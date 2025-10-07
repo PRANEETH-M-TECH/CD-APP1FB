@@ -1,0 +1,118 @@
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: #f4f7f9;
+    color: #333;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+}
+
+.container {
+    width: 100%;
+    max-width: 800px;
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+h1 {
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 30px;
+}
+
+.navigation-links {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.nav-button, button {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.nav-button:hover, button:hover {
+    background-color: #2980b9;
+}
+
+.back-link {
+    display: inline-block;
+    margin-bottom: 20px;
+    color: #3498db;
+    text-decoration: none;
+}
+
+.form-section {
+    background-color: #fdfdfd;
+    border: 1px solid #ecf0f1;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 25px;
+}
+
+input[type="file"], input[type="text"], select, textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box; /* Important */
+}
+
+textarea {
+    height: 120px;
+    resize: vertical;
+}
+
+#chapters-container .chapter-group {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+#chapters-container input {
+    flex-grow: 1;
+}
+
+#add-chapter-btn {
+    background-color: #2ecc71;
+}
+
+#add-chapter-btn:hover {
+    background-color: #27ae60;
+}
+
+.results-section {
+    margin-top: 30px;
+}
+
+#answer-container {
+    background-color: #ecf0f1;
+    padding: 15px;
+    border-radius: 5px;
+    min-height: 50px;
+    margin-bottom: 20px;
+}
+
+#sources-container .source {
+    border-left: 3px solid #3498db;
+    padding-left: 15px;
+    margin-bottom: 15px;
+    font-size: 0.9em;
+    color: #555;
+}

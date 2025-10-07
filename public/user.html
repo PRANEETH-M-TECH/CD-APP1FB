@@ -1,0 +1,44 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ask a Query - CHADUVU GURU</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <a href="/" class="back-link">&larr; Home</a>
+        <h1>Ask a Query</h1>
+
+        <div class="form-section">
+            <label for="book-select">Select a Book:</label>
+            <select id="book-select">
+                <option value="">Loading books...</option>
+            </select>
+        </div>
+
+        <div class="form-section">
+            <form id="query-form">
+                <textarea id="query-text" placeholder="Ask your question here..." required></textarea>
+                <button type="submit">Get Answer</button>
+            </form>
+        </div>
+
+        <div class="results-section">
+            <h2>Answer</h2>
+            <div id="answer-container">
+                <p id="loading-indicator" style="display: none;">Getting your answer...</p>
+                <p id="answer-text"></p>
+            </div>
+            <h3>Sources</h3>
+            <div id="sources-container">
+                <!-- Source documents will be listed here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>

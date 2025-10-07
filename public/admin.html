@@ -1,0 +1,45 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - CHADUVU GURU</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <a href="/" class="back-link">&larr; Home</a>
+        <h1>Admin Panel</h1>
+
+        <div class="form-section">
+            <h2>1. Upload Book PDF</h2>
+            <form id="upload-form">
+                <input type="file" id="pdf-file" name="file" accept=".pdf" required>
+                <button type="submit">Upload PDF</button>
+            </form>
+            <p id="upload-status"></p>
+        </div>
+
+        <div class="form-section" id="book-details-section" style="display: none;">
+            <h2>2. Enter Book Details</h2>
+            <form id="book-details-form">
+                <input type="text" id="book-title" placeholder="Book Title" required>
+                <input type="text" id="class-name" placeholder="Class (e.g., 10th)" required>
+                <input type="text" id="subject" placeholder="Subject (e.g., Physics)" required>
+                
+                <h3>Chapters</h3>
+                <div id="chapters-container">
+                    <!-- Chapter inputs will be added here by JS -->
+                </div>
+                <button type="button" id="add-chapter-btn">+ Add Chapter</button>
+                <hr>
+                <button type="submit">Save Book</button>
+            </form>
+            <p id="book-status"></p>
+        </div>
+    </div>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>
