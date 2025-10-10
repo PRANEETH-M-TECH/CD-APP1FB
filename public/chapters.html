@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Define Chapters - Chaduvu Guru</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+        <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="/static/style.css">
+    <!-- PDF.js Library -->
+    <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.4.120/build/pdf.min.js"></script>
+</head>
+<body>
+    <div class="page-container chapters-page-container">
+        <main class="chapters-main-content">
+            <!-- Left Column: PDF Viewer -->
+            <div class="pdf-viewer-container">
+                <div id="pdf-viewer-header">
+                    <button id="prev-page">Prev</button>
+                    <span>Page: <span id="page-num"></span> / <span id="page-count"></span></span>
+                    <button id="next-page">Next</button>
+                </div>
+                <button id="extract-page-btn" class="action-button">Extract Page</button>
+                <div id="pdf-render-area">
+                    <canvas id="pdf-canvas"></canvas>
+                </div>
+                 <div id="pdf-loading-message">Loading PDF...</div>
+            </div>
+
+            <!-- Right Column: Chapter Definition Form -->
+            <div class="form-card chapters-form-card">
+                <div class="card-header">
+                    <div class="step-indicator">2</div>
+                    <h2>Chapter Definitions</h2>
+                    <a href="/admin" class="back-link-chapters">Back to Upload</a>
+                </div>
+                <div class="card-content">
+                    <div class="form-group">
+                        <button type="button" id="extract-chapters-btn" class="action-button">Extract Chapters</button>
+                    </div>
+                    <form id="chapters-form">
+                        <div class="form-group">
+                            <label for="num-chapters">Enter the Number of Chapters</label>
+                            <input type="number" id="num-chapters" min="1" placeholder="e.g., 12">
+                        </div>
+                        <div id="chapter-details-area">
+                            <table id="chapters-table">
+                                <thead>
+                                    <tr>
+                                        <th>Chapter Name</th>
+                                        <th>Start Page</th>
+                                        <th>End Page</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="chapters-table-body">
+                                    <!-- Chapter input rows will be generated here -->
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="submission-section">
+                            <button type="submit" id="submit-btn" class="submit-button">Process and Save Book</button>
+                            <div id="status-container" class="status-message" style="display: none;"></div>
+                        </div>
+                    </form>
+
+                    <div id="extracted-chapter-details" class="extracted-details-card" style="display: none;">
+                        <h3>Extracted Chapter Suggestion</h3>
+                        <div class="form-group">
+                            <label for="extracted-chapter-name">Chapter Name</label>
+                            <input type="text" id="extracted-chapter-name" class="full-width-input">
+                        </div>
+                        <div class="form-group">
+                            <label for="extracted-start-page">Start Page</label>
+                            <input type="number" id="extracted-start-page" class="full-width-input" min="1">
+                        </div>
+                        <div class="form-group">
+                            <label for="extracted-end-page">End Page</label>
+                            <input type="number" id="extracted-end-page" class="full-width-input" min="1">
+                        </div>
+                        <div class="button-group">
+                            <button id="confirm-extracted-btn" class="action-button">Confirm & Add</button>
+                            <button id="cancel-extracted-btn" class="secondary-button">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Set the worker source for PDF.js
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.4.120/build/pdf.worker.min.js';
+    </script>
+    <script src="/static/script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const extractChaptersBtn = document.getElementById('extract-chapters-btn');
+            if (extractChaptersBtn) {
+                extractChaptersBtn.addEventListener('click', async () => {
+                    const urlParams = new URLSearchParams(window.location.search);
+                    let bookId = urlParams.get('filename');
+
+                    if (!bookId) {
+                        alert('Filename not found in URL query parameter. Please go back and upload the file again.');
+                        return;
+                    }
+
+                    extractChaptersBtn.disabled = true;
+                    extractChaptersBtn.textContent = 'Extracting...';
+
+                    try {
+                        const response = await fetch(`/extract-chapters?book_id=${bookId}`, {
+                            method: 'POST',
+                        });
+
+                        if (!response.ok) {
+                            const errorData = await response.json().catch(() => ({ detail: 'Failed to extract chapters.' }));
+                            throw new Error(errorData.detail);
+                        }
+
+                        const chapters = await response.json();
+                        
+                        if (chapters && chapters.length > 0) {
+                            populateChaptersTable(chapters);
+                        } else {
+                            alert('Could not automatically extract any chapters. Please define them manually.');
+                        }
+
+                    } catch (error) {
+                        console.error('Error extracting chapters:', error);
+                        alert(`An error occurred: ${error.message}`);
+                    } finally {
+                        extractChaptersBtn.disabled = false;
+                        extractChaptersBtn.textContent = 'Extract Chapters';
+                    }
+                });
+            }
+
+            function populateChaptersTable(chapters) {
+                const tableBody = document.getElementById('chapters-table-body');
+                const numChaptersInput = document.getElementById('num-chapters');
+
+                if (!tableBody || !numChaptersInput) return;
+
+                tableBody.innerHTML = '';
+                numChaptersInput.value = chapters.length;
+
+                chapters.forEach((chapter, index) => {
+                    const row = document.createElement('tr');
+                    row.dataset.chapterIndex = index;
+                    row.innerHTML = `
+                        <td><input type="text" class="chapter-name-input" value="${chapter.title || ''}" placeholder="Chapter ${index + 1} Name"></td>
+                        <td><input type="number" class="chapter-start-input" value="${chapter.start_page || ''}" min="1" placeholder="Start"></td>
+                        <td><input type="number" class="chapter-end-input" value="${chapter.end_page || ''}" min="1" placeholder="End"></td>
+                        <td><button type="button" class="remove-chapter-btn">Remove</button></td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+            }
+        });
+    </script>
+</body>
+</html>

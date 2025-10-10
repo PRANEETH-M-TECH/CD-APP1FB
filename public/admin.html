@@ -1,43 +1,51 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel - CHADUVU GURU</title>
+    <title>Admin Panel - Chaduvu Guru</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-    <div class="container">
-        <a href="/" class="back-link">&larr; Home</a>
-        <h1>Admin Panel</h1>
+    <div class="page-container">
+        <header class="page-header">
+            <a href="/" class="back-link">&larr; Home</a>
+            <h1>Admin Panel</h1>
+            <button type="submit" id="submit-btn" class="submit-button" form="admin-form">Next: Define Chapters</button>
+        </header>
 
-        <div class="form-section">
-            <h2>1. Upload Book PDF</h2>
-            <form id="upload-form">
-                <input type="file" id="pdf-file" name="file" accept=".pdf" required>
-                <button type="submit">Upload PDF</button>
-            </form>
-            <p id="upload-status"></p>
-        </div>
-
-        <div class="form-section" id="book-details-section" style="display: none;">
-            <h2>2. Enter Book Details</h2>
-            <form id="book-details-form">
-                <input type="text" id="book-title" placeholder="Book Title" required>
-                <input type="text" id="class-name" placeholder="Class (e.g., 10th)" required>
-                <input type="text" id="subject" placeholder="Subject (e.g., Physics)" required>
-                
-                <h3>Chapters</h3>
-                <div id="chapters-container">
-                    <!-- Chapter inputs will be added here by JS -->
+        <main>
+            <form id="admin-form" class="admin-form-container">
+                <div class="form-card">
+                    <div class="card-header">
+                        <div class="step-indicator">1</div>
+                        <h2>Upload Book Information</h2>
+                    </div>
+                    <div class="card-content">
+                        <div class="form-group">
+                            <label for="class-name">Class Name</label>
+                            <input type="text" id="class-name" placeholder="e.g., 10th Grade" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="subject">Subject</label>
+                            <input type="text" id="subject" placeholder="e.g., Modern Physics" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="pdf-file">Book PDF File</label>
+                            <input type="file" id="pdf-file" class="file-input" accept=".pdf" required>
+                        </div>
+                    </div>
                 </div>
-                <button type="button" id="add-chapter-btn">+ Add Chapter</button>
-                <hr>
-                <button type="submit">Save Book</button>
+
+                <div class="submission-section">
+                    <div id="status-container" class="status-message" style="display: none;"></div>
+                </div>
             </form>
-            <p id="book-status"></p>
-        </div>
+        </main>
     </div>
 
     <script src="/static/script.js"></script>

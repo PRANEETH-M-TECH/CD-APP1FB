@@ -3,3 +3,5 @@ pydantic
 qdrant-client
 google-generativeai
 pypdf
+python-dotenv
+python-multipart

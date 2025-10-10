@@ -1,190 +1,522 @@
-
-
 document.addEventListener('DOMContentLoaded', () => {
-    const path = window.location.pathname;
-
-    if (path.includes('/admin')) {
-        initAdminPage();
-    } else if (path.includes('/user')) {
-        initUserPage();
+    // Check which page we are on and run the appropriate setup function
+    if (document.getElementById('admin-form')) {
+        setupAdminPage();
+    } else if (document.getElementById('chapters-form')) {
+        setupChaptersPage();
+    } else if (document.getElementById('user-query-form')) {
+        setupUserPage();
     }
 });
 
-function initAdminPage() {
-    const uploadForm = document.getElementById('upload-form');
-    const bookDetailsSection = document.getElementById('book-details-section');
-    const bookDetailsForm = document.getElementById('book-details-form');
-    const addChapterBtn = document.getElementById('add-chapter-btn');
-    const chaptersContainer = document.getElementById('chapters-container');
-    const uploadStatus = document.getElementById('upload-status');
-    const bookStatus = document.getElementById('book-status');
+/**
+ * Sets up the main admin page (uploading class, subject, and PDF).
+ */
+function setupAdminPage() {
+    const adminForm = document.getElementById('admin-form');
 
-    uploadForm.addEventListener('submit', async (e) => {
+    adminForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const formData = new FormData(uploadForm);
-        uploadStatus.textContent = 'Uploading...';
+        showStatus('Uploading PDF...', 'info');
 
-        try {
-            const response = await fetch('/api/upload', {
-                method: 'POST',
-                body: formData,
-            });
-
-            if (response.ok) {
-                const result = await response.json();
-                uploadStatus.textContent = `File '${result.filename}' uploaded successfully!`;
-                bookDetailsSection.style.display = 'block';
-            } else {
-                uploadStatus.textContent = 'Upload failed.';
-            }
-        } catch (error) {
-            uploadStatus.textContent = 'An error occurred during upload.';
-            console.error('Upload error:', error);
-        }
-    });
-
-    addChapterBtn.addEventListener('click', () => {
-        const chapterCount = chaptersContainer.children.length;
-        const chapterGroup = document.createElement('div');
-        chapterGroup.className = 'chapter-group';
-        chapterGroup.innerHTML = `
-            <input type="text" placeholder="Chapter ${chapterCount + 1} Name" class="chapter-name" required>
-            <input type="number" placeholder="Start Page" class="start-page" required>
-            <input type="number" placeholder="End Page" class="end-page" required>
-        `;
-        chaptersContainer.appendChild(chapterGroup);
-    });
-
-    bookDetailsForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const title = document.getElementById('book-title').value;
+        const pdfFile = document.getElementById('pdf-file').files[0];
         const className = document.getElementById('class-name').value;
         const subject = document.getElementById('subject').value;
 
-        const chapters = Array.from(chaptersContainer.children).map(group => ({
-            name: group.querySelector('.chapter-name').value,
-            start_page: parseInt(group.querySelector('.start-page').value),
-            end_page: parseInt(group.querySelector('.end-page').value),
-        }));
-
-        if (chapters.some(c => !c.name || !c.start_page || !c.end_page)) {
-            bookStatus.textContent = 'Please fill in all chapter details.';
+        if (!pdfFile || !className || !subject) {
+            showStatus('Please fill out all fields and select a PDF.', 'error');
             return;
         }
 
-        const formData = new FormData();
-        formData.append('title', title);
-        formData.append('class_name', className);
-        formData.append('subject', subject);
-        formData.append('chapters', JSON.stringify(chapters));
-
-        bookStatus.textContent = 'Saving book...';
+        const uploadFormData = new FormData();
+        uploadFormData.append('file', pdfFile);
 
         try {
-            const response = await fetch('/api/books', {
+            // Step 1: Upload the file
+            const response = await fetch('/api/upload', {
                 method: 'POST',
-                body: formData,
+                body: uploadFormData,
             });
-
-            if (response.ok) {
-                bookStatus.textContent = 'Book saved successfully!';
-                bookDetailsForm.reset();
-                chaptersContainer.innerHTML = '';
-            } else {
-                const error = await response.json();
-                bookStatus.textContent = `Failed to save book: ${error.detail || 'Unknown error'}`;
+            const uploadResult = await response.json();
+            if (!response.ok) {
+                throw new Error(uploadResult.detail || 'Failed to upload file.');
             }
+
+            // Step 2: Redirect to the chapters page with data in URL
+            const queryParams = new URLSearchParams({
+                filename: uploadResult.filename,
+                className: className,
+                subject: subject
+            });
+            window.location.href = `/chapters?${queryParams.toString()}`;
+
         } catch (error) {
-            bookStatus.textContent = 'An error occurred while saving the book.';
-            console.error('Save book error:', error);
+            showStatus(`Upload failed: ${error.message}`, 'error');
         }
     });
 }
 
-function initUserPage() {
-    const bookSelect = document.getElementById('book-select');
-    const queryForm = document.getElementById('query-form');
-    const queryText = document.getElementById('query-text');
-    const answerContainer = document.getElementById('answer-container');
-    const answerText = document.getElementById('answer-text');
-    const sourcesContainer = document.getElementById('sources-container');
-    const loadingIndicator = document.getElementById('loading-indicator');
+/**
+ * Sets up the chapters definition page (PDF viewer and chapter form).
+ */
+function setupChaptersPage() {
+    const params = new URLSearchParams(window.location.search);
+    const filename = params.get('filename');
+    const className = params.get('className');
+    const subject = params.get('subject');
 
-    async function loadBooks() {
-        try {
-            const response = await fetch('/api/books');
-            if (response.ok) {
-                const books = await response.json();
-                bookSelect.innerHTML = '<option value="">-- Select a Book --</option>';
-                books.forEach(book => {
-                    const option = document.createElement('option');
-                    option.value = book;
-                    option.textContent = book;
-                    bookSelect.appendChild(option);
-                });
-            } else {
-                bookSelect.innerHTML = '<option value="">Failed to load books</option>';
-            }
-        } catch (error) {
-            bookSelect.innerHTML = '<option value="">Error loading books</option>';
-            console.error('Load books error:', error);
+    if (!filename) {
+        document.body.innerHTML = '<h1 style="color: red; text-align: center;">Error: No PDF file specified. Please go back to the admin page and upload a file.</h1>';
+        return;
+    }
+
+    const pdfUrl = `/uploads/${filename}`;
+    const chaptersForm = document.getElementById('chapters-form');
+    
+    // PDF.js state
+    let pdfDoc = null;
+    let pageNum = 1;
+    let pageRendering = false;
+    let pageNumPending = null;
+    const scale = 1.5;
+    const canvas = document.getElementById('pdf-canvas');
+    const ctx = canvas.getContext('2d');
+
+    /**
+     * Get page info from document, resize canvas accordingly, and render page.
+     */
+    function renderPage(num) {
+        pageRendering = true;
+        document.getElementById('pdf-loading-message').style.display = 'block';
+
+        // Using promise to fetch the page
+        pdfDoc.getPage(num).then(function(page) {
+            const container = document.getElementById('pdf-render-area');
+            const unscaledViewport = page.getViewport({ scale: 1 });
+            
+            // Dynamically calculate scale to fit container width
+            const scale = container.clientWidth / unscaledViewport.width;
+            const viewport = page.getViewport({ scale: scale });
+
+            canvas.height = viewport.height;
+            canvas.width = viewport.width;
+
+            // Render PDF page into canvas context
+            const renderContext = {
+                canvasContext: ctx,
+                viewport: viewport
+            };
+            const renderTask = page.render(renderContext);
+
+            // Wait for rendering to finish
+            renderTask.promise.then(function() {
+                pageRendering = false;
+                document.getElementById('pdf-loading-message').style.display = 'none';
+                if (pageNumPending !== null) {
+                    // New page rendering is pending
+                    renderPage(pageNumPending);
+                    pageNumPending = null;
+                }
+            });
+        });
+
+        // Update page counters
+        document.getElementById('page-num').textContent = num;
+    }
+
+    /**
+     * If another page rendering in progress, waits until the rendering is
+     * finished. Otherwise, executes rendering immediately.
+     */
+    function queueRenderPage(num) {
+        if (pageRendering) {
+            pageNumPending = num;
+        } else {
+            renderPage(num);
         }
     }
 
-    queryForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const bookTitle = bookSelect.value;
-        const query = queryText.value;
+    // Load the PDF
+    pdfjsLib.getDocument(pdfUrl).promise.then(function(pdfDoc_) {
+        pdfDoc = pdfDoc_;
+        document.getElementById('page-count').textContent = pdfDoc.numPages;
+        renderPage(pageNum);
+    }).catch(err => {
+        showStatus(`Error loading PDF: ${err.message}`, 'error');
+        document.getElementById('pdf-loading-message').textContent = 'Error loading PDF.';
+    });
 
-        if (!bookTitle) {
-            alert('Please select a book first.');
-            return;
-        }
+    // Button events
+    document.getElementById('prev-page').addEventListener('click', () => {
+        if (pageNum <= 1) return;
+        pageNum--;
+        queueRenderPage(pageNum);
+    });
 
-        loadingIndicator.style.display = 'block';
-        answerText.textContent = '';
-        sourcesContainer.innerHTML = '';
+    document.getElementById('next-page').addEventListener('click', () => {
+        if (pageNum >= pdfDoc.numPages) return;
+        pageNum++;
+        queueRenderPage(pageNum);
+    });
 
-        try {
-            const params = new URLSearchParams({
-                book_title: bookTitle,
-                query: query
-            });
+    // Chapter input generation
+    const numChaptersInput = document.getElementById('num-chapters');
+    const chaptersTableBody = document.getElementById('chapters-table-body');
 
-            const response = await fetch(`/api/query?${params}` , { method: 'POST' });
+    function createChapterRow() {
+        const row = document.createElement('tr');
+        row.classList.add('chapter-entry');
+        row.innerHTML = `
+            <td><input type="text" class="chapter-name" placeholder="e.g., Introduction" required></td>
+            <td><input type="number" class="start-page" placeholder="e.g., 1" min="1" required></td>
+            <td><input type="number" class="end-page" placeholder="e.g., 10" min="1" required></td>
+            <td><button type="button" class="remove-chapter-btn">Remove</button></td>
+        `;
+        
+        row.querySelector('.remove-chapter-btn').addEventListener('click', () => {
+            row.remove();
+        });
 
-            if (response.ok) {
-                const result = await response.json();
-                answerText.textContent = result.answer;
-                displaySources(result.sources);
-            } else {
-                answerText.textContent = 'Failed to get an answer.';
+        return row;
+    }
+
+    numChaptersInput.addEventListener('input', () => {
+        const count = parseInt(numChaptersInput.value, 10);
+        chaptersTableBody.innerHTML = ''; // Clear existing rows
+
+        if (count > 0) {
+            for (let i = 0; i < count; i++) {
+                chaptersTableBody.appendChild(createChapterRow());
             }
-        } catch (error) {
-            answerText.textContent = 'An error occurred.';
-            console.error('Query error:', error);
-        } finally {
-            loadingIndicator.style.display = 'none';
         }
     });
 
-    function displaySources(sources) {
-        sourcesContainer.innerHTML = '';
-        if (!sources || sources.length === 0) {
-            sourcesContainer.innerHTML = '<p>No sources found.</p>';
+
+    // Final form submission
+    chaptersForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        // Clear previous errors
+        document.querySelectorAll('#chapters-table-body .input-error').forEach(el => el.classList.remove('input-error'));
+
+        const chapterEntries = document.querySelectorAll('#chapters-table-body tr');
+        const chapters = [];
+        let validationError = false;
+
+        if (chapterEntries.length === 0) {
+            showStatus('Please add at least one chapter.', 'error');
             return;
         }
 
-        sources.forEach(source => {
-            const sourceEl = document.createElement('div');
-            sourceEl.className = 'source';
-            sourceEl.innerHTML = `
-                <p><strong>Chapter:</strong> ${source.payload.chapter_name}</p>
-                <p>"${source.payload.text.substring(0, 150)}..."</p>
-            `;
-            sourcesContainer.appendChild(sourceEl);
+        chapterEntries.forEach(entry => {
+            const nameInput = entry.querySelector('.chapter-name');
+            const startPageInput = entry.querySelector('.start-page');
+            const endPageInput = entry.querySelector('.end-page');
+
+            const name = nameInput.value;
+            const start_page = parseInt(startPageInput.value, 10);
+            const end_page = parseInt(endPageInput.value, 10);
+            
+            let hasRowError = false;
+            if (!name) {
+                nameInput.classList.add('input-error');
+                hasRowError = true;
+            }
+            if (isNaN(start_page) || start_page <= 0) {
+                startPageInput.classList.add('input-error');
+                hasRowError = true;
+            }
+            if (isNaN(end_page) || end_page < start_page) {
+                endPageInput.classList.add('input-error');
+                hasRowError = true;
+            }
+
+            if (hasRowError) {
+                validationError = true;
+            } else {
+                chapters.push({ name, start_page, end_page });
+            }
         });
+
+        if (validationError) {
+            showStatus('Please fix the errors in the highlighted fields.', 'error');
+            return;
+        }
+        
+        showStatus('Processing book and chapters...', 'info');
+
+        const finalFormData = new FormData();
+        finalFormData.append('class_name', className);
+        finalFormData.append('subject', subject);
+        finalFormData.append('chapters', JSON.stringify(chapters));
+        finalFormData.append('filename', filename);
+
+        try {
+            const response = await fetch('/api/books', { method: 'POST', body: finalFormData });
+            const result = await response.json();
+            if (!response.ok) throw new Error(result.detail || 'Failed to process book.');
+            
+            showStatus(result.message, result.status === 'exists' ? 'warning' : 'success');
+            chaptersForm.reset();
+            chaptersTableBody.innerHTML = '';
+            numChaptersInput.value = ''; // Clear the number input
+
+        } catch (error) {
+            showStatus(`Error: ${error.message}`, 'error');
+        }
+    });
+
+    // Add event listeners to clear errors on input
+    chaptersTableBody.addEventListener('input', (e) => {
+        if (e.target.classList.contains('input-error')) {
+            e.target.classList.remove('input-error');
+        }
+    });
+}
+
+/**
+ * Sets up the main user query page wizard.
+ */
+function setupUserPage() {
+    // Left Pane Elements
+    const classSelect = document.getElementById('class-select');
+    const subjectSelect = document.getElementById('subject-select');
+    const viewerPlaceholder = document.getElementById('viewer-placeholder');
+    const pdfLoadingIndicator = document.getElementById('pdf-loading-user');
+    const pdfCanvas = document.getElementById('pdf-canvas-user');
+    const ctx = pdfCanvas.getContext('2d');
+
+    // Right Pane Elements
+    const chatHistory = document.getElementById('chat-history');
+    const queryForm = document.getElementById('user-query-form');
+    const queryText = document.getElementById('query-text');
+    const submitButton = document.getElementById('submit-query-btn');
+
+    // App State
+    let selectedBook = null;
+    let pdfDoc = null;
+    let pageNum = 1; // Current page number
+    let pageRendering = false;
+    let pageNumPending = null;
+
+    // --- Event Listeners ---
+
+    classSelect.addEventListener('change', () => {
+        subjectSelect.disabled = false;
+        subjectSelect.value = '';
+        resetUI();
+    });
+
+    subjectSelect.addEventListener('change', () => {
+        loadBook();
+    });
+
+    queryForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        handleQuerySubmit();
+    });
+
+    // Auto-resize textarea
+    queryText.addEventListener('input', () => {
+        queryText.style.height = 'auto';
+        queryText.style.height = (queryText.scrollHeight) + 'px';
+    });
+
+    // PDF Navigation Buttons
+    document.getElementById('prev-page-user').addEventListener('click', () => {
+        if (pageNum <= 1) return;
+        pageNum--;
+        queueRenderPage(pageNum);
+    });
+
+    document.getElementById('next-page-user').addEventListener('click', () => {
+        if (pdfDoc && pageNum >= pdfDoc.numPages) return;
+        pageNum++;
+        queueRenderPage(pageNum);
+    });
+
+
+    // --- Core Functions ---
+
+    function resetUI() {
+        pdfDoc = null;
+        selectedBook = null;
+        pageNum = 1; // Reset page number
+        pdfCanvas.style.display = 'none';
+        document.getElementById('pdf-viewer-header-user').style.display = 'none'; // Hide header
+        viewerPlaceholder.style.display = 'flex';
+        pdfLoadingIndicator.style.display = 'none';
+        queryText.disabled = true;
+        submitButton.disabled = true;
+        queryText.placeholder = 'Ask a question about the selected book...';
     }
 
-    loadBooks();
+    async function loadBook() {
+        const className = classSelect.value;
+        const subject = subjectSelect.value;
+
+        if (!className || !subject) return;
+
+        resetUI();
+        viewerPlaceholder.style.display = 'none';
+        pdfLoadingIndicator.style.display = 'flex';
+
+        try {
+            // Step 1: Fetch book metadata (including filename)
+            const response = await fetch(`/api/books?class_name=${className}&subject=${subject}`);
+            if (!response.ok) throw new Error('Book not found.');
+            
+            const books = await response.json();
+            if (books.length === 0) throw new Error('Book not found for this selection.');
+            
+            selectedBook = books[0]; // Assume the first book is the correct one
+
+            // Step 2: Load the PDF document
+            const pdfUrl = `/uploads/${selectedBook.filename}`;
+            pdfDoc = await pdfjsLib.getDocument(pdfUrl).promise;
+            
+            pdfLoadingIndicator.style.display = 'none';
+            pdfCanvas.style.display = 'block';
+            document.getElementById('pdf-viewer-header-user').style.display = 'flex'; // Show header
+            
+            document.getElementById('page-count-user').textContent = pdfDoc.numPages;
+            renderPage(pageNum); // Render the first page
+
+            // Enable chat
+            queryText.disabled = false;
+            submitButton.disabled = false;
+            addMessage('ai', `Book "${selectedBook.subject}" loaded. You can now ask questions about it.`);
+
+        } catch (error) {
+            pdfLoadingIndicator.style.display = 'none';
+            viewerPlaceholder.style.display = 'flex';
+            viewerPlaceholder.innerHTML = `<p class="error-message">${error.message}</p>`;
+            console.error(error);
+        }
+    }
+
+    /**
+     * Get page info from document, resize canvas accordingly, and render page.
+     */
+    async function renderPage(num) {
+        pageRendering = true;
+        pdfLoadingIndicator.style.display = 'flex'; // Show loading indicator
+
+        // Using promise to fetch the page
+        const page = await pdfDoc.getPage(num);
+        const container = document.getElementById('pdf-render-area-user');
+        const unscaledViewport = page.getViewport({ scale: 1 });
+        
+        // Dynamically calculate scale to fit container width
+        const scale = container.clientWidth / unscaledViewport.width;
+        
+        const viewport = page.getViewport({ scale: scale });
+
+        const outputScale = window.devicePixelRatio || 1;
+
+        pdfCanvas.height = Math.floor(viewport.height * outputScale);
+        pdfCanvas.width = Math.floor(viewport.width * outputScale);
+        pdfCanvas.style.width = Math.floor(viewport.width) + 'px';
+        pdfCanvas.style.height = Math.floor(viewport.height) + 'px';
+
+        // Render PDF page into canvas context
+        const renderContext = {
+            canvasContext: ctx,
+            viewport: viewport,
+            transform: [outputScale, 0, 0, outputScale, 0, 0]
+        };
+        const renderTask = page.render(renderContext);
+
+        // Wait for rendering to finish
+        await renderTask.promise;
+        pageRendering = false;
+        pdfLoadingIndicator.style.display = 'none'; // Hide loading indicator
+        if (pageNumPending !== null) {
+            // New page rendering is pending
+            renderPage(pageNumPending);
+            pageNumPending = null;
+        }
+
+        // Update page counters
+        document.getElementById('page-num-user').textContent = num;
+    }
+
+    /**
+     * If another page rendering in progress, waits until the rendering is
+     * finished. Otherwise, executes rendering immediately.
+     */
+    function queueRenderPage(num) {
+        if (pageRendering) {
+            pageNumPending = num;
+        } else {
+            renderPage(num);
+        }
+    }
+
+    async function handleQuerySubmit() {
+        const query = queryText.value.trim();
+        if (!query || !selectedBook) return;
+
+        addMessage('user', query);
+        queryText.value = '';
+        queryText.style.height = 'auto'; // Reset height
+        submitButton.disabled = true;
+
+        const thinkingMessage = addMessage('ai', '...');
+
+        try {
+            const response = await fetch('/api/query', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    book_uuid: selectedBook.id,
+                    query: query
+                })
+            });
+
+            if (!response.ok) {
+                const errorResult = await response.json();
+                throw new Error(errorResult.detail || 'Failed to get answer.');
+            }
+
+            const result = await response.json();
+            
+            let answer = result.answer;
+            
+            thinkingMessage.querySelector('.message-content').innerHTML = `<p>${answer.replace(/\n/g, '<br>')}</p>`;
+
+        } catch (error) {
+            thinkingMessage.querySelector('.message-content').innerHTML = `<p class="error-message">Error: ${error.message}</p>`;
+        } finally {
+            submitButton.disabled = false;
+        }
+    }
+
+    function addMessage(sender, text) {
+        const messageEl = document.createElement('div');
+        messageEl.className = `chat-message ${sender}-message`;
+        
+        const contentEl = document.createElement('div');
+        contentEl.className = 'message-content';
+        contentEl.innerHTML = `<p>${text.replace(/\n/g, '<br>')}</p>`;
+        
+        messageEl.appendChild(contentEl);
+        chatHistory.appendChild(messageEl);
+        chatHistory.scrollTop = chatHistory.scrollHeight;
+        return messageEl;
+    }
+}
+
+/**
+ * Utility to show status messages to the user.
+ * This function is kept for other pages but is not used in the new user page wizard.
+ * A more integrated status/error display is used instead.
+ */
+function showStatus(message, type) {
+    const statusContainer = document.getElementById('status-container');
+    if (statusContainer) {
+        statusContainer.textContent = message;
+        statusContainer.className = `status-message ${type}`;
+        statusContainer.style.display = 'block';
+    }
 }
