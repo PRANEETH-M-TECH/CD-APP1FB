@@ -78,10 +78,15 @@ def check_if_book_exists(book_uuid: str) -> bool:
 
 # --- CORE LOGIC ---
 def process_and_embed_book(pdf_path: str, class_name: str, subject: str, chapters: list):
+    print(f"\n--- Starting Book Processing ---")
+    print(f"File: {os.path.basename(pdf_path)}")
+    print(f"Class: {class_name}, Subject: {subject}")
+
     book_uuid = get_book_uuid(pdf_path)
     
     # If book exists, delete all its old entries before re-embedding to ensure an overwrite
     if check_if_book_exists(book_uuid):
+        print(f"Book with UUID {book_uuid} already exists. Deleting old entries...")
         client.delete(
             collection_name=COLLECTION_NAME,
             points_selector=models.FilterSelector(
@@ -95,12 +100,19 @@ def process_and_embed_book(pdf_path: str, class_name: str, subject: str, chapter
                 )
             ),
         )
-        return {"message": "Book already in database. Overwriting existing entries.", "book_uuid": book_uuid, "status": "exists"}
+        print("Old entries deleted. Proceeding with re-embedding...")
 
+    print("Reading PDF and splitting text...")
     reader = PdfReader(pdf_path)
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
 
-    for chapter in chapters:
+    total_chapters = len(chapters)
+    print(f"Found {total_chapters} chapters to process.")
+
+    for i, chapter in enumerate(chapters):
+        chapter_name = chapter['name']
+        print(f"\nProcessing Chapter {i+1}/{total_chapters}: '{chapter_name}'...")
+        
         start_page, end_page = chapter['start_page'], chapter['end_page']
         chapter_text = ""
         for page_num in range(start_page - 1, end_page):
@@ -108,6 +120,8 @@ def process_and_embed_book(pdf_path: str, class_name: str, subject: str, chapter
                 chapter_text += reader.pages[page_num].extract_text() or ""
         
         text_chunks = text_splitter.split_text(chapter_text)
+        print(f"Split chapter into {len(text_chunks)} text chunks.")
+        
         points_to_upload = []
         for chunk in text_chunks:
             embedding = local_embedder.encode(chunk).tolist()
@@ -118,49 +132,351 @@ def process_and_embed_book(pdf_path: str, class_name: str, subject: str, chapter
                     payload={
                         "class_name": class_name, "subject": subject, "textbook_uuid": book_uuid,
                         "filename": os.path.basename(pdf_path),
-                        "chapter": chapter['name'], "start_page": start_page, "end_page": end_page, "text": chunk,
+                        "chapter": chapter_name, "start_page": start_page, "end_page": end_page, "text": chunk,
                     }
                 )
             )
+        
         if points_to_upload:
+            print(f"Embedding complete. Uploading {len(points_to_upload)} points to Qdrant...")
             client.upsert(collection_name=COLLECTION_NAME, points=points_to_upload, wait=True)
-    
-    return {"message": "Book processed and uploaded successfully!", "book_uuid": book_uuid, "status": "new"}
+            print(f"Chapter '{chapter_name}' processed and saved successfully.")
+
+    print("\n--- Book Processing Complete ---")
+    # This function runs in the background, so it does not return a value to the client.
+    return
 
 def get_books(class_name: str = None, subject: str = None) -> List[Dict[str, str]]:
+
     filter_conditions = []
+
     if class_name:
+
         filter_conditions.append(models.FieldCondition(key="class_name", match=models.MatchValue(value=class_name)))
 
+
+
     # Always fetch all points for the given class_name first, then filter by subject in Python
+
     # because Qdrant's 'match' filter is case-sensitive.
+
     scroll_filter = models.Filter(must=filter_conditions) if filter_conditions else None
 
+
+
     response, _ = client.scroll(
+
         collection_name=COLLECTION_NAME,
+
         scroll_filter=scroll_filter,
+
         limit=1000, # Limit to a reasonable number
+
         with_payload=["textbook_uuid", "subject", "class_name", "filename"]
+
     )
+
     
+
     unique_books = {}
+
     for p in response:
+
         book_uuid = p.payload.get('textbook_uuid')
+
         payload_subject = p.payload.get('subject')
 
+
+
         # Case-insensitive filtering for subject in Python
+
         if subject and payload_subject and subject.lower() != payload_subject.lower():
+
             continue # Skip if subject doesn't match case-insensitively
 
+
+
         if book_uuid and book_uuid not in unique_books:
+
             unique_books[book_uuid] = {
+
                 "id": book_uuid, 
+
                 "subject": payload_subject, # Use the original casing from payload
+
                 "class_name": p.payload.get('class_name', 'N/A'),
+
                 "filename": p.payload.get('filename')
+
             }
+
     
+
     return list(unique_books.values())
+
+
+
+def get_chapter_names(book_uuid: str) -> List[str]:
+
+
+
+    """Retrieves a list of unique chapter names for a book."""
+
+
+
+    if not client:
+
+
+
+        raise RuntimeError("Qdrant client not initialized.")
+
+
+
+    
+
+
+
+    response, _ = client.scroll(
+
+
+
+        collection_name=COLLECTION_NAME,
+
+
+
+        scroll_filter=models.Filter(
+
+
+
+            must=[models.FieldCondition(key="textbook_uuid", match=models.MatchValue(value=book_uuid))]
+
+
+
+        ),
+
+
+
+        limit=1000, # Assuming a book won't have more than 1000 chunks with unique chapter names
+
+
+
+        with_payload=["chapter"]
+
+
+
+    )
+
+
+
+    
+
+
+
+    unique_names = set()
+
+
+
+    for point in response:
+
+
+
+        if name := point.payload.get("chapter"):
+
+
+
+            unique_names.add(name)
+
+
+
+            
+
+
+
+    return sorted(list(unique_names))
+
+
+
+
+
+
+
+def get_chapters_for_book(book_uuid: str) -> List[Dict]:
+
+
+
+    """
+
+
+
+    Retrieves a sorted list of unique chapters with their page ranges for a given book UUID.
+
+
+
+    This implementation follows the user's suggested logic.
+
+
+
+    """
+
+
+
+    if not client:
+
+
+
+        raise RuntimeError("Qdrant client not initialized.")
+
+
+
+
+
+
+
+    # 1. Get all unique chapter names first.
+
+
+
+    chapter_names = get_chapter_names(book_uuid)
+
+
+
+    
+
+
+
+    if not chapter_names:
+
+
+
+        return []
+
+
+
+
+
+
+
+    chapter_info = []
+
+
+
+    # 2. For each chapter, find its page range.
+
+
+
+    for name in chapter_names:
+
+
+
+        # We only need one chunk to get the page range since it's the same for all chunks in a chapter.
+
+
+
+        response, _ = client.scroll(
+
+
+
+            collection_name=COLLECTION_NAME,
+
+
+
+            scroll_filter=models.Filter(
+
+
+
+                must=[
+
+
+
+                    models.FieldCondition(key="textbook_uuid", match=models.MatchValue(value=book_uuid)),
+
+
+
+                    models.FieldCondition(key="chapter", match=models.MatchValue(value=name))
+
+
+
+                ]
+
+
+
+            ),
+
+
+
+            limit=1,
+
+
+
+            with_payload=["start_page", "end_page"]
+
+
+
+        )
+
+
+
+        
+
+
+
+        start_page, end_page = None, None
+
+
+
+        if response:
+
+
+
+            payload = response[0].payload
+
+
+
+            start_page = payload.get("start_page")
+
+
+
+            end_page = payload.get("end_page")
+
+
+
+            
+
+
+
+        chapter_info.append({
+
+
+
+            "name": name,
+
+
+
+            "start_page": start_page,
+
+
+
+            "end_page": end_page
+
+
+
+        })
+
+
+
+
+
+
+
+    # The chapter_names were already sorted, so the final list should be too.
+
+
+
+    return chapter_info
+
+
+
+
 
 def semantic_search(book_uuid: str, query: str, metadata_filters: dict = None) -> List[dict]:
     query_embedding = local_embedder.encode(query).tolist()

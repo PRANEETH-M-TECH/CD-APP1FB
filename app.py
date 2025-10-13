@@ -4,7 +4,7 @@ import json
 import re
 from contextlib import asynccontextmanager
 from dotenv import load_dotenv
-from fastapi import FastAPI, File, UploadFile, Form, HTTPException, Query
+from fastapi import FastAPI, File, UploadFile, Form, HTTPException, Query, BackgroundTasks
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, JSONResponse
 from pydantic import BaseModel
@@ -20,6 +20,7 @@ from qrdant import (
     semantic_search,
     generate_answer,
     generate_chapters_from_text,
+    get_chapters_for_book,
 )
 
 # --- Lifespan Management ---
@@ -62,6 +63,7 @@ async def upload_file(file: UploadFile = File(...)):
 
 @app.post("/api/books")
 async def create_book(
+    background_tasks: BackgroundTasks, # Add this
     class_name: str = Form(...),
     subject: str = Form(...),
     chapters: str = Form(...),      # JSON string of chapter metadata
@@ -79,10 +81,11 @@ async def create_book(
     if not os.path.exists(pdf_path):
         raise HTTPException(status_code=404, detail=f"Uploaded file not found: {filename}")
 
-    # Process the book using the new logic in qrdant.py
-    result = process_and_embed_book(pdf_path, class_name, subject, chapters_list)
+    # Run the long-running task in the background
+    background_tasks.add_task(process_and_embed_book, pdf_path, class_name, subject, chapters_list)
     
-    return result
+    # Immediately return a response to the user
+    return {"message": "Book processing started in the background. This may take several minutes.", "status": "processing"}
 
 @app.get("/api/books")
 async def list_books(class_name: Optional[str] = None, subject: Optional[str] = None):
@@ -119,6 +122,20 @@ async def query_book(request: QueryRequest):
     answer = generate_answer(request.query, context)
     
     return {"answer": answer, "sources": search_results}
+
+@app.get("/api/list-chapters")
+async def list_chapters(class_name: str, subject: str):
+    """
+    Returns a sorted list of chapters for a given book.
+    """
+    books = get_books(class_name=class_name, subject=subject)
+    if not books:
+        raise HTTPException(status_code=404, detail="Book not found.")
+
+    book_uuid = books[0]['id']
+    chapters = get_chapters_for_book(book_uuid)
+
+    return {"chapters": chapters}
 
 def extract_chapters_from_pdf(pdf_path: str) -> List[Dict]:
     """

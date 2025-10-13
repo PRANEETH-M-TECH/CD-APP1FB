@@ -199,13 +199,20 @@
 
       <!-- Chat Input -->
       <div id="chat-input-container" class="p-4 border-t border-gray-200 bg-white shadow-inner">
-        <form id="user-query-form" class="flex items-center gap-2">
+        <div class="flex justify-start mb-2">
+            <button type="button" id="list-chapters-btn" class="hidden bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg p-2 px-4 transition text-sm">
+              List Chapters
+            </button>
+        </div>
+        <form id="user-query-form">
           <textarea id="query-text" placeholder="Ask a question about the selected book..." required disabled
-            class="flex-1 border border-gray-300 rounded-lg p-3 h-12 focus:ring-2 focus:ring-blue-400"></textarea>
-          <button type="submit" id="submit-query-btn" disabled
-            class="bg-blue-600 text-white rounded-lg p-2 px-4 hover:bg-blue-700 transition">
-            ➤
-          </button>
+            class="w-full border border-gray-300 rounded-lg p-3 h-12 focus:ring-2 focus:ring-blue-400"></textarea>
+          <div class="flex justify-end items-center gap-2 mt-2">
+            <button type="submit" id="submit-query-btn" disabled
+              class="bg-blue-600 hover:bg-blue-700 text-white rounded-lg p-2 px-4 transition disabled:bg-gray-300 disabled:cursor-not-allowed">
+              Ask ➤
+            </button>
+          </div>
         </form>
       </div>
     </div>

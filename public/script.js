@@ -256,7 +256,9 @@ function setupChaptersPage() {
             const result = await response.json();
             if (!response.ok) throw new Error(result.detail || 'Failed to process book.');
             
-            showStatus(result.message, result.status === 'exists' ? 'warning' : 'success');
+            const finalMessage = "Processing started in the background. You can now safely leave this page. The book will be available in a few minutes.";
+            showStatus(finalMessage, 'success');
+
             chaptersForm.reset();
             chaptersTableBody.innerHTML = '';
             numChaptersInput.value = ''; // Clear the number input
@@ -291,6 +293,7 @@ function setupUserPage() {
     const queryForm = document.getElementById('user-query-form');
     const queryText = document.getElementById('query-text');
     const submitButton = document.getElementById('submit-query-btn');
+    const listChaptersBtn = document.getElementById('list-chapters-btn');
 
     // App State
     let selectedBook = null;
@@ -314,6 +317,10 @@ function setupUserPage() {
     queryForm.addEventListener('submit', (e) => {
         e.preventDefault();
         handleQuerySubmit();
+    });
+
+    listChaptersBtn.addEventListener('click', () => {
+        handleListChapters();
     });
 
     // Auto-resize textarea
@@ -346,8 +353,9 @@ function setupUserPage() {
         document.getElementById('pdf-viewer-header-user').style.display = 'none'; // Hide header
         viewerPlaceholder.style.display = 'flex';
         pdfLoadingIndicator.style.display = 'none';
-        queryText.disabled = true;
-        submitButton.disabled = true;
+        queryText.setAttribute('disabled', 'true');
+        submitButton.setAttribute('disabled', 'true');
+        listChaptersBtn.classList.add('hidden'); // Hide the button
         queryText.placeholder = 'Ask a question about the selected book...';
     }
 
@@ -383,8 +391,9 @@ function setupUserPage() {
             renderPage(pageNum); // Render the first page
 
             // Enable chat
-            queryText.disabled = false;
-            submitButton.disabled = false;
+            queryText.removeAttribute('disabled');
+            submitButton.removeAttribute('disabled');
+            listChaptersBtn.classList.remove('hidden'); // Show the button
             addMessage('ai', `Book "${selectedBook.subject}" loaded. You can now ask questions about it.`);
 
         } catch (error) {
@@ -460,7 +469,8 @@ function setupUserPage() {
         addMessage('user', query);
         queryText.value = '';
         queryText.style.height = 'auto'; // Reset height
-        submitButton.disabled = true;
+        submitButton.setAttribute('disabled', 'true');
+        listChaptersBtn.classList.add('hidden');
 
         const thinkingMessage = addMessage('ai', '...');
 
@@ -488,7 +498,83 @@ function setupUserPage() {
         } catch (error) {
             thinkingMessage.querySelector('.message-content').innerHTML = `<p class="error-message">Error: ${error.message}</p>`;
         } finally {
-            submitButton.disabled = false;
+            submitButton.removeAttribute('disabled');
+            listChaptersBtn.classList.remove('hidden');
+        }
+    }
+
+    async function handleListChapters() {
+        if (!selectedBook) return;
+
+        addMessage('user', 'List all chapters');
+        appendAIResponse('Fetching chapters...');
+
+        submitButton.setAttribute('disabled', 'true');
+        listChaptersBtn.classList.add('hidden');
+
+        try {
+            const className = classSelect.value;
+            const subject = subjectSelect.value;
+            const response = await fetch(`/api/list-chapters?class_name=${className}&subject=${subject}`);
+
+            if (!response.ok) {
+                const errorResult = await response.json();
+                throw new Error(errorResult.detail || 'Failed to get chapters.');
+            }
+
+            const result = await response.json();
+            let chapters = result.chapters;
+
+            if (!chapters || chapters.length === 0) {
+                throw new Error("No chapters were found for this book in the database.");
+            }
+
+            // Sort chapters by start_page numerically
+            chapters.sort((a, b) => a.start_page - b.start_page);
+
+            // Build an HTML table string
+            let tableHtml = `
+                <h3 class="text-lg font-bold mb-2">Chapters in this book:</h3>
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr>
+                            <th class="border-b-2 p-2">S.No.</th>
+                            <th class="border-b-2 p-2">Chapter Name</th>
+                            <th class="border-b-2 p-2">Pages</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            chapters.forEach((chapter, index) => {
+                const sno = index + 1;
+                tableHtml += `
+                        <tr>
+                            <td class="border-b p-2">${sno}</td>
+                            <td class="border-b p-2">${chapter.name}</td>
+                            <td class="border-b p-2">${chapter.start_page} - ${chapter.end_page}</td>
+                        </tr>
+                `;
+            });
+
+            tableHtml += `
+                    </tbody>
+                </table>
+            `;
+
+            const chatHistory = document.getElementById('chat-history');
+            const placeholderCard = chatHistory.lastChild;
+            
+            // Directly set the innerHTML with the new table
+            placeholderCard.querySelector('.markdown-content').innerHTML = tableHtml;
+
+        } catch (error) {
+            const chatHistory = document.getElementById('chat-history');
+            const placeholderCard = chatHistory.lastChild;
+            placeholderCard.querySelector('.markdown-content').innerHTML = `<p style="color: red;"><strong>Error:</strong> ${error.message}</p>`;
+        } finally {
+            submitButton.removeAttribute('disabled');
+            listChaptersBtn.classList.remove('hidden');
         }
     }
 
