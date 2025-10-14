@@ -1,0 +1,2393 @@
+--- Query Log ---
+Timestamp: 2025-10-14T14:28:33.670873
+Original Query: explain clearly about rainguage
+Reformulated Query: Define and describe the structure, function, and purpose of the rain gauge (rainguage) used for measuring rainfall, specifically referencing the content in the 'Rain and Rivers' chapter of the Class 7 Social Studies textbook.
+Classification: conceptual
+Retrieved 5 Chunks:
+
+  1. Score: 11.7449
+     Chapter: Importance of Transport System
+     Text: 5. Why did factory owners pay low wages and force workers to work for longer hours?
+6. Why do you think the working conditions in factories should be improved?
+7. Why is it necessary for government to enact laws to improve the working conditions?
+8. Why are children  not allowed to  work in factories?
+9. Transport system helps the industry – justify this statement in the context of Industrialisation.
+10. Locate the following countries in the world map.
+a) England b) Portugal
+c) France d) Spain
+11. Read the para ‘Urbanisation and slums’ of page 84 and comment on it.
+Project:
+1. You may recall the chapter on agriculture and trade in Class VI. Compare the nature of farmers
+and traders in Telangana with traders in Britain or Europe. You can use a few criteria and
+tabulate.
+2. Do you know any child working in a factory or shop? If you find, how do you respond?
+Improve your learning
+Industrial Revolution
+SCERT, TEALANGANASCERT, TEALANGANA
+
+  2. Score: 11.6981
+     Chapter: Rulers and Buildings
+     Text: garden in the layout of the Taj Mahal, the
+grandest architectural accomplishment of
+his reign. Here, the white marble
+mausoleum was placed on a terrace by the
+Fig: 22.14 Tajmahal in Agra.
+SCERT, TEALANGANASCERT, TEALANGANA
+ 207Free Distribution by Govt. of  Telangana 2021-22
+Fig: 22.16b  The archways at the Qutb
+Shahi Tombs.
+1. How is the “trabeate” principle of architecture different from “arcuate”?
+2. What is a shikhara?
+3.  What are the elements of a Mughal chahar bagh garden?
+4. How did a temple communicate the importance of a king?
+5. Read the second para of introduction part of page 198 and comment on it.
+6. Is there a statue or a memorial in your village or town. Why was it placed there? What purpose does it
+serve?
+7. Visit and describe any park or garden in your neighbourhood. In what ways is it similar to or
+different from the gardens of the Mughals?
+8. Locate the following in the map of India.
+a) Delhi b) Agra c) Amritsar d) T anjavur e) Humpi f) River Yamuna
+
+  3. Score: 11.2647
+     Chapter: Reading Maps of Different kinds
+     Text: This additional content will help the students understand the concepts clearly and will also help the teachers in
+making their interaction with the students more meaningful.
+At the end of each chapter, questions are provided in a separate QR Code which can assess the level of learning
+outcomes achieved by the students.
+We expect the students and the teachers to use the content available in the QR Codes optimally and make their
+class room interaction more enjoyable and educative.
+SCERT, TEALANGANASCERT, TEALANGANA
+Free Distribution by Govt. of  Telangana 2021-22
+5     %
+5%
+SOCIAL STUDIES
+Class VII
+Published by Government of Telangana, Hyderabad.
+Respect the Law
+Get the Rights
+Grow by Education
+Behave Humbly
+i
+Textbook Development Committee
+Smt. B. Seshu Kumari, Director,
+SCERT, Telangana,
+Hyderabad.
+Sri B. Sudhakar, Director,
+Govt. Textbook Printing Press,
+Telangana, Hyderabad.Dr. N. Upender Reddy,
+Professor & Head C&T Dept.,
+SCERT, Telangana, Hyderabad.
+
+  4. Score: 11.0373
+     Chapter: Africa
+     Text: go to America using the Trade Winds.
+Look at Map 7 and answer the following questions :
+ Which winds would help the sailors to return to Europe from America?
+ Could the sail driven ships use the Trade Winds to return to Europe? Give reasons.
+After Columbus, the Europeans discovered several sea routes. They could now sail not
+only to America but also to different parts of Africa, India and Australia. They traded with
+these countries and amassed immense wealth, which was used to develop industries in
+Europe.
+You will read about the industrial revolution in Europe in greater detail in a later chapter.
+Keywords :
+1. Peninsula
+2. Island
+3. Bay
+4. Currents
+5. Gulf
+6. Climate
+SCERT, TEALANGANASCERT, TEALANGANA
+ 57Free Distribution by Govt. of  Telangana 2021-22
+Improve your learning
+1. The Atlantic Ocean has  a great impact on the climate of Europe as well as on the lives and livelihood
+of the people of Europe. Collect relevant information and write an essay on the theme.
+
+  5. Score: 11.0308
+     Chapter: Tanks and Ground Water
+     Text: programme, the protection and
+safeguarding the plants and to monitor the
+programme, the village level Haritha
+Rakshaka Committees are formed under the
+chairmanship of sarpanch. In the same way,
+district and state level committees are also
+formed.
+ What are the activities taken up
+under tree plantation programme in
+your school?
+ Why is it necessary to take up the
+initiation of massive plantation of
+saplings?
+Let us take the case of the Ganga. Earlier,
+there were dense forests on the Himalayas
+from where Ganga and its tributaries
+originate. In the recent years, there has
+been a large scale felling of trees and
+hence, the forest cover in the Himalayas
+has reduced considerably. As a result,
+whenever there is heavy rainfall, the
+rainwater rapidly flows down the slopes of
+the mountains and fills up the floodplain
+of the river. The waters also bring a very
+large quantity of silt and deposit it on the
+riverbed. This results in frequent floods
+which cause heavy damage to life and
+
+--- End Log ---
+
+--- Query Log ---
+Timestamp: 2025-10-14T14:32:05.759078
+Original Query: think about the ways to restore the ground water in your area?
+Reformulated Query: What methods for restoring or conserving groundwater resources are discussed in the chapter 'Tanks and Ground Water'?
+Classification: conceptual
+Retrieved 5 Chunks:
+
+  1. Score: 6.1880
+     Chapter: Europe
+     Text: SCERT, TEALANGANA
+32 Diversity on the Earth Social Studies
+2. The wells shown in this figure are situated on the slopes of the Godavari. But there
+seems to be a mistake in the figure. Can you correct it?
+3. In which of these places do you expect maximum percolation to take place?
+4. When the owners of some wells in Pallerla started using high-powered motors to
+draw water from the wells, the owners of other wells noticed that their wells were
+drying up. Discuss the possible solution to the problem.
+5. In areas where there is a shortage of groundwater, should there be any restrictions on
+digging bore wells? Why?
+6. Think about the ways to restore the groundwater in your area.
+7. Observe the figure 3.1(a) and compare it with your locality.
+8. Draw the map of your village and locate the water resources of your village in it.
+9. Read the third paragraph under “Quality of Ground water” in page no. 30 and
+comment on it.
+Weathered Rock Weathered RockWeathered Rock Weathered Rock
+
+  2. Score: 5.9766
+     Chapter: Rulers and Buildings
+     Text: SCERT, TEALANGANASCERT, TEALANGANA
+208 Culture and Communication Social Studies
+ACADEMIC STANDARDS (AS)
+   Time should be spent in making sure that children comprehend the passages given in text. In
+between questions are useful in this context. These questions are of different types that would
+include the aspects reasoning, cause and effect, justification, mind mapping / concept mapping,
+observation, analysis, thinking and imagination, reflection, interpreting etc. The key concepts
+have been discussed subconceptwise  in every chapter with examples and also given in the
+form of keywords.
+1) Conceptual understanding (AS1) : Promoting learning of basic concepts through inquiry,
+discussion, reflection giving examples through case studies interpreting, observation etc.
+2) Reading the text (given), understanding and interpretation (AS2) : Occasionally there
+are case studies about farmers, labourers in factory, or images that are used in text which do
+
+  3. Score: 5.4270
+     Chapter: Caste Discrimination and the Struggle for Equalities
+     Text: on the hill slopes in my constituencies and
+as a result, there has been considerable
+rise in the level of groundwater in my
+constituency.  Government officials are
+within the reach of the people.
+MLA (6) : Hon. Speaker, the Industrial
+units in my area are discharging polluted
+water into the river and it has adv erse
+effects on the health of the people. I would
+like to know the steps being taken by the
+government in this regard since drinking
+water is a serious issue in my constituency.
+Minister: Hon’ble Speaker, the
+Government has great concern for the
+health of the people. It has taken up all the
+remedial and protective measures in the
+drought prone mandals. Development of
+tanks, plantation of trees, and banning sand
+mining are some of them. The Government
+takes into consideration the suggestions
+of the honourable members and also
+seeks the support of all for the successful
+implementation of the programme.
+ What would be your response on
+the above issue if you were an
+MLA?
+
+  4. Score: 4.8172
+     Chapter: Europe
+     Text: The fishermen return any time between
+1 pm and 8 pm or sometimes even late in
+the night. On the day we visited the village,
+they came back at 3 pm with a good catch
+of a type of fish known as “para”.
+Fig 4.4 Aerial view of Bhavanapadu village settlement
+SCERT, TEALANGANASCERT, TEALANGANA
+ 37Free Distribution by Govt. of  Telangana 2021-22
+Some middlemen temporarily store the
+fish, segregate them and carry them in cold
+container tanks to faraway places like
+Kolkata, Bangalore, Chennai, Hyderabad,
+Kerala and so on. These people get four
+times more money than the catcher does.
+Observe the following pictures of the
+Potaiah adda (4.9), the local middleman.
+ What makes the middlemen in the
+fish business to earn much more
+money than the fishermen?
+ For what purpose are the thermocol
+boxes shown in the photo lined up
+in the middleman’s adda?
+So far we discussed the big fishing
+business but there are also small fisher folk
+in this village. Karrateppa is a country
+
+  5. Score: 4.7635
+     Chapter: Oceans and Fishing
+     Text: Groundwater usually accumulates above
+such rocks. Since the water cannot go
+beneath them, these are called impervious
+PART - II
+ Do you think
+groundwater would
+accumulate if there
+were no imper-
+vious rocks?
+ What would
+happen if the
+pervious rock is
+below the imper-
+vious rock? Where
+would the ground
+water accumulate?
+Fig 3.2. Rocks and Water below the ground level
+Tanks and Ground Water
+rocks. Most of the rocks underlying the soil
+in telangana are of this kind. A small portion
+of land in Telangana, which is next to rivers,
+has deep layers of sand, soil and pebbles.
+Water also accumulates in these layers.
+The layer of water which accumulates
+under the ground among rocks is called
+aquifer. The thickness of the aquifer
+determines the availability of groundwater
+in the area.
+Visit the wells in your area and try to
+find out how many feet below the ground
+is the water level. Find out if there is any
+rocks underneath and if so, what kind of
+rock it is. Also find out about who owns
+
+--- End Log ---
+
+--- Query Log ---
+Timestamp: 2025-10-14T15:24:25.277896
+Original Query: which food shows the presence of the starch?
+Reformulated Query: Based on the Class 7 Science textbook chapter 'FOOD COMPONENTS', what are the specific examples of foods that show the presence of starch?
+Classification: factual
+
+--- Initial Hybrid Search Results (5 chunks) ---
+  1. Hybrid Score: 21.7110 | Chapter: WATER
+  2. Hybrid Score: 21.3237 | Chapter: ACIDS AND BASES
+  3. Hybrid Score: 18.7134 | Chapter: REPRODUCTION IN PLANTS
+  4. Hybrid Score: 18.2904 | Chapter: REVISION
+  5. Hybrid Score: 17.6108 | Chapter: FOREST : OUR LIFE
+
+--- Final Re-ranked Results (1 chunks) ---
+  1. Cross-Encoder Score: 1.9596
+     Chapter: ACIDS AND BASES
+     Text: oils, fats are present in more quantity.
+Let us do – 4: Testing of food items
+Test different food items as given in Table 2.
+You may add your own examples. Find out
+the different components in them and record
+the information on the basis of your
+observations in table 2.
+You can enrich the table by adding more food
+substances.
+Analyse the data in the table and think about
+the components presents in the  food items.
+Fig. 4
+ Fig 5
+S.No. FOOD STARCH
+Present / Absent
+PROTEINS
+Present / Absent
+FATS
+Present / Absent
+1
+2
+3
+4
+5
+RICE
+POTATO
+MILK
+CURD
+EGG
+Table 2: Testing of  food items for Carbohydrates, Proteins, Fats
+SCERT, TELANGANAFood Components4
+Discuss with your friends and answer the
+following questions.
+1. Which foods show the presence of
+starch?
+ ..........................................................................
+2. What nutrients are present in milk?
+ ..........................................................................
+3. Which component of food could you
+
+--- End Log ---
+
+--- Query Log ---
+Timestamp: 2025-10-14T15:25:44.322009
+Original Query: What nutrients are present in milk?
+Reformulated Query: According to the Class 7 Science textbook chapter on 'FOOD COMPONENTS', what essential nutrients (proteins, fats, vitamins, minerals) are specifically present in milk?
+Classification: factual
+
+--- Initial Hybrid Search Results (5 chunks) ---
+  1. Hybrid Score: 17.1666 | Chapter: REPRODUCTION IN PLANTS
+  2. Hybrid Score: 13.2993 | Chapter: ACIDS AND BASES
+  3. Hybrid Score: 12.6270 | Chapter: REVISION
+  4. Hybrid Score: 12.2098 | Chapter: REPRODUCTION IN PLANTS
+  5. Hybrid Score: 12.1313 | Chapter: REPRODUCTION IN PLANTS
+
+--- Final Re-ranked Results (0 chunks) ---
+--- End Log ---
+
+--- Query Log ---
+Timestamp: 2025-10-14T15:26:33.358846
+Original Query: explain the types of motion?
+Reformulated Query: Explain the different categories and types of motion (e.g., rectilinear, circular, periodic) as described in the Class 7 Science textbook chapter 'MOTION AND TIME'.
+Classification: conceptual
+
+--- Initial Hybrid Search Results (5 chunks) ---
+  1. Hybrid Score: 6.8158 | Chapter: WEATHER AND CLIMATE
+  2. Hybrid Score: 6.7357 | Chapter: HEAT - MEASUREMENT
+  3. Hybrid Score: 6.5815 | Chapter: AIR, WINDS AND CYCLONES
+  4. Hybrid Score: 6.5440 | Chapter: WEATHER AND CLIMATE
+  5. Hybrid Score: 6.3974 | Chapter: FOREST : OUR LIFE
+
+--- Final Re-ranked Results (0 chunks) ---
+--- End Log ---
+
+--- Query Log ---
+Timestamp: 2025-10-14T15:45:55.981848
+Original Query: which place in the Telangana is called the silk city?
+Reformulated Query: What information does the textbook provide about the geographical origin, production, or commercial use of silk, specifically in relation to the chapter 'SILK - WOOL'?
+Classification: factual
+Retrieved 5 Chunks (Hybrid Search):
+
+  1. Hybrid Score: 19.1773
+     Chapter: ACIDS AND BASES
+     Text: experiments.
+• Teacher must develop a year plan duly distributing the projects, assignments, field trips given in
+the textbooks so as to complete with in the available 180 working days.
+• Teachers are advised to collect information about recent studies of the areas discussed in the
+textbook for every year.
+About assessment ….
+The present practice of testing children to what extent they learnt the information must be
+replaced by understanding how children are learning. What are the learning problems? What is difficult
+for children? etc., This may be possible by observing children notebooks, assignments and sitting
+besides them while doing the work / problem solving. Therefore, importance must be given for the
+Assessment For Learning than Assessment Of Learning.  An effort was made to provide variety of
+assessment exercises in the textbooks, assess the different competencies to be developed as per the
+
+  2. Hybrid Score: 18.1415
+     Chapter: ACIDS AND BASES
+     Text: Assessment For Learning than Assessment Of Learning.  An effort was made to provide variety of
+assessment exercises in the textbooks, assess the different competencies to be developed as per the
+goals and objectives of science teaching in schools.  Teachers must understand the continuity and
+appropriateness of varieties of assessment.
+• It is expected that every child must understand the concept and try for his own answer rather
+than repeating the text given in the textbooks without any value addition.
+• Teachers shall not try for uniformity in the answers across the students in the class but
+encourage them for a variety of responses.
+• Some of the exercises for display in the wall magazine, bulletin board, school community
+meeting are not only for the sake of assessment but it reflects the nature of academic activities
+to be performed in the schools.
+The revised science textbook is all together an improved design reflecting the nature and spirit
+
+  3. Hybrid Score: 16.8547
+     Chapter: FOOD COMPONENTS
+     Text: re-learning of the true nature of science must happen as recommended by the National
+Curriculum Frame Work-2005.
+SCERT, TELANGANAV Free Distribution by Government of T.S. 2021-22
+The textbooks are developed based on State Curriculum Framework and its Position
+Paper on Science and also reflect the spirit of Right to Education Act.  Science textbooks
+are developed to facilitate construction of knowledge jointly by the teacher and the pupil
+but never as merely an information provider.
+The textbook facilitates learning through activities, discovery, exploration in a child
+centered manner.  The activities i.e., group, individual and whole class, experiments, field
+investigations, information collection, questioning, analysis, synthesis, projects etc., must
+become a part of learning and as well as assessment in the context of science education.
+The pupil assessment procedures facilitate thinking in  critical and multiple ways.  Critical
+
+  4. Hybrid Score: 16.5743
+     Chapter: REPRODUCTION IN PLANTS
+     Text: conclusion can you draw about the
+functions of the root and stem in the
+nutrition of plants?
+Farmers sprinkle urea in rice or wheat
+fields whenever the leaves turn yellow.
+The leaves soon become green again.
+• Why is it necessary to irrigate the fields
+after sprinkling urea? Think it over and
+answer with reasons.
+• The farmer sprinkles urea in the soil
+of his field. How does the urea affect
+the leaves of the crop?
+This experiment and the information about
+urea tell us how and from where plants get
+water and other nutrients dissolved in it.
+Exchange of air
+Plants get water from the soil through their
+roots. They use carbon dioxide of  air. This
+job is done by the leaves. The leaves have tiny
+holes through which the exchange of air takes
+place. These holes are so minute you can only
+see them with the help of a microscope. They
+are called stomata. It is through the stomata
+that the exchange of air in leaves takes place
+continuously. You have seen the picture of
+
+  5. Hybrid Score: 16.4166
+     Chapter: FOOD COMPONENTS
+     Text: information, analysis of information and finally arriving to conclusions and generalizations.
+Children must draw the illustrations on the observed things and appreciate the interdependence
+of the living beings in the nature.  Appropriate attitudes on keeping the bio diversity and sustaining it is
+also one of the objectives of science learning in schools.  Teachers must play a vital role and take the
+responsibility in developing such scientific spirit and academic standards.
+Teaching Learning Strategies ….
+Teaching does not mean transferring information from the textbooks.  Teachers must understand
+the philosophical base of science i.e., why science is as a subject in school curriculum? And what are
+the expected goals and objectives of science teaching? What is the expected behavioral change in
+children through science teaching? How to motivate the children to peruse science with increased
+
+--- End Log ---
+
+--- Query Log ---
+Timestamp: 2025-10-14T15:50:25.202324
+Original Query: Turmeric stains on the white clothes , when washed with soap turn red, why?
+Reformulated Query: Explain why the natural indicator turmeric changes from yellow to red/reddish-brown when it reacts with a basic substance such as soap, as discussed in the chapter ACIDS AND BASES.
+Classification: conceptual
+Retrieved 5 Chunks (Hybrid Search):
+
+  1. Hybrid Score: 9.6593
+     Chapter: SILK - WOOL
+     Text: their taste:
+• Do you experience any other tastes in
+your daily life? Write them below.
+———————————
+———————————
+———————————
+———————————
+• Do you find any difference in the taste
+of  a raw and a ripe fruit?
+TABLE - 1
+• Do substances change their taste when
+cooked?
+• Do substances change their taste when
+added to some other substances?
+• Add salt to lemon juice. How do the two
+together  taste now?
+• Add sugar to lemon juice what change
+do you notice in the taste?
+• Is there any difference in the taste in the
+above situations.
+2 ACIDS AND BASES
+SCERT, TELANGANAAcids and Bases10
+• Do substances change colour when
+added to other substances?
+• Do you observed any change when lime
+water is added to turmeric?
+Let us do - 1
+Take some turmeric powder. Add a bit of
+water to it and prepare turmeric paste. Rub
+the turmeric paste on a white paper dry it for
+some time. Then draw a flower daigram on
+that paper with a pencil. Colour the flower
+with soap water using a brush.
+
+  2. Hybrid Score: 9.1620
+     Chapter: MOTION AND TIME
+     Text: 3. Acidic, basic and neutral solutions are
+given in three test tubes and you are given
+a strip of red litmus? How will you
+identify the three solutions?
+4. When drops of lemon juice are put on
+blue litmus it turns red what will happen
+if you put some drops of soap solution
+on the same position on litmus paper?
+5. What happens when Nitric acid is added
+to egg shell?
+6. Turmeric stains on white clothes, when
+washed with soap, turn red. Why?
+7. Ammonia is present in window cleaners.
+It turns red litmus blue. What is its
+nature?
+8. What is the nature of urea? Is it acidic,
+basic / neutral?  How can we verify it?
+9. Red litmus paper is dipped in a solution.
+It remains red.  What is nature of the
+solution? Explain your answer?
+10. What is the effect of basic substances on
+turmeric paper?
+11. Can flowers and turmeric papers also be
+called indicators? Why?
+12. Correct the statement if it is wrong
+a)  Indicators show different  colours in
+acidic and basic solutions.
+
+  3. Hybrid Score: 8.9324
+     Chapter: SILK - WOOL
+     Text: Let us do - 2
+Take a piece of  turmeric paper. Find as many
+of the substances  given in the table-2 as
+possible and put them on the turmeric paper
+one by one. You could try using other
+substances around you as well.
+• What do you observe? Do you find any
+change in colour?
+• We notice that the colour of  turmeric
+paper changes with some substances
+when added to it.
+Record your observations in table-2
+The substances which indicate a change in
+colour when some substances are added to
+them are known as indicators.
+Turmeric paper is a natural indicator. We can
+also prepare other natural indicators
+mentioned in the table – 2 and carry out the
+tests.
+Let us test some substances using these natural
+indicators. To the substances mentioned in the
+table – 2, add natural indicators and observe
+the change in colour. Write the changed
+colours in the table-2.
+• What are the substances which can change
+the colour of the petals of hibiscus
+indicator?
+• Are there any substances which can
+
+  4. Hybrid Score: 8.3717
+     Chapter: MOTION AND TIME
+     Text: Acids and Bases14
+Methyl orange gives red colour with acids
+and yellow colour with bases.  Phenolphtha-
+lein remains colourless in acidic solution
+while it turns pink in basic solution.
+Let us do some more experiments
+Take a natural acid say lemon juice
+in six test tubes and add Copper,
+Zinc, Magnesium, Iron, Brass,
+Aluminium pieces to each one of
+the test tubes separately. Note
+your observations.
+Light a matchstick and introduce it into the
+test tubes.  What do you observe?
+Henry Cavendish, an Italian
+Scientist discovered  a colourless
+gas called Hydrogen Balloons
+are filled with this gas. The
+balloons are used for
+decorations.
+It catches fire  with
+a sound.  Is it Hydrogen?
+Do you know?
+Why are the inner sides of vessels made up
+of brass and copper coated with tin?
+When some substances are kept in a copper
+container for a long time then a blue - green
+layer is formed in the inner walls of  the
+container. Copper reacts with the acids
+present in the substances and forms a blue
+
+  5. Hybrid Score: 8.0413
+     Chapter: SILK - WOOL
+     Text: the turmeric paste on a white paper dry it for
+some time. Then draw a flower daigram on
+that paper with a pencil. Colour the flower
+with soap water using a brush.
+• Does the colour of the flower remain the
+same when soap water is used?
+Similarly take some lime water. Add a few
+drops of  it on a piece of  turmeric paper. Does
+the paper change its colour? Is the changed
+colour of  turmeric paper the same in both
+the cases?
+Rani and Sai dropped food they were eating
+on a white sheet. They washed the sheet with
+soap and found to their surprise a red spot
+appearing on the sheet.
+• What is the reason for the red spot?
+Colour Change:-  We notice here that
+turmeric changes colour when soap water or
+Fig.1
+lime water is added to it. Is it possible that
+some  other substances also change their
+colour. Let us see.
+Let us do - 2
+Take a piece of  turmeric paper. Find as many
+of the substances  given in the table-2 as
+possible and put them on the turmeric paper
+one by one. You could try using other
+
+--- End Log ---
+
+--- Query Log ---
+Timestamp: 2025-10-14T15:52:06.269534
+Original Query: What is the nature of the urea?is it acidic basic or neutral?how can we verify it?
+Reformulated Query: Determine the chemical nature of urea (acidic, basic, or neutral) and the experimental methods used to verify its pH level according to the 'Acids and Bases' chapter.
+Classification: conceptual
+Retrieved 5 Chunks (Hybrid Search):
+
+  1. Hybrid Score: 9.5478
+     Chapter: FOOD COMPONENTS
+     Text: become a part of learning and as well as assessment in the context of science education.
+The pupil assessment procedures facilitate thinking in  critical and multiple ways.  Critical
+pedagogy and social construction become a part of classroom pedagogies in search of
+truth. The spirit of continuous and comprehensive evaluation is reflected in the assessment
+procedures.  Certainly the revised textbooks facilitate the teachers in effective transaction
+of science duly reflecting the nature and spirit of science.
+New textbooks are developed to achieve desired academic standards. So teachers
+should develop various teaching learning strategies to make their students to achieve class
+based academic standards.  We should avoid rote learning methods for successful
+implementation of Continuous Comprehensive Evaluation (CCE). It is very impart to know
+more about different methods to assess student progress  by summative and formative
+
+  2. Hybrid Score: 9.0939
+     Chapter: FOOD COMPONENTS
+     Text: implementation of Continuous Comprehensive Evaluation (CCE). It is very impart to know
+more about different methods to assess student progress  by summative and formative
+evaluation. New textbooks reflects Continuous Comprehensive Evaluation and teaching
+method with respect of discussed concepts. This is more useful to teachers and students.
+We are very  grateful for the kind of support from the National and State level
+experts in designing a textbook of science that transforms the very nature of science teaching
+learning in the state classrooms.  We are also thankful to the Textbook Writers, Editors,
+Illustrators, Graphic Designers for their  dedicated work for the cause of children’s science
+education.
+We humbly request the educationists, parents, NGOs and children for appropriate
+suggestions to improve the science textbooks.  We also expect that the teachers and
+teacher educators will welcome the proposed reforms in science teaching learning process
+
+  3. Hybrid Score: 8.6506
+     Chapter: MOTION AND TIME
+     Text: 15. Prepare  violet cabbage juice by boiling a piece of cabbage in water. Use it as an
+indicator and test acidic and basic solutions with it.  Present your observations in
+the form of a table.
+16. Collect different flowers and prepare their natural indicators with the help of filter
+papers verify whether they act as indicators.
+17. Test the nature of lemon juice and milk sample with help of natural indicators
+prepared from different flowers. Explain their nature.
+18. How do you  feel about nature? It is a big natural laboratory that contains
+innumerable indicators!
+19. Choose the correct anser:
+a. To protect tooth decay we are advised to brush our teeth regularly. The nature of
+the tooth paste commonly used is
+(i) Acidic (ii) Neutral (iii) Basic (iv) Salt
+b. Which of the following is acidic in nature?
+(i) Lemon juice (ii) Baking Soda (iii) Lime Water (iv) Soap Water
+20. Match the following
+a) Lactic Acid ( ) (1) Tomato
+b) Acetic Acid ( ) (2) Lemon
+c) Citric Acid ( ) (3) Vinegar
+
+  4. Hybrid Score: 8.3880
+     Chapter: REVISION
+     Text: of sugar at the bottom of the beaker. Thus
+sugar the small granules of sugar added
+changed into large size sugar crystals.
+What type of change is it ?
+Let us do-11: Observe  Crystallisation of Urea
+Take some water in a test tube and add urea
+to it. Heat the test tube till all the urea
+dissolves. Add more urea to it. Keep on
+adding to it until  no more urea can be
+dissolved in it. Let the solution cool down for
+sometime.  Observe the test tube after about
+half  an hour.
+Do  you find any crystals in the solution?
+What is the shape of the crystals?
+Repeat the experiment with Alum.  Compare
+the type of crystals formed by urea and Alum.
+SCERT, TELANGANA165VII Science Free Distribution by Govt. of T.S. 2021-22
+Let us do-12: Observing Crystallisation of
+Copper Sulphate.
+Take some hot, saturated solution of  Copper
+sulphate in a test tube.  Pour some of  it in an
+evaporating dish. Allow the solution to cool
+quickly.
+Observe with a magnifying glass, the size,
+
+  5. Hybrid Score: 8.3456
+     Chapter: REVISION
+     Text: Carbon dioxide and Calcium Carbonate
+are formed. Hence it is a chemical change.
+When a material undergoes a change in its
+composition it is called a chemical change
+Let us do-9: Burning of Camphor
+Have you ever seen “harathi” ?
+Have you ever thought of the material used
+in harathi?
+It is “Camphor”, we burn it to get flame
+(harathi). Observe what happens when you
+burn Camphor?  Initially it changes into
+liquid and then burns.  It is also considered
+to be  a chemical change.
+Take a small quantity of  Camphor in a dish
+and place it in the open air. Observe it after
+some time. What happens? Its quantity
+reduces and you sense the smell of it. It
+happens because camphor evaporates. Since
+SCERT, TELANGANAChanges Around Us164
+it has strong smell, it is used to keep  insects
+and flies away.  It is also used in medicines.
+From the  activities  discussed above  we
+conclude that, in a chemical change, material
+undergoes a change in its composition and a
+new substance is formed.
+
+--- End Log ---
+
+--- Query Log ---
+Timestamp: 2025-10-14T15:59:41.246697
+Original Query: what is the effect of basic substance on the turmeric paper?
+Reformulated Query: Color change observed when a basic substance is applied to turmeric indicator paper, referencing the Class 7 Science chapter on ACIDS AND BASES.
+Classification: factual
+Retrieved 5 Chunks (Hybrid Search):
+
+  1. Hybrid Score: 24.4811
+     Chapter: SILK - WOOL
+     Text: their taste:
+• Do you experience any other tastes in
+your daily life? Write them below.
+———————————
+———————————
+———————————
+———————————
+• Do you find any difference in the taste
+of  a raw and a ripe fruit?
+TABLE - 1
+• Do substances change their taste when
+cooked?
+• Do substances change their taste when
+added to some other substances?
+• Add salt to lemon juice. How do the two
+together  taste now?
+• Add sugar to lemon juice what change
+do you notice in the taste?
+• Is there any difference in the taste in the
+above situations.
+2 ACIDS AND BASES
+SCERT, TELANGANAAcids and Bases10
+• Do substances change colour when
+added to other substances?
+• Do you observed any change when lime
+water is added to turmeric?
+Let us do - 1
+Take some turmeric powder. Add a bit of
+water to it and prepare turmeric paste. Rub
+the turmeric paste on a white paper dry it for
+some time. Then draw a flower daigram on
+that paper with a pencil. Colour the flower
+with soap water using a brush.
+
+  2. Hybrid Score: 17.4827
+     Chapter: SILK - WOOL
+     Text: the turmeric paste on a white paper dry it for
+some time. Then draw a flower daigram on
+that paper with a pencil. Colour the flower
+with soap water using a brush.
+• Does the colour of the flower remain the
+same when soap water is used?
+Similarly take some lime water. Add a few
+drops of  it on a piece of  turmeric paper. Does
+the paper change its colour? Is the changed
+colour of  turmeric paper the same in both
+the cases?
+Rani and Sai dropped food they were eating
+on a white sheet. They washed the sheet with
+soap and found to their surprise a red spot
+appearing on the sheet.
+• What is the reason for the red spot?
+Colour Change:-  We notice here that
+turmeric changes colour when soap water or
+Fig.1
+lime water is added to it. Is it possible that
+some  other substances also change their
+colour. Let us see.
+Let us do - 2
+Take a piece of  turmeric paper. Find as many
+of the substances  given in the table-2 as
+possible and put them on the turmeric paper
+one by one. You could try using other
+
+  3. Hybrid Score: 16.7174
+     Chapter: REVISION
+     Text: burning the same?
+In the above  activity we notice that when
+a piece of wood, paper, and cotton are burnt
+a new material is formed . This is black in
+colour  and in powder form which is
+different from  the original  material. We
+SCERT, TELANGANAChanges Around Us160
+also notice the change in shape and size of
+new material. This type of change which
+leads to  form a new substance is known as
+Chemical Change.
+Have you observed such changes in your
+daily life?
+Can you name some changes which form
+new substances?
+Rusting of Iron:
+Fig. 3
+Have you ever observed iron nails, iron
+gates, iron benches or pieces of  iron left in
+the open ground for a long time?
+What did you notice?
+You observe a brown layer on the surface of
+the iron articles.  This is called ‘rust’ and the
+process of  forming of  this layer is called
+‘rusting’.
+Observe the  iron tawa in your kitchen. You
+find a brown layer  on it if it is unused for a
+long time.  This is nothing but rusting of  iron.
+
+  4. Hybrid Score: 16.2395
+     Chapter: MOTION AND TIME
+     Text: your observations in the given table.
+TABLE - 9
+Why is our sweat  salty ?
+Our body needs many types of salts.  We
+lose some salts through excretion. So sweat
+is salty.
+Do you know?
+Uses of  some acids, bases and salts
+Salts which change blue litmus to red are
+acidic salts and  salts which change red
+litmus to blue are basic salts.  Some salts
+affect neither blue nor red litmus papers.
+These are called neutral salts. TABLE - 10
+Cool Drinks
+SCERT, TELANGANAVII Science 17Free Distribution by Govt. of T.S. 2021-22
+Key words:-
+Indicator, Acid, Base, Red litmus, Blue
+litmus, Acidic substance, Basic Substance,
+Neutral Substance, Salts, Neutralization,
+Acid rain.
+What we have learnt
+• Indicator helps us to find whether the
+solution is acidic or basic or neutral.
+• Red litmus paper, blue litmus paper,
+phenolphthalein, methyl orange  are
+indicators.
+• Hibiscus, turmeric and rose petals are
+natural indicators.
+• The substances that turn blue litmus to
+red are acidic in nature.
+
+  5. Hybrid Score: 13.8396
+     Chapter: MOTION AND TIME
+     Text: 3. Acidic, basic and neutral solutions are
+given in three test tubes and you are given
+a strip of red litmus? How will you
+identify the three solutions?
+4. When drops of lemon juice are put on
+blue litmus it turns red what will happen
+if you put some drops of soap solution
+on the same position on litmus paper?
+5. What happens when Nitric acid is added
+to egg shell?
+6. Turmeric stains on white clothes, when
+washed with soap, turn red. Why?
+7. Ammonia is present in window cleaners.
+It turns red litmus blue. What is its
+nature?
+8. What is the nature of urea? Is it acidic,
+basic / neutral?  How can we verify it?
+9. Red litmus paper is dipped in a solution.
+It remains red.  What is nature of the
+solution? Explain your answer?
+10. What is the effect of basic substances on
+turmeric paper?
+11. Can flowers and turmeric papers also be
+called indicators? Why?
+12. Correct the statement if it is wrong
+a)  Indicators show different  colours in
+acidic and basic solutions.
+
+--- End Log ---
+
+--- Query Log ---
+Timestamp: 2025-10-14T16:01:35.461430
+Original Query: what causes cyclones?
+Reformulated Query: Explain the causes and formation mechanisms of cyclones, referencing the concepts in the 'AIR, WINDS AND CYCLONES' chapter of the Class 7 Science textbook.
+Classification: conceptual
+Retrieved 5 Chunks (Hybrid Search):
+
+  1. Hybrid Score: 9.8172
+     Chapter: ACIDS AND BASES
+     Text: sense, values
+7. Application to daily life,
+concern to bio diversity.
+Children are able to explain, cite examples, give reasons,
+and give comparison and differences, explain the process
+of given concepts in the textbook. Children are able to
+develop their own brain mappings.
+Children are able to ask questions to understand
+concepts, to clarify doubts about the concepts and to
+participate in discussions. They are able to guess the
+results of on issue with proper reasoning, able to predict
+the results of  experiments.
+Children are able to do the experiments given in the
+text book and developed on their own.  Able to arrange
+the apparatus, record the observati onal findings, suggest
+alternative apparatus, takes necessary precautions while
+doing the experiments, able to do to alternate
+experiments by changing variables. They are able to
+participate in field investigation and prepare reports.
+Children are able to collect information related to the
+
+  2. Hybrid Score: 9.5371
+     Chapter: ACIDS AND BASES
+     Text: concept they learned, to solve the problem faced in daily
+life situations. Recognise the importance of  biodiversity
+and takes measures to protect the biodiversity.
+SCERT, TELANGANAXI Free Distribution by Government of T.S. 2021-22
+INDEX
+S.No. Name of the Chapter Page No. Periods Month
+Class VII
+Unit
+I
+II
+III
+IV
+10
+10
+10
+11
+12
+10
+12
+12
+12
+10
+11
+10
+9
+10
+11
+11
+10
+1
+9
+19
+28
+43
+54
+63
+73
+82
+97
+104
+112
+123
+129
+138
+150
+157
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+XI
+FOOD COMPONENTS
+ACIDS AND BASES
+SILK - WOOL
+MOTION AND TIME
+HEAT - MEASUREMENT
+WEATHER AND CLIMATE
+ELECTRICITY
+AIR, WINDS AND CYCLONES
+REFLECTION OF LIGHT
+NUTRITION IN PLANTS
+RESPIRATION IN ORGANISMS
+REPRODUCTION IN PLANTS
+SEED DISPERSAL
+WATER
+SOIL : OUR LIFE
+FOREST : OUR LIFE
+CHANGES AROUND US
+REVISION
+June
+June
+July
+July
+August
+August
+September
+September
+October
+November
+November
+November
+December
+December
+January
+January
+February
+March
+SCERT, TELANGANAXII
+OUR  NATIONAL ANTHEM
+- Rabindranath Tagore
+
+  3. Hybrid Score: 9.0197
+     Chapter: FOREST : OUR LIFE
+     Text: and record the presence of  roots. Are there
+any?
+4. Take out the soil and spread the soil onto
+a sheet of  newspaper.
+5. Carefully sort the soil, watch closely for
+small living things with a hand lens. Watch
+for worms and other animals. You may also
+find other signs of animal life such as
+burrows or eggs of  insects which may be
+single or in masses. Count the different
+kinds (write in section: other creatures I
+found)
+You may take the help of  the given
+picture for your study.
+Fig. 2
+• Which area has a maximum of animal
+life?
+• Does the amount of animal life and the
+burrows the animals make have any
+relation to the condition of the soil?
+• “Soil is a good habitat”. Explain the
+statement.
+Soil is a good habitat. We depend on it for
+agricultural and construction purposes,
+making utensils, toys etc. We have already
+learnt that plants depend on soil for nutrients
+like mineral salts and water from the soil in
+the chapter “Nutrition in Plants.”
+Do you know?
+
+  4. Hybrid Score: 8.8195
+     Chapter: AIR, WINDS AND CYCLONES
+     Text: descriptions. Some common electric
+components can be represented by standard
+symbols as shown in the following page.
+Activity - 2 : Write the symbols for given
+electric components in the table.
+Activity - 3 :  Drawing a circuit diagram
+In the previous class you have learnt about
+some simple circuits. Let us
+learn a little more about
+them by performing a few
+experiments.
+Look at figure 6. A bulb,
+battery and switch are
+connected as shown. Can we
+make this drawing simpler
+using symbols?  The picture of circuit using
+symbols is called  a circuit diagram.
+Figure 7 shows a circuit diagram of the circuit
+shown  in figure 6.
+Fig. 4
+Dry Cell
+Fig. 5 - Parts of  Cell
+Zinc Container
+(Negative terminal)
+Amonium
+Chloride
+Paste
+Metal cap
+(Positive terminal)
+Carbon
+powder
+Carbon rod
+Seal
+Outer
+cover
+Fig. 6 - Simple switch
+to close the circuit
+SCERT, TELANGANA65VII Science Free Distribution by Govt. of T.S. 2021-22
+ELECTRIC SYMBOLS AND THEIR USES
+SCERT, TELANGANAElectricity_Current and It’s Effect66
+
+  5. Hybrid Score: 8.7874
+     Chapter: AIR, WINDS AND CYCLONES
+     Text: to close the circuit
+SCERT, TELANGANA65VII Science Free Distribution by Govt. of T.S. 2021-22
+ELECTRIC SYMBOLS AND THEIR USES
+SCERT, TELANGANAElectricity_Current and It’s Effect66
+Fig. 7 - Circuit daigram
+Circuit Diagram
+There should be a source, which is one or
+more electric cells(battery).  The switch can
+be placed anywhere in the circuit.  If the switch
+is in the ON position, the circuit is complete
+from the positive terminal of  the battery to
+its negative terminal. The circuit is then said
+to be closed and the current flows throughout
+the circuit constantly.  The wires should not
+have any discontinuity (gaps).  When the switch
+is in the OFF position, the circuit is
+incomplete. It is said to be open.  No current
+flows through any part of the circuit.
+Observe the sequence in which the cell, bulb
+and switch are connected in the circuit.
+The sequence of components is as follows:
+Positive terminal of  the cell
+     Wire            Switch            Wire            Bulb
+
+--- End Log ---
+
+--- Query Log ---
+Timestamp: 2025-10-14T16:02:16.804307
+Original Query: explain about air winds and cyclones
+Reformulated Query: Provide a comprehensive explanation and summary of the concepts discussed in the chapter 'AIR, WINDS AND CYCLONES' in the Class 7 Science textbook.
+Classification: conceptual
+Retrieved 5 Chunks (Hybrid Search):
+
+  1. Hybrid Score: 9.1292
+     Chapter: ACIDS AND BASES
+     Text: sense, values
+7. Application to daily life,
+concern to bio diversity.
+Children are able to explain, cite examples, give reasons,
+and give comparison and differences, explain the process
+of given concepts in the textbook. Children are able to
+develop their own brain mappings.
+Children are able to ask questions to understand
+concepts, to clarify doubts about the concepts and to
+participate in discussions. They are able to guess the
+results of on issue with proper reasoning, able to predict
+the results of  experiments.
+Children are able to do the experiments given in the
+text book and developed on their own.  Able to arrange
+the apparatus, record the observati onal findings, suggest
+alternative apparatus, takes necessary precautions while
+doing the experiments, able to do to alternate
+experiments by changing variables. They are able to
+participate in field investigation and prepare reports.
+Children are able to collect information related to the
+
+  2. Hybrid Score: 8.7321
+     Chapter: AIR, WINDS AND CYCLONES
+     Text: descriptions. Some common electric
+components can be represented by standard
+symbols as shown in the following page.
+Activity - 2 : Write the symbols for given
+electric components in the table.
+Activity - 3 :  Drawing a circuit diagram
+In the previous class you have learnt about
+some simple circuits. Let us
+learn a little more about
+them by performing a few
+experiments.
+Look at figure 6. A bulb,
+battery and switch are
+connected as shown. Can we
+make this drawing simpler
+using symbols?  The picture of circuit using
+symbols is called  a circuit diagram.
+Figure 7 shows a circuit diagram of the circuit
+shown  in figure 6.
+Fig. 4
+Dry Cell
+Fig. 5 - Parts of  Cell
+Zinc Container
+(Negative terminal)
+Amonium
+Chloride
+Paste
+Metal cap
+(Positive terminal)
+Carbon
+powder
+Carbon rod
+Seal
+Outer
+cover
+Fig. 6 - Simple switch
+to close the circuit
+SCERT, TELANGANA65VII Science Free Distribution by Govt. of T.S. 2021-22
+ELECTRIC SYMBOLS AND THEIR USES
+SCERT, TELANGANAElectricity_Current and It’s Effect66
+
+  3. Hybrid Score: 8.4790
+     Chapter: ACIDS AND BASES
+     Text: concept they learned, to solve the problem faced in daily
+life situations. Recognise the importance of  biodiversity
+and takes measures to protect the biodiversity.
+SCERT, TELANGANAXI Free Distribution by Government of T.S. 2021-22
+INDEX
+S.No. Name of the Chapter Page No. Periods Month
+Class VII
+Unit
+I
+II
+III
+IV
+10
+10
+10
+11
+12
+10
+12
+12
+12
+10
+11
+10
+9
+10
+11
+11
+10
+1
+9
+19
+28
+43
+54
+63
+73
+82
+97
+104
+112
+123
+129
+138
+150
+157
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+XI
+FOOD COMPONENTS
+ACIDS AND BASES
+SILK - WOOL
+MOTION AND TIME
+HEAT - MEASUREMENT
+WEATHER AND CLIMATE
+ELECTRICITY
+AIR, WINDS AND CYCLONES
+REFLECTION OF LIGHT
+NUTRITION IN PLANTS
+RESPIRATION IN ORGANISMS
+REPRODUCTION IN PLANTS
+SEED DISPERSAL
+WATER
+SOIL : OUR LIFE
+FOREST : OUR LIFE
+CHANGES AROUND US
+REVISION
+June
+June
+July
+July
+August
+August
+September
+September
+October
+November
+November
+November
+December
+December
+January
+January
+February
+March
+SCERT, TELANGANAXII
+OUR  NATIONAL ANTHEM
+- Rabindranath Tagore
+
+  4. Hybrid Score: 8.2500
+     Chapter: AIR, WINDS AND CYCLONES
+     Text: to close the circuit
+SCERT, TELANGANA65VII Science Free Distribution by Govt. of T.S. 2021-22
+ELECTRIC SYMBOLS AND THEIR USES
+SCERT, TELANGANAElectricity_Current and It’s Effect66
+Fig. 7 - Circuit daigram
+Circuit Diagram
+There should be a source, which is one or
+more electric cells(battery).  The switch can
+be placed anywhere in the circuit.  If the switch
+is in the ON position, the circuit is complete
+from the positive terminal of  the battery to
+its negative terminal. The circuit is then said
+to be closed and the current flows throughout
+the circuit constantly.  The wires should not
+have any discontinuity (gaps).  When the switch
+is in the OFF position, the circuit is
+incomplete. It is said to be open.  No current
+flows through any part of the circuit.
+Observe the sequence in which the cell, bulb
+and switch are connected in the circuit.
+The sequence of components is as follows:
+Positive terminal of  the cell
+     Wire            Switch            Wire            Bulb
+
+  5. Hybrid Score: 8.1107
+     Chapter: FOOD COMPONENTS
+     Text: 1. Go to https://diksha.gov.in/telangana
+ 2. Click on Explore DIKSHA-TELANGANA
+ 3. Enter the code printed below the QR code in the browser search bar (        )
+ 4. A list of linked topics is displayed
+ 5. Click on any link to view the desired content
+Energized Text Books facilitate the students in understanding the concepts clearly, accurately and effectively. Content in the
+QR Codes can be read with the help of any smart phone or can as well be presented on the Screen with LCD projector/K-Yan
+projector. The content in the QR Codes is mostly in the form of videos, animations and slides, and is an additional information to
+what is already there in the text books.
+This additional content will help the students understand the concepts clearly and will also help the teachers in making their
+interaction with the students more meaningful. At the end of each chapter, questions are provided in a separate QR Code which can
+
+--- End Log ---
+
+--- Query Log ---
+Timestamp: 2025-10-14T16:26:36.651093
+Original Query: explain about cyclones
+Reformulated Query: Explain the definition, formation, and effects of cyclones, referencing the concepts detailed in the Class 7 Science chapter titled 'AIR, WINDS AND CYCLONES'.
+Classification: conceptual
+Retrieved 5 Chunks (Hybrid Search):
+
+  1. Hybrid Score: -0.3849
+     Chapter: REFLECTION OF LIGHT
+     Text: Key words:
+Wind, Expansion, Anemometer, Cyclone,
+Low pressure, High pressure
+What we have learnt?
+• Air is everywhere.
+• The moving air is called wind.
+• Air around us exerts pressure.
+• Air expands on heating and contracts on
+cooling.
+• Warm air rises up whereas comparatively
+cooler air tends to sink towards the
+earth’s surface.
+• As warm air rises air pressure at the
+place is reduced and the cooler air moves
+into that place.
+• Uneven heating on the earth causes wind
+movements.
+• Cyclones may be caused due to wind
+traveling at high speed due to difference
+in air pressure.
+• It has become easier to study cyclones
+with the help of  advanced technology
+like satellites and radars.
+Improve your learning
+1.       Fill the missing words
+in the blank spaces in the
+following statements.
+a. Wind is ————— air.
+b. Winds are generated due
+to —————— heating
+on the earth.
+c. Near the earth’s surface ————— air
+rises up whereas ————— air comes
+down.
+d.Air moves from a region of ———
+
+  2. Hybrid Score: -0.4727
+     Chapter: REFLECTION OF LIGHT
+     Text: use warm moist air as fuel. The warm moist
+air rises upward from near the surface. The
+warm air rises causing an area of  lower air
+pressure below. Air from surrounding areas
+of high air pressure pushes into the low
+pressure area. Then this “new” air becomes
+warm and rises too.  As the warm air continues
+to rise, the surrounding air swirls-in to take
+its place and the water from the sea surface
+also comes up with the air as you have seen in
+activity 10. As the warmed moist air rises and
+cools off, the water in the air forms clouds.
+The whole system of clouds and winds spins
+and grows, fed by the ocean’s heat and water
+evaporating from the surface. See the figure
+(10)
+Fig. 10
+These kinds of satellite images help us to
+predict the path of the cyclones to some
+extent.
+DESTRUCTION BY CYCLONES:
+Cyclones can be very destructive. The main
+effects of cyclones include heavy rain and,
+strong wind. The destruction of  a cyclone
+depends mainly on its intensity, its size and its
+location.
+Fig. 11
+
+  3. Hybrid Score: -0.5276
+     Chapter: REFLECTION OF LIGHT
+     Text: where they occur. Let us try to understand the
+phenomenon of cyclone through the following
+activity. Ex: Lyla, Bulbul cyclones.
+Let us do - 10:
+Fig. 9
+Take a glass containing water and two straws.
+Keep one straw in the water and another in
+horizontal direction as shown in figure 9 and
+blow through the horizontal straw.
+• Can you say what happens to water?
+• What do you observe?
+• Why is the water spray coming out from
+the straw? Discuss with your friends.
+When you blow over the straw the water comes
+out due to low pressure which forms inside
+the straw. So the water from the glass reaches
+up in the straw due to high pressure.
+We see that the increased wind speed is
+accompanied by a reduced air pressure.
+SCERT, TELANGANAAir, Winds And Cyclones78
+How Cyclones are Formed
+Tropical cyclones are like giant engines that
+use warm moist air as fuel. The warm moist
+air rises upward from near the surface. The
+warm air rises causing an area of  lower air
+pressure below. Air from surrounding areas
+
+  4. Hybrid Score: -0.7250
+     Chapter: REFLECTION OF LIGHT
+     Text: Cyclones can be very destructive. The main
+effects of cyclones include heavy rain and,
+strong wind. The destruction of  a cyclone
+depends mainly on its intensity, its size and its
+location.
+Fig. 11
+• Have you heard or seen any experiences
+of  cyclones? Write about these in your
+notebook.
+• Collect information regarding cyclones
+from news papers. Prepare a scrap book
+with news paper cuttings followed by
+small report prepared by you.
+CYCLONES – Do’s and Don’ts:-
+• We should not ignore the warnings issued
+by the meteorological department
+through T.V ., Radio or news papers.
+Pass on the information to others and
+ignore rumors.
+• When a cyclone alert is on for your area,
+continue normal working but stay alert
+to the radio warnings.
+• We should make necessary arrangements
+to shift  essential household goods,
+domestic animals and vehicles, etc. to
+safer places.
+• Switch off electrical mains in your house.
+• Keep ready the phone numbers of all
+emergency services like police, fire
+
+  5. Hybrid Score: -0.7451
+     Chapter: REFLECTION OF LIGHT
+     Text: months of  June to September.
+The direction of the wind flow gets usually
+reversed in the months from December to
+early March. The wind flows from the land to
+ocean as the sea cools more slowly..
+The winds from the oceans carry water and
+bring rains. Farmers in our country depend
+mainly on rains for their harvests. We can also
+generate energy from high speed wind. Thus
+we can see the usefulness of winds in our life.
+•  Write other uses of  wind you can think of
+Do winds also cause harm? Let’s see how? You
+may be familiar with the word cyclone. During
+the months of May-June or October-
+November reports about them can be seen in
+the news papers/ T.V .
+CYCLONES
+Cyclones are a form of  violent storms on
+Earth. People call these storms by names such
+as typhoons, hurricanes etc. depending on
+where they occur. Let us try to understand the
+phenomenon of cyclone through the following
+activity. Ex: Lyla, Bulbul cyclones.
+Let us do - 10:
+Fig. 9
+Take a glass containing water and two straws.
+
+--- End Log ---
+
+--- Query Log ---
+Timestamp: 2025-10-14T17:16:02.838599
+Original Query: What is a cyclone
+Reformulated Query: Provide the definition and explanation of a cyclone, referencing the 'AIR, WINDS AND CYCLONES' chapter of the Class 7 Science textbook.
+Classification: conceptual
+Retrieved 5 Chunks (Hybrid Search):
+
+  1. Hybrid Score: -0.7237
+     Chapter: ACIDS AND BASES
+     Text: concept they learned, to solve the problem faced in daily
+life situations. Recognise the importance of  biodiversity
+and takes measures to protect the biodiversity.
+SCERT, TELANGANAXI Free Distribution by Government of T.S. 2021-22
+INDEX
+S.No. Name of the Chapter Page No. Periods Month
+Class VII
+Unit
+I
+II
+III
+IV
+10
+10
+10
+11
+12
+10
+12
+12
+12
+10
+11
+10
+9
+10
+11
+11
+10
+1
+9
+19
+28
+43
+54
+63
+73
+82
+97
+104
+112
+123
+129
+138
+150
+157
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+XI
+FOOD COMPONENTS
+ACIDS AND BASES
+SILK - WOOL
+MOTION AND TIME
+HEAT - MEASUREMENT
+WEATHER AND CLIMATE
+ELECTRICITY
+AIR, WINDS AND CYCLONES
+REFLECTION OF LIGHT
+NUTRITION IN PLANTS
+RESPIRATION IN ORGANISMS
+REPRODUCTION IN PLANTS
+SEED DISPERSAL
+WATER
+SOIL : OUR LIFE
+FOREST : OUR LIFE
+CHANGES AROUND US
+REVISION
+June
+June
+July
+July
+August
+August
+September
+September
+October
+November
+November
+November
+December
+December
+January
+January
+February
+March
+SCERT, TELANGANAXII
+OUR  NATIONAL ANTHEM
+- Rabindranath Tagore
+
+  2. Hybrid Score: -0.7487
+     Chapter: AIR, WINDS AND CYCLONES
+     Text: descriptions. Some common electric
+components can be represented by standard
+symbols as shown in the following page.
+Activity - 2 : Write the symbols for given
+electric components in the table.
+Activity - 3 :  Drawing a circuit diagram
+In the previous class you have learnt about
+some simple circuits. Let us
+learn a little more about
+them by performing a few
+experiments.
+Look at figure 6. A bulb,
+battery and switch are
+connected as shown. Can we
+make this drawing simpler
+using symbols?  The picture of circuit using
+symbols is called  a circuit diagram.
+Figure 7 shows a circuit diagram of the circuit
+shown  in figure 6.
+Fig. 4
+Dry Cell
+Fig. 5 - Parts of  Cell
+Zinc Container
+(Negative terminal)
+Amonium
+Chloride
+Paste
+Metal cap
+(Positive terminal)
+Carbon
+powder
+Carbon rod
+Seal
+Outer
+cover
+Fig. 6 - Simple switch
+to close the circuit
+SCERT, TELANGANA65VII Science Free Distribution by Govt. of T.S. 2021-22
+ELECTRIC SYMBOLS AND THEIR USES
+SCERT, TELANGANAElectricity_Current and It’s Effect66
+
+  3. Hybrid Score: -0.8188
+     Chapter: REFLECTION OF LIGHT
+     Text: Key words:
+Wind, Expansion, Anemometer, Cyclone,
+Low pressure, High pressure
+What we have learnt?
+• Air is everywhere.
+• The moving air is called wind.
+• Air around us exerts pressure.
+• Air expands on heating and contracts on
+cooling.
+• Warm air rises up whereas comparatively
+cooler air tends to sink towards the
+earth’s surface.
+• As warm air rises air pressure at the
+place is reduced and the cooler air moves
+into that place.
+• Uneven heating on the earth causes wind
+movements.
+• Cyclones may be caused due to wind
+traveling at high speed due to difference
+in air pressure.
+• It has become easier to study cyclones
+with the help of  advanced technology
+like satellites and radars.
+Improve your learning
+1.       Fill the missing words
+in the blank spaces in the
+following statements.
+a. Wind is ————— air.
+b. Winds are generated due
+to —————— heating
+on the earth.
+c. Near the earth’s surface ————— air
+rises up whereas ————— air comes
+down.
+d.Air moves from a region of ———
+
+  4. Hybrid Score: -0.8806
+     Chapter: AIR, WINDS AND CYCLONES
+     Text: to close the circuit
+SCERT, TELANGANA65VII Science Free Distribution by Govt. of T.S. 2021-22
+ELECTRIC SYMBOLS AND THEIR USES
+SCERT, TELANGANAElectricity_Current and It’s Effect66
+Fig. 7 - Circuit daigram
+Circuit Diagram
+There should be a source, which is one or
+more electric cells(battery).  The switch can
+be placed anywhere in the circuit.  If the switch
+is in the ON position, the circuit is complete
+from the positive terminal of  the battery to
+its negative terminal. The circuit is then said
+to be closed and the current flows throughout
+the circuit constantly.  The wires should not
+have any discontinuity (gaps).  When the switch
+is in the OFF position, the circuit is
+incomplete. It is said to be open.  No current
+flows through any part of the circuit.
+Observe the sequence in which the cell, bulb
+and switch are connected in the circuit.
+The sequence of components is as follows:
+Positive terminal of  the cell
+     Wire            Switch            Wire            Bulb
+
+  5. Hybrid Score: -0.9181
+     Chapter: ACIDS AND BASES
+     Text: to environmental protection and specific roles of the children in doing so.
+• Teaching learning strategies and the expected learning outcomes, have been developed class
+wise and subject-wise based on the syllabus and compiled in the form of a Hand book to guide
+the teachers and were supplied to all the schools. With the help of this Hand book the teachers
+are expected to conduct effective teaching learning processes and ensure that all the students
+attain the expected learning outcomes.
+Conduct of Activities ….
+The basic objectives of science teaching facilitate the learning of how to learn.  Therefore,
+children must be facilitated to construct knowledge collaboratively through participating in whole class,
+group and individual activities.
+• Provide advanced information and awareness on the experiments, observations to be done
+both in side and out side the classrooms along with study of reports.
+
+--- End Log ---
+
+--- Query Log ---
+Timestamp: 2025-10-14T17:17:17.389727
+Original Query: explain reproduction in plants
+Reformulated Query: Provide a comprehensive explanation and summary of the chapter 'REPRODUCTION IN PLANTS' from the Class 7 Science textbook, detailing the mechanisms and types of reproduction described.
+Classification: conceptual
+Retrieved 5 Chunks (Hybrid Search):
+
+  1. Hybrid Score: 0.6585
+     Chapter: WATER
+     Text: Fusion of units of male and female parts to
+form a structure called as zygote is called
+Fertilization.
+After fertilization seed develops from the
+ovule and the ovary usually develops into a
+fruit. The entire process of  fertilization and
+formation of  zygote is known as Sexual
+reproduction. For the formation of  a seed
+sexual reproduction is essential. The seed thus
+formed are dispersed to different places by
+agents like air, water, birds and animals and
+by human beings as well. These seeds grow
+into new plants under favourable conditions.
+Production of baby plants or offsprings from the zygote is called sexual reproduction.
+We often find that some plants produce new plants from their vegitative parts. Can you name
+some such plants?
+S.No. Name of the Plant Plant part from which new plantproduced
+1
+2
+3
+4
+Fig. 11 Fertilization
+Pollen grain
+Pollen tube
+Ovary
+Rose Twig
+SCERT, TELANGANA119VII Science Free Distribution by Govt. of T.S. 2021-22
+Reproduction in plants when occurs using
+
+  2. Hybrid Score: 0.1404
+     Chapter: WATER
+     Text: there is an eye in each piece. Remove the eyes
+from some of  these pieces. Fill two cups with
+soil. Plant the piece with eyes in one cup and
+label the cup as “with eyes” and those without
+eyes in another cup named as “without eyes”.
+Water both cups daily and observe what
+happens. In which cup do potato plants
+sprout?
+Here is a picture of a plant called
+Bryophyllum.
+You can see baby plants on the edge of  the
+leaves. Can we say that the Bryophyllum plant
+reproduces through its leaves?
+In our garden we grow plants like rose,
+hibiscus, and jasmine by cutting a small branch
+and planting them in the soil.
+Which other plants can be grown from its
+cutting? (Name a few such plants)
+Vegetative reproduction in some plants
+Fig. 12
+Fig. 13
+S.No.
+1.
+2.
+3.
+4.
+5.
+6.
+SCERT, TELANGANAReproduction in Plants120
+b. Budding:
+The jilebi maker adds something to the jilebi
+mix and leaves it for sometime. It helps him
+to make good jilebes. What he mixes is a type
+
+  3. Hybrid Score: -1.8316
+     Chapter: ACIDS AND BASES
+     Text: to environmental protection and specific roles of the children in doing so.
+• Teaching learning strategies and the expected learning outcomes, have been developed class
+wise and subject-wise based on the syllabus and compiled in the form of a Hand book to guide
+the teachers and were supplied to all the schools. With the help of this Hand book the teachers
+are expected to conduct effective teaching learning processes and ensure that all the students
+attain the expected learning outcomes.
+Conduct of Activities ….
+The basic objectives of science teaching facilitate the learning of how to learn.  Therefore,
+children must be facilitated to construct knowledge collaboratively through participating in whole class,
+group and individual activities.
+• Provide advanced information and awareness on the experiments, observations to be done
+both in side and out side the classrooms along with study of reports.
+
+  4. Hybrid Score: -1.8892
+     Chapter: FOOD COMPONENTS
+     Text: become a part of learning and as well as assessment in the context of science education.
+The pupil assessment procedures facilitate thinking in  critical and multiple ways.  Critical
+pedagogy and social construction become a part of classroom pedagogies in search of
+truth. The spirit of continuous and comprehensive evaluation is reflected in the assessment
+procedures.  Certainly the revised textbooks facilitate the teachers in effective transaction
+of science duly reflecting the nature and spirit of science.
+New textbooks are developed to achieve desired academic standards. So teachers
+should develop various teaching learning strategies to make their students to achieve class
+based academic standards.  We should avoid rote learning methods for successful
+implementation of Continuous Comprehensive Evaluation (CCE). It is very impart to know
+more about different methods to assess student progress  by summative and formative
+
+  5. Hybrid Score: -1.9488
+     Chapter: FOREST : OUR LIFE
+     Text: and record the presence of  roots. Are there
+any?
+4. Take out the soil and spread the soil onto
+a sheet of  newspaper.
+5. Carefully sort the soil, watch closely for
+small living things with a hand lens. Watch
+for worms and other animals. You may also
+find other signs of animal life such as
+burrows or eggs of  insects which may be
+single or in masses. Count the different
+kinds (write in section: other creatures I
+found)
+You may take the help of  the given
+picture for your study.
+Fig. 2
+• Which area has a maximum of animal
+life?
+• Does the amount of animal life and the
+burrows the animals make have any
+relation to the condition of the soil?
+• “Soil is a good habitat”. Explain the
+statement.
+Soil is a good habitat. We depend on it for
+agricultural and construction purposes,
+making utensils, toys etc. We have already
+learnt that plants depend on soil for nutrients
+like mineral salts and water from the soil in
+the chapter “Nutrition in Plants.”
+Do you know?
+
+--- End Log ---
+
+--- Query Log ---
+Timestamp: 2025-10-14T17:18:25.791074
+Original Query: isnt there asexual reproduction too?
+Reformulated Query: Explain the concept and types of asexual reproduction discussed in the chapter 'Reproduction in Plants' for Class 7 Science.
+Classification: conceptual
+Retrieved 5 Chunks (Hybrid Search):
+
+  1. Hybrid Score: 0.7404
+     Chapter: WATER
+     Text: Reproduction
+e. Self pollination, Cross pollination
+3. What happens when a pollen grain falls on
+     a stigma?
+4.  What  helps to bring pollen grains to the
+      stigma?
+5.  Explain the method of sexual reproduction
+    in  plants.
+6. Can plants produce new plants even
+    without seeds? Explain the methods with
+     examples.
+SCERT, TELANGANAReproduction in Plants122
+7. Draw the diagram of any flower showing
+its parts.
+8. Write the differences between sexual and
+asexual reproduction.
+9. Do all plants reproduce in the same way?
+Explain with examples.
+10. Karthik saw a cucumber plant in the
+kitchen garden. He identified two types of
+flowers-some flowers had a small swollen
+structure behind them while some did not.
+He removed all the flowers which did not
+have the swollen structure behind them
+thinking that they were of no use.
+- Which flowers did he remove?
+- What are the flowers which had a small
+fruit behind them?
+11. What are the agents of pollination?
+
+  2. Hybrid Score: -0.8566
+     Chapter: WATER
+     Text: 1
+2
+3
+4
+Fig. 11 Fertilization
+Pollen grain
+Pollen tube
+Ovary
+Rose Twig
+SCERT, TELANGANA119VII Science Free Distribution by Govt. of T.S. 2021-22
+Reproduction in plants when occurs using
+plant (vegitative part) other than the flower is
+asexual reproduction.
+Asexual reproduction:
+The most interesting thing in plants is baby
+plants can grow even without formation of
+seeds that is without sexual reproduction.  Let
+us study some such processes.
+a. Vegetative reproduction
+Production of new plants from vegetative
+parts of a plant i.e. root, stem and leaf is
+known as vegetative reproduction.
+Let us do - 6
+Do you know how
+farmers produce
+potatoes in their
+fields?
+Take potato and
+observe it. It has a
+number of small
+depressions on its surface. These are known
+as eyes. Cut the potato into pieces such that
+there is an eye in each piece. Remove the eyes
+from some of  these pieces. Fill two cups with
+soil. Plant the piece with eyes in one cup and
+label the cup as “with eyes” and those without
+
+  3. Hybrid Score: -0.9136
+     Chapter: WATER
+     Text: stigma is known as pollination. Flowers
+can be self pollinated or cross pollinated.
+• Fusion of  male and female parts to form
+zygote is called Fertilization.
+• On the basis of parts involved,
+reproduction in plants is of  two types,
+sexual reproduction and asexual
+reproduction.
+Androecium Gynoecium
+Pollengrains Ovules
+Fertilization
+• Production of offspring from zygote is
+called sexual reproduction.
+• Formation of  new plants without sexual
+reproduction is Asexual reproduction.
+Improve your learning
+1. Do all flowers have same
+parts? Classify the flowers
+according to the parts of
+flower present in them and
+give examples.
+2.  Differentiate between
+a. Bisexual flowers, Unisexual flowers
+b. Complete flower, incomplete flower
+c. Male flower, female flower
+d. Sexual reproduction, Asexual
+            Reproduction
+e. Self pollination, Cross pollination
+3. What happens when a pollen grain falls on
+     a stigma?
+4.  What  helps to bring pollen grains to the
+      stigma?
+
+  4. Hybrid Score: -1.0517
+     Chapter: WATER
+     Text: e) Transfer of  pollen grain from anther
+to stigma  is called ………………
+Teophrastus, a Greek philosopher and the pupil of  Aristotle, is known as the father
+of  Botany. Reproduction in plants was first studied in detail by Theophrastus.
+16. Match the following
+(1) Pollen grain ( ) (a) Ovary
+(2) Ovule ( ) (b) Bryophyllum
+(3) Reproduction through eyes ( ) (c) Anther
+(4) Reproduction through leaves ( ) (d) Potato
+17. Observe the following figures. What difference do you observe. Write in your note
+       book.
+SCERT, TELANGANA123VII Science Free Distribution by Govt. of T.S. 2021-22
+In the previous chapter “Reproduction in
+Plants” you have learnt about the parts of the
+flower. Do you know which part of  the flower
+turns into fruit? What does the fruit contain?
+You have also seen the section on the Ovary.
+What develops from the Ovule? You know
+that after fertilization ovary develops as fruit
+and ovules develop into seeds. When the seeds
+germinate they give birth to new plants.
+
+  5. Hybrid Score: -1.1086
+     Chapter: FOREST : OUR LIFE
+     Text: and record the presence of  roots. Are there
+any?
+4. Take out the soil and spread the soil onto
+a sheet of  newspaper.
+5. Carefully sort the soil, watch closely for
+small living things with a hand lens. Watch
+for worms and other animals. You may also
+find other signs of animal life such as
+burrows or eggs of  insects which may be
+single or in masses. Count the different
+kinds (write in section: other creatures I
+found)
+You may take the help of  the given
+picture for your study.
+Fig. 2
+• Which area has a maximum of animal
+life?
+• Does the amount of animal life and the
+burrows the animals make have any
+relation to the condition of the soil?
+• “Soil is a good habitat”. Explain the
+statement.
+Soil is a good habitat. We depend on it for
+agricultural and construction purposes,
+making utensils, toys etc. We have already
+learnt that plants depend on soil for nutrients
+like mineral salts and water from the soil in
+the chapter “Nutrition in Plants.”
+Do you know?
+
+--- End Log ---
+
+--- Query Log ---
+Timestamp: 2025-10-14T17:20:01.523954
+Original Query: where is america
+Reformulated Query: Search the Class 7 Science textbook (topics: Food Components, Acids and Bases, Motion and Time, etc.) for any discussion or factual information regarding the location of America or the American continent.
+Classification: factual
+Retrieved 5 Chunks (Hybrid Search):
+
+  1. Hybrid Score: 0.2221
+     Chapter: FOREST : OUR LIFE
+     Text: Leave home a little early on that day, go to
+the location allotted to you, collect about 250
+gm of soil for your sample, and bring it to
+school. You can carry the soil in a bag.
+Remember to collect the soil only on the day
+you begin the experiments in class. Don’t forget
+to put a label on your soil sample, stating
+where you got it from and the date on which
+you collected it.
+First copy the following Table in your Note
+book and note all your observations in this
+table. Instructions given after the table will
+help you to fill it.
+Let us do-5:  Examining The Soil After
+Returning To School
+Examine the different soil samples brought
+to class and see whether you can identify
+various properties of soil as given in the
+table. Some points to study the properties
+are given below.
+1. How does the soil look? Is it like fine
+powder or granular?
+SCERT, TELANGANASoil: Our Life142
+2. What is its colour? Is it black, brown
+or any other colour?
+3. How does it feel when you touch or press
+
+  2. Hybrid Score: -0.9338
+     Chapter: FOOD COMPONENTS
+     Text: re-learning of the true nature of science must happen as recommended by the National
+Curriculum Frame Work-2005.
+SCERT, TELANGANAV Free Distribution by Government of T.S. 2021-22
+The textbooks are developed based on State Curriculum Framework and its Position
+Paper on Science and also reflect the spirit of Right to Education Act.  Science textbooks
+are developed to facilitate construction of knowledge jointly by the teacher and the pupil
+but never as merely an information provider.
+The textbook facilitates learning through activities, discovery, exploration in a child
+centered manner.  The activities i.e., group, individual and whole class, experiments, field
+investigations, information collection, questioning, analysis, synthesis, projects etc., must
+become a part of learning and as well as assessment in the context of science education.
+The pupil assessment procedures facilitate thinking in  critical and multiple ways.  Critical
+
+  3. Hybrid Score: -1.0310
+     Chapter: WEATHER AND CLIMATE
+     Text: b) Motion of your hands while
+running.
+c) Motion of a child on a see -
+saw.
+d) Motion of a horse pulling a
+cart.
+SCERT, TELANGANAMotion  and Time42
+5. Arun completed a 100 meter race in
+16s., while Karthik finished it  in  13s.
+Who ran faster ?
+6. I.A train runs from New Delhi to
+Hyderabad.  It covers first distance of
+420 km in 7 hrs. and next distance of
+360 km in 6 hrs.
+II. Gopi takes part in a car race.  He
+drives a distance of 70 km each in the
+first, second and third hours.
+Which of the following statements is
+true.
+a) I, is an example uniform
+motion and II is an example of
+non-uniform motion.
+b) I is an example of non-
+uniform motion and II is an
+example of  uniform motion.
+c) I and II are examples of
+uniform motion.
+d) I and II are examples of non-
+uniform motion.
+7. Write the motion of  different parts of  a
+bicycle while it is in motion.
+a) the wheel
+b) the cycle chain
+c) the pedal with its arm
+d) the movement of the feet
+pedaling
+e) the movement of the rider
+
+  4. Hybrid Score: -1.0559
+     Chapter: REFLECTION OF LIGHT
+     Text: Cyclones can be very destructive. The main
+effects of cyclones include heavy rain and,
+strong wind. The destruction of  a cyclone
+depends mainly on its intensity, its size and its
+location.
+Fig. 11
+• Have you heard or seen any experiences
+of  cyclones? Write about these in your
+notebook.
+• Collect information regarding cyclones
+from news papers. Prepare a scrap book
+with news paper cuttings followed by
+small report prepared by you.
+CYCLONES – Do’s and Don’ts:-
+• We should not ignore the warnings issued
+by the meteorological department
+through T.V ., Radio or news papers.
+Pass on the information to others and
+ignore rumors.
+• When a cyclone alert is on for your area,
+continue normal working but stay alert
+to the radio warnings.
+• We should make necessary arrangements
+to shift  essential household goods,
+domestic animals and vehicles, etc. to
+safer places.
+• Switch off electrical mains in your house.
+• Keep ready the phone numbers of all
+emergency services like police, fire
+
+  5. Hybrid Score: -1.2849
+     Chapter: FOREST : OUR LIFE
+     Text: locations are given below:
+SCERT, TELANGANA141VII Science Free Distribution by Govt. of T.S. 2021-22
+fields, lakeside, open meadows,
+river banks, gardens, forests,
+roadside, fallow land
+You can change the list, adding or subtracting
+names, to suit your convenience. But you
+should make sure that you get different types
+of  soil from different places. It would be even
+better if  the soils are of  different colours.
+Collect the soil samples while you are on your
+way to school from home. But, first, let your
+teacher distribute the work of collecting
+different soil samples among the different
+groups in the class. The class can decide which
+group should visit which location and bring
+back which type of soil samples to school.
+This work distribution should be done a day
+before the chapter is begun in the class.
+Leave home a little early on that day, go to
+the location allotted to you, collect about 250
+gm of soil for your sample, and bring it to
+school. You can carry the soil in a bag.
+
+--- End Log ---
+
+--- Query Log ---
+Timestamp: 2025-10-14T17:21:56.021898
+Original Query: explain what will happen if we dont include roughage in our food?
+Reformulated Query: Explain the physiological consequences and negative effects of excluding roughage (dietary fiber) from the human diet, referencing the 'FOOD COMPONENTS' chapter.
+Classification: conceptual
+Retrieved 5 Chunks (Hybrid Search):
+
+  1. Hybrid Score: 0.2896
+     Chapter: SILK - WOOL
+     Text: components in each food
+item.
+2. Manjula eats only
+bread and omlette daily. Do
+you think it is a balanced
+diet? Why? Why not?
+3. Make a list of food items that contain all
+components of food.
+4. Who am I?
+a. I am a component of food that makes
+paper translucent.
+b. Put a drop of  me on a cut potato. It turns
+dark blue. Who am I?
+5. Explain what will happen if  we don’t
+include roughage in our food?
+6. Test the given food items and record the
+type of component that are present in
+them. (Ground nut, Cooked dal, Pulusu)
+7. Draw some food items of your diet and
+explain why  you like them.
+SCERT, TELANGANAFood Components8
+8. If  you were invited to a party with many food items in the menu like Rice, Roti, Puri, Idly,
+Dosa, Samosa, Dal, Green salad, Vegetable curry, Fruit chat, Chicken curry, Eggs, Gulab
+Jamun
+a.What food items would come on to your plate to make your diet a balanced one?
+b.What food items would you take plenty, adequately?
+9. How is water useful to our body?
+
+  2. Hybrid Score: -0.5253
+     Chapter: ELECTRICITY
+     Text: sunny in the morning but clouds appear from
+somewhere and it starts raining. Within a
+matter of a few minutes this gives  way to
+bright sunshine. You must have had several
+such experiences. The temperature, humidity,
+rain, wind speed change. All this effects the
+life of human beings and other living
+organisms. This constitutes weather.
+Do you know?
+Many people died during the tsunami in
+Andaman and Nicobar islands in 2004.
+But the tribals who observed the ocean
+moving back and birds making sounds
+moved away from  danger. They could
+predict the danger and save their  lives.
+Let us do-2: Plotting Graph
+• Take a newspaper or watch the TV news
+and record the maximum and minimum
+temperature, rainfall, humidity and wind
+pattern of any 3 cities or towns in a table.
+Do this over a week.
+• Take the figures of  the maximum
+temperature over a week and plot the
+data on a graph. For example one is
+given here.
+Fig. 1 Graph showing the variation of  maxi-
+mum temperature during 10-14 Dec. 2011 at
+
+  3. Hybrid Score: -0.5431
+     Chapter: FOREST : OUR LIFE
+     Text: called ____________.
+(c) Dried ____________ is used as
+manure.
+(d) Drains get blocked by
+____________ and ____________.
+2. What is sewage?
+Explain why it is harmful
+to discharge untreated
+sewage into rivers or seas?
+3. Why should oils and
+fats not be released in the
+drain? Explain.
+4. Describe the steps involved in getting
+clarified water from wastewater.
+5. What is sludge? Explain how it is treated.
+6. Untreated human excreta is a health
+hazard. Explain.
+7. Name two chemicals used to disinfect the
+water.
+8. Explain the function of bar screens in a
+wastewater treatment plant.
+9. Explain the relationship between
+sanitation and disease.
+10. Outline your role as an active citizen in
+relation to sanitation.
+SCERT, TELANGANA137VII Science Free Distribution by Govt. of T.S. 2021-22
+11. What would you do to motivate people
+in your street to utilise toilets?
+12. What would happen if there were no
+microbes that break down wastes in
+sewage?
+13. What point would you like to address in
+
+  4. Hybrid Score: -0.6615
+     Chapter: ELECTRICITY
+     Text: clinical thermometer. Is it right or
+wrong. Why?
+8. Swathi kept a laboratory thermometer
+in hot water for some time and took it
+out to read the temperature. Rani said
+it was a wrong way of measuring
+temperature.  Do you agree with Rani
+? Explain your answer.
+9. Why do we jerk a clinical thermometer
+before we measure body temperature?
+10. Heat energy is converted into other
+forms of  energy. Give some examples.
+SCERT, TELANGANATemperature and Its Measurements52
+11. Prathima said ‘Heat is a form of  energy’. How do you support her?
+12. Why is a  clinical thermometer  not used to measure the temperature of  air?
+13. Fill in the blanks
+a. Doctor uses _____________ thermometer to measure the human body temperature.
+b. At room temperature Mercury is in _______________ state.
+c. Heat energy transfer from _______________ to ___________
+d. -7°C temperature is _______________ than 0°C temperature.
+14. Match the following
+i) Clinical thermometer ( ) a) A form of  energy
+
+  5. Hybrid Score: -0.7111
+     Chapter: AIR, WINDS AND CYCLONES
+     Text: Fig. 9 - Connecting
+dry cells in series
+SCERT, TELANGANA67VII Science Free Distribution by Govt. of T.S. 2021-22
+Thus by connecting cells in series, we get a
+battery.  The battery cells in the torch are  in
+series.
+Think:
+Can we connect as many cells as we want for
+making a bulb glow brighter and brighter? Is
+there any restriction on the how many cells
+can be/should be used for a given bulb?
+Connecting Electric cells in Parallel:
+Fig. 10 - Connecting cells in parallel
+Activity - 5 :
+Take three dry cells and connect them as
+shown in figure-10.  That is, all the positive
+terminals of the three cells are connected
+together and all the three negative terminals
+are connected together.  These three positive
+and three negative terminals are connected to
+a bulb.
+Is there any difference in the intensity of bulb
+glow compared to that in the case of only one
+cell?
+Fig. 11 - Parallel circuit daigram
+Connecting Electric Bulbs in Series:
+Fig. 12 - Bulbs connected in series
+
+--- End Log ---
+

@@ -38,6 +38,16 @@ body {
 .card-header h2 { margin: 0; font-size: 1.25rem; font-weight: 600; }
 .card-content { padding: 25px; }
 .form-group { margin-bottom: 20px; }
+
+.form-row {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+}
+
+.form-row .form-group {
+    flex: 1;
+}
 .form-group label { display: block; font-weight: 500; margin-bottom: 8px; }
 input[type="text"], input[type="number"], input[type="file"], select { width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; box-sizing: border-box; font-family: var(--font-family); font-size: 1rem; transition: border-color 0.3s, box-shadow 0.3s; }
 input:focus, select:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(74, 105, 189, 0.2); }

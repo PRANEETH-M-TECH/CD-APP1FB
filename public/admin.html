@@ -26,13 +26,33 @@
                         <h2>Upload Book Information</h2>
                     </div>
                     <div class="card-content">
-                        <div class="form-group">
-                            <label for="class-name">Class Name</label>
-                            <input type="text" id="class-name" placeholder="e.g., 10th Grade" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="subject">Subject</label>
-                            <input type="text" id="subject" placeholder="e.g., Modern Physics" required>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="class">Class</label>
+                                <select id="class" name="class" required>
+                                    <option value="" disabled selected>Select Class</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                    <option value="10">10</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="subject">Subject</label>
+                                <select id="subject" name="subject" required>
+                                    <option value="" disabled selected>Select Subject</option>
+                                    <option value="english">English</option>
+                                    <option value="maths">Maths</option>
+                                    <option value="science">Science</option>
+                                    <option value="social">Social</option>
+                                </select>
+                            </div>
                         </div>
                         <div class="form-group">
                             <label for="pdf-file">Book PDF File</label>

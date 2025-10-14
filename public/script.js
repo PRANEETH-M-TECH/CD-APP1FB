@@ -20,7 +20,7 @@ function setupAdminPage() {
         showStatus('Uploading PDF...', 'info');
 
         const pdfFile = document.getElementById('pdf-file').files[0];
-        const className = document.getElementById('class-name').value;
+        const className = document.getElementById('class').value;
         const subject = document.getElementById('subject').value;
 
         if (!pdfFile || !className || !subject) {

@@ -2,6 +2,7 @@ import os
 import shutil
 import json
 import re
+import datetime
 from contextlib import asynccontextmanager
 from dotenv import load_dotenv
 from fastapi import FastAPI, File, UploadFile, Form, HTTPException, Query, BackgroundTasks
@@ -17,10 +18,12 @@ from qrdant import (
     initialize, # Updated import
     process_and_embed_book,
     get_books,
-    semantic_search,
+    get_book_metadata,
+    get_chapters_for_book,
+    hybrid_search,
+    reformulate_and_classify_query,
     generate_answer,
     generate_chapters_from_text,
-    get_chapters_for_book,
 )
 
 # --- Lifespan Management ---
@@ -97,31 +100,69 @@ async def list_books(class_name: Optional[str] = None, subject: Optional[str] = 
 @app.post("/api/query")
 async def query_book(request: QueryRequest):
     """
-    Performs semantic search and generates an answer.
-    Optionally filters by chapter.
+    Performs RAG pipeline to generate an answer.
     """
-    # Prepare metadata filters
+    # --- Start of New RAG Workflow ---
+    # 1. Fetch context for the LLM
+    metadata = get_book_metadata(request.book_uuid)
+    class_name = metadata.get("class_name")
+    subject = metadata.get("subject")
+    
+    chapters_data = get_chapters_for_book(request.book_uuid)
+    chapter_list = [chapter['name'] for chapter in chapters_data]
+
+    # 2. Reformulate and Classify Query using the full context
+    processed_query_data = reformulate_and_classify_query(
+        query=request.query,
+        class_name=class_name,
+        subject=subject,
+        chapter_list=chapter_list
+    )
+    
+    reformulated_query = processed_query_data.get("reformulated_query", request.query)
+    classification = processed_query_data.get("classification", "conceptual")
+
+    print(f"Original Query: '{request.query}'")
+    print(f"Processed Query Data: {processed_query_data}")
+
+    # 3. Perform Hybrid Search
     filters = {}
     if request.chapter:
         filters['chapter'] = request.chapter
 
-    # 1. Perform semantic search to get relevant context
-    search_results = semantic_search(request.book_uuid, request.query, metadata_filters=filters)
+    search_results = hybrid_search(
+        book_uuid=request.book_uuid, 
+        query=reformulated_query, 
+        classification=classification,
+        metadata_filters=filters
+    )
     
-    print(f"Retrieved {len(search_results)} chunks from Qdrant.")
+    # 4. Log simplified results to file
+    with open("result.txt", "a", encoding="utf-8") as f:
+        f.write(f"--- Query Log ---\n")
+        f.write(f"Timestamp: {datetime.datetime.now().isoformat()}\n")
+        f.write(f"Original Query: {request.query}\n")
+        f.write(f"Reformulated Query: {reformulated_query}\n")
+        f.write(f"Classification: {classification}\n")
+        f.write(f"Retrieved {len(search_results)} Chunks (Hybrid Search):\n\n")
+        
+        for i, (score, payload) in enumerate(search_results):
+            f.write(f"  {i+1}. Hybrid Score: {score:.4f}\n")
+            f.write(f"     Chapter: {payload.get('chapter', 'N/A')}\n")
+            f.write(f"     Text: {payload.get('text', '').strip()}\n\n")
+        f.write(f"--- End Log ---\n\n")
+
     
     if not search_results:
-        print("No chunks retrieved, returning empty answer.")
-        return {"answer": "I couldn't find any relevant information in the selected book to answer your question.", "sources": []}
+        print("No chunks retrieved from Hybrid Search.")
+        return {"answer": "I couldn't find any relevant information to answer your question.", "sources": []}
 
-    # All retrieved chunks are used as context for the LLM in this current implementation
-    print(f"Using {len(search_results)} chunks as context for the LLM.")
-
-    # 2. Combine context and generate a final answer
-    context = " ".join([result['text'] for result in search_results])
-    answer = generate_answer(request.query, context)
+    # 5. Generate Final Answer
+    context = " ".join([payload['text'] for score, payload in search_results])
+    answer = generate_answer(reformulated_query, context, class_name)
     
-    return {"answer": answer, "sources": search_results}
+    sources = [payload for score, payload in search_results]
+    return {"answer": answer, "sources": sources}
 
 @app.get("/api/list-chapters")
 async def list_chapters(class_name: str, subject: str):

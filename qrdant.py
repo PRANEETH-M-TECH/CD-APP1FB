@@ -9,6 +9,8 @@ from sentence_transformers import SentenceTransformer
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from typing import List, Dict
 
+from rank_bm25 import BM25Okapi
+
 # --- CONFIGURATION ---
 COLLECTION_NAME = os.environ.get("QDRANT_COLLECTION_NAME", "my_documents")
 EMBEDDING_MODEL = 'all-MiniLM-L6-v2'
@@ -18,6 +20,8 @@ EMBEDDING_MODEL = 'all-MiniLM-L6-v2'
 client: QC | None = None
 local_embedder: SentenceTransformer | None = None
 generation_model: genai.GenerativeModel | None = None
+bm25_indices: dict = {}
+book_corpus: dict = {}
 
 def initialize():
     """
@@ -75,6 +79,55 @@ def check_if_book_exists(book_uuid: str) -> bool:
         limit=1,
     )
     return len(response) > 0
+
+def _get_all_chunks_for_book(book_uuid: str) -> List[Dict]:
+    """Scrolls through all points in a collection for a given book_uuid."""
+    if not client:
+        raise RuntimeError("Qdrant client not initialized.")
+    
+    all_points = []
+    next_offset = None
+    
+    while True:
+        response, next_offset = client.scroll(
+            collection_name=COLLECTION_NAME,
+            scroll_filter=models.Filter(
+                must=[models.FieldCondition(key="textbook_uuid", match=models.MatchValue(value=book_uuid))]
+            ),
+            limit=250,
+            with_payload=True,
+            offset=next_offset
+        )
+        all_points.extend(response)
+        if not next_offset:
+            break
+            
+    return [point.payload for point in all_points]
+
+def get_or_build_bm25_index(book_uuid: str):
+    """
+    Builds or retrieves a cached BM25 index for a given book.
+    """
+    if book_uuid in bm25_indices:
+        return bm25_indices[book_uuid]
+
+    print(f"Building BM25 index for book: {book_uuid}")
+    corpus_docs = _get_all_chunks_for_book(book_uuid)
+    
+    if not corpus_docs:
+        return None
+
+    # Store the full payload for later retrieval
+    book_corpus[book_uuid] = corpus_docs
+    
+    # Tokenize the text content for BM25
+    tokenized_corpus = [doc["text"].split(" ") for doc in corpus_docs]
+    bm25 = BM25Okapi(tokenized_corpus)
+    
+    # Cache the index
+    bm25_indices[book_uuid] = bm25
+    return bm25
+
 
 # --- CORE LOGIC ---
 def process_and_embed_book(pdf_path: str, class_name: str, subject: str, chapters: list):
@@ -175,15 +228,11 @@ def get_books(class_name: str = None, subject: str = None) -> List[Dict[str, str
         with_payload=["textbook_uuid", "subject", "class_name", "filename"]
 
     )
-
     
 
     unique_books = {}
-
     for p in response:
-
         book_uuid = p.payload.get('textbook_uuid')
-
         payload_subject = p.payload.get('subject')
 
 
@@ -209,11 +258,32 @@ def get_books(class_name: str = None, subject: str = None) -> List[Dict[str, str
                 "filename": p.payload.get('filename')
 
             }
-
     
 
     return list(unique_books.values())
 
+def get_book_metadata(book_uuid: str) -> dict:
+    """Retrieves metadata for a specific book UUID."""
+    if not client:
+        raise RuntimeError("Qdrant client not initialized.")
+    
+    # Scroll for one point to get the metadata
+    response, _ = client.scroll(
+        collection_name=COLLECTION_NAME,
+        scroll_filter=models.Filter(
+            must=[models.FieldCondition(key="textbook_uuid", match=models.MatchValue(value=book_uuid))]
+        ),
+        limit=1,
+        with_payload=["class_name", "subject"]
+    )
+    
+    if response:
+        payload = response[0].payload
+        return {
+            "class_name": payload.get("class_name"),
+            "subject": payload.get("subject")
+        }
+    return {}
 
 
 def get_chapter_names(book_uuid: str) -> List[str]:
@@ -296,11 +366,9 @@ def get_chapter_names(book_uuid: str) -> List[str]:
 
 
 
-
-
-
-
 def get_chapters_for_book(book_uuid: str) -> List[Dict]:
+
+
 
 
 
@@ -312,11 +380,11 @@ def get_chapters_for_book(book_uuid: str) -> List[Dict]:
 
 
 
-    This implementation follows the user's suggested logic.
-
 
 
     """
+
+
 
 
 
@@ -324,7 +392,11 @@ def get_chapters_for_book(book_uuid: str) -> List[Dict]:
 
 
 
+
+
         raise RuntimeError("Qdrant client not initialized.")
+
+
 
 
 
@@ -349,8 +421,6 @@ def get_chapters_for_book(book_uuid: str) -> List[Dict]:
 
 
         return []
-
-
 
 
 
@@ -466,19 +536,42 @@ def get_chapters_for_book(book_uuid: str) -> List[Dict]:
 
 
 
+    # Sort the final list by the starting page number to ensure correct book order.
 
 
-    # The chapter_names were already sorted, so the final list should be too.
+
+    chapter_info.sort(key=lambda x: (x.get('start_page') or 0))
 
 
 
     return chapter_info
 
 
+def hybrid_search(book_uuid: str, query: str, classification: str, metadata_filters: dict = None) -> List[dict]:
+    """
+    Performs a hybrid search using both dense and sparse retrieval methods,
+    normalizing their scores and weighting them based on the query classification.
+    """
+    # 1. Get BM25 index and corpus
+    bm25 = get_or_build_bm25_index(book_uuid)
+    corpus = book_corpus.get(book_uuid, [])
 
+    if not bm25 or not corpus:
+        print("Warning: BM25 index not found. Falling back to pure semantic search.")
+        query_embedding = local_embedder.encode(query).tolist()
+        filter_conditions = [models.FieldCondition(key="textbook_uuid", match=models.MatchValue(value=book_uuid))]
+        if metadata_filters:
+            for key, value in metadata_filters.items():
+                if value:
+                    filter_conditions.append(models.FieldCondition(key=key, match=models.MatchValue(value=value)))
 
+        search_result = client.search(
+            collection_name=COLLECTION_NAME, query_vector=query_embedding,
+            query_filter=models.Filter(must=filter_conditions), limit=5, with_payload=True
+        )
+        return [(res.score, res.payload) for res in search_result]
 
-def semantic_search(book_uuid: str, query: str, metadata_filters: dict = None) -> List[dict]:
+    # 2. Perform Dense (Vector) Search
     query_embedding = local_embedder.encode(query).tolist()
     filter_conditions = [models.FieldCondition(key="textbook_uuid", match=models.MatchValue(value=book_uuid))]
     if metadata_filters:
@@ -486,23 +579,154 @@ def semantic_search(book_uuid: str, query: str, metadata_filters: dict = None) -
             if value:
                 filter_conditions.append(models.FieldCondition(key=key, match=models.MatchValue(value=value)))
 
-    search_result = client.search(
-        collection_name=COLLECTION_NAME, query_vector=query_embedding,
-        query_filter=models.Filter(must=filter_conditions), limit=5, with_payload=True
+    dense_search_result = client.search(
+        collection_name=COLLECTION_NAME, 
+        query_vector=query_embedding,
+        query_filter=models.Filter(must=filter_conditions), 
+        limit=10, 
+        with_payload=True
     )
-    return [hit.payload for hit in search_result]
+    dense_results = {res.payload['text']: res.score for res in dense_search_result}
+    print("\n--- Dense (Semantic) Search Results ---")
+    print(f"Retrieved {len(dense_results)} results.")
+    for i, res in enumerate(dense_search_result):
+        print(f"  {i+1}. Score: {res.score:.4f} | Text: {res.payload['text'][:100]}...")
 
-def generate_answer(query: str, context: str) -> str:
-    prompt = f"""Answer the user's question based on the context provided.
+    # 3. Perform Sparse (BM25) Search
+    tokenized_query = query.split(" ")
+    bm25_scores = bm25.get_scores(tokenized_query)
+    
+    sparse_results_with_scores = []
+    for i, doc in enumerate(corpus):
+        sparse_results_with_scores.append((bm25_scores[i], doc))
+    
+    sparse_results_with_scores.sort(key=lambda x: x[0], reverse=True)
+    top_10_sparse = sparse_results_with_scores[:10]
+    sparse_results = {doc['text']: score for score, doc in top_10_sparse}
+    print("\n--- Sparse (BM25) Search Results ---")
+    print(f"Retrieved {len(sparse_results)} results.")
+    for i, (score, doc) in enumerate(top_10_sparse):
+        print(f"  {i+1}. Score: {score:.4f} | Text: {doc['text'][:100]}...")
 
-Context:
-{context}
+    # 4. Normalize, Combine, and Re-rank
+    alpha = 0.7 if classification == 'conceptual' else 0.3
 
-Question:
-{query}
+    all_doc_texts = list(set(dense_results.keys()) | set(sparse_results.keys()))
+    
+    # Min-Max Normalization
+    max_dense = max(dense_results.values()) if dense_results else 0
+    min_dense = min(dense_results.values()) if dense_results else 0
+    max_sparse = max(sparse_results.values()) if sparse_results else 0
+    min_sparse = min(sparse_results.values()) if sparse_results else 0
 
-Answer:
-"""
+    fused_results = []
+    for text in all_doc_texts:
+        # Normalize dense score to 0-1 range
+        dense_score = dense_results.get(text, 0)
+        norm_dense = (dense_score - min_dense) / (max_dense - min_dense) if (max_dense - min_dense) > 0 else 0
+        
+        # Normalize sparse score to 0-1 range
+        sparse_score = sparse_results.get(text, 0)
+        norm_sparse = (sparse_score - min_sparse) / (max_sparse - min_sparse) if (max_sparse - min_sparse) > 0 else 0
+
+        fused_score = (alpha * norm_dense) + ((1 - alpha) * norm_sparse)
+        
+        original_payload = next((doc for doc in corpus if doc['text'] == text), None)
+        if original_payload:
+            fused_results.append((fused_score, original_payload))
+
+    fused_results.sort(key=lambda x: x[0], reverse=True)
+    
+    final_results = fused_results[:5]
+    print("\n--- Final Fused & Ranked Results ---")
+    print(f"Returning {len(final_results)} results after Hybrid Fusion.")
+    for i, (score, payload) in enumerate(final_results):
+        print(f"  {i+1}. Fused Score: {score:.4f} | Text: {payload['text'][:100]}...")
+    print("-" * 30)
+
+    return final_results
+
+
+
+def reformulate_and_classify_query(query: str, class_name: str = None, subject: str = None, chapter_list: list = None) -> dict:
+    """
+    Uses the generative model to reformulate the user's query and classify it, using book context.
+    """
+    context_prompt = ""
+    if class_name and subject:
+        context_prompt += f"The user is asking a question about a textbook for Class '{class_name}', Subject '{subject}'.\n"
+    if chapter_list:
+        chapters_formatted = "\n".join([f"- {name}" for name in chapter_list])
+        context_prompt += f"The book contains the following chapters:\n{chapters_formatted}\n"
+
+    prompt = f'''
+    You are an expert in query analysis. Your task is to reformulate a user's query to be more effective for a semantic search system and to classify the query's intent, using the provided context about the textbook.
+
+    **Textbook Context:**
+    {context_prompt}
+
+    Based on the context and the user's query, perform the following two tasks:
+
+    1.  **Reformulate the Query**: Rephrase the query to be clearer and more specific for a vector database search. Use the context to make the query less ambiguous. For example, if the query is "what is the first law?" and the context mentions "Newton's Laws", reformulate it to "What is Newton's First Law of Motion?".
+    2.  **Classify the Query**: Determine if the query is 'factual' or 'conceptual'.
+        -   'factual': The query asks for specific, concrete pieces of information (e.g., "What is the formula for momentum?", "Who discovered penicillin?").
+        -   'conceptual': The query asks for explanations, summaries, or comparisons (e.g., "Explain the difference between heat and temperature.", "Summarize the causes of World War I.").
+
+    Return your response as a single, valid JSON object with two keys: "reformulated_query" and "classification".
+
+    **User Query:**
+    "{query}"
+
+    **JSON Response:**
+    '''
+    try:
+        response = generation_model.generate_content(prompt)
+        # Basic parsing to find the JSON object
+        json_text = response.text.strip()
+        json_start = json_text.find('{')
+        json_end = json_text.rfind('}') + 1
+        if json_start != -1 and json_end != -1:
+            clean_json = json_text[json_start:json_end]
+            return json.loads(clean_json)
+        else:
+            # Fallback if JSON is not found
+            return {
+                "reformulated_query": query,
+                "classification": "conceptual" # Default to conceptual
+            }
+    except Exception as e:
+        print(f"Error during query reformulation/classification: {e}")
+        # Fallback in case of any error
+        return {
+            "reformulated_query": query,
+            "classification": "conceptual"
+        }
+
+def generate_answer(query: str, context: str, class_name: str) -> str:
+    # Determine the class_level string
+    class_level = f"Class {class_name}" if class_name else "student"
+
+    prompt = f"""
+    **Your Role:** You are CHADUVU-GURU, an intelligent and friendly AI tutor. Your goal is to explain topics clearly and interactively.
+
+    **Your Instructions:**
+    1.  Your primary source of information is the provided "Textbook Context". You must base your answer on this content.
+    2.  If the context is insufficient, you may use your general knowledge to enrich the explanation, but you must not contradict the textbook content.
+    3.  Explain the concept in a simple and engaging way, as if you are talking to a {class_level}.
+    4.  Use short, real-world examples or analogies to make the topic easier to understand.
+    5.  Do not copy the textbook content verbatim. Rephrase everything in your own conversational words.
+    6.  If the user's question cannot be answered using the provided context at all, you must reply with only this exact sentence: "I'm sorry, but this topic does not seem to be covered in your textbook."
+
+    **Textbook Context:**
+    ---
+    {context}
+    ---
+
+    **User's Question:**
+    {query}
+
+    Now, as CHADUVU-GURU, explain the answer to the student step-by-step.
+    """
     response = generation_model.generate_content(prompt)
     return response.text
 
