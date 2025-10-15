@@ -301,6 +301,7 @@ function setupUserPage() {
     let pageNum = 1; // Current page number
     let pageRendering = false;
     let pageNumPending = null;
+    let isFirstQuery = true; // To handle the welcome message
 
     // --- Event Listeners ---
 
@@ -394,7 +395,11 @@ function setupUserPage() {
             queryText.removeAttribute('disabled');
             submitButton.removeAttribute('disabled');
             listChaptersBtn.classList.remove('hidden'); // Show the button
-            addMessage('ai', `Book "${selectedBook.subject}" loaded. You can now ask questions about it.`);
+            
+            // Clear welcome and add loaded message
+            chatHistory.innerHTML = '';
+            isFirstQuery = false;
+            appendAIResponse(`Book "${selectedBook.subject}" loaded. You can now ask questions about it.`);
 
         } catch (error) {
             pdfLoadingIndicator.style.display = 'none';
@@ -462,17 +467,30 @@ function setupUserPage() {
         }
     }
 
+    function addUserMessage(text) {
+        const messageEl = document.createElement('div');
+        messageEl.className = 'user-message p-3 bg-blue-100 rounded-lg self-end max-w-xl fade-in';
+        messageEl.textContent = text;
+        chatHistory.appendChild(messageEl);
+        chatHistory.scrollTop = chatHistory.scrollHeight;
+    }
+
     async function handleQuerySubmit() {
         const query = queryText.value.trim();
         if (!query || !selectedBook) return;
 
-        addMessage('user', query);
+        if (isFirstQuery) {
+            chatHistory.innerHTML = '';
+            isFirstQuery = false;
+        }
+
+        addUserMessage(query);
         queryText.value = '';
         queryText.style.height = 'auto'; // Reset height
         submitButton.setAttribute('disabled', 'true');
         listChaptersBtn.classList.add('hidden');
 
-        const thinkingMessage = addMessage('ai', '...');
+        const thinkingMessage = appendAIResponse('...');
 
         try {
             const response = await fetch('/api/query', {
@@ -490,24 +508,28 @@ function setupUserPage() {
             }
 
             const result = await response.json();
-            
-            let answer = result.answer;
-            
-            thinkingMessage.querySelector('.message-content').innerHTML = `<p>${answer.replace(/\n/g, '<br>')}</p>`;
+            const formatted = marked.parse(result.answer);
+            thinkingMessage.querySelector('.markdown-content').innerHTML = formatted;
 
         } catch (error) {
-            thinkingMessage.querySelector('.message-content').innerHTML = `<p class="error-message">Error: ${error.message}</p>`;
+            thinkingMessage.querySelector('.markdown-content').innerHTML = `<p class="error-message">Error: ${error.message}</p>`;
         } finally {
             submitButton.removeAttribute('disabled');
             listChaptersBtn.classList.remove('hidden');
+            chatHistory.scrollTop = chatHistory.scrollHeight;
         }
     }
 
     async function handleListChapters() {
         if (!selectedBook) return;
+        
+        if (isFirstQuery) {
+            chatHistory.innerHTML = '';
+            isFirstQuery = false;
+        }
 
-        addMessage('user', 'List all chapters');
-        appendAIResponse('Fetching chapters...');
+        addUserMessage('List all chapters');
+        const thinkingMessage = appendAIResponse('Fetching chapters...');
 
         submitButton.setAttribute('disabled', 'true');
         listChaptersBtn.classList.add('hidden');
@@ -529,67 +551,26 @@ function setupUserPage() {
                 throw new Error("No chapters were found for this book in the database.");
             }
 
-            // Sort chapters by start_page numerically
             chapters.sort((a, b) => a.start_page - b.start_page);
 
-            // Build an HTML table string
-            let tableHtml = `
-                <h3 class="text-lg font-bold mb-2">Chapters in this book:</h3>
-                <table class="w-full text-left border-collapse">
-                    <thead>
-                        <tr>
-                            <th class="border-b-2 p-2">S.No.</th>
-                            <th class="border-b-2 p-2">Chapter Name</th>
-                            <th class="border-b-2 p-2">Pages</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-            `;
-
+            let tableMd = `
+| S.No. | Chapter Name | Pages |
+|---|---|---|
+`;
             chapters.forEach((chapter, index) => {
-                const sno = index + 1;
-                tableHtml += `
-                        <tr>
-                            <td class="border-b p-2">${sno}</td>
-                            <td class="border-b p-2">${chapter.name}</td>
-                            <td class="border-b p-2">${chapter.start_page} - ${chapter.end_page}</td>
-                        </tr>
-                `;
+                tableMd += `| ${index + 1} | ${chapter.name} | ${chapter.start_page} - ${chapter.end_page} |\n`;
             });
 
-            tableHtml += `
-                    </tbody>
-                </table>
-            `;
-
-            const chatHistory = document.getElementById('chat-history');
-            const placeholderCard = chatHistory.lastChild;
-            
-            // Directly set the innerHTML with the new table
-            placeholderCard.querySelector('.markdown-content').innerHTML = tableHtml;
+            const formatted = marked.parse(tableMd);
+            thinkingMessage.querySelector('.markdown-content').innerHTML = formatted;
 
         } catch (error) {
-            const chatHistory = document.getElementById('chat-history');
-            const placeholderCard = chatHistory.lastChild;
-            placeholderCard.querySelector('.markdown-content').innerHTML = `<p style="color: red;"><strong>Error:</strong> ${error.message}</p>`;
+            thinkingMessage.querySelector('.markdown-content').innerHTML = `<p style="color: red;"><strong>Error:</strong> ${error.message}</p>`;
         } finally {
             submitButton.removeAttribute('disabled');
             listChaptersBtn.classList.remove('hidden');
+            chatHistory.scrollTop = chatHistory.scrollHeight;
         }
-    }
-
-    function addMessage(sender, text) {
-        const messageEl = document.createElement('div');
-        messageEl.className = `chat-message ${sender}-message`;
-        
-        const contentEl = document.createElement('div');
-        contentEl.className = 'message-content';
-        contentEl.innerHTML = `<p>${text.replace(/\n/g, '<br>')}</p>`;
-        
-        messageEl.appendChild(contentEl);
-        chatHistory.appendChild(messageEl);
-        chatHistory.scrollTop = chatHistory.scrollHeight;
-        return messageEl;
     }
 }
 
@@ -605,4 +586,29 @@ function showStatus(message, type) {
         statusContainer.className = `status-message ${type}`;
         statusContainer.style.display = 'block';
     }
+}
+
+function appendAIResponse(markdownText) {
+    const chatHistory = document.getElementById("chat-history");
+    const messageDiv = document.createElement("div");
+    messageDiv.className = "ai-card fade-in";
+
+    const header = `
+        <div class="flex justify-between items-center mb-2">
+          <h2 class="font-semibold text-gray-700">🤖 AI Response</h2>
+          <button class="copy-btn" onclick="copyMessage(this)">📋</button>
+        </div>`;
+
+    const formatted = marked.parse(markdownText);
+    messageDiv.innerHTML = header + `<div class="markdown-content">${formatted}</div>`;
+    chatHistory.appendChild(messageDiv);
+    chatHistory.scrollTop = chatHistory.scrollHeight;
+    return messageDiv; // Return the element
+}
+
+function copyMessage(btn) {
+    const text = btn.closest(".ai-card").querySelector(".markdown-content").innerText;
+    navigator.clipboard.writeText(text);
+    btn.textContent = "✅";
+    setTimeout(() => (btn.textContent = "📋"), 1200);
 }

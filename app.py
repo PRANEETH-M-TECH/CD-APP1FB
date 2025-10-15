@@ -167,14 +167,34 @@ async def query_book(request: QueryRequest):
 @app.get("/api/list-chapters")
 async def list_chapters(class_name: str, subject: str):
     """
-    Returns a sorted list of chapters for a given book.
+    Returns a sorted list of chapters for a given book, using a cache.
     """
+    cache_path = "chapters_cache.json"
+    cache_key = f"{class_name}_{subject}"
+
+    # 1. Check cache first
+    try:
+        with open(cache_path, "r") as f:
+            cache = json.load(f)
+        if cache_key in cache:
+            print(f"Cache hit for {cache_key}. Returning cached chapters.")
+            return {"chapters": cache[cache_key]}
+    except (FileNotFoundError, json.JSONDecodeError):
+        cache = {}
+
+    # 2. If not in cache, get from database
+    print(f"Cache miss for {cache_key}. Fetching chapters from database.")
     books = get_books(class_name=class_name, subject=subject)
     if not books:
         raise HTTPException(status_code=404, detail="Book not found.")
 
     book_uuid = books[0]['id']
     chapters = get_chapters_for_book(book_uuid)
+
+    # 3. Save to cache
+    cache[cache_key] = chapters
+    with open(cache_path, "w") as f:
+        json.dump(cache, f, indent=2)
 
     return {"chapters": chapters}
 
@@ -228,20 +248,38 @@ def extract_chapters_from_pdf(pdf_path: str) -> List[Dict]:
 @app.post("/extract-chapters")
 async def extract_chapters(book_id: str = Query(...)):
     """
-    Extracts chapter information from the specified PDF file.
+    Extracts chapter information from the specified PDF file, using a cache to avoid re-processing.
     """
     if not book_id:
         raise HTTPException(status_code=400, detail="book_id is required.")
 
-    # Sanitize filename
     safe_filename = os.path.basename(book_id)
     pdf_path = os.path.join(UPLOADS_DIR, safe_filename)
+    cache_path = "chapters_cache.json"
 
+    # 1. Check cache first
+    try:
+        with open(cache_path, "r") as f:
+            cache = json.load(f)
+        if safe_filename in cache:
+            print(f"Cache hit for {safe_filename}. Returning cached chapters.")
+            return JSONResponse(content=cache[safe_filename])
+    except (FileNotFoundError, json.JSONDecodeError):
+        cache = {}
+
+    # 2. If not in cache, process the PDF
     if not os.path.exists(pdf_path):
         raise HTTPException(status_code=404, detail=f"PDF file not found: {safe_filename}")
 
+    print(f"Cache miss for {safe_filename}. Extracting chapters from PDF.")
     try:
         chapters = extract_chapters_from_pdf(pdf_path)
+        
+        # 3. Save to cache
+        cache[safe_filename] = chapters
+        with open(cache_path, "w") as f:
+            json.dump(cache, f, indent=2)
+            
         return JSONResponse(content=chapters)
     except Exception as e:
         print(f"Error extracting chapters: {e}")

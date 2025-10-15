@@ -1,0 +1,206 @@
+{
+  "7_Science": [
+    {
+      "name": "FOOD COMPONENTS",
+      "start_page": 1,
+      "end_page": 8
+    },
+    {
+      "name": "ACIDS AND BASES",
+      "start_page": 9,
+      "end_page": 18
+    },
+    {
+      "name": "SILK - WOOL",
+      "start_page": 19,
+      "end_page": 27
+    },
+    {
+      "name": "MOTION AND TIME",
+      "start_page": 28,
+      "end_page": 42
+    },
+    {
+      "name": "HEAT - MEASUREMENT",
+      "start_page": 43,
+      "end_page": 53
+    },
+    {
+      "name": "WEATHER AND CLIMATE",
+      "start_page": 54,
+      "end_page": 62
+    },
+    {
+      "name": "ELECTRICITY",
+      "start_page": 63,
+      "end_page": 72
+    },
+    {
+      "name": "AIR, WINDS AND CYCLONES",
+      "start_page": 73,
+      "end_page": 81
+    },
+    {
+      "name": "REFLECTION OF LIGHT",
+      "start_page": 82,
+      "end_page": 96
+    },
+    {
+      "name": "NUTRITION IN PLANTS",
+      "start_page": 97,
+      "end_page": 103
+    },
+    {
+      "name": "RESPIRATION IN ORGANISMS",
+      "start_page": 104,
+      "end_page": 111
+    },
+    {
+      "name": "REPRODUCTION IN PLANTS",
+      "start_page": 112,
+      "end_page": 122
+    },
+    {
+      "name": "SEED DISPERSAL",
+      "start_page": 123,
+      "end_page": 128
+    },
+    {
+      "name": "WATER",
+      "start_page": 129,
+      "end_page": 137
+    },
+    {
+      "name": "SOIL : OUR LIFE",
+      "start_page": 138,
+      "end_page": 149
+    },
+    {
+      "name": "FOREST : OUR LIFE",
+      "start_page": 150,
+      "end_page": 156
+    },
+    {
+      "name": "CHANGES AROUND US",
+      "start_page": 157,
+      "end_page": 168
+    },
+    {
+      "name": "REVISION",
+      "start_page": 169,
+      "end_page": 182
+    }
+  ],
+  "7_Social": [
+    {
+      "name": "Reading Maps of Different kinds",
+      "start_page": 1,
+      "end_page": 6
+    },
+    {
+      "name": "Rain and Rivers",
+      "start_page": 7,
+      "end_page": 21
+    },
+    {
+      "name": "Tanks and Ground Water",
+      "start_page": 22,
+      "end_page": 32
+    },
+    {
+      "name": "Oceans and Fishing",
+      "start_page": 33,
+      "end_page": 41
+    },
+    {
+      "name": "Europe",
+      "start_page": 42,
+      "end_page": 57
+    },
+    {
+      "name": "Africa",
+      "start_page": 58,
+      "end_page": 68
+    },
+    {
+      "name": "Handicrafts and Handlooms",
+      "start_page": 69,
+      "end_page": 77
+    },
+    {
+      "name": "Industrial Revolution",
+      "start_page": 78,
+      "end_page": 85
+    },
+    {
+      "name": "Production in a Factory - A Paper Mill",
+      "start_page": 86,
+      "end_page": 94
+    },
+    {
+      "name": "Importance of Transport System",
+      "start_page": 95,
+      "end_page": 100
+    },
+    {
+      "name": "New Kings and Kingdoms",
+      "start_page": 101,
+      "end_page": 109
+    },
+    {
+      "name": "The Kakatiyas - Emergence of a Regional Kingdom",
+      "start_page": 110,
+      "end_page": 116
+    },
+    {
+      "name": "The Kings of Vijayanagara",
+      "start_page": 117,
+      "end_page": 125
+    },
+    {
+      "name": "Mughal Empire",
+      "start_page": 126,
+      "end_page": 134
+    },
+    {
+      "name": "Establishment of the British Empire in India",
+      "start_page": 135,
+      "end_page": 146
+    },
+    {
+      "name": "Making of Laws in the State Assembly",
+      "start_page": 147,
+      "end_page": 157
+    },
+    {
+      "name": "Implementation of Laws in the District",
+      "start_page": 158,
+      "end_page": 164
+    },
+    {
+      "name": "Caste Discrimination and the Struggle for Equalities",
+      "start_page": 165,
+      "end_page": 171
+    },
+    {
+      "name": "Livelihood and Struggles of Urban Workers",
+      "start_page": 172,
+      "end_page": 180
+    },
+    {
+      "name": "Folk - Religion",
+      "start_page": 181,
+      "end_page": 187
+    },
+    {
+      "name": "Devotional Paths to the Divine",
+      "start_page": 188,
+      "end_page": 196
+    },
+    {
+      "name": "Rulers and Buildings",
+      "start_page": 197,
+      "end_page": 226
+    }
+  ]
+}

@@ -225,32 +225,6 @@
       'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.4.120/build/pdf.worker.min.js';
   </script>
 
-  <script>
-    function appendAIResponse(markdownText) {
-      const chatHistory = document.getElementById("chat-history");
-      const messageDiv = document.createElement("div");
-      messageDiv.className = "ai-card fade-in";
-
-      const header = `
-        <div class="flex justify-between items-center mb-2">
-          <h2 class="font-semibold text-gray-700">🤖 AI Response</h2>
-          <button class="copy-btn" onclick="copyMessage(this)">📋</button>
-        </div>`;
-
-      const formatted = marked.parse(markdownText);
-      messageDiv.innerHTML = header + `<div class="markdown-content">${formatted}</div>`;
-      chatHistory.appendChild(messageDiv);
-      chatHistory.scrollTop = chatHistory.scrollHeight;
-    }
-
-    function copyMessage(btn) {
-      const text = btn.closest(".ai-card").querySelector(".markdown-content").innerText;
-      navigator.clipboard.writeText(text);
-      btn.textContent = "✅";
-      setTimeout(() => (btn.textContent = "📋"), 1200);
-    }
-  </script>
-
   <script src="/static/script.js"></script>
 </body>
 </html>

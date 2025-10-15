@@ -2391,3 +2391,1268 @@ Fig. 12 - Bulbs connected in series
 
 --- End Log ---
 
+--- Query Log ---
+Timestamp: 2025-10-15T10:14:09.814911
+Original Query: when will the evaporation be more,during day or night?
+Reformulated Query: Explain the factors affecting the rate of evaporation, specifically comparing whether evaporation is higher during the day or at night, drawing upon concepts discussed in chapters related to water, climate, or geography (e.g., Rain and Rivers, Oceans and Fishing).
+Classification: conceptual
+Retrieved 5 Chunks (Hybrid Search):
+
+  1. Hybrid Score: 1.0000
+     Chapter: Rain and Rivers
+     Text: these water bodies. In fact, wherever there
+is moisture, evaporation will take place.
+There is evaporation from our bodies, from
+trees, plants and soil. The process of
+evaporation speeds up with the increase in
+temperature.
+ In which season would there be
+more evaporation, summer or
+winter?
+ When will the evaporation be more,
+during the day or night?
+ Look at the figure 2.1 and make a list
+of the places from where evaporation
+takes place.
+ Where do you think the maximum
+evaporation would take place – from
+plants, rivers, oceans or soils?
+Formation of Clouds and Rain
+When there is rise in temperature, water
+vapour rises and reaches high up in the sky,
+and it gets cooled. This is because the
+atmosphere gets cooler as we rise above
+the surface of the earth. With the cooling,
+water vapour is transformed into tiny water
+droplets. These droplets gather around
+minute dust or smoke particles in the air
+and gradually increase in size. These small
+drops of water gather to form the clouds.
+
+  2. Hybrid Score: -0.4536
+     Chapter: Rain and Rivers
+     Text: cooling.
+The story of rain begins with water
+vapour. What is water vapour? When you
+dry your wet clothes in the open, you see
+PART - I
+get salty or hard water. In the following
+chapters, we will study about the
+diversity in water availability and its
+consequences.
+SCERT, TEALANGANASCERT, TEALANGANA
+8 Diversity on the Earth Social Studies
+that the water disappears after a while and
+the clothes dry. Similarly, if you keep some
+water in a plate, it dries up in a couple of
+days. Actually, water in the clothes or in
+the plate becomes water vapour and mixes
+with the air through a process called
+‘evaporation’. So, even when water is not
+boiling there is evaporation.
+There are several water bodies on the
+earth’s surface – oceans, rivers, lakes etc.
+There is constant evaporation of water from
+these water bodies. In fact, wherever there
+is moisture, evaporation will take place.
+There is evaporation from our bodies, from
+trees, plants and soil. The process of
+
+  3. Hybrid Score: -0.5963
+     Chapter: Rain and Rivers
+     Text: cause rain?
+ Have
+  you ever observed dew?
+Where is it formed?
+ In which part of the day do you see
+fog?
+ In which season do you have more
+foggy days?
+ Have  you ever seen snow fall? How
+is it different from rain fall?
+ Have you ever seen the hail storm?
+Winds and Clouds
+Since evaporation takes place all over
+the earth’s surface, clouds are also being
+formed all over. However, it is on the
+surface of the oceans that maximum
+evaporation and cloud formation takes
+place. After all, oceans are vast water
+bodies extending upto thousands of
+kilometres. As a result, it also rains very
+Fig 2.2  Water cycle
+Some Important Terms
+Evaporation:  Change of water
+into vapours is known as
+evaporation. The process in which
+water vapour changes into water is
+called condensation. Clouds are
+tiny droplets of water hanging in the
+air above.
+Water Cycle :  The process of
+water evaporating from the seas,
+forming clouds in the sky,  coming
+down as rain,  flowing down the
+
+  4. Hybrid Score: -0.6277
+     Chapter: Rain and Rivers
+     Text: tiny droplets of water hanging in the
+air above.
+Water Cycle :  The process of
+water evaporating from the seas,
+forming clouds in the sky,  coming
+down as rain,  flowing down the
+slopes on  land in the form of rivers
+and finally joining the sea, is called
+the water cycle.
+Precipitation: Different forms of
+condensation of water vapours is
+known as precipitation. This may take
+place in the form of dew, fog, rain,
+snow or hail.
+Humidity: The amount of invisible
+water vapours present in the
+atmosphere is known as humidity.
+When temperature and humidity
+rise, we feel uncomfortable. We
+perspire and the sweat does not
+evaporate quickly. We feel sticky
+and such weather is called sultry.
+Rain and Rivers
+SCERT, TEALANGANASCERT, TEALANGANA
+10 Diversity on the Earth Social Studies
+heavily on the oceans. Clouds also travel inland for thousands of kilometres to bring rain to
+us. Do you know what brings them deep inland?
+From which direction does the wind blow during the rainy season?
+
+  5. Hybrid Score: -0.6458
+     Chapter: Rain and Rivers
+     Text: dependent on water. As you know, over
+71% of the earth’s surface is covered
+with water. We depend on water for
+growing crops. But we do not get water
+uniformly over the year. It is also not
+available uniformly all over the earth.
+Nor is the quality of water the same
+everywhere.
+Discuss the following in the class: in
+which months you get rain, in which part
+of the village or town do you have more
+water or less water, where do you get
+good drinking water and where do you
+the water heated up, water vapours touched
+the lid and with the help of outside cool air,
+vapour became water drops and stuck to
+the lid of the dish. When she removed the
+lid, some of the water drops fell down into
+the dish. By observing this, she realised
+that the water evaporates and latter it
+becomes condensed into water by
+cooling.
+The story of rain begins with water
+vapour. What is water vapour? When you
+dry your wet clothes in the open, you see
+PART - I
+get salty or hard water. In the following
+
+--- End Log ---
+
+--- Query Log ---
+Timestamp: 2025-10-15T10:33:20.923936
+Original Query: explain about cause and effect and also precaution that needs to be taken for the cyclones?
+Reformulated Query: Provide a detailed explanation of the causes, resultant effects, and recommended precautions related to cyclones, specifically referencing the content in the Class 7 Science chapter 'AIR, WINDS AND CYCLONES'.
+Classification: conceptual
+Retrieved 5 Chunks (Hybrid Search):
+
+  1. Hybrid Score: -0.8327
+     Chapter: ACIDS AND BASES
+     Text: concept they learned, to solve the problem faced in daily
+life situations. Recognise the importance of  biodiversity
+and takes measures to protect the biodiversity.
+SCERT, TELANGANAXI Free Distribution by Government of T.S. 2021-22
+INDEX
+S.No. Name of the Chapter Page No. Periods Month
+Class VII
+Unit
+I
+II
+III
+IV
+10
+10
+10
+11
+12
+10
+12
+12
+12
+10
+11
+10
+9
+10
+11
+11
+10
+1
+9
+19
+28
+43
+54
+63
+73
+82
+97
+104
+112
+123
+129
+138
+150
+157
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+XI
+FOOD COMPONENTS
+ACIDS AND BASES
+SILK - WOOL
+MOTION AND TIME
+HEAT - MEASUREMENT
+WEATHER AND CLIMATE
+ELECTRICITY
+AIR, WINDS AND CYCLONES
+REFLECTION OF LIGHT
+NUTRITION IN PLANTS
+RESPIRATION IN ORGANISMS
+REPRODUCTION IN PLANTS
+SEED DISPERSAL
+WATER
+SOIL : OUR LIFE
+FOREST : OUR LIFE
+CHANGES AROUND US
+REVISION
+June
+June
+July
+July
+August
+August
+September
+September
+October
+November
+November
+November
+December
+December
+January
+January
+February
+March
+SCERT, TELANGANAXII
+OUR  NATIONAL ANTHEM
+- Rabindranath Tagore
+
+  2. Hybrid Score: -0.9116
+     Chapter: ACIDS AND BASES
+     Text: sense, values
+7. Application to daily life,
+concern to bio diversity.
+Children are able to explain, cite examples, give reasons,
+and give comparison and differences, explain the process
+of given concepts in the textbook. Children are able to
+develop their own brain mappings.
+Children are able to ask questions to understand
+concepts, to clarify doubts about the concepts and to
+participate in discussions. They are able to guess the
+results of on issue with proper reasoning, able to predict
+the results of  experiments.
+Children are able to do the experiments given in the
+text book and developed on their own.  Able to arrange
+the apparatus, record the observati onal findings, suggest
+alternative apparatus, takes necessary precautions while
+doing the experiments, able to do to alternate
+experiments by changing variables. They are able to
+participate in field investigation and prepare reports.
+Children are able to collect information related to the
+
+  3. Hybrid Score: -0.9511
+     Chapter: FOOD COMPONENTS
+     Text: re-learning of the true nature of science must happen as recommended by the National
+Curriculum Frame Work-2005.
+SCERT, TELANGANAV Free Distribution by Government of T.S. 2021-22
+The textbooks are developed based on State Curriculum Framework and its Position
+Paper on Science and also reflect the spirit of Right to Education Act.  Science textbooks
+are developed to facilitate construction of knowledge jointly by the teacher and the pupil
+but never as merely an information provider.
+The textbook facilitates learning through activities, discovery, exploration in a child
+centered manner.  The activities i.e., group, individual and whole class, experiments, field
+investigations, information collection, questioning, analysis, synthesis, projects etc., must
+become a part of learning and as well as assessment in the context of science education.
+The pupil assessment procedures facilitate thinking in  critical and multiple ways.  Critical
+
+  4. Hybrid Score: -1.0179
+     Chapter: ACIDS AND BASES
+     Text: to environmental protection and specific roles of the children in doing so.
+• Teaching learning strategies and the expected learning outcomes, have been developed class
+wise and subject-wise based on the syllabus and compiled in the form of a Hand book to guide
+the teachers and were supplied to all the schools. With the help of this Hand book the teachers
+are expected to conduct effective teaching learning processes and ensure that all the students
+attain the expected learning outcomes.
+Conduct of Activities ….
+The basic objectives of science teaching facilitate the learning of how to learn.  Therefore,
+children must be facilitated to construct knowledge collaboratively through participating in whole class,
+group and individual activities.
+• Provide advanced information and awareness on the experiments, observations to be done
+both in side and out side the classrooms along with study of reports.
+
+  5. Hybrid Score: -1.0315
+     Chapter: AIR, WINDS AND CYCLONES
+     Text: to close the circuit
+SCERT, TELANGANA65VII Science Free Distribution by Govt. of T.S. 2021-22
+ELECTRIC SYMBOLS AND THEIR USES
+SCERT, TELANGANAElectricity_Current and It’s Effect66
+Fig. 7 - Circuit daigram
+Circuit Diagram
+There should be a source, which is one or
+more electric cells(battery).  The switch can
+be placed anywhere in the circuit.  If the switch
+is in the ON position, the circuit is complete
+from the positive terminal of  the battery to
+its negative terminal. The circuit is then said
+to be closed and the current flows throughout
+the circuit constantly.  The wires should not
+have any discontinuity (gaps).  When the switch
+is in the OFF position, the circuit is
+incomplete. It is said to be open.  No current
+flows through any part of the circuit.
+Observe the sequence in which the cell, bulb
+and switch are connected in the circuit.
+The sequence of components is as follows:
+Positive terminal of  the cell
+     Wire            Switch            Wire            Bulb
+
+--- End Log ---
+
+--- Query Log ---
+Timestamp: 2025-10-15T10:33:52.758669
+Original Query: explain the cause of cyclones
+Reformulated Query: Explain the formation process and specific causes of cyclones as described in the Class 7 Science chapter 'Air, Winds and Cyclones'.
+Classification: conceptual
+Retrieved 5 Chunks (Hybrid Search):
+
+  1. Hybrid Score: 0.7909
+     Chapter: REFLECTION OF LIGHT
+     Text: where they occur. Let us try to understand the
+phenomenon of cyclone through the following
+activity. Ex: Lyla, Bulbul cyclones.
+Let us do - 10:
+Fig. 9
+Take a glass containing water and two straws.
+Keep one straw in the water and another in
+horizontal direction as shown in figure 9 and
+blow through the horizontal straw.
+• Can you say what happens to water?
+• What do you observe?
+• Why is the water spray coming out from
+the straw? Discuss with your friends.
+When you blow over the straw the water comes
+out due to low pressure which forms inside
+the straw. So the water from the glass reaches
+up in the straw due to high pressure.
+We see that the increased wind speed is
+accompanied by a reduced air pressure.
+SCERT, TELANGANAAir, Winds And Cyclones78
+How Cyclones are Formed
+Tropical cyclones are like giant engines that
+use warm moist air as fuel. The warm moist
+air rises upward from near the surface. The
+warm air rises causing an area of  lower air
+pressure below. Air from surrounding areas
+
+  2. Hybrid Score: 0.6676
+     Chapter: REFLECTION OF LIGHT
+     Text: use warm moist air as fuel. The warm moist
+air rises upward from near the surface. The
+warm air rises causing an area of  lower air
+pressure below. Air from surrounding areas
+of high air pressure pushes into the low
+pressure area. Then this “new” air becomes
+warm and rises too.  As the warm air continues
+to rise, the surrounding air swirls-in to take
+its place and the water from the sea surface
+also comes up with the air as you have seen in
+activity 10. As the warmed moist air rises and
+cools off, the water in the air forms clouds.
+The whole system of clouds and winds spins
+and grows, fed by the ocean’s heat and water
+evaporating from the surface. See the figure
+(10)
+Fig. 10
+These kinds of satellite images help us to
+predict the path of the cyclones to some
+extent.
+DESTRUCTION BY CYCLONES:
+Cyclones can be very destructive. The main
+effects of cyclones include heavy rain and,
+strong wind. The destruction of  a cyclone
+depends mainly on its intensity, its size and its
+location.
+Fig. 11
+
+  3. Hybrid Score: 0.6159
+     Chapter: REFLECTION OF LIGHT
+     Text: Key words:
+Wind, Expansion, Anemometer, Cyclone,
+Low pressure, High pressure
+What we have learnt?
+• Air is everywhere.
+• The moving air is called wind.
+• Air around us exerts pressure.
+• Air expands on heating and contracts on
+cooling.
+• Warm air rises up whereas comparatively
+cooler air tends to sink towards the
+earth’s surface.
+• As warm air rises air pressure at the
+place is reduced and the cooler air moves
+into that place.
+• Uneven heating on the earth causes wind
+movements.
+• Cyclones may be caused due to wind
+traveling at high speed due to difference
+in air pressure.
+• It has become easier to study cyclones
+with the help of  advanced technology
+like satellites and radars.
+Improve your learning
+1.       Fill the missing words
+in the blank spaces in the
+following statements.
+a. Wind is ————— air.
+b. Winds are generated due
+to —————— heating
+on the earth.
+c. Near the earth’s surface ————— air
+rises up whereas ————— air comes
+down.
+d.Air moves from a region of ———
+
+  4. Hybrid Score: 0.3725
+     Chapter: REFLECTION OF LIGHT
+     Text: difference that causes winds created in nature?
+Is there a difference in temperature involved?
+The following activities will help you to
+understand this.
+Let us do – 8
+Take an incense stick(agarbati) and light it.
+Observe the smoke of  the incense stick?
+• Where does it go?
+Observations from above activities indicate
+that warm air rises up. Also, it is important to
+remember that on heating the air expands and
+occupies more space. When something
+occupies more space, it becomes less dense
+and lighter. The warm air  is therefore  less
+dense and lighter than  cold air. Thus smoke
+and hot air go up.
+Similar to observations of  activities done so
+far, numerous factors contribute to heat air.
+SCERT, TELANGANAAir, Winds And Cyclones76
+When the air rises up, air pressure at the place
+becomes low and we have many kinds of
+winds as air comes in to occupy areas of lower
+pressure. The differential heating of land and
+water by the sun leads to land and sea breeze.
+ Fig. 7   Land and sea breeze
+
+  5. Hybrid Score: 0.2897
+     Chapter: REFLECTION OF LIGHT
+     Text: a. Wind is ————— air.
+b. Winds are generated due
+to —————— heating
+on the earth.
+c. Near the earth’s surface ————— air
+rises up whereas ————— air comes
+down.
+d.Air moves from a region of ———
+———— pressure to a region of ——
+——— pressure.
+2. Suggest two methods to find out wind
+direction at a given place.
+SCERT, TELANGANAAir, Winds And Cyclones80
+3. State two experiences that make you
+think that air exerts pressure. (Other than
+those given in the text).
+4. While constructing a house, where do we
+construct ventilators; why?
+5. Explain why holes are made in banners
+and hoardings hanging in the open.
+6. How will you help your neighbours in
+case cyclone approaches  your village/
+town?
+7. In the day time, when we go to the sea
+the air blows towards us and does not
+go towards the sea. Explain.
+8. Which of the statements given below is
+correct?
+a) In winter the winds flow from the land
+to the ocean.
+b) In summer the winds flow from the
+land towards the ocean.
+
+--- End Log ---
+
+--- Query Log ---
+Timestamp: 2025-10-15T10:41:31.768045
+Original Query: explain the difference between acids and bases
+Reformulated Query: Provide a detailed explanation of the fundamental differences and contrasting properties between acids and bases, based on the definitions provided in the Class 7 Science textbook chapter 'ACIDS AND BASES'.
+Classification: conceptual
+Retrieved 5 Chunks (Hybrid Search):
+
+  1. Hybrid Score: -0.6394
+     Chapter: SILK - WOOL
+     Text: The substances that contain different acids. are
+given in the table 5.
+Apart from natural acids, there are certain acids
+like Hydrochloric acid, Sulphuric acid and
+Nitric acid etc. that are prepared from
+minerals.
+Basic Nature:-
+How do you feel when you touch a cake of
+soap? Take it between your fingers and gently
+rub your fingers on it? Do the same with the
+other material. What difference do you
+notice?
+• You might have touched soap water or
+lime water. How do you feel?
+• Can you list out some more substances
+that are soapy to touch?
+The substances which are soapy to touch are
+basic in nature.
+Some substances that we use
+in our daily life, contain
+different bases. For example
+soap, glass cleaners etc.
+Various substances
+containing bases are listed in the below table.
+TABLE - 6
+TABLE - 6
+Let us do - 5
+Burn a small piece of
+Magnesium ribbon by
+holding it with tongs. Collect the white ash and
+dissolve it in a little water.  Touch the solutions
+
+  2. Hybrid Score: -0.7453
+     Chapter: MOTION AND TIME
+     Text: acid how can you make it into a solution which
+is neither acidic nor basic?
+If you are given a caustic soda solution, how
+can you make it into a solution which is neither
+acidic nor basic?
+When acids and bases are mixed in equal
+concentrations they give a neutral
+solution. We learn more about
+neutralization in higher classes.
+Manures:-
+In recent years the use of chemical fertilizers
+has increased. Though the use of chemical
+fertilizers increases the production of  crops,
+it changes the nature of the soil. Some
+fertilizers increase the acidity of the soil and
+some changes its basicity. Thus use of  natural
+organic manure is becoming more preferred
+these days.
+Salts:-
+We have seen in the process of  neutralization,
+both the acidic and the basic qualities are
+changed. Actually when an acid and a base
+are mixed, a chemical reaction takes place
+and  a salt is produced.
+For example by neutralizing Hydrochloric
+acid solution with Caustic soda (Sodium
+Hydroxide) solution, a salt Sodium
+
+  3. Hybrid Score: -0.9562
+     Chapter: SILK - WOOL
+     Text: substances on different paper strips for next
+use.
+Let us do - 4:
+Classify the above substances into the
+following categories from the above
+observations.
+TABLE 4
+SCERT, TELANGANAAcids and Bases12
+• Now take things which are sour in taste
+and used as food e.g. curd, lemon juice
+etc. Check with blue and red litmus, what
+happens?
+Indicators:
+The strips of litmus paper change the colour,
+based on the nature of the material put on
+them. These are all indicators. They tell us
+whether a substance is acidic or basic. They
+are used in studying acidic and basic properties
+of  substances.
+Acidic Nature:-
+You may have experienced a burning sensation
+when bitten by an ant. The sensation is due to
+the presence of  formic acid that the ant
+releases. The acids present in plants and
+animals are called as natural acids.
+The substances that contain different acids. are
+given in the table 5.
+Apart from natural acids, there are certain acids
+like Hydrochloric acid, Sulphuric acid and
+
+  4. Hybrid Score: -1.0019
+     Chapter: SILK - WOOL
+     Text: their taste:
+• Do you experience any other tastes in
+your daily life? Write them below.
+———————————
+———————————
+———————————
+———————————
+• Do you find any difference in the taste
+of  a raw and a ripe fruit?
+TABLE - 1
+• Do substances change their taste when
+cooked?
+• Do substances change their taste when
+added to some other substances?
+• Add salt to lemon juice. How do the two
+together  taste now?
+• Add sugar to lemon juice what change
+do you notice in the taste?
+• Is there any difference in the taste in the
+above situations.
+2 ACIDS AND BASES
+SCERT, TELANGANAAcids and Bases10
+• Do substances change colour when
+added to other substances?
+• Do you observed any change when lime
+water is added to turmeric?
+Let us do - 1
+Take some turmeric powder. Add a bit of
+water to it and prepare turmeric paste. Rub
+the turmeric paste on a white paper dry it for
+some time. Then draw a flower daigram on
+that paper with a pencil. Colour the flower
+with soap water using a brush.
+
+  5. Hybrid Score: -1.0029
+     Chapter: MOTION AND TIME
+     Text: Add one drop of Hydrochloric acid and see
+if it changes back to its original (colourless)
+state. If not, then add one more drop of
+Hydrochloric acid. Keep doing this until the
+solution in the test tube becomes colourless
+again.
+Now can you say what kind of solution this
+is? Check your claim with litmus paper.
+On the basis of this experiment can you
+explain how would you convert an acidic
+solution into basic solution?
+If you are given a basic solution how can you
+turn it into an acidic solution?
+In the above experiment you might have
+noticed that if we add excess base (caustic
+soda) to acidic solution (Hydrochloric acid)
+it gets converted into a base; similarly we
+can change  a base into an acid by adding the
+acid in excess.
+If you are given a solution of Hydrochloric
+acid how can you make it into a solution which
+is neither acidic nor basic?
+If you are given a caustic soda solution, how
+can you make it into a solution which is neither
+acidic nor basic?
+
+--- End Log ---
+
+--- Query Log ---
+Timestamp: 2025-10-15T10:43:13.759378
+Original Query: do you find any similarities between silk and wool weaving? what are they?
+Reformulated Query: Identify and list the similarities in the preparation, processing, or weaving techniques used for silk and wool fibers, focusing on the content presented in the textbook chapter 'SILK - WOOL'.
+Classification: conceptual
+Retrieved 5 Chunks (Hybrid Search):
+
+  1. Hybrid Score: 0.9206
+     Chapter: MOTION AND TIME
+     Text: stages of production of woollen fabric.
+8. In what way is knitting  different from
+weaving?
+9. Prepare a scrap book with pictures of
+different wool yielding animals.
+SCERT, TELANGANA27VII Science Free Distribution by Govt. of T.S. 2021-22
+10. Fill up the blank and give your
+reasons for the statement.
+       ………………….. fabric protect us from
+cold.
+11. If you are going to visit Dal lake at
+Kashmir which type of clothes would
+you like to keep in your luggage ? Why?
+12. Do you find any similarities between silk
+and wool weaving? What are they?
+13. Write 5 differences between wool
+and silk manufacturing.
+14. Observe designs on silk sarees, trace
+them in your notebook and make your
+own designs.
+15. In East India silk is called pat. You may
+collect different pieces of silk fabric
+from a cloth store and write the names
+of the type of fabric and make a chart.
+READ AND ENJOY
+SILK- THAT’S HOW IT BEGAN:
+Chinese traditions, along with the writings
+of Confucius tell the same 2700 BC tale. It
+
+  2. Hybrid Score: 0.3387
+     Chapter: MOTION AND TIME
+     Text: types of yarn whether cotton or silk or
+wool etc. are woven in this manner(Fig. 16).
+Neelima was surprised to see how fast
+knitting was being carried out.  She sat near
+a man to observe and learn how to knit.
+Neelima purchased a book about woolen
+fabrics and a sweater for her grandma and
+returned home.At home Neelima made a
+flow chart to show the processes involved
+from obtaining wool to producing fabric.
+SHEARING
+SCOURING
+SORTING
+BLEACHING
+DYEING
+COMBING/CARDING
+ROLLING AND TWISTING
+SPINNING
+WEAVING OR KNITTING
+WOOLLEN FABRIC
+Grandpa asked Neelima to check and make
+corrections in the sequence. What
+corrections do you think Neelima needs to
+make?
+SCERT, TELANGANAAnimal Fibre26
+Neelima thought that silk and wool are
+also natural fibres like cotton. She wanted
+to find out the difference between silk and
+cotton.  Let us help her.
+Silk Cotton
+1. Mainly protein 1. Mainly a
+carbohydrate
+called cellulose
+Do you know?
+Wool is a poor conductor of  heat. Air
+
+  3. Hybrid Score: -0.0585
+     Chapter: MOTION AND TIME
+     Text: etc., are used to obtain woollen fibre.
+• Angora goat hair is soft to spin different
+types of  fabrics like shawls and sweaters.
+• Removing of hair or fleece from the skin
+of  sheep is called shearing.
+• Cleaning of fleece with a stream of water
+is called scouring.
+• Knitting is the process of making fabric
+by using knitting needles to form
+interlocking loops and rings of woolen
+yarn.
+Improve your learning
+1. In sericulture industry
+do which stages of
+silkworm do weavers buy?
+Why do they do so?
+2. Which place in our
+state is called silk city?
+3. Prepare a chart showing life cycle of
+silkworm and display that in the
+classroom.
+4. Why are cocoons stiffled?
+5. What will happen if cocoon is not
+boiled?
+6. What are the differences between fleece
+of angora goat and camel.
+7. Make a flow chart showing various
+stages of production of woollen fabric.
+8. In what way is knitting  different from
+weaving?
+9. Prepare a scrap book with pictures of
+different wool yielding animals.
+
+  4. Hybrid Score: -0.3634
+     Chapter: MOTION AND TIME
+     Text: about how dresses are made up of material
+obtained from caterpillers. She remembered
+studied about that in class VI, the fibres
+derived from plants like cotton & jute are
+made into fabric. So the animals also give us
+fibres!
+What fibres do animals give us? Is the way of
+obtaining them similar to plants?  Which part
+of animal is useful to make fabrics?  Neelima
+asked question after question.  She wanted to
+get answers to all her questions.
+We get fibres from plants and animals.
+Cotton, Jute, Deccan hemp(Gongoora),
+Coconut  plant fibres are useful to make
+different kinds of  fabrics. In the same way we
+get fibres of silk and wool from animals like
+silk worms, sheep, goat, camel, yak etc.  Let
+us find out about these animal fibres.
+Story of  silk:
+Making of silk or silk fabrics is a very
+interesting story.  This involves various
+persons and practices.  To know about silk,
+Neelima visited a sericulture exhibition.
+People there, shared the following experiences
+with Neelima.
+
+  5. Hybrid Score: -0.5260
+     Chapter: MOTION AND TIME
+     Text: Narayanpet, Kothakota, Pochampally are all
+types of  silk fabrics. They get their names from
+the places where they are made. You may have
+also heard the names of tasar silk, mooga silk,
+kosa silk, eri silk etc as you went through
+different stalls here. These are all several
+varieties of silk.  Some chemicals add  strength
+to silk fibres. Silk is used to make other
+products as well like satin and crepe. We have
+both handlooms and power looms to weave
+silk.
+Neelima was filled with wonder and delight
+about the process involved in making of the
+fabric of her silk frock. She tried to make a
+flowchart showing the stages from silk worm
+to her frock. She also wanted to make a chart
+showing the life cycle of  silk moth. Try to
+help her. (Fig. 10)
+SCERT, TELANGANA23VII Science Free Distribution by Govt. of T.S. 2021-22
+Eggs
+Larva
+Pupa
+LIFE CYCLE
+OF
+SILKWORM
+Fig. 10
+Draw the flow chart of life cycle of silk
+worm in your notebook.
+Do you know?
+The thread you get from the average cocoon
+
+--- End Log ---
+
+--- Query Log ---
+Timestamp: 2025-10-15T11:09:59.510933
+Original Query: when do you say an object is in rotatory motion?
+Reformulated Query: What is the definition and criteria used to determine if an object is undergoing rotatory motion (from the Motion and Time chapter)?
+Classification: conceptual
+Retrieved 5 Chunks (Hybrid Search):
+
+  1. Hybrid Score: 0.8423
+     Chapter: WEATHER AND CLIMATE
+     Text: Rotatory Motion, Axis of  Rotation,
+Oscillatory  Motion, Speed, Average
+Speed.
+What we have learnt?
+• Motion is a common experience in our
+life.
+• An object is said to be in motion if it
+changes it’s position. And it is said to be
+in rest if  it does not changes it’s position
+with respect to time.
+• There are three types of motion namely
+translatory motion, rotatory motion and
+oscillatory motion.
+• We measure time by using diffrent
+instruments like electronic clocks,
+digital clocks, etc.
+• Speedometer helps us  know the speed
+of a vehicle.
+• Units of speed in SI system is meters
+per second. In another system it is kilo
+meter per hour
+Improve your learning
+1. State whether the
+following statements are
+True or False. Rewrite
+the wrong statements
+correctly.
+a) A body can be at rest and in
+motion at the same time in relation
+to the same set of  surroundings.
+b) A passenger flying in an
+airplane is at rest with respect to
+the airport and moving with
+respect to other passengers.
+
+  2. Hybrid Score: 0.7969
+     Chapter: HEAT - MEASUREMENT
+     Text: A, B, and C on the blade move to A
+1, B1, C1
+first and then move to A2, B2 and C2 position.
+Thus when a fan is in motion, each point on
+the blade moves in a circular path around the
+centre of the fan which is fixed.
+Fig. 21
+Here, we observe that the position of a fan
+is not changing. Only the blades of fan are
+A
+B
+C
+A1
+B1
+C1
+A2
+B2
+C2
+SCERT, TELANGANAMotion  and Time34
+○○○○○ ○○○○○○○○○
+○○○○○ ○○○○○○○○○
+○○○○○ ○○○○○○○○○
+changing their position continuously and
+moving in circular path around a fixed
+point. The imaginary line passing through
+this fixed point is called axis of rotation.
+This type of motion is called Rotatory
+Motion.
+Rotatory motion means that, motion of all
+particles of a moving body follow a  circular
+path with respect to a fixed centre or axis
+of rotation.
+1. Are all the objects shown in activity -
+7 in rotatory motion?
+2. Can you give some more examples of
+rotatory motion?
+Let us do - 8:
+Observe the following motion of  objects,
+State whether they are in rotatory motion?
+
+  3. Hybrid Score: 0.7242
+     Chapter: HEAT - MEASUREMENT
+     Text: 7 in rotatory motion?
+2. Can you give some more examples of
+rotatory motion?
+Let us do - 8:
+Observe the following motion of  objects,
+State whether they are in rotatory motion?
+Draw a line showing axis of rotation by using
+a pencil.
+1.
+   Fig. 22
+2.
+   Fig. 23
+3
+    Fig. 24
+4.
+    Fig. 25
+Let us do - 9:
+Take a table tennis ball, and keep it on the
+surface of a table. Push the ball with your finger
+and observe its motion.
+Fig. 26
+Is it in Rotatory motion or in
+Translatory motion?
+When you push the ball on the surface of a
+table, it moves from one end  to the other end
+and all the particles of the ball also move along
+the direction of motion of the ball. Hence the
+ball is in translatory motion. Similarly, each
+particle of the ball moves in a circular path
+about a particular line, when the ball rolls on
+the surface. Therefore it is in rotatory motion.
+Thus in the above example the ball possesses
+both translatory and rotatory motion.
+Can you give some more examples of
+
+  4. Hybrid Score: 0.4901
+     Chapter: WEATHER AND CLIMATE
+     Text: motion at the same time in relation
+to the same set of  surroundings.
+b) A passenger flying in an
+airplane is at rest with respect to
+the airport and moving with
+respect to other passengers.
+c) The wheels of a train are in
+rotatory motion as well as in
+translatory motion, when it
+moves.
+2. John tied a stone to a string and whirled
+it around. What type of motion do you
+find there?
+3. What is common to the following?
+Motion of the propeller of a flying
+helicopter, the minute hand of a watch,
+the tape of  a cassette recorder.
+a) All are examples of
+translatory motion
+b) All are examples of oscillatory
+motion
+c) All are examples of rotatory
+motion
+d) All are examples of periodic
+motion
+4.   Which of the following is not an
+oscillatory motion?
+a) Motion of the hammer of an
+electric bell.
+b) Motion of your hands while
+running.
+c) Motion of a child on a see -
+saw.
+d) Motion of a horse pulling a
+cart.
+SCERT, TELANGANAMotion  and Time42
+5. Arun completed a 100 meter race in
+
+  5. Hybrid Score: 0.0979
+     Chapter: HEAT - MEASUREMENT
+     Text: 1. A spinning top ( )
+2. Bullet fired from a gun ( )
+3. Typewriter key ( )
+4. Motion of  a potter’s wheel ( )
+5. Motion of a vibrating  sitar string ( )
+6. Motion of a car taking a turn while moving ( )
+7. Ringing of a bell ( )
+8. A bouncing ball ( )
+4.1 Slow and Fast Motion:
+We observe many objects in motion in our daily life.  In some cases objects move slowly and in
+other cases they move fast.  How do we know whether the motion is slow or fast?
+Let us assume that you started to school on a bicycle and your friend started in a bus at the
+same time from a place.
+• Who reaches the school first? Why?
+• Do you find any difference in the time taken by bicycle and bus to reach the school?
+Let us do - 12: Comparing the motion of objects.
+Observe following pairs of objects that are in motion. Compare their motions and decide
+which moves slower and which move faster. Mark ( 9)  in relevant box.
+• How can you decide whether  the motion of a body is slow or fast?
+
+--- End Log ---
+
+--- Query Log ---
+Timestamp: 2025-10-15T11:14:39.889651
+Original Query: A train travels at a speed of 180km/h. How far will it travel in 4 hours
+Reformulated Query: What is the calculation method and resulting distance traveled, according to the principles outlined in the 'MOTION AND TIME' chapter (Class 7 Science), if a vehicle moves at a speed of 180 km/h for a duration of 4 hours?
+Classification: factual
+Retrieved 5 Chunks (Hybrid Search):
+
+  1. Hybrid Score: 0.9870
+     Chapter: WEATHER AND CLIMATE
+     Text: bicycle while it is in motion.
+a) the wheel
+b) the cycle chain
+c) the pedal with its arm
+d) the movement of the feet
+pedaling
+e) the movement of the rider
+along with the bicycle.
+8. Which of the following statements is
+correct?
+a) The basic unit of time is
+second.
+b) Every object’s motion is
+uniform.
+c) Two cars move for 5 minutes
+and 2 minutes respectively.  The
+second car is faster because it
+takes less time.
+d) The speed of a car is
+expressed in km/h.
+9. The basic unit of speed in SI system is
+a) km / min b) m/min.
+c) km/h d) m/s
+10. The correct relation between speed,
+distance and time is.
+a) Speed = distance x time
+b) Speed = time / distance
+c) Speed = distance / time
+d) distance = speed / time
+11. The distance between two stations is 240
+km.  A train takes 4 hrs to cover this
+distance.  Calculate the speed of the
+train.
+12. A train travels at a speed of 180 km/h.
+How far will it travel in 4 hours?
+13. When do you say an object  is in
+rotatory  motion?
+
+  2. Hybrid Score: 0.8978
+     Chapter: WEATHER AND CLIMATE
+     Text: example, speed of a bus is expressed in km/
+h and the speed of a car in m/s, to compare
+these speeds, one of them must be
+converted to other.
+Speed of a bus = 72 km/h
+Time Reading of
+Distance Covered
+0 minute
+10 minute
+20 minute
+30 minute
+40 minute
+0 km
+15 km
+25 km
+38 km
+60 km
+• What is the total distance travelled by
+the car?
+• What is the time taken to travel the
+distance?
+• How do you find the speed of the car?
+• Is the speed of  the car uniform
+throughout the journey?
+distance travelled
+time taken
+SCERT, TELANGANAVII Science 41Free Distribution by Govt. of T.S. 2021-22
+Speed of a car = 12.5 m/s
+1 km/h = 5/18 m/s
+1 m/s =18/5 km/s
+Thus the speed of car is
+12.5 x 18/5 km/h = 45 km/h
+Hence, the bus moves faster than the car
+Key words:-
+Motion, Rest, Translatory motion,
+Rotatory Motion, Axis of  Rotation,
+Oscillatory  Motion, Speed, Average
+Speed.
+What we have learnt?
+• Motion is a common experience in our
+life.
+• An object is said to be in motion if it
+
+  3. Hybrid Score: 0.4384
+     Chapter: WEATHER AND CLIMATE
+     Text: speed of the car is not uniform.  To find
+the speed of the car in the journey we
+should calculate total distance travelled by
+the car and the total time taken to cover
+that distance.
+Total distance travelled by the car = 60 km
+Time taken = 40 min.
+The distance must be either in meters or
+kilometers and time in seconds or hours. We
+express the speed either in m/s or in km/h.
+In  this example distance is 60 km  and time is
+40 min.
+1 hour = 60 min
+40 min = 
+hour60
+40  h3
+2=
+           Speed =
+hkm
+h
+/2
+360
+3
+2
+km 60 ×==
+= 90 km/ h
+Thus, the car travelled with an average
+speed of 90 km/h.
+Solve the following problem
+The speed of a bus is 72 km/h, whereas the
+speed of a car is 12.5 m/s. Which vehicle
+moves faster?
+To compare two speeds.  They must be
+expressed in the same units.  In the above
+example, speed of a bus is expressed in km/
+h and the speed of a car in m/s, to compare
+these speeds, one of them must be
+converted to other.
+Speed of a bus = 72 km/h
+Time Reading of
+Distance Covered
+
+  4. Hybrid Score: 0.4164
+     Chapter: HEAT - MEASUREMENT
+     Text: changes in speedometer  reading.
+Note the exact time when you started from
+home and observe speedometer reading
+carefully and note it  and the corresponding
+Speedo Meter Reading
+(Speed)
+0
+20
+30
+Corresponding Time
+(Time)
+Started at home 9-10 a.m.
+9.15 a.m.
+9.20 a.m.
+time in the table.  Some examples are given
+in the table.
+• Does the speed of the vehicle remain
+the same throughout the journey?
+• If not, what can you say about the speed
+of the vehicle during the journey?
+We experience in our everyday life that
+most of the objects in motion do not have
+the same speed throughout the journey.  To
+express the speed of the object, we consider
+its average speed.
+How to calculate the average speed?
+Average speed = Total distance travelled /
+Total time taken to travel the distance
+Thus we can define speed of an
+object as the distance travelled by
+it in a unit of time.
+SCERT, TELANGANA
+
+  5. Hybrid Score: 0.3989
+     Chapter: WEATHER AND CLIMATE
+     Text: Motion  and Time40
+Units of speed
+Depending on the need and context, speed
+is measured in different units.
+Unit of speed in S.I. system is meter per
+second (m/s)
+Another unit commonly used for speed is
+kilometer per hour (Km/h)
+1 Km / h = 5/18 m/s
+Do you know how we got this?
+1 km = 1000 m
+1 h = 3600s
+1 km / h = 1000 m / 3600s
+= 5/18 m/s
+If we travel 1km in 1 hour it means we
+travelled 5 meters in 18 seconds.
+Consider a car driven on a road. A person
+seated beside the driver recorded the
+distance travelled after every 10 minutes by
+noting the distance reading in the
+Odometer.  The distance travelled by the
+car at different instances of time is as follow.
+From the table, we notice that the car has
+covered unequal distances in equal
+intervals of time (10 min), which shows the
+speed of the car is not uniform.  To find
+the speed of the car in the journey we
+should calculate total distance travelled by
+the car and the total time taken to cover
+that distance.
+
+--- End Log ---
+
