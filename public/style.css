@@ -349,3 +349,12 @@ html, body {
     background-color: #ccc;
     cursor: not-allowed;
 }
+
+/* Override for List Chapters button to make it rectangular */
+#chat-input-container #list-chapters-btn {
+    border-radius: 8px;
+    width: auto;
+    height: auto;
+    padding: 10px 16px;
+    font-size: 0.9rem;
+}
