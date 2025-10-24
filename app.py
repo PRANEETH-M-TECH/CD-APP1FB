@@ -3,6 +3,7 @@ import shutil
 import json
 import re
 import datetime
+import re
 from contextlib import asynccontextmanager
 from dotenv import load_dotenv
 from fastapi import FastAPI, File, UploadFile, Form, HTTPException, Query, BackgroundTasks
@@ -14,7 +15,7 @@ from pypdf import PdfReader
 
 # Load environment variables
 load_dotenv()
-from qrdant import (
+from qdrant import (
     initialize, # Updated import
     process_and_embed_book,
     get_books,
@@ -66,23 +67,28 @@ async def upload_file(file: UploadFile = File(...)):
 
 @app.post("/api/books")
 async def create_book(
-    background_tasks: BackgroundTasks, # Add this
+    background_tasks: BackgroundTasks,
     class_name: str = Form(...),
     subject: str = Form(...),
-    chapters: str = Form(...),      # JSON string of chapter metadata
-    filename: str = Form(...)       # Filename from the /api/upload response
+    filename: str = Form(...)
 ):
     """
     Processes and stores book metadata and content based on the uploaded file.
     """
-    try:
-        chapters_list = json.loads(chapters)
-    except json.JSONDecodeError:
-        raise HTTPException(status_code=400, detail="Invalid JSON format for chapters.")
-
     pdf_path = os.path.join(UPLOADS_DIR, os.path.basename(filename))
     if not os.path.exists(pdf_path):
         raise HTTPException(status_code=404, detail=f"Uploaded file not found: {filename}")
+
+    cache_path = "chapters_cache.json"
+    try:
+        with open(cache_path, "r") as f:
+            cache = json.load(f)
+        cached_chapters_data = cache.get(os.path.basename(filename))
+        if not cached_chapters_data or not cached_chapters_data.get("chapters"):
+            raise HTTPException(status_code=404, detail="Chapter data not found in cache. Please extract chapters first.")
+        chapters_list = cached_chapters_data.get("chapters")
+    except (FileNotFoundError, json.JSONDecodeError):
+        raise HTTPException(status_code=404, detail="Chapter cache not found or invalid. Please extract chapters first.")
 
     # Run the long-running task in the background
     background_tasks.add_task(process_and_embed_book, pdf_path, class_name, subject, chapters_list)
@@ -121,6 +127,8 @@ async def query_book(request: QueryRequest):
     
     reformulated_query = processed_query_data.get("reformulated_query", request.query)
     classification = processed_query_data.get("classification", "conceptual")
+    keywords = processed_query_data.get("keywords", [])
+    conceptual_score = processed_query_data.get("conceptual_score", 0.5)
 
     print(f"Original Query: '{request.query}'")
     print(f"Processed Query Data: {processed_query_data}")
@@ -130,38 +138,66 @@ async def query_book(request: QueryRequest):
     if request.chapter:
         filters['chapter'] = request.chapter
 
-    search_results = hybrid_search(
-        book_uuid=request.book_uuid, 
-        query=reformulated_query, 
-        classification=classification,
+    search_results, semantic_results, normalized_bm25_results = hybrid_search(
+        book_uuid=request.book_uuid,
+        query=reformulated_query,
+        keywords=keywords,
+        conceptual_score=conceptual_score,
         metadata_filters=filters
     )
     
-    # 4. Log simplified results to file
-    with open("result.txt", "a", encoding="utf-8") as f:
+    # 4. Log all steps to ans.txt, clearing previous content
+    ans_log_filename = "ans.txt"
+    with open(ans_log_filename, "w", encoding="utf-8") as f:
         f.write(f"--- Query Log ---\n")
         f.write(f"Timestamp: {datetime.datetime.now().isoformat()}\n")
         f.write(f"Original Query: {request.query}\n")
+        f.write(f"Book UUID: {request.book_uuid}\n")
+        f.write(f"Class: {class_name}, Subject: {subject}\n")
+        f.write(f"\n--- LLM Query Processing ---\n")
         f.write(f"Reformulated Query: {reformulated_query}\n")
         f.write(f"Classification: {classification}\n")
-        f.write(f"Retrieved {len(search_results)} Chunks (Hybrid Search):\n\n")
+        f.write(f"Conceptual Score: {conceptual_score:.2f}\n")
+        f.write(f"Keywords: {', '.join([item['keyword'] for item in keywords])}\n")
+
+        f.write(f"\n--- Semantic Search Results ({len(semantic_results)} Chunks) ---\n\n")
+        if not semantic_results:
+            f.write("No chunks retrieved from Semantic Search.\n")
+        else:
+            for i, res in enumerate(semantic_results):
+                f.write(f"  {i+1}. Score: {res.score:.4f} | Text: {res.payload['text'].strip()}\n\n")
+
+        f.write(f"\n--- BM25 Keyword Search Results ({len(normalized_bm25_results)} Chunks) ---\n\n")
+        if not normalized_bm25_results:
+            f.write("No chunks retrieved from BM25 Keyword Search.\n")
+        else:
+            for i, (score, doc) in enumerate(normalized_bm25_results):
+                f.write(f"  {i+1}. Normalized Score: {score:.4f} | Text: {doc['text'].strip()}\n\n")
+
+        f.write(f"\n--- Hybrid Search Results ({len(search_results)} Chunks) ---\n\n")
+        if not search_results:
+            f.write("No chunks retrieved from Hybrid Search.\n")
+        else:
+            for i, (score, payload) in enumerate(search_results):
+                f.write(f"  {i+1}. Hybrid Score: {score:.4f}\n")
+                f.write(f"     Chapter: {payload.get('chapter', 'N/A')}\n")
+                f.write(f"     Text: {payload.get('text', '').strip()}\n\n")
+
+        # 5. Generate Final Answer
+        if not search_results:
+            print("No chunks retrieved from Hybrid Search.")
+            answer = "I couldn't find any relevant information to answer your question."
+            sources = []
+        else:
+            context = "\n\n---\n\n".join([payload['text'] for score, payload in search_results])
+            book_details = {"class_name": class_name, "subject": subject}
+            answer = generate_answer(request.query, book_details, context)
+            sources = [payload for score, payload in search_results]
         
-        for i, (score, payload) in enumerate(search_results):
-            f.write(f"  {i+1}. Hybrid Score: {score:.4f}\n")
-            f.write(f"     Chapter: {payload.get('chapter', 'N/A')}\n")
-            f.write(f"     Text: {payload.get('text', '').strip()}\n\n")
-        f.write(f"--- End Log ---\n\n")
+        f.write(f"\n--- Generated Answer ---\n")
+        f.write(answer)
+        f.write(f"\n--- End Log ---\n\n")
 
-    
-    if not search_results:
-        print("No chunks retrieved from Hybrid Search.")
-        return {"answer": "I couldn't find any relevant information to answer your question.", "sources": []}
-
-    # 5. Generate Final Answer
-    context = " ".join([payload['text'] for score, payload in search_results])
-    answer = generate_answer(reformulated_query, context, class_name)
-    
-    sources = [payload for score, payload in search_results]
     return {"answer": answer, "sources": sources}
 
 @app.get("/api/list-chapters")
@@ -207,36 +243,24 @@ def extract_chapters_from_pdf(pdf_path: str) -> List[Dict]:
         reader = PdfReader(pdf_path)
         num_pages = len(reader.pages)
         
-        # Create a text sample: first 25 pages + last 5 pages
-        text_sample = ""
-        for i in range(min(25, num_pages)):
-            text_sample += reader.pages[i].extract_text() or ""
+        pdf_pages_data = []
+        for i in range(num_pages):
+            text = reader.pages[i].extract_text() or ""
+            pdf_pages_data.append({"pdf_page": i + 1, "text": text})
+
+        with open("chap_extraction.json", "w", encoding="utf-8") as f:
+            json.dump(pdf_pages_data, f, indent=2)
         
-        if num_pages > 30:
-            text_sample += "\n\n... (content from middle of the book omitted) ...\n\n"
-            for i in range(num_pages - 5, num_pages):
-                text_sample += reader.pages[i].extract_text() or ""
+        print("Extracted text saved to chap_extraction.json")
 
-        text_sample += f"\n\n--- End of Sample ---\nTotal pages in book: {num_pages}"
+        try:
+            llm_response_str = generate_chapters_from_text("chap_extraction.json")
+        except Exception as e:
+            print(f"Error calling generate_chapters_from_text: {e}")
+            raise HTTPException(status_code=500, detail=f"AI model failed to generate chapters: {e}")
 
-        if not text_sample.strip():
-            print("PDF text sample is empty. Cannot extract chapters.")
-            return []
-
-        llm_response_str = generate_chapters_from_text(text_sample)
-        response_data = json.loads(llm_response_str)
-        chapters = response_data.get("chapters", [])
-        
-        if not isinstance(chapters, list):
-            print(f"LLM returned an unexpected data type: {type(chapters)}")
-            return []
-
-        # Rename 'chapter_name' to 'title' to match frontend expectations
-        for chapter in chapters:
-            if 'chapter_name' in chapter:
-                chapter['title'] = chapter.pop('chapter_name')
-
-        return chapters
+        chapters_data = json.loads(llm_response_str)
+        return chapters_data
 
     except json.JSONDecodeError:
         print(f"Failed to parse JSON from LLM response: {llm_response_str}")
@@ -250,29 +274,29 @@ async def extract_chapters(book_id: str = Query(...)):
     """
     Extracts chapter information from the specified PDF file, using a cache to avoid re-processing.
     """
-    if not book_id:
-        raise HTTPException(status_code=400, detail="book_id is required.")
-
-    safe_filename = os.path.basename(book_id)
-    pdf_path = os.path.join(UPLOADS_DIR, safe_filename)
-    cache_path = "chapters_cache.json"
-
-    # 1. Check cache first
     try:
-        with open(cache_path, "r") as f:
-            cache = json.load(f)
-        if safe_filename in cache:
-            print(f"Cache hit for {safe_filename}. Returning cached chapters.")
-            return JSONResponse(content=cache[safe_filename])
-    except (FileNotFoundError, json.JSONDecodeError):
-        cache = {}
+        if not book_id:
+            raise HTTPException(status_code=400, detail="book_id is required.")
 
-    # 2. If not in cache, process the PDF
-    if not os.path.exists(pdf_path):
-        raise HTTPException(status_code=404, detail=f"PDF file not found: {safe_filename}")
+        safe_filename = os.path.basename(book_id)
+        pdf_path = os.path.join(UPLOADS_DIR, safe_filename)
+        cache_path = "chapters_cache.json"
 
-    print(f"Cache miss for {safe_filename}. Extracting chapters from PDF.")
-    try:
+        # 1. Check cache first
+        try:
+            with open(cache_path, "r") as f:
+                cache = json.load(f)
+            if safe_filename in cache:
+                print(f"Cache hit for {safe_filename}. Returning cached chapters.")
+                return JSONResponse(content=cache[safe_filename])
+        except (FileNotFoundError, json.JSONDecodeError):
+            cache = {}
+
+        # 2. If not in cache, process the PDF
+        if not os.path.exists(pdf_path):
+            raise HTTPException(status_code=404, detail=f"PDF file not found: {safe_filename}")
+
+        print(f"Cache miss for {safe_filename}. Extracting chapters from PDF.")
         chapters = extract_chapters_from_pdf(pdf_path)
         
         # 3. Save to cache
@@ -281,9 +305,11 @@ async def extract_chapters(book_id: str = Query(...)):
             json.dump(cache, f, indent=2)
             
         return JSONResponse(content=chapters)
+    except HTTPException as e:
+        raise e # Re-raise HTTPExceptions directly
     except Exception as e:
-        print(f"Error extracting chapters: {e}")
-        raise HTTPException(status_code=500, detail="Failed to extract chapters from the PDF.")
+        print(f"Error in extract_chapters endpoint: {e}")
+        raise HTTPException(status_code=500, detail=f"Failed to extract chapters: {e}")
 
 
 # --- STATIC FILE SERVING ---

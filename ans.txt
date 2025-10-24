@@ -1,0 +1,1016 @@
+--- Query Log ---
+Timestamp: 2025-10-24T10:51:04.747262
+Original Query: explain about the different shapes of magnets?
+Book UUID: 097025710c9d2a09420dda2755023e25b2106cc4e89dfc78be9f2adab9f8c6b9
+Class: 6, Subject: science
+
+--- LLM Query Processing ---
+Reformulated Query: A comprehensive overview and detailed description of the common physical shapes and geometric forms in which various types of permanent and temporary magnets are manufactured and utilized.
+Classification: conceptual
+Conceptual Score: 0.60
+Keywords: magnets, shapes, bar magnet, horseshoe magnet, magnet forms, disk magnet
+
+--- Semantic Search Results (10 Chunks) ---
+
+  1. Score: 0.5697 | Text: the usual shapes of magnets are shown in Fig. 2.
+Horse Shoe
+Magnet
+Ring Magnet Disc Magnet
+Fig. 2
+Think: Can we make a magnet in a required shape?
+Usually, magnets are made of  steel or iron. However, special alloys of  iron, nickel,
+copper, cobalt, and aluminum can be made into powerful magnets.
+Bar Magnet
+SCERT TELANGANAPLAYING WITH MAGNETS Free Distribution by Govt. of T.S. 2020-21
+14
+  Activity-2:  Finding materials
+  attracted by magnets.
+Take a bar magnet, nail, jump-clip,
+plastic scale, a piece of glass, brass key,
+paper, iron bolt, pen, blade, pencil,
+knife, stainless steel spoon, piece of
+chalk, wood and touch the magnet
+to each item. Does the magnet attract
+every object? Observe and record
+your observations duly mentioning
+the name of the material of which the
+object is made in table 1.
+        Table 1
+Name of the object Material of which the Attracted
+object is made By Magnet
+(Iron/plastic/aluminum/ (Yes/No)
+wood/glass/ any other)
+Jump Clip Iron Yes
+Scale Plastic No
+
+  2. Score: 0.5572 | Text: SCERT TELANGANAScience VI Class
+13
+ Story of Magnet
+Around 2500 years ago, there lived an old
+shepherd named Magnus. He used to take his
+goats and sheep to the hills for grazing. He
+always carried a wooden stick which had an
+iron cap on its lower end. One day, while his
+goats were grazing, Magnus dipped his stick
+into a spring of water and poked at the pebbles
+and stones at the bottom with it.  Suddenly he
+felt something pulling his stick. When he took
+it out of water, he saw a stone stuck to the iron cap. The stone which Magnus
+pulled out was called 
+Lode stone.  It is a natural magnet and possesses the
+property of attracting iron.
+The magnets we discussed are not natural magnets. These magnets are man-
+made magnets.
+Magnets of different shapes
+The magnets we see and use in our daily life possess different shapes. Some of
+the usual shapes of magnets are shown in Fig. 2.
+Horse Shoe
+Magnet
+Ring Magnet Disc Magnet
+Fig. 2
+Think: Can we make a magnet in a required shape?
+
+  3. Score: 0.5418 | Text: SCERT TELANGANAPLAYING WITH MAGNETS Free Distribution by Govt. of T.S. 2020-21
+20
+Fig. 11 (b)
+Take a bar magnet in one hand and a
+safety pin in the other hand, hold
+them in such a way that
+they are close to each
+other but not in contact
+as shown in Fig. 11 (b).
+Ask your friend to
+bring an alpin and
+touch the safety pin.
+You will notice that the
+alpin will stick to the
+safety pin. This shows
+that due to magnetic
+induction safety pin acts as a magnet.
+Keywords
+Magnet, magnetic material, non-
+magnetic material, North Pole, South
+Pole, Magnetic compass, like poles,
+unlike poles, attraction, repulsion,
+magnetic induction
+What we have learnt
+• Lode stone is a natural magnet.
+• Magnets are of different shapes i.e.
+bar magnets, horse shoe magnets,
+ring type magnets, disc magnets,
+etc.
+• The materials that are attracted by
+magnets are called magnetic
+materials. The materials that are
+not attracted by magnets are called
+non-magnetic materials.
+• A bar magnet always has two
+
+  4. Score: 0.5149 | Text: after testing all materials?
+Plastic, Iron, Stainless steel,
+Wood, Aluminium, Gold, Silver,
+Copper, Paper, Cloth.
+2. List out the magnetic and non
+magnetic materials in your class
+room.
+Earth magnets can be 20 times more powerful than a fridge magnet
+SCERT TELANGANAScience VI Class
+21
+3. For which purposes do people use
+magnets in their daily life? Ask
+your family members and other
+elders and collect the information
+and prepare a list of uses of
+magnets.
+4. Draw a bar magnet and locate the
+poles.
+5. Observe and locate North and
+South poles for the second bar
+magnet shown in the figure given
+below.
+6. Think and say, in which
+direction your house is facing?
+(a) Use the compass and findout
+the exact direction of your house
+and compare it with your
+prediction.
+(b) Similarly predict and findout
+in which direction you  keep your
+head while sleeping at night,
+(c)  The directions you face while
+you are reading, eating etc.
+7. Prepare a toy using magnets and
+write the procedure of preparation
+
+  5. Score: 0.4951 | Text: its other parts. These ends are called
+poles of the magnet .
+ Activity-5:  Finding directions with
+ a bar magnet.
+Suspend the bar magnet freely with the
+help of a thread tied around its center
+as shown in Fig. 4. Does the magnet
+remain stationary? Wait for some time.
+What do you find now?
+Fig.  3
+ Fig. 4
+Electromagnets are made up of  an arrangement of  wire coils; often, the wire is wound
+around a ferromagnetic substance such as steel.
+SCERT TELANGANAPLAYING WITH MAGNETS Free Distribution by Govt. of T.S. 2020-21
+16
+You will notice that the magnet finally
+takes a position in the North-South
+direction. Mark the end that points
+towards the North with some colour.
+Now disturb the magnet and again wait
+for some time.
+• Where does the coloured portion
+come to rest?
+• Repeat this experiment at another
+place. What do you observe?
+Magnets always come to rest in the
+North-South direction. In each case the
+marked end points towards North. This
+end is known as North pole of the
+
+  6. Score: 0.4944 | Text: to the other pole of the bar magnet
+in the same way and record your
+observations.
+What do you conclude by comparing
+the recorded observations?
+By the above observations we conclude
+the following:
+If an object is attracted by one pole of
+the bar magnet and repelled by the its other
+pole, then you can say that it is a magnet.
+If an object is attracted by both the
+poles of a bar magnet and not repelled
+by any pole, then you can say that it is
+not a magnet but a magnetic substance.
+If an object is neither attracted by
+magnet nor repelled by it, then you
+can say that it is neither a magnet nor
+a magnetic substance.
+Activity-9: Make your own magnet
+Take an iron nail and place it on a table.
+Make sure that the nail neither attracts
+nor repels iron pins or iron filings. Take
+a bar magnet and place one of its poles
+near one edge of the nail. Without lifting
+the bar magnet, move it along the length
+of the iron nail till you reach the other
+end. Then lift the bar magnet, bring it to
+
+  7. Score: 0.4757 | Text: place. What do you observe?
+Magnets always come to rest in the
+North-South direction. In each case the
+marked end points towards North. This
+end is known as North pole of the
+magnet. The other end, which points
+towards the South is known as South
+pole of the magnet. This property of
+magnets is called  directional property.
+It is exhibited only by magnets. We use
+this property to make the magnetic compass.
+Magnetic Compass
+A compass is usually a small box with a
+glass covering it. A magnetized needle
+is pivoted inside the box in such a way
+that it can rotate freely. The compass
+also has a dial with directions marked
+on it. The compass is kept at the place
+where we wish to know the direction.
+Its needle indicates the North-South
+direction when it comes to rest. The
+compass is then rotated until the north
+and south marked on the dial are exactly
+below the two ends of the needle. To
+identify the North pole of the magnetic
+needle, it is usually painted in a
+
+  8. Score: 0.4751 | Text: Table 1
+Name of the object Material of which the Attracted
+object is made By Magnet
+(Iron/plastic/aluminum/ (Yes/No)
+wood/glass/ any other)
+Jump Clip Iron Yes
+Scale Plastic No
+• Which materials are attracted by
+a magnet?
+• Which materials are not attracted
+by a magnet?
+The materials that are attracted by
+magnets are called magnetic materials.
+The materials that are not attracted by
+magnets are called non-magnetic
+materials.
+• Give your own examples for
+magnetic materials.
+• Give your own examples for non-
+magnetic materials.
+Magnets have the property of
+attracting materials like Iron. Based on
+this property of magnets they can be
+used to separate some mixtures.
+Activity-3:  Can we separate iron
+filings from soil?
+Take a bar magnet and roll it in the soil
+in your school ground for some time.
+Pull out the magnet.  What do you find?
+Does anything get attached to the
+magnet?
+You may find some dark particles of
+soil sticking to the magnet.
+Now gently remove these dark particles
+
+  9. Score: 0.4639 | Text: SCERT TELANGANAScience VI Class
+19
+Now remove the bar magnet and bring
+some iron filings or alpins close to the
+nail. What do you notice?
+The iron filings or alpins get attracted
+by the nail.  Thus you have succeeded
+in making your own magnet by
+magnetizing the nail. What will happen
+if the nail is now suspended freely?
+ Activity-10: Make your
+ own magnetic compass
+Take a magnetized needle. Tape the
+needle to a light cork. Float the cork
+in a glass of water as shown in Fig.10.
+Add a little detergent to water to help
+the cork float freely. In
+what direction does
+your magnetized
+needle point?
+It points in North-
+South direction.
+Thus it acts as a
+magnetic compass.
+Fig. 9
+Fig. 10
+ Activity-11:  Magnetic induction
+Take a safety pin and bring it close to
+an alpin. Does it attract the alpin?
+Why?
+Bring the safety pin close
+to one pole of a bar
+magnet and see how it
+gets attached to the
+magnet. Now bring an
+alpin and touch it to the
+safety pin as shown in
+Fig. 11 (a).  Does safety
+
+  10. Score: 0.4624 | Text: cases). Where does this invisible
+magnet come from? The earth
+possesses magnetic property which
+acts upon the suspended bar magnet
+(see Fig. 8).Fig. 7
+Fig. 8
+Magnet attracts only magnetic objects
+SCERT TELANGANAPLAYING WITH MAGNETS Free Distribution by Govt. of T.S. 2020-21
+18
+ Activity-8:  Finding out whether
+ the given object is a magnet or not .
+You have been given three objects of
+same size, shape and colour and a bar
+magnet. You have to decide which one
+among them is a magnet, which is not
+a magnet but made up of a magnetic
+material or a non-magnetic material.
+Bring three objects one after the other
+close to one pole of the bar magnet
+and observe whether they get
+attracted, repelled or not attracted.
+Record your observation in table 2.
+After that bring those objects close
+to the other pole of the bar magnet
+in the same way and record your
+observations.
+What do you conclude by comparing
+the recorded observations?
+By the above observations we conclude
+the following:
+
+
+--- BM25 Keyword Search Results (10 Chunks) ---
+
+  1. Normalized Score: 1.0000 | Text: SCERT TELANGANAScience VI Class
+17
+• What do you observe?
+• When do the magnets attract
+each other?
+• When do the magnets repel each
+other?
+You notice that like poles (N-N, S-
+S) repel each other and unlike poles
+(N-S) attract each other.
+Earth as a Magnet:
+We saw that a suspended bar magnet
+always comes to rest in the North-South
+direction.
+• Why does it come to rest in that
+particular direction only?
+• What force is acting on it?
+Activity-7:
+Place a bar magnet on
+a table in any
+direction.  Suspend
+another bar magnet
+over it as shown in
+Fig. 7. The suspended
+bar magnet should be
+fairly close to the one kept
+on the table.  Observe in which
+direction the suspended bar magnet
+comes to rest.
+Change the direction of the bar magnet
+placed on the table.
+  
+• Do you find any change in the
+direction of suspended bar magnet?
+   • Is there a change in the direction it
+comes to rest? What is that change?
+The suspended bar magnet always
+comes to rest in the direction of the
+
+  2. Normalized Score: 0.7618 | Text: SCERT TELANGANAPLAYING WITH MAGNETS Free Distribution by Govt. of T.S. 2020-21
+20
+Fig. 11 (b)
+Take a bar magnet in one hand and a
+safety pin in the other hand, hold
+them in such a way that
+they are close to each
+other but not in contact
+as shown in Fig. 11 (b).
+Ask your friend to
+bring an alpin and
+touch the safety pin.
+You will notice that the
+alpin will stick to the
+safety pin. This shows
+that due to magnetic
+induction safety pin acts as a magnet.
+Keywords
+Magnet, magnetic material, non-
+magnetic material, North Pole, South
+Pole, Magnetic compass, like poles,
+unlike poles, attraction, repulsion,
+magnetic induction
+What we have learnt
+• Lode stone is a natural magnet.
+• Magnets are of different shapes i.e.
+bar magnets, horse shoe magnets,
+ring type magnets, disc magnets,
+etc.
+• The materials that are attracted by
+magnets are called magnetic
+materials. The materials that are
+not attracted by magnets are called
+non-magnetic materials.
+• A bar magnet always has two
+
+  3. Normalized Score: 0.6917 | Text: direction of suspended bar magnet?
+   • Is there a change in the direction it
+comes to rest? What is that change?
+The suspended bar magnet always
+comes to rest in the direction of the
+bar magnet placed on the table.  But
+the north pole of the suspended bar
+magnet points towards the south pole
+of the bar magnet placed on the table
+and south pole of the suspended  bar
+magnet points towards the north pole
+of the bar magnet placed on the table.
+• What happens if you remove the
+bar magnet placed on the table?
+In this case the suspended magnet
+comes to rest in  the North-South
+direction.  We can say that there is some
+magnet below the suspended bar magnet
+which compels it to come to rest in that
+particular direction (as in above two
+cases). Where does this invisible
+magnet come from? The earth
+possesses magnetic property which
+acts upon the suspended bar magnet
+(see Fig. 8).Fig. 7
+Fig. 8
+Magnet attracts only magnetic objects
+
+  4. Normalized Score: 0.6651 | Text: etc.
+• The materials that are attracted by
+magnets are called magnetic
+materials. The materials that are
+not attracted by magnets are called
+non-magnetic materials.
+• A bar magnet always has two
+ends whose attracting capacity is
+more than other parts of  it. The
+poles of the magnet lie at these
+ends.
+• Each magnet has two magnetic
+poles :  North and South.
+• A freely suspended magnet
+always aligns in the North-South
+direction.
+• Unlike poles of two magnets
+attract each other; whereas like
+poles repel each other.
+• Magnetic property possessed by
+a magnetic substance due to the
+presence of a magnet near to it, is
+called magnetic induction.
+Improve your learning
+1. Predict which of the following
+material are  magnetic and non-
+magnetic material. Test with a bar
+magnet and check your
+predictions. What do you say
+after testing all materials?
+Plastic, Iron, Stainless steel,
+Wood, Aluminium, Gold, Silver,
+Copper, Paper, Cloth.
+2. List out the magnetic and non
+magnetic materials in your class
+
+  5. Normalized Score: 0.6612 | Text: the usual shapes of magnets are shown in Fig. 2.
+Horse Shoe
+Magnet
+Ring Magnet Disc Magnet
+Fig. 2
+Think: Can we make a magnet in a required shape?
+Usually, magnets are made of  steel or iron. However, special alloys of  iron, nickel,
+copper, cobalt, and aluminum can be made into powerful magnets.
+Bar Magnet
+SCERT TELANGANAPLAYING WITH MAGNETS Free Distribution by Govt. of T.S. 2020-21
+14
+  Activity-2:  Finding materials
+  attracted by magnets.
+Take a bar magnet, nail, jump-clip,
+plastic scale, a piece of glass, brass key,
+paper, iron bolt, pen, blade, pencil,
+knife, stainless steel spoon, piece of
+chalk, wood and touch the magnet
+to each item. Does the magnet attract
+every object? Observe and record
+your observations duly mentioning
+the name of the material of which the
+object is made in table 1.
+        Table 1
+Name of the object Material of which the Attracted
+object is made By Magnet
+(Iron/plastic/aluminum/ (Yes/No)
+wood/glass/ any other)
+Jump Clip Iron Yes
+Scale Plastic No
+
+  6. Normalized Score: 0.6041 | Text: to the other pole of the bar magnet
+in the same way and record your
+observations.
+What do you conclude by comparing
+the recorded observations?
+By the above observations we conclude
+the following:
+If an object is attracted by one pole of
+the bar magnet and repelled by the its other
+pole, then you can say that it is a magnet.
+If an object is attracted by both the
+poles of a bar magnet and not repelled
+by any pole, then you can say that it is
+not a magnet but a magnetic substance.
+If an object is neither attracted by
+magnet nor repelled by it, then you
+can say that it is neither a magnet nor
+a magnetic substance.
+Activity-9: Make your own magnet
+Take an iron nail and place it on a table.
+Make sure that the nail neither attracts
+nor repels iron pins or iron filings. Take
+a bar magnet and place one of its poles
+near one edge of the nail. Without lifting
+the bar magnet, move it along the length
+of the iron nail till you reach the other
+end. Then lift the bar magnet, bring it to
+
+  7. Normalized Score: 0.2950 | Text: SCERT TELANGANAScience VI Class
+13
+ Story of Magnet
+Around 2500 years ago, there lived an old
+shepherd named Magnus. He used to take his
+goats and sheep to the hills for grazing. He
+always carried a wooden stick which had an
+iron cap on its lower end. One day, while his
+goats were grazing, Magnus dipped his stick
+into a spring of water and poked at the pebbles
+and stones at the bottom with it.  Suddenly he
+felt something pulling his stick. When he took
+it out of water, he saw a stone stuck to the iron cap. The stone which Magnus
+pulled out was called 
+Lode stone.  It is a natural magnet and possesses the
+property of attracting iron.
+The magnets we discussed are not natural magnets. These magnets are man-
+made magnets.
+Magnets of different shapes
+The magnets we see and use in our daily life possess different shapes. Some of
+the usual shapes of magnets are shown in Fig. 2.
+Horse Shoe
+Magnet
+Ring Magnet Disc Magnet
+Fig. 2
+Think: Can we make a magnet in a required shape?
+
+  8. Normalized Score: 0.2116 | Text: its other parts. These ends are called
+poles of the magnet .
+ Activity-5:  Finding directions with
+ a bar magnet.
+Suspend the bar magnet freely with the
+help of a thread tied around its center
+as shown in Fig. 4. Does the magnet
+remain stationary? Wait for some time.
+What do you find now?
+Fig.  3
+ Fig. 4
+Electromagnets are made up of  an arrangement of  wire coils; often, the wire is wound
+around a ferromagnetic substance such as steel.
+SCERT TELANGANAPLAYING WITH MAGNETS Free Distribution by Govt. of T.S. 2020-21
+16
+You will notice that the magnet finally
+takes a position in the North-South
+direction. Mark the end that points
+towards the North with some colour.
+Now disturb the magnet and again wait
+for some time.
+• Where does the coloured portion
+come to rest?
+• Repeat this experiment at another
+place. What do you observe?
+Magnets always come to rest in the
+North-South direction. In each case the
+marked end points towards North. This
+end is known as North pole of the
+
+  9. Normalized Score: 0.1230 | Text: Spread some iron filings uniformly on a
+sheet of  paper. Place a bar magnet
+below this sheet.
+• What do you observe?
+• Do you observe any change in
+the pattern of iron filings spread
+over the sheet?
+You will observe that the uniformly
+spread iron filings concentrate at two
+points of the paper sheet. At some
+distance you will find some scattered
+iron filings between these two points.
+(see Fig. 3)
+This change in the spread of  iron filings
+on the sheet of paper is due to the
+magnet present below it. The iron filings
+move towards its ends because of this
+magnet. Thus the ends of the bar
+magnet attract more iron filings than the
+middle part of the magnet.
+By this activity we can conclude that
+every bar magnet always has two ends
+whose attracting capacity is more than
+its other parts. These ends are called
+poles of the magnet .
+ Activity-5:  Finding directions with
+ a bar magnet.
+Suspend the bar magnet freely with the
+help of a thread tied around its center
+
+  10. Normalized Score: 0.0000 | Text: Why?
+Bring the safety pin close
+to one pole of a bar
+magnet and see how it
+gets attached to the
+magnet. Now bring an
+alpin and touch it to the
+safety pin as shown in
+Fig. 11 (a).  Does safety
+pin attract  the alpin?
+Why?
+In the above two cases,
+we notice that the safety pin acts as a
+magnet when it is in contact with
+another magnet. Magnetic property is
+induced in safety pin due to the bar
+magnet.
+Magnetic property possessed by a
+magnetic substance due to the
+presence of a magnet near it, is called
+magnetic induction.
+• If the safety pin is not in contact
+with the bar magnet, can it attract
+the alpin?
+• What happens if we place the bar
+magnet very close to the safety pin
+but not touching it?
+Let us find out.
+Fig. 11 (a)
+The earth's magnetic field is like a bar magnet at the center
+SCERT TELANGANAPLAYING WITH MAGNETS Free Distribution by Govt. of T.S. 2020-21
+20
+Fig. 11 (b)
+Take a bar magnet in one hand and a
+safety pin in the other hand, hold
+them in such a way that
+
+
+--- Hybrid Search Results (10 Chunks) ---
+
+  1. Hybrid Score: 0.6474
+     Chapter: PLAYING WITH MAGNETS
+     Text: SCERT TELANGANAPLAYING WITH MAGNETS Free Distribution by Govt. of T.S. 2020-21
+20
+Fig. 11 (b)
+Take a bar magnet in one hand and a
+safety pin in the other hand, hold
+them in such a way that
+they are close to each
+other but not in contact
+as shown in Fig. 11 (b).
+Ask your friend to
+bring an alpin and
+touch the safety pin.
+You will notice that the
+alpin will stick to the
+safety pin. This shows
+that due to magnetic
+induction safety pin acts as a magnet.
+Keywords
+Magnet, magnetic material, non-
+magnetic material, North Pole, South
+Pole, Magnetic compass, like poles,
+unlike poles, attraction, repulsion,
+magnetic induction
+What we have learnt
+• Lode stone is a natural magnet.
+• Magnets are of different shapes i.e.
+bar magnets, horse shoe magnets,
+ring type magnets, disc magnets,
+etc.
+• The materials that are attracted by
+magnets are called magnetic
+materials. The materials that are
+not attracted by magnets are called
+non-magnetic materials.
+• A bar magnet always has two
+
+  2. Hybrid Score: 0.6136
+     Chapter: PLAYING WITH MAGNETS
+     Text: the usual shapes of magnets are shown in Fig. 2.
+Horse Shoe
+Magnet
+Ring Magnet Disc Magnet
+Fig. 2
+Think: Can we make a magnet in a required shape?
+Usually, magnets are made of  steel or iron. However, special alloys of  iron, nickel,
+copper, cobalt, and aluminum can be made into powerful magnets.
+Bar Magnet
+SCERT TELANGANAPLAYING WITH MAGNETS Free Distribution by Govt. of T.S. 2020-21
+14
+  Activity-2:  Finding materials
+  attracted by magnets.
+Take a bar magnet, nail, jump-clip,
+plastic scale, a piece of glass, brass key,
+paper, iron bolt, pen, blade, pencil,
+knife, stainless steel spoon, piece of
+chalk, wood and touch the magnet
+to each item. Does the magnet attract
+every object? Observe and record
+your observations duly mentioning
+the name of the material of which the
+object is made in table 1.
+        Table 1
+Name of the object Material of which the Attracted
+object is made By Magnet
+(Iron/plastic/aluminum/ (Yes/No)
+wood/glass/ any other)
+Jump Clip Iron Yes
+Scale Plastic No
+
+  3. Hybrid Score: 0.5470
+     Chapter: PLAYING WITH MAGNETS
+     Text: to the other pole of the bar magnet
+in the same way and record your
+observations.
+What do you conclude by comparing
+the recorded observations?
+By the above observations we conclude
+the following:
+If an object is attracted by one pole of
+the bar magnet and repelled by the its other
+pole, then you can say that it is a magnet.
+If an object is attracted by both the
+poles of a bar magnet and not repelled
+by any pole, then you can say that it is
+not a magnet but a magnetic substance.
+If an object is neither attracted by
+magnet nor repelled by it, then you
+can say that it is neither a magnet nor
+a magnetic substance.
+Activity-9: Make your own magnet
+Take an iron nail and place it on a table.
+Make sure that the nail neither attracts
+nor repels iron pins or iron filings. Take
+a bar magnet and place one of its poles
+near one edge of the nail. Without lifting
+the bar magnet, move it along the length
+of the iron nail till you reach the other
+end. Then lift the bar magnet, bring it to
+
+  4. Hybrid Score: 0.4800
+     Chapter: PLAYING WITH MAGNETS
+     Text: SCERT TELANGANAScience VI Class
+17
+• What do you observe?
+• When do the magnets attract
+each other?
+• When do the magnets repel each
+other?
+You notice that like poles (N-N, S-
+S) repel each other and unlike poles
+(N-S) attract each other.
+Earth as a Magnet:
+We saw that a suspended bar magnet
+always comes to rest in the North-South
+direction.
+• Why does it come to rest in that
+particular direction only?
+• What force is acting on it?
+Activity-7:
+Place a bar magnet on
+a table in any
+direction.  Suspend
+another bar magnet
+over it as shown in
+Fig. 7. The suspended
+bar magnet should be
+fairly close to the one kept
+on the table.  Observe in which
+direction the suspended bar magnet
+comes to rest.
+Change the direction of the bar magnet
+placed on the table.
+  
+• Do you find any change in the
+direction of suspended bar magnet?
+   • Is there a change in the direction it
+comes to rest? What is that change?
+The suspended bar magnet always
+comes to rest in the direction of the
+
+  5. Hybrid Score: 0.4314
+     Chapter: PLAYING WITH MAGNETS
+     Text: SCERT TELANGANAScience VI Class
+13
+ Story of Magnet
+Around 2500 years ago, there lived an old
+shepherd named Magnus. He used to take his
+goats and sheep to the hills for grazing. He
+always carried a wooden stick which had an
+iron cap on its lower end. One day, while his
+goats were grazing, Magnus dipped his stick
+into a spring of water and poked at the pebbles
+and stones at the bottom with it.  Suddenly he
+felt something pulling his stick. When he took
+it out of water, he saw a stone stuck to the iron cap. The stone which Magnus
+pulled out was called 
+Lode stone.  It is a natural magnet and possesses the
+property of attracting iron.
+The magnets we discussed are not natural magnets. These magnets are man-
+made magnets.
+Magnets of different shapes
+The magnets we see and use in our daily life possess different shapes. Some of
+the usual shapes of magnets are shown in Fig. 2.
+Horse Shoe
+Magnet
+Ring Magnet Disc Magnet
+Fig. 2
+Think: Can we make a magnet in a required shape?
+
+  6. Hybrid Score: 0.3590
+     Chapter: PLAYING WITH MAGNETS
+     Text: its other parts. These ends are called
+poles of the magnet .
+ Activity-5:  Finding directions with
+ a bar magnet.
+Suspend the bar magnet freely with the
+help of a thread tied around its center
+as shown in Fig. 4. Does the magnet
+remain stationary? Wait for some time.
+What do you find now?
+Fig.  3
+ Fig. 4
+Electromagnets are made up of  an arrangement of  wire coils; often, the wire is wound
+around a ferromagnetic substance such as steel.
+SCERT TELANGANAPLAYING WITH MAGNETS Free Distribution by Govt. of T.S. 2020-21
+16
+You will notice that the magnet finally
+takes a position in the North-South
+direction. Mark the end that points
+towards the North with some colour.
+Now disturb the magnet and again wait
+for some time.
+• Where does the coloured portion
+come to rest?
+• Repeat this experiment at another
+place. What do you observe?
+Magnets always come to rest in the
+North-South direction. In each case the
+marked end points towards North. This
+end is known as North pole of the
+
+  7. Hybrid Score: 0.3320
+     Chapter: PLAYING WITH MAGNETS
+     Text: direction of suspended bar magnet?
+   • Is there a change in the direction it
+comes to rest? What is that change?
+The suspended bar magnet always
+comes to rest in the direction of the
+bar magnet placed on the table.  But
+the north pole of the suspended bar
+magnet points towards the south pole
+of the bar magnet placed on the table
+and south pole of the suspended  bar
+magnet points towards the north pole
+of the bar magnet placed on the table.
+• What happens if you remove the
+bar magnet placed on the table?
+In this case the suspended magnet
+comes to rest in  the North-South
+direction.  We can say that there is some
+magnet below the suspended bar magnet
+which compels it to come to rest in that
+particular direction (as in above two
+cases). Where does this invisible
+magnet come from? The earth
+possesses magnetic property which
+acts upon the suspended bar magnet
+(see Fig. 8).Fig. 7
+Fig. 8
+Magnet attracts only magnetic objects
+
+  8. Hybrid Score: 0.3192
+     Chapter: PLAYING WITH MAGNETS
+     Text: etc.
+• The materials that are attracted by
+magnets are called magnetic
+materials. The materials that are
+not attracted by magnets are called
+non-magnetic materials.
+• A bar magnet always has two
+ends whose attracting capacity is
+more than other parts of  it. The
+poles of the magnet lie at these
+ends.
+• Each magnet has two magnetic
+poles :  North and South.
+• A freely suspended magnet
+always aligns in the North-South
+direction.
+• Unlike poles of two magnets
+attract each other; whereas like
+poles repel each other.
+• Magnetic property possessed by
+a magnetic substance due to the
+presence of a magnet near to it, is
+called magnetic induction.
+Improve your learning
+1. Predict which of the following
+material are  magnetic and non-
+magnetic material. Test with a bar
+magnet and check your
+predictions. What do you say
+after testing all materials?
+Plastic, Iron, Stainless steel,
+Wood, Aluminium, Gold, Silver,
+Copper, Paper, Cloth.
+2. List out the magnetic and non
+magnetic materials in your class
+
+  9. Hybrid Score: 0.2677
+     Chapter: PLAYING WITH MAGNETS
+     Text: after testing all materials?
+Plastic, Iron, Stainless steel,
+Wood, Aluminium, Gold, Silver,
+Copper, Paper, Cloth.
+2. List out the magnetic and non
+magnetic materials in your class
+room.
+Earth magnets can be 20 times more powerful than a fridge magnet
+SCERT TELANGANAScience VI Class
+21
+3. For which purposes do people use
+magnets in their daily life? Ask
+your family members and other
+elders and collect the information
+and prepare a list of uses of
+magnets.
+4. Draw a bar magnet and locate the
+poles.
+5. Observe and locate North and
+South poles for the second bar
+magnet shown in the figure given
+below.
+6. Think and say, in which
+direction your house is facing?
+(a) Use the compass and findout
+the exact direction of your house
+and compare it with your
+prediction.
+(b) Similarly predict and findout
+in which direction you  keep your
+head while sleeping at night,
+(c)  The directions you face while
+you are reading, eating etc.
+7. Prepare a toy using magnets and
+write the procedure of preparation
+
+  10. Hybrid Score: 0.2474
+     Chapter: PLAYING WITH MAGNETS
+     Text: place. What do you observe?
+Magnets always come to rest in the
+North-South direction. In each case the
+marked end points towards North. This
+end is known as North pole of the
+magnet. The other end, which points
+towards the South is known as South
+pole of the magnet. This property of
+magnets is called  directional property.
+It is exhibited only by magnets. We use
+this property to make the magnetic compass.
+Magnetic Compass
+A compass is usually a small box with a
+glass covering it. A magnetized needle
+is pivoted inside the box in such a way
+that it can rotate freely. The compass
+also has a dial with directions marked
+on it. The compass is kept at the place
+where we wish to know the direction.
+Its needle indicates the North-South
+direction when it comes to rest. The
+compass is then rotated until the north
+and south marked on the dial are exactly
+below the two ends of the needle. To
+identify the North pole of the magnetic
+needle, it is usually painted in a
+
+
+--- Generated Answer ---
+That is an excellent question! Magnets are manufactured in many different forms depending on what they are used for.
+
+As we have learned, the magnets we use in our daily life are man-made magnets, and they possess different shapes.
+
+Based on their structure, the textbook mentions the following usual shapes for magnets:
+
+1.  **Bar Magnet:** This is the most common shape, appearing as a straight rectangular piece.
+2.  **Horse Shoe Magnet:** This magnet is shaped like a horseshoe (or a 'U' shape).
+3.  **Ring Magnet:** These magnets are shaped like a flat ring or washer, with a hole in the center.
+4.  **Disc Magnet:** These magnets are shaped like a flat circle or disc.
+
+These various shapes, such as the **Bar Magnet**, **Horse Shoe Magnet**, **Ring Magnet**, and **Disc Magnet**, are the common forms you will encounter when studying magnetism.
+--- End Log ---
+

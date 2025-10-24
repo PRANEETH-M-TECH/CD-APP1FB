@@ -234,7 +234,7 @@ function setupChaptersPage() {
             if (hasRowError) {
                 validationError = true;
             } else {
-                chapters.push({ name, start_page, end_page });
+                chapters.push({ chapter_name: name, pdf_startpg: start_page, pdf_endpg: end_page });
             }
         });
 
@@ -248,7 +248,6 @@ function setupChaptersPage() {
         const finalFormData = new FormData();
         finalFormData.append('class_name', className);
         finalFormData.append('subject', subject);
-        finalFormData.append('chapters', JSON.stringify(chapters));
         finalFormData.append('filename', filename);
 
         try {

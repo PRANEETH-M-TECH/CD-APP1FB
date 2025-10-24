@@ -121,7 +121,8 @@
                             throw new Error(errorData.detail);
                         }
 
-                        const chapters = await response.json();
+                        const data = await response.json();
+                        const chapters = data.chapters;
                         
                         if (chapters && chapters.length > 0) {
                             populateChaptersTable(chapters);
@@ -152,7 +153,7 @@
                     const row = document.createElement('tr');
                     row.dataset.chapterIndex = index;
                     row.innerHTML = `
-                        <td><input type="text" class="chapter-name" value="${chapter.title || ''}" placeholder="Chapter ${index + 1} Name"></td>
+                        <td><input type="text" class="chapter-name" value="${chapter.chapter_name || ''}" placeholder="Chapter ${index + 1} Name"></td>
                         <td><input type="number" class="start-page" value="${chapter.start_page || ''}" min="1" placeholder="Start"></td>
                         <td><input type="number" class="end-page" value="${chapter.end_page || ''}" min="1" placeholder="End"></td>
                         <td><button type="button" class="remove-chapter-btn">Remove</button></td>
