@@ -1,1016 +1,1333 @@
 --- Query Log ---
-Timestamp: 2025-10-24T10:51:04.747262
-Original Query: explain about the different shapes of magnets?
-Book UUID: 097025710c9d2a09420dda2755023e25b2106cc4e89dfc78be9f2adab9f8c6b9
-Class: 6, Subject: science
+Timestamp: 2025-10-24T12:58:08.715838
+Original Query: explain about the Mean sea level?
+Book UUID: b250da676f2f0c2a2b1423a27ae133c1a32829112733470fc683ceab06193ba0
+Class: 7, Subject: social
 
 --- LLM Query Processing ---
-Reformulated Query: A comprehensive overview and detailed description of the common physical shapes and geometric forms in which various types of permanent and temporary magnets are manufactured and utilized.
+Reformulated Query: Provide a detailed explanation, precise definition, calculation methods, and measurement significance of the Mean Sea Level (MSL) concept in the fields of oceanography and geodesy.
 Classification: conceptual
-Conceptual Score: 0.60
-Keywords: magnets, shapes, bar magnet, horseshoe magnet, magnet forms, disk magnet
+Conceptual Score: 0.90
+Keywords: Mean Sea Level, Sea level, Explanation, Calculation methods, Oceanography
 
---- Semantic Search Results (10 Chunks) ---
+--- Formatted Top Chunks for LLM (Context) ---
 
-  1. Score: 0.5697 | Text: the usual shapes of magnets are shown in Fig. 2.
-Horse Shoe
-Magnet
-Ring Magnet Disc Magnet
-Fig. 2
-Think: Can we make a magnet in a required shape?
-Usually, magnets are made of  steel or iron. However, special alloys of  iron, nickel,
-copper, cobalt, and aluminum can be made into powerful magnets.
-Bar Magnet
-SCERT TELANGANAPLAYING WITH MAGNETS Free Distribution by Govt. of T.S. 2020-21
-14
-  Activity-2:  Finding materials
-  attracted by magnets.
-Take a bar magnet, nail, jump-clip,
-plastic scale, a piece of glass, brass key,
-paper, iron bolt, pen, blade, pencil,
-knife, stainless steel spoon, piece of
-chalk, wood and touch the magnet
-to each item. Does the magnet attract
-every object? Observe and record
-your observations duly mentioning
-the name of the material of which the
-object is made in table 1.
-        Table 1
-Name of the object Material of which the Attracted
-object is made By Magnet
-(Iron/plastic/aluminum/ (Yes/No)
-wood/glass/ any other)
-Jump Clip Iron Yes
-Scale Plastic No
+  --- Chunk 1 (Hybrid Score: 0.7770) ---
+     Chapter: Reading Maps of Different kinds
+     Text: 150 MSL.
+Mean Sea Level
+There are high tides and low tides on
+the level of the sea, and they never stand
+still. As a result of this phenomenon, the
+level of the sea keeps on either rising or
+falling. Which of these heights do we
+take as the sea level or 0 meter height?
+In order to solve this problem, the level
+of the sea is carefully measured at
+frequent intervals and the mean level of
+the sea is calculated. Over a period,
+scientists observed the high and low
+levels of the sea and they have come to
+one calculated average level, which is
+known as Mean Sea Level (M.S.L.).
+ If you live near a Railway station,
+find out the height of that place with
+the help of display board. The height
+is mentioned as “________ M.S.L.”.
+Note it down in your note book.
+ Look at figures 1.6 & 1.7  and tell
+whether Nimpur would be
+submerged if sea waters were to
+flood up to 30 meters?
+R Pranahita
+R Penganga
+R Wainganga
+R Godavari
+R Musi
+R Dindi
+R Krishna
+R Tungabhadra
+R Krishna
+R Manjeera
+R Godavari
 
-  2. Score: 0.5572 | Text: SCERT TELANGANAScience VI Class
-13
- Story of Magnet
-Around 2500 years ago, there lived an old
-shepherd named Magnus. He used to take his
-goats and sheep to the hills for grazing. He
-always carried a wooden stick which had an
-iron cap on its lower end. One day, while his
-goats were grazing, Magnus dipped his stick
-into a spring of water and poked at the pebbles
-and stones at the bottom with it.  Suddenly he
-felt something pulling his stick. When he took
-it out of water, he saw a stone stuck to the iron cap. The stone which Magnus
-pulled out was called 
-Lode stone.  It is a natural magnet and possesses the
-property of attracting iron.
-The magnets we discussed are not natural magnets. These magnets are man-
-made magnets.
-Magnets of different shapes
-The magnets we see and use in our daily life possess different shapes. Some of
-the usual shapes of magnets are shown in Fig. 2.
-Horse Shoe
-Magnet
-Ring Magnet Disc Magnet
-Fig. 2
-Think: Can we make a magnet in a required shape?
-
-  3. Score: 0.5418 | Text: SCERT TELANGANAPLAYING WITH MAGNETS Free Distribution by Govt. of T.S. 2020-21
-20
-Fig. 11 (b)
-Take a bar magnet in one hand and a
-safety pin in the other hand, hold
-them in such a way that
-they are close to each
-other but not in contact
-as shown in Fig. 11 (b).
-Ask your friend to
-bring an alpin and
-touch the safety pin.
-You will notice that the
-alpin will stick to the
-safety pin. This shows
-that due to magnetic
-induction safety pin acts as a magnet.
-Keywords
-Magnet, magnetic material, non-
-magnetic material, North Pole, South
-Pole, Magnetic compass, like poles,
-unlike poles, attraction, repulsion,
-magnetic induction
-What we have learnt
-• Lode stone is a natural magnet.
-• Magnets are of different shapes i.e.
-bar magnets, horse shoe magnets,
-ring type magnets, disc magnets,
-etc.
-• The materials that are attracted by
-magnets are called magnetic
-materials. The materials that are
-not attracted by magnets are called
-non-magnetic materials.
-• A bar magnet always has two
-
-  4. Score: 0.5149 | Text: after testing all materials?
-Plastic, Iron, Stainless steel,
-Wood, Aluminium, Gold, Silver,
-Copper, Paper, Cloth.
-2. List out the magnetic and non
-magnetic materials in your class
-room.
-Earth magnets can be 20 times more powerful than a fridge magnet
-SCERT TELANGANAScience VI Class
-21
-3. For which purposes do people use
-magnets in their daily life? Ask
-your family members and other
-elders and collect the information
-and prepare a list of uses of
-magnets.
-4. Draw a bar magnet and locate the
-poles.
-5. Observe and locate North and
-South poles for the second bar
-magnet shown in the figure given
-below.
-6. Think and say, in which
-direction your house is facing?
-(a) Use the compass and findout
-the exact direction of your house
-and compare it with your
-prediction.
-(b) Similarly predict and findout
-in which direction you  keep your
-head while sleeping at night,
-(c)  The directions you face while
-you are reading, eating etc.
-7. Prepare a toy using magnets and
-write the procedure of preparation
-
-  5. Score: 0.4951 | Text: its other parts. These ends are called
-poles of the magnet .
- Activity-5:  Finding directions with
- a bar magnet.
-Suspend the bar magnet freely with the
-help of a thread tied around its center
-as shown in Fig. 4. Does the magnet
-remain stationary? Wait for some time.
-What do you find now?
-Fig.  3
- Fig. 4
-Electromagnets are made up of  an arrangement of  wire coils; often, the wire is wound
-around a ferromagnetic substance such as steel.
-SCERT TELANGANAPLAYING WITH MAGNETS Free Distribution by Govt. of T.S. 2020-21
-16
-You will notice that the magnet finally
-takes a position in the North-South
-direction. Mark the end that points
-towards the North with some colour.
-Now disturb the magnet and again wait
-for some time.
-• Where does the coloured portion
-come to rest?
-• Repeat this experiment at another
-place. What do you observe?
-Magnets always come to rest in the
-North-South direction. In each case the
-marked end points towards North. This
-end is known as North pole of the
-
-  6. Score: 0.4944 | Text: to the other pole of the bar magnet
-in the same way and record your
-observations.
-What do you conclude by comparing
-the recorded observations?
-By the above observations we conclude
-the following:
-If an object is attracted by one pole of
-the bar magnet and repelled by the its other
-pole, then you can say that it is a magnet.
-If an object is attracted by both the
-poles of a bar magnet and not repelled
-by any pole, then you can say that it is
-not a magnet but a magnetic substance.
-If an object is neither attracted by
-magnet nor repelled by it, then you
-can say that it is neither a magnet nor
-a magnetic substance.
-Activity-9: Make your own magnet
-Take an iron nail and place it on a table.
-Make sure that the nail neither attracts
-nor repels iron pins or iron filings. Take
-a bar magnet and place one of its poles
-near one edge of the nail. Without lifting
-the bar magnet, move it along the length
-of the iron nail till you reach the other
-end. Then lift the bar magnet, bring it to
-
-  7. Score: 0.4757 | Text: place. What do you observe?
-Magnets always come to rest in the
-North-South direction. In each case the
-marked end points towards North. This
-end is known as North pole of the
-magnet. The other end, which points
-towards the South is known as South
-pole of the magnet. This property of
-magnets is called  directional property.
-It is exhibited only by magnets. We use
-this property to make the magnetic compass.
-Magnetic Compass
-A compass is usually a small box with a
-glass covering it. A magnetized needle
-is pivoted inside the box in such a way
-that it can rotate freely. The compass
-also has a dial with directions marked
-on it. The compass is kept at the place
-where we wish to know the direction.
-Its needle indicates the North-South
-direction when it comes to rest. The
-compass is then rotated until the north
-and south marked on the dial are exactly
-below the two ends of the needle. To
-identify the North pole of the magnetic
-needle, it is usually painted in a
-
-  8. Score: 0.4751 | Text: Table 1
-Name of the object Material of which the Attracted
-object is made By Magnet
-(Iron/plastic/aluminum/ (Yes/No)
-wood/glass/ any other)
-Jump Clip Iron Yes
-Scale Plastic No
-• Which materials are attracted by
-a magnet?
-• Which materials are not attracted
-by a magnet?
-The materials that are attracted by
-magnets are called magnetic materials.
-The materials that are not attracted by
-magnets are called non-magnetic
-materials.
-• Give your own examples for
-magnetic materials.
-• Give your own examples for non-
-magnetic materials.
-Magnets have the property of
-attracting materials like Iron. Based on
-this property of magnets they can be
-used to separate some mixtures.
-Activity-3:  Can we separate iron
-filings from soil?
-Take a bar magnet and roll it in the soil
-in your school ground for some time.
-Pull out the magnet.  What do you find?
-Does anything get attached to the
-magnet?
-You may find some dark particles of
-soil sticking to the magnet.
-Now gently remove these dark particles
-
-  9. Score: 0.4639 | Text: SCERT TELANGANAScience VI Class
-19
-Now remove the bar magnet and bring
-some iron filings or alpins close to the
-nail. What do you notice?
-The iron filings or alpins get attracted
-by the nail.  Thus you have succeeded
-in making your own magnet by
-magnetizing the nail. What will happen
-if the nail is now suspended freely?
- Activity-10: Make your
- own magnetic compass
-Take a magnetized needle. Tape the
-needle to a light cork. Float the cork
-in a glass of water as shown in Fig.10.
-Add a little detergent to water to help
-the cork float freely. In
-what direction does
-your magnetized
-needle point?
-It points in North-
-South direction.
-Thus it acts as a
-magnetic compass.
-Fig. 9
-Fig. 10
- Activity-11:  Magnetic induction
-Take a safety pin and bring it close to
-an alpin. Does it attract the alpin?
-Why?
-Bring the safety pin close
-to one pole of a bar
-magnet and see how it
-gets attached to the
-magnet. Now bring an
-alpin and touch it to the
-safety pin as shown in
-Fig. 11 (a).  Does safety
-
-  10. Score: 0.4624 | Text: cases). Where does this invisible
-magnet come from? The earth
-possesses magnetic property which
-acts upon the suspended bar magnet
-(see Fig. 8).Fig. 7
-Fig. 8
-Magnet attracts only magnetic objects
-SCERT TELANGANAPLAYING WITH MAGNETS Free Distribution by Govt. of T.S. 2020-21
-18
- Activity-8:  Finding out whether
- the given object is a magnet or not .
-You have been given three objects of
-same size, shape and colour and a bar
-magnet. You have to decide which one
-among them is a magnet, which is not
-a magnet but made up of a magnetic
-material or a non-magnetic material.
-Bring three objects one after the other
-close to one pole of the bar magnet
-and observe whether they get
-attracted, repelled or not attracted.
-Record your observation in table 2.
-After that bring those objects close
-to the other pole of the bar magnet
-in the same way and record your
-observations.
-What do you conclude by comparing
-the recorded observations?
-By the above observations we conclude
-the following:
-
-
---- BM25 Keyword Search Results (10 Chunks) ---
-
-  1. Normalized Score: 1.0000 | Text: SCERT TELANGANAScience VI Class
-17
-• What do you observe?
-• When do the magnets attract
-each other?
-• When do the magnets repel each
-other?
-You notice that like poles (N-N, S-
-S) repel each other and unlike poles
-(N-S) attract each other.
-Earth as a Magnet:
-We saw that a suspended bar magnet
-always comes to rest in the North-South
-direction.
-• Why does it come to rest in that
-particular direction only?
-• What force is acting on it?
-Activity-7:
-Place a bar magnet on
-a table in any
-direction.  Suspend
-another bar magnet
-over it as shown in
-Fig. 7. The suspended
-bar magnet should be
-fairly close to the one kept
-on the table.  Observe in which
-direction the suspended bar magnet
-comes to rest.
-Change the direction of the bar magnet
-placed on the table.
-  
-• Do you find any change in the
-direction of suspended bar magnet?
-   • Is there a change in the direction it
-comes to rest? What is that change?
-The suspended bar magnet always
-comes to rest in the direction of the
-
-  2. Normalized Score: 0.7618 | Text: SCERT TELANGANAPLAYING WITH MAGNETS Free Distribution by Govt. of T.S. 2020-21
-20
-Fig. 11 (b)
-Take a bar magnet in one hand and a
-safety pin in the other hand, hold
-them in such a way that
-they are close to each
-other but not in contact
-as shown in Fig. 11 (b).
-Ask your friend to
-bring an alpin and
-touch the safety pin.
-You will notice that the
-alpin will stick to the
-safety pin. This shows
-that due to magnetic
-induction safety pin acts as a magnet.
-Keywords
-Magnet, magnetic material, non-
-magnetic material, North Pole, South
-Pole, Magnetic compass, like poles,
-unlike poles, attraction, repulsion,
-magnetic induction
-What we have learnt
-• Lode stone is a natural magnet.
-• Magnets are of different shapes i.e.
-bar magnets, horse shoe magnets,
-ring type magnets, disc magnets,
-etc.
-• The materials that are attracted by
-magnets are called magnetic
-materials. The materials that are
-not attracted by magnets are called
-non-magnetic materials.
-• A bar magnet always has two
-
-  3. Normalized Score: 0.6917 | Text: direction of suspended bar magnet?
-   • Is there a change in the direction it
-comes to rest? What is that change?
-The suspended bar magnet always
-comes to rest in the direction of the
-bar magnet placed on the table.  But
-the north pole of the suspended bar
-magnet points towards the south pole
-of the bar magnet placed on the table
-and south pole of the suspended  bar
-magnet points towards the north pole
-of the bar magnet placed on the table.
-• What happens if you remove the
-bar magnet placed on the table?
-In this case the suspended magnet
-comes to rest in  the North-South
-direction.  We can say that there is some
-magnet below the suspended bar magnet
-which compels it to come to rest in that
-particular direction (as in above two
-cases). Where does this invisible
-magnet come from? The earth
-possesses magnetic property which
-acts upon the suspended bar magnet
-(see Fig. 8).Fig. 7
-Fig. 8
-Magnet attracts only magnetic objects
-
-  4. Normalized Score: 0.6651 | Text: etc.
-• The materials that are attracted by
-magnets are called magnetic
-materials. The materials that are
-not attracted by magnets are called
-non-magnetic materials.
-• A bar magnet always has two
-ends whose attracting capacity is
-more than other parts of  it. The
-poles of the magnet lie at these
-ends.
-• Each magnet has two magnetic
-poles :  North and South.
-• A freely suspended magnet
-always aligns in the North-South
-direction.
-• Unlike poles of two magnets
-attract each other; whereas like
-poles repel each other.
-• Magnetic property possessed by
-a magnetic substance due to the
-presence of a magnet near to it, is
-called magnetic induction.
+  --- Chunk 2 (Hybrid Score: 0.3106) ---
+     Chapter: Reading Maps of Different kinds
+     Text: 6 Diversity on the Earth Social Studies
+Telangana Plateau
+Map-2 TELANGANA -
+SEA LEVEL
+Look at figure 1.8 and answer the
+following questions:
+ Mark the direction of flow of the
+river.
+ The height of the lowest land is
+between ____ meters and _____
+meters.
+ There are two high points in this
+map. What are their heights?
 Improve your learning
-1. Predict which of the following
-material are  magnetic and non-
-magnetic material. Test with a bar
-magnet and check your
-predictions. What do you say
-after testing all materials?
-Plastic, Iron, Stainless steel,
-Wood, Aluminium, Gold, Silver,
-Copper, Paper, Cloth.
-2. List out the magnetic and non
-magnetic materials in your class
+1. Why are the levels of all the
+seas equal in the world?
+2. How is the sea level
+measured?
+3. What are the uses of maps
+showing height?
+4. What differences do you find between the life
+style of people living on high altitudes and low
+altitudes?
+5. How are  maps helpful to people?
+6. Read the para ‘Contour Lines’ on page 5 and
+comment on it.
+7. Observe the Telangana map given and list out
+the areas of districts which are below
+150 MSL.
+Mean Sea Level
+There are high tides and low tides on
+the level of the sea, and they never stand
+still. As a result of this phenomenon, the
+level of the sea keeps on either rising or
 
-  5. Normalized Score: 0.6612 | Text: the usual shapes of magnets are shown in Fig. 2.
-Horse Shoe
-Magnet
-Ring Magnet Disc Magnet
-Fig. 2
-Think: Can we make a magnet in a required shape?
-Usually, magnets are made of  steel or iron. However, special alloys of  iron, nickel,
-copper, cobalt, and aluminum can be made into powerful magnets.
-Bar Magnet
-SCERT TELANGANAPLAYING WITH MAGNETS Free Distribution by Govt. of T.S. 2020-21
-14
-  Activity-2:  Finding materials
-  attracted by magnets.
-Take a bar magnet, nail, jump-clip,
-plastic scale, a piece of glass, brass key,
-paper, iron bolt, pen, blade, pencil,
-knife, stainless steel spoon, piece of
-chalk, wood and touch the magnet
-to each item. Does the magnet attract
-every object? Observe and record
-your observations duly mentioning
-the name of the material of which the
-object is made in table 1.
-        Table 1
-Name of the object Material of which the Attracted
-object is made By Magnet
-(Iron/plastic/aluminum/ (Yes/No)
-wood/glass/ any other)
-Jump Clip Iron Yes
-Scale Plastic No
+  --- Chunk 3 (Hybrid Score: 0.2949) ---
+     Chapter: Oceans and Fishing
+     Text: sea areas are called oceans. Oceans are huge bodies of water generally separated
+by continents.
+PART - I
+Fig 4.1 Relief features of an Ocean
+Continental Slope
+Trench
+Deep sea plain
+Sea level
+It will be interesting to find out what lies
+under the water. The surface of water does not
+tell us about what lies under it. You may have
+had the opportunity to notice or feel what the
+bed of a river or stream or pond is like.
+ Please share what you have seen or
+felt about what lies under the
+surface of waterbodies.
+ How many meters deep are the
+water bodies that you have seen?
+Ocean Relief
+The floor of the ocean
+is just like the surface of
+the earth.  The bottom of
+the sea is not a flat surface.
+It consists of hills,
+mountains,  plateaus,
+plains, trenches etc. Many
+trenches on the ocean
+floor are so deep that even
+if the Mount Everest was
+placed in them, it would
+4
+Continental Shelf
+SCERT, TEALANGANASCERT, TEALANGANA
+34 Diversity on the Earth Social Studies
+2) Currents: In the oceans, water
 
-  6. Normalized Score: 0.6041 | Text: to the other pole of the bar magnet
-in the same way and record your
-observations.
-What do you conclude by comparing
-the recorded observations?
-By the above observations we conclude
-the following:
-If an object is attracted by one pole of
-the bar magnet and repelled by the its other
-pole, then you can say that it is a magnet.
-If an object is attracted by both the
-poles of a bar magnet and not repelled
-by any pole, then you can say that it is
-not a magnet but a magnetic substance.
-If an object is neither attracted by
-magnet nor repelled by it, then you
-can say that it is neither a magnet nor
-a magnetic substance.
-Activity-9: Make your own magnet
-Take an iron nail and place it on a table.
-Make sure that the nail neither attracts
-nor repels iron pins or iron filings. Take
-a bar magnet and place one of its poles
-near one edge of the nail. Without lifting
-the bar magnet, move it along the length
-of the iron nail till you reach the other
-end. Then lift the bar magnet, bring it to
+  --- Chunk 4 (Hybrid Score: 0.2719) ---
+     Chapter: Oceans and Fishing
+     Text: if the Mount Everest was
+placed in them, it would
+4
+Continental Shelf
+SCERT, TEALANGANASCERT, TEALANGANA
+34 Diversity on the Earth Social Studies
+2) Currents: In the oceans, water
+moves from one part to another in big
+streams. These streams which flow
+constantly in a definite direction on the
+surface of the ocean are called ocean
+currents. The ocean currents are of two
+types - the warm currents and the cold
+currents. The warm currents flow from the
+equatorial region towards the poles. The
+cold currents flow from the poles to the
+equatorial regions. They are mainly caused
+by the prevailing winds, difference in
+temperature and salinity of the ocean water.
+3) Tides:  Tides are the rhythmic rise
+and fall in the level of the water in the
+oceans every day. All places on the coast
+experience some hours of low tide and
+some hours of high tide. Tides do not rise
+to the same height every day. When the tide
+is high, water comes up to the coast for
+some distance. Then as low tide begins, the
 
-  7. Normalized Score: 0.2950 | Text: SCERT TELANGANAScience VI Class
-13
- Story of Magnet
-Around 2500 years ago, there lived an old
-shepherd named Magnus. He used to take his
-goats and sheep to the hills for grazing. He
-always carried a wooden stick which had an
-iron cap on its lower end. One day, while his
-goats were grazing, Magnus dipped his stick
-into a spring of water and poked at the pebbles
-and stones at the bottom with it.  Suddenly he
-felt something pulling his stick. When he took
-it out of water, he saw a stone stuck to the iron cap. The stone which Magnus
-pulled out was called 
-Lode stone.  It is a natural magnet and possesses the
-property of attracting iron.
-The magnets we discussed are not natural magnets. These magnets are man-
-made magnets.
-Magnets of different shapes
-The magnets we see and use in our daily life possess different shapes. Some of
-the usual shapes of magnets are shown in Fig. 2.
-Horse Shoe
-Magnet
-Ring Magnet Disc Magnet
-Fig. 2
-Think: Can we make a magnet in a required shape?
+  --- Chunk 5 (Hybrid Score: 0.2683) ---
+     Chapter: Europe
+     Text: sea means ‘middle of the world’. Do you
+know why it is called by this name? In
+ancient times, the people of Europe did not
+know about other continents like America
+In this chapter, we will try to find out about how the people of Europe have been
+using their distinct natural environment and resources.
+5
+or Australia. They only knew about Europe,
+western parts of Asia and northern parts of
+Africa. You can see that all these regions
+are situated around the Mediterranean Sea.
+That is why Europeans thought that this sea
+was in the centre of the world and named it
+so. It has been known by this name ever
+since.
+ Name the mountains to the east of
+Europe.
+The Eural mountains are eastern
+boundaries of Europe. These mountains are
+not very high. Asia is on the east of these
+Europe
+Arctic Ocean
+Asia
+Ural
+Mountains Pacific
+Ocean
+Africa
+Equator
+Indian
+Ocean Australia
+Map 1: Location of Europe
+Atlantic Ocean
+Mediterranean
+Sea
+SCERT, TEALANGANASCERT, TEALANGANA
 
-  8. Normalized Score: 0.2116 | Text: its other parts. These ends are called
-poles of the magnet .
- Activity-5:  Finding directions with
- a bar magnet.
-Suspend the bar magnet freely with the
-help of a thread tied around its center
-as shown in Fig. 4. Does the magnet
-remain stationary? Wait for some time.
-What do you find now?
-Fig.  3
- Fig. 4
-Electromagnets are made up of  an arrangement of  wire coils; often, the wire is wound
-around a ferromagnetic substance such as steel.
-SCERT TELANGANAPLAYING WITH MAGNETS Free Distribution by Govt. of T.S. 2020-21
-16
-You will notice that the magnet finally
-takes a position in the North-South
-direction. Mark the end that points
-towards the North with some colour.
-Now disturb the magnet and again wait
-for some time.
-• Where does the coloured portion
-come to rest?
-• Repeat this experiment at another
-place. What do you observe?
-Magnets always come to rest in the
-North-South direction. In each case the
-marked end points towards North. This
-end is known as North pole of the
+  --- Chunk 6 (Hybrid Score: 0.2661) ---
+     Chapter: Oceans and Fishing
+     Text: some hours of high tide. Tides do not rise
+to the same height every day. When the tide
+is high, water comes up to the coast for
+some distance. Then as low tide begins, the
+water moves back from the land. The tides
+are of great help for fishing. Tides at some
+places take away the mud brought down by
+rivers and prevent silting.
+drown completely.  A
+major part of ocean
+floor is about 3-6 kms
+below the sea level.
+Figure 4.1 is a sketch
+of the different kind of
+land forms that can be
+found under the surface
+of an ocean. Fig 4.2
+shows the relief
+features of what lies
+below the surface of the
+oceans around India.
+In figure 4.2 ,
+observe the land mass
+of India and then go over to the floor of the
+Bay of Bengal, the Arabian Sea and the
+Indian Ocean. Try to point out the areas look
+like hills, plains and trenches on the ocean
+floor.
+The waters of the oceans are never still.
+There are different kinds of movements in
+them.
+ Have you experienced the different
+movements of water in a river? You
 
-  9. Normalized Score: 0.1230 | Text: Spread some iron filings uniformly on a
-sheet of  paper. Place a bar magnet
-below this sheet.
-• What do you observe?
-• Do you observe any change in
-the pattern of iron filings spread
-over the sheet?
-You will observe that the uniformly
-spread iron filings concentrate at two
-points of the paper sheet. At some
-distance you will find some scattered
-iron filings between these two points.
-(see Fig. 3)
-This change in the spread of  iron filings
-on the sheet of paper is due to the
-magnet present below it. The iron filings
-move towards its ends because of this
-magnet. Thus the ends of the bar
-magnet attract more iron filings than the
-middle part of the magnet.
-By this activity we can conclude that
-every bar magnet always has two ends
-whose attracting capacity is more than
-its other parts. These ends are called
-poles of the magnet .
- Activity-5:  Finding directions with
- a bar magnet.
-Suspend the bar magnet freely with the
-help of a thread tied around its center
+  --- Chunk 7 (Hybrid Score: 0.2442) ---
+     Chapter: Reading Maps of Different kinds
+     Text: Physical Maps
+You will find some maps in your Atlas called ‘Physical Maps’. In these maps, you will
+usually find different parts of the land coloured in green, yellow or brown. Actually, they
+show the variety of landforms (mountains, plateaus, plains etc.) and depict the height of
+places.
+How can we represent the heights of land on flat paper? Of course, we can make a drawing
+like the one below:
+As you can see this is a
+picture and not a map. Here
+the height of the hills hide
+what is behind them. A map
+should show all the places
+without hiding them. Can
+you think of a way in which
+we can draw a map of this
+place?
+One way in which we can
+show heights on maps is
+through the use of colour.
+Let us see how this is done.
+Measuring Height on Land
+All heights on the land are calculated from the sea level. Since all the seas in the world
+are connected to each other, the sea level (the top surface) all over the world is taken to be
 
-  10. Normalized Score: 0.0000 | Text: Why?
-Bring the safety pin close
-to one pole of a bar
-magnet and see how it
-gets attached to the
-magnet. Now bring an
-alpin and touch it to the
-safety pin as shown in
-Fig. 11 (a).  Does safety
-pin attract  the alpin?
-Why?
-In the above two cases,
-we notice that the safety pin acts as a
-magnet when it is in contact with
-another magnet. Magnetic property is
-induced in safety pin due to the bar
-magnet.
-Magnetic property possessed by a
-magnetic substance due to the
-presence of a magnet near it, is called
-magnetic induction.
-• If the safety pin is not in contact
-with the bar magnet, can it attract
-the alpin?
-• What happens if we place the bar
-magnet very close to the safety pin
-but not touching it?
-Let us find out.
-Fig. 11 (a)
-The earth's magnetic field is like a bar magnet at the center
-SCERT TELANGANAPLAYING WITH MAGNETS Free Distribution by Govt. of T.S. 2020-21
-20
-Fig. 11 (b)
-Take a bar magnet in one hand and a
-safety pin in the other hand, hold
-them in such a way that
+  --- Chunk 8 (Hybrid Score: 0.2175) ---
+     Chapter: Europe
+     Text: times.
+The presence of a large number of bays
+and gulfs has also facilitated the use of sea
+routes. Bays and gulfs are parts of the sea
+enclosed by land on three sides. In a bay,
+the land curves inwards and the mouth of
+the bay is usually wide as in the Bay of
+Bengal. A gulf is a narrow inlet of the sea
+and has a narrow mouth. The entire Baltic
+Sea as you can see in the map is a large
+gulf. Since the bays and gulfs are protected
+from the storms of the high seas, they are
+very useful for building harbours where
+ships can be safely anchored and cargoes
+loaded or unloaded. Deep gulfs or bays are
+preferred for building harbours as large
+ships can be anchored in them. Ships need
+deep waters so that their bottoms do not
+touch the sea floor.
+ Find out the names of the countries
+on the three sides of the Baltic Sea
+from Map 4.
+Climate
+Europe has a cooler climate than ours.
+Most of its countries experience snowfall in
+winter. Their summers too are not as warm
+as ours.
+
+  --- Chunk 9 (Hybrid Score: 0.2120) ---
+     Chapter: Oceans and Fishing
+     Text: SCERT, TEALANGANA
+ 33Free Distribution by Govt. of  Telangana 2021-22
+ Is the water found in your village/
+town saline or potable? Is it
+different in different parts of the
+village/town?
+ What names do you know for
+different water bodies? Do large or
+small waterbodies have different
+names?
+ In a map of the world or on the
+globe, find the names of five seas
+and five oceans. Run your fingers
+over the areas they cover.
+CHAPTER
+   Oceans and Fishing
+The earth is known as a watery planet as it is the only planet containing water in
+abundance. It is estimated that about 71% of the earth‘s surface is covered by oceans
+and seas. What is your image of a sea or an ocean? What have you seen or heard
+about oceans and seas? An extension of saline water on earth is called sea. Large
+sea areas are called oceans. Oceans are huge bodies of water generally separated
+by continents.
+PART - I
+Fig 4.1 Relief features of an Ocean
+Continental Slope
+Trench
+Deep sea plain
+Sea level
+
+  --- Chunk 10 (Hybrid Score: 0.2091) ---
+     Chapter: Oceans and Fishing
+     Text: floor.
+The waters of the oceans are never still.
+There are different kinds of movements in
+them.
+ Have you experienced the different
+movements of water in a river? You
+may be aware of waves, currents
+and the coming and receding of
+floods. Discuss these experiences
+in the class.
+Ocean waters have three kinds of
+movements. They are:
+1) Waves:  When the water on the
+surface of the ocean rises and falls, they
+are called waves. Waves are formed when
+gentle winds scrape across the ocean
+surface. The faster the wind, the bigger will
+be the waves.
+Fig 4.2 Relief features of Indian Ocean
+SCERT, TEALANGANASCERT, TEALANGANA
+ 35Free Distribution by Govt. of  Telangana 2021-22
+Fishing Village on the Coastal
+Plains
+Ocean water is always saline. It contains
+several mineral salts dissolved in it. Oceans
+are the main source of rainfall. Oceans are
+also storehouses of fish and other seafoods.
+Oceans provide natural highways for
+international trade. Let us visit
+Bhavanapadu, a fishing village near the
 
 
 --- Hybrid Search Results (10 Chunks) ---
 
-  1. Hybrid Score: 0.6474
-     Chapter: PLAYING WITH MAGNETS
-     Text: SCERT TELANGANAPLAYING WITH MAGNETS Free Distribution by Govt. of T.S. 2020-21
-20
-Fig. 11 (b)
-Take a bar magnet in one hand and a
-safety pin in the other hand, hold
-them in such a way that
-they are close to each
-other but not in contact
-as shown in Fig. 11 (b).
-Ask your friend to
-bring an alpin and
-touch the safety pin.
-You will notice that the
-alpin will stick to the
-safety pin. This shows
-that due to magnetic
-induction safety pin acts as a magnet.
-Keywords
-Magnet, magnetic material, non-
-magnetic material, North Pole, South
-Pole, Magnetic compass, like poles,
-unlike poles, attraction, repulsion,
-magnetic induction
-What we have learnt
-• Lode stone is a natural magnet.
-• Magnets are of different shapes i.e.
-bar magnets, horse shoe magnets,
-ring type magnets, disc magnets,
-etc.
-• The materials that are attracted by
-magnets are called magnetic
-materials. The materials that are
-not attracted by magnets are called
-non-magnetic materials.
-• A bar magnet always has two
+  1. Hybrid Score: 0.7770
+     Chapter: Reading Maps of Different kinds
+     Text: 150 MSL.
+Mean Sea Level
+There are high tides and low tides on
+the level of the sea, and they never stand
+still. As a result of this phenomenon, the
+level of the sea keeps on either rising or
+falling. Which of these heights do we
+take as the sea level or 0 meter height?
+In order to solve this problem, the level
+of the sea is carefully measured at
+frequent intervals and the mean level of
+the sea is calculated. Over a period,
+scientists observed the high and low
+levels of the sea and they have come to
+one calculated average level, which is
+known as Mean Sea Level (M.S.L.).
+ If you live near a Railway station,
+find out the height of that place with
+the help of display board. The height
+is mentioned as “________ M.S.L.”.
+Note it down in your note book.
+ Look at figures 1.6 & 1.7  and tell
+whether Nimpur would be
+submerged if sea waters were to
+flood up to 30 meters?
+R Pranahita
+R Penganga
+R Wainganga
+R Godavari
+R Musi
+R Dindi
+R Krishna
+R Tungabhadra
+R Krishna
+R Manjeera
+R Godavari
 
-  2. Hybrid Score: 0.6136
-     Chapter: PLAYING WITH MAGNETS
-     Text: the usual shapes of magnets are shown in Fig. 2.
-Horse Shoe
-Magnet
-Ring Magnet Disc Magnet
-Fig. 2
-Think: Can we make a magnet in a required shape?
-Usually, magnets are made of  steel or iron. However, special alloys of  iron, nickel,
-copper, cobalt, and aluminum can be made into powerful magnets.
-Bar Magnet
-SCERT TELANGANAPLAYING WITH MAGNETS Free Distribution by Govt. of T.S. 2020-21
-14
-  Activity-2:  Finding materials
-  attracted by magnets.
-Take a bar magnet, nail, jump-clip,
-plastic scale, a piece of glass, brass key,
-paper, iron bolt, pen, blade, pencil,
-knife, stainless steel spoon, piece of
-chalk, wood and touch the magnet
-to each item. Does the magnet attract
-every object? Observe and record
-your observations duly mentioning
-the name of the material of which the
-object is made in table 1.
-        Table 1
-Name of the object Material of which the Attracted
-object is made By Magnet
-(Iron/plastic/aluminum/ (Yes/No)
-wood/glass/ any other)
-Jump Clip Iron Yes
-Scale Plastic No
-
-  3. Hybrid Score: 0.5470
-     Chapter: PLAYING WITH MAGNETS
-     Text: to the other pole of the bar magnet
-in the same way and record your
-observations.
-What do you conclude by comparing
-the recorded observations?
-By the above observations we conclude
-the following:
-If an object is attracted by one pole of
-the bar magnet and repelled by the its other
-pole, then you can say that it is a magnet.
-If an object is attracted by both the
-poles of a bar magnet and not repelled
-by any pole, then you can say that it is
-not a magnet but a magnetic substance.
-If an object is neither attracted by
-magnet nor repelled by it, then you
-can say that it is neither a magnet nor
-a magnetic substance.
-Activity-9: Make your own magnet
-Take an iron nail and place it on a table.
-Make sure that the nail neither attracts
-nor repels iron pins or iron filings. Take
-a bar magnet and place one of its poles
-near one edge of the nail. Without lifting
-the bar magnet, move it along the length
-of the iron nail till you reach the other
-end. Then lift the bar magnet, bring it to
-
-  4. Hybrid Score: 0.4800
-     Chapter: PLAYING WITH MAGNETS
-     Text: SCERT TELANGANAScience VI Class
-17
-• What do you observe?
-• When do the magnets attract
-each other?
-• When do the magnets repel each
-other?
-You notice that like poles (N-N, S-
-S) repel each other and unlike poles
-(N-S) attract each other.
-Earth as a Magnet:
-We saw that a suspended bar magnet
-always comes to rest in the North-South
-direction.
-• Why does it come to rest in that
-particular direction only?
-• What force is acting on it?
-Activity-7:
-Place a bar magnet on
-a table in any
-direction.  Suspend
-another bar magnet
-over it as shown in
-Fig. 7. The suspended
-bar magnet should be
-fairly close to the one kept
-on the table.  Observe in which
-direction the suspended bar magnet
-comes to rest.
-Change the direction of the bar magnet
-placed on the table.
-  
-• Do you find any change in the
-direction of suspended bar magnet?
-   • Is there a change in the direction it
-comes to rest? What is that change?
-The suspended bar magnet always
-comes to rest in the direction of the
-
-  5. Hybrid Score: 0.4314
-     Chapter: PLAYING WITH MAGNETS
-     Text: SCERT TELANGANAScience VI Class
-13
- Story of Magnet
-Around 2500 years ago, there lived an old
-shepherd named Magnus. He used to take his
-goats and sheep to the hills for grazing. He
-always carried a wooden stick which had an
-iron cap on its lower end. One day, while his
-goats were grazing, Magnus dipped his stick
-into a spring of water and poked at the pebbles
-and stones at the bottom with it.  Suddenly he
-felt something pulling his stick. When he took
-it out of water, he saw a stone stuck to the iron cap. The stone which Magnus
-pulled out was called 
-Lode stone.  It is a natural magnet and possesses the
-property of attracting iron.
-The magnets we discussed are not natural magnets. These magnets are man-
-made magnets.
-Magnets of different shapes
-The magnets we see and use in our daily life possess different shapes. Some of
-the usual shapes of magnets are shown in Fig. 2.
-Horse Shoe
-Magnet
-Ring Magnet Disc Magnet
-Fig. 2
-Think: Can we make a magnet in a required shape?
-
-  6. Hybrid Score: 0.3590
-     Chapter: PLAYING WITH MAGNETS
-     Text: its other parts. These ends are called
-poles of the magnet .
- Activity-5:  Finding directions with
- a bar magnet.
-Suspend the bar magnet freely with the
-help of a thread tied around its center
-as shown in Fig. 4. Does the magnet
-remain stationary? Wait for some time.
-What do you find now?
-Fig.  3
- Fig. 4
-Electromagnets are made up of  an arrangement of  wire coils; often, the wire is wound
-around a ferromagnetic substance such as steel.
-SCERT TELANGANAPLAYING WITH MAGNETS Free Distribution by Govt. of T.S. 2020-21
-16
-You will notice that the magnet finally
-takes a position in the North-South
-direction. Mark the end that points
-towards the North with some colour.
-Now disturb the magnet and again wait
-for some time.
-• Where does the coloured portion
-come to rest?
-• Repeat this experiment at another
-place. What do you observe?
-Magnets always come to rest in the
-North-South direction. In each case the
-marked end points towards North. This
-end is known as North pole of the
-
-  7. Hybrid Score: 0.3320
-     Chapter: PLAYING WITH MAGNETS
-     Text: direction of suspended bar magnet?
-   • Is there a change in the direction it
-comes to rest? What is that change?
-The suspended bar magnet always
-comes to rest in the direction of the
-bar magnet placed on the table.  But
-the north pole of the suspended bar
-magnet points towards the south pole
-of the bar magnet placed on the table
-and south pole of the suspended  bar
-magnet points towards the north pole
-of the bar magnet placed on the table.
-• What happens if you remove the
-bar magnet placed on the table?
-In this case the suspended magnet
-comes to rest in  the North-South
-direction.  We can say that there is some
-magnet below the suspended bar magnet
-which compels it to come to rest in that
-particular direction (as in above two
-cases). Where does this invisible
-magnet come from? The earth
-possesses magnetic property which
-acts upon the suspended bar magnet
-(see Fig. 8).Fig. 7
-Fig. 8
-Magnet attracts only magnetic objects
-
-  8. Hybrid Score: 0.3192
-     Chapter: PLAYING WITH MAGNETS
-     Text: etc.
-• The materials that are attracted by
-magnets are called magnetic
-materials. The materials that are
-not attracted by magnets are called
-non-magnetic materials.
-• A bar magnet always has two
-ends whose attracting capacity is
-more than other parts of  it. The
-poles of the magnet lie at these
-ends.
-• Each magnet has two magnetic
-poles :  North and South.
-• A freely suspended magnet
-always aligns in the North-South
-direction.
-• Unlike poles of two magnets
-attract each other; whereas like
-poles repel each other.
-• Magnetic property possessed by
-a magnetic substance due to the
-presence of a magnet near to it, is
-called magnetic induction.
+  2. Hybrid Score: 0.3106
+     Chapter: Reading Maps of Different kinds
+     Text: 6 Diversity on the Earth Social Studies
+Telangana Plateau
+Map-2 TELANGANA -
+SEA LEVEL
+Look at figure 1.8 and answer the
+following questions:
+ Mark the direction of flow of the
+river.
+ The height of the lowest land is
+between ____ meters and _____
+meters.
+ There are two high points in this
+map. What are their heights?
 Improve your learning
-1. Predict which of the following
-material are  magnetic and non-
-magnetic material. Test with a bar
-magnet and check your
-predictions. What do you say
-after testing all materials?
-Plastic, Iron, Stainless steel,
-Wood, Aluminium, Gold, Silver,
-Copper, Paper, Cloth.
-2. List out the magnetic and non
-magnetic materials in your class
+1. Why are the levels of all the
+seas equal in the world?
+2. How is the sea level
+measured?
+3. What are the uses of maps
+showing height?
+4. What differences do you find between the life
+style of people living on high altitudes and low
+altitudes?
+5. How are  maps helpful to people?
+6. Read the para ‘Contour Lines’ on page 5 and
+comment on it.
+7. Observe the Telangana map given and list out
+the areas of districts which are below
+150 MSL.
+Mean Sea Level
+There are high tides and low tides on
+the level of the sea, and they never stand
+still. As a result of this phenomenon, the
+level of the sea keeps on either rising or
 
-  9. Hybrid Score: 0.2677
-     Chapter: PLAYING WITH MAGNETS
-     Text: after testing all materials?
-Plastic, Iron, Stainless steel,
-Wood, Aluminium, Gold, Silver,
-Copper, Paper, Cloth.
-2. List out the magnetic and non
-magnetic materials in your class
-room.
-Earth magnets can be 20 times more powerful than a fridge magnet
-SCERT TELANGANAScience VI Class
-21
-3. For which purposes do people use
-magnets in their daily life? Ask
-your family members and other
-elders and collect the information
-and prepare a list of uses of
-magnets.
-4. Draw a bar magnet and locate the
-poles.
-5. Observe and locate North and
-South poles for the second bar
-magnet shown in the figure given
-below.
-6. Think and say, in which
-direction your house is facing?
-(a) Use the compass and findout
-the exact direction of your house
-and compare it with your
-prediction.
-(b) Similarly predict and findout
-in which direction you  keep your
-head while sleeping at night,
-(c)  The directions you face while
-you are reading, eating etc.
-7. Prepare a toy using magnets and
-write the procedure of preparation
+  3. Hybrid Score: 0.2949
+     Chapter: Oceans and Fishing
+     Text: sea areas are called oceans. Oceans are huge bodies of water generally separated
+by continents.
+PART - I
+Fig 4.1 Relief features of an Ocean
+Continental Slope
+Trench
+Deep sea plain
+Sea level
+It will be interesting to find out what lies
+under the water. The surface of water does not
+tell us about what lies under it. You may have
+had the opportunity to notice or feel what the
+bed of a river or stream or pond is like.
+ Please share what you have seen or
+felt about what lies under the
+surface of waterbodies.
+ How many meters deep are the
+water bodies that you have seen?
+Ocean Relief
+The floor of the ocean
+is just like the surface of
+the earth.  The bottom of
+the sea is not a flat surface.
+It consists of hills,
+mountains,  plateaus,
+plains, trenches etc. Many
+trenches on the ocean
+floor are so deep that even
+if the Mount Everest was
+placed in them, it would
+4
+Continental Shelf
+SCERT, TEALANGANASCERT, TEALANGANA
+34 Diversity on the Earth Social Studies
+2) Currents: In the oceans, water
 
-  10. Hybrid Score: 0.2474
-     Chapter: PLAYING WITH MAGNETS
-     Text: place. What do you observe?
-Magnets always come to rest in the
-North-South direction. In each case the
-marked end points towards North. This
-end is known as North pole of the
-magnet. The other end, which points
-towards the South is known as South
-pole of the magnet. This property of
-magnets is called  directional property.
-It is exhibited only by magnets. We use
-this property to make the magnetic compass.
-Magnetic Compass
-A compass is usually a small box with a
-glass covering it. A magnetized needle
-is pivoted inside the box in such a way
-that it can rotate freely. The compass
-also has a dial with directions marked
-on it. The compass is kept at the place
-where we wish to know the direction.
-Its needle indicates the North-South
-direction when it comes to rest. The
-compass is then rotated until the north
-and south marked on the dial are exactly
-below the two ends of the needle. To
-identify the North pole of the magnetic
-needle, it is usually painted in a
+  4. Hybrid Score: 0.2719
+     Chapter: Oceans and Fishing
+     Text: if the Mount Everest was
+placed in them, it would
+4
+Continental Shelf
+SCERT, TEALANGANASCERT, TEALANGANA
+34 Diversity on the Earth Social Studies
+2) Currents: In the oceans, water
+moves from one part to another in big
+streams. These streams which flow
+constantly in a definite direction on the
+surface of the ocean are called ocean
+currents. The ocean currents are of two
+types - the warm currents and the cold
+currents. The warm currents flow from the
+equatorial region towards the poles. The
+cold currents flow from the poles to the
+equatorial regions. They are mainly caused
+by the prevailing winds, difference in
+temperature and salinity of the ocean water.
+3) Tides:  Tides are the rhythmic rise
+and fall in the level of the water in the
+oceans every day. All places on the coast
+experience some hours of low tide and
+some hours of high tide. Tides do not rise
+to the same height every day. When the tide
+is high, water comes up to the coast for
+some distance. Then as low tide begins, the
+
+  5. Hybrid Score: 0.2683
+     Chapter: Europe
+     Text: sea means ‘middle of the world’. Do you
+know why it is called by this name? In
+ancient times, the people of Europe did not
+know about other continents like America
+In this chapter, we will try to find out about how the people of Europe have been
+using their distinct natural environment and resources.
+5
+or Australia. They only knew about Europe,
+western parts of Asia and northern parts of
+Africa. You can see that all these regions
+are situated around the Mediterranean Sea.
+That is why Europeans thought that this sea
+was in the centre of the world and named it
+so. It has been known by this name ever
+since.
+ Name the mountains to the east of
+Europe.
+The Eural mountains are eastern
+boundaries of Europe. These mountains are
+not very high. Asia is on the east of these
+Europe
+Arctic Ocean
+Asia
+Ural
+Mountains Pacific
+Ocean
+Africa
+Equator
+Indian
+Ocean Australia
+Map 1: Location of Europe
+Atlantic Ocean
+Mediterranean
+Sea
+SCERT, TEALANGANASCERT, TEALANGANA
+
+  6. Hybrid Score: 0.2661
+     Chapter: Oceans and Fishing
+     Text: some hours of high tide. Tides do not rise
+to the same height every day. When the tide
+is high, water comes up to the coast for
+some distance. Then as low tide begins, the
+water moves back from the land. The tides
+are of great help for fishing. Tides at some
+places take away the mud brought down by
+rivers and prevent silting.
+drown completely.  A
+major part of ocean
+floor is about 3-6 kms
+below the sea level.
+Figure 4.1 is a sketch
+of the different kind of
+land forms that can be
+found under the surface
+of an ocean. Fig 4.2
+shows the relief
+features of what lies
+below the surface of the
+oceans around India.
+In figure 4.2 ,
+observe the land mass
+of India and then go over to the floor of the
+Bay of Bengal, the Arabian Sea and the
+Indian Ocean. Try to point out the areas look
+like hills, plains and trenches on the ocean
+floor.
+The waters of the oceans are never still.
+There are different kinds of movements in
+them.
+ Have you experienced the different
+movements of water in a river? You
+
+  7. Hybrid Score: 0.2442
+     Chapter: Reading Maps of Different kinds
+     Text: Physical Maps
+You will find some maps in your Atlas called ‘Physical Maps’. In these maps, you will
+usually find different parts of the land coloured in green, yellow or brown. Actually, they
+show the variety of landforms (mountains, plateaus, plains etc.) and depict the height of
+places.
+How can we represent the heights of land on flat paper? Of course, we can make a drawing
+like the one below:
+As you can see this is a
+picture and not a map. Here
+the height of the hills hide
+what is behind them. A map
+should show all the places
+without hiding them. Can
+you think of a way in which
+we can draw a map of this
+place?
+One way in which we can
+show heights on maps is
+through the use of colour.
+Let us see how this is done.
+Measuring Height on Land
+All heights on the land are calculated from the sea level. Since all the seas in the world
+are connected to each other, the sea level (the top surface) all over the world is taken to be
+
+  8. Hybrid Score: 0.2175
+     Chapter: Europe
+     Text: times.
+The presence of a large number of bays
+and gulfs has also facilitated the use of sea
+routes. Bays and gulfs are parts of the sea
+enclosed by land on three sides. In a bay,
+the land curves inwards and the mouth of
+the bay is usually wide as in the Bay of
+Bengal. A gulf is a narrow inlet of the sea
+and has a narrow mouth. The entire Baltic
+Sea as you can see in the map is a large
+gulf. Since the bays and gulfs are protected
+from the storms of the high seas, they are
+very useful for building harbours where
+ships can be safely anchored and cargoes
+loaded or unloaded. Deep gulfs or bays are
+preferred for building harbours as large
+ships can be anchored in them. Ships need
+deep waters so that their bottoms do not
+touch the sea floor.
+ Find out the names of the countries
+on the three sides of the Baltic Sea
+from Map 4.
+Climate
+Europe has a cooler climate than ours.
+Most of its countries experience snowfall in
+winter. Their summers too are not as warm
+as ours.
+
+  9. Hybrid Score: 0.2120
+     Chapter: Oceans and Fishing
+     Text: SCERT, TEALANGANA
+ 33Free Distribution by Govt. of  Telangana 2021-22
+ Is the water found in your village/
+town saline or potable? Is it
+different in different parts of the
+village/town?
+ What names do you know for
+different water bodies? Do large or
+small waterbodies have different
+names?
+ In a map of the world or on the
+globe, find the names of five seas
+and five oceans. Run your fingers
+over the areas they cover.
+CHAPTER
+   Oceans and Fishing
+The earth is known as a watery planet as it is the only planet containing water in
+abundance. It is estimated that about 71% of the earth‘s surface is covered by oceans
+and seas. What is your image of a sea or an ocean? What have you seen or heard
+about oceans and seas? An extension of saline water on earth is called sea. Large
+sea areas are called oceans. Oceans are huge bodies of water generally separated
+by continents.
+PART - I
+Fig 4.1 Relief features of an Ocean
+Continental Slope
+Trench
+Deep sea plain
+Sea level
+
+  10. Hybrid Score: 0.2091
+     Chapter: Oceans and Fishing
+     Text: floor.
+The waters of the oceans are never still.
+There are different kinds of movements in
+them.
+ Have you experienced the different
+movements of water in a river? You
+may be aware of waves, currents
+and the coming and receding of
+floods. Discuss these experiences
+in the class.
+Ocean waters have three kinds of
+movements. They are:
+1) Waves:  When the water on the
+surface of the ocean rises and falls, they
+are called waves. Waves are formed when
+gentle winds scrape across the ocean
+surface. The faster the wind, the bigger will
+be the waves.
+Fig 4.2 Relief features of Indian Ocean
+SCERT, TEALANGANASCERT, TEALANGANA
+ 35Free Distribution by Govt. of  Telangana 2021-22
+Fishing Village on the Coastal
+Plains
+Ocean water is always saline. It contains
+several mineral salts dissolved in it. Oceans
+are the main source of rainfall. Oceans are
+also storehouses of fish and other seafoods.
+Oceans provide natural highways for
+international trade. Let us visit
+Bhavanapadu, a fishing village near the
+
+
+--- Semantic Search Results (10 Chunks) ---
+
+  1. Score: 0.6155 | Chapter: Reading Maps of Different kinds | Text: 150 MSL.
+Mean Sea Level
+There are high tides and low tides on
+the level of the sea, and they never stand
+still. As a result of this phenomenon, the
+level of the sea keeps on either rising or
+falling. Which of these heights do we
+take as the sea level or 0 meter height?
+In order to solve this problem, the level
+of the sea is carefully measured at
+frequent intervals and the mean level of
+the sea is calculated. Over a period,
+scientists observed the high and low
+levels of the sea and they have come to
+one calculated average level, which is
+known as Mean Sea Level (M.S.L.).
+ If you live near a Railway station,
+find out the height of that place with
+the help of display board. The height
+is mentioned as “________ M.S.L.”.
+Note it down in your note book.
+ Look at figures 1.6 & 1.7  and tell
+whether Nimpur would be
+submerged if sea waters were to
+flood up to 30 meters?
+R Pranahita
+R Penganga
+R Wainganga
+R Godavari
+R Musi
+R Dindi
+R Krishna
+R Tungabhadra
+R Krishna
+R Manjeera
+R Godavari
+
+  2. Score: 0.5084 | Chapter: Oceans and Fishing | Text: sea areas are called oceans. Oceans are huge bodies of water generally separated
+by continents.
+PART - I
+Fig 4.1 Relief features of an Ocean
+Continental Slope
+Trench
+Deep sea plain
+Sea level
+It will be interesting to find out what lies
+under the water. The surface of water does not
+tell us about what lies under it. You may have
+had the opportunity to notice or feel what the
+bed of a river or stream or pond is like.
+ Please share what you have seen or
+felt about what lies under the
+surface of waterbodies.
+ How many meters deep are the
+water bodies that you have seen?
+Ocean Relief
+The floor of the ocean
+is just like the surface of
+the earth.  The bottom of
+the sea is not a flat surface.
+It consists of hills,
+mountains,  plateaus,
+plains, trenches etc. Many
+trenches on the ocean
+floor are so deep that even
+if the Mount Everest was
+placed in them, it would
+4
+Continental Shelf
+SCERT, TEALANGANASCERT, TEALANGANA
+34 Diversity on the Earth Social Studies
+2) Currents: In the oceans, water
+
+  3. Score: 0.4688 | Chapter: Oceans and Fishing | Text: if the Mount Everest was
+placed in them, it would
+4
+Continental Shelf
+SCERT, TEALANGANASCERT, TEALANGANA
+34 Diversity on the Earth Social Studies
+2) Currents: In the oceans, water
+moves from one part to another in big
+streams. These streams which flow
+constantly in a definite direction on the
+surface of the ocean are called ocean
+currents. The ocean currents are of two
+types - the warm currents and the cold
+currents. The warm currents flow from the
+equatorial region towards the poles. The
+cold currents flow from the poles to the
+equatorial regions. They are mainly caused
+by the prevailing winds, difference in
+temperature and salinity of the ocean water.
+3) Tides:  Tides are the rhythmic rise
+and fall in the level of the water in the
+oceans every day. All places on the coast
+experience some hours of low tide and
+some hours of high tide. Tides do not rise
+to the same height every day. When the tide
+is high, water comes up to the coast for
+some distance. Then as low tide begins, the
+
+  4. Score: 0.4626 | Chapter: Europe | Text: sea means ‘middle of the world’. Do you
+know why it is called by this name? In
+ancient times, the people of Europe did not
+know about other continents like America
+In this chapter, we will try to find out about how the people of Europe have been
+using their distinct natural environment and resources.
+5
+or Australia. They only knew about Europe,
+western parts of Asia and northern parts of
+Africa. You can see that all these regions
+are situated around the Mediterranean Sea.
+That is why Europeans thought that this sea
+was in the centre of the world and named it
+so. It has been known by this name ever
+since.
+ Name the mountains to the east of
+Europe.
+The Eural mountains are eastern
+boundaries of Europe. These mountains are
+not very high. Asia is on the east of these
+Europe
+Arctic Ocean
+Asia
+Ural
+Mountains Pacific
+Ocean
+Africa
+Equator
+Indian
+Ocean Australia
+Map 1: Location of Europe
+Atlantic Ocean
+Mediterranean
+Sea
+SCERT, TEALANGANASCERT, TEALANGANA
+
+  5. Score: 0.4587 | Chapter: Oceans and Fishing | Text: some hours of high tide. Tides do not rise
+to the same height every day. When the tide
+is high, water comes up to the coast for
+some distance. Then as low tide begins, the
+water moves back from the land. The tides
+are of great help for fishing. Tides at some
+places take away the mud brought down by
+rivers and prevent silting.
+drown completely.  A
+major part of ocean
+floor is about 3-6 kms
+below the sea level.
+Figure 4.1 is a sketch
+of the different kind of
+land forms that can be
+found under the surface
+of an ocean. Fig 4.2
+shows the relief
+features of what lies
+below the surface of the
+oceans around India.
+In figure 4.2 ,
+observe the land mass
+of India and then go over to the floor of the
+Bay of Bengal, the Arabian Sea and the
+Indian Ocean. Try to point out the areas look
+like hills, plains and trenches on the ocean
+floor.
+The waters of the oceans are never still.
+There are different kinds of movements in
+them.
+ Have you experienced the different
+movements of water in a river? You
+
+  6. Score: 0.4264 | Chapter: Reading Maps of Different kinds | Text: 6 Diversity on the Earth Social Studies
+Telangana Plateau
+Map-2 TELANGANA -
+SEA LEVEL
+Look at figure 1.8 and answer the
+following questions:
+ Mark the direction of flow of the
+river.
+ The height of the lowest land is
+between ____ meters and _____
+meters.
+ There are two high points in this
+map. What are their heights?
+Improve your learning
+1. Why are the levels of all the
+seas equal in the world?
+2. How is the sea level
+measured?
+3. What are the uses of maps
+showing height?
+4. What differences do you find between the life
+style of people living on high altitudes and low
+altitudes?
+5. How are  maps helpful to people?
+6. Read the para ‘Contour Lines’ on page 5 and
+comment on it.
+7. Observe the Telangana map given and list out
+the areas of districts which are below
+150 MSL.
+Mean Sea Level
+There are high tides and low tides on
+the level of the sea, and they never stand
+still. As a result of this phenomenon, the
+level of the sea keeps on either rising or
+
+  7. Score: 0.4211 | Chapter: Reading Maps of Different kinds | Text: Physical Maps
+You will find some maps in your Atlas called ‘Physical Maps’. In these maps, you will
+usually find different parts of the land coloured in green, yellow or brown. Actually, they
+show the variety of landforms (mountains, plateaus, plains etc.) and depict the height of
+places.
+How can we represent the heights of land on flat paper? Of course, we can make a drawing
+like the one below:
+As you can see this is a
+picture and not a map. Here
+the height of the hills hide
+what is behind them. A map
+should show all the places
+without hiding them. Can
+you think of a way in which
+we can draw a map of this
+place?
+One way in which we can
+show heights on maps is
+through the use of colour.
+Let us see how this is done.
+Measuring Height on Land
+All heights on the land are calculated from the sea level. Since all the seas in the world
+are connected to each other, the sea level (the top surface) all over the world is taken to be
+
+  8. Score: 0.3750 | Chapter: Europe | Text: times.
+The presence of a large number of bays
+and gulfs has also facilitated the use of sea
+routes. Bays and gulfs are parts of the sea
+enclosed by land on three sides. In a bay,
+the land curves inwards and the mouth of
+the bay is usually wide as in the Bay of
+Bengal. A gulf is a narrow inlet of the sea
+and has a narrow mouth. The entire Baltic
+Sea as you can see in the map is a large
+gulf. Since the bays and gulfs are protected
+from the storms of the high seas, they are
+very useful for building harbours where
+ships can be safely anchored and cargoes
+loaded or unloaded. Deep gulfs or bays are
+preferred for building harbours as large
+ships can be anchored in them. Ships need
+deep waters so that their bottoms do not
+touch the sea floor.
+ Find out the names of the countries
+on the three sides of the Baltic Sea
+from Map 4.
+Climate
+Europe has a cooler climate than ours.
+Most of its countries experience snowfall in
+winter. Their summers too are not as warm
+as ours.
+
+  9. Score: 0.3655 | Chapter: Oceans and Fishing | Text: SCERT, TEALANGANA
+ 33Free Distribution by Govt. of  Telangana 2021-22
+ Is the water found in your village/
+town saline or potable? Is it
+different in different parts of the
+village/town?
+ What names do you know for
+different water bodies? Do large or
+small waterbodies have different
+names?
+ In a map of the world or on the
+globe, find the names of five seas
+and five oceans. Run your fingers
+over the areas they cover.
+CHAPTER
+   Oceans and Fishing
+The earth is known as a watery planet as it is the only planet containing water in
+abundance. It is estimated that about 71% of the earth‘s surface is covered by oceans
+and seas. What is your image of a sea or an ocean? What have you seen or heard
+about oceans and seas? An extension of saline water on earth is called sea. Large
+sea areas are called oceans. Oceans are huge bodies of water generally separated
+by continents.
+PART - I
+Fig 4.1 Relief features of an Ocean
+Continental Slope
+Trench
+Deep sea plain
+Sea level
+
+  10. Score: 0.3605 | Chapter: Oceans and Fishing | Text: floor.
+The waters of the oceans are never still.
+There are different kinds of movements in
+them.
+ Have you experienced the different
+movements of water in a river? You
+may be aware of waves, currents
+and the coming and receding of
+floods. Discuss these experiences
+in the class.
+Ocean waters have three kinds of
+movements. They are:
+1) Waves:  When the water on the
+surface of the ocean rises and falls, they
+are called waves. Waves are formed when
+gentle winds scrape across the ocean
+surface. The faster the wind, the bigger will
+be the waves.
+Fig 4.2 Relief features of Indian Ocean
+SCERT, TEALANGANASCERT, TEALANGANA
+ 35Free Distribution by Govt. of  Telangana 2021-22
+Fishing Village on the Coastal
+Plains
+Ocean water is always saline. It contains
+several mineral salts dissolved in it. Oceans
+are the main source of rainfall. Oceans are
+also storehouses of fish and other seafoods.
+Oceans provide natural highways for
+international trade. Let us visit
+Bhavanapadu, a fishing village near the
+
+
+--- BM25 Keyword Search Results (10 Chunks) ---
+
+  1. Normalized Score: 1.0000 | Chapter: Reading Maps of Different kinds | Text: 150 MSL.
+Mean Sea Level
+There are high tides and low tides on
+the level of the sea, and they never stand
+still. As a result of this phenomenon, the
+level of the sea keeps on either rising or
+falling. Which of these heights do we
+take as the sea level or 0 meter height?
+In order to solve this problem, the level
+of the sea is carefully measured at
+frequent intervals and the mean level of
+the sea is calculated. Over a period,
+scientists observed the high and low
+levels of the sea and they have come to
+one calculated average level, which is
+known as Mean Sea Level (M.S.L.).
+ If you live near a Railway station,
+find out the height of that place with
+the help of display board. The height
+is mentioned as “________ M.S.L.”.
+Note it down in your note book.
+ Look at figures 1.6 & 1.7  and tell
+whether Nimpur would be
+submerged if sea waters were to
+flood up to 30 meters?
+R Pranahita
+R Penganga
+R Wainganga
+R Godavari
+R Musi
+R Dindi
+R Krishna
+R Tungabhadra
+R Krishna
+R Manjeera
+R Godavari
+
+  2. Normalized Score: 0.2611 | Chapter: Europe | Text: West Europe?
+Western Europe also benefits in other
+ways from the Gulf Stream. The warm
+currents are very good for fish breeding as
+they contain ample food material for the
+fishes. As a result, the fishery  industry is
+well developed in the North Sea near
+Britain. This part of the North Sea is called
+‘Dogger Bank’. Fish is an important part
+of the food of the Europeans and fishing is
+a very important industry in Europe.
+ Name the countries which would
+benefit from the Dogger Bank.
+Mediterranean Climate in Southern
+Europe
+Look at the countries of Southern
+Europe. They have the Mediterranean Sea
+to their south, so they are called
+‘Mediterranean Countries’. The lands along
+the Mediterranean Sea have a distinct
+climate called the ‘Mediterranean
+climate’.
+ Look at Map 2 and name four
+Mediterranean countries.
+The Mediterranean countries are the
+southernmost countries of Europe. As a
+result, the winters here are not too  cold
+and summers are warm. It does not rain all
+
+  3. Normalized Score: 0.2465 | Chapter: Europe | Text: SCERT, TEALANGANASCERT, TEALANGANA
+ 55Free Distribution by Govt. of  Telangana 2021-22
+Route of  Columbus
+Index
+Trade winds
+Old Land route to India
+Map 7: Trade routes
+0
+ο 
+Equator
+what route they took from Europe to India?
+Look at map 7 in which two major routes
+are given. Both the routes crossed the
+Mediterranean Sea; while one of them took
+a land route via the Middle East, Iran, and
+Afghanistan, the other route took a sea
+route via the Red Sea and the Arabian Sea.
+About five hundred years ago, the West
+European sailors and traders began to
+search for new routes to India. This was
+because both the routes mentioned above
+passed through countries ruled by the Arabs
+who were often at war with the Europeans.
+Further, most of the trade in the
+Mediterranean Sea was controlled by
+Italian merchants who did not let in traders
+of other countries. That is why the sailors
+of the other countries began to look for
+routes to India that did not have to pass
+through the Mediterranean Sea or the Arab
+
+  4. Normalized Score: 0.2454 | Chapter: Europe | Text: / Poland / Switzerland)?
+ Which mountains lie between the Caspian Sea and the Black Sea – (Alps / Caucasus
+Mountains)?
+ Which countries are on the shores of the Arctic Ocean – (Russia / Germany / Sweden / Norway)?
+ Can a ship sail from the Black Sea to the Atlantic Ocean? If yes, trace the route it will have to
+take.
+3. Why are harbours built in deep gulfs or bays?
+4. Why are the winters less severe in Western Europe than in Eastern Europe?
+5. Name four countries on the coast of the Black Sea.
+6. How do the Westerlies benefit the people of Western Europe?
+7.
+What are the characteristics of the Mediterranean climate? Name the countries which
+have a Mediterranean climate.
+8. What are the factors that limit European agriculture?
+9. Name the important crops of southern Europe.
+10. How can you say that the trade and cultural relations have developed among the countries due
+to the discovery of new sea routes by European sailors?
+
+  5. Normalized Score: 0.1644 | Chapter: Europe | Text: only to America but also to different parts of Africa, India and Australia. They traded with
+these countries and amassed immense wealth, which was used to develop industries in
+Europe.
+You will read about the industrial revolution in Europe in greater detail in a later chapter.
+Keywords :
+1. Peninsula
+2. Island
+3. Bay
+4. Currents
+5. Gulf
+6. Climate
+SCERT, TEALANGANASCERT, TEALANGANA
+ 57Free Distribution by Govt. of  Telangana 2021-22
+Improve your learning
+1. The Atlantic Ocean has  a great impact on the climate of Europe as well as on the lives and livelihood
+of the people of Europe. Collect relevant information and write an essay on the theme.
+2. Answer these questions with the help of the maps given in the chapter:
+ Which of the following is not a landlocked (surrounded by land) country – (Hungary / Romania
+/ Poland / Switzerland)?
+ Which mountains lie between the Caspian Sea and the Black Sea – (Alps / Caucasus
+Mountains)?
+
+  6. Normalized Score: 0.1507 | Chapter: Reading Maps of Different kinds | Text: 6 Diversity on the Earth Social Studies
+Telangana Plateau
+Map-2 TELANGANA -
+SEA LEVEL
+Look at figure 1.8 and answer the
+following questions:
+ Mark the direction of flow of the
+river.
+ The height of the lowest land is
+between ____ meters and _____
+meters.
+ There are two high points in this
+map. What are their heights?
+Improve your learning
+1. Why are the levels of all the
+seas equal in the world?
+2. How is the sea level
+measured?
+3. What are the uses of maps
+showing height?
+4. What differences do you find between the life
+style of people living on high altitudes and low
+altitudes?
+5. How are  maps helpful to people?
+6. Read the para ‘Contour Lines’ on page 5 and
+comment on it.
+7. Observe the Telangana map given and list out
+the areas of districts which are below
+150 MSL.
+Mean Sea Level
+There are high tides and low tides on
+the level of the sea, and they never stand
+still. As a result of this phenomenon, the
+level of the sea keeps on either rising or
+
+  7. Normalized Score: 0.0061 | Chapter: Europe | Text: neighbouring countries have the
+same colour.
+Mountains, Plains and Rivers
+Let us learn more about the mountains,
+plains and rivers of Europe with the help
+of Map 4. Europe has several snow-covered
+mountains. Look for the Alps and the
+Pyrenees in the map. The Alps, the most
+important mountain ranges of Europe, are
+covered with snow all year round.
+ The Alps stretch across several
+countries. Find out the names of
+these countries by comparing Maps
+2 and 4.
+ Write the names of the two rivers
+starting from the Alps.
+ Name the countries across whose
+borders the Pyrenees stretch.
+ Name the mountains stretching to
+the Eastern Europe.
+ Identify the other mountains in
+Europe and prepare a table.
+The Caucasian Mountains, which lie
+between the Caspian Sea and the Black Sea,
+form the southern boundary of Europe.
+They too are very high and covered with
+snow all year round.
+There is a lot of diffference between
+Asia and Europe. We can see many plateaus
+
+  8. Normalized Score: 0.0036 | Chapter: Europe | Text: agricultural technology they use also
+requires the use of hybrid seeds, chemical
+fertilisers, pesticides etc.
+However, compared to our country, very
+few people in Europe are dependent upon
+agriculture. Most of them work in industry
+or service sector like banks, transport etc.
+Even those who work in the field of
+agriculture are helped by the government
+with a lot of subsidy to carry on farming as
+it gives them less income than other kinds
+of work. The government pays them for
+carrying on agriculture in the villages.
+Discovery of Sea Routes
+No part of western Europe is too far
+from the ocean. In contrast, many countries
+of Asia are thousands of kilometers from
+the sea.
+ Look at the wall map or atlas to
+identify the names of at least six
+cities of Europe which are situated
+on the sea coast.
+There are thousands of such seaside
+settlements where seafaring people have
+been living for hundreds of years. With
+centuries of experience of sea travel, the
+
+  9. Normalized Score: 0.0000 | Chapter: Rain and Rivers | Text: the water cycle.
+Precipitation: Different forms of
+condensation of water vapours is
+known as precipitation. This may take
+place in the form of dew, fog, rain,
+snow or hail.
+Humidity: The amount of invisible
+water vapours present in the
+atmosphere is known as humidity.
+When temperature and humidity
+rise, we feel uncomfortable. We
+perspire and the sweat does not
+evaporate quickly. We feel sticky
+and such weather is called sultry.
+Rain and Rivers
+SCERT, TEALANGANASCERT, TEALANGANA
+10 Diversity on the Earth Social Studies
+heavily on the oceans. Clouds also travel inland for thousands of kilometres to bring rain to
+us. Do you know what brings them deep inland?
+From which direction does the wind blow during the rainy season?
+These winds come all the way from the Arabian Sea and the Bay of Bengal and they transport
+the rain clouds. They are called ‘Monsoon winds’. They are also called ‘south- west monsoon
+winds’ as they blow from that direction. These winds blow only in the summer.
+
+  10. Normalized Score: 0.0000 | Chapter: Rain and Rivers | Text: the rain clouds. They are called ‘Monsoon winds’. They are also called ‘south- west monsoon
+winds’ as they blow from that direction. These winds blow only in the summer.
+There are two arms of the monsoon winds: one blows from the Arabian Sea and the other
+from the Bay of Bengal. The arrows in Map 1 show us the direction of winds.
+Map 1: Monsoon
+winds in India
+Imphal
+Dispur
+THE
+THE
+Index :
+Areas of Heavy Rainfall
+Wind direction
+N
+SCERT, TEALANGANASCERT, TEALANGANA
+ 11Free Distribution by Govt. of  Telangana 2021-22
+ Towards which parts of the country
+would the winds take the clouds
+from the Bay of Bengal?
+ Towards which parts of the country
+would the winds take the clouds
+from the Arabian Sea?
+ From which direction would the
+winds blow to bring monsoon rains
+to West Bengal, Lucknow and
+Delhi?
+ From which direction would the
+winds blow to bring monsoon rains
+to Mumbai, Hyderabad, and
+Bangalore?
+Rainfall in Telangana
+ In which months  does it rain the
 
 
 --- Generated Answer ---
-That is an excellent question! Magnets are manufactured in many different forms depending on what they are used for.
+That is an excellent question! Understanding the Mean Sea Level is fundamental to measuring any height on Earth.
 
-As we have learned, the magnets we use in our daily life are man-made magnets, and they possess different shapes.
+The **Mean Sea Level (M.S.L.)** is the standard reference height (or 0 meter height) used globally to measure the height of all places on land.
 
-Based on their structure, the textbook mentions the following usual shapes for magnets:
+Here is a detailed explanation based on how the concept is derived and used:
 
-1.  **Bar Magnet:** This is the most common shape, appearing as a straight rectangular piece.
-2.  **Horse Shoe Magnet:** This magnet is shaped like a horseshoe (or a 'U' shape).
-3.  **Ring Magnet:** These magnets are shaped like a flat ring or washer, with a hole in the center.
-4.  **Disc Magnet:** These magnets are shaped like a flat circle or disc.
+### 1. Why is MSL Necessary?
 
-These various shapes, such as the **Bar Magnet**, **Horse Shoe Magnet**, **Ring Magnet**, and **Disc Magnet**, are the common forms you will encounter when studying magnetism.
+The level of the sea is not fixed; it is constantly changing. This is due to natural phenomena like **high tides and low tides**. Because the water level is either rising or falling, scientists cannot simply pick one moment in time to define the sea level.
+
+### 2. How is MSL Calculated?
+
+In order to establish a stable reference point, the following steps are taken:
+
+*   **Frequent Measurement:** The level of the sea is carefully measured at frequent intervals over a long period.
+*   **Averaging:** Scientists observe these high and low levels and calculate the **mean** (or average) of all these measured heights.
+*   **Standard Reference:** This single, calculated average level is known as the Mean Sea Level (M.S.L.), and it is taken as the **0 meter height**.
+
+### 3. Importance and Use of MSL
+
+The Mean Sea Level is critically important because it serves as the universal baseline for all land measurements:
+
+*   **Calculating Land Heights:** All heights on land, whether a small hill, a large mountain, or a plateau, are calculated *from* the sea level.
+*   **Universal Standard:** Since all the seas and oceans in the world are connected to each other, the sea level (M.S.L.) is taken to be the standard reference point all over the world.
+
+You may have seen this concept applied directly if you visit a railway station. The display board often mentions the height of that location in meters "M.S.L." (e.g., 150 MSL), indicating how high that spot is above the calculated average sea level.
 --- End Log ---
 

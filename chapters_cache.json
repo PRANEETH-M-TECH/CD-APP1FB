@@ -1,169 +1,317 @@
 {
-  "class6-science.pdf": {
-    "pdf_offset": 14,
+  "social.pdf": {
+    "pdf_offset": 10,
     "chapters": [
       {
-        "chapter_name": "OUR FOOD",
-        "start_page": 15,
-        "end_page": 25
+        "chapter_name": "Reading Maps of Different kinds",
+        "pdf_startpg": 11,
+        "pdf_endpg": 16,
+        "chpstpage": 1,
+        "chpendpage": 6
       },
       {
-        "chapter_name": "PLAYING WITH MAGNETS",
-        "start_page": 26,
-        "end_page": 35
+        "chapter_name": "Rain and Rivers",
+        "pdf_startpg": 17,
+        "pdf_endpg": 31,
+        "chpstpage": 7,
+        "chpendpage": 21
       },
       {
-        "chapter_name": "RAIN: WHERE DOES IT COME FROM?",
-        "start_page": 36,
-        "end_page": 43
+        "chapter_name": "Tanks and Ground Water",
+        "pdf_startpg": 32,
+        "pdf_endpg": 42,
+        "chpstpage": 22,
+        "chpendpage": 32
       },
       {
-        "chapter_name": "WHAT DO ANIMALS EAT?",
-        "start_page": 44,
-        "end_page": 56
+        "chapter_name": "Oceans and Fishing",
+        "pdf_startpg": 43,
+        "pdf_endpg": 51,
+        "chpstpage": 33,
+        "chpendpage": 41
       },
       {
-        "chapter_name": "MATERIALS AND THINGS",
-        "start_page": 57,
-        "end_page": 66
+        "chapter_name": "Europe",
+        "pdf_startpg": 52,
+        "pdf_endpg": 67,
+        "chpstpage": 42,
+        "chpendpage": 57
       },
       {
-        "chapter_name": "HABITAT",
-        "start_page": 67,
-        "end_page": 77
+        "chapter_name": "Africa",
+        "pdf_startpg": 68,
+        "pdf_endpg": 78,
+        "chpstpage": 58,
+        "chpendpage": 68
       },
       {
-        "chapter_name": "SEPARATION OF SUBSTANCES",
-        "start_page": 78,
-        "end_page": 87
+        "chapter_name": "Handicrafts and Handlooms",
+        "pdf_startpg": 79,
+        "pdf_endpg": 87,
+        "chpstpage": 69,
+        "chpendpage": 77
       },
       {
-        "chapter_name": "FIBRE TO FABRIC",
-        "start_page": 88,
-        "end_page": 96
+        "chapter_name": "Industrial Revolution",
+        "pdf_startpg": 88,
+        "pdf_endpg": 95,
+        "chpstpage": 78,
+        "chpendpage": 85
       },
       {
-        "chapter_name": "PLANTS: PARTS AND FUNCTIONS",
-        "start_page": 97,
-        "end_page": 106
+        "chapter_name": "Production in a Factory - A Paper Mill",
+        "pdf_startpg": 96,
+        "pdf_endpg": 104,
+        "chpstpage": 86,
+        "chpendpage": 94
       },
       {
-        "chapter_name": "CHANGES AROUND US",
-        "start_page": 107,
-        "end_page": 118
+        "chapter_name": "Importance of Transport System",
+        "pdf_startpg": 105,
+        "pdf_endpg": 110,
+        "chpstpage": 95,
+        "chpendpage": 100
       },
       {
-        "chapter_name": "WATER IN OUR LIFE",
-        "start_page": 119,
-        "end_page": 126
+        "chapter_name": "New Kings and Kingdoms",
+        "pdf_startpg": 111,
+        "pdf_endpg": 119,
+        "chpstpage": 101,
+        "chpendpage": 109
       },
       {
-        "chapter_name": "SIMPLE ELECTRIC CIRCUITS",
-        "start_page": 127,
-        "end_page": 136
+        "chapter_name": "The Kakatiyas - Emergence of a Regional Kingdom",
+        "pdf_startpg": 120,
+        "pdf_endpg": 126,
+        "chpstpage": 110,
+        "chpendpage": 116
       },
       {
-        "chapter_name": "LEARNING HOW TO MEASURE",
-        "start_page": 137,
-        "end_page": 151
+        "chapter_name": "The Kings of Vijayanagara",
+        "pdf_startpg": 127,
+        "pdf_endpg": 135,
+        "chpstpage": 117,
+        "chpendpage": 125
       },
       {
-        "chapter_name": "MOVEMENTS IN ANIMALS",
-        "start_page": 152,
-        "end_page": 165
+        "chapter_name": "Mughal Empire",
+        "pdf_startpg": 136,
+        "pdf_endpg": 144,
+        "chpstpage": 126,
+        "chpendpage": 134
       },
       {
-        "chapter_name": "LIGHT, SHADOWS AND IMAGES",
-        "start_page": 166,
-        "end_page": 177
+        "chapter_name": "Establishment of the British Empire in India",
+        "pdf_startpg": 145,
+        "pdf_endpg": 156,
+        "chpstpage": 135,
+        "chpendpage": 146
       },
       {
-        "chapter_name": "LIVING AND NON-LIVING",
-        "start_page": 178,
-        "end_page": 190
+        "chapter_name": "Making of Laws in the State Assembly",
+        "pdf_startpg": 157,
+        "pdf_endpg": 167,
+        "chpstpage": 147,
+        "chpendpage": 157
+      },
+      {
+        "chapter_name": "Implementation of Laws in the District",
+        "pdf_startpg": 168,
+        "pdf_endpg": 174,
+        "chpstpage": 158,
+        "chpendpage": 164
+      },
+      {
+        "chapter_name": "Caste Discrimination and the Struggle for Equalities",
+        "pdf_startpg": 175,
+        "pdf_endpg": 181,
+        "chpstpage": 165,
+        "chpendpage": 171
+      },
+      {
+        "chapter_name": "Livelihood and Struggles of Urban Workers",
+        "pdf_startpg": 182,
+        "pdf_endpg": 190,
+        "chpstpage": 172,
+        "chpendpage": 180
+      },
+      {
+        "chapter_name": "Folk - Religion",
+        "pdf_startpg": 191,
+        "pdf_endpg": 197,
+        "chpstpage": 181,
+        "chpendpage": 187
+      },
+      {
+        "chapter_name": "Devotional Paths to the Divine",
+        "pdf_startpg": 198,
+        "pdf_endpg": 206,
+        "chpstpage": 188,
+        "chpendpage": 196
+      },
+      {
+        "chapter_name": "Rulers and Buildings",
+        "pdf_startpg": 207,
+        "pdf_endpg": 217,
+        "chpstpage": 197,
+        "chpendpage": 207
       }
     ]
   },
-  "6_Science": [
+  "7_Social": [
     {
-      "name": "CHANGES AROUND US",
-      "start_page": 107,
-      "end_page": 118
+      "chapter_name": "Reading Maps of Different kinds",
+      "pdf_startpg": 11,
+      "pdf_endpg": 16,
+      "chpstpage": 1,
+      "chpendpage": 6
     },
     {
-      "name": "FIBRE TO FABRIC",
-      "start_page": 88,
-      "end_page": 96
+      "chapter_name": "Rain and Rivers",
+      "pdf_startpg": 17,
+      "pdf_endpg": 31,
+      "chpstpage": 7,
+      "chpendpage": 21
     },
     {
-      "name": "HABITAT",
-      "start_page": 67,
-      "end_page": 77
+      "chapter_name": "Tanks and Ground Water",
+      "pdf_startpg": 32,
+      "pdf_endpg": 42,
+      "chpstpage": 22,
+      "chpendpage": 32
     },
     {
-      "name": "LEARNING HOW TO MEASURE",
-      "start_page": 137,
-      "end_page": 151
+      "chapter_name": "Oceans and Fishing",
+      "pdf_startpg": 43,
+      "pdf_endpg": 51,
+      "chpstpage": 33,
+      "chpendpage": 41
     },
     {
-      "name": "LIGHT, SHADOWS AND IMAGES",
-      "start_page": 166,
-      "end_page": 177
+      "chapter_name": "Europe",
+      "pdf_startpg": 52,
+      "pdf_endpg": 67,
+      "chpstpage": 42,
+      "chpendpage": 57
     },
     {
-      "name": "LIVING AND NON-LIVING",
-      "start_page": 178,
-      "end_page": 190
+      "chapter_name": "Africa",
+      "pdf_startpg": 68,
+      "pdf_endpg": 78,
+      "chpstpage": 58,
+      "chpendpage": 68
     },
     {
-      "name": "MATERIALS AND THINGS",
-      "start_page": 57,
-      "end_page": 66
+      "chapter_name": "Handicrafts and Handlooms",
+      "pdf_startpg": 79,
+      "pdf_endpg": 87,
+      "chpstpage": 69,
+      "chpendpage": 77
     },
     {
-      "name": "MOVEMENTS IN ANIMALS",
-      "start_page": 152,
-      "end_page": 165
+      "chapter_name": "Industrial Revolution",
+      "pdf_startpg": 88,
+      "pdf_endpg": 95,
+      "chpstpage": 78,
+      "chpendpage": 85
     },
     {
-      "name": "OUR FOOD",
-      "start_page": 15,
-      "end_page": 25
+      "chapter_name": "Production in a Factory - A Paper Mill",
+      "pdf_startpg": 96,
+      "pdf_endpg": 104,
+      "chpstpage": 86,
+      "chpendpage": 94
     },
     {
-      "name": "PLANTS: PARTS AND FUNCTIONS",
-      "start_page": 97,
-      "end_page": 106
+      "chapter_name": "Importance of Transport System",
+      "pdf_startpg": 105,
+      "pdf_endpg": 110,
+      "chpstpage": 95,
+      "chpendpage": 100
     },
     {
-      "name": "PLAYING WITH MAGNETS",
-      "start_page": 26,
-      "end_page": 35
+      "chapter_name": "New Kings and Kingdoms",
+      "pdf_startpg": 111,
+      "pdf_endpg": 119,
+      "chpstpage": 101,
+      "chpendpage": 109
     },
     {
-      "name": "RAIN: WHERE DOES IT COME FROM?",
-      "start_page": 36,
-      "end_page": 43
+      "chapter_name": "The Kakatiyas - Emergence of a Regional Kingdom",
+      "pdf_startpg": 120,
+      "pdf_endpg": 126,
+      "chpstpage": 110,
+      "chpendpage": 116
     },
     {
-      "name": "SEPARATION OF SUBSTANCES",
-      "start_page": 78,
-      "end_page": 87
+      "chapter_name": "The Kings of Vijayanagara",
+      "pdf_startpg": 127,
+      "pdf_endpg": 135,
+      "chpstpage": 117,
+      "chpendpage": 125
     },
     {
-      "name": "SIMPLE ELECTRIC CIRCUITS",
-      "start_page": 127,
-      "end_page": 136
+      "chapter_name": "Mughal Empire",
+      "pdf_startpg": 136,
+      "pdf_endpg": 144,
+      "chpstpage": 126,
+      "chpendpage": 134
     },
     {
-      "name": "WATER IN OUR LIFE",
-      "start_page": 119,
-      "end_page": 126
+      "chapter_name": "Establishment of the British Empire in India",
+      "pdf_startpg": 145,
+      "pdf_endpg": 156,
+      "chpstpage": 135,
+      "chpendpage": 146
     },
     {
-      "name": "WHAT DO ANIMALS EAT?",
-      "start_page": 44,
-      "end_page": 56
+      "chapter_name": "Making of Laws in the State Assembly",
+      "pdf_startpg": 157,
+      "pdf_endpg": 167,
+      "chpstpage": 147,
+      "chpendpage": 157
+    },
+    {
+      "chapter_name": "Implementation of Laws in the District",
+      "pdf_startpg": 168,
+      "pdf_endpg": 174,
+      "chpstpage": 158,
+      "chpendpage": 164
+    },
+    {
+      "chapter_name": "Caste Discrimination and the Struggle for Equalities",
+      "pdf_startpg": 175,
+      "pdf_endpg": 181,
+      "chpstpage": 165,
+      "chpendpage": 171
+    },
+    {
+      "chapter_name": "Livelihood and Struggles of Urban Workers",
+      "pdf_startpg": 182,
+      "pdf_endpg": 190,
+      "chpstpage": 172,
+      "chpendpage": 180
+    },
+    {
+      "chapter_name": "Folk - Religion",
+      "pdf_startpg": 191,
+      "pdf_endpg": 197,
+      "chpstpage": 181,
+      "chpendpage": 187
+    },
+    {
+      "chapter_name": "Devotional Paths to the Divine",
+      "pdf_startpg": 198,
+      "pdf_endpg": 206,
+      "chpstpage": 188,
+      "chpendpage": 196
+    },
+    {
+      "chapter_name": "Rulers and Buildings",
+      "pdf_startpg": 207,
+      "pdf_endpg": 217,
+      "chpstpage": 197,
+      "chpendpage": 207
     }
   ]
 }

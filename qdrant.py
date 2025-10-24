@@ -30,6 +30,8 @@ def initialize():
     """
     global client, local_embedder, generation_model
 
+    print("Initializing Qdrant client and models...")
+
     local_embedder = SentenceTransformer(EMBEDDING_MODEL)
 
     # Initialize Gemini / generative model (if API key/config available)
@@ -47,24 +49,35 @@ def initialize():
 
     # Ensure collection exists and create payload indexes if new
     model_embedding_dimension = local_embedder.get_sentence_embedding_dimension()
-    if not client.collection_exists(collection_name=COLLECTION_NAME):
-        client.create_collection(
-            collection_name=COLLECTION_NAME,
-            vectors_config=models.VectorParams(
-                size=model_embedding_dimension,
-                distance=models.Distance.COSINE,
-            ),
-        )
+    try:
+        if not client.collection_exists(collection_name=COLLECTION_NAME):
+            print(f"Collection '{COLLECTION_NAME}' does not exist. Attempting to create it...")
+            client.create_collection(
+                collection_name=COLLECTION_NAME,
+                vectors_config=models.VectorParams(
+                    size=model_embedding_dimension,
+                    distance=models.Distance.COSINE,
+                ),
+            )
+            print(f"Collection '{COLLECTION_NAME}' created successfully.")
+        else:
+            print(f"Collection '{COLLECTION_NAME}' already exists.")
 
-        for field in ["class_name", "subject", "chapter", "textbook_uuid"]:
+        for field in ["class_name", "subject", "chapter", "textbook_uuid", "chpstpage", "chpendpage"]: # Added chpstpage, chpendpage
             try:
                 client.create_payload_index(
                     collection_name=COLLECTION_NAME,
                     field_name=field,
                     field_schema=models.PayloadSchemaType.KEYWORD,
                 )
+                print(f"Payload index for '{field}' created/verified.")
             except Exception as e:
                 print(f"Warning: Failed to create payload index for field '{field}': {e}")
+    except Exception as e:
+        print(f"CRITICAL ERROR during Qdrant initialization: {e}")
+        raise # Re-raise to prevent app from running with broken Qdrant connection
+
+    print("Qdrant client and models initialized.")
 
 
 # --- Helper functions ---
@@ -173,20 +186,24 @@ def process_and_embed_book(pdf_path: str, class_name: str, subject: str, chapter
 
     for i, chapter in enumerate(chapters):
         chapter_name = chapter.get("chapter_name") or chapter.get("name", f"Untitled Chapter {i+1}")
-        print(f"\nProcessing Chapter {i+1}/{total_chapters}: '{chapter_name}'...")
+        
+        # Use the specific page numbers from the chapter object
+        pdf_start_page_llm = chapter.get("pdf_startpg")
+        pdf_end_page_llm = chapter.get("pdf_endpg")
+        chp_start_page = chapter.get("chpstpage")
+        chp_end_page = chapter.get("chpendpage")
 
-        start_page = chapter.get("start_page")
-        end_page = chapter.get("end_page")
-        if start_page is None or end_page is None:
-            print(f"  Skipping chapter '{chapter_name}' because start_page/end_page missing.")
+        if pdf_start_page_llm is None or pdf_end_page_llm is None:
+            print(f"  Skipping chapter '{chapter_name}' because pdf_startpg/pdf_endpg missing.")
             continue
 
         chapter_text = ""
-        for page_num in range(start_page - 1, end_page):
+        # Iterate using the LLM's identified PDF page numbers
+        for page_num in range(pdf_start_page_llm - 1, pdf_end_page_llm):
             if 0 <= page_num < len(reader.pages):
                 chapter_text += reader.pages[page_num].extract_text() or ""
 
-        print(f"  --- Chapter Text for '{chapter_name}' (Pages {start_page}-{end_page}) ---")
+        print(f"  --- Chapter Text for '{chapter_name}' (PDF Pages {pdf_start_page_llm}-{pdf_end_page_llm}) ---")
         print(f"  First 200 chars: {chapter_text[:200].strip()}...")
         print(f"  Last 200 chars: ...{chapter_text[-200:].strip() if len(chapter_text) >= 200 else chapter_text.strip()}")
         print(f"  Total length: {len(chapter_text)} characters")
@@ -208,8 +225,10 @@ def process_and_embed_book(pdf_path: str, class_name: str, subject: str, chapter
                         "textbook_uuid": book_uuid,
                         "filename": os.path.basename(pdf_path),
                         "chapter": chapter_name,
-                        "pdf_startpg": start_page,
-                        "pdf_endpg": end_page,
+                        "pdf_startpg": pdf_start_page_llm,
+                        "pdf_endpg": pdf_end_page_llm,
+                        "chpstpage": chp_start_page, # Add this
+                        "chpendpage": chp_end_page,   # Add this
                         "text": chunk,
                     },
                 )
@@ -331,24 +350,30 @@ def get_chapters_for_book(book_uuid: str) -> List[Dict]:
                 ]
             ),
             limit=1,
-            with_payload=["pdf_startpg", "pdf_endpg"],
+            with_payload=["pdf_startpg", "pdf_endpg", "chpstpage", "chpendpage"], # Fetch these
         )
 
-        start_page = end_page = None
+        pdf_start_page = pdf_end_page = None
+        chp_start_page = chp_end_page = None
         if response:
             payload = response[0].payload
-            start_page = payload.get("pdf_startpg")
-            end_page = payload.get("pdf_endpg")
+            pdf_start_page = payload.get("pdf_startpg")
+            pdf_end_page = payload.get("pdf_endpg")
+            chp_start_page = payload.get("chpstpage") # Get chpstpage
+            chp_end_page = payload.get("chpendpage")   # Get chpendpage
 
         chapter_info.append(
             {
-                "name": name,
-                "start_page": start_page,
-                "end_page": end_page,
+                "chapter_name": name, # Renamed 'name' to 'chapter_name' for consistency with frontend
+                "pdf_startpg": pdf_start_page,
+                "pdf_endpg": pdf_end_page,
+                "chpstpage": chp_start_page, # Add chpstpage
+                "chpendpage": chp_end_page,   # Add chpendpage
             }
         )
 
-    chapter_info.sort(key=lambda x: (x.get("chap_startpg") or 0))
+    # The sort key needs to be updated as well, as 'chap_startpg' is now 'chpstpage'
+    chapter_info.sort(key=lambda x: (x.get("chpstpage") or 0))
     return chapter_info
 
 
@@ -667,6 +692,7 @@ def generate_chapters_from_json(pdf_json: List[Dict]) -> str:
         "You are an expert assistant tasked with analyzing a textbook to identify its chapters.\n\n"
         "The book content is provided as a JSON array, each element representing a PDF page:\n\n"
         '[{"pdf_page": <integer>, "text": "<page text>"}]\n\n'
+        "When identifying chapters and their page numbers, prioritize information found in an 'INDEX' or 'Table of Contents' section if available within the provided text.\n\n"
         "Return a single valid JSON object following this schema:\n\n"
         '{\n'
         '  "pdf_offset": <integer>,\n'
@@ -675,7 +701,7 @@ def generate_chapters_from_json(pdf_json: List[Dict]) -> str:
         "  ]\n"
         "}\n\n"
         "- pdf_startpg/pdf_endpg are the real PDF page numbers (including front matter).\n"
-        "- Calculate `pdf_offset` as the number of pages of front matter. This is typically (first_chapter_start_page - 1).\n"
+        "- Calculate `pdf_offset` as the number of pages of front matter. This is typically (first_chapter_start_page - 1). If an index is available, infer the front matter by the difference between the page number in the index and the actual pdf page number where the chapter starts.\n"
         "Do not include any text outside the JSON object.\n\n"
         "Here is the book content in JSON format:\n\n"
         f"{json_text}\n"
@@ -726,12 +752,6 @@ def generate_chapters_from_text(json_path: str) -> str:
         clean_json_str = text[json_start:json_end]
         try:
             data = json.loads(clean_json_str)
-            if "chapters" in data and isinstance(data["chapters"], list):
-                for chapter in data["chapters"]:
-                    if "pdf_startpg" in chapter:
-                        chapter["start_page"] = chapter.pop("pdf_startpg")
-                    if "pdf_endpg" in chapter:
-                        chapter["end_page"] = chapter.pop("pdf_endpg")
             # The LLM's pdf_startpg/endpg are taken as is.
             return json.dumps(data)
         except json.JSONDecodeError:

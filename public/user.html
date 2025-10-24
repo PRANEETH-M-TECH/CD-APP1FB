@@ -24,16 +24,25 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Markdown styling */
-    .markdown-content {
-      line-height: 1.6;
-      color: #374151;
-    }
-    .markdown-content h3 {
-      color: #1e40af;
-      font-size: 1.2rem;
-      font-weight: 700;
+    .markdown-content table {
+      width: 100%;
+      border-collapse: collapse;
       margin-top: 1rem;
+      margin-bottom: 1rem;
+    }
+    .markdown-content th,
+    .markdown-content td {
+      border: 1px solid #e2e8f0;
+      padding: 0.75rem;
+      text-align: left;
+    }
+    .markdown-content th {
+      background-color: #f1f5f9;
+      font-weight: 600;
+      color: #334155;
+    }
+    .markdown-content tr:nth-child(even) {
+      background-color: #f8fafc;
     }
 
     /* Chat card */
@@ -228,59 +237,68 @@
       const chatHistory = document.getElementById('chat-history');
 
       if (listChaptersBtn) {
-        listChaptersBtn.addEventListener('click', async () => {
-          // NOTE: This assumes that a 'selectedBook' object with an 'id' property
-          // is available in the global scope when a book is selected.
-          if (!window.selectedBook || !window.selectedBook.id) {
-            alert('Please select a book first.');
-            return;
-          }
+                  listChaptersBtn.addEventListener('click', async () => {
+            const classSelect = document.getElementById('class-select');
+            const subjectSelect = document.getElementById('subject-select');
 
-          addMessageToChat({
-            role: 'ai',
-            content: 'Fetching chapter list...'
-          });
+            const selectedClass = classSelect.value;
+            const selectedSubject = subjectSelect.value;
 
-          try {
-            // This requires a new endpoint in your app.py that reads chapters_cache.json
-            const response = await fetch(`/api/chapters?book_id=${window.selectedBook.id}`);
-            
-            if (!response.ok) {
-              throw new Error('Could not retrieve chapters. Please ensure the book has been processed.');
+            if (!selectedClass || selectedClass === 'Select...') {
+              alert('Please select a class first.');
+              return;
+            }
+            if (!selectedSubject || selectedSubject === 'Select...') {
+              alert('Please select a subject first.');
+              return;
             }
 
-            const data = await response.json();
-            
-            // The server should return the data in the format: { chapters: [...] }
-            if (data && data.chapters && data.chapters.length > 0) {
-              displayChaptersInChat(data.chapters);
-            } else {
-              addMessageToChat({
-                role: 'ai',
-                content: 'No chapters found for this book.'
-              });
-            }
+            // Clear previous chat history before adding new messages
+            chatHistory.innerHTML = '';
 
-          } catch (error) {
-            console.error('Error fetching chapters:', error);
             addMessageToChat({
               role: 'ai',
-              content: `Sorry, an error occurred while fetching chapters: ${error.message}`
+              content: 'Fetching chapter list...'
             });
-          }
-        });
-      }
+
+            try {
+              const response = await fetch(`/api/list-chapters?class_name=${selectedClass}&subject=${selectedSubject}`);
+              
+              if (!response.ok) {
+                throw new Error('Could not retrieve chapters. Please ensure the book has been processed.');
+              }
+
+              const data = await response.json();
+              
+              if (data && data.chapters && data.chapters.length > 0) {
+                displayChaptersInChat(data.chapters);
+              } else {
+                addMessageToChat({
+                  role: 'ai',
+                  content: 'No chapters found for this book.'
+                });
+              }
+
+            } catch (error) {
+              console.error('Error fetching chapters:', error);
+              addMessageToChat({
+                role: 'ai',
+                content: `Sorry, an error occurred while fetching chapters: ${error.message}`
+              });
+            }
+          });      }
 
       function displayChaptersInChat(chapters) {
         let markdownText = '### Chapters\n\n';
-        markdownText += '| Chapter Name | Start Page | End Page |\n';
-        markdownText += '| :--- | :--- | :--- |\n';
+        markdownText += '| S.No. | Chapter Name | Start Page | End Page |\n';
+        markdownText += '| :--- | :--- | :--- | :--- |\n'; // Updated markdown table separator
 
-        chapters.forEach(chapter => {
+        chapters.forEach((chapter, index) => { // Added index to forEach
+          const sNo = index + 1; // Calculate serial number
           const name = chapter.chapter_name || 'N/A';
-          const start = chapter.chap_startpg || '-';
-          const end = chapter.chap_endpg || '-';
-          markdownText += `| ${name} | ${start} | ${end} |\n`;
+          const start = chapter.chpstpage || '-'; // Use chpstpage
+          const end = chapter.chpendpage || '-';   // Use chpendpage
+          markdownText += `| ${sNo} | ${name} | ${start} | ${end} |\n`;
         });
 
         addMessageToChat({

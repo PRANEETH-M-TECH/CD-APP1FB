@@ -115,7 +115,7 @@ async def query_book(request: QueryRequest):
     subject = metadata.get("subject")
     
     chapters_data = get_chapters_for_book(request.book_uuid)
-    chapter_list = [chapter['name'] for chapter in chapters_data]
+    chapter_list = [chapter['chapter_name'] for chapter in chapters_data]
 
     # 2. Reformulate and Classify Query using the full context
     processed_query_data = reformulate_and_classify_query(
@@ -160,20 +160,17 @@ async def query_book(request: QueryRequest):
         f.write(f"Conceptual Score: {conceptual_score:.2f}\n")
         f.write(f"Keywords: {', '.join([item['keyword'] for item in keywords])}\n")
 
-        f.write(f"\n--- Semantic Search Results ({len(semantic_results)} Chunks) ---\n\n")
-        if not semantic_results:
-            f.write("No chunks retrieved from Semantic Search.\n")
+        # 1. Print Formatted Top 10 Chunks for LLM (context)
+        f.write(f"\n--- Formatted Top Chunks for LLM (Context) ---\n\n")
+        if not search_results:
+            f.write("No chunks retrieved for LLM context.\n")
         else:
-            for i, res in enumerate(semantic_results):
-                f.write(f"  {i+1}. Score: {res.score:.4f} | Text: {res.payload['text'].strip()}\n\n")
+            for i, (score, payload) in enumerate(search_results):
+                f.write(f"  --- Chunk {i+1} (Hybrid Score: {score:.4f}) ---\n")
+                f.write(f"     Chapter: {payload.get('chapter', 'N/A')}\n")
+                f.write(f"     Text: {payload.get('text', '').strip()}\n\n")
 
-        f.write(f"\n--- BM25 Keyword Search Results ({len(normalized_bm25_results)} Chunks) ---\n\n")
-        if not normalized_bm25_results:
-            f.write("No chunks retrieved from BM25 Keyword Search.\n")
-        else:
-            for i, (score, doc) in enumerate(normalized_bm25_results):
-                f.write(f"  {i+1}. Normalized Score: {score:.4f} | Text: {doc['text'].strip()}\n\n")
-
+        # 2. Print Hybrid Search Results
         f.write(f"\n--- Hybrid Search Results ({len(search_results)} Chunks) ---\n\n")
         if not search_results:
             f.write("No chunks retrieved from Hybrid Search.\n")
@@ -182,6 +179,22 @@ async def query_book(request: QueryRequest):
                 f.write(f"  {i+1}. Hybrid Score: {score:.4f}\n")
                 f.write(f"     Chapter: {payload.get('chapter', 'N/A')}\n")
                 f.write(f"     Text: {payload.get('text', '').strip()}\n\n")
+
+        # 3. Print Semantic Search Results
+        f.write(f"\n--- Semantic Search Results ({len(semantic_results)} Chunks) ---\n\n")
+        if not semantic_results:
+            f.write("No chunks retrieved from Semantic Search.\n")
+        else:
+            for i, res in enumerate(semantic_results):
+                f.write(f"  {i+1}. Score: {res.score:.4f} | Chapter: {res.payload.get('chapter', 'N/A')} | Text: {res.payload['text'].strip()}\n\n") # Added chapter name
+
+        # 4. Print BM25 Keyword Search Results
+        f.write(f"\n--- BM25 Keyword Search Results ({len(normalized_bm25_results)} Chunks) ---\n\n")
+        if not normalized_bm25_results:
+            f.write("No chunks retrieved from BM25 Keyword Search.\n")
+        else:
+            for i, (score, doc) in enumerate(normalized_bm25_results):
+                f.write(f"  {i+1}. Normalized Score: {score:.4f} | Chapter: {doc.get('chapter', 'N/A')} | Text: {doc['text'].strip()}\n\n") # Added chapter name
 
         # 5. Generate Final Answer
         if not search_results:
@@ -234,17 +247,30 @@ async def list_chapters(class_name: str, subject: str):
 
     return {"chapters": chapters}
 
-def extract_chapters_from_pdf(pdf_path: str) -> List[Dict]:
+def extract_chapters_from_pdf(pdf_path: str) -> Dict:
     """
-    Extracts chapters from a PDF using an LLM-only approach.
+    Extracts chapters from a PDF using an LLM-only approach, calculates chapter-specific page numbers,
+    and includes pdf_offset.
     """
     print("Extracting chapters using LLM-only approach.")
     try:
         reader = PdfReader(pdf_path)
         num_pages = len(reader.pages)
         
+        pages_to_extract_indices = set()
+
+        # Add first 20 pages
+        for i in range(min(20, num_pages)):
+            pages_to_extract_indices.add(i)
+
+        # Add last 5 pages
+        for i in range(max(0, num_pages - 5), num_pages):
+            pages_to_extract_indices.add(i)
+        
+        sorted_page_indices = sorted(list(pages_to_extract_indices))
+
         pdf_pages_data = []
-        for i in range(num_pages):
+        for i in sorted_page_indices:
             text = reader.pages[i].extract_text() or ""
             pdf_pages_data.append({"pdf_page": i + 1, "text": text})
 
@@ -259,8 +285,50 @@ def extract_chapters_from_pdf(pdf_path: str) -> List[Dict]:
             print(f"Error calling generate_chapters_from_text: {e}")
             raise HTTPException(status_code=500, detail=f"AI model failed to generate chapters: {e}")
 
-        chapters_data = json.loads(llm_response_str)
-        return chapters_data
+        chapters_data_from_llm = json.loads(llm_response_str)
+        
+        if not isinstance(chapters_data_from_llm, dict) or "chapters" not in chapters_data_from_llm:
+            raise HTTPException(status_code=500, detail="LLM response is not in the expected format (missing 'chapters' key).")
+
+        llm_chapters_list = chapters_data_from_llm.get("chapters")
+        llm_pdf_offset = chapters_data_from_llm.get("pdf_offset")
+
+        if not llm_chapters_list:
+            raise HTTPException(status_code=500, detail="AI model returned empty chapter list.")
+        if llm_pdf_offset is None:
+            raise HTTPException(status_code=500, detail="LLM response missing 'pdf_offset'.")
+
+        # The pdf_offset is now directly from the LLM response
+        pdf_offset = llm_pdf_offset
+
+        processed_chapters = []
+        for chapter in llm_chapters_list: # Iterate over the actual list of chapters
+            pdf_startpg = chapter.get("pdf_startpg")
+            pdf_endpg = chapter.get("pdf_endpg")
+
+            # If pdf_startpg or pdf_endpg are missing, try to use start_page and end_page
+            if pdf_startpg is None:
+                pdf_startpg = chapter.get("start_page")
+            if pdf_endpg is None:
+                pdf_endpg = chapter.get("end_page")
+
+            if pdf_startpg is None or pdf_endpg is None:
+                print(f"Warning: Chapter '{chapter.get('chapter_name', 'Unknown')}' missing all page number fields. Skipping page calculation.")
+                processed_chapters.append(chapter) # Append as is if pages are missing
+                continue
+
+            chpstpage = pdf_startpg - pdf_offset
+            chpendpage = pdf_endpg - pdf_offset
+            
+            processed_chapters.append({
+                "chapter_name": chapter.get("chapter_name"),
+                "pdf_startpg": pdf_startpg,
+                "pdf_endpg": pdf_endpg,
+                "chpstpage": chpstpage,
+                "chpendpage": chpendpage
+            })
+        
+        return {"pdf_offset": pdf_offset, "chapters": processed_chapters}
 
     except json.JSONDecodeError:
         print(f"Failed to parse JSON from LLM response: {llm_response_str}")
@@ -296,15 +364,15 @@ async def extract_chapters(book_id: str = Query(...)):
         if not os.path.exists(pdf_path):
             raise HTTPException(status_code=404, detail=f"PDF file not found: {safe_filename}")
 
-        print(f"Cache miss for {safe_filename}. Extracting chapters from PDF.")
-        chapters = extract_chapters_from_pdf(pdf_path)
+        # extract_chapters_from_pdf now returns a dict with "pdf_offset" and "chapters"
+        extracted_data = extract_chapters_from_pdf(pdf_path) 
         
         # 3. Save to cache
-        cache[safe_filename] = chapters
+        cache[safe_filename] = extracted_data # Save the entire dict
         with open(cache_path, "w") as f:
             json.dump(cache, f, indent=2)
             
-        return JSONResponse(content=chapters)
+        return JSONResponse(content=extracted_data) # Return the entire dict
     except HTTPException as e:
         raise e # Re-raise HTTPExceptions directly
     except Exception as e:
