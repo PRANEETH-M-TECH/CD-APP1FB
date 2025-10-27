@@ -43,10 +43,53 @@ Top chunks concatenated → LLM → Answer
   
 ### summarize chapter prompt  ###
   "summarize_chapter": {
-    "role": "You are CHADUVU-GURU, an AI tutor helping students revise a textbook chapter.",
-    "instructions": [
-      "Summarize the following chapter concisely for a {class_level} student.",
-      "Highlight key concepts, definitions, and important points.",
+    "role": "Y
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
       "Avoid adding any new or external information.",
       "Keep it under 500 words and easy to read."
     ],

@@ -350,8 +350,9 @@ html, body {
     cursor: not-allowed;
 }
 
-/* Override for List Chapters button to make it rectangular */
-#chat-input-container #list-chapters-btn {
+/* Override for List Chapters and Summarize buttons to make them rectangular */
+#chat-input-container #list-chapters-btn,
+#chat-input-container #summarize-btn {
     border-radius: 8px;
     width: auto;
     height: auto;

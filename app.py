@@ -23,8 +23,10 @@ from qdrant import (
     get_chapters_for_book,
     hybrid_search,
     reformulate_and_classify_query,
+
     generate_answer,
     generate_chapters_from_text,
+    generate_teacher_explanation,
 )
 
 # --- Lifespan Management ---
@@ -48,6 +50,8 @@ class QueryRequest(BaseModel):
     book_uuid: str
     # Optional filter for chapter
     chapter: Optional[str] = None
+
+
 
 # --- API ENDPOINTS ---
 @app.post("/api/upload")
@@ -83,7 +87,8 @@ async def create_book(
     try:
         with open(cache_path, "r") as f:
             cache = json.load(f)
-        cached_chapters_data = cache.get(os.path.basename(filename))
+        cache_key = f"{class_name}_{subject}"
+        cached_chapters_data = cache.get(cache_key)
         if not cached_chapters_data or not cached_chapters_data.get("chapters"):
             raise HTTPException(status_code=404, detail="Chapter data not found in cache. Please extract chapters first.")
         chapters_list = cached_chapters_data.get("chapters")
@@ -129,9 +134,6 @@ async def query_book(request: QueryRequest):
     classification = processed_query_data.get("classification", "conceptual")
     keywords = processed_query_data.get("keywords", [])
     conceptual_score = processed_query_data.get("conceptual_score", 0.5)
-
-    print(f"Original Query: '{request.query}'")
-    print(f"Processed Query Data: {processed_query_data}")
 
     # 3. Perform Hybrid Search
     filters = {}
@@ -198,7 +200,6 @@ async def query_book(request: QueryRequest):
 
         # 5. Generate Final Answer
         if not search_results:
-            print("No chunks retrieved from Hybrid Search.")
             answer = "I couldn't find any relevant information to answer your question."
             sources = []
         else:
@@ -213,26 +214,28 @@ async def query_book(request: QueryRequest):
 
     return {"answer": answer, "sources": sources}
 
+
+
 @app.get("/api/list-chapters")
 async def list_chapters(class_name: str, subject: str):
     """
     Returns a sorted list of chapters for a given book, using a cache.
     """
     cache_path = "chapters_cache.json"
-    cache_key = f"{class_name}_{subject}"
+    cache_key = f"{class_name}_{subject.lower()}"
 
     # 1. Check cache first
     try:
         with open(cache_path, "r") as f:
             cache = json.load(f)
         if cache_key in cache:
-            print(f"Cache hit for {cache_key}. Returning cached chapters.")
-            return {"chapters": cache[cache_key]}
+            # Return only the chapters list from the cached data
+            return {"chapters": cache[cache_key]["chapters"]}
     except (FileNotFoundError, json.JSONDecodeError):
-        cache = {}
+        # If cache file not found or invalid, proceed to get from database
+        pass # No need to initialize cache = {} here, as we are not writing to it
 
     # 2. If not in cache, get from database
-    print(f"Cache miss for {cache_key}. Fetching chapters from database.")
     books = get_books(class_name=class_name, subject=subject)
     if not books:
         raise HTTPException(status_code=404, detail="Book not found.")
@@ -240,19 +243,63 @@ async def list_chapters(class_name: str, subject: str):
     book_uuid = books[0]['id']
     chapters = get_chapters_for_book(book_uuid)
 
-    # 3. Save to cache
-    cache[cache_key] = chapters
-    with open(cache_path, "w") as f:
-        json.dump(cache, f, indent=2)
+    # This endpoint should not write to the cache. The cache is managed by /extract-chapters.
+    # If the data is not in cache, it means /extract-chapters hasn't been run for this book.
+    # The frontend should handle this by prompting the user to extract chapters first.
 
     return {"chapters": chapters}
+
+
+class SummaryRequest(BaseModel):
+    class_name: str
+    subject: str
+    chapter_name: str
+
+@app.post("/api/summarize")
+async def get_summary(request: SummaryRequest):
+    """
+    Generates a teacher-like explanation for a specific chapter of a book.
+    """
+    class_name = request.class_name
+    subject = request.subject
+    chapter_name = request.chapter_name
+
+    summary_filename = f"{subject.lower()}{class_name.replace(' ', '')}.json"
+    summary_filepath = os.path.join("summary", summary_filename)
+
+    if not os.path.exists(summary_filepath):
+        raise HTTPException(status_code=404, detail="Summary file not found for this book.")
+
+    try:
+        with open(summary_filepath, "r", encoding="utf-8") as f:
+            summary_data = json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError):
+        raise HTTPException(status_code=404, detail="Summary data not found or invalid.")
+
+    chapter_summary = None
+    for chapter in summary_data.get("chapters", []):
+        if chapter.get("chapter_name") == chapter_name:
+            chapter_summary = chapter.get("summary")
+            break
+    
+    if chapter_summary is None:
+        raise HTTPException(status_code=404, detail="Summary not found for this chapter.")
+
+    # Generate the detailed explanation using the new function
+    explanation = generate_teacher_explanation(
+        class_name=class_name,
+        subject=subject,
+        chapter_name=chapter_name,
+        summary_text=chapter_summary
+    )
+    
+    return {"summary": explanation}
 
 def extract_chapters_from_pdf(pdf_path: str) -> Dict:
     """
     Extracts chapters from a PDF using an LLM-only approach, calculates chapter-specific page numbers,
     and includes pdf_offset.
     """
-    print("Extracting chapters using LLM-only approach.")
     try:
         reader = PdfReader(pdf_path)
         num_pages = len(reader.pages)
@@ -277,12 +324,9 @@ def extract_chapters_from_pdf(pdf_path: str) -> Dict:
         with open("chap_extraction.json", "w", encoding="utf-8") as f:
             json.dump(pdf_pages_data, f, indent=2)
         
-        print("Extracted text saved to chap_extraction.json")
-
         try:
             llm_response_str = generate_chapters_from_text("chap_extraction.json")
         except Exception as e:
-            print(f"Error calling generate_chapters_from_text: {e}")
             raise HTTPException(status_code=500, detail=f"AI model failed to generate chapters: {e}")
 
         chapters_data_from_llm = json.loads(llm_response_str)
@@ -313,8 +357,14 @@ def extract_chapters_from_pdf(pdf_path: str) -> Dict:
                 pdf_endpg = chapter.get("end_page")
 
             if pdf_startpg is None or pdf_endpg is None:
-                print(f"Warning: Chapter '{chapter.get('chapter_name', 'Unknown')}' missing all page number fields. Skipping page calculation.")
-                processed_chapters.append(chapter) # Append as is if pages are missing
+                print(f"Warning: Chapter '{chapter.get('chapter_name', 'Unknown')}' is missing start or end page numbers. Appending as is.")
+                processed_chapters.append({
+                    "chapter_name": chapter.get("chapter_name"),
+                    "pdf_startpg": pdf_startpg,
+                    "pdf_endpg": pdf_endpg,
+                    "chpstpage": None, # Assign None for consistency
+                    "chpendpage": None   # Assign None for consistency
+                })
                 continue
 
             chpstpage = pdf_startpg - pdf_offset
@@ -331,14 +381,16 @@ def extract_chapters_from_pdf(pdf_path: str) -> Dict:
         return {"pdf_offset": pdf_offset, "chapters": processed_chapters}
 
     except json.JSONDecodeError:
-        print(f"Failed to parse JSON from LLM response: {llm_response_str}")
         raise HTTPException(status_code=500, detail="Failed to parse chapter data from the AI model.")
     except Exception as e:
-        print(f"An error occurred during PDF processing for LLM: {e}")
         raise HTTPException(status_code=500, detail=f"Failed to process PDF: {e}")
 
 @app.post("/extract-chapters")
-async def extract_chapters(book_id: str = Query(...)):
+async def extract_chapters(
+    book_id: str = Query(...),
+    class_name: str = Query(...),
+    subject: str = Query(...)
+):
     """
     Extracts chapter information from the specified PDF file, using a cache to avoid re-processing.
     """
@@ -349,14 +401,14 @@ async def extract_chapters(book_id: str = Query(...)):
         safe_filename = os.path.basename(book_id)
         pdf_path = os.path.join(UPLOADS_DIR, safe_filename)
         cache_path = "chapters_cache.json"
+        cache_key = f"{class_name}_{subject.lower()}" # Define cache_key before the try block
 
         # 1. Check cache first
         try:
             with open(cache_path, "r") as f:
                 cache = json.load(f)
-            if safe_filename in cache:
-                print(f"Cache hit for {safe_filename}. Returning cached chapters.")
-                return JSONResponse(content=cache[safe_filename])
+            if cache_key in cache: # Check with new cache key
+                return JSONResponse(content=cache[cache_key])
         except (FileNotFoundError, json.JSONDecodeError):
             cache = {}
 
@@ -368,7 +420,7 @@ async def extract_chapters(book_id: str = Query(...)):
         extracted_data = extract_chapters_from_pdf(pdf_path) 
         
         # 3. Save to cache
-        cache[safe_filename] = extracted_data # Save the entire dict
+        cache[cache_key] = extracted_data # Save with new cache key
         with open(cache_path, "w") as f:
             json.dump(cache, f, indent=2)
             
@@ -376,7 +428,6 @@ async def extract_chapters(book_id: str = Query(...)):
     except HTTPException as e:
         raise e # Re-raise HTTPExceptions directly
     except Exception as e:
-        print(f"Error in extract_chapters endpoint: {e}")
         raise HTTPException(status_code=500, detail=f"Failed to extract chapters: {e}")
 
 

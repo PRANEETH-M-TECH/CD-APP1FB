@@ -30,8 +30,6 @@ def initialize():
     """
     global client, local_embedder, generation_model
 
-    print("Initializing Qdrant client and models...")
-
     local_embedder = SentenceTransformer(EMBEDDING_MODEL)
 
     # Initialize Gemini / generative model (if API key/config available)
@@ -39,7 +37,6 @@ def initialize():
     try:
         generation_model = genai.GenerativeModel(GENERATION_MODEL_NAME)
     except Exception as e:
-        print(f"Warning: failed to initialize generation_model: {e}")
         generation_model = None  # type: ignore
 
     client = QC(
@@ -51,7 +48,6 @@ def initialize():
     model_embedding_dimension = local_embedder.get_sentence_embedding_dimension()
     try:
         if not client.collection_exists(collection_name=COLLECTION_NAME):
-            print(f"Collection '{COLLECTION_NAME}' does not exist. Attempting to create it...")
             client.create_collection(
                 collection_name=COLLECTION_NAME,
                 vectors_config=models.VectorParams(
@@ -59,9 +55,6 @@ def initialize():
                     distance=models.Distance.COSINE,
                 ),
             )
-            print(f"Collection '{COLLECTION_NAME}' created successfully.")
-        else:
-            print(f"Collection '{COLLECTION_NAME}' already exists.")
 
         for field in ["class_name", "subject", "chapter", "textbook_uuid", "chpstpage", "chpendpage"]: # Added chpstpage, chpendpage
             try:
@@ -70,14 +63,10 @@ def initialize():
                     field_name=field,
                     field_schema=models.PayloadSchemaType.KEYWORD,
                 )
-                print(f"Payload index for '{field}' created/verified.")
             except Exception as e:
-                print(f"Warning: Failed to create payload index for field '{field}': {e}")
+                pass # Silently fail
     except Exception as e:
-        print(f"CRITICAL ERROR during Qdrant initialization: {e}")
         raise # Re-raise to prevent app from running with broken Qdrant connection
-
-    print("Qdrant client and models initialized.")
 
 
 # --- Helper functions ---
@@ -138,7 +127,6 @@ def get_or_build_bm25_index(book_uuid: str) -> Optional[BM25Okapi]:
     if book_uuid in bm25_indices:
         return bm25_indices[book_uuid]
 
-    print(f"Building BM25 index for book: {book_uuid}")
     corpus_docs = _get_all_chunks_for_book(book_uuid)
     if not corpus_docs:
         return None
@@ -156,19 +144,25 @@ def process_and_embed_book(pdf_path: str, class_name: str, subject: str, chapter
     Read PDF, split into chunks using the provided chapter ranges, embed with
     local_embedder, and upload points to Qdrant. If the same book (sha256)
     already exists, delete previous points first.
+    Also, generates and saves a summary of the book.
     """
     if not client or not local_embedder:
         raise RuntimeError("Client or embedder not initialized. Call initialize() first.")
 
-    print(f"\n--- Starting Book Processing ---")
-    print(f"File: {os.path.basename(pdf_path)}")
-    print(f"Class: {class_name}, Subject: {subject}")
+    # Create chpchunks directory if it doesn't exist
+    chpchunks_dir = "chpchunks"
+    if not os.path.exists(chpchunks_dir):
+        os.makedirs(chpchunks_dir)
+        
+    # Create summary directory if it doesn't exist
+    summary_dir = "summary"
+    if not os.path.exists(summary_dir):
+        os.makedirs(summary_dir)
 
     book_uuid = get_book_uuid(pdf_path)
 
     # Delete existing points for this book_uuid (if any)
     if check_if_book_exists(book_uuid):
-        print(f"Book with UUID {book_uuid} already exists. Deleting old entries...")
         client.delete(
             collection_name=COLLECTION_NAME,
             points_selector=models.FilterSelector(
@@ -177,40 +171,55 @@ def process_and_embed_book(pdf_path: str, class_name: str, subject: str, chapter
                 )
             ),
         )
-        print("Old entries deleted. Proceeding with re-embedding...")
 
     reader = PdfReader(pdf_path)
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
-    total_chapters = len(chapters)
-    print(f"Found {total_chapters} chapters to process.")
+    
+    book_data_for_json = {
+        "class_name": class_name,
+        "subject": subject,
+        "chapters": []
+    }
+    
+    summary_data_for_json = {
+        "class_name": class_name,
+        "subject_name": subject,
+        "chapters": []
+    }
 
     for i, chapter in enumerate(chapters):
         chapter_name = chapter.get("chapter_name") or chapter.get("name", f"Untitled Chapter {i+1}")
         
-        # Use the specific page numbers from the chapter object
         pdf_start_page_llm = chapter.get("pdf_startpg")
         pdf_end_page_llm = chapter.get("pdf_endpg")
         chp_start_page = chapter.get("chpstpage")
         chp_end_page = chapter.get("chpendpage")
 
         if pdf_start_page_llm is None or pdf_end_page_llm is None:
-            print(f"  Skipping chapter '{chapter_name}' because pdf_startpg/pdf_endpg missing.")
             continue
 
         chapter_text = ""
-        # Iterate using the LLM's identified PDF page numbers
         for page_num in range(pdf_start_page_llm - 1, pdf_end_page_llm):
             if 0 <= page_num < len(reader.pages):
                 chapter_text += reader.pages[page_num].extract_text() or ""
 
-        print(f"  --- Chapter Text for '{chapter_name}' (PDF Pages {pdf_start_page_llm}-{pdf_end_page_llm}) ---")
-        print(f"  First 200 chars: {chapter_text[:200].strip()}...")
-        print(f"  Last 200 chars: ...{chapter_text[-200:].strip() if len(chapter_text) >= 200 else chapter_text.strip()}")
-        print(f"  Total length: {len(chapter_text)} characters")
-        print("  --------------------------------------------------")
-
         text_chunks = text_splitter.split_text(chapter_text)
-        print(f"Split chapter into {len(text_chunks)} text chunks.")
+
+        # Store chunks for chpchunks.json
+        chapter_data_for_json = {
+            "chapter_name": chapter_name,
+            "number_of_chunks": len(text_chunks),
+            "chunks": text_chunks
+        }
+        book_data_for_json["chapters"].append(chapter_data_for_json)
+
+        # Generate and store summary for summary.json
+        summary_text = generate_chapter_summary(class_name, subject, chapter_name, text_chunks)
+        summary_chapter_data = {
+            "chapter_name": chapter_name,
+            "summary": summary_text
+        }
+        summary_data_for_json["chapters"].append(summary_chapter_data)
 
         points_to_upload = []
         for chunk in text_chunks:
@@ -227,19 +236,28 @@ def process_and_embed_book(pdf_path: str, class_name: str, subject: str, chapter
                         "chapter": chapter_name,
                         "pdf_startpg": pdf_start_page_llm,
                         "pdf_endpg": pdf_end_page_llm,
-                        "chpstpage": chp_start_page, # Add this
-                        "chpendpage": chp_end_page,   # Add this
+                        "chpstpage": chp_start_page,
+                        "chpendpage": chp_end_page,
                         "text": chunk,
                     },
                 )
             )
 
         if points_to_upload:
-            print(f"Embedding complete. Uploading {len(points_to_upload)} points to Qdrant...")
             client.upsert(collection_name=COLLECTION_NAME, points=points_to_upload, wait=True)
-            print(f"Chapter '{chapter_name}' processed and saved successfully.")
 
-    print("\n--- Book Processing Complete ---")
+    # Write chpchunks JSON file
+    json_filename_chunks = f"{subject.lower()}{class_name.replace(' ', '')}.json"
+    json_filepath_chunks = os.path.join(chpchunks_dir, json_filename_chunks)
+    with open(json_filepath_chunks, "w", encoding="utf-8") as f:
+        json.dump(book_data_for_json, f, indent=2)
+        
+    # Write summary JSON file
+    json_filename_summary = f"{subject.lower()}{class_name.replace(' ', '')}.json"
+    json_filepath_summary = os.path.join(summary_dir, json_filename_summary)
+    with open(json_filepath_summary, "w", encoding="utf-8") as f:
+        json.dump(summary_data_for_json, f, indent=2)
+
     return
 
 
@@ -466,23 +484,20 @@ def perform_retrieval(raw_query: str, selected_book: Dict):
     book_uuid = selected_book["id"]
     output_filename = "result.txt"
 
-    print("\nProcessing query with Gemini model...")
-    processed_data = reformulate_and_classify_query(raw_query)
+    processed_data = reformulate_and_classify_query(
+        raw_query,
+        class_name=selected_book.get('class_name'),
+        subject=selected_book.get('subject')
+    )
     reformulated_query = processed_data.get("reformulated_query", raw_query)
     keywords = processed_data.get("keywords", [])
     conceptual_score = processed_data.get("conceptual_score", 0.0)
+    classified_chapter = processed_data.get("classified_chapter", "N/A") # Get the new field
 
     alpha = 0.4 + (conceptual_score * 0.2)
     keyword_list = [item["keyword"] for item in keywords]
     keyword_query_str = " ".join(keyword_list)
     keyword_details = ", ".join([f"{item['keyword']} (Score: {item['importance']:.2f})" for item in keywords])
-
-    print("--- Query Details ---")
-    print(f"Original Query: {raw_query}")
-    print(f"Conceptual Score: {conceptual_score:.2f} (Alpha for Hybrid Search: {alpha:.2f})")
-    print(f"Reformulated Semantic Query: {reformulated_query}")
-    print(f"Extracted Keywords for BM25: {keyword_details}")
-    print("---------------------")
 
     semantic_results = []
     normalized_bm25_results = []
@@ -492,6 +507,7 @@ def perform_retrieval(raw_query: str, selected_book: Dict):
         f.write(f"Conceptual Score: {conceptual_score:.2f} (Alpha: {alpha:.2f})\n")
         f.write(f"Reformulated Semantic Query: {reformulated_query}\n")
         f.write(f"Extracted Keywords: {keyword_details}\n")
+        f.write(f"Classified Chapter: {classified_chapter}\n") # Write the classified chapter
         f.write(
             f"Book: Class {selected_book.get('class_name', 'N/A')}, Subject {selected_book.get('subject', 'N/A')}\n"
         )
@@ -597,34 +613,72 @@ def reformulate_and_classify_query(query: str, class_name: Optional[str] = None,
       "reformulated_query": str,
       "keywords": [{"keyword": str, "importance": float}, ...],
       "conceptual_score": float,
-      "classification": "conceptual"|"factual"
+      "classification": "conceptual"|"factual",
+      "classified_chapter": Optional[str] # New field
     }
     """
     raw_query = query
+    summary_context = ""
+    classified_chapter = None
 
-    prompt = (
+    if class_name and subject:
+        summary_dir = "summary"
+        json_filename_summary = f"{subject.lower()}{class_name.replace(' ', '')}.json"
+        json_filepath_summary = os.path.join(summary_dir, json_filename_summary)
+
+        if os.path.exists(json_filepath_summary):
+            try:
+                with open(json_filepath_summary, "r", encoding="utf-8") as f:
+                    summary_data = json.load(f)
+                # Extract chapter summaries to provide as context
+                chapter_summaries = []
+                for chapter in summary_data.get("chapters", []):
+                    chapter_summaries.append(f"Chapter: {chapter.get('chapter_name')}\nSummary: {chapter.get('summary')}\n---")
+                summary_context = "\n".join(chapter_summaries)
+            except Exception as e:
+                print(f"Error reading summary file {json_filepath_summary}: {e}")
+                summary_context = ""
+
+    base_prompt = (
         "You are a search query processing expert. For the given user query, perform the following tasks:\n\n"
         "1. Reformulate the Query: Make it more descriptive and contextually complete for use in a semantic vector search.\n\n"
         "2. Extract Important Keywords: Identify the most relevant keywords or short key phrases from the query. "
         "For each keyword, assign a relevance score between 0 and 1. Include only keywords with importance >= 0.3.\n\n"
         "3. Classify Query Type: Determine whether the query is more conceptual or factual. Provide a 'conceptual_score' between 0 and 1.\n\n"
-        f"Return a single valid JSON object with keys: reformulated_query, keywords (array of {{keyword, importance}}), conceptual_score.\n\n"
-        f"User Query: \"{raw_query}\"\n\n"
-        "Example output:\n"
-        '{"reformulated_query":"Detailed...","keywords":[{"keyword":"photosynthesis","importance":0.95}],"conceptual_score":0.85}\n'
     )
+
+    if summary_context:
+        base_prompt += (
+            "4. Classify Chapter: Based on the provided chapter summaries, identify which chapter the user's query is most likely related to. "
+            "If the query does not clearly relate to any specific chapter, state 'None'.\n\n"
+            f"Chapter Summaries:\n{summary_context}\n\n"
+            f"Return a single valid JSON object with keys: reformulated_query, keywords (array of {{keyword, importance}}), conceptual_score, classified_chapter.\n\n"
+            f'User Query: "{raw_query}"\n\n'
+            "Example output:\n"
+            '{"reformulated_query":"Detailed...","keywords":[{"keyword":"photosynthesis","importance":0.95}],"conceptual_score":0.85, "classified_chapter": "PLANTS: PARTS AND FUNCTIONS"}\n'
+        )
+    else:
+        base_prompt += (
+            f"Return a single valid JSON object with keys: reformulated_query, keywords (array of {{keyword, importance}}), conceptual_score.\n\n"
+            f'User Query: "{raw_query}"\n\n'
+            "Example output:\n"
+            '{"reformulated_query":"Detailed...","keywords":[{"keyword":"photosynthesis","importance":0.95}],"conceptual_score":0.85}\n'
+        )
 
     if not generation_model:
         # Fallback: simple deterministic extraction if no model available
-        return {
+        result = {
             "reformulated_query": raw_query,
             "keywords": [],
             "conceptual_score": 0.5,
             "classification": "conceptual",
         }
+        if summary_context:
+            result["classified_chapter"] = "None"
+        return result
 
     try:
-        response = generation_model.generate_content(prompt)
+        response = generation_model.generate_content(base_prompt)
         json_text = response.text.strip()
         json_start = json_text.find("{")
         json_end = json_text.rfind("}") + 1
@@ -635,20 +689,26 @@ def reformulate_and_classify_query(query: str, class_name: Optional[str] = None,
             parsed_json["classification"] = "conceptual" if conceptual_score > 0.5 else "factual"
             return parsed_json
         else:
-            return {
+            result = {
                 "reformulated_query": raw_query,
                 "keywords": [],
                 "conceptual_score": 0.5,
                 "classification": "conceptual",
             }
+            if summary_context:
+                result["classified_chapter"] = "None"
+            return result
     except Exception as e:
-        print(f"Error during query reformulation/classification: {e}")
-        return {
+        print(f"Error in reformulate_and_classify_query: {e}")
+        result = {
             "reformulated_query": raw_query,
             "keywords": [],
             "conceptual_score": 0.5,
             "classification": "conceptual",
         }
+        if summary_context:
+            result["classified_chapter"] = "None"
+        return result
 
 
 def generate_answer(raw_query: str, book_details: Dict, context: str) -> str:
@@ -674,7 +734,7 @@ def generate_answer(raw_query: str, book_details: Dict, context: str) -> str:
     user_prompt = (
         f"**Class:** {book_details.get('class_name', 'N/A')}\n"
         f"**Subject:** {book_details.get('subject', 'N/A')}\n\n"
-        f"**Student's Query:** \"{raw_query}\"\n\n"
+        f'**Student\'s Query:** "{raw_query}"\n\n'  # Corrected escaping for apostrophe
         f"**Textbook Context:**\n{context}\n"
     )
 
@@ -682,30 +742,150 @@ def generate_answer(raw_query: str, book_details: Dict, context: str) -> str:
     return response.text
 
 
+def generate_teacher_explanation(class_name: str, subject: str, chapter_name: str, summary_text: str) -> str:
+    """
+    Uses the generative model to create a teacher-like explanation from a chapter summary.
+    """
+    if not generation_model:
+        raise RuntimeError("Generation model not initialized.")
+
+    system_prompt = (
+        "You are an expert AI teacher, skilled at explaining complex topics in a simple, "
+        "engaging, and easy-to-understand way. Your audience is a student in the specified class."
+    )
+
+    user_prompt = f'''
+    **Class:** {class_name}
+    **Subject:** {subject}
+    **Chapter:** {chapter_name}
+
+    **Chapter Summary to Explain:**
+    ---
+    {summary_text}
+    ---
+
+    **Your Task:**
+    Based on the summary above, provide a detailed explanation of the chapter's key topics.
+    Follow these rules:
+    1.  **Act as a Teacher:** Address the student directly in a friendly and encouraging tone.
+    2.  **Simplify Concepts:** Break down the main ideas from the summary into simple, digestible points.
+    3.  **Use Analogies:** Where appropriate, use simple analogies or real-world examples to make the concepts relatable for a student of this class level.
+    4.  **Structure:** Organize the explanation with clear headings for each main topic. Use bullet points or numbered lists to improve readability.
+    5.  **Completeness:** Ensure you cover all the main topics mentioned in the summary.
+    6.  **Do Not Introduce New Information:** Stick strictly to the concepts presented in the provided summary.
+
+    Begin the explanation now.
+    '''
+
+    response = generation_model.generate_content([system_prompt, user_prompt])
+    return response.text
+
+
+def generate_chapter_summary(class_name: str, subject_name: str, chapter_name: str, chapter_chunks: List[str]) -> str:
+    """
+    Generates a summary for a single chapter using the generative model.
+    """
+    if not generation_model:
+        raise RuntimeError("Generation model not initialized.")
+
+    # Combine chunks into a single text
+    full_chapter_text = "\n\n".join(chapter_chunks)
+
+    # Construct the prompt
+    prompt = f"""You are an expert educational content summarizer.
+Your task is to read the raw textbook chunks from a single chapter and produce a clear, accurate, and well-structured chapter summary.
+
+---
+
+### Input:
+You will receive a list of raw text chunks extracted from a chapter of a textbook.
+These chunks may be fragmented, repetitive, or discontinuous — your job is to combine them logically.
+
+---
+
+### Your Goal:
+Summarize all the given chunks into a **coherent chapter summary** that:
+- Covers **all key topics, definitions, and formulas**.
+- Explains each major concept in simple and understandable language.
+- **Removes redundant or repeated text**.
+- Maintains the **natural chapter flow** (introduction → concepts → examples → conclusion).
+- Is **concise but complete** enough for a student to study directly from it.
+
+---
+
+### Output Format (JSON):
+Return the summarized output in valid JSON format like this:
+
+{{
+  "class_name": "{class_name}",
+  "subject_name": "{subject_name}",
+  "chapter_name": "{chapter_name}",
+  "summary": "<clean summarized text covering the full chapter>"
+}}
+
+Make sure:
+- The JSON is valid and properly formatted.
+- Do NOT include the raw chunks or extra commentary.
+- Only include the clean summarized text inside the "summary" field.
+
+---
+
+Now read the provided chapter chunks and generate the summarized JSON output as per the format above.
+
+Chapter Chunks:
+{full_chapter_text}
+"""
+
+    try:
+        response = generation_model.generate_content(prompt)
+        # Extract the JSON part from the response
+        json_text = response.text.strip()
+        json_start = json_text.find("{")
+        json_end = json_text.rfind("}") + 1
+        if json_start != -1 and json_end != -1:
+            clean_json = json_text[json_start:json_end]
+            parsed_json = json.loads(clean_json)
+            return parsed_json.get("summary", "")
+        else:
+            return "Could not generate summary."
+    except Exception as e:
+        print(f"Error generating summary for chapter {chapter_name}: {e}")
+        return "Could not generate summary."
+
+
 def generate_chapters_from_json(pdf_json: List[Dict]) -> str:
     """
-    Build a single prompt string containing the JSON page list for the LLM to extract chapters.
-    Returns the prompt (a plain string).
+    Builds a prompt string containing the JSON page list for the LLM to extract chapters.
+    Returns the prompt as a plain string.
     """
-    json_text = json.dumps(pdf_json)
-    prompt = (
-        "You are an expert assistant tasked with analyzing a textbook to identify its chapters.\n\n"
-        "The book content is provided as a JSON array, each element representing a PDF page:\n\n"
-        '[{"pdf_page": <integer>, "text": "<page text>"}]\n\n'
-        "When identifying chapters and their page numbers, prioritize information found in an 'INDEX' or 'Table of Contents' section if available within the provided text.\n\n"
-        "Return a single valid JSON object following this schema:\n\n"
-        '{\n'
-        '  "pdf_offset": <integer>,\n'
-        '  "chapters": [\n'
-        '    {"chapter_name": "Full name of the chapter", "pdf_startpg": <integer>, "pdf_endpg": <integer>}\n'
-        "  ]\n"
-        "}\n\n"
-        "- pdf_startpg/pdf_endpg are the real PDF page numbers (including front matter).\n"
-        "- Calculate `pdf_offset` as the number of pages of front matter. This is typically (first_chapter_start_page - 1). If an index is available, infer the front matter by the difference between the page number in the index and the actual pdf page number where the chapter starts.\n"
-        "Do not include any text outside the JSON object.\n\n"
-        "Here is the book content in JSON format:\n\n"
-        f"{json_text}\n"
-    )
+    json_text = json.dumps(pdf_json, ensure_ascii=False)
+
+    prompt = f'''You are an expert assistant tasked with analyzing a textbook to identify its chapters.
+
+The book content is provided as a JSON array, each element representing a PDF page:
+
+[{{"pdf_page": <integer>, "text": "<page text>"}}]
+
+When identifying chapters and their page numbers, prioritize information found in an 'INDEX' or 'Table of Contents' section if available within the provided text.
+
+Return a single valid JSON object following this schema:
+
+{{
+  "pdf_offset": <integer>,
+  "chapters": [
+    {{"chapter_name": "Full name of the chapter", "pdf_startpg": <integer>, "pdf_endpg": <integer>}}
+  ]
+}}
+
+- pdf_startpg/pdf_endpg are the real PDF page numbers (including front matter).
+- Calculate `pdf_offset` as the number of pages of front matter. This is typically (first_chapter_start_page - 1).
+- If an index is available, infer the front matter by comparing the index’s chapter start page with the actual PDF page number.
+- Do not include any text outside the JSON object.
+
+Here is the book content in JSON format:
+
+{json_text}
+'''
     return prompt
 
 
@@ -715,7 +895,6 @@ def generate_chapters_from_text(json_path: str) -> str:
     Returns a JSON-string representation of the parsed LLM output or a safe default.
     """
     if not generation_model:
-        print("Warning: generation_model not initialized; returning empty chapters.")
         return json.dumps({"pdf_offset": 0, "chapters": []})
 
     with open(json_path, "r", encoding="utf-8") as f:
@@ -726,11 +905,9 @@ def generate_chapters_from_text(json_path: str) -> str:
     try:
         response = generation_model.generate_content(prompt)
         text = response.text.strip()
-        print(f"Raw LLM response for chapter extraction: {text[:500]}...")
 
         json_start = text.find("{")
         if json_start == -1:
-            print("LLM response did not contain a JSON object.")
             return json.dumps({"pdf_offset": 0, "chapters": []})
 
         open_braces = 0
@@ -746,7 +923,6 @@ def generate_chapters_from_text(json_path: str) -> str:
                 break
 
         if json_end == -1:
-            print("Could not find matching closing brace in LLM response.")
             return json.dumps({"pdf_offset": 0, "chapters": []})
 
         clean_json_str = text[json_start:json_end]
@@ -755,9 +931,12 @@ def generate_chapters_from_text(json_path: str) -> str:
             # The LLM's pdf_startpg/endpg are taken as is.
             return json.dumps(data)
         except json.JSONDecodeError:
-            print("Failed to parse JSON from LLM response.")
-            return clean_json_str
+            # If parsing fails, return the safe default, not the broken string.
+            return json.dumps({"pdf_offset": 0, "chapters": []})
 
     except Exception as e:
-        print(f"Error during LLM chapter generation: {e}")
         return json.dumps({"pdf_offset": 0, "chapters": []})
+    
+
+
+    

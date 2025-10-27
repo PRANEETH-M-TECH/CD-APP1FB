@@ -103,9 +103,15 @@
                 extractChaptersBtn.addEventListener('click', async () => {
                     const urlParams = new URLSearchParams(window.location.search);
                     let bookId = urlParams.get('filename');
+                    let class_name = urlParams.get('class_name'); // Get class_name
+                    let subject = urlParams.get('subject');     // Get subject
 
                     if (!bookId) {
                         alert('Filename not found in URL query parameter. Please go back and upload the file again.');
+                        return;
+                    }
+                    if (!class_name || !subject) { // Check for class_name and subject
+                        alert('Class name or subject not found in URL. Please go back and upload the file again.');
                         return;
                     }
 
@@ -113,7 +119,7 @@
                     extractChaptersBtn.textContent = 'Extracting...';
 
                     try {
-                        const response = await fetch(`/extract-chapters?book_id=${bookId}`, {
+                        const response = await fetch(`/extract-chapters?book_id=${bookId}&class_name=${class_name}&subject=${subject}`, { // Pass new params
                             method: 'POST',
                         });
 

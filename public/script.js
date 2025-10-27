@@ -45,7 +45,7 @@ function setupAdminPage() {
             // Step 2: Redirect to the chapters page with data in URL
             const queryParams = new URLSearchParams({
                 filename: uploadResult.filename,
-                className: className,
+                class_name: className,
                 subject: subject
             });
             window.location.href = `/chapters?${queryParams.toString()}`;
@@ -62,7 +62,7 @@ function setupAdminPage() {
 function setupChaptersPage() {
     const params = new URLSearchParams(window.location.search);
     const filename = params.get('filename');
-    const className = params.get('className');
+    const className = params.get('class_name'); // Changed to 'class_name'
     const subject = params.get('subject');
 
     if (!filename) {

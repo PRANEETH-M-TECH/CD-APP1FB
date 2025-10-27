@@ -1,1333 +1,1351 @@
 --- Query Log ---
-Timestamp: 2025-10-24T12:58:08.715838
-Original Query: explain about the Mean sea level?
-Book UUID: b250da676f2f0c2a2b1423a27ae133c1a32829112733470fc683ceab06193ba0
-Class: 7, Subject: social
+Timestamp: 2025-10-27T19:02:16.011676
+Original Query: which parts of the plants do we generally use?
+Book UUID: 097025710c9d2a09420dda2755023e25b2106cc4e89dfc78be9f2adab9f8c6b9
+Class: 6, Subject: science
 
 --- LLM Query Processing ---
-Reformulated Query: Provide a detailed explanation, precise definition, calculation methods, and measurement significance of the Mean Sea Level (MSL) concept in the fields of oceanography and geodesy.
-Classification: conceptual
-Conceptual Score: 0.90
-Keywords: Mean Sea Level, Sea level, Explanation, Calculation methods, Oceanography
+Reformulated Query: Identify and list the specific anatomical parts of plants (such as roots, stems, leaves, or fruits) that are commonly harvested and utilized for human consumption as food ingredients.
+Classification: factual
+Conceptual Score: 0.10
+Keywords: plant parts, consumed, food ingredients, roots, leaves, fruits
 
 --- Formatted Top Chunks for LLM (Context) ---
 
-  --- Chunk 1 (Hybrid Score: 0.7770) ---
-     Chapter: Reading Maps of Different kinds
-     Text: 150 MSL.
-Mean Sea Level
-There are high tides and low tides on
-the level of the sea, and they never stand
-still. As a result of this phenomenon, the
-level of the sea keeps on either rising or
-falling. Which of these heights do we
-take as the sea level or 0 meter height?
-In order to solve this problem, the level
-of the sea is carefully measured at
-frequent intervals and the mean level of
-the sea is calculated. Over a period,
-scientists observed the high and low
-levels of the sea and they have come to
-one calculated average level, which is
-known as Mean Sea Level (M.S.L.).
- If you live near a Railway station,
-find out the height of that place with
-the help of display board. The height
-is mentioned as “________ M.S.L.”.
-Note it down in your note book.
- Look at figures 1.6 & 1.7  and tell
-whether Nimpur would be
-submerged if sea waters were to
-flood up to 30 meters?
-R Pranahita
-R Penganga
-R Wainganga
-R Godavari
-R Musi
-R Dindi
-R Krishna
-R Tungabhadra
-R Krishna
-R Manjeera
-R Godavari
+  --- Chunk 1 (Hybrid Score: 0.5800) ---
+     Chapter: OUR FOOD
+     Text: Mustard (Avalu)
+Sugarcane
+Carrot
+Onion
+Cabbage
+Asafoetida (Inguva)
+Peanuts contain beneficial protien, but many people are allergic to them and find
+them hard to digest.
+SCERT TELANGANA6
+OUR FOOD Free Distribution by Govt. of T.S. 2020-21
+• Which parts of the plants do we
+generally use?
+• Do we also use flowers as food?
+Which plants are these?
+• Is there any plant of which whole
+parts of it can be eaten?
+We use various parts of  plants for our
+food. Leaves, roots, seeds and fruits of
+plants are widely used whereas stems
+and flowers are not so widely used. We
+need several ingredients to cook
+different types of food. Whatever may
+be the source of  ingredients - plants,
+animals or minerals, we use some in
+plenty but others are needed in only
+small quantities. Why is it so?
+How people develop food habits?
+People living in one region usually
+share common food habits. You
+might have seen paddy fields near
+your village. In our state geographical
+and climatic conditions are more
 
-  --- Chunk 2 (Hybrid Score: 0.3106) ---
-     Chapter: Reading Maps of Different kinds
-     Text: 6 Diversity on the Earth Social Studies
-Telangana Plateau
-Map-2 TELANGANA -
-SEA LEVEL
-Look at figure 1.8 and answer the
-following questions:
- Mark the direction of flow of the
-river.
- The height of the lowest land is
-between ____ meters and _____
-meters.
- There are two high points in this
-map. What are their heights?
+  --- Chunk 2 (Hybrid Score: 0.5395) ---
+     Chapter: OUR FOOD
+     Text: be aware of  the ingredients of packaged
+food. When you purchase any food item
+in the market, don't forget to read about
+its ingredients and manufacturing date.
+Eating out-dated food material may
+damage your health.
+Joseph’s father always observes the
+ingredients used and the date of
+manufacturing when he buys the
+readymade food items. Expired food
+items should not be consumed. They
+are harmful to our health.
+Do you know?
+Preparation of food  using vegetables
+and fruits is an art. Some people make
+different types of designs and
+decorations with vegetables. This is
+called vegetable carving. Try to make
+your own carving (Fig. 5).
+Fig. 5
+KeywordsKeywordsKeywordsKeywordsKeywords
+Ingredients, preservatives, fragrant
+materials, dry fruits
+What we have learnt
+   • We get food from plants and
+animals.
+   • For cooking food, we need
+different types of  ingredients.
+   • We use different parts of  plants
+like stems, roots, leaves, fruits and
+flowers as food.
+
+  --- Chunk 3 (Hybrid Score: 0.3929) ---
+     Chapter: OUR FOOD
+     Text: * In some plants we eat only some
+parts as food.
+* We take entire plant as food.
+Beet roots are high in carbohydrate levels and should therefore be used sparingly
+SCERT TELANGANA5
+Science VI Class
+Fig. 3
+Do you know?
+To make biryani or kheer, we use different types of  ingredients such as ilaichi
+(cardamom), lavang (clove), dalchini (cinnamon), biryani leaves, pepper etc. They
+are called condiments (sugandha dravyalu / fragrant material). Cashew nuts,
+almonds, kismis (dried grapes) etc are also used. These are dry fruits. Condiments
+and dry fruits grow in particular places only. They are not available in large
+quantities. They are expensive.
+Now look at table 4 and try to fill it as shown.
+Table 4
+Name of plant Parts that we eat
+Fenugreek (Menthulu) Leaves, seeds
+Mustard (Avalu)
+Sugarcane
+Carrot
+Onion
+Cabbage
+Asafoetida (Inguva)
+Peanuts contain beneficial protien, but many people are allergic to them and find
+them hard to digest.
+SCERT TELANGANA6
+
+  --- Chunk 4 (Hybrid Score: 0.3351) ---
+     Chapter: PLANTS: PARTS AND FUNCTIONS
+     Text: What are the common parts that you
+observe in all plants?
+Fig. 1
+A notch in a tree will remain the same distance from the ground as the tree grows.
+SCERT TELANGANA84
+PLANTS : Parts and Functions Free Distribution by Govt. of T.S. 2020-21
+Table 1
+S.No.   Name of the plant Root  Stem    Leaves      Flower
+Yes/No    Y es/No    Yes/No      Yes/No
+1.   Tridax plant  Yes  Yes  Yes    Yes
+2.   Plant No. 2
+3.
+4.
+5.
+Fig. 2(a) Fig. 2(b)
+Table-2
+S. Name of Roots are similar
+No. the plant   to Fig.
+1. Tridax plant 2a
+2. Plant No. 2
+3.
+4.
+5.
+There are variations in the size and
+shape of plants but generally all plants
+have roots, stems and leaves.  Have you
+ever thought about the importance of
+leaf, stem and roots in plants? What is
+the role of  plant parts? Let us try to
+understand these things.
+Roots: Different types of roots
+Observe the roots of  the plants you
+collected. How are they?
+Do all plants have similar types of roots?
+Is there any difference?
+Compare the roots of your sample
+
+  --- Chunk 5 (Hybrid Score: 0.3315) ---
+     Chapter: PLANTS: PARTS AND FUNCTIONS
+     Text: What we have learnt
+• The important parts of a plant
+are roots, stem and leaves.
+• Tap root system and fibrous root
+system are two types of root
+systems seen in plants.
+• Roots absorb water and minerals
+from the soil and also help in
+anchoring the plant body to the
+soil.
+• The stem bears branches, leaves,
+flowers and fruits.
+• The stem carries the water
+absorbed by the roots to different
+parts of the plant.
+Do you know?
+Some plants like potato, turmeric, garlic, ginger and sugarcane store food  material
+in the stem due to which the stem bulges in size. Generally we think that these
+are all tubers or roots. Actually they are modified stems.
+Fig. 10
+Buds are small swellings on a plant from which a shoot, leaf, or flower usually develops.
+SCERT TELANGANA92
+PLANTS : Parts and Functions Free Distribution by Govt. of T.S. 2020-21
+• Leaves are involved in preparing
+food. They also help in exchange
+of gases and transpiration.
+• Leaf base, petiole and lamina are
+all parts of a leaf.
+
+  --- Chunk 6 (Hybrid Score: 0.3085) ---
+     Chapter: PLANTS: PARTS AND FUNCTIONS
+     Text: red ink
+Fig. 3
+84% of  a raw apple and 96% of  a raw cucumber is water.
+SCERT TELANGANA86
+PLANTS : Parts and Functions Free Distribution by Govt. of T.S. 2020-21
+• Did you see any red spots in the
+stem or other parts of any of
+the plants?
+• Why did red spots appear on the
+stem or flower?
+We can conclude that roots help in
+taking up of water from the soil. They
+do this by absorption. Minerals present
+in the soil are also absorbed along with
+the water.
+Do you know?
+Some plants store  food in roots and
+stems. Some plants like radish, carrot,
+beetroot store food materials in their
+roots.  These roots bulge out and
+called tuberous roots. Can you give
+some more examples. Carrot, sweet
+potato are eaten even when raw!
+Parts of  a leaf
+Leaves are another important part of
+plants. Most  plants that we see in our
+surroundings have different types of
+leaves.
+Fig. 5
+Observe the given picture of  a leaf  and
+its parts (Fig. 5).
+• Where is the leaf attached to the
+stem?
+
+  --- Chunk 7 (Hybrid Score: 0.3049) ---
+     Chapter: OUR FOOD
+     Text: Don’t eat bananas on an empty stomach; combining them with a bit of protein will
+help to normalize the insulin response caused by the sugar in the banana.
+SCERT TELANGANA3
+Science VI Class
+raw rice and water. But for making
+biryani we need many materials.
+To make different kinds of  food we need
+different materials. These materials which
+When you purchase packed food,
+biscuits or any cool drink, you will find
+their ingredients written on their
+packets. Have you ever thought from
+where these ingredients come? Yes, it
+will be easy for you to say that we get
+vegetables and fruits from plants; eggs,
+Fig. 2
+Chicory is beneficial for digestion, the circulatory system and the blood
+milk, meat from animals. Is there any
+other source you can think of? Some
+ingredients have been listed below. Find
+out the source of each ingredient; if it
+is a plant mark (P) or an animal (A), or
+something else (O) (Table-3).
+Table 2 - Ingredients of  some food items.
+
+  --- Chunk 8 (Hybrid Score: 0.2880) ---
+     Chapter: PLANTS: PARTS AND FUNCTIONS
+     Text: • Leaves are involved in preparing
+food. They also help in exchange
+of gases and transpiration.
+• Leaf base, petiole and lamina are
+all parts of a leaf.
+• Reticulate and parallel venation are
+found in leaves.
 Improve your learning
-1. Why are the levels of all the
-seas equal in the world?
-2. How is the sea level
-measured?
-3. What are the uses of maps
-showing height?
-4. What differences do you find between the life
-style of people living on high altitudes and low
-altitudes?
-5. How are  maps helpful to people?
-6. Read the para ‘Contour Lines’ on page 5 and
-comment on it.
-7. Observe the Telangana map given and list out
-the areas of districts which are below
-150 MSL.
-Mean Sea Level
-There are high tides and low tides on
-the level of the sea, and they never stand
-still. As a result of this phenomenon, the
-level of the sea keeps on either rising or
+1. What are the important parts of a
+plant?
+2. How will you tell which part of a
+plant is the stem and which is the
+root?
+3. Collect any plant from your
+surroundings. Draw its  root
+structure. What can you say about
+its root system?
+4. John has no place in his house but
+he wants to plant vegetables like
+tomato  in his house. Suggest him
+different ways to do so.
+5. What will happen if a plant doesn’t
+have any leaves?
+6. How does the stem help the plant?
+7. What type of venation is found in
+the leaves of plants with fibrous
+roots?
+8. If the leaves have reticulate venation
+what would be the type of  root?
+9. Explain the various parts of a plant
+with the help of a diagram.
+10. Explain the parts of a leaf with the
+help of a diagram.
 
-  --- Chunk 3 (Hybrid Score: 0.2949) ---
-     Chapter: Oceans and Fishing
-     Text: sea areas are called oceans. Oceans are huge bodies of water generally separated
-by continents.
-PART - I
-Fig 4.1 Relief features of an Ocean
-Continental Slope
-Trench
-Deep sea plain
-Sea level
-It will be interesting to find out what lies
-under the water. The surface of water does not
-tell us about what lies under it. You may have
-had the opportunity to notice or feel what the
-bed of a river or stream or pond is like.
- Please share what you have seen or
-felt about what lies under the
-surface of waterbodies.
- How many meters deep are the
-water bodies that you have seen?
-Ocean Relief
-The floor of the ocean
-is just like the surface of
-the earth.  The bottom of
-the sea is not a flat surface.
-It consists of hills,
-mountains,  plateaus,
-plains, trenches etc. Many
-trenches on the ocean
-floor are so deep that even
-if the Mount Everest was
-placed in them, it would
-4
-Continental Shelf
-SCERT, TEALANGANASCERT, TEALANGANA
-34 Diversity on the Earth Social Studies
-2) Currents: In the oceans, water
+  --- Chunk 9 (Hybrid Score: 0.2569) ---
+     Chapter: PLANTS: PARTS AND FUNCTIONS
+     Text: Think it over.
+Most plants around us have roots, leaves,
+stems and flowers. All parts of  the plants
+carry out some functions, essential for
+the whole plant. There are diverse forms
+of plants in nature and plants adapt
+themselves to the different conditions in
+nature in different ways. For example,
+while stems usually support the plant
+body, in some plants they adapt and start
+storing food.
+Flower is another important part
+in the plant. Flower has different colourful
+structures called petals. They attract insects
+for pollination and produce fruits.We grow
+plants for colourful flowers which gives
+beauty to nature. We will learn more about
+flower  in the next classes.
+Keywords:Keywords:Keywords:Keywords:Keywords:
+Tap root, fibrous roots, petiole,
+lamina, stomata, reticulate venation,
+parallel venation, transpiration
+What we have learnt
+• The important parts of a plant
+are roots, stem and leaves.
+• Tap root system and fibrous root
+system are two types of root
+systems seen in plants.
 
-  --- Chunk 4 (Hybrid Score: 0.2719) ---
-     Chapter: Oceans and Fishing
-     Text: if the Mount Everest was
-placed in them, it would
-4
-Continental Shelf
-SCERT, TEALANGANASCERT, TEALANGANA
-34 Diversity on the Earth Social Studies
-2) Currents: In the oceans, water
-moves from one part to another in big
-streams. These streams which flow
-constantly in a definite direction on the
-surface of the ocean are called ocean
-currents. The ocean currents are of two
-types - the warm currents and the cold
-currents. The warm currents flow from the
-equatorial region towards the poles. The
-cold currents flow from the poles to the
-equatorial regions. They are mainly caused
-by the prevailing winds, difference in
-temperature and salinity of the ocean water.
-3) Tides:  Tides are the rhythmic rise
-and fall in the level of the water in the
-oceans every day. All places on the coast
-experience some hours of low tide and
-some hours of high tide. Tides do not rise
-to the same height every day. When the tide
-is high, water comes up to the coast for
-some distance. Then as low tide begins, the
-
-  --- Chunk 5 (Hybrid Score: 0.2683) ---
-     Chapter: Europe
-     Text: sea means ‘middle of the world’. Do you
-know why it is called by this name? In
-ancient times, the people of Europe did not
-know about other continents like America
-In this chapter, we will try to find out about how the people of Europe have been
-using their distinct natural environment and resources.
-5
-or Australia. They only knew about Europe,
-western parts of Asia and northern parts of
-Africa. You can see that all these regions
-are situated around the Mediterranean Sea.
-That is why Europeans thought that this sea
-was in the centre of the world and named it
-so. It has been known by this name ever
-since.
- Name the mountains to the east of
-Europe.
-The Eural mountains are eastern
-boundaries of Europe. These mountains are
-not very high. Asia is on the east of these
-Europe
-Arctic Ocean
-Asia
-Ural
-Mountains Pacific
-Ocean
-Africa
-Equator
-Indian
-Ocean Australia
-Map 1: Location of Europe
-Atlantic Ocean
-Mediterranean
-Sea
-SCERT, TEALANGANASCERT, TEALANGANA
-
-  --- Chunk 6 (Hybrid Score: 0.2661) ---
-     Chapter: Oceans and Fishing
-     Text: some hours of high tide. Tides do not rise
-to the same height every day. When the tide
-is high, water comes up to the coast for
-some distance. Then as low tide begins, the
-water moves back from the land. The tides
-are of great help for fishing. Tides at some
-places take away the mud brought down by
-rivers and prevent silting.
-drown completely.  A
-major part of ocean
-floor is about 3-6 kms
-below the sea level.
-Figure 4.1 is a sketch
-of the different kind of
-land forms that can be
-found under the surface
-of an ocean. Fig 4.2
-shows the relief
-features of what lies
-below the surface of the
-oceans around India.
-In figure 4.2 ,
-observe the land mass
-of India and then go over to the floor of the
-Bay of Bengal, the Arabian Sea and the
-Indian Ocean. Try to point out the areas look
-like hills, plains and trenches on the ocean
-floor.
-The waters of the oceans are never still.
-There are different kinds of movements in
-them.
- Have you experienced the different
-movements of water in a river? You
-
-  --- Chunk 7 (Hybrid Score: 0.2442) ---
-     Chapter: Reading Maps of Different kinds
-     Text: Physical Maps
-You will find some maps in your Atlas called ‘Physical Maps’. In these maps, you will
-usually find different parts of the land coloured in green, yellow or brown. Actually, they
-show the variety of landforms (mountains, plateaus, plains etc.) and depict the height of
-places.
-How can we represent the heights of land on flat paper? Of course, we can make a drawing
-like the one below:
-As you can see this is a
-picture and not a map. Here
-the height of the hills hide
-what is behind them. A map
-should show all the places
-without hiding them. Can
-you think of a way in which
-we can draw a map of this
-place?
-One way in which we can
-show heights on maps is
-through the use of colour.
-Let us see how this is done.
-Measuring Height on Land
-All heights on the land are calculated from the sea level. Since all the seas in the world
-are connected to each other, the sea level (the top surface) all over the world is taken to be
-
-  --- Chunk 8 (Hybrid Score: 0.2175) ---
-     Chapter: Europe
-     Text: times.
-The presence of a large number of bays
-and gulfs has also facilitated the use of sea
-routes. Bays and gulfs are parts of the sea
-enclosed by land on three sides. In a bay,
-the land curves inwards and the mouth of
-the bay is usually wide as in the Bay of
-Bengal. A gulf is a narrow inlet of the sea
-and has a narrow mouth. The entire Baltic
-Sea as you can see in the map is a large
-gulf. Since the bays and gulfs are protected
-from the storms of the high seas, they are
-very useful for building harbours where
-ships can be safely anchored and cargoes
-loaded or unloaded. Deep gulfs or bays are
-preferred for building harbours as large
-ships can be anchored in them. Ships need
-deep waters so that their bottoms do not
-touch the sea floor.
- Find out the names of the countries
-on the three sides of the Baltic Sea
-from Map 4.
-Climate
-Europe has a cooler climate than ours.
-Most of its countries experience snowfall in
-winter. Their summers too are not as warm
-as ours.
-
-  --- Chunk 9 (Hybrid Score: 0.2120) ---
-     Chapter: Oceans and Fishing
-     Text: SCERT, TEALANGANA
- 33Free Distribution by Govt. of  Telangana 2021-22
- Is the water found in your village/
-town saline or potable? Is it
-different in different parts of the
-village/town?
- What names do you know for
-different water bodies? Do large or
-small waterbodies have different
-names?
- In a map of the world or on the
-globe, find the names of five seas
-and five oceans. Run your fingers
-over the areas they cover.
-CHAPTER
-   Oceans and Fishing
-The earth is known as a watery planet as it is the only planet containing water in
-abundance. It is estimated that about 71% of the earth‘s surface is covered by oceans
-and seas. What is your image of a sea or an ocean? What have you seen or heard
-about oceans and seas? An extension of saline water on earth is called sea. Large
-sea areas are called oceans. Oceans are huge bodies of water generally separated
-by continents.
-PART - I
-Fig 4.1 Relief features of an Ocean
-Continental Slope
-Trench
-Deep sea plain
-Sea level
-
-  --- Chunk 10 (Hybrid Score: 0.2091) ---
-     Chapter: Oceans and Fishing
-     Text: floor.
-The waters of the oceans are never still.
-There are different kinds of movements in
-them.
- Have you experienced the different
-movements of water in a river? You
-may be aware of waves, currents
-and the coming and receding of
-floods. Discuss these experiences
-in the class.
-Ocean waters have three kinds of
-movements. They are:
-1) Waves:  When the water on the
-surface of the ocean rises and falls, they
-are called waves. Waves are formed when
-gentle winds scrape across the ocean
-surface. The faster the wind, the bigger will
-be the waves.
-Fig 4.2 Relief features of Indian Ocean
-SCERT, TEALANGANASCERT, TEALANGANA
- 35Free Distribution by Govt. of  Telangana 2021-22
-Fishing Village on the Coastal
-Plains
-Ocean water is always saline. It contains
-several mineral salts dissolved in it. Oceans
-are the main source of rainfall. Oceans are
-also storehouses of fish and other seafoods.
-Oceans provide natural highways for
-international trade. Let us visit
-Bhavanapadu, a fishing village near the
+  --- Chunk 10 (Hybrid Score: 0.2533) ---
+     Chapter: PLANTS: PARTS AND FUNCTIONS
+     Text: 83
+Science VI Class
+9 Plants : Parts and Functions
+What kind of plants have you seen at
+home and outside? You must have
+observed a variety of  plants; some are
+big and some are small. We can find plants
+near our home, in the school campus, on
+the way to school, in the parks and almost
+everywhere.
+• Are all plants similar?
+• What are the similarities among
+them?
+Let us get to know more about plants,
+especially about their parts and functions.
+Parts of  plants
+We know that we have different parts in
+our body. In the same way plants  also
+have different parts.  Do you know them?
+Here is a plant . Try to name its parts.
+Which plant is this?
+In this chapter, Let us try to understand
+about different parts of  plants
+through activities. For this, make
+groups of  4-5 students. Each group will
+collect 5 to 6 different types of plants
+along with their roots.  You can collect
+different small plants from your garden
+or surroundings but be careful not to
+damage too many plants.
 
 
 --- Hybrid Search Results (10 Chunks) ---
 
-  1. Hybrid Score: 0.7770
-     Chapter: Reading Maps of Different kinds
-     Text: 150 MSL.
-Mean Sea Level
-There are high tides and low tides on
-the level of the sea, and they never stand
-still. As a result of this phenomenon, the
-level of the sea keeps on either rising or
-falling. Which of these heights do we
-take as the sea level or 0 meter height?
-In order to solve this problem, the level
-of the sea is carefully measured at
-frequent intervals and the mean level of
-the sea is calculated. Over a period,
-scientists observed the high and low
-levels of the sea and they have come to
-one calculated average level, which is
-known as Mean Sea Level (M.S.L.).
- If you live near a Railway station,
-find out the height of that place with
-the help of display board. The height
-is mentioned as “________ M.S.L.”.
-Note it down in your note book.
- Look at figures 1.6 & 1.7  and tell
-whether Nimpur would be
-submerged if sea waters were to
-flood up to 30 meters?
-R Pranahita
-R Penganga
-R Wainganga
-R Godavari
-R Musi
-R Dindi
-R Krishna
-R Tungabhadra
-R Krishna
-R Manjeera
-R Godavari
+  1. Hybrid Score: 0.5800
+     Chapter: OUR FOOD
+     Text: Mustard (Avalu)
+Sugarcane
+Carrot
+Onion
+Cabbage
+Asafoetida (Inguva)
+Peanuts contain beneficial protien, but many people are allergic to them and find
+them hard to digest.
+SCERT TELANGANA6
+OUR FOOD Free Distribution by Govt. of T.S. 2020-21
+• Which parts of the plants do we
+generally use?
+• Do we also use flowers as food?
+Which plants are these?
+• Is there any plant of which whole
+parts of it can be eaten?
+We use various parts of  plants for our
+food. Leaves, roots, seeds and fruits of
+plants are widely used whereas stems
+and flowers are not so widely used. We
+need several ingredients to cook
+different types of food. Whatever may
+be the source of  ingredients - plants,
+animals or minerals, we use some in
+plenty but others are needed in only
+small quantities. Why is it so?
+How people develop food habits?
+People living in one region usually
+share common food habits. You
+might have seen paddy fields near
+your village. In our state geographical
+and climatic conditions are more
 
-  2. Hybrid Score: 0.3106
-     Chapter: Reading Maps of Different kinds
-     Text: 6 Diversity on the Earth Social Studies
-Telangana Plateau
-Map-2 TELANGANA -
-SEA LEVEL
-Look at figure 1.8 and answer the
-following questions:
- Mark the direction of flow of the
-river.
- The height of the lowest land is
-between ____ meters and _____
-meters.
- There are two high points in this
-map. What are their heights?
+  2. Hybrid Score: 0.5395
+     Chapter: OUR FOOD
+     Text: be aware of  the ingredients of packaged
+food. When you purchase any food item
+in the market, don't forget to read about
+its ingredients and manufacturing date.
+Eating out-dated food material may
+damage your health.
+Joseph’s father always observes the
+ingredients used and the date of
+manufacturing when he buys the
+readymade food items. Expired food
+items should not be consumed. They
+are harmful to our health.
+Do you know?
+Preparation of food  using vegetables
+and fruits is an art. Some people make
+different types of designs and
+decorations with vegetables. This is
+called vegetable carving. Try to make
+your own carving (Fig. 5).
+Fig. 5
+KeywordsKeywordsKeywordsKeywordsKeywords
+Ingredients, preservatives, fragrant
+materials, dry fruits
+What we have learnt
+   • We get food from plants and
+animals.
+   • For cooking food, we need
+different types of  ingredients.
+   • We use different parts of  plants
+like stems, roots, leaves, fruits and
+flowers as food.
+
+  3. Hybrid Score: 0.3929
+     Chapter: OUR FOOD
+     Text: * In some plants we eat only some
+parts as food.
+* We take entire plant as food.
+Beet roots are high in carbohydrate levels and should therefore be used sparingly
+SCERT TELANGANA5
+Science VI Class
+Fig. 3
+Do you know?
+To make biryani or kheer, we use different types of  ingredients such as ilaichi
+(cardamom), lavang (clove), dalchini (cinnamon), biryani leaves, pepper etc. They
+are called condiments (sugandha dravyalu / fragrant material). Cashew nuts,
+almonds, kismis (dried grapes) etc are also used. These are dry fruits. Condiments
+and dry fruits grow in particular places only. They are not available in large
+quantities. They are expensive.
+Now look at table 4 and try to fill it as shown.
+Table 4
+Name of plant Parts that we eat
+Fenugreek (Menthulu) Leaves, seeds
+Mustard (Avalu)
+Sugarcane
+Carrot
+Onion
+Cabbage
+Asafoetida (Inguva)
+Peanuts contain beneficial protien, but many people are allergic to them and find
+them hard to digest.
+SCERT TELANGANA6
+
+  4. Hybrid Score: 0.3351
+     Chapter: PLANTS: PARTS AND FUNCTIONS
+     Text: What are the common parts that you
+observe in all plants?
+Fig. 1
+A notch in a tree will remain the same distance from the ground as the tree grows.
+SCERT TELANGANA84
+PLANTS : Parts and Functions Free Distribution by Govt. of T.S. 2020-21
+Table 1
+S.No.   Name of the plant Root  Stem    Leaves      Flower
+Yes/No    Y es/No    Yes/No      Yes/No
+1.   Tridax plant  Yes  Yes  Yes    Yes
+2.   Plant No. 2
+3.
+4.
+5.
+Fig. 2(a) Fig. 2(b)
+Table-2
+S. Name of Roots are similar
+No. the plant   to Fig.
+1. Tridax plant 2a
+2. Plant No. 2
+3.
+4.
+5.
+There are variations in the size and
+shape of plants but generally all plants
+have roots, stems and leaves.  Have you
+ever thought about the importance of
+leaf, stem and roots in plants? What is
+the role of  plant parts? Let us try to
+understand these things.
+Roots: Different types of roots
+Observe the roots of  the plants you
+collected. How are they?
+Do all plants have similar types of roots?
+Is there any difference?
+Compare the roots of your sample
+
+  5. Hybrid Score: 0.3315
+     Chapter: PLANTS: PARTS AND FUNCTIONS
+     Text: What we have learnt
+• The important parts of a plant
+are roots, stem and leaves.
+• Tap root system and fibrous root
+system are two types of root
+systems seen in plants.
+• Roots absorb water and minerals
+from the soil and also help in
+anchoring the plant body to the
+soil.
+• The stem bears branches, leaves,
+flowers and fruits.
+• The stem carries the water
+absorbed by the roots to different
+parts of the plant.
+Do you know?
+Some plants like potato, turmeric, garlic, ginger and sugarcane store food  material
+in the stem due to which the stem bulges in size. Generally we think that these
+are all tubers or roots. Actually they are modified stems.
+Fig. 10
+Buds are small swellings on a plant from which a shoot, leaf, or flower usually develops.
+SCERT TELANGANA92
+PLANTS : Parts and Functions Free Distribution by Govt. of T.S. 2020-21
+• Leaves are involved in preparing
+food. They also help in exchange
+of gases and transpiration.
+• Leaf base, petiole and lamina are
+all parts of a leaf.
+
+  6. Hybrid Score: 0.3085
+     Chapter: PLANTS: PARTS AND FUNCTIONS
+     Text: red ink
+Fig. 3
+84% of  a raw apple and 96% of  a raw cucumber is water.
+SCERT TELANGANA86
+PLANTS : Parts and Functions Free Distribution by Govt. of T.S. 2020-21
+• Did you see any red spots in the
+stem or other parts of any of
+the plants?
+• Why did red spots appear on the
+stem or flower?
+We can conclude that roots help in
+taking up of water from the soil. They
+do this by absorption. Minerals present
+in the soil are also absorbed along with
+the water.
+Do you know?
+Some plants store  food in roots and
+stems. Some plants like radish, carrot,
+beetroot store food materials in their
+roots.  These roots bulge out and
+called tuberous roots. Can you give
+some more examples. Carrot, sweet
+potato are eaten even when raw!
+Parts of  a leaf
+Leaves are another important part of
+plants. Most  plants that we see in our
+surroundings have different types of
+leaves.
+Fig. 5
+Observe the given picture of  a leaf  and
+its parts (Fig. 5).
+• Where is the leaf attached to the
+stem?
+
+  7. Hybrid Score: 0.3049
+     Chapter: OUR FOOD
+     Text: Don’t eat bananas on an empty stomach; combining them with a bit of protein will
+help to normalize the insulin response caused by the sugar in the banana.
+SCERT TELANGANA3
+Science VI Class
+raw rice and water. But for making
+biryani we need many materials.
+To make different kinds of  food we need
+different materials. These materials which
+When you purchase packed food,
+biscuits or any cool drink, you will find
+their ingredients written on their
+packets. Have you ever thought from
+where these ingredients come? Yes, it
+will be easy for you to say that we get
+vegetables and fruits from plants; eggs,
+Fig. 2
+Chicory is beneficial for digestion, the circulatory system and the blood
+milk, meat from animals. Is there any
+other source you can think of? Some
+ingredients have been listed below. Find
+out the source of each ingredient; if it
+is a plant mark (P) or an animal (A), or
+something else (O) (Table-3).
+Table 2 - Ingredients of  some food items.
+
+  8. Hybrid Score: 0.2880
+     Chapter: PLANTS: PARTS AND FUNCTIONS
+     Text: • Leaves are involved in preparing
+food. They also help in exchange
+of gases and transpiration.
+• Leaf base, petiole and lamina are
+all parts of a leaf.
+• Reticulate and parallel venation are
+found in leaves.
 Improve your learning
-1. Why are the levels of all the
-seas equal in the world?
-2. How is the sea level
-measured?
-3. What are the uses of maps
-showing height?
-4. What differences do you find between the life
-style of people living on high altitudes and low
-altitudes?
-5. How are  maps helpful to people?
-6. Read the para ‘Contour Lines’ on page 5 and
-comment on it.
-7. Observe the Telangana map given and list out
-the areas of districts which are below
-150 MSL.
-Mean Sea Level
-There are high tides and low tides on
-the level of the sea, and they never stand
-still. As a result of this phenomenon, the
-level of the sea keeps on either rising or
+1. What are the important parts of a
+plant?
+2. How will you tell which part of a
+plant is the stem and which is the
+root?
+3. Collect any plant from your
+surroundings. Draw its  root
+structure. What can you say about
+its root system?
+4. John has no place in his house but
+he wants to plant vegetables like
+tomato  in his house. Suggest him
+different ways to do so.
+5. What will happen if a plant doesn’t
+have any leaves?
+6. How does the stem help the plant?
+7. What type of venation is found in
+the leaves of plants with fibrous
+roots?
+8. If the leaves have reticulate venation
+what would be the type of  root?
+9. Explain the various parts of a plant
+with the help of a diagram.
+10. Explain the parts of a leaf with the
+help of a diagram.
 
-  3. Hybrid Score: 0.2949
-     Chapter: Oceans and Fishing
-     Text: sea areas are called oceans. Oceans are huge bodies of water generally separated
-by continents.
-PART - I
-Fig 4.1 Relief features of an Ocean
-Continental Slope
-Trench
-Deep sea plain
-Sea level
-It will be interesting to find out what lies
-under the water. The surface of water does not
-tell us about what lies under it. You may have
-had the opportunity to notice or feel what the
-bed of a river or stream or pond is like.
- Please share what you have seen or
-felt about what lies under the
-surface of waterbodies.
- How many meters deep are the
-water bodies that you have seen?
-Ocean Relief
-The floor of the ocean
-is just like the surface of
-the earth.  The bottom of
-the sea is not a flat surface.
-It consists of hills,
-mountains,  plateaus,
-plains, trenches etc. Many
-trenches on the ocean
-floor are so deep that even
-if the Mount Everest was
-placed in them, it would
-4
-Continental Shelf
-SCERT, TEALANGANASCERT, TEALANGANA
-34 Diversity on the Earth Social Studies
-2) Currents: In the oceans, water
+  9. Hybrid Score: 0.2569
+     Chapter: PLANTS: PARTS AND FUNCTIONS
+     Text: Think it over.
+Most plants around us have roots, leaves,
+stems and flowers. All parts of  the plants
+carry out some functions, essential for
+the whole plant. There are diverse forms
+of plants in nature and plants adapt
+themselves to the different conditions in
+nature in different ways. For example,
+while stems usually support the plant
+body, in some plants they adapt and start
+storing food.
+Flower is another important part
+in the plant. Flower has different colourful
+structures called petals. They attract insects
+for pollination and produce fruits.We grow
+plants for colourful flowers which gives
+beauty to nature. We will learn more about
+flower  in the next classes.
+Keywords:Keywords:Keywords:Keywords:Keywords:
+Tap root, fibrous roots, petiole,
+lamina, stomata, reticulate venation,
+parallel venation, transpiration
+What we have learnt
+• The important parts of a plant
+are roots, stem and leaves.
+• Tap root system and fibrous root
+system are two types of root
+systems seen in plants.
 
-  4. Hybrid Score: 0.2719
-     Chapter: Oceans and Fishing
-     Text: if the Mount Everest was
-placed in them, it would
-4
-Continental Shelf
-SCERT, TEALANGANASCERT, TEALANGANA
-34 Diversity on the Earth Social Studies
-2) Currents: In the oceans, water
-moves from one part to another in big
-streams. These streams which flow
-constantly in a definite direction on the
-surface of the ocean are called ocean
-currents. The ocean currents are of two
-types - the warm currents and the cold
-currents. The warm currents flow from the
-equatorial region towards the poles. The
-cold currents flow from the poles to the
-equatorial regions. They are mainly caused
-by the prevailing winds, difference in
-temperature and salinity of the ocean water.
-3) Tides:  Tides are the rhythmic rise
-and fall in the level of the water in the
-oceans every day. All places on the coast
-experience some hours of low tide and
-some hours of high tide. Tides do not rise
-to the same height every day. When the tide
-is high, water comes up to the coast for
-some distance. Then as low tide begins, the
-
-  5. Hybrid Score: 0.2683
-     Chapter: Europe
-     Text: sea means ‘middle of the world’. Do you
-know why it is called by this name? In
-ancient times, the people of Europe did not
-know about other continents like America
-In this chapter, we will try to find out about how the people of Europe have been
-using their distinct natural environment and resources.
-5
-or Australia. They only knew about Europe,
-western parts of Asia and northern parts of
-Africa. You can see that all these regions
-are situated around the Mediterranean Sea.
-That is why Europeans thought that this sea
-was in the centre of the world and named it
-so. It has been known by this name ever
-since.
- Name the mountains to the east of
-Europe.
-The Eural mountains are eastern
-boundaries of Europe. These mountains are
-not very high. Asia is on the east of these
-Europe
-Arctic Ocean
-Asia
-Ural
-Mountains Pacific
-Ocean
-Africa
-Equator
-Indian
-Ocean Australia
-Map 1: Location of Europe
-Atlantic Ocean
-Mediterranean
-Sea
-SCERT, TEALANGANASCERT, TEALANGANA
-
-  6. Hybrid Score: 0.2661
-     Chapter: Oceans and Fishing
-     Text: some hours of high tide. Tides do not rise
-to the same height every day. When the tide
-is high, water comes up to the coast for
-some distance. Then as low tide begins, the
-water moves back from the land. The tides
-are of great help for fishing. Tides at some
-places take away the mud brought down by
-rivers and prevent silting.
-drown completely.  A
-major part of ocean
-floor is about 3-6 kms
-below the sea level.
-Figure 4.1 is a sketch
-of the different kind of
-land forms that can be
-found under the surface
-of an ocean. Fig 4.2
-shows the relief
-features of what lies
-below the surface of the
-oceans around India.
-In figure 4.2 ,
-observe the land mass
-of India and then go over to the floor of the
-Bay of Bengal, the Arabian Sea and the
-Indian Ocean. Try to point out the areas look
-like hills, plains and trenches on the ocean
-floor.
-The waters of the oceans are never still.
-There are different kinds of movements in
-them.
- Have you experienced the different
-movements of water in a river? You
-
-  7. Hybrid Score: 0.2442
-     Chapter: Reading Maps of Different kinds
-     Text: Physical Maps
-You will find some maps in your Atlas called ‘Physical Maps’. In these maps, you will
-usually find different parts of the land coloured in green, yellow or brown. Actually, they
-show the variety of landforms (mountains, plateaus, plains etc.) and depict the height of
-places.
-How can we represent the heights of land on flat paper? Of course, we can make a drawing
-like the one below:
-As you can see this is a
-picture and not a map. Here
-the height of the hills hide
-what is behind them. A map
-should show all the places
-without hiding them. Can
-you think of a way in which
-we can draw a map of this
-place?
-One way in which we can
-show heights on maps is
-through the use of colour.
-Let us see how this is done.
-Measuring Height on Land
-All heights on the land are calculated from the sea level. Since all the seas in the world
-are connected to each other, the sea level (the top surface) all over the world is taken to be
-
-  8. Hybrid Score: 0.2175
-     Chapter: Europe
-     Text: times.
-The presence of a large number of bays
-and gulfs has also facilitated the use of sea
-routes. Bays and gulfs are parts of the sea
-enclosed by land on three sides. In a bay,
-the land curves inwards and the mouth of
-the bay is usually wide as in the Bay of
-Bengal. A gulf is a narrow inlet of the sea
-and has a narrow mouth. The entire Baltic
-Sea as you can see in the map is a large
-gulf. Since the bays and gulfs are protected
-from the storms of the high seas, they are
-very useful for building harbours where
-ships can be safely anchored and cargoes
-loaded or unloaded. Deep gulfs or bays are
-preferred for building harbours as large
-ships can be anchored in them. Ships need
-deep waters so that their bottoms do not
-touch the sea floor.
- Find out the names of the countries
-on the three sides of the Baltic Sea
-from Map 4.
-Climate
-Europe has a cooler climate than ours.
-Most of its countries experience snowfall in
-winter. Their summers too are not as warm
-as ours.
-
-  9. Hybrid Score: 0.2120
-     Chapter: Oceans and Fishing
-     Text: SCERT, TEALANGANA
- 33Free Distribution by Govt. of  Telangana 2021-22
- Is the water found in your village/
-town saline or potable? Is it
-different in different parts of the
-village/town?
- What names do you know for
-different water bodies? Do large or
-small waterbodies have different
-names?
- In a map of the world or on the
-globe, find the names of five seas
-and five oceans. Run your fingers
-over the areas they cover.
-CHAPTER
-   Oceans and Fishing
-The earth is known as a watery planet as it is the only planet containing water in
-abundance. It is estimated that about 71% of the earth‘s surface is covered by oceans
-and seas. What is your image of a sea or an ocean? What have you seen or heard
-about oceans and seas? An extension of saline water on earth is called sea. Large
-sea areas are called oceans. Oceans are huge bodies of water generally separated
-by continents.
-PART - I
-Fig 4.1 Relief features of an Ocean
-Continental Slope
-Trench
-Deep sea plain
-Sea level
-
-  10. Hybrid Score: 0.2091
-     Chapter: Oceans and Fishing
-     Text: floor.
-The waters of the oceans are never still.
-There are different kinds of movements in
-them.
- Have you experienced the different
-movements of water in a river? You
-may be aware of waves, currents
-and the coming and receding of
-floods. Discuss these experiences
-in the class.
-Ocean waters have three kinds of
-movements. They are:
-1) Waves:  When the water on the
-surface of the ocean rises and falls, they
-are called waves. Waves are formed when
-gentle winds scrape across the ocean
-surface. The faster the wind, the bigger will
-be the waves.
-Fig 4.2 Relief features of Indian Ocean
-SCERT, TEALANGANASCERT, TEALANGANA
- 35Free Distribution by Govt. of  Telangana 2021-22
-Fishing Village on the Coastal
-Plains
-Ocean water is always saline. It contains
-several mineral salts dissolved in it. Oceans
-are the main source of rainfall. Oceans are
-also storehouses of fish and other seafoods.
-Oceans provide natural highways for
-international trade. Let us visit
-Bhavanapadu, a fishing village near the
+  10. Hybrid Score: 0.2533
+     Chapter: PLANTS: PARTS AND FUNCTIONS
+     Text: 83
+Science VI Class
+9 Plants : Parts and Functions
+What kind of plants have you seen at
+home and outside? You must have
+observed a variety of  plants; some are
+big and some are small. We can find plants
+near our home, in the school campus, on
+the way to school, in the parks and almost
+everywhere.
+• Are all plants similar?
+• What are the similarities among
+them?
+Let us get to know more about plants,
+especially about their parts and functions.
+Parts of  plants
+We know that we have different parts in
+our body. In the same way plants  also
+have different parts.  Do you know them?
+Here is a plant . Try to name its parts.
+Which plant is this?
+In this chapter, Let us try to understand
+about different parts of  plants
+through activities. For this, make
+groups of  4-5 students. Each group will
+collect 5 to 6 different types of plants
+along with their roots.  You can collect
+different small plants from your garden
+or surroundings but be careful not to
+damage too many plants.
 
 
 --- Semantic Search Results (10 Chunks) ---
 
-  1. Score: 0.6155 | Chapter: Reading Maps of Different kinds | Text: 150 MSL.
-Mean Sea Level
-There are high tides and low tides on
-the level of the sea, and they never stand
-still. As a result of this phenomenon, the
-level of the sea keeps on either rising or
-falling. Which of these heights do we
-take as the sea level or 0 meter height?
-In order to solve this problem, the level
-of the sea is carefully measured at
-frequent intervals and the mean level of
-the sea is calculated. Over a period,
-scientists observed the high and low
-levels of the sea and they have come to
-one calculated average level, which is
-known as Mean Sea Level (M.S.L.).
- If you live near a Railway station,
-find out the height of that place with
-the help of display board. The height
-is mentioned as “________ M.S.L.”.
-Note it down in your note book.
- Look at figures 1.6 & 1.7  and tell
-whether Nimpur would be
-submerged if sea waters were to
-flood up to 30 meters?
-R Pranahita
-R Penganga
-R Wainganga
-R Godavari
-R Musi
-R Dindi
-R Krishna
-R Tungabhadra
-R Krishna
-R Manjeera
-R Godavari
+  1. Score: 0.6279 | Chapter: PLANTS: PARTS AND FUNCTIONS | Text: What we have learnt
+• The important parts of a plant
+are roots, stem and leaves.
+• Tap root system and fibrous root
+system are two types of root
+systems seen in plants.
+• Roots absorb water and minerals
+from the soil and also help in
+anchoring the plant body to the
+soil.
+• The stem bears branches, leaves,
+flowers and fruits.
+• The stem carries the water
+absorbed by the roots to different
+parts of the plant.
+Do you know?
+Some plants like potato, turmeric, garlic, ginger and sugarcane store food  material
+in the stem due to which the stem bulges in size. Generally we think that these
+are all tubers or roots. Actually they are modified stems.
+Fig. 10
+Buds are small swellings on a plant from which a shoot, leaf, or flower usually develops.
+SCERT TELANGANA92
+PLANTS : Parts and Functions Free Distribution by Govt. of T.S. 2020-21
+• Leaves are involved in preparing
+food. They also help in exchange
+of gases and transpiration.
+• Leaf base, petiole and lamina are
+all parts of a leaf.
 
-  2. Score: 0.5084 | Chapter: Oceans and Fishing | Text: sea areas are called oceans. Oceans are huge bodies of water generally separated
-by continents.
-PART - I
-Fig 4.1 Relief features of an Ocean
-Continental Slope
-Trench
-Deep sea plain
-Sea level
-It will be interesting to find out what lies
-under the water. The surface of water does not
-tell us about what lies under it. You may have
-had the opportunity to notice or feel what the
-bed of a river or stream or pond is like.
- Please share what you have seen or
-felt about what lies under the
-surface of waterbodies.
- How many meters deep are the
-water bodies that you have seen?
-Ocean Relief
-The floor of the ocean
-is just like the surface of
-the earth.  The bottom of
-the sea is not a flat surface.
-It consists of hills,
-mountains,  plateaus,
-plains, trenches etc. Many
-trenches on the ocean
-floor are so deep that even
-if the Mount Everest was
-placed in them, it would
-4
-Continental Shelf
-SCERT, TEALANGANASCERT, TEALANGANA
-34 Diversity on the Earth Social Studies
-2) Currents: In the oceans, water
+  2. Score: 0.6116 | Chapter: PLANTS: PARTS AND FUNCTIONS | Text: Think it over.
+Most plants around us have roots, leaves,
+stems and flowers. All parts of  the plants
+carry out some functions, essential for
+the whole plant. There are diverse forms
+of plants in nature and plants adapt
+themselves to the different conditions in
+nature in different ways. For example,
+while stems usually support the plant
+body, in some plants they adapt and start
+storing food.
+Flower is another important part
+in the plant. Flower has different colourful
+structures called petals. They attract insects
+for pollination and produce fruits.We grow
+plants for colourful flowers which gives
+beauty to nature. We will learn more about
+flower  in the next classes.
+Keywords:Keywords:Keywords:Keywords:Keywords:
+Tap root, fibrous roots, petiole,
+lamina, stomata, reticulate venation,
+parallel venation, transpiration
+What we have learnt
+• The important parts of a plant
+are roots, stem and leaves.
+• Tap root system and fibrous root
+system are two types of root
+systems seen in plants.
 
-  3. Score: 0.4688 | Chapter: Oceans and Fishing | Text: if the Mount Everest was
-placed in them, it would
-4
-Continental Shelf
-SCERT, TEALANGANASCERT, TEALANGANA
-34 Diversity on the Earth Social Studies
-2) Currents: In the oceans, water
-moves from one part to another in big
-streams. These streams which flow
-constantly in a definite direction on the
-surface of the ocean are called ocean
-currents. The ocean currents are of two
-types - the warm currents and the cold
-currents. The warm currents flow from the
-equatorial region towards the poles. The
-cold currents flow from the poles to the
-equatorial regions. They are mainly caused
-by the prevailing winds, difference in
-temperature and salinity of the ocean water.
-3) Tides:  Tides are the rhythmic rise
-and fall in the level of the water in the
-oceans every day. All places on the coast
-experience some hours of low tide and
-some hours of high tide. Tides do not rise
-to the same height every day. When the tide
-is high, water comes up to the coast for
-some distance. Then as low tide begins, the
-
-  4. Score: 0.4626 | Chapter: Europe | Text: sea means ‘middle of the world’. Do you
-know why it is called by this name? In
-ancient times, the people of Europe did not
-know about other continents like America
-In this chapter, we will try to find out about how the people of Europe have been
-using their distinct natural environment and resources.
-5
-or Australia. They only knew about Europe,
-western parts of Asia and northern parts of
-Africa. You can see that all these regions
-are situated around the Mediterranean Sea.
-That is why Europeans thought that this sea
-was in the centre of the world and named it
-so. It has been known by this name ever
-since.
- Name the mountains to the east of
-Europe.
-The Eural mountains are eastern
-boundaries of Europe. These mountains are
-not very high. Asia is on the east of these
-Europe
-Arctic Ocean
-Asia
-Ural
-Mountains Pacific
-Ocean
-Africa
-Equator
-Indian
-Ocean Australia
-Map 1: Location of Europe
-Atlantic Ocean
-Mediterranean
-Sea
-SCERT, TEALANGANASCERT, TEALANGANA
-
-  5. Score: 0.4587 | Chapter: Oceans and Fishing | Text: some hours of high tide. Tides do not rise
-to the same height every day. When the tide
-is high, water comes up to the coast for
-some distance. Then as low tide begins, the
-water moves back from the land. The tides
-are of great help for fishing. Tides at some
-places take away the mud brought down by
-rivers and prevent silting.
-drown completely.  A
-major part of ocean
-floor is about 3-6 kms
-below the sea level.
-Figure 4.1 is a sketch
-of the different kind of
-land forms that can be
-found under the surface
-of an ocean. Fig 4.2
-shows the relief
-features of what lies
-below the surface of the
-oceans around India.
-In figure 4.2 ,
-observe the land mass
-of India and then go over to the floor of the
-Bay of Bengal, the Arabian Sea and the
-Indian Ocean. Try to point out the areas look
-like hills, plains and trenches on the ocean
-floor.
-The waters of the oceans are never still.
-There are different kinds of movements in
-them.
- Have you experienced the different
-movements of water in a river? You
-
-  6. Score: 0.4264 | Chapter: Reading Maps of Different kinds | Text: 6 Diversity on the Earth Social Studies
-Telangana Plateau
-Map-2 TELANGANA -
-SEA LEVEL
-Look at figure 1.8 and answer the
-following questions:
- Mark the direction of flow of the
-river.
- The height of the lowest land is
-between ____ meters and _____
-meters.
- There are two high points in this
-map. What are their heights?
+  3. Score: 0.6109 | Chapter: PLANTS: PARTS AND FUNCTIONS | Text: • Leaves are involved in preparing
+food. They also help in exchange
+of gases and transpiration.
+• Leaf base, petiole and lamina are
+all parts of a leaf.
+• Reticulate and parallel venation are
+found in leaves.
 Improve your learning
-1. Why are the levels of all the
-seas equal in the world?
-2. How is the sea level
-measured?
-3. What are the uses of maps
-showing height?
-4. What differences do you find between the life
-style of people living on high altitudes and low
-altitudes?
-5. How are  maps helpful to people?
-6. Read the para ‘Contour Lines’ on page 5 and
-comment on it.
-7. Observe the Telangana map given and list out
-the areas of districts which are below
-150 MSL.
-Mean Sea Level
-There are high tides and low tides on
-the level of the sea, and they never stand
-still. As a result of this phenomenon, the
-level of the sea keeps on either rising or
+1. What are the important parts of a
+plant?
+2. How will you tell which part of a
+plant is the stem and which is the
+root?
+3. Collect any plant from your
+surroundings. Draw its  root
+structure. What can you say about
+its root system?
+4. John has no place in his house but
+he wants to plant vegetables like
+tomato  in his house. Suggest him
+different ways to do so.
+5. What will happen if a plant doesn’t
+have any leaves?
+6. How does the stem help the plant?
+7. What type of venation is found in
+the leaves of plants with fibrous
+roots?
+8. If the leaves have reticulate venation
+what would be the type of  root?
+9. Explain the various parts of a plant
+with the help of a diagram.
+10. Explain the parts of a leaf with the
+help of a diagram.
 
-  7. Score: 0.4211 | Chapter: Reading Maps of Different kinds | Text: Physical Maps
-You will find some maps in your Atlas called ‘Physical Maps’. In these maps, you will
-usually find different parts of the land coloured in green, yellow or brown. Actually, they
-show the variety of landforms (mountains, plateaus, plains etc.) and depict the height of
-places.
-How can we represent the heights of land on flat paper? Of course, we can make a drawing
-like the one below:
-As you can see this is a
-picture and not a map. Here
-the height of the hills hide
-what is behind them. A map
-should show all the places
-without hiding them. Can
-you think of a way in which
-we can draw a map of this
-place?
-One way in which we can
-show heights on maps is
-through the use of colour.
-Let us see how this is done.
-Measuring Height on Land
-All heights on the land are calculated from the sea level. Since all the seas in the world
-are connected to each other, the sea level (the top surface) all over the world is taken to be
+  4. Score: 0.6030 | Chapter: PLANTS: PARTS AND FUNCTIONS | Text: 83
+Science VI Class
+9 Plants : Parts and Functions
+What kind of plants have you seen at
+home and outside? You must have
+observed a variety of  plants; some are
+big and some are small. We can find plants
+near our home, in the school campus, on
+the way to school, in the parks and almost
+everywhere.
+• Are all plants similar?
+• What are the similarities among
+them?
+Let us get to know more about plants,
+especially about their parts and functions.
+Parts of  plants
+We know that we have different parts in
+our body. In the same way plants  also
+have different parts.  Do you know them?
+Here is a plant . Try to name its parts.
+Which plant is this?
+In this chapter, Let us try to understand
+about different parts of  plants
+through activities. For this, make
+groups of  4-5 students. Each group will
+collect 5 to 6 different types of plants
+along with their roots.  You can collect
+different small plants from your garden
+or surroundings but be careful not to
+damage too many plants.
 
-  8. Score: 0.3750 | Chapter: Europe | Text: times.
-The presence of a large number of bays
-and gulfs has also facilitated the use of sea
-routes. Bays and gulfs are parts of the sea
-enclosed by land on three sides. In a bay,
-the land curves inwards and the mouth of
-the bay is usually wide as in the Bay of
-Bengal. A gulf is a narrow inlet of the sea
-and has a narrow mouth. The entire Baltic
-Sea as you can see in the map is a large
-gulf. Since the bays and gulfs are protected
-from the storms of the high seas, they are
-very useful for building harbours where
-ships can be safely anchored and cargoes
-loaded or unloaded. Deep gulfs or bays are
-preferred for building harbours as large
-ships can be anchored in them. Ships need
-deep waters so that their bottoms do not
-touch the sea floor.
- Find out the names of the countries
-on the three sides of the Baltic Sea
-from Map 4.
-Climate
-Europe has a cooler climate than ours.
-Most of its countries experience snowfall in
-winter. Their summers too are not as warm
-as ours.
+  5. Score: 0.6023 | Chapter: PLANTS: PARTS AND FUNCTIONS | Text: red ink
+Fig. 3
+84% of  a raw apple and 96% of  a raw cucumber is water.
+SCERT TELANGANA86
+PLANTS : Parts and Functions Free Distribution by Govt. of T.S. 2020-21
+• Did you see any red spots in the
+stem or other parts of any of
+the plants?
+• Why did red spots appear on the
+stem or flower?
+We can conclude that roots help in
+taking up of water from the soil. They
+do this by absorption. Minerals present
+in the soil are also absorbed along with
+the water.
+Do you know?
+Some plants store  food in roots and
+stems. Some plants like radish, carrot,
+beetroot store food materials in their
+roots.  These roots bulge out and
+called tuberous roots. Can you give
+some more examples. Carrot, sweet
+potato are eaten even when raw!
+Parts of  a leaf
+Leaves are another important part of
+plants. Most  plants that we see in our
+surroundings have different types of
+leaves.
+Fig. 5
+Observe the given picture of  a leaf  and
+its parts (Fig. 5).
+• Where is the leaf attached to the
+stem?
 
-  9. Score: 0.3655 | Chapter: Oceans and Fishing | Text: SCERT, TEALANGANA
- 33Free Distribution by Govt. of  Telangana 2021-22
- Is the water found in your village/
-town saline or potable? Is it
-different in different parts of the
-village/town?
- What names do you know for
-different water bodies? Do large or
-small waterbodies have different
-names?
- In a map of the world or on the
-globe, find the names of five seas
-and five oceans. Run your fingers
-over the areas they cover.
-CHAPTER
-   Oceans and Fishing
-The earth is known as a watery planet as it is the only planet containing water in
-abundance. It is estimated that about 71% of the earth‘s surface is covered by oceans
-and seas. What is your image of a sea or an ocean? What have you seen or heard
-about oceans and seas? An extension of saline water on earth is called sea. Large
-sea areas are called oceans. Oceans are huge bodies of water generally separated
-by continents.
-PART - I
-Fig 4.1 Relief features of an Ocean
-Continental Slope
-Trench
-Deep sea plain
-Sea level
+  6. Score: 0.5964 | Chapter: PLANTS: PARTS AND FUNCTIONS | Text: or flowers of any of the plants?
+Take the stem of  a plant
+which was kept in water
+with red ink and cut a small
+section transversely  with a
+sharp blade. Take the help
+of  your teacher for this. Put
+it on a slide. Observe it
+under a microscope. Do
+you observe any coloured
+portion? Now, cut the
+stem into two halves
+vertically, from top to bottom Observe it.
+Do you see any coloured portion?
+The coloured ring like structure that you
+see act as a tube that carries water and
+food material throughout the plant. The
+water absorbed by the root is carried
+through the stem to all parts of the plant.
+Fruit is really the part of  a flower in which seeds grow. Cherries, apples, and even
+milkweed pods are fruit.
+SCERT TELANGANA91
+Science VI Class
+How can you say that a potato is stem
+although it grows under the ground?
+Think it over.
+Most plants around us have roots, leaves,
+stems and flowers. All parts of  the plants
+carry out some functions, essential for
+the whole plant. There are diverse forms
 
-  10. Score: 0.3605 | Chapter: Oceans and Fishing | Text: floor.
-The waters of the oceans are never still.
-There are different kinds of movements in
-them.
- Have you experienced the different
-movements of water in a river? You
-may be aware of waves, currents
-and the coming and receding of
-floods. Discuss these experiences
-in the class.
-Ocean waters have three kinds of
-movements. They are:
-1) Waves:  When the water on the
-surface of the ocean rises and falls, they
-are called waves. Waves are formed when
-gentle winds scrape across the ocean
-surface. The faster the wind, the bigger will
-be the waves.
-Fig 4.2 Relief features of Indian Ocean
-SCERT, TEALANGANASCERT, TEALANGANA
- 35Free Distribution by Govt. of  Telangana 2021-22
-Fishing Village on the Coastal
-Plains
-Ocean water is always saline. It contains
-several mineral salts dissolved in it. Oceans
-are the main source of rainfall. Oceans are
-also storehouses of fish and other seafoods.
-Oceans provide natural highways for
-international trade. Let us visit
-Bhavanapadu, a fishing village near the
+  7. Score: 0.5779 | Chapter: OUR FOOD | Text: Try to enrich this list as much as you
+can. You will find that from animals we
+get milk, eggs and meat. If  you observe
+carefully you will notice that there are  a
+number of animals from which we get
+different kinds of food. Goats and
+sheep give us meat. Hens and roosters
+are used as meat (chicken). Can you
+elaborate this list?  In plants we eat
+different parts, like leaf  of  spinach and
+coriander plants, flower of  cauliflower
+plant, fruit of  tomato and drumstick
+plants. You may be having some doubt
+about the salt. It is a mineral and
+obtained from the sea. In later classes
+you will learn about the components of
+food. Can you identify which part of
+the plant is eaten by us in the given
+table? You can also discuss with your
+friends (Fig.-3).
+* We get varieties of  food material
+from plants
+* In some plants we eat only some
+parts as food.
+* We take entire plant as food.
+Beet roots are high in carbohydrate levels and should therefore be used sparingly
+SCERT TELANGANA5
+Science VI Class
+
+  8. Score: 0.5738 | Chapter: LIVING AND NON LIVING | Text: next class.
+Food and living beings
+We have seen in the chapters on food
+that we as well as all other animals need
+food for smooth functioning of
+different activities.
+• Do plants also need food?
+In the chapter "plants parts and
+functions", we have seen that some
+parts of  plants like root, stem and fruits
+store food.
+• What are the sources of their food?
+Most of the plants absorb water and
+minerals from the soil and prepare their
+food in the presence of sunlight. The
+leaf is the place where the food is
+prepared. This is called photosynthesis.
+Do you know?
+Some plants cannot prepare their
+own food. They depends on the
+other platns for their nutrition. These
+plants are called ‘Parasitic Plants’. eg.
+Cuscuta. We also prepare food. Is our
+food preparation process is same as
+that of plants?
+Growth in living beings
+You notice that kittens, pups and chicks
+grow into adults. You become taller
+every year. Similarly, a seed germinates
+into a plant. Some plants grow day by
+
+  9. Score: 0.5659 | Chapter: PLANTS: PARTS AND FUNCTIONS | Text: What are the common parts that you
+observe in all plants?
+Fig. 1
+A notch in a tree will remain the same distance from the ground as the tree grows.
+SCERT TELANGANA84
+PLANTS : Parts and Functions Free Distribution by Govt. of T.S. 2020-21
+Table 1
+S.No.   Name of the plant Root  Stem    Leaves      Flower
+Yes/No    Y es/No    Yes/No      Yes/No
+1.   Tridax plant  Yes  Yes  Yes    Yes
+2.   Plant No. 2
+3.
+4.
+5.
+Fig. 2(a) Fig. 2(b)
+Table-2
+S. Name of Roots are similar
+No. the plant   to Fig.
+1. Tridax plant 2a
+2. Plant No. 2
+3.
+4.
+5.
+There are variations in the size and
+shape of plants but generally all plants
+have roots, stems and leaves.  Have you
+ever thought about the importance of
+leaf, stem and roots in plants? What is
+the role of  plant parts? Let us try to
+understand these things.
+Roots: Different types of roots
+Observe the roots of  the plants you
+collected. How are they?
+Do all plants have similar types of roots?
+Is there any difference?
+Compare the roots of your sample
+
+  10. Score: 0.5597 | Chapter: PLANTS: PARTS AND FUNCTIONS | Text: collect 5 to 6 different types of plants
+along with their roots.  You can collect
+different small plants from your garden
+or surroundings but be careful not to
+damage too many plants.
+Activity-1:  Identification of plant
+parts
+Observe the collected plants and try
+to identify their parts. Take the help
+of  Fig. 1 and write your observations
+in Table 1 given on the next page.
+If  you don’t know the name of  any of
+the plants you can give them a number.
+You can take the help of  your teacher,
+a gardener or some one else to find
+the name of the plant. Based on the
+observations in the Table 1, let us
+discuss the following questions.
+Did you find any plant which does not
+have roots?
+Are the leaves of all the plants similar
+in size?
+Is there any plant without flowers?
+What are the common parts that you
+observe in all plants?
+Fig. 1
+A notch in a tree will remain the same distance from the ground as the tree grows.
+SCERT TELANGANA84
 
 
 --- BM25 Keyword Search Results (10 Chunks) ---
 
-  1. Normalized Score: 1.0000 | Chapter: Reading Maps of Different kinds | Text: 150 MSL.
-Mean Sea Level
-There are high tides and low tides on
-the level of the sea, and they never stand
-still. As a result of this phenomenon, the
-level of the sea keeps on either rising or
-falling. Which of these heights do we
-take as the sea level or 0 meter height?
-In order to solve this problem, the level
-of the sea is carefully measured at
-frequent intervals and the mean level of
-the sea is calculated. Over a period,
-scientists observed the high and low
-levels of the sea and they have come to
-one calculated average level, which is
-known as Mean Sea Level (M.S.L.).
- If you live near a Railway station,
-find out the height of that place with
-the help of display board. The height
-is mentioned as “________ M.S.L.”.
-Note it down in your note book.
- Look at figures 1.6 & 1.7  and tell
-whether Nimpur would be
-submerged if sea waters were to
-flood up to 30 meters?
-R Pranahita
-R Penganga
-R Wainganga
-R Godavari
-R Musi
-R Dindi
-R Krishna
-R Tungabhadra
-R Krishna
-R Manjeera
-R Godavari
+  1. Normalized Score: 1.0000 | Chapter: OUR FOOD | Text: Mustard (Avalu)
+Sugarcane
+Carrot
+Onion
+Cabbage
+Asafoetida (Inguva)
+Peanuts contain beneficial protien, but many people are allergic to them and find
+them hard to digest.
+SCERT TELANGANA6
+OUR FOOD Free Distribution by Govt. of T.S. 2020-21
+• Which parts of the plants do we
+generally use?
+• Do we also use flowers as food?
+Which plants are these?
+• Is there any plant of which whole
+parts of it can be eaten?
+We use various parts of  plants for our
+food. Leaves, roots, seeds and fruits of
+plants are widely used whereas stems
+and flowers are not so widely used. We
+need several ingredients to cook
+different types of food. Whatever may
+be the source of  ingredients - plants,
+animals or minerals, we use some in
+plenty but others are needed in only
+small quantities. Why is it so?
+How people develop food habits?
+People living in one region usually
+share common food habits. You
+might have seen paddy fields near
+your village. In our state geographical
+and climatic conditions are more
 
-  2. Normalized Score: 0.2611 | Chapter: Europe | Text: West Europe?
-Western Europe also benefits in other
-ways from the Gulf Stream. The warm
-currents are very good for fish breeding as
-they contain ample food material for the
-fishes. As a result, the fishery  industry is
-well developed in the North Sea near
-Britain. This part of the North Sea is called
-‘Dogger Bank’. Fish is an important part
-of the food of the Europeans and fishing is
-a very important industry in Europe.
- Name the countries which would
-benefit from the Dogger Bank.
-Mediterranean Climate in Southern
-Europe
-Look at the countries of Southern
-Europe. They have the Mediterranean Sea
-to their south, so they are called
-‘Mediterranean Countries’. The lands along
-the Mediterranean Sea have a distinct
-climate called the ‘Mediterranean
-climate’.
- Look at Map 2 and name four
-Mediterranean countries.
-The Mediterranean countries are the
-southernmost countries of Europe. As a
-result, the winters here are not too  cold
-and summers are warm. It does not rain all
+  2. Normalized Score: 0.9302 | Chapter: OUR FOOD | Text: be aware of  the ingredients of packaged
+food. When you purchase any food item
+in the market, don't forget to read about
+its ingredients and manufacturing date.
+Eating out-dated food material may
+damage your health.
+Joseph’s father always observes the
+ingredients used and the date of
+manufacturing when he buys the
+readymade food items. Expired food
+items should not be consumed. They
+are harmful to our health.
+Do you know?
+Preparation of food  using vegetables
+and fruits is an art. Some people make
+different types of designs and
+decorations with vegetables. This is
+called vegetable carving. Try to make
+your own carving (Fig. 5).
+Fig. 5
+KeywordsKeywordsKeywordsKeywordsKeywords
+Ingredients, preservatives, fragrant
+materials, dry fruits
+What we have learnt
+   • We get food from plants and
+animals.
+   • For cooking food, we need
+different types of  ingredients.
+   • We use different parts of  plants
+like stems, roots, leaves, fruits and
+flowers as food.
 
-  3. Normalized Score: 0.2465 | Chapter: Europe | Text: SCERT, TEALANGANASCERT, TEALANGANA
- 55Free Distribution by Govt. of  Telangana 2021-22
-Route of  Columbus
-Index
-Trade winds
-Old Land route to India
-Map 7: Trade routes
-0
-ο 
-Equator
-what route they took from Europe to India?
-Look at map 7 in which two major routes
-are given. Both the routes crossed the
-Mediterranean Sea; while one of them took
-a land route via the Middle East, Iran, and
-Afghanistan, the other route took a sea
-route via the Red Sea and the Arabian Sea.
-About five hundred years ago, the West
-European sailors and traders began to
-search for new routes to India. This was
-because both the routes mentioned above
-passed through countries ruled by the Arabs
-who were often at war with the Europeans.
-Further, most of the trade in the
-Mediterranean Sea was controlled by
-Italian merchants who did not let in traders
-of other countries. That is why the sailors
-of the other countries began to look for
-routes to India that did not have to pass
-through the Mediterranean Sea or the Arab
+  3. Normalized Score: 0.6775 | Chapter: OUR FOOD | Text: * In some plants we eat only some
+parts as food.
+* We take entire plant as food.
+Beet roots are high in carbohydrate levels and should therefore be used sparingly
+SCERT TELANGANA5
+Science VI Class
+Fig. 3
+Do you know?
+To make biryani or kheer, we use different types of  ingredients such as ilaichi
+(cardamom), lavang (clove), dalchini (cinnamon), biryani leaves, pepper etc. They
+are called condiments (sugandha dravyalu / fragrant material). Cashew nuts,
+almonds, kismis (dried grapes) etc are also used. These are dry fruits. Condiments
+and dry fruits grow in particular places only. They are not available in large
+quantities. They are expensive.
+Now look at table 4 and try to fill it as shown.
+Table 4
+Name of plant Parts that we eat
+Fenugreek (Menthulu) Leaves, seeds
+Mustard (Avalu)
+Sugarcane
+Carrot
+Onion
+Cabbage
+Asafoetida (Inguva)
+Peanuts contain beneficial protien, but many people are allergic to them and find
+them hard to digest.
+SCERT TELANGANA6
 
-  4. Normalized Score: 0.2454 | Chapter: Europe | Text: / Poland / Switzerland)?
- Which mountains lie between the Caspian Sea and the Black Sea – (Alps / Caucasus
-Mountains)?
- Which countries are on the shores of the Arctic Ocean – (Russia / Germany / Sweden / Norway)?
- Can a ship sail from the Black Sea to the Atlantic Ocean? If yes, trace the route it will have to
-take.
-3. Why are harbours built in deep gulfs or bays?
-4. Why are the winters less severe in Western Europe than in Eastern Europe?
-5. Name four countries on the coast of the Black Sea.
-6. How do the Westerlies benefit the people of Western Europe?
-7.
-What are the characteristics of the Mediterranean climate? Name the countries which
-have a Mediterranean climate.
-8. What are the factors that limit European agriculture?
-9. Name the important crops of southern Europe.
-10. How can you say that the trade and cultural relations have developed among the countries due
-to the discovery of new sea routes by European sailors?
+  4. Normalized Score: 0.5257 | Chapter: OUR FOOD | Text: Don’t eat bananas on an empty stomach; combining them with a bit of protein will
+help to normalize the insulin response caused by the sugar in the banana.
+SCERT TELANGANA3
+Science VI Class
+raw rice and water. But for making
+biryani we need many materials.
+To make different kinds of  food we need
+different materials. These materials which
+When you purchase packed food,
+biscuits or any cool drink, you will find
+their ingredients written on their
+packets. Have you ever thought from
+where these ingredients come? Yes, it
+will be easy for you to say that we get
+vegetables and fruits from plants; eggs,
+Fig. 2
+Chicory is beneficial for digestion, the circulatory system and the blood
+milk, meat from animals. Is there any
+other source you can think of? Some
+ingredients have been listed below. Find
+out the source of each ingredient; if it
+is a plant mark (P) or an animal (A), or
+something else (O) (Table-3).
+Table 2 - Ingredients of  some food items.
 
-  5. Normalized Score: 0.1644 | Chapter: Europe | Text: only to America but also to different parts of Africa, India and Australia. They traded with
-these countries and amassed immense wealth, which was used to develop industries in
-Europe.
-You will read about the industrial revolution in Europe in greater detail in a later chapter.
-Keywords :
-1. Peninsula
-2. Island
-3. Bay
-4. Currents
-5. Gulf
-6. Climate
-SCERT, TEALANGANASCERT, TEALANGANA
- 57Free Distribution by Govt. of  Telangana 2021-22
+  5. Normalized Score: 0.2568 | Chapter: OUR FOOD | Text: • We get food from plants and
+animals.
+   • For cooking food, we need
+different types of  ingredients.
+   • We use different parts of  plants
+like stems, roots, leaves, fruits and
+flowers as food.
+   • The taste of food is based on its
+ingredients, method of
+preparation and cultural practices
+of the region.
+   • Boiling, steaming, fermentation
+are some methods of preparing
+food.
+   • We use preservatives to preserve
+food for some time.
 Improve your learning
-1. The Atlantic Ocean has  a great impact on the climate of Europe as well as on the lives and livelihood
-of the people of Europe. Collect relevant information and write an essay on the theme.
-2. Answer these questions with the help of the maps given in the chapter:
- Which of the following is not a landlocked (surrounded by land) country – (Hungary / Romania
-/ Poland / Switzerland)?
- Which mountains lie between the Caspian Sea and the Black Sea – (Alps / Caucasus
-Mountains)?
+1. What are the common food
+items usually eaten by you?
+2. Find out the ingredients of the
+given food items:
+Pachipulusu, coconut chutney,
+jilebi, onion pakodi
+3. Write down the process of
+making upma or any other snack
+of your choice.
+Tomatoes are rich in Carotenoid and Lycopene; eating foods containing
+Carotenoids can lower the risk of  cancer.
+SCERT TELANGANA10
+OUR FOOD Free Distribution by Govt. of T.S. 2020-21
+4. Collect any wrapper of
+packaged food. Read the
+information details and answer
+the following questions.
 
-  6. Normalized Score: 0.1507 | Chapter: Reading Maps of Different kinds | Text: 6 Diversity on the Earth Social Studies
-Telangana Plateau
-Map-2 TELANGANA -
-SEA LEVEL
-Look at figure 1.8 and answer the
-following questions:
- Mark the direction of flow of the
-river.
- The height of the lowest land is
-between ____ meters and _____
-meters.
- There are two high points in this
-map. What are their heights?
+  6. Normalized Score: 0.1679 | Chapter: PLANTS: PARTS AND FUNCTIONS | Text: What are the common parts that you
+observe in all plants?
+Fig. 1
+A notch in a tree will remain the same distance from the ground as the tree grows.
+SCERT TELANGANA84
+PLANTS : Parts and Functions Free Distribution by Govt. of T.S. 2020-21
+Table 1
+S.No.   Name of the plant Root  Stem    Leaves      Flower
+Yes/No    Y es/No    Yes/No      Yes/No
+1.   Tridax plant  Yes  Yes  Yes    Yes
+2.   Plant No. 2
+3.
+4.
+5.
+Fig. 2(a) Fig. 2(b)
+Table-2
+S. Name of Roots are similar
+No. the plant   to Fig.
+1. Tridax plant 2a
+2. Plant No. 2
+3.
+4.
+5.
+There are variations in the size and
+shape of plants but generally all plants
+have roots, stems and leaves.  Have you
+ever thought about the importance of
+leaf, stem and roots in plants? What is
+the role of  plant parts? Let us try to
+understand these things.
+Roots: Different types of roots
+Observe the roots of  the plants you
+collected. How are they?
+Do all plants have similar types of roots?
+Is there any difference?
+Compare the roots of your sample
+
+  7. Normalized Score: 0.1168 | Chapter: PLANTS: PARTS AND FUNCTIONS | Text: What we have learnt
+• The important parts of a plant
+are roots, stem and leaves.
+• Tap root system and fibrous root
+system are two types of root
+systems seen in plants.
+• Roots absorb water and minerals
+from the soil and also help in
+anchoring the plant body to the
+soil.
+• The stem bears branches, leaves,
+flowers and fruits.
+• The stem carries the water
+absorbed by the roots to different
+parts of the plant.
+Do you know?
+Some plants like potato, turmeric, garlic, ginger and sugarcane store food  material
+in the stem due to which the stem bulges in size. Generally we think that these
+are all tubers or roots. Actually they are modified stems.
+Fig. 10
+Buds are small swellings on a plant from which a shoot, leaf, or flower usually develops.
+SCERT TELANGANA92
+PLANTS : Parts and Functions Free Distribution by Govt. of T.S. 2020-21
+• Leaves are involved in preparing
+food. They also help in exchange
+of gases and transpiration.
+• Leaf base, petiole and lamina are
+all parts of a leaf.
+
+  8. Normalized Score: 0.0957 | Chapter: PLANTS: PARTS AND FUNCTIONS | Text: red ink
+Fig. 3
+84% of  a raw apple and 96% of  a raw cucumber is water.
+SCERT TELANGANA86
+PLANTS : Parts and Functions Free Distribution by Govt. of T.S. 2020-21
+• Did you see any red spots in the
+stem or other parts of any of
+the plants?
+• Why did red spots appear on the
+stem or flower?
+We can conclude that roots help in
+taking up of water from the soil. They
+do this by absorption. Minerals present
+in the soil are also absorbed along with
+the water.
+Do you know?
+Some plants store  food in roots and
+stems. Some plants like radish, carrot,
+beetroot store food materials in their
+roots.  These roots bulge out and
+called tuberous roots. Can you give
+some more examples. Carrot, sweet
+potato are eaten even when raw!
+Parts of  a leaf
+Leaves are another important part of
+plants. Most  plants that we see in our
+surroundings have different types of
+leaves.
+Fig. 5
+Observe the given picture of  a leaf  and
+its parts (Fig. 5).
+• Where is the leaf attached to the
+stem?
+
+  9. Normalized Score: 0.0542 | Chapter: PLANTS: PARTS AND FUNCTIONS | Text: • Leaves are involved in preparing
+food. They also help in exchange
+of gases and transpiration.
+• Leaf base, petiole and lamina are
+all parts of a leaf.
+• Reticulate and parallel venation are
+found in leaves.
 Improve your learning
-1. Why are the levels of all the
-seas equal in the world?
-2. How is the sea level
-measured?
-3. What are the uses of maps
-showing height?
-4. What differences do you find between the life
-style of people living on high altitudes and low
-altitudes?
-5. How are  maps helpful to people?
-6. Read the para ‘Contour Lines’ on page 5 and
-comment on it.
-7. Observe the Telangana map given and list out
-the areas of districts which are below
-150 MSL.
-Mean Sea Level
-There are high tides and low tides on
-the level of the sea, and they never stand
-still. As a result of this phenomenon, the
-level of the sea keeps on either rising or
+1. What are the important parts of a
+plant?
+2. How will you tell which part of a
+plant is the stem and which is the
+root?
+3. Collect any plant from your
+surroundings. Draw its  root
+structure. What can you say about
+its root system?
+4. John has no place in his house but
+he wants to plant vegetables like
+tomato  in his house. Suggest him
+different ways to do so.
+5. What will happen if a plant doesn’t
+have any leaves?
+6. How does the stem help the plant?
+7. What type of venation is found in
+the leaves of plants with fibrous
+roots?
+8. If the leaves have reticulate venation
+what would be the type of  root?
+9. Explain the various parts of a plant
+with the help of a diagram.
+10. Explain the parts of a leaf with the
+help of a diagram.
 
-  7. Normalized Score: 0.0061 | Chapter: Europe | Text: neighbouring countries have the
-same colour.
-Mountains, Plains and Rivers
-Let us learn more about the mountains,
-plains and rivers of Europe with the help
-of Map 4. Europe has several snow-covered
-mountains. Look for the Alps and the
-Pyrenees in the map. The Alps, the most
-important mountain ranges of Europe, are
-covered with snow all year round.
- The Alps stretch across several
-countries. Find out the names of
-these countries by comparing Maps
-2 and 4.
- Write the names of the two rivers
-starting from the Alps.
- Name the countries across whose
-borders the Pyrenees stretch.
- Name the mountains stretching to
-the Eastern Europe.
- Identify the other mountains in
-Europe and prepare a table.
-The Caucasian Mountains, which lie
-between the Caspian Sea and the Black Sea,
-form the southern boundary of Europe.
-They too are very high and covered with
-snow all year round.
-There is a lot of diffference between
-Asia and Europe. We can see many plateaus
-
-  8. Normalized Score: 0.0036 | Chapter: Europe | Text: agricultural technology they use also
-requires the use of hybrid seeds, chemical
-fertilisers, pesticides etc.
-However, compared to our country, very
-few people in Europe are dependent upon
-agriculture. Most of them work in industry
-or service sector like banks, transport etc.
-Even those who work in the field of
-agriculture are helped by the government
-with a lot of subsidy to carry on farming as
-it gives them less income than other kinds
-of work. The government pays them for
-carrying on agriculture in the villages.
-Discovery of Sea Routes
-No part of western Europe is too far
-from the ocean. In contrast, many countries
-of Asia are thousands of kilometers from
-the sea.
- Look at the wall map or atlas to
-identify the names of at least six
-cities of Europe which are situated
-on the sea coast.
-There are thousands of such seaside
-settlements where seafaring people have
-been living for hundreds of years. With
-centuries of experience of sea travel, the
-
-  9. Normalized Score: 0.0000 | Chapter: Rain and Rivers | Text: the water cycle.
-Precipitation: Different forms of
-condensation of water vapours is
-known as precipitation. This may take
-place in the form of dew, fog, rain,
-snow or hail.
-Humidity: The amount of invisible
-water vapours present in the
-atmosphere is known as humidity.
-When temperature and humidity
-rise, we feel uncomfortable. We
-perspire and the sweat does not
-evaporate quickly. We feel sticky
-and such weather is called sultry.
-Rain and Rivers
-SCERT, TEALANGANASCERT, TEALANGANA
-10 Diversity on the Earth Social Studies
-heavily on the oceans. Clouds also travel inland for thousands of kilometres to bring rain to
-us. Do you know what brings them deep inland?
-From which direction does the wind blow during the rainy season?
-These winds come all the way from the Arabian Sea and the Bay of Bengal and they transport
-the rain clouds. They are called ‘Monsoon winds’. They are also called ‘south- west monsoon
-winds’ as they blow from that direction. These winds blow only in the summer.
-
-  10. Normalized Score: 0.0000 | Chapter: Rain and Rivers | Text: the rain clouds. They are called ‘Monsoon winds’. They are also called ‘south- west monsoon
-winds’ as they blow from that direction. These winds blow only in the summer.
-There are two arms of the monsoon winds: one blows from the Arabian Sea and the other
-from the Bay of Bengal. The arrows in Map 1 show us the direction of winds.
-Map 1: Monsoon
-winds in India
-Imphal
-Dispur
-THE
-THE
-Index :
-Areas of Heavy Rainfall
-Wind direction
-N
-SCERT, TEALANGANASCERT, TEALANGANA
- 11Free Distribution by Govt. of  Telangana 2021-22
- Towards which parts of the country
-would the winds take the clouds
-from the Bay of Bengal?
- Towards which parts of the country
-would the winds take the clouds
-from the Arabian Sea?
- From which direction would the
-winds blow to bring monsoon rains
-to West Bengal, Lucknow and
-Delhi?
- From which direction would the
-winds blow to bring monsoon rains
-to Mumbai, Hyderabad, and
-Bangalore?
-Rainfall in Telangana
- In which months  does it rain the
+  10. Normalized Score: 0.0000 | Chapter: OUR FOOD | Text: ingredients have been listed below. Find
+out the source of each ingredient; if it
+is a plant mark (P) or an animal (A), or
+something else (O) (Table-3).
+Table 2 - Ingredients of  some food items.
+S.No. F ood items you lik e Required  ingredients
+1. Payasam
+2. Chicken curry
+3. Pallikaram
+are required to prepare food are known
+as ingredients.
+List out some food items you like to
+eat and try to find out what ingredients
+are used to prepare them (Table-2).
+SCERT TELANGANA4
+OUR FOOD Free Distribution by Govt. of T.S. 2020-21
+Name the plant or animal also. You can take the help of  your friends or elders.
+Table 3 : Who gives us food
+Ingredients Plant/Animal/Others Name of plant or animal
+Cooking Oil
+Honey
+Chips
+Turmeric powder
+Salt
+Dough
+Meat
+Rice
+Eggs
+Sugar
+Peanuts
+Try to enrich this list as much as you
+can. You will find that from animals we
+get milk, eggs and meat. If  you observe
+carefully you will notice that there are  a
+number of animals from which we get
 
 
 --- Generated Answer ---
-That is an excellent question! Understanding the Mean Sea Level is fundamental to measuring any height on Earth.
+That is an excellent question! Plants provide us with a great variety of ingredients, and we use almost every part of a plant in some form as food.
 
-The **Mean Sea Level (M.S.L.)** is the standard reference height (or 0 meter height) used globally to measure the height of all places on land.
+Based on our study, the different parts of plants that we generally use as food include:
 
-Here is a detailed explanation based on how the concept is derived and used:
+1.  **Leaves**
+2.  **Roots**
+3.  **Seeds**
+4.  **Fruits**
+5.  **Stems**
+6.  **Flowers**
 
-### 1. Why is MSL Necessary?
+### Usage Patterns
 
-The level of the sea is not fixed; it is constantly changing. This is due to natural phenomena like **high tides and low tides**. Because the water level is either rising or falling, scientists cannot simply pick one moment in time to define the sea level.
+While we can use all of these parts, the textbook notes that some are more widely used than others:
 
-### 2. How is MSL Calculated?
+*   **Widely Used Parts:** Leaves, roots, seeds, and fruits of plants are commonly and widely consumed in our food.
+*   **Less Widely Used Parts:** Stems and flowers are also used, but not as widely as the other four categories. For example, some plants, like sugarcane or ginger, have modified stems that we eat, and we also consume certain flowers.
 
-In order to establish a stable reference point, the following steps are taken:
+We see examples of this variety when we look at common ingredients:
 
-*   **Frequent Measurement:** The level of the sea is carefully measured at frequent intervals over a long period.
-*   **Averaging:** Scientists observe these high and low levels and calculate the **mean** (or average) of all these measured heights.
-*   **Standard Reference:** This single, calculated average level is known as the Mean Sea Level (M.S.L.), and it is taken as the **0 meter height**.
-
-### 3. Importance and Use of MSL
-
-The Mean Sea Level is critically important because it serves as the universal baseline for all land measurements:
-
-*   **Calculating Land Heights:** All heights on land, whether a small hill, a large mountain, or a plateau, are calculated *from* the sea level.
-*   **Universal Standard:** Since all the seas and oceans in the world are connected to each other, the sea level (M.S.L.) is taken to be the standard reference point all over the world.
-
-You may have seen this concept applied directly if you visit a railway station. The display board often mentions the height of that location in meters "M.S.L." (e.g., 150 MSL), indicating how high that spot is above the calculated average sea level.
+*   **Roots:** We eat the roots of plants like Carrot, Radish, and Beetroot.
+*   **Stems:** We consume modified stems like Potato, Ginger, and Sugarcane.
+*   **Leaves and Seeds:** For a plant like Fenugreek (Menthulu), we eat both its leaves and its seeds.
 --- End Log ---
 

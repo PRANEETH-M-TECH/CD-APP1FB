@@ -8,6 +8,9 @@
   <link rel="stylesheet" href="/static/style.css">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV" crossorigin="anonymous">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmImMNkdTe" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous"></script>
 
   <style>
     body {
@@ -140,10 +143,15 @@
 </head>
 
 <body class="text-gray-800">
-  <div class="user-app-container flex flex-col md:flex-row h-screen">
+  <div class="user-app-container flex flex-col md:flex-row h-screen relative">
+    <button id="toggle-left-pane" class="absolute top-4 right-1/2 z-10 bg-gray-200 p-2 rounded-full hover:bg-gray-300 transition-all duration-300">
+        <svg id="toggle-icon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        </svg>
+    </button>
 
     <!-- Left Pane (Book Viewer) -->
-    <div class="left-pane w-1/2 flex flex-col">
+    <div id="left-pane" class="left-pane w-1/2 flex flex-col transition-all duration-300">
 
       <div class="flex gap-4">
         <div class="flex-1">
@@ -184,7 +192,7 @@
     </div>
 
     <!-- Right Pane (Chat Area) -->
-    <div class="right-pane w-1/2">
+    <div id="right-pane" class="right-pane w-1/2 transition-all duration-300">
 
       <!-- Chat History -->
       <div id="chat-container" class="flex flex-col flex-1 p-5 overflow-y-auto">
@@ -203,9 +211,12 @@
 
       <!-- Chat Input -->
       <div id="chat-input-container" class="p-4 border-t border-gray-200 bg-white shadow-inner">
-        <div class="flex justify-start mb-2">
+        <div class="flex justify-start mb-2 gap-2">
             <button type="button" id="list-chapters-btn" class="hidden bg-indigo-500 hover:bg-indigo-600 text-white p-2 px-4 transition text-sm">
               List Chapters
+            </button>
+            <button type="button" id="summarize-btn" class="hidden bg-indigo-500 hover:bg-indigo-600 text-white p-2 px-4 transition text-sm">
+              Summarize
             </button>
         </div>
         <form id="user-query-form">
@@ -230,14 +241,43 @@
 
   <script src="/static/script.js"></script>
 
-  <!-- New script for 'List Chapters' button functionality -->
+  <!-- New script for 'List Chapters' and 'Summarize' button functionality -->
   <script>
+    function addMessageToChat({ role, content }) {
+        const chatHistory = document.getElementById('chat-history');
+        const messageElement = document.createElement('div');
+        messageElement.classList.add('ai-card', 'fade-in');
+
+        const header = role === 'ai' ? '🤖 Chaduvu Guru' : '👤 You';
+        
+        const htmlContent = marked.parse(content);
+
+        messageElement.innerHTML = `
+            <div class="flex justify-between items-center mb-2">
+                <h2 class="font-semibold text-gray-700">${header}</h2>
+                <button class="copy-btn" onclick="copyMessage(this)">📋</button>
+            </div>
+            <div class="markdown-content">${htmlContent}</div>
+        `;
+
+        chatHistory.appendChild(messageElement);
+        chatHistory.scrollTop = chatHistory.scrollHeight; // Auto-scroll to bottom
+    }    
+    function copyMessage(button) {
+        const card = button.closest('.ai-card');
+        const content = card.querySelector('.markdown-content').innerText;
+        navigator.clipboard.writeText(content).then(() => {
+            button.textContent = '✅';
+            setTimeout(() => { button.textContent = '📋'; }, 1000);
+        });
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
       const listChaptersBtn = document.getElementById('list-chapters-btn');
-      const chatHistory = document.getElementById('chat-history');
+      const summarizeBtn = document.getElementById('summarize-btn');
 
       if (listChaptersBtn) {
-                  listChaptersBtn.addEventListener('click', async () => {
+          listChaptersBtn.addEventListener('click', async () => {
             const classSelect = document.getElementById('class-select');
             const subjectSelect = document.getElementById('subject-select');
 
@@ -254,7 +294,7 @@
             }
 
             // Clear previous chat history before adding new messages
-            chatHistory.innerHTML = '';
+            document.getElementById('chat-history').innerHTML = '';
 
             addMessageToChat({
               role: 'ai',
@@ -286,7 +326,57 @@
                 content: `Sorry, an error occurred while fetching chapters: ${error.message}`
               });
             }
-          });      }
+          });
+      }
+
+      if (summarizeBtn) {
+          summarizeBtn.addEventListener('click', async () => {
+            const classSelect = document.getElementById('class-select');
+            const subjectSelect = document.getElementById('subject-select');
+
+            const selectedClass = classSelect.value;
+            const selectedSubject = subjectSelect.value;
+
+            if (!selectedClass || selectedClass === 'Select...') {
+              alert('Please select a class first.');
+              return;
+            }
+            if (!selectedSubject || selectedSubject === 'Select...') {
+              alert('Please select a subject first.');
+              return;
+            }
+
+            // Clear previous chat history before adding new messages
+            document.getElementById('chat-history').innerHTML = '';
+
+            try {
+              const response = await fetch(`/api/list-chapters?class_name=${selectedClass}&subject=${selectedSubject}`);
+              
+              if (!response.ok) {
+                throw new Error('Could not retrieve chapters. Please ensure the book has been processed.');
+              }
+
+              const data = await response.json();
+              
+              if (data && data.chapters && data.chapters.length > 0) {
+                displayChapterDropdown(data.chapters);
+              }
+              else {
+                addMessageToChat({
+                  role: 'ai',
+                  content: 'No chapters found for this book.'
+                });
+              }
+
+            } catch (error) {
+              console.error('Error fetching chapters:', error);
+              addMessageToChat({
+                role: 'ai',
+                content: `Sorry, an error occurred while fetching chapters: ${error.message}`
+              });
+            }
+          });
+      }
 
       function displayChaptersInChat(chapters) {
         let markdownText = '### Chapters\n\n';
@@ -307,34 +397,545 @@
         });
       }
 
-      function addMessageToChat({ role, content }) {
-          const messageElement = document.createElement('div');
-          messageElement.classList.add('ai-card', 'fade-in');
+      function displayChapterDropdown(chapters) {
+        let dropdownHTML = '### Select a Chapter to Summarize\n\n';
+        dropdownHTML += '<select id="chapter-summary-select" class="w-full border border-gray-300 rounded-lg px-3 py-2 mt-1">';
+        dropdownHTML += '<option disabled selected>Select a chapter...</option>';
 
-          const header = role === 'ai' ? '🤖 Chaduvu Guru' : '👤 You';
-          
-          const htmlContent = marked.parse(content);
+        chapters.forEach(chapter => {
+          dropdownHTML += `<option value="${chapter.chapter_name}">${chapter.chapter_name}</option>`;
+        });
 
-          messageElement.innerHTML = `
-              <div class="flex justify-between items-center mb-2">
-                  <h2 class="font-semibold text-gray-700">${header}</h2>
-                  <button class="copy-btn" onclick="copyMessage(this)">📋</button>
-              </div>
-              <div class="markdown-content">${htmlContent}</div>
-          `;
+        dropdownHTML += '</select>';
+        dropdownHTML += '<button id="get-summary-btn" class="mt-2 bg-blue-500 hover:bg-blue-600 text-white p-2 px-4 transition text-sm rounded-lg">Get Summary</button>';
 
-          chatHistory.appendChild(messageElement);
-          chatHistory.scrollTop = chatHistory.scrollHeight; // Auto-scroll to bottom
+        addMessageToChat({
+          role: 'ai',
+          content: dropdownHTML
+        });
       }
+
+      document.getElementById('chat-history').addEventListener('click', async (event) => {
+        if (event.target.id === 'get-summary-btn') {
+          const chapterSelect = document.getElementById('chapter-summary-select');
+          const selectedChapter = chapterSelect.value;
+
+          if (!selectedChapter || selectedChapter === 'Select a chapter...') {
+            alert('Please select a chapter first.');
+            return;
+          }
+
+          const classSelect = document.getElementById('class-select');
+          const subjectSelect = document.getElementById('subject-select');
+          const selectedClass = classSelect.value;
+          const selectedSubject = subjectSelect.value;
+
+          try {
+            const response = await fetch('/api/summarize', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                class_name: selectedClass,
+                subject: selectedSubject,
+                chapter_name: selectedChapter
+              })
+            });
+
+            if (!response.ok) {
+              throw new Error('Could not retrieve summary.');
+            }
+
+            const data = await response.json();
+            addMessageToChat({
+              role: 'ai',
+              content: data.summary
+            });
+
+          } catch (error) {
+            console.error('Error fetching summary:', error);
+            addMessageToChat({
+              role: 'ai',
+              content: `Sorry, an error occurred while fetching the summary: ${error.message}`
+            });
+          }
+        }
+      });
       
-      function copyMessage(button) {
-          const card = button.closest('.ai-card');
-          const content = card.querySelector('.markdown-content').innerText;
-          navigator.clipboard.writeText(content).then(() => {
-              button.textContent = '✅';
-              setTimeout(() => { button.textContent = '📋'; }, 1000);
+      window.copyMessage = copyMessage;
+    });
+  </script>
+</body>
+</html>, right: '    }
+    
+    function copyMessage(button) {
+        const card = button.closest('.ai-card');
+        const content = card.querySelector('.markdown-content').innerText;
+        navigator.clipboard.writeText(content).then(() => {
+            button.textContent = '✅';
+            setTimeout(() => { button.textContent = '📋'; }, 1000);
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const toggleBtn = document.getElementById('toggle-left-pane');
+      const toggleIcon = document.getElementById('toggle-icon');
+      const leftPane = document.getElementById('left-pane');
+      const rightPane = document.getElementById('right-pane');
+
+      if (toggleBtn) {
+        toggleBtn.addEventListener('click', () => {
+          leftPane.classList.toggle('hidden');
+          rightPane.classList.toggle('w-1/2');
+          rightPane.classList.toggle('w-full');
+
+          // Change button icon and position
+          if (leftPane.classList.contains('hidden')) {
+            toggleIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />';
+            toggleBtn.classList.remove('right-1/2');
+            toggleBtn.classList.add('left-4');
+          } else {
+            toggleIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />';
+            toggleBtn.classList.remove('left-4');
+            toggleBtn.classList.add('right-1/2');
+          }
+        });
+      }
+
+      const listChaptersBtn = document.getElementById('list-chapters-btn');
+      const summarizeBtn = document.getElementById('summarize-btn');
+
+      if (listChaptersBtn) {
+          listChaptersBtn.addEventListener('click', async () => {
+            const classSelect = document.getElementById('class-select');
+            const subjectSelect = document.getElementById('subject-select');
+
+            const selectedClass = classSelect.value;
+            const selectedSubject = subjectSelect.value;
+
+            if (!selectedClass || selectedClass === 'Select...') {
+              alert('Please select a class first.');
+              return;
+            }
+            if (!selectedSubject || selectedSubject === 'Select...') {
+              alert('Please select a subject first.');
+              return;
+            }
+
+            // Clear previous chat history before adding new messages
+            document.getElementById('chat-history').innerHTML = '';
+
+            addMessageToChat({
+              role: 'ai',
+              content: 'Fetching chapter list...'
+            });
+
+            try {
+              const response = await fetch(`/api/list-chapters?class_name=${selectedClass}&subject=${selectedSubject}`);
+              
+              if (!response.ok) {
+                throw new Error('Could not retrieve chapters. Please ensure the book has been processed.');
+              }
+
+              const data = await response.json();
+              
+              if (data && data.chapters && data.chapters.length > 0) {
+                displayChaptersInChat(data.chapters);
+              } else {
+                addMessageToChat({
+                  role: 'ai',
+                  content: 'No chapters found for this book.'
+                });
+              }
+
+            } catch (error) {
+              console.error('Error fetching chapters:', error);
+              addMessageToChat({
+                role: 'ai',
+                content: `Sorry, an error occurred while fetching chapters: ${error.message}`
+              });
+            }
           });
       }
+
+      if (summarizeBtn) {
+          summarizeBtn.addEventListener('click', async () => {
+            const classSelect = document.getElementById('class-select');
+            const subjectSelect = document.getElementById('subject-select');
+
+            const selectedClass = classSelect.value;
+            const selectedSubject = subjectSelect.value;
+
+            if (!selectedClass || selectedClass === 'Select...') {
+              alert('Please select a class first.');
+              return;
+            }
+            if (!selectedSubject || selectedSubject === 'Select...') {
+              alert('Please select a subject first.');
+              return;
+            }
+
+            // Clear previous chat history before adding new messages
+            document.getElementById('chat-history').innerHTML = '';
+
+            try {
+              const response = await fetch(`/api/list-chapters?class_name=${selectedClass}&subject=${selectedSubject}`);
+              
+              if (!response.ok) {
+                throw new Error('Could not retrieve chapters. Please ensure the book has been processed.');
+              }
+
+              const data = await response.json();
+              
+              if (data && data.chapters && data.chapters.length > 0) {
+                displayChapterDropdown(data.chapters);
+              } else {
+                addMessageToChat({
+                  role: 'ai',
+                  content: 'No chapters found for this book.'
+                });
+              }
+
+            } catch (error) {
+              console.error('Error fetching chapters:', error);
+              addMessageToChat({
+                role: 'ai',
+                content: `Sorry, an error occurred while fetching chapters: ${error.message}`
+              });
+            }
+          });
+      }
+
+      function displayChaptersInChat(chapters) {
+        let markdownText = '### Chapters\n\n';
+        markdownText += '| S.No. | Chapter Name | Start Page | End Page |\n';
+        markdownText += '| :--- | :--- | :--- | :--- |\n'; // Updated markdown table separator
+
+        chapters.forEach((chapter, index) => { // Added index to forEach
+          const sNo = index + 1; // Calculate serial number
+          const name = chapter.chapter_name || 'N/A';
+          const start = chapter.chpstpage || '-'; // Use chpstpage
+          const end = chapter.chpendpage || '-';   // Use chpendpage
+          markdownText += `| ${sNo} | ${name} | ${start} | ${end} |\n`;
+        });
+
+        addMessageToChat({
+          role: 'ai',
+          content: markdownText
+        });
+      }
+
+      function displayChapterDropdown(chapters) {
+        let dropdownHTML = '### Select a Chapter to Summarize\n\n';
+        dropdownHTML += '<select id="chapter-summary-select" class="w-full border border-gray-300 rounded-lg px-3 py-2 mt-1">';
+        dropdownHTML += '<option disabled selected>Select a chapter...</option>';
+
+        chapters.forEach(chapter => {
+          dropdownHTML += `<option value="${chapter.chapter_name}">${chapter.chapter_name}</option>`;
+        });
+
+        dropdownHTML += '</select>';
+        dropdownHTML += '<button id="get-summary-btn" class="mt-2 bg-blue-500 hover:bg-blue-600 text-white p-2 px-4 transition text-sm rounded-lg">Get Summary</button>';
+
+        addMessageToChat({
+          role: 'ai',
+          content: dropdownHTML
+        });
+      }
+
+      document.getElementById('chat-history').addEventListener('click', async (event) => {
+        if (event.target.id === 'get-summary-btn') {
+          const chapterSelect = document.getElementById('chapter-summary-select');
+          const selectedChapter = chapterSelect.value;
+
+          if (!selectedChapter || selectedChapter === 'Select a chapter...') {
+            alert('Please select a chapter first.');
+            return;
+          }
+
+          const classSelect = document.getElementById('class-select');
+          const subjectSelect = document.getElementById('subject-select');
+          const selectedClass = classSelect.value;
+          const selectedSubject = subjectSelect.value;
+
+          try {
+            const response = await fetch('/api/summarize', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                class_name: selectedClass,
+                subject: selectedSubject,
+                chapter_name: selectedChapter
+              })
+            });
+
+            if (!response.ok) {
+              throw new Error('Could not retrieve summary.');
+            }
+
+            const data = await response.json();
+            addMessageToChat({
+              role: 'ai',
+              content: data.summary
+            });
+
+          } catch (error) {
+            console.error('Error fetching summary:', error);
+            addMessageToChat({
+              role: 'ai',
+              content: `Sorry, an error occurred while fetching the summary: ${error.message}`
+            });
+          }
+        }
+      });
+      
+      window.copyMessage = copyMessage;
+    });
+  </script>
+</body>
+</html>, display: false},
+        
+                                                {left: '\\(', right: '\\)', display: false},
+        
+                                                {left: '\\[', right: '\\]', display: true}
+        
+                                            ]
+        
+                                        });
+        
+                                    } else {
+        
+                                        console.error("KaTeX or renderMathInElement is not loaded. Math will not be rendered.");
+        
+                                    }
+        
+                                }, 0);    }
+    
+    function copyMessage(button) {
+        const card = button.closest('.ai-card');
+        const content = card.querySelector('.markdown-content').innerText;
+        navigator.clipboard.writeText(content).then(() => {
+            button.textContent = '✅';
+            setTimeout(() => { button.textContent = '📋'; }, 1000);
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const toggleBtn = document.getElementById('toggle-left-pane');
+      const toggleIcon = document.getElementById('toggle-icon');
+      const leftPane = document.getElementById('left-pane');
+      const rightPane = document.getElementById('right-pane');
+
+      if (toggleBtn) {
+        toggleBtn.addEventListener('click', () => {
+          leftPane.classList.toggle('hidden');
+          rightPane.classList.toggle('w-1/2');
+          rightPane.classList.toggle('w-full');
+
+          // Change button icon and position
+          if (leftPane.classList.contains('hidden')) {
+            toggleIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />';
+            toggleBtn.classList.remove('right-1/2');
+            toggleBtn.classList.add('left-4');
+          } else {
+            toggleIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />';
+            toggleBtn.classList.remove('left-4');
+            toggleBtn.classList.add('right-1/2');
+          }
+        });
+      }
+
+      const listChaptersBtn = document.getElementById('list-chapters-btn');
+      const summarizeBtn = document.getElementById('summarize-btn');
+
+      if (listChaptersBtn) {
+          listChaptersBtn.addEventListener('click', async () => {
+            const classSelect = document.getElementById('class-select');
+            const subjectSelect = document.getElementById('subject-select');
+
+            const selectedClass = classSelect.value;
+            const selectedSubject = subjectSelect.value;
+
+            if (!selectedClass || selectedClass === 'Select...') {
+              alert('Please select a class first.');
+              return;
+            }
+            if (!selectedSubject || selectedSubject === 'Select...') {
+              alert('Please select a subject first.');
+              return;
+            }
+
+            // Clear previous chat history before adding new messages
+            document.getElementById('chat-history').innerHTML = '';
+
+            addMessageToChat({
+              role: 'ai',
+              content: 'Fetching chapter list...'
+            });
+
+            try {
+              const response = await fetch(`/api/list-chapters?class_name=${selectedClass}&subject=${selectedSubject}`);
+              
+              if (!response.ok) {
+                throw new Error('Could not retrieve chapters. Please ensure the book has been processed.');
+              }
+
+              const data = await response.json();
+              
+              if (data && data.chapters && data.chapters.length > 0) {
+                displayChaptersInChat(data.chapters);
+              } else {
+                addMessageToChat({
+                  role: 'ai',
+                  content: 'No chapters found for this book.'
+                });
+              }
+
+            } catch (error) {
+              console.error('Error fetching chapters:', error);
+              addMessageToChat({
+                role: 'ai',
+                content: `Sorry, an error occurred while fetching chapters: ${error.message}`
+              });
+            }
+          });
+      }
+
+      if (summarizeBtn) {
+          summarizeBtn.addEventListener('click', async () => {
+            const classSelect = document.getElementById('class-select');
+            const subjectSelect = document.getElementById('subject-select');
+
+            const selectedClass = classSelect.value;
+            const selectedSubject = subjectSelect.value;
+
+            if (!selectedClass || selectedClass === 'Select...') {
+              alert('Please select a class first.');
+              return;
+            }
+            if (!selectedSubject || selectedSubject === 'Select...') {
+              alert('Please select a subject first.');
+              return;
+            }
+
+            // Clear previous chat history before adding new messages
+            document.getElementById('chat-history').innerHTML = '';
+
+            try {
+              const response = await fetch(`/api/list-chapters?class_name=${selectedClass}&subject=${selectedSubject}`);
+              
+              if (!response.ok) {
+                throw new Error('Could not retrieve chapters. Please ensure the book has been processed.');
+              }
+
+              const data = await response.json();
+              
+              if (data && data.chapters && data.chapters.length > 0) {
+                displayChapterDropdown(data.chapters);
+              } else {
+                addMessageToChat({
+                  role: 'ai',
+                  content: 'No chapters found for this book.'
+                });
+              }
+
+            } catch (error) {
+              console.error('Error fetching chapters:', error);
+              addMessageToChat({
+                role: 'ai',
+                content: `Sorry, an error occurred while fetching chapters: ${error.message}`
+              });
+            }
+          });
+      }
+
+      function displayChaptersInChat(chapters) {
+        let markdownText = '### Chapters\n\n';
+        markdownText += '| S.No. | Chapter Name | Start Page | End Page |\n';
+        markdownText += '| :--- | :--- | :--- | :--- |\n'; // Updated markdown table separator
+
+        chapters.forEach((chapter, index) => { // Added index to forEach
+          const sNo = index + 1; // Calculate serial number
+          const name = chapter.chapter_name || 'N/A';
+          const start = chapter.chpstpage || '-'; // Use chpstpage
+          const end = chapter.chpendpage || '-';   // Use chpendpage
+          markdownText += `| ${sNo} | ${name} | ${start} | ${end} |\n`;
+        });
+
+        addMessageToChat({
+          role: 'ai',
+          content: markdownText
+        });
+      }
+
+      function displayChapterDropdown(chapters) {
+        let dropdownHTML = '### Select a Chapter to Summarize\n\n';
+        dropdownHTML += '<select id="chapter-summary-select" class="w-full border border-gray-300 rounded-lg px-3 py-2 mt-1">';
+        dropdownHTML += '<option disabled selected>Select a chapter...</option>';
+
+        chapters.forEach(chapter => {
+          dropdownHTML += `<option value="${chapter.chapter_name}">${chapter.chapter_name}</option>`;
+        });
+
+        dropdownHTML += '</select>';
+        dropdownHTML += '<button id="get-summary-btn" class="mt-2 bg-blue-500 hover:bg-blue-600 text-white p-2 px-4 transition text-sm rounded-lg">Get Summary</button>';
+
+        addMessageToChat({
+          role: 'ai',
+          content: dropdownHTML
+        });
+      }
+
+      document.getElementById('chat-history').addEventListener('click', async (event) => {
+        if (event.target.id === 'get-summary-btn') {
+          const chapterSelect = document.getElementById('chapter-summary-select');
+          const selectedChapter = chapterSelect.value;
+
+          if (!selectedChapter || selectedChapter === 'Select a chapter...') {
+            alert('Please select a chapter first.');
+            return;
+          }
+
+          const classSelect = document.getElementById('class-select');
+          const subjectSelect = document.getElementById('subject-select');
+          const selectedClass = classSelect.value;
+          const selectedSubject = subjectSelect.value;
+
+          try {
+            const response = await fetch('/api/summarize', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                class_name: selectedClass,
+                subject: selectedSubject,
+                chapter_name: selectedChapter
+              })
+            });
+
+            if (!response.ok) {
+              throw new Error('Could not retrieve summary.');
+            }
+
+            const data = await response.json();
+            addMessageToChat({
+              role: 'ai',
+              content: data.summary
+            });
+
+          } catch (error) {
+            console.error('Error fetching summary:', error);
+            addMessageToChat({
+              role: 'ai',
+              content: `Sorry, an error occurred while fetching the summary: ${error.message}`
+            });
+          }
+        }
+      });
       
       window.copyMessage = copyMessage;
     });
