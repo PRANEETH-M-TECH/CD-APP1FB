@@ -274,5 +274,129 @@
         "chpendpage": 176
       }
     ]
+  },
+  "7_science": {
+    "pdf_offset": 14,
+    "chapters": [
+      {
+        "chapter_name": "FOOD COMPONENTS",
+        "pdf_startpg": 15,
+        "pdf_endpg": 22,
+        "chpstpage": 1,
+        "chpendpage": 8
+      },
+      {
+        "chapter_name": "ACIDS AND BASES",
+        "pdf_startpg": 23,
+        "pdf_endpg": 32,
+        "chpstpage": 9,
+        "chpendpage": 18
+      },
+      {
+        "chapter_name": "SILK - WOOL",
+        "pdf_startpg": 33,
+        "pdf_endpg": 41,
+        "chpstpage": 19,
+        "chpendpage": 27
+      },
+      {
+        "chapter_name": "MOTION AND TIME",
+        "pdf_startpg": 42,
+        "pdf_endpg": 56,
+        "chpstpage": 28,
+        "chpendpage": 42
+      },
+      {
+        "chapter_name": "HEAT - MEASUREMENT",
+        "pdf_startpg": 57,
+        "pdf_endpg": 67,
+        "chpstpage": 43,
+        "chpendpage": 53
+      },
+      {
+        "chapter_name": "WEATHER AND CLIMATE",
+        "pdf_startpg": 68,
+        "pdf_endpg": 76,
+        "chpstpage": 54,
+        "chpendpage": 62
+      },
+      {
+        "chapter_name": "ELECTRICITY",
+        "pdf_startpg": 77,
+        "pdf_endpg": 86,
+        "chpstpage": 63,
+        "chpendpage": 72
+      },
+      {
+        "chapter_name": "AIR, WINDS AND CYCLONES",
+        "pdf_startpg": 87,
+        "pdf_endpg": 95,
+        "chpstpage": 73,
+        "chpendpage": 81
+      },
+      {
+        "chapter_name": "REFLECTION OF LIGHT",
+        "pdf_startpg": 96,
+        "pdf_endpg": 110,
+        "chpstpage": 82,
+        "chpendpage": 96
+      },
+      {
+        "chapter_name": "NUTRITION IN PLANTS",
+        "pdf_startpg": 111,
+        "pdf_endpg": 117,
+        "chpstpage": 97,
+        "chpendpage": 103
+      },
+      {
+        "chapter_name": "RESPIRATION IN ORGANISMS",
+        "pdf_startpg": 118,
+        "pdf_endpg": 125,
+        "chpstpage": 104,
+        "chpendpage": 111
+      },
+      {
+        "chapter_name": "REPRODUCTION IN PLANTS",
+        "pdf_startpg": 126,
+        "pdf_endpg": 136,
+        "chpstpage": 112,
+        "chpendpage": 122
+      },
+      {
+        "chapter_name": "SEED DISPERSAL",
+        "pdf_startpg": 137,
+        "pdf_endpg": 142,
+        "chpstpage": 123,
+        "chpendpage": 128
+      },
+      {
+        "chapter_name": "WATER",
+        "pdf_startpg": 143,
+        "pdf_endpg": 151,
+        "chpstpage": 129,
+        "chpendpage": 137
+      },
+      {
+        "chapter_name": "SOIL : OUR LIFE",
+        "pdf_startpg": 152,
+        "pdf_endpg": 163,
+        "chpstpage": 138,
+        "chpendpage": 149
+      },
+      {
+        "chapter_name": "FOREST : OUR LIFE",
+        "pdf_startpg": 164,
+        "pdf_endpg": 170,
+        "chpstpage": 150,
+        "chpendpage": 156
+      },
+      {
+        "chapter_name": "CHANGES AROUND US",
+        "pdf_startpg": 171,
+        "pdf_endpg": 182,
+        "chpstpage": 157,
+        "chpendpage": 168
+      }
+    ]
   }
 }

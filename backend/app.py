@@ -15,7 +15,7 @@ from pypdf import PdfReader
 
 # Load environment variables
 load_dotenv()
-from qdrant import (
+from .qdrant import (
     initialize, # Updated import
     process_and_embed_book,
     get_books,
@@ -83,7 +83,7 @@ async def create_book(
     if not os.path.exists(pdf_path):
         raise HTTPException(status_code=404, detail=f"Uploaded file not found: {filename}")
 
-    cache_path = "chapters_cache.json"
+    cache_path = "chapterdata/chapters_cache.json"
     try:
         with open(cache_path, "r") as f:
             cache = json.load(f)
@@ -221,19 +221,21 @@ async def list_chapters(class_name: str, subject: str):
     """
     Returns a sorted list of chapters for a given book, using a cache.
     """
-    cache_path = "chapters_cache.json"
+    cache_path = "chapterdata/chapters_cache.json"
     cache_key = f"{class_name}_{subject.lower()}"
+
+    print(f"--- API: /api/list-chapters called for Class: {class_name}, Subject: {subject} (Cache Key: {cache_key}) ---")
 
     # 1. Check cache first
     try:
         with open(cache_path, "r") as f:
             cache = json.load(f)
         if cache_key in cache:
-            # Return only the chapters list from the cached data
+            print(f"--- Cache HIT for {cache_key}. Returning {len(cache[cache_key]['chapters'])} chapters from cache. ---")
             return {"chapters": cache[cache_key]["chapters"]}
     except (FileNotFoundError, json.JSONDecodeError):
-        # If cache file not found or invalid, proceed to get from database
-        pass # No need to initialize cache = {} here, as we are not writing to it
+        print(f"--- Cache MISS or invalid cache file for {cache_key}. Attempting to retrieve from database. ---")
+        cache = {} # Ensure cache is empty if file not found or invalid
 
     # 2. If not in cache, get from database
     books = get_books(class_name=class_name, subject=subject)
@@ -242,6 +244,7 @@ async def list_chapters(class_name: str, subject: str):
 
     book_uuid = books[0]['id']
     chapters = get_chapters_for_book(book_uuid)
+    print(f"--- Retrieved {len(chapters)} chapters from database for book UUID: {book_uuid}. ---")
 
     # This endpoint should not write to the cache. The cache is managed by /extract-chapters.
     # If the data is not in cache, it means /extract-chapters hasn't been run for this book.
@@ -265,7 +268,7 @@ async def get_summary(request: SummaryRequest):
     chapter_name = request.chapter_name
 
     summary_filename = f"{subject.lower()}{class_name.replace(' ', '')}.json"
-    summary_filepath = os.path.join("summary", summary_filename)
+    summary_filepath = os.path.join("..", "summary", summary_filename)
 
     if not os.path.exists(summary_filepath):
         raise HTTPException(status_code=404, detail="Summary file not found for this book.")
@@ -321,11 +324,11 @@ def extract_chapters_from_pdf(pdf_path: str) -> Dict:
             text = reader.pages[i].extract_text() or ""
             pdf_pages_data.append({"pdf_page": i + 1, "text": text})
 
-        with open("chap_extraction.json", "w", encoding="utf-8") as f:
+        with open("chapterdata/chap_extraction.json", "w", encoding="utf-8") as f:
             json.dump(pdf_pages_data, f, indent=2)
         
         try:
-            llm_response_str = generate_chapters_from_text("chap_extraction.json")
+            llm_response_str = generate_chapters_from_text("chapterdata/chap_extraction.json")
         except Exception as e:
             raise HTTPException(status_code=500, detail=f"AI model failed to generate chapters: {e}")
 
@@ -400,7 +403,7 @@ async def extract_chapters(
 
         safe_filename = os.path.basename(book_id)
         pdf_path = os.path.join(UPLOADS_DIR, safe_filename)
-        cache_path = "chapters_cache.json"
+        cache_path = "chapterdata/chapters_cache.json"
         cache_key = f"{class_name}_{subject.lower()}" # Define cache_key before the try block
 
         # 1. Check cache first

@@ -1,18 +1,198 @@
 --- Query Log ---
-Timestamp: 2025-10-27T19:02:16.011676
-Original Query: which parts of the plants do we generally use?
+Timestamp: 2025-10-28T11:46:14.500527
+Original Query: what are the common food items usually eaten by you?
 Book UUID: 097025710c9d2a09420dda2755023e25b2106cc4e89dfc78be9f2adab9f8c6b9
 Class: 6, Subject: science
 
 --- LLM Query Processing ---
-Reformulated Query: Identify and list the specific anatomical parts of plants (such as roots, stems, leaves, or fruits) that are commonly harvested and utilized for human consumption as food ingredients.
+Reformulated Query: Identify the common, staple food items typically consumed by humans according to the text, and explain how regional factors influence these food habits, referencing examples like rice, dal, and different regional staples.
 Classification: factual
-Conceptual Score: 0.10
-Keywords: plant parts, consumed, food ingredients, roots, leaves, fruits
+Conceptual Score: 0.40
+Keywords: common food items, staple food, dietary consumption, food habits
 
 --- Formatted Top Chunks for LLM (Context) ---
 
-  --- Chunk 1 (Hybrid Score: 0.5800) ---
+  --- Chunk 1 (Hybrid Score: 0.6484) ---
+     Chapter: OUR FOOD
+     Text: food items and name them.
+Fig. 1 : Variety of  food
+Banana contains potassium which is useful for us.
+1 2 3
+4 5 6
+7 8 9
+SCERT TELANGANA2
+OUR FOOD Free Distribution by Govt. of T.S. 2020-21
+ Activity-1:  Finding variety in our
+food
+Every day we eat different types of  food
+from morning to night. What did you
+eat yesterday? Make a list. Also discuss
+with your friends and collect
+information about what food they had
+eaten yesterday.
+Record the inf ormation in table 1.
+Table 1 - What did I eat
+Name  of student Food eaten
+Ashok Rice, Dal, Milk, Vegetables, Jam, Idly, Bread
+Neelam Biry ani, Chilli Chatni, Roti
+• Are there any common food items
+in the list of yours and your friends'?
+• Count the number of food
+varieties you have listed in the
+table?
+• Do all the students eat the same
+type of food items?
+• What food is served in your
+school at midday meal?
+We eat different types of  food material
+daily but some food items like rice, dal
+and vegetables are common in the daily
+
+  --- Chunk 2 (Hybrid Score: 0.5200) ---
+     Chapter: OUR FOOD
+     Text: People living in one region usually
+share common food habits. You
+might have seen paddy fields near
+your village. In our state geographical
+and climatic conditions are more
+suitable for growing paddy so we
+produce more rice. In which districts
+of our State is paddy grown widely?
+Even though farmers grow various
+types of food crops we generally use
+rice as staple food. A variety of food
+items are prepared using rice. A number
+of food items are made using rice in
+the form of Rava and flour. Make a list
+of those items. We eat more rice and
+rice products as compared to other
+cereals like wheat or maize. But in
+Rajasthan maize, bajra and wheat is
+produced more than rice. So the main
+food in Rajasthan is chapathi or roti.
+Many times we hear people saying that
+"I like this curry ". "I don't like that".
+This is not a good food  habit ,you
+should  make a habit of eating all
+varieties of vegetable food items. This
+makes you strong and energetic.
+Different methods of preparing food
+
+  --- Chunk 3 (Hybrid Score: 0.2537) ---
+     Chapter: WHAT DO ANIMALS EAT?
+     Text: SCERT TELANGANA41
+Science VI Class
+• Sucking, licking, picking,
+chewing, peeling, swallowing are
+all the ways by which animals take
+in their food .
+• Beaks of birds differ from one
+another depending upon the
+type of food they eat.
+• Most wild animals that eat
+other animals have sharp teeth.
+• Animals are divided into three
+types on the basis of their food.
+They are carnivores, herbivores,
+omnivores.
+• Food chain is the connection
+between animals on the basis of
+their food habits.
+• Food chain explains the
+interdependence of diverse
+organisms in nature.
+Improve your learning
+1. Name some animals in your
+house which have the same kind
+of food habit.
+2. Observe your  surroundings or
+go to a nearby field and write
+about the following :
+(a) How does the cow eat grass?
+(b) What parts are used while
+doing so?
+(c) In what way can you justify it
+as a herbivore?
+3. Compare the legs and nails of a
+dog and hen and say why they
+are different.
+4. Go to a nearby pond where cranes
+
+  --- Chunk 4 (Hybrid Score: 0.2381) ---
+     Chapter: WHAT DO ANIMALS EAT?
+     Text: your pet animals eat?
+• Write about any two animals in
+your list, describing the type of
+food they eat and how they get
+their food?
+• Compare the types of food
+habits of two animals selected by
+you.
+• Regarding the types of food
+eaten by animals, what major
+groups can be made? Discuss
+with your friends and write. You
+could write like this :
+1. Some animals depend only on
+plants for food.
+2. ............................................................
+3. ............................................................
+4. ............................................................
+Table 1
+Animals are divided into six basic groups which include invertebrates, fishes, amphibians,
+reptiles, birds and mammals.
+SCERT TELANGANA32
+32
+WHAT DO ANIMALS EAT ? Free Distribution by Govt. of T.S. 2020-21
+We have seen that all animals depend on different types of  food. Now let us do
+the above exercise in a slightly different manner. Add your own examples in the
+last column of table 2.
+Table 2
+
+  --- Chunk 5 (Hybrid Score: 0.2361) ---
+     Chapter: WHAT DO ANIMALS EAT?
+     Text: see how animals eat their food.
+Activity-1: Taking in food
+You can see many animals in your
+surroundings. Discuss about them with
+your friends. Make a list of  what they
+usually eat and what they usually do to
+find their food. Do not be in a hurry to
+complete this table. Keep adding to this
+list as you observe animals around you
+everyday. But don’t forget to observe
+animals wherever you go.
+Fig. 1 (a)
+Fig. 1 (b)
+The first animals evolved about 600 million years ago during the late Precambrian.
+SCERT TELANGANA31
+Science VI Class
+S. No. Animal/Bird What they How they find food
+eat/ drink
+1 Sparrow Worms, gr ains, ... Looking, seeing, ...
+2 Dog Bones, bread Sniffing
+3
+4
+5
+6
+7
+8
+9
+10
+• Which of  the animals, listed by
+you, eat nearly the same type of
+food?
+• What are the types of food that
+your pet animals eat?
+• Write about any two animals in
+your list, describing the type of
+food they eat and how they get
+their food?
+• Compare the types of food
+habits of two animals selected by
+you.
+
+  --- Chunk 6 (Hybrid Score: 0.2351) ---
      Chapter: OUR FOOD
      Text: Mustard (Avalu)
 Sugarcane
@@ -47,830 +227,120 @@ might have seen paddy fields near
 your village. In our state geographical
 and climatic conditions are more
 
-  --- Chunk 2 (Hybrid Score: 0.5395) ---
+  --- Chunk 7 (Hybrid Score: 0.2306) ---
      Chapter: OUR FOOD
-     Text: be aware of  the ingredients of packaged
-food. When you purchase any food item
-in the market, don't forget to read about
-its ingredients and manufacturing date.
-Eating out-dated food material may
-damage your health.
-Joseph’s father always observes the
-ingredients used and the date of
-manufacturing when he buys the
-readymade food items. Expired food
-items should not be consumed. They
-are harmful to our health.
-Do you know?
-Preparation of food  using vegetables
-and fruits is an art. Some people make
-different types of designs and
-decorations with vegetables. This is
-called vegetable carving. Try to make
-your own carving (Fig. 5).
-Fig. 5
-KeywordsKeywordsKeywordsKeywordsKeywords
-Ingredients, preservatives, fragrant
-materials, dry fruits
-What we have learnt
-   • We get food from plants and
-animals.
-   • For cooking food, we need
-different types of  ingredients.
-   • We use different parts of  plants
-like stems, roots, leaves, fruits and
-flowers as food.
-
-  --- Chunk 3 (Hybrid Score: 0.3929) ---
-     Chapter: OUR FOOD
-     Text: * In some plants we eat only some
-parts as food.
-* We take entire plant as food.
-Beet roots are high in carbohydrate levels and should therefore be used sparingly
-SCERT TELANGANA5
+     Text: 12. Find out from your parents the
+various methods of  preserving
+food and write a note on them.
+13. Collect information about the
+main food habits of different
+states of  India. Refer to the Atlas,
+library books and discuss with
+your teacher.
+Cakes and cookies contain too much sugar and not enough vitamins and minerals
+SCERT TELANGANA11
 Science VI Class
-Fig. 3
-Do you know?
-To make biryani or kheer, we use different types of  ingredients such as ilaichi
-(cardamom), lavang (clove), dalchini (cinnamon), biryani leaves, pepper etc. They
-are called condiments (sugandha dravyalu / fragrant material). Cashew nuts,
-almonds, kismis (dried grapes) etc are also used. These are dry fruits. Condiments
-and dry fruits grow in particular places only. They are not available in large
-quantities. They are expensive.
-Now look at table 4 and try to fill it as shown.
-Table 4
-Name of plant Parts that we eat
-Fenugreek (Menthulu) Leaves, seeds
-Mustard (Avalu)
-Sugarcane
-Carrot
-Onion
-Cabbage
-Asafoetida (Inguva)
-Peanuts contain beneficial protien, but many people are allergic to them and find
-them hard to digest.
-SCERT TELANGANA6
+14. Suppose if  fish / raw mango / lemons are given to you how would you
+preserve them?
+15. Make a list of animals and insects from which we get food.
+(a) Write the names of these animals on slips of paper. On the other side
+of the slip write the names of food we get from the animals - milk, eggs
+or meat.
+(b) Sort the slips into groups. Write the names of the animals in the correct
+portions of the circles shown below.
+(c) Are there any portions where none of the animals fit? Explain why?
+* * * *
+Oranges are more fibrous. So take oranges for the source of fibrefood.
+milk
+giving
+meat
+giving
+egg
+giving
+SCERT TELANGANA
 
-  --- Chunk 4 (Hybrid Score: 0.3351) ---
-     Chapter: PLANTS: PARTS AND FUNCTIONS
-     Text: What are the common parts that you
-observe in all plants?
-Fig. 1
-A notch in a tree will remain the same distance from the ground as the tree grows.
-SCERT TELANGANA84
-PLANTS : Parts and Functions Free Distribution by Govt. of T.S. 2020-21
-Table 1
-S.No.   Name of the plant Root  Stem    Leaves      Flower
-Yes/No    Y es/No    Yes/No      Yes/No
-1.   Tridax plant  Yes  Yes  Yes    Yes
-2.   Plant No. 2
-3.
-4.
-5.
-Fig. 2(a) Fig. 2(b)
-Table-2
-S. Name of Roots are similar
-No. the plant   to Fig.
-1. Tridax plant 2a
-2. Plant No. 2
-3.
-4.
-5.
-There are variations in the size and
-shape of plants but generally all plants
-have roots, stems and leaves.  Have you
-ever thought about the importance of
-leaf, stem and roots in plants? What is
-the role of  plant parts? Let us try to
-understand these things.
-Roots: Different types of roots
-Observe the roots of  the plants you
-collected. How are they?
-Do all plants have similar types of roots?
-Is there any difference?
-Compare the roots of your sample
-
-  --- Chunk 5 (Hybrid Score: 0.3315) ---
-     Chapter: PLANTS: PARTS AND FUNCTIONS
-     Text: What we have learnt
-• The important parts of a plant
-are roots, stem and leaves.
-• Tap root system and fibrous root
-system are two types of root
-systems seen in plants.
-• Roots absorb water and minerals
-from the soil and also help in
-anchoring the plant body to the
-soil.
-• The stem bears branches, leaves,
-flowers and fruits.
-• The stem carries the water
-absorbed by the roots to different
-parts of the plant.
-Do you know?
-Some plants like potato, turmeric, garlic, ginger and sugarcane store food  material
-in the stem due to which the stem bulges in size. Generally we think that these
-are all tubers or roots. Actually they are modified stems.
-Fig. 10
-Buds are small swellings on a plant from which a shoot, leaf, or flower usually develops.
-SCERT TELANGANA92
-PLANTS : Parts and Functions Free Distribution by Govt. of T.S. 2020-21
-• Leaves are involved in preparing
-food. They also help in exchange
-of gases and transpiration.
-• Leaf base, petiole and lamina are
-all parts of a leaf.
-
-  --- Chunk 6 (Hybrid Score: 0.3085) ---
-     Chapter: PLANTS: PARTS AND FUNCTIONS
-     Text: red ink
-Fig. 3
-84% of  a raw apple and 96% of  a raw cucumber is water.
-SCERT TELANGANA86
-PLANTS : Parts and Functions Free Distribution by Govt. of T.S. 2020-21
-• Did you see any red spots in the
-stem or other parts of any of
-the plants?
-• Why did red spots appear on the
-stem or flower?
-We can conclude that roots help in
-taking up of water from the soil. They
-do this by absorption. Minerals present
-in the soil are also absorbed along with
-the water.
-Do you know?
-Some plants store  food in roots and
-stems. Some plants like radish, carrot,
-beetroot store food materials in their
-roots.  These roots bulge out and
-called tuberous roots. Can you give
-some more examples. Carrot, sweet
-potato are eaten even when raw!
-Parts of  a leaf
-Leaves are another important part of
-plants. Most  plants that we see in our
-surroundings have different types of
-leaves.
-Fig. 5
-Observe the given picture of  a leaf  and
-its parts (Fig. 5).
-• Where is the leaf attached to the
-stem?
-
-  --- Chunk 7 (Hybrid Score: 0.3049) ---
+  --- Chunk 8 (Hybrid Score: 0.2245) ---
      Chapter: OUR FOOD
-     Text: Don’t eat bananas on an empty stomach; combining them with a bit of protein will
-help to normalize the insulin response caused by the sugar in the banana.
-SCERT TELANGANA3
-Science VI Class
-raw rice and water. But for making
-biryani we need many materials.
-To make different kinds of  food we need
-different materials. These materials which
-When you purchase packed food,
-biscuits or any cool drink, you will find
-their ingredients written on their
-packets. Have you ever thought from
-where these ingredients come? Yes, it
-will be easy for you to say that we get
-vegetables and fruits from plants; eggs,
-Fig. 2
-Chicory is beneficial for digestion, the circulatory system and the blood
-milk, meat from animals. Is there any
-other source you can think of? Some
-ingredients have been listed below. Find
-out the source of each ingredient; if it
-is a plant mark (P) or an animal (A), or
-something else (O) (Table-3).
-Table 2 - Ingredients of  some food items.
-
-  --- Chunk 8 (Hybrid Score: 0.2880) ---
-     Chapter: PLANTS: PARTS AND FUNCTIONS
-     Text: • Leaves are involved in preparing
-food. They also help in exchange
-of gases and transpiration.
-• Leaf base, petiole and lamina are
-all parts of a leaf.
-• Reticulate and parallel venation are
-found in leaves.
-Improve your learning
-1. What are the important parts of a
-plant?
-2. How will you tell which part of a
-plant is the stem and which is the
-root?
-3. Collect any plant from your
-surroundings. Draw its  root
-structure. What can you say about
-its root system?
-4. John has no place in his house but
-he wants to plant vegetables like
-tomato  in his house. Suggest him
-different ways to do so.
-5. What will happen if a plant doesn’t
-have any leaves?
-6. How does the stem help the plant?
-7. What type of venation is found in
-the leaves of plants with fibrous
-roots?
-8. If the leaves have reticulate venation
-what would be the type of  root?
-9. Explain the various parts of a plant
-with the help of a diagram.
-10. Explain the parts of a leaf with the
-help of a diagram.
-
-  --- Chunk 9 (Hybrid Score: 0.2569) ---
-     Chapter: PLANTS: PARTS AND FUNCTIONS
-     Text: Think it over.
-Most plants around us have roots, leaves,
-stems and flowers. All parts of  the plants
-carry out some functions, essential for
-the whole plant. There are diverse forms
-of plants in nature and plants adapt
-themselves to the different conditions in
-nature in different ways. For example,
-while stems usually support the plant
-body, in some plants they adapt and start
-storing food.
-Flower is another important part
-in the plant. Flower has different colourful
-structures called petals. They attract insects
-for pollination and produce fruits.We grow
-plants for colourful flowers which gives
-beauty to nature. We will learn more about
-flower  in the next classes.
-Keywords:Keywords:Keywords:Keywords:Keywords:
-Tap root, fibrous roots, petiole,
-lamina, stomata, reticulate venation,
-parallel venation, transpiration
-What we have learnt
-• The important parts of a plant
-are roots, stem and leaves.
-• Tap root system and fibrous root
-system are two types of root
-systems seen in plants.
-
-  --- Chunk 10 (Hybrid Score: 0.2533) ---
-     Chapter: PLANTS: PARTS AND FUNCTIONS
-     Text: 83
-Science VI Class
-9 Plants : Parts and Functions
-What kind of plants have you seen at
-home and outside? You must have
-observed a variety of  plants; some are
-big and some are small. We can find plants
-near our home, in the school campus, on
-the way to school, in the parks and almost
-everywhere.
-• Are all plants similar?
-• What are the similarities among
-them?
-Let us get to know more about plants,
-especially about their parts and functions.
-Parts of  plants
-We know that we have different parts in
-our body. In the same way plants  also
-have different parts.  Do you know them?
-Here is a plant . Try to name its parts.
-Which plant is this?
-In this chapter, Let us try to understand
-about different parts of  plants
-through activities. For this, make
-groups of  4-5 students. Each group will
-collect 5 to 6 different types of plants
-along with their roots.  You can collect
-different small plants from your garden
-or surroundings but be careful not to
-damage too many plants.
-
-
---- Hybrid Search Results (10 Chunks) ---
-
-  1. Hybrid Score: 0.5800
-     Chapter: OUR FOOD
-     Text: Mustard (Avalu)
-Sugarcane
-Carrot
-Onion
-Cabbage
-Asafoetida (Inguva)
-Peanuts contain beneficial protien, but many people are allergic to them and find
-them hard to digest.
-SCERT TELANGANA6
+     Text: SCERT TELANGANA10
 OUR FOOD Free Distribution by Govt. of T.S. 2020-21
-• Which parts of the plants do we
-generally use?
-• Do we also use flowers as food?
-Which plants are these?
-• Is there any plant of which whole
-parts of it can be eaten?
-We use various parts of  plants for our
-food. Leaves, roots, seeds and fruits of
-plants are widely used whereas stems
-and flowers are not so widely used. We
-need several ingredients to cook
-different types of food. Whatever may
-be the source of  ingredients - plants,
-animals or minerals, we use some in
-plenty but others are needed in only
-small quantities. Why is it so?
-How people develop food habits?
-People living in one region usually
-share common food habits. You
-might have seen paddy fields near
-your village. In our state geographical
-and climatic conditions are more
+4. Collect any wrapper of
+packaged food. Read the
+information details and answer
+the following questions.
+(a) Name of the food item
+(b) Price of the food item
+(c) When was it manufactured
+(d) How long can we use it?
+(e) What ingredients does it
+contain, name them?
+5 Shahina's mother always cooks
+plain rice! If the same rice is
+used to make kichidi, payasam
+or biryani how would you feel
+eating those?
+6 List out the names of some
+plants that grow in your village.
+Which parts of it are used as
+food?
+7. Some food material is given
+below. What are the diffrent
+possible ways of cooking them?
+Find out and write them.
+Meat - Groundnuts - Potatoes -
+Spinach
+8. With the help of your teacher
+form  groups of  5 or 6 students
+of  your class. Make a fruit chat
+or vegetable salad and eat it.
+How do you feel? Write few lines
+about your experience.
+9. Ask your friend to think of the
+name of any food item. Now
 
-  2. Hybrid Score: 0.5395
+  --- Chunk 9 (Hybrid Score: 0.2235) ---
+     Chapter: WHAT DO ANIMALS EAT?
+     Text: 34
+WHAT DO ANIMALS EAT ? Free Distribution by Govt. of T.S. 2020-21
+Activity-2
+In the list given in table 3, write the bodyparts of animals that are used to collect or
+capture food.
+Table 3
+S. No. Animal Bod ypart used in taking food
+1. Hen Beak, ...
+2. Cow
+3. Dog
+4. Frog
+5. Snake
+6. Man
+7. Lizard
+8. Vulture
+9. Lion Legs, claws, mouth, ...
+10. Humming bird
+Look at table 3 and answer :
+• Which animals use  similar parts
+in taking food?
+• Compare the parts of dog to that
+of hen. Note down the similarities
+as well as differences observed by
+you.
+• Compare the parts of hen and
+humming bird in taking in food.
+Note down the similarities as well
+as differences observed by you.
+• What are the similarities between
+a dog and a lion in the parts
+involved in taking food?
+• What are the similarities and
+differences between a vulture and
+a lion in their mode of taking in
+food?
+• You may also add any other
+observations you may have made.
+You will see that the same part may be
+
+  --- Chunk 10 (Hybrid Score: 0.2189) ---
      Chapter: OUR FOOD
-     Text: be aware of  the ingredients of packaged
-food. When you purchase any food item
-in the market, don't forget to read about
-its ingredients and manufacturing date.
-Eating out-dated food material may
-damage your health.
-Joseph’s father always observes the
-ingredients used and the date of
-manufacturing when he buys the
-readymade food items. Expired food
-items should not be consumed. They
-are harmful to our health.
-Do you know?
-Preparation of food  using vegetables
-and fruits is an art. Some people make
-different types of designs and
-decorations with vegetables. This is
-called vegetable carving. Try to make
-your own carving (Fig. 5).
-Fig. 5
-KeywordsKeywordsKeywordsKeywordsKeywords
-Ingredients, preservatives, fragrant
-materials, dry fruits
-What we have learnt
-   • We get food from plants and
-animals.
-   • For cooking food, we need
-different types of  ingredients.
-   • We use different parts of  plants
-like stems, roots, leaves, fruits and
-flowers as food.
-
-  3. Hybrid Score: 0.3929
-     Chapter: OUR FOOD
-     Text: * In some plants we eat only some
-parts as food.
-* We take entire plant as food.
-Beet roots are high in carbohydrate levels and should therefore be used sparingly
-SCERT TELANGANA5
-Science VI Class
-Fig. 3
-Do you know?
-To make biryani or kheer, we use different types of  ingredients such as ilaichi
-(cardamom), lavang (clove), dalchini (cinnamon), biryani leaves, pepper etc. They
-are called condiments (sugandha dravyalu / fragrant material). Cashew nuts,
-almonds, kismis (dried grapes) etc are also used. These are dry fruits. Condiments
-and dry fruits grow in particular places only. They are not available in large
-quantities. They are expensive.
-Now look at table 4 and try to fill it as shown.
-Table 4
-Name of plant Parts that we eat
-Fenugreek (Menthulu) Leaves, seeds
-Mustard (Avalu)
-Sugarcane
-Carrot
-Onion
-Cabbage
-Asafoetida (Inguva)
-Peanuts contain beneficial protien, but many people are allergic to them and find
-them hard to digest.
-SCERT TELANGANA6
-
-  4. Hybrid Score: 0.3351
-     Chapter: PLANTS: PARTS AND FUNCTIONS
-     Text: What are the common parts that you
-observe in all plants?
-Fig. 1
-A notch in a tree will remain the same distance from the ground as the tree grows.
-SCERT TELANGANA84
-PLANTS : Parts and Functions Free Distribution by Govt. of T.S. 2020-21
-Table 1
-S.No.   Name of the plant Root  Stem    Leaves      Flower
-Yes/No    Y es/No    Yes/No      Yes/No
-1.   Tridax plant  Yes  Yes  Yes    Yes
-2.   Plant No. 2
-3.
-4.
-5.
-Fig. 2(a) Fig. 2(b)
-Table-2
-S. Name of Roots are similar
-No. the plant   to Fig.
-1. Tridax plant 2a
-2. Plant No. 2
-3.
-4.
-5.
-There are variations in the size and
-shape of plants but generally all plants
-have roots, stems and leaves.  Have you
-ever thought about the importance of
-leaf, stem and roots in plants? What is
-the role of  plant parts? Let us try to
-understand these things.
-Roots: Different types of roots
-Observe the roots of  the plants you
-collected. How are they?
-Do all plants have similar types of roots?
-Is there any difference?
-Compare the roots of your sample
-
-  5. Hybrid Score: 0.3315
-     Chapter: PLANTS: PARTS AND FUNCTIONS
-     Text: What we have learnt
-• The important parts of a plant
-are roots, stem and leaves.
-• Tap root system and fibrous root
-system are two types of root
-systems seen in plants.
-• Roots absorb water and minerals
-from the soil and also help in
-anchoring the plant body to the
-soil.
-• The stem bears branches, leaves,
-flowers and fruits.
-• The stem carries the water
-absorbed by the roots to different
-parts of the plant.
-Do you know?
-Some plants like potato, turmeric, garlic, ginger and sugarcane store food  material
-in the stem due to which the stem bulges in size. Generally we think that these
-are all tubers or roots. Actually they are modified stems.
-Fig. 10
-Buds are small swellings on a plant from which a shoot, leaf, or flower usually develops.
-SCERT TELANGANA92
-PLANTS : Parts and Functions Free Distribution by Govt. of T.S. 2020-21
-• Leaves are involved in preparing
-food. They also help in exchange
-of gases and transpiration.
-• Leaf base, petiole and lamina are
-all parts of a leaf.
-
-  6. Hybrid Score: 0.3085
-     Chapter: PLANTS: PARTS AND FUNCTIONS
-     Text: red ink
-Fig. 3
-84% of  a raw apple and 96% of  a raw cucumber is water.
-SCERT TELANGANA86
-PLANTS : Parts and Functions Free Distribution by Govt. of T.S. 2020-21
-• Did you see any red spots in the
-stem or other parts of any of
-the plants?
-• Why did red spots appear on the
-stem or flower?
-We can conclude that roots help in
-taking up of water from the soil. They
-do this by absorption. Minerals present
-in the soil are also absorbed along with
-the water.
-Do you know?
-Some plants store  food in roots and
-stems. Some plants like radish, carrot,
-beetroot store food materials in their
-roots.  These roots bulge out and
-called tuberous roots. Can you give
-some more examples. Carrot, sweet
-potato are eaten even when raw!
-Parts of  a leaf
-Leaves are another important part of
-plants. Most  plants that we see in our
-surroundings have different types of
-leaves.
-Fig. 5
-Observe the given picture of  a leaf  and
-its parts (Fig. 5).
-• Where is the leaf attached to the
-stem?
-
-  7. Hybrid Score: 0.3049
-     Chapter: OUR FOOD
-     Text: Don’t eat bananas on an empty stomach; combining them with a bit of protein will
-help to normalize the insulin response caused by the sugar in the banana.
-SCERT TELANGANA3
-Science VI Class
-raw rice and water. But for making
-biryani we need many materials.
-To make different kinds of  food we need
-different materials. These materials which
-When you purchase packed food,
-biscuits or any cool drink, you will find
-their ingredients written on their
-packets. Have you ever thought from
-where these ingredients come? Yes, it
-will be easy for you to say that we get
-vegetables and fruits from plants; eggs,
-Fig. 2
-Chicory is beneficial for digestion, the circulatory system and the blood
-milk, meat from animals. Is there any
-other source you can think of? Some
-ingredients have been listed below. Find
-out the source of each ingredient; if it
-is a plant mark (P) or an animal (A), or
-something else (O) (Table-3).
-Table 2 - Ingredients of  some food items.
-
-  8. Hybrid Score: 0.2880
-     Chapter: PLANTS: PARTS AND FUNCTIONS
-     Text: • Leaves are involved in preparing
-food. They also help in exchange
-of gases and transpiration.
-• Leaf base, petiole and lamina are
-all parts of a leaf.
-• Reticulate and parallel venation are
-found in leaves.
-Improve your learning
-1. What are the important parts of a
-plant?
-2. How will you tell which part of a
-plant is the stem and which is the
-root?
-3. Collect any plant from your
-surroundings. Draw its  root
-structure. What can you say about
-its root system?
-4. John has no place in his house but
-he wants to plant vegetables like
-tomato  in his house. Suggest him
-different ways to do so.
-5. What will happen if a plant doesn’t
-have any leaves?
-6. How does the stem help the plant?
-7. What type of venation is found in
-the leaves of plants with fibrous
-roots?
-8. If the leaves have reticulate venation
-what would be the type of  root?
-9. Explain the various parts of a plant
-with the help of a diagram.
-10. Explain the parts of a leaf with the
-help of a diagram.
-
-  9. Hybrid Score: 0.2569
-     Chapter: PLANTS: PARTS AND FUNCTIONS
-     Text: Think it over.
-Most plants around us have roots, leaves,
-stems and flowers. All parts of  the plants
-carry out some functions, essential for
-the whole plant. There are diverse forms
-of plants in nature and plants adapt
-themselves to the different conditions in
-nature in different ways. For example,
-while stems usually support the plant
-body, in some plants they adapt and start
-storing food.
-Flower is another important part
-in the plant. Flower has different colourful
-structures called petals. They attract insects
-for pollination and produce fruits.We grow
-plants for colourful flowers which gives
-beauty to nature. We will learn more about
-flower  in the next classes.
-Keywords:Keywords:Keywords:Keywords:Keywords:
-Tap root, fibrous roots, petiole,
-lamina, stomata, reticulate venation,
-parallel venation, transpiration
-What we have learnt
-• The important parts of a plant
-are roots, stem and leaves.
-• Tap root system and fibrous root
-system are two types of root
-systems seen in plants.
-
-  10. Hybrid Score: 0.2533
-     Chapter: PLANTS: PARTS AND FUNCTIONS
-     Text: 83
-Science VI Class
-9 Plants : Parts and Functions
-What kind of plants have you seen at
-home and outside? You must have
-observed a variety of  plants; some are
-big and some are small. We can find plants
-near our home, in the school campus, on
-the way to school, in the parks and almost
-everywhere.
-• Are all plants similar?
-• What are the similarities among
-them?
-Let us get to know more about plants,
-especially about their parts and functions.
-Parts of  plants
-We know that we have different parts in
-our body. In the same way plants  also
-have different parts.  Do you know them?
-Here is a plant . Try to name its parts.
-Which plant is this?
-In this chapter, Let us try to understand
-about different parts of  plants
-through activities. For this, make
-groups of  4-5 students. Each group will
-collect 5 to 6 different types of plants
-along with their roots.  You can collect
-different small plants from your garden
-or surroundings but be careful not to
-damage too many plants.
-
-
---- Semantic Search Results (10 Chunks) ---
-
-  1. Score: 0.6279 | Chapter: PLANTS: PARTS AND FUNCTIONS | Text: What we have learnt
-• The important parts of a plant
-are roots, stem and leaves.
-• Tap root system and fibrous root
-system are two types of root
-systems seen in plants.
-• Roots absorb water and minerals
-from the soil and also help in
-anchoring the plant body to the
-soil.
-• The stem bears branches, leaves,
-flowers and fruits.
-• The stem carries the water
-absorbed by the roots to different
-parts of the plant.
-Do you know?
-Some plants like potato, turmeric, garlic, ginger and sugarcane store food  material
-in the stem due to which the stem bulges in size. Generally we think that these
-are all tubers or roots. Actually they are modified stems.
-Fig. 10
-Buds are small swellings on a plant from which a shoot, leaf, or flower usually develops.
-SCERT TELANGANA92
-PLANTS : Parts and Functions Free Distribution by Govt. of T.S. 2020-21
-• Leaves are involved in preparing
-food. They also help in exchange
-of gases and transpiration.
-• Leaf base, petiole and lamina are
-all parts of a leaf.
-
-  2. Score: 0.6116 | Chapter: PLANTS: PARTS AND FUNCTIONS | Text: Think it over.
-Most plants around us have roots, leaves,
-stems and flowers. All parts of  the plants
-carry out some functions, essential for
-the whole plant. There are diverse forms
-of plants in nature and plants adapt
-themselves to the different conditions in
-nature in different ways. For example,
-while stems usually support the plant
-body, in some plants they adapt and start
-storing food.
-Flower is another important part
-in the plant. Flower has different colourful
-structures called petals. They attract insects
-for pollination and produce fruits.We grow
-plants for colourful flowers which gives
-beauty to nature. We will learn more about
-flower  in the next classes.
-Keywords:Keywords:Keywords:Keywords:Keywords:
-Tap root, fibrous roots, petiole,
-lamina, stomata, reticulate venation,
-parallel venation, transpiration
-What we have learnt
-• The important parts of a plant
-are roots, stem and leaves.
-• Tap root system and fibrous root
-system are two types of root
-systems seen in plants.
-
-  3. Score: 0.6109 | Chapter: PLANTS: PARTS AND FUNCTIONS | Text: • Leaves are involved in preparing
-food. They also help in exchange
-of gases and transpiration.
-• Leaf base, petiole and lamina are
-all parts of a leaf.
-• Reticulate and parallel venation are
-found in leaves.
-Improve your learning
-1. What are the important parts of a
-plant?
-2. How will you tell which part of a
-plant is the stem and which is the
-root?
-3. Collect any plant from your
-surroundings. Draw its  root
-structure. What can you say about
-its root system?
-4. John has no place in his house but
-he wants to plant vegetables like
-tomato  in his house. Suggest him
-different ways to do so.
-5. What will happen if a plant doesn’t
-have any leaves?
-6. How does the stem help the plant?
-7. What type of venation is found in
-the leaves of plants with fibrous
-roots?
-8. If the leaves have reticulate venation
-what would be the type of  root?
-9. Explain the various parts of a plant
-with the help of a diagram.
-10. Explain the parts of a leaf with the
-help of a diagram.
-
-  4. Score: 0.6030 | Chapter: PLANTS: PARTS AND FUNCTIONS | Text: 83
-Science VI Class
-9 Plants : Parts and Functions
-What kind of plants have you seen at
-home and outside? You must have
-observed a variety of  plants; some are
-big and some are small. We can find plants
-near our home, in the school campus, on
-the way to school, in the parks and almost
-everywhere.
-• Are all plants similar?
-• What are the similarities among
-them?
-Let us get to know more about plants,
-especially about their parts and functions.
-Parts of  plants
-We know that we have different parts in
-our body. In the same way plants  also
-have different parts.  Do you know them?
-Here is a plant . Try to name its parts.
-Which plant is this?
-In this chapter, Let us try to understand
-about different parts of  plants
-through activities. For this, make
-groups of  4-5 students. Each group will
-collect 5 to 6 different types of plants
-along with their roots.  You can collect
-different small plants from your garden
-or surroundings but be careful not to
-damage too many plants.
-
-  5. Score: 0.6023 | Chapter: PLANTS: PARTS AND FUNCTIONS | Text: red ink
-Fig. 3
-84% of  a raw apple and 96% of  a raw cucumber is water.
-SCERT TELANGANA86
-PLANTS : Parts and Functions Free Distribution by Govt. of T.S. 2020-21
-• Did you see any red spots in the
-stem or other parts of any of
-the plants?
-• Why did red spots appear on the
-stem or flower?
-We can conclude that roots help in
-taking up of water from the soil. They
-do this by absorption. Minerals present
-in the soil are also absorbed along with
-the water.
-Do you know?
-Some plants store  food in roots and
-stems. Some plants like radish, carrot,
-beetroot store food materials in their
-roots.  These roots bulge out and
-called tuberous roots. Can you give
-some more examples. Carrot, sweet
-potato are eaten even when raw!
-Parts of  a leaf
-Leaves are another important part of
-plants. Most  plants that we see in our
-surroundings have different types of
-leaves.
-Fig. 5
-Observe the given picture of  a leaf  and
-its parts (Fig. 5).
-• Where is the leaf attached to the
-stem?
-
-  6. Score: 0.5964 | Chapter: PLANTS: PARTS AND FUNCTIONS | Text: or flowers of any of the plants?
-Take the stem of  a plant
-which was kept in water
-with red ink and cut a small
-section transversely  with a
-sharp blade. Take the help
-of  your teacher for this. Put
-it on a slide. Observe it
-under a microscope. Do
-you observe any coloured
-portion? Now, cut the
-stem into two halves
-vertically, from top to bottom Observe it.
-Do you see any coloured portion?
-The coloured ring like structure that you
-see act as a tube that carries water and
-food material throughout the plant. The
-water absorbed by the root is carried
-through the stem to all parts of the plant.
-Fruit is really the part of  a flower in which seeds grow. Cherries, apples, and even
-milkweed pods are fruit.
-SCERT TELANGANA91
-Science VI Class
-How can you say that a potato is stem
-although it grows under the ground?
-Think it over.
-Most plants around us have roots, leaves,
-stems and flowers. All parts of  the plants
-carry out some functions, essential for
-the whole plant. There are diverse forms
-
-  7. Score: 0.5779 | Chapter: OUR FOOD | Text: Try to enrich this list as much as you
+     Text: Try to enrich this list as much as you
 can. You will find that from animals we
 get milk, eggs and meat. If  you observe
 carefully you will notice that there are  a
@@ -899,107 +369,192 @@ Beet roots are high in carbohydrate levels and should therefore be used sparingl
 SCERT TELANGANA5
 Science VI Class
 
-  8. Score: 0.5738 | Chapter: LIVING AND NON LIVING | Text: next class.
-Food and living beings
-We have seen in the chapters on food
-that we as well as all other animals need
-food for smooth functioning of
-different activities.
-• Do plants also need food?
-In the chapter "plants parts and
-functions", we have seen that some
-parts of  plants like root, stem and fruits
-store food.
-• What are the sources of their food?
-Most of the plants absorb water and
-minerals from the soil and prepare their
-food in the presence of sunlight. The
-leaf is the place where the food is
-prepared. This is called photosynthesis.
-Do you know?
-Some plants cannot prepare their
-own food. They depends on the
-other platns for their nutrition. These
-plants are called ‘Parasitic Plants’. eg.
-Cuscuta. We also prepare food. Is our
-food preparation process is same as
-that of plants?
-Growth in living beings
-You notice that kittens, pups and chicks
-grow into adults. You become taller
-every year. Similarly, a seed germinates
-into a plant. Some plants grow day by
 
-  9. Score: 0.5659 | Chapter: PLANTS: PARTS AND FUNCTIONS | Text: What are the common parts that you
-observe in all plants?
-Fig. 1
-A notch in a tree will remain the same distance from the ground as the tree grows.
-SCERT TELANGANA84
-PLANTS : Parts and Functions Free Distribution by Govt. of T.S. 2020-21
+--- Hybrid Search Results (10 Chunks) ---
+
+  1. Hybrid Score: 0.6484
+     Chapter: OUR FOOD
+     Text: food items and name them.
+Fig. 1 : Variety of  food
+Banana contains potassium which is useful for us.
+1 2 3
+4 5 6
+7 8 9
+SCERT TELANGANA2
+OUR FOOD Free Distribution by Govt. of T.S. 2020-21
+ Activity-1:  Finding variety in our
+food
+Every day we eat different types of  food
+from morning to night. What did you
+eat yesterday? Make a list. Also discuss
+with your friends and collect
+information about what food they had
+eaten yesterday.
+Record the inf ormation in table 1.
+Table 1 - What did I eat
+Name  of student Food eaten
+Ashok Rice, Dal, Milk, Vegetables, Jam, Idly, Bread
+Neelam Biry ani, Chilli Chatni, Roti
+• Are there any common food items
+in the list of yours and your friends'?
+• Count the number of food
+varieties you have listed in the
+table?
+• Do all the students eat the same
+type of food items?
+• What food is served in your
+school at midday meal?
+We eat different types of  food material
+daily but some food items like rice, dal
+and vegetables are common in the daily
+
+  2. Hybrid Score: 0.5200
+     Chapter: OUR FOOD
+     Text: People living in one region usually
+share common food habits. You
+might have seen paddy fields near
+your village. In our state geographical
+and climatic conditions are more
+suitable for growing paddy so we
+produce more rice. In which districts
+of our State is paddy grown widely?
+Even though farmers grow various
+types of food crops we generally use
+rice as staple food. A variety of food
+items are prepared using rice. A number
+of food items are made using rice in
+the form of Rava and flour. Make a list
+of those items. We eat more rice and
+rice products as compared to other
+cereals like wheat or maize. But in
+Rajasthan maize, bajra and wheat is
+produced more than rice. So the main
+food in Rajasthan is chapathi or roti.
+Many times we hear people saying that
+"I like this curry ". "I don't like that".
+This is not a good food  habit ,you
+should  make a habit of eating all
+varieties of vegetable food items. This
+makes you strong and energetic.
+Different methods of preparing food
+
+  3. Hybrid Score: 0.2537
+     Chapter: WHAT DO ANIMALS EAT?
+     Text: SCERT TELANGANA41
+Science VI Class
+• Sucking, licking, picking,
+chewing, peeling, swallowing are
+all the ways by which animals take
+in their food .
+• Beaks of birds differ from one
+another depending upon the
+type of food they eat.
+• Most wild animals that eat
+other animals have sharp teeth.
+• Animals are divided into three
+types on the basis of their food.
+They are carnivores, herbivores,
+omnivores.
+• Food chain is the connection
+between animals on the basis of
+their food habits.
+• Food chain explains the
+interdependence of diverse
+organisms in nature.
+Improve your learning
+1. Name some animals in your
+house which have the same kind
+of food habit.
+2. Observe your  surroundings or
+go to a nearby field and write
+about the following :
+(a) How does the cow eat grass?
+(b) What parts are used while
+doing so?
+(c) In what way can you justify it
+as a herbivore?
+3. Compare the legs and nails of a
+dog and hen and say why they
+are different.
+4. Go to a nearby pond where cranes
+
+  4. Hybrid Score: 0.2381
+     Chapter: WHAT DO ANIMALS EAT?
+     Text: your pet animals eat?
+• Write about any two animals in
+your list, describing the type of
+food they eat and how they get
+their food?
+• Compare the types of food
+habits of two animals selected by
+you.
+• Regarding the types of food
+eaten by animals, what major
+groups can be made? Discuss
+with your friends and write. You
+could write like this :
+1. Some animals depend only on
+plants for food.
+2. ............................................................
+3. ............................................................
+4. ............................................................
 Table 1
-S.No.   Name of the plant Root  Stem    Leaves      Flower
-Yes/No    Y es/No    Yes/No      Yes/No
-1.   Tridax plant  Yes  Yes  Yes    Yes
-2.   Plant No. 2
-3.
-4.
-5.
-Fig. 2(a) Fig. 2(b)
-Table-2
-S. Name of Roots are similar
-No. the plant   to Fig.
-1. Tridax plant 2a
-2. Plant No. 2
-3.
-4.
-5.
-There are variations in the size and
-shape of plants but generally all plants
-have roots, stems and leaves.  Have you
-ever thought about the importance of
-leaf, stem and roots in plants? What is
-the role of  plant parts? Let us try to
-understand these things.
-Roots: Different types of roots
-Observe the roots of  the plants you
-collected. How are they?
-Do all plants have similar types of roots?
-Is there any difference?
-Compare the roots of your sample
+Animals are divided into six basic groups which include invertebrates, fishes, amphibians,
+reptiles, birds and mammals.
+SCERT TELANGANA32
+32
+WHAT DO ANIMALS EAT ? Free Distribution by Govt. of T.S. 2020-21
+We have seen that all animals depend on different types of  food. Now let us do
+the above exercise in a slightly different manner. Add your own examples in the
+last column of table 2.
+Table 2
 
-  10. Score: 0.5597 | Chapter: PLANTS: PARTS AND FUNCTIONS | Text: collect 5 to 6 different types of plants
-along with their roots.  You can collect
-different small plants from your garden
-or surroundings but be careful not to
-damage too many plants.
-Activity-1:  Identification of plant
-parts
-Observe the collected plants and try
-to identify their parts. Take the help
-of  Fig. 1 and write your observations
-in Table 1 given on the next page.
-If  you don’t know the name of  any of
-the plants you can give them a number.
-You can take the help of  your teacher,
-a gardener or some one else to find
-the name of the plant. Based on the
-observations in the Table 1, let us
-discuss the following questions.
-Did you find any plant which does not
-have roots?
-Are the leaves of all the plants similar
-in size?
-Is there any plant without flowers?
-What are the common parts that you
-observe in all plants?
-Fig. 1
-A notch in a tree will remain the same distance from the ground as the tree grows.
-SCERT TELANGANA84
+  5. Hybrid Score: 0.2361
+     Chapter: WHAT DO ANIMALS EAT?
+     Text: see how animals eat their food.
+Activity-1: Taking in food
+You can see many animals in your
+surroundings. Discuss about them with
+your friends. Make a list of  what they
+usually eat and what they usually do to
+find their food. Do not be in a hurry to
+complete this table. Keep adding to this
+list as you observe animals around you
+everyday. But don’t forget to observe
+animals wherever you go.
+Fig. 1 (a)
+Fig. 1 (b)
+The first animals evolved about 600 million years ago during the late Precambrian.
+SCERT TELANGANA31
+Science VI Class
+S. No. Animal/Bird What they How they find food
+eat/ drink
+1 Sparrow Worms, gr ains, ... Looking, seeing, ...
+2 Dog Bones, bread Sniffing
+3
+4
+5
+6
+7
+8
+9
+10
+• Which of  the animals, listed by
+you, eat nearly the same type of
+food?
+• What are the types of food that
+your pet animals eat?
+• Write about any two animals in
+your list, describing the type of
+food they eat and how they get
+their food?
+• Compare the types of food
+habits of two animals selected by
+you.
 
-
---- BM25 Keyword Search Results (10 Chunks) ---
-
-  1. Normalized Score: 1.0000 | Chapter: OUR FOOD | Text: Mustard (Avalu)
+  6. Hybrid Score: 0.2351
+     Chapter: OUR FOOD
+     Text: Mustard (Avalu)
 Sugarcane
 Carrot
 Onion
@@ -1032,57 +587,294 @@ might have seen paddy fields near
 your village. In our state geographical
 and climatic conditions are more
 
-  2. Normalized Score: 0.9302 | Chapter: OUR FOOD | Text: be aware of  the ingredients of packaged
-food. When you purchase any food item
-in the market, don't forget to read about
-its ingredients and manufacturing date.
-Eating out-dated food material may
-damage your health.
-Joseph’s father always observes the
-ingredients used and the date of
-manufacturing when he buys the
-readymade food items. Expired food
-items should not be consumed. They
-are harmful to our health.
-Do you know?
-Preparation of food  using vegetables
-and fruits is an art. Some people make
-different types of designs and
-decorations with vegetables. This is
-called vegetable carving. Try to make
-your own carving (Fig. 5).
-Fig. 5
-KeywordsKeywordsKeywordsKeywordsKeywords
-Ingredients, preservatives, fragrant
-materials, dry fruits
-What we have learnt
-   • We get food from plants and
-animals.
-   • For cooking food, we need
-different types of  ingredients.
-   • We use different parts of  plants
-like stems, roots, leaves, fruits and
-flowers as food.
+  7. Hybrid Score: 0.2306
+     Chapter: OUR FOOD
+     Text: 12. Find out from your parents the
+various methods of  preserving
+food and write a note on them.
+13. Collect information about the
+main food habits of different
+states of  India. Refer to the Atlas,
+library books and discuss with
+your teacher.
+Cakes and cookies contain too much sugar and not enough vitamins and minerals
+SCERT TELANGANA11
+Science VI Class
+14. Suppose if  fish / raw mango / lemons are given to you how would you
+preserve them?
+15. Make a list of animals and insects from which we get food.
+(a) Write the names of these animals on slips of paper. On the other side
+of the slip write the names of food we get from the animals - milk, eggs
+or meat.
+(b) Sort the slips into groups. Write the names of the animals in the correct
+portions of the circles shown below.
+(c) Are there any portions where none of the animals fit? Explain why?
+* * * *
+Oranges are more fibrous. So take oranges for the source of fibrefood.
+milk
+giving
+meat
+giving
+egg
+giving
+SCERT TELANGANA
 
-  3. Normalized Score: 0.6775 | Chapter: OUR FOOD | Text: * In some plants we eat only some
+  8. Hybrid Score: 0.2245
+     Chapter: OUR FOOD
+     Text: SCERT TELANGANA10
+OUR FOOD Free Distribution by Govt. of T.S. 2020-21
+4. Collect any wrapper of
+packaged food. Read the
+information details and answer
+the following questions.
+(a) Name of the food item
+(b) Price of the food item
+(c) When was it manufactured
+(d) How long can we use it?
+(e) What ingredients does it
+contain, name them?
+5 Shahina's mother always cooks
+plain rice! If the same rice is
+used to make kichidi, payasam
+or biryani how would you feel
+eating those?
+6 List out the names of some
+plants that grow in your village.
+Which parts of it are used as
+food?
+7. Some food material is given
+below. What are the diffrent
+possible ways of cooking them?
+Find out and write them.
+Meat - Groundnuts - Potatoes -
+Spinach
+8. With the help of your teacher
+form  groups of  5 or 6 students
+of  your class. Make a fruit chat
+or vegetable salad and eat it.
+How do you feel? Write few lines
+about your experience.
+9. Ask your friend to think of the
+name of any food item. Now
+
+  9. Hybrid Score: 0.2235
+     Chapter: WHAT DO ANIMALS EAT?
+     Text: 34
+WHAT DO ANIMALS EAT ? Free Distribution by Govt. of T.S. 2020-21
+Activity-2
+In the list given in table 3, write the bodyparts of animals that are used to collect or
+capture food.
+Table 3
+S. No. Animal Bod ypart used in taking food
+1. Hen Beak, ...
+2. Cow
+3. Dog
+4. Frog
+5. Snake
+6. Man
+7. Lizard
+8. Vulture
+9. Lion Legs, claws, mouth, ...
+10. Humming bird
+Look at table 3 and answer :
+• Which animals use  similar parts
+in taking food?
+• Compare the parts of dog to that
+of hen. Note down the similarities
+as well as differences observed by
+you.
+• Compare the parts of hen and
+humming bird in taking in food.
+Note down the similarities as well
+as differences observed by you.
+• What are the similarities between
+a dog and a lion in the parts
+involved in taking food?
+• What are the similarities and
+differences between a vulture and
+a lion in their mode of taking in
+food?
+• You may also add any other
+observations you may have made.
+You will see that the same part may be
+
+  10. Hybrid Score: 0.2189
+     Chapter: OUR FOOD
+     Text: Try to enrich this list as much as you
+can. You will find that from animals we
+get milk, eggs and meat. If  you observe
+carefully you will notice that there are  a
+number of animals from which we get
+different kinds of food. Goats and
+sheep give us meat. Hens and roosters
+are used as meat (chicken). Can you
+elaborate this list?  In plants we eat
+different parts, like leaf  of  spinach and
+coriander plants, flower of  cauliflower
+plant, fruit of  tomato and drumstick
+plants. You may be having some doubt
+about the salt. It is a mineral and
+obtained from the sea. In later classes
+you will learn about the components of
+food. Can you identify which part of
+the plant is eaten by us in the given
+table? You can also discuss with your
+friends (Fig.-3).
+* We get varieties of  food material
+from plants
+* In some plants we eat only some
 parts as food.
 * We take entire plant as food.
 Beet roots are high in carbohydrate levels and should therefore be used sparingly
 SCERT TELANGANA5
 Science VI Class
-Fig. 3
-Do you know?
-To make biryani or kheer, we use different types of  ingredients such as ilaichi
-(cardamom), lavang (clove), dalchini (cinnamon), biryani leaves, pepper etc. They
-are called condiments (sugandha dravyalu / fragrant material). Cashew nuts,
-almonds, kismis (dried grapes) etc are also used. These are dry fruits. Condiments
-and dry fruits grow in particular places only. They are not available in large
-quantities. They are expensive.
-Now look at table 4 and try to fill it as shown.
-Table 4
-Name of plant Parts that we eat
-Fenugreek (Menthulu) Leaves, seeds
-Mustard (Avalu)
+
+
+--- Semantic Search Results (10 Chunks) ---
+
+  1. Score: 0.5286 | Chapter: WHAT DO ANIMALS EAT? | Text: SCERT TELANGANA41
+Science VI Class
+• Sucking, licking, picking,
+chewing, peeling, swallowing are
+all the ways by which animals take
+in their food .
+• Beaks of birds differ from one
+another depending upon the
+type of food they eat.
+• Most wild animals that eat
+other animals have sharp teeth.
+• Animals are divided into three
+types on the basis of their food.
+They are carnivores, herbivores,
+omnivores.
+• Food chain is the connection
+between animals on the basis of
+their food habits.
+• Food chain explains the
+interdependence of diverse
+organisms in nature.
+Improve your learning
+1. Name some animals in your
+house which have the same kind
+of food habit.
+2. Observe your  surroundings or
+go to a nearby field and write
+about the following :
+(a) How does the cow eat grass?
+(b) What parts are used while
+doing so?
+(c) In what way can you justify it
+as a herbivore?
+3. Compare the legs and nails of a
+dog and hen and say why they
+are different.
+4. Go to a nearby pond where cranes
+
+  2. Score: 0.5268 | Chapter: OUR FOOD | Text: food items and name them.
+Fig. 1 : Variety of  food
+Banana contains potassium which is useful for us.
+1 2 3
+4 5 6
+7 8 9
+SCERT TELANGANA2
+OUR FOOD Free Distribution by Govt. of T.S. 2020-21
+ Activity-1:  Finding variety in our
+food
+Every day we eat different types of  food
+from morning to night. What did you
+eat yesterday? Make a list. Also discuss
+with your friends and collect
+information about what food they had
+eaten yesterday.
+Record the inf ormation in table 1.
+Table 1 - What did I eat
+Name  of student Food eaten
+Ashok Rice, Dal, Milk, Vegetables, Jam, Idly, Bread
+Neelam Biry ani, Chilli Chatni, Roti
+• Are there any common food items
+in the list of yours and your friends'?
+• Count the number of food
+varieties you have listed in the
+table?
+• Do all the students eat the same
+type of food items?
+• What food is served in your
+school at midday meal?
+We eat different types of  food material
+daily but some food items like rice, dal
+and vegetables are common in the daily
+
+  3. Score: 0.4960 | Chapter: WHAT DO ANIMALS EAT? | Text: your pet animals eat?
+• Write about any two animals in
+your list, describing the type of
+food they eat and how they get
+their food?
+• Compare the types of food
+habits of two animals selected by
+you.
+• Regarding the types of food
+eaten by animals, what major
+groups can be made? Discuss
+with your friends and write. You
+could write like this :
+1. Some animals depend only on
+plants for food.
+2. ............................................................
+3. ............................................................
+4. ............................................................
+Table 1
+Animals are divided into six basic groups which include invertebrates, fishes, amphibians,
+reptiles, birds and mammals.
+SCERT TELANGANA32
+32
+WHAT DO ANIMALS EAT ? Free Distribution by Govt. of T.S. 2020-21
+We have seen that all animals depend on different types of  food. Now let us do
+the above exercise in a slightly different manner. Add your own examples in the
+last column of table 2.
+Table 2
+
+  4. Score: 0.4919 | Chapter: WHAT DO ANIMALS EAT? | Text: see how animals eat their food.
+Activity-1: Taking in food
+You can see many animals in your
+surroundings. Discuss about them with
+your friends. Make a list of  what they
+usually eat and what they usually do to
+find their food. Do not be in a hurry to
+complete this table. Keep adding to this
+list as you observe animals around you
+everyday. But don’t forget to observe
+animals wherever you go.
+Fig. 1 (a)
+Fig. 1 (b)
+The first animals evolved about 600 million years ago during the late Precambrian.
+SCERT TELANGANA31
+Science VI Class
+S. No. Animal/Bird What they How they find food
+eat/ drink
+1 Sparrow Worms, gr ains, ... Looking, seeing, ...
+2 Dog Bones, bread Sniffing
+3
+4
+5
+6
+7
+8
+9
+10
+• Which of  the animals, listed by
+you, eat nearly the same type of
+food?
+• What are the types of food that
+your pet animals eat?
+• Write about any two animals in
+your list, describing the type of
+food they eat and how they get
+their food?
+• Compare the types of food
+habits of two animals selected by
+you.
+
+  5. Score: 0.4898 | Chapter: OUR FOOD | Text: Mustard (Avalu)
 Sugarcane
 Carrot
 Onion
@@ -1091,33 +883,165 @@ Asafoetida (Inguva)
 Peanuts contain beneficial protien, but many people are allergic to them and find
 them hard to digest.
 SCERT TELANGANA6
+OUR FOOD Free Distribution by Govt. of T.S. 2020-21
+• Which parts of the plants do we
+generally use?
+• Do we also use flowers as food?
+Which plants are these?
+• Is there any plant of which whole
+parts of it can be eaten?
+We use various parts of  plants for our
+food. Leaves, roots, seeds and fruits of
+plants are widely used whereas stems
+and flowers are not so widely used. We
+need several ingredients to cook
+different types of food. Whatever may
+be the source of  ingredients - plants,
+animals or minerals, we use some in
+plenty but others are needed in only
+small quantities. Why is it so?
+How people develop food habits?
+People living in one region usually
+share common food habits. You
+might have seen paddy fields near
+your village. In our state geographical
+and climatic conditions are more
 
-  4. Normalized Score: 0.5257 | Chapter: OUR FOOD | Text: Don’t eat bananas on an empty stomach; combining them with a bit of protein will
-help to normalize the insulin response caused by the sugar in the banana.
-SCERT TELANGANA3
+  6. Score: 0.4805 | Chapter: OUR FOOD | Text: 12. Find out from your parents the
+various methods of  preserving
+food and write a note on them.
+13. Collect information about the
+main food habits of different
+states of  India. Refer to the Atlas,
+library books and discuss with
+your teacher.
+Cakes and cookies contain too much sugar and not enough vitamins and minerals
+SCERT TELANGANA11
 Science VI Class
-raw rice and water. But for making
-biryani we need many materials.
-To make different kinds of  food we need
-different materials. These materials which
-When you purchase packed food,
-biscuits or any cool drink, you will find
-their ingredients written on their
-packets. Have you ever thought from
-where these ingredients come? Yes, it
-will be easy for you to say that we get
-vegetables and fruits from plants; eggs,
-Fig. 2
-Chicory is beneficial for digestion, the circulatory system and the blood
-milk, meat from animals. Is there any
-other source you can think of? Some
-ingredients have been listed below. Find
-out the source of each ingredient; if it
-is a plant mark (P) or an animal (A), or
-something else (O) (Table-3).
-Table 2 - Ingredients of  some food items.
+14. Suppose if  fish / raw mango / lemons are given to you how would you
+preserve them?
+15. Make a list of animals and insects from which we get food.
+(a) Write the names of these animals on slips of paper. On the other side
+of the slip write the names of food we get from the animals - milk, eggs
+or meat.
+(b) Sort the slips into groups. Write the names of the animals in the correct
+portions of the circles shown below.
+(c) Are there any portions where none of the animals fit? Explain why?
+* * * *
+Oranges are more fibrous. So take oranges for the source of fibrefood.
+milk
+giving
+meat
+giving
+egg
+giving
+SCERT TELANGANA
 
-  5. Normalized Score: 0.2568 | Chapter: OUR FOOD | Text: • We get food from plants and
+  7. Score: 0.4676 | Chapter: OUR FOOD | Text: SCERT TELANGANA10
+OUR FOOD Free Distribution by Govt. of T.S. 2020-21
+4. Collect any wrapper of
+packaged food. Read the
+information details and answer
+the following questions.
+(a) Name of the food item
+(b) Price of the food item
+(c) When was it manufactured
+(d) How long can we use it?
+(e) What ingredients does it
+contain, name them?
+5 Shahina's mother always cooks
+plain rice! If the same rice is
+used to make kichidi, payasam
+or biryani how would you feel
+eating those?
+6 List out the names of some
+plants that grow in your village.
+Which parts of it are used as
+food?
+7. Some food material is given
+below. What are the diffrent
+possible ways of cooking them?
+Find out and write them.
+Meat - Groundnuts - Potatoes -
+Spinach
+8. With the help of your teacher
+form  groups of  5 or 6 students
+of  your class. Make a fruit chat
+or vegetable salad and eat it.
+How do you feel? Write few lines
+about your experience.
+9. Ask your friend to think of the
+name of any food item. Now
+
+  8. Score: 0.4657 | Chapter: WHAT DO ANIMALS EAT? | Text: 34
+WHAT DO ANIMALS EAT ? Free Distribution by Govt. of T.S. 2020-21
+Activity-2
+In the list given in table 3, write the bodyparts of animals that are used to collect or
+capture food.
+Table 3
+S. No. Animal Bod ypart used in taking food
+1. Hen Beak, ...
+2. Cow
+3. Dog
+4. Frog
+5. Snake
+6. Man
+7. Lizard
+8. Vulture
+9. Lion Legs, claws, mouth, ...
+10. Humming bird
+Look at table 3 and answer :
+• Which animals use  similar parts
+in taking food?
+• Compare the parts of dog to that
+of hen. Note down the similarities
+as well as differences observed by
+you.
+• Compare the parts of hen and
+humming bird in taking in food.
+Note down the similarities as well
+as differences observed by you.
+• What are the similarities between
+a dog and a lion in the parts
+involved in taking food?
+• What are the similarities and
+differences between a vulture and
+a lion in their mode of taking in
+food?
+• You may also add any other
+observations you may have made.
+You will see that the same part may be
+
+  9. Score: 0.4561 | Chapter: OUR FOOD | Text: Try to enrich this list as much as you
+can. You will find that from animals we
+get milk, eggs and meat. If  you observe
+carefully you will notice that there are  a
+number of animals from which we get
+different kinds of food. Goats and
+sheep give us meat. Hens and roosters
+are used as meat (chicken). Can you
+elaborate this list?  In plants we eat
+different parts, like leaf  of  spinach and
+coriander plants, flower of  cauliflower
+plant, fruit of  tomato and drumstick
+plants. You may be having some doubt
+about the salt. It is a mineral and
+obtained from the sea. In later classes
+you will learn about the components of
+food. Can you identify which part of
+the plant is eaten by us in the given
+table? You can also discuss with your
+friends (Fig.-3).
+* We get varieties of  food material
+from plants
+* In some plants we eat only some
+parts as food.
+* We take entire plant as food.
+Beet roots are high in carbohydrate levels and should therefore be used sparingly
+SCERT TELANGANA5
+Science VI Class
+
+  10. Score: 0.4550 | Chapter: OUR FOOD | Text: • We get food from plants and
 animals.
    • For cooking food, we need
 different types of  ingredients.
@@ -1152,141 +1076,159 @@ packaged food. Read the
 information details and answer
 the following questions.
 
-  6. Normalized Score: 0.1679 | Chapter: PLANTS: PARTS AND FUNCTIONS | Text: What are the common parts that you
-observe in all plants?
-Fig. 1
-A notch in a tree will remain the same distance from the ground as the tree grows.
-SCERT TELANGANA84
-PLANTS : Parts and Functions Free Distribution by Govt. of T.S. 2020-21
-Table 1
-S.No.   Name of the plant Root  Stem    Leaves      Flower
-Yes/No    Y es/No    Yes/No      Yes/No
-1.   Tridax plant  Yes  Yes  Yes    Yes
-2.   Plant No. 2
-3.
-4.
-5.
-Fig. 2(a) Fig. 2(b)
-Table-2
-S. Name of Roots are similar
-No. the plant   to Fig.
-1. Tridax plant 2a
-2. Plant No. 2
-3.
-4.
-5.
-There are variations in the size and
-shape of plants but generally all plants
-have roots, stems and leaves.  Have you
-ever thought about the importance of
-leaf, stem and roots in plants? What is
-the role of  plant parts? Let us try to
-understand these things.
-Roots: Different types of roots
-Observe the roots of  the plants you
-collected. How are they?
-Do all plants have similar types of roots?
-Is there any difference?
-Compare the roots of your sample
 
-  7. Normalized Score: 0.1168 | Chapter: PLANTS: PARTS AND FUNCTIONS | Text: What we have learnt
-• The important parts of a plant
-are roots, stem and leaves.
-• Tap root system and fibrous root
-system are two types of root
-systems seen in plants.
-• Roots absorb water and minerals
-from the soil and also help in
-anchoring the plant body to the
-soil.
-• The stem bears branches, leaves,
-flowers and fruits.
-• The stem carries the water
-absorbed by the roots to different
-parts of the plant.
-Do you know?
-Some plants like potato, turmeric, garlic, ginger and sugarcane store food  material
-in the stem due to which the stem bulges in size. Generally we think that these
-are all tubers or roots. Actually they are modified stems.
-Fig. 10
-Buds are small swellings on a plant from which a shoot, leaf, or flower usually develops.
-SCERT TELANGANA92
-PLANTS : Parts and Functions Free Distribution by Govt. of T.S. 2020-21
-• Leaves are involved in preparing
-food. They also help in exchange
-of gases and transpiration.
-• Leaf base, petiole and lamina are
-all parts of a leaf.
+--- BM25 Keyword Search Results (10 Chunks) ---
 
-  8. Normalized Score: 0.0957 | Chapter: PLANTS: PARTS AND FUNCTIONS | Text: red ink
-Fig. 3
-84% of  a raw apple and 96% of  a raw cucumber is water.
-SCERT TELANGANA86
-PLANTS : Parts and Functions Free Distribution by Govt. of T.S. 2020-21
-• Did you see any red spots in the
-stem or other parts of any of
-the plants?
-• Why did red spots appear on the
-stem or flower?
-We can conclude that roots help in
-taking up of water from the soil. They
-do this by absorption. Minerals present
-in the soil are also absorbed along with
-the water.
-Do you know?
-Some plants store  food in roots and
-stems. Some plants like radish, carrot,
-beetroot store food materials in their
-roots.  These roots bulge out and
-called tuberous roots. Can you give
-some more examples. Carrot, sweet
-potato are eaten even when raw!
-Parts of  a leaf
-Leaves are another important part of
-plants. Most  plants that we see in our
-surroundings have different types of
-leaves.
-Fig. 5
-Observe the given picture of  a leaf  and
-its parts (Fig. 5).
-• Where is the leaf attached to the
-stem?
+  1. Normalized Score: 1.0000 | Chapter: OUR FOOD | Text: People living in one region usually
+share common food habits. You
+might have seen paddy fields near
+your village. In our state geographical
+and climatic conditions are more
+suitable for growing paddy so we
+produce more rice. In which districts
+of our State is paddy grown widely?
+Even though farmers grow various
+types of food crops we generally use
+rice as staple food. A variety of food
+items are prepared using rice. A number
+of food items are made using rice in
+the form of Rava and flour. Make a list
+of those items. We eat more rice and
+rice products as compared to other
+cereals like wheat or maize. But in
+Rajasthan maize, bajra and wheat is
+produced more than rice. So the main
+food in Rajasthan is chapathi or roti.
+Many times we hear people saying that
+"I like this curry ". "I don't like that".
+This is not a good food  habit ,you
+should  make a habit of eating all
+varieties of vegetable food items. This
+makes you strong and energetic.
+Different methods of preparing food
 
-  9. Normalized Score: 0.0542 | Chapter: PLANTS: PARTS AND FUNCTIONS | Text: • Leaves are involved in preparing
-food. They also help in exchange
-of gases and transpiration.
-• Leaf base, petiole and lamina are
-all parts of a leaf.
-• Reticulate and parallel venation are
-found in leaves.
-Improve your learning
-1. What are the important parts of a
-plant?
-2. How will you tell which part of a
-plant is the stem and which is the
-root?
-3. Collect any plant from your
-surroundings. Draw its  root
-structure. What can you say about
-its root system?
-4. John has no place in his house but
-he wants to plant vegetables like
-tomato  in his house. Suggest him
-different ways to do so.
-5. What will happen if a plant doesn’t
-have any leaves?
-6. How does the stem help the plant?
-7. What type of venation is found in
-the leaves of plants with fibrous
-roots?
-8. If the leaves have reticulate venation
-what would be the type of  root?
-9. Explain the various parts of a plant
-with the help of a diagram.
-10. Explain the parts of a leaf with the
-help of a diagram.
+  2. Normalized Score: 0.7606 | Chapter: OUR FOOD | Text: food items and name them.
+Fig. 1 : Variety of  food
+Banana contains potassium which is useful for us.
+1 2 3
+4 5 6
+7 8 9
+SCERT TELANGANA2
+OUR FOOD Free Distribution by Govt. of T.S. 2020-21
+ Activity-1:  Finding variety in our
+food
+Every day we eat different types of  food
+from morning to night. What did you
+eat yesterday? Make a list. Also discuss
+with your friends and collect
+information about what food they had
+eaten yesterday.
+Record the inf ormation in table 1.
+Table 1 - What did I eat
+Name  of student Food eaten
+Ashok Rice, Dal, Milk, Vegetables, Jam, Idly, Bread
+Neelam Biry ani, Chilli Chatni, Roti
+• Are there any common food items
+in the list of yours and your friends'?
+• Count the number of food
+varieties you have listed in the
+table?
+• Do all the students eat the same
+type of food items?
+• What food is served in your
+school at midday meal?
+We eat different types of  food material
+daily but some food items like rice, dal
+and vegetables are common in the daily
 
-  10. Normalized Score: 0.0000 | Chapter: OUR FOOD | Text: ingredients have been listed below. Find
+  3. Normalized Score: 0.4005 | Chapter: OUR FOOD | Text: type of food items?
+• What food is served in your
+school at midday meal?
+We eat different types of  food material
+daily but some food items like rice, dal
+and vegetables are common in the daily
+menu in large parts of  Telangana. On
+special occasions we eat a larger variety
+of food.
+Food ingredients
+Activity-2:  Many things are needed to
+prepare food
+Srinivas wants to eat something special
+on Sunday. He asked his mother to make
+biryani. Srinivas wanted to help his
+mother. His mother asked him to
+prepare a list of materials which would
+be required to make biryani. Here is the
+list made by Srinivas - rice, salt, jeera,
+tomato, potato, onion, etc. Help Srinivas
+if he had missed any material and
+complete the list.
+Srinivas was surprised that while cooking
+boiled rice we need only two materials,
+Don’t eat bananas on an empty stomach; combining them with a bit of protein will
+help to normalize the insulin response caused by the sugar in the banana.
+SCERT TELANGANA3
+Science VI Class
+
+  4. Normalized Score: 0.2468 | Chapter: WHAT DO ANIMALS EAT? | Text: hunting.
+(e) Most of the food chains end
+with herbivorous animals.
+14. If you want to understand more
+about food chain what questions
+would you like to ask?
+15. Write a play with dialogues
+between a parrot and a lion about
+their food habits and organs they
+use to get food. Act it with your
+friends. Send it to school/
+district childrens magzine.
+16. Identify the given animal :
+• What does it eat?
+• Which part of the body helps
+it in eating?
+Every creature is better alive than dead, men and
+mouse and mango tree, and he who understands it
+alright will rather preserve it’ s life than destroy it.
+....... Saleem Ali
+A rat can last longer without water than a camel can.
+SCERT TELANGANA
+
+  5. Normalized Score: 0.2329 | Chapter: WHAT DO ANIMALS EAT? | Text: ant forces to do  work. There are
+mainly workers, soldiers, female and
+male ants.
+The workers collect and maintain
+food stock for others in the colony
+along with several other duties. Just
+as we keep cows for milk, some
+species of ants keep a type of insect
+called aphids for honeydew.
+Like us ants are good farmers as well
+they cut leaves into pieces and create a
+bed to grow a type of fungus which they
+eat!
+Think! What can we learn from ants?
+Write your opinion in your
+notebook.
+KeywordsKeywordsKeywordsKeywordsKeywords
+Food habit, food chain, sucking,
+picking, chewing, habitat, carnivore
+herbivore, omnivore, nocturnal,
+rumination
+What we have learnt
+• Different types of animals  that
+live in our surroundings  have
+their  own food habits (way of
+taking in food and type of food
+taken).
+Birds are vertebrate animals. They all have a backbone.
+SCERT TELANGANA41
+Science VI Class
+• Sucking, licking, picking,
+chewing, peeling, swallowing are
+all the ways by which animals take
+in their food .
+
+  6. Normalized Score: 0.1918 | Chapter: OUR FOOD | Text: ingredients have been listed below. Find
 out the source of each ingredient; if it
 is a plant mark (P) or an animal (A), or
 something else (O) (Table-3).
@@ -1322,30 +1264,155 @@ get milk, eggs and meat. If  you observe
 carefully you will notice that there are  a
 number of animals from which we get
 
+  7. Normalized Score: 0.1152 | Chapter: OUR FOOD | Text: 1
+Science VI Class
+1 Our Food
+If any one asks you about your favourite
+food item, what will you answer? The
+list may include several things like laddu,
+biryani, idly-sambar, pulihora, cheese, dal,
+brinjal curry and so on. But if  you are
+asked about the components, their
+sources and how they have been cooked,
+then, it may be difficult for you to
+answer. Generally we take interest in
+eating food and don't bother about other
+things, like what material we need to
+prepare brinjal curry or biryani? How can
+idly be made soft? We take food for our
+health and energy, but we should also
+know the materials required for
+preparing the food we eat. This type
+of  information is very important. So,
+we will discuss about the ingredients,
+processing and sources of food in detail
+in this chapter. Observe the following
+food items and name them.
+Fig. 1 : Variety of  food
+Banana contains potassium which is useful for us.
+1 2 3
+4 5 6
+7 8 9
+SCERT TELANGANA2
+OUR FOOD Free Distribution by Govt. of T.S. 2020-21
+
+  8. Normalized Score: 0.1100 | Chapter: WHAT DO ANIMALS EAT? | Text: of different birds are used to eat different
+types of food.
+Let us take some specific examples to
+observe how animals eat their food. The
+type of food and the ways in which an
+animal collects it, form the food habit
+of the organism.
+Let us study the food habits of birds in
+detail. How do birds eat their food?
+Look at (Fig. 4) and choose the correct
+The largest animal alive today is the blue whale.
+Eagle Sparrow Duck
+Hen
+Crow
+PigeonWood pecker
+SCERT TELANGANA36
+36
+WHAT DO ANIMALS EAT ? Free Distribution by Govt. of T.S. 2020-21
+options from  statements 1, 2 and 3
+given below.
+1. The reason for the beaks of
+different birds being different is to
+make it easy to recognize them.
+2. There is no reason for the
+difference, it just happens.
+3. The beaks are different because the
+birds eat different  kinds of food.
+Again look at Fig. 4 and try to answer :
+• Which two of the given birds
+(sparrow, duck, eagle, dove) would
+eat the same kind of food
+according to you?
+
+  9. Normalized Score: 0.1047 | Chapter: OUR FOOD | Text: of  your class. Make a fruit chat
+or vegetable salad and eat it.
+How do you feel? Write few lines
+about your experience.
+9. Ask your friend to think of the
+name of any food item. Now
+you have to guess its name. For
+this you can ask some
+questions. Your friend can only
+answer Yes or No.   How many
+and what questions did you ask
+before you could guess the
+name?
+10. List out the ingredients needed
+to make vada. Are they same for
+dosa? Identify the differences in
+your list.
+11. Latha's mother has prepared the
+following statements for you.
+Find out the wrong ones among
+these, don't forget to give your
+reasons.
+(a) We can get food from plants
+and animals only.
+(b) Spices, oil, salt and meat are
+the ingredients of  a chicken curry.
+(c) Plants are the source of  honey.
+12. Find out from your parents the
+various methods of  preserving
+food and write a note on them.
+13. Collect information about the
+main food habits of different
+states of  India. Refer to the Atlas,
+
+  10. Normalized Score: 0.0000 | Chapter: OUR FOOD | Text: • We get food from plants and
+animals.
+   • For cooking food, we need
+different types of  ingredients.
+   • We use different parts of  plants
+like stems, roots, leaves, fruits and
+flowers as food.
+   • The taste of food is based on its
+ingredients, method of
+preparation and cultural practices
+of the region.
+   • Boiling, steaming, fermentation
+are some methods of preparing
+food.
+   • We use preservatives to preserve
+food for some time.
+Improve your learning
+1. What are the common food
+items usually eaten by you?
+2. Find out the ingredients of the
+given food items:
+Pachipulusu, coconut chutney,
+jilebi, onion pakodi
+3. Write down the process of
+making upma or any other snack
+of your choice.
+Tomatoes are rich in Carotenoid and Lycopene; eating foods containing
+Carotenoids can lower the risk of  cancer.
+SCERT TELANGANA10
+OUR FOOD Free Distribution by Govt. of T.S. 2020-21
+4. Collect any wrapper of
+packaged food. Read the
+information details and answer
+the following questions.
+
 
 --- Generated Answer ---
-That is an excellent question! Plants provide us with a great variety of ingredients, and we use almost every part of a plant in some form as food.
+That is a wonderful question! While I, as your teacher, focus on observing and studying the food habits of people and animals, we can certainly identify the common food items that are usually eaten by students like you, based on what we have studied in our lesson on "Our Food."
 
-Based on our study, the different parts of plants that we generally use as food include:
+We learn that people eat many different types of food throughout the day. However, when comparing the lists of what various students eat, certain items appear frequently and are considered staples.
 
-1.  **Leaves**
-2.  **Roots**
-3.  **Seeds**
-4.  **Fruits**
-5.  **Stems**
-6.  **Flowers**
+Here are the common food items typically eaten, according to our textbook context:
 
-### Usage Patterns
+1.  **Common Daily Items:** Although people eat different materials daily, some essential food items are very common in the everyday diet. These include:
+    *   Rice
+    *   Dal (Pulses)
+    *   Vegetables
 
-While we can use all of these parts, the textbook notes that some are more widely used than others:
+2.  **Staple Food:** In our state, due to the suitable geographical and climatic conditions for growing paddy, **rice** is generally used as the staple food. This means that many common meals are based on rice or rice products (like Rava or flour items).
 
-*   **Widely Used Parts:** Leaves, roots, seeds, and fruits of plants are commonly and widely consumed in our food.
-*   **Less Widely Used Parts:** Stems and flowers are also used, but not as widely as the other four categories. For example, some plants, like sugarcane or ginger, have modified stems that we eat, and we also consume certain flowers.
-
-We see examples of this variety when we look at common ingredients:
-
-*   **Roots:** We eat the roots of plants like Carrot, Radish, and Beetroot.
-*   **Stems:** We consume modified stems like Potato, Ginger, and Sugarcane.
-*   **Leaves and Seeds:** For a plant like Fenugreek (Menthulu), we eat both its leaves and its seeds.
+3.  **Examples from Peers:** If we look at the food lists recorded in Activity-1 (like what Ashok or Neelam ate), we see common items such as **Rice, Dal, Milk, Idly, Bread, Roti, and Vegetables** being consumed.
 --- End Log ---
 

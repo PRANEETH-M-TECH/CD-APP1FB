@@ -150,16 +150,18 @@ def process_and_embed_book(pdf_path: str, class_name: str, subject: str, chapter
         raise RuntimeError("Client or embedder not initialized. Call initialize() first.")
 
     # Create chpchunks directory if it doesn't exist
-    chpchunks_dir = "chpchunks"
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    project_root = os.path.abspath(os.path.join(current_dir, ".."))
+    chpchunks_dir = os.path.join(project_root, "chpchunks")
     if not os.path.exists(chpchunks_dir):
         os.makedirs(chpchunks_dir)
         
-    # Create summary directory if it doesn't exist
-    summary_dir = "summary"
+    summary_dir = os.path.join(project_root, "summary")
     if not os.path.exists(summary_dir):
         os.makedirs(summary_dir)
 
     book_uuid = get_book_uuid(pdf_path)
+    print(f"\n--- Starting processing for book: {os.path.basename(pdf_path)} (UUID: {book_uuid}) ---")
 
     # Delete existing points for this book_uuid (if any)
     if check_if_book_exists(book_uuid):
@@ -204,6 +206,7 @@ def process_and_embed_book(pdf_path: str, class_name: str, subject: str, chapter
                 chapter_text += reader.pages[page_num].extract_text() or ""
 
         text_chunks = text_splitter.split_text(chapter_text)
+        print(f"  - Processing chapter '{chapter_name}': {len(text_chunks)} raw chunks extracted.")
 
         # Store chunks for chpchunks.json
         chapter_data_for_json = {
@@ -214,6 +217,7 @@ def process_and_embed_book(pdf_path: str, class_name: str, subject: str, chapter
         book_data_for_json["chapters"].append(chapter_data_for_json)
 
         # Generate and store summary for summary.json
+        print(f"  - Sending {len(text_chunks)} chunks for chapter '{chapter_name}' to LLM for summary generation...")
         summary_text = generate_chapter_summary(class_name, subject, chapter_name, text_chunks)
         summary_chapter_data = {
             "chapter_name": chapter_name,
@@ -249,14 +253,22 @@ def process_and_embed_book(pdf_path: str, class_name: str, subject: str, chapter
     # Write chpchunks JSON file
     json_filename_chunks = f"{subject.lower()}{class_name.replace(' ', '')}.json"
     json_filepath_chunks = os.path.join(chpchunks_dir, json_filename_chunks)
-    with open(json_filepath_chunks, "w", encoding="utf-8") as f:
-        json.dump(book_data_for_json, f, indent=2)
+    print(f"--- Writing chapter chunks to {json_filepath_chunks} ---")
+    try:
+        with open(json_filepath_chunks, "w", encoding="utf-8") as f:
+            json.dump(book_data_for_json, f, indent=2)
+    except IOError as e:
+        print(f"ERROR: Could not write chapter chunks file {json_filepath_chunks}: {e}")
         
     # Write summary JSON file
     json_filename_summary = f"{subject.lower()}{class_name.replace(' ', '')}.json"
     json_filepath_summary = os.path.join(summary_dir, json_filename_summary)
-    with open(json_filepath_summary, "w", encoding="utf-8") as f:
-        json.dump(summary_data_for_json, f, indent=2)
+    print(f"--- Writing summary to {json_filepath_summary} ---")
+    try:
+        with open(json_filepath_summary, "w", encoding="utf-8") as f:
+            json.dump(summary_data_for_json, f, indent=2)
+    except IOError as e:
+        print(f"ERROR: Could not write summary file {json_filepath_summary}: {e}")
 
     return
 
