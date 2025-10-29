@@ -33,6 +33,7 @@ def initialize():
     local_embedder = SentenceTransformer(EMBEDDING_MODEL)
 
     # Initialize Gemini / generative model (if API key/config available)
+    genai.configure(api_key=os.environ.get("GOOGLE_API_KEY"))
     GENERATION_MODEL_NAME = "models/gemini-flash-latest"
     try:
         generation_model = genai.GenerativeModel(GENERATION_MODEL_NAME)
