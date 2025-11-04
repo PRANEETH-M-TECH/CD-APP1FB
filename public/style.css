@@ -17,6 +17,17 @@ body {
     margin: 0;
 }
 
+/* Speak button */
+.speak-btn {
+  background: none;
+  border: none;
+  color: #64748b;
+  cursor: pointer;
+}
+.speak-btn:hover {
+  color: #2563eb;
+}
+
 /* --- Landing Page (index.html) --- */
 .landing-page-container { display: flex; flex-direction: column; min-height: 100vh; }
 .main-header { padding: 20px 40px; }

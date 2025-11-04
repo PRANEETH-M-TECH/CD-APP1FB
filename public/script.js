@@ -342,6 +342,51 @@ function setupUserPage() {
         queueRenderPage(pageNum);
     });
 
+    const voiceSearchBtn = document.getElementById('voice-search-btn');
+    const voiceModal = document.getElementById('voice-modal');
+    const micButton = document.getElementById('mic-button');
+    const voiceStatus = document.getElementById('voice-status');
+
+    let isRecording = false;
+    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+    recognition.interimResults = true;
+    recognition.lang = 'en-US';
+
+    recognition.addEventListener('result', e => {
+    const transcript = Array.from(e.results)
+        .map(result => result[0])
+        .map(result => result.transcript)
+        .join('');
+    queryText.value = transcript;
+    });
+
+    recognition.addEventListener('end', () => {
+    micButton.textContent = 'Start Recording';
+    isRecording = false;
+    voiceModal.classList.add('hidden');
+    });
+
+    voiceSearchBtn.addEventListener('click', () => {
+    voiceModal.classList.remove('hidden');
+    });
+
+    micButton.addEventListener('click', () => {
+    if (isRecording) {
+        recognition.stop();
+    } else {
+        recognition.start();
+        micButton.textContent = 'Stop Recording';
+        voiceStatus.textContent = 'Recording...';
+        isRecording = true;
+    }
+    });
+
+    voiceModal.addEventListener('click', (e) => {
+    if (e.target === voiceModal) {
+        voiceModal.classList.add('hidden');
+    }
+    });
+
 
     // --- Core Functions ---
 
@@ -595,7 +640,10 @@ function appendAIResponse(markdownText) {
     const header = `
         <div class="flex justify-between items-center mb-2">
           <h2 class="font-semibold text-gray-700">🤖 AI Response</h2>
-          <button class="copy-btn" onclick="copyMessage(this)">📋</button>
+          <div>
+            <button class="copy-btn" onclick="copyMessage(this)">📋</button>
+            <button class="speak-btn" onclick="speakMessage(this)">🔊</button>
+          </div>
         </div>`;
 
     const formatted = marked.parse(markdownText);
@@ -610,4 +658,11 @@ function copyMessage(btn) {
     navigator.clipboard.writeText(text);
     btn.textContent = "✅";
     setTimeout(() => (btn.textContent = "📋"), 1200);
+}
+
+function speakMessage(button) {
+    const card = button.closest('.ai-card');
+    const content = card.querySelector('.markdown-content').innerText;
+    const utterance = new SpeechSynthesisUtterance(content);
+    speechSynthesis.speak(utterance);
 }

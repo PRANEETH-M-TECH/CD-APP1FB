@@ -73,6 +73,17 @@
       color: #2563eb;
     }
 
+    /* Speak button */
+    .speak-btn {
+      background: none;
+      border: none;
+      color: #64748b;
+      cursor: pointer;
+    }
+    .speak-btn:hover {
+      color: #2563eb;
+    }
+
     /* Gradient header */
     .gradient-header {
       background: linear-gradient(135deg, #3b82f6, #6366f1);
@@ -223,12 +234,34 @@
           <textarea id="query-text" placeholder="Ask a question about the selected book..." required disabled
             class="w-full border border-gray-300 rounded-lg p-3 h-12 focus:ring-2 focus:ring-blue-400"></textarea>
           <div class="flex justify-end items-center gap-2 mt-2">
+            <button type="button" id="voice-search-btn"
+            class="bg-gray-200 hover:bg-gray-300 text-gray-600 rounded-lg p-2 px-4 transition">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+            </svg>
+          </button>
             <button type="submit" id="submit-query-btn" disabled
               class="bg-blue-600 hover:bg-blue-700 text-white rounded-lg p-2 px-4 transition disabled:bg-gray-300 disabled:cursor-not-allowed">
               Ask ➤
             </button>
           </div>
         </form>
+      </div>
+    </div>
+  </div>
+
+  <div id="voice-modal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
+    <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+      <div class="mt-3 text-center">
+        <h3 class="text-lg leading-6 font-medium text-gray-900">Voice Search</h3>
+        <div class="mt-2 px-7 py-3">
+          <p id="voice-status" class="text-sm text-gray-500">Click the button to start recording.</p>
+        </div>
+        <div class="items-center px-4 py-3">
+          <button id="mic-button" class="px-4 py-2 bg-green-500 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-300">
+            Start Recording
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -256,6 +289,7 @@
             <div class="flex justify-between items-center mb-2">
                 <h2 class="font-semibold text-gray-700">${header}</h2>
                 <button class="copy-btn" onclick="copyMessage(this)">📋</button>
+                <button class="speak-btn" onclick="speakMessage(this)">🔊</button>
             </div>
             <div class="markdown-content">${htmlContent}</div>
         `;
@@ -270,6 +304,13 @@
             button.textContent = '✅';
             setTimeout(() => { button.textContent = '📋'; }, 1000);
         });
+    }
+
+    function speakMessage(button) {
+        const card = button.closest('.ai-card');
+        const content = card.querySelector('.markdown-content').innerText;
+        const utterance = new SpeechSynthesisUtterance(content);
+        speechSynthesis.speak(utterance);
     }
 
     document.addEventListener('DOMContentLoaded', () => {

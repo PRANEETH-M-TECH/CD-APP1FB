@@ -1,1418 +1,1302 @@
 --- Query Log ---
-Timestamp: 2025-10-28T11:46:14.500527
-Original Query: what are the common food items usually eaten by you?
-Book UUID: 097025710c9d2a09420dda2755023e25b2106cc4e89dfc78be9f2adab9f8c6b9
-Class: 6, Subject: science
+Timestamp: 2025-11-04T15:13:56.836802
+Original Query: differentiate between acid bases and salts
+Book UUID: 9f4e8506f5d016caa6cd7c7b824396829225ed8d9fed9229a3e04d7fbf2a3372
+Class: 7, Subject: science
 
 --- LLM Query Processing ---
-Reformulated Query: Identify the common, staple food items typically consumed by humans according to the text, and explain how regional factors influence these food habits, referencing examples like rice, dal, and different regional staples.
-Classification: factual
-Conceptual Score: 0.40
-Keywords: common food items, staple food, dietary consumption, food habits
+Reformulated Query: Provide a comprehensive comparison detailing the fundamental chemical differences, definitions (e.g., pH, conductivity, reaction types), and characteristic properties used to distinguish acids, bases, and salts.
+Classification: conceptual
+Conceptual Score: 0.90
+Keywords: acids, bases, salts, differentiation, chemical properties, pH scale, chemistry
 
 --- Formatted Top Chunks for LLM (Context) ---
 
-  --- Chunk 1 (Hybrid Score: 0.6484) ---
-     Chapter: OUR FOOD
-     Text: food items and name them.
-Fig. 1 : Variety of  food
-Banana contains potassium which is useful for us.
-1 2 3
-4 5 6
-7 8 9
-SCERT TELANGANA2
-OUR FOOD Free Distribution by Govt. of T.S. 2020-21
- Activity-1:  Finding variety in our
-food
-Every day we eat different types of  food
-from morning to night. What did you
-eat yesterday? Make a list. Also discuss
-with your friends and collect
-information about what food they had
-eaten yesterday.
-Record the inf ormation in table 1.
-Table 1 - What did I eat
-Name  of student Food eaten
-Ashok Rice, Dal, Milk, Vegetables, Jam, Idly, Bread
-Neelam Biry ani, Chilli Chatni, Roti
-• Are there any common food items
-in the list of yours and your friends'?
-• Count the number of food
-varieties you have listed in the
-table?
-• Do all the students eat the same
-type of food items?
-• What food is served in your
-school at midday meal?
-We eat different types of  food material
-daily but some food items like rice, dal
-and vegetables are common in the daily
+  --- Chunk 1 (Hybrid Score: 0.6683) ---
+     Chapter: ACIDS AND BASES
+     Text: neutral but they are not salts.
+Let us do - 9
+Test the following salt substances with red
+litmus and blue litmus papers. Record your
+observations in the table.
+TABLE - 8
+Let us do - 10: Classifying salts
+Collect some salt substances with the help
+of your teacher, make their salt solutions.
+Test the salt solutions with blue litmus and
+red litmus papers. Classify these salts as per
+your observations in the given table.
+TABLE - 9
+Why is our sweat  salty ?
+Our body needs many types of salts.  We
+lose some salts through excretion. So sweat
+is salty.
+Do you know?
+Uses of  some acids, bases and salts
+Salts which change blue litmus to red are
+acidic salts and  salts which change red
+litmus to blue are basic salts.  Some salts
+affect neither blue nor red litmus papers.
+These are called neutral salts. TABLE - 10
+Cool Drinks
+SCERT, TELANGANAVII Science 17Free Distribution by Govt. of T.S. 2021-22
+Key words:-
+Indicator, Acid, Base, Red litmus, Blue
+litmus, Acidic substance, Basic Substance,
 
-  --- Chunk 2 (Hybrid Score: 0.5200) ---
-     Chapter: OUR FOOD
-     Text: People living in one region usually
-share common food habits. You
-might have seen paddy fields near
-your village. In our state geographical
-and climatic conditions are more
-suitable for growing paddy so we
-produce more rice. In which districts
-of our State is paddy grown widely?
-Even though farmers grow various
-types of food crops we generally use
-rice as staple food. A variety of food
-items are prepared using rice. A number
-of food items are made using rice in
-the form of Rava and flour. Make a list
-of those items. We eat more rice and
-rice products as compared to other
-cereals like wheat or maize. But in
-Rajasthan maize, bajra and wheat is
-produced more than rice. So the main
-food in Rajasthan is chapathi or roti.
-Many times we hear people saying that
-"I like this curry ". "I don't like that".
-This is not a good food  habit ,you
-should  make a habit of eating all
-varieties of vegetable food items. This
-makes you strong and energetic.
-Different methods of preparing food
+  --- Chunk 2 (Hybrid Score: 0.5566) ---
+     Chapter: ACIDS AND BASES
+     Text: explain how would you convert an acidic
+solution into basic solution?
+If you are given a basic solution how can you
+turn it into an acidic solution?
+In the above experiment you might have
+noticed that if we add excess base (caustic
+soda) to acidic solution (Hydrochloric acid)
+it gets converted into a base; similarly we
+can change  a base into an acid by adding the
+acid in excess.
+If you are given a solution of Hydrochloric
+acid how can you make it into a solution which
+is neither acidic nor basic?
+If you are given a caustic soda solution, how
+can you make it into a solution which is neither
+acidic nor basic?
+When acids and bases are mixed in equal
+concentrations they give a neutral
+solution. We learn more about
+neutralization in higher classes.
+Manures:-
+In recent years the use of chemical fertilizers
+has increased. Though the use of chemical
+fertilizers increases the production of  crops,
+it changes the nature of the soil. Some
+fertilizers increase the acidity of the soil and
 
-  --- Chunk 3 (Hybrid Score: 0.2537) ---
-     Chapter: WHAT DO ANIMALS EAT?
-     Text: SCERT TELANGANA41
-Science VI Class
-• Sucking, licking, picking,
-chewing, peeling, swallowing are
-all the ways by which animals take
-in their food .
-• Beaks of birds differ from one
-another depending upon the
-type of food they eat.
-• Most wild animals that eat
-other animals have sharp teeth.
-• Animals are divided into three
-types on the basis of their food.
-They are carnivores, herbivores,
-omnivores.
-• Food chain is the connection
-between animals on the basis of
-their food habits.
-• Food chain explains the
-interdependence of diverse
-organisms in nature.
+  --- Chunk 3 (Hybrid Score: 0.3843) ---
+     Chapter: ACIDS AND BASES
+     Text: What do you observe?
+Bring a burning match stick near the test
+tube.
+What happens? The flame extinguishes.
+Pass the gas into lime water. What happens?
+Can you see the formation of  precipitation?
+Lime water turned milky white.
+Is it Carbon dioxide?
+Now try to write the properties of  acids and
+bases from your observations in the above
+experiments.
+We have seen that neutral solutions have no
+effect on indicators. We have also seen that
+acids and bases have different effects on
+indicators. When is the solution made by
+mixing of an acid and a base, be a neutral?
+SCERT, TELANGANAVII Science 15Free Distribution by Govt. of T.S. 2021-22
+Let us do - 8
+Take a clean test tube. Using a clean dropper
+put 10 drops of dilute Hydrochloric acid
+carefully in it and also add 2 drops of
+phenolphthalein indicator solution.
+What is the colour of the resulting solution?
+Now add Caustic soda solution
+(Whose concentration is equal to
+Hydrochloric acid) drop by drop
+to the test tube.
+
+  --- Chunk 4 (Hybrid Score: 0.3127) ---
+     Chapter: ACIDS AND BASES
+     Text: Apart from natural acids, there are certain acids
+like Hydrochloric acid, Sulphuric acid and
+Nitric acid etc. that are prepared from
+minerals.
+Basic Nature:-
+How do you feel when you touch a cake of
+soap? Take it between your fingers and gently
+rub your fingers on it? Do the same with the
+other material. What difference do you
+notice?
+• You might have touched soap water or
+lime water. How do you feel?
+• Can you list out some more substances
+that are soapy to touch?
+The substances which are soapy to touch are
+basic in nature.
+Some substances that we use
+in our daily life, contain
+different bases. For example
+soap, glass cleaners etc.
+Various substances
+containing bases are listed in the below table.
+TABLE - 6
+TABLE - 6
+Let us do - 5
+Burn a small piece of
+Magnesium ribbon by
+holding it with tongs. Collect the white ash and
+dissolve it in a little water.  Touch the solutions
+formed and test this solution with blue litmus
+and red litmus.
+TABLE - 5
+cheese
+Butter Milk, Curd
+
+  --- Chunk 5 (Hybrid Score: 0.2938) ---
+     Chapter: ACIDS AND BASES
+     Text: following categories from the above
+observations.
+TABLE 4
+SCERT, TELANGANAAcids and Bases12
+• Now take things which are sour in taste
+and used as food e.g. curd, lemon juice
+etc. Check with blue and red litmus, what
+happens?
+Indicators:
+The strips of litmus paper change the colour,
+based on the nature of the material put on
+them. These are all indicators. They tell us
+whether a substance is acidic or basic. They
+are used in studying acidic and basic properties
+of  substances.
+Acidic Nature:-
+You may have experienced a burning sensation
+when bitten by an ant. The sensation is due to
+the presence of  formic acid that the ant
+releases. The acids present in plants and
+animals are called as natural acids.
+The substances that contain different acids. are
+given in the table 5.
+Apart from natural acids, there are certain acids
+like Hydrochloric acid, Sulphuric acid and
+Nitric acid etc. that are prepared from
+minerals.
+Basic Nature:-
+How do you feel when you touch a cake of
+
+  --- Chunk 6 (Hybrid Score: 0.2840) ---
+     Chapter: ACIDS AND BASES
+     Text: ———————————
+———————————
+———————————
+———————————
+• Do you find any difference in the taste
+of  a raw and a ripe fruit?
+TABLE - 1
+• Do substances change their taste when
+cooked?
+• Do substances change their taste when
+added to some other substances?
+• Add salt to lemon juice. How do the two
+together  taste now?
+• Add sugar to lemon juice what change
+do you notice in the taste?
+• Is there any difference in the taste in the
+above situations.
+2 ACIDS AND BASES
+SCERT, TELANGANAAcids and Bases10
+• Do substances change colour when
+added to other substances?
+• Do you observed any change when lime
+water is added to turmeric?
+Let us do - 1
+Take some turmeric powder. Add a bit of
+water to it and prepare turmeric paste. Rub
+the turmeric paste on a white paper dry it for
+some time. Then draw a flower daigram on
+that paper with a pencil. Colour the flower
+with soap water using a brush.
+• Does the colour of the flower remain the
+same when soap water is used?
+Similarly take some lime water. Add a few
+
+  --- Chunk 7 (Hybrid Score: 0.2831) ---
+     Chapter: ACIDS AND BASES
+     Text: neutral are not salts. For eg. sugar and
+starch solutions are  neutral, but they are
+not salts.
+• In the process of Neutralization, both
+the acidic and basic qualities are
+neutralised.
+• Salts need not always be neutral, they can
+be acidic or basic.
 Improve your learning
-1. Name some animals in your
-house which have the same kind
-of food habit.
-2. Observe your  surroundings or
-go to a nearby field and write
-about the following :
-(a) How does the cow eat grass?
-(b) What parts are used while
-doing so?
-(c) In what way can you justify it
-as a herbivore?
-3. Compare the legs and nails of a
-dog and hen and say why they
-are different.
-4. Go to a nearby pond where cranes
+1. The sting of a wasp is
+basic. How can we treat
+the sting of a wasp?
+2. Why are acids not stored
+in a metal container?
+3. Acidic, basic and neutral solutions are
+given in three test tubes and you are given
+a strip of red litmus? How will you
+identify the three solutions?
+4. When drops of lemon juice are put on
+blue litmus it turns red what will happen
+if you put some drops of soap solution
+on the same position on litmus paper?
+5. What happens when Nitric acid is added
+to egg shell?
+6. Turmeric stains on white clothes, when
+washed with soap, turn red. Why?
+7. Ammonia is present in window cleaners.
+It turns red litmus blue. What is its
+nature?
+8. What is the nature of urea? Is it acidic,
 
-  --- Chunk 4 (Hybrid Score: 0.2381) ---
-     Chapter: WHAT DO ANIMALS EAT?
-     Text: your pet animals eat?
-• Write about any two animals in
-your list, describing the type of
-food they eat and how they get
-their food?
-• Compare the types of food
-habits of two animals selected by
-you.
-• Regarding the types of food
-eaten by animals, what major
-groups can be made? Discuss
-with your friends and write. You
-could write like this :
-1. Some animals depend only on
-plants for food.
-2. ............................................................
-3. ............................................................
-4. ............................................................
-Table 1
-Animals are divided into six basic groups which include invertebrates, fishes, amphibians,
-reptiles, birds and mammals.
-SCERT TELANGANA32
-32
-WHAT DO ANIMALS EAT ? Free Distribution by Govt. of T.S. 2020-21
-We have seen that all animals depend on different types of  food. Now let us do
-the above exercise in a slightly different manner. Add your own examples in the
-last column of table 2.
-Table 2
+  --- Chunk 8 (Hybrid Score: 0.2709) ---
+     Chapter: CHANGES AROUND US
+     Text: and  chemical changes. In physical changes no
+new substance is formed whereas in chemical
+change we have seen that one or more new
+substances are formed.
+Identifying physical and chemical change
+Have you ever thought of the process behind
+setting milk into curd?  Is it a physical change
+or chemical change ?
+What type of  change is the boiling of  an egg?
+Is it a chemical change or a physical change?
+Think about the following changes and
+decide whether they are physical or
+chemical changes. Write the type of change
+and reasons for that in the  table.
+Everyday we use many types of batteries and
+many of these batteries are recharged
+Table - 5
+SCERT, TELANGANAChanges Around Us166
+regularly.  Can you identify the types of  change
+taking place in this process?
+We use Turmeric with Limewater (Calcium
+Hydroxide) to decorate the feet (Parani)
+during some  occasions at our homes. What
+type of change is this? Think about  the
+reasons why chewing of  Pan (Killi) turns our
+mouth red.
 
-  --- Chunk 5 (Hybrid Score: 0.2361) ---
-     Chapter: WHAT DO ANIMALS EAT?
-     Text: see how animals eat their food.
-Activity-1: Taking in food
-You can see many animals in your
-surroundings. Discuss about them with
-your friends. Make a list of  what they
-usually eat and what they usually do to
-find their food. Do not be in a hurry to
-complete this table. Keep adding to this
-list as you observe animals around you
-everyday. But don’t forget to observe
-animals wherever you go.
-Fig. 1 (a)
-Fig. 1 (b)
-The first animals evolved about 600 million years ago during the late Precambrian.
-SCERT TELANGANA31
-Science VI Class
-S. No. Animal/Bird What they How they find food
-eat/ drink
-1 Sparrow Worms, gr ains, ... Looking, seeing, ...
-2 Dog Bones, bread Sniffing
-3
-4
-5
-6
-7
-8
-9
-10
-• Which of  the animals, listed by
-you, eat nearly the same type of
-food?
-• What are the types of food that
-your pet animals eat?
-• Write about any two animals in
-your list, describing the type of
-food they eat and how they get
-their food?
-• Compare the types of food
-habits of two animals selected by
-you.
+  --- Chunk 9 (Hybrid Score: 0.2475) ---
+     Chapter: ACIDS AND BASES
+     Text: Cool Drinks
+SCERT, TELANGANAVII Science 17Free Distribution by Govt. of T.S. 2021-22
+Key words:-
+Indicator, Acid, Base, Red litmus, Blue
+litmus, Acidic substance, Basic Substance,
+Neutral Substance, Salts, Neutralization,
+Acid rain.
+What we have learnt
+• Indicator helps us to find whether the
+solution is acidic or basic or neutral.
+• Red litmus paper, blue litmus paper,
+phenolphthalein, methyl orange  are
+indicators.
+• Hibiscus, turmeric and rose petals are
+natural indicators.
+• The substances that turn blue litmus to
+red are acidic in nature.
+• The substances that are soapy to touch
+and turn red litmus to blue are basic in
+nature.
+• Acid rains are the combination of
+Carbonic acid, sulphuric acid and Nitric
+acid with rain water.
+• All substances whose solutions are
+neutral are not salts. For eg. sugar and
+starch solutions are  neutral, but they are
+not salts.
+• In the process of Neutralization, both
+the acidic and basic qualities are
+neutralised.
 
-  --- Chunk 6 (Hybrid Score: 0.2351) ---
-     Chapter: OUR FOOD
-     Text: Mustard (Avalu)
-Sugarcane
-Carrot
-Onion
-Cabbage
-Asafoetida (Inguva)
-Peanuts contain beneficial protien, but many people are allergic to them and find
-them hard to digest.
-SCERT TELANGANA6
-OUR FOOD Free Distribution by Govt. of T.S. 2020-21
-• Which parts of the plants do we
-generally use?
-• Do we also use flowers as food?
-Which plants are these?
-• Is there any plant of which whole
-parts of it can be eaten?
-We use various parts of  plants for our
-food. Leaves, roots, seeds and fruits of
-plants are widely used whereas stems
-and flowers are not so widely used. We
-need several ingredients to cook
-different types of food. Whatever may
-be the source of  ingredients - plants,
-animals or minerals, we use some in
-plenty but others are needed in only
-small quantities. Why is it so?
-How people develop food habits?
-People living in one region usually
-share common food habits. You
-might have seen paddy fields near
-your village. In our state geographical
-and climatic conditions are more
-
-  --- Chunk 7 (Hybrid Score: 0.2306) ---
-     Chapter: OUR FOOD
-     Text: 12. Find out from your parents the
-various methods of  preserving
-food and write a note on them.
-13. Collect information about the
-main food habits of different
-states of  India. Refer to the Atlas,
-library books and discuss with
-your teacher.
-Cakes and cookies contain too much sugar and not enough vitamins and minerals
-SCERT TELANGANA11
-Science VI Class
-14. Suppose if  fish / raw mango / lemons are given to you how would you
-preserve them?
-15. Make a list of animals and insects from which we get food.
-(a) Write the names of these animals on slips of paper. On the other side
-of the slip write the names of food we get from the animals - milk, eggs
-or meat.
-(b) Sort the slips into groups. Write the names of the animals in the correct
-portions of the circles shown below.
-(c) Are there any portions where none of the animals fit? Explain why?
-* * * *
-Oranges are more fibrous. So take oranges for the source of fibrefood.
-milk
-giving
-meat
-giving
-egg
-giving
-SCERT TELANGANA
-
-  --- Chunk 8 (Hybrid Score: 0.2245) ---
-     Chapter: OUR FOOD
-     Text: SCERT TELANGANA10
-OUR FOOD Free Distribution by Govt. of T.S. 2020-21
-4. Collect any wrapper of
-packaged food. Read the
-information details and answer
-the following questions.
-(a) Name of the food item
-(b) Price of the food item
-(c) When was it manufactured
-(d) How long can we use it?
-(e) What ingredients does it
-contain, name them?
-5 Shahina's mother always cooks
-plain rice! If the same rice is
-used to make kichidi, payasam
-or biryani how would you feel
-eating those?
-6 List out the names of some
-plants that grow in your village.
-Which parts of it are used as
-food?
-7. Some food material is given
-below. What are the diffrent
-possible ways of cooking them?
-Find out and write them.
-Meat - Groundnuts - Potatoes -
-Spinach
-8. With the help of your teacher
-form  groups of  5 or 6 students
-of  your class. Make a fruit chat
-or vegetable salad and eat it.
-How do you feel? Write few lines
-about your experience.
-9. Ask your friend to think of the
-name of any food item. Now
-
-  --- Chunk 9 (Hybrid Score: 0.2235) ---
-     Chapter: WHAT DO ANIMALS EAT?
-     Text: 34
-WHAT DO ANIMALS EAT ? Free Distribution by Govt. of T.S. 2020-21
-Activity-2
-In the list given in table 3, write the bodyparts of animals that are used to collect or
-capture food.
-Table 3
-S. No. Animal Bod ypart used in taking food
-1. Hen Beak, ...
-2. Cow
-3. Dog
-4. Frog
-5. Snake
-6. Man
-7. Lizard
-8. Vulture
-9. Lion Legs, claws, mouth, ...
-10. Humming bird
-Look at table 3 and answer :
-• Which animals use  similar parts
-in taking food?
-• Compare the parts of dog to that
-of hen. Note down the similarities
-as well as differences observed by
-you.
-• Compare the parts of hen and
-humming bird in taking in food.
-Note down the similarities as well
-as differences observed by you.
-• What are the similarities between
-a dog and a lion in the parts
-involved in taking food?
-• What are the similarities and
-differences between a vulture and
-a lion in their mode of taking in
-food?
-• You may also add any other
-observations you may have made.
-You will see that the same part may be
-
-  --- Chunk 10 (Hybrid Score: 0.2189) ---
-     Chapter: OUR FOOD
-     Text: Try to enrich this list as much as you
-can. You will find that from animals we
-get milk, eggs and meat. If  you observe
-carefully you will notice that there are  a
-number of animals from which we get
-different kinds of food. Goats and
-sheep give us meat. Hens and roosters
-are used as meat (chicken). Can you
-elaborate this list?  In plants we eat
-different parts, like leaf  of  spinach and
-coriander plants, flower of  cauliflower
-plant, fruit of  tomato and drumstick
-plants. You may be having some doubt
-about the salt. It is a mineral and
-obtained from the sea. In later classes
-you will learn about the components of
-food. Can you identify which part of
-the plant is eaten by us in the given
-table? You can also discuss with your
-friends (Fig.-3).
-* We get varieties of  food material
-from plants
-* In some plants we eat only some
-parts as food.
-* We take entire plant as food.
-Beet roots are high in carbohydrate levels and should therefore be used sparingly
-SCERT TELANGANA5
-Science VI Class
+  --- Chunk 10 (Hybrid Score: 0.2398) ---
+     Chapter: CHANGES AROUND US
+     Text: the type of crystals formed by urea and Alum.
+SCERT, TELANGANA165VII Science Free Distribution by Govt. of T.S. 2021-22
+Let us do-12: Observing Crystallisation of
+Copper Sulphate.
+Take some hot, saturated solution of  Copper
+sulphate in a test tube.  Pour some of  it in an
+evaporating dish. Allow the solution to cool
+quickly.
+Observe with a magnifying glass, the size,
+colour and shape of  the crystals formed.
+From the above three activities we notice that
+we can separate dissolved substances in the
+form of  crystals.
+The process of separating a soluble
+solid from the solution by heating  or
+evaporating the solvent is called
+crystallization.
+What type of change is this? In
+crystallization no new substance is formed.
+Hence it is physical change.
+Till now we have discussed about some physical
+and  chemical changes. In physical changes no
+new substance is formed whereas in chemical
+change we have seen that one or more new
+substances are formed.
+Identifying physical and chemical change
 
 
 --- Hybrid Search Results (10 Chunks) ---
 
-  1. Hybrid Score: 0.6484
-     Chapter: OUR FOOD
-     Text: food items and name them.
-Fig. 1 : Variety of  food
-Banana contains potassium which is useful for us.
-1 2 3
-4 5 6
-7 8 9
-SCERT TELANGANA2
-OUR FOOD Free Distribution by Govt. of T.S. 2020-21
- Activity-1:  Finding variety in our
-food
-Every day we eat different types of  food
-from morning to night. What did you
-eat yesterday? Make a list. Also discuss
-with your friends and collect
-information about what food they had
-eaten yesterday.
-Record the inf ormation in table 1.
-Table 1 - What did I eat
-Name  of student Food eaten
-Ashok Rice, Dal, Milk, Vegetables, Jam, Idly, Bread
-Neelam Biry ani, Chilli Chatni, Roti
-• Are there any common food items
-in the list of yours and your friends'?
-• Count the number of food
-varieties you have listed in the
-table?
-• Do all the students eat the same
-type of food items?
-• What food is served in your
-school at midday meal?
-We eat different types of  food material
-daily but some food items like rice, dal
-and vegetables are common in the daily
+  1. Hybrid Score: 0.6683
+     Chapter: ACIDS AND BASES
+     Text: neutral but they are not salts.
+Let us do - 9
+Test the following salt substances with red
+litmus and blue litmus papers. Record your
+observations in the table.
+TABLE - 8
+Let us do - 10: Classifying salts
+Collect some salt substances with the help
+of your teacher, make their salt solutions.
+Test the salt solutions with blue litmus and
+red litmus papers. Classify these salts as per
+your observations in the given table.
+TABLE - 9
+Why is our sweat  salty ?
+Our body needs many types of salts.  We
+lose some salts through excretion. So sweat
+is salty.
+Do you know?
+Uses of  some acids, bases and salts
+Salts which change blue litmus to red are
+acidic salts and  salts which change red
+litmus to blue are basic salts.  Some salts
+affect neither blue nor red litmus papers.
+These are called neutral salts. TABLE - 10
+Cool Drinks
+SCERT, TELANGANAVII Science 17Free Distribution by Govt. of T.S. 2021-22
+Key words:-
+Indicator, Acid, Base, Red litmus, Blue
+litmus, Acidic substance, Basic Substance,
 
-  2. Hybrid Score: 0.5200
-     Chapter: OUR FOOD
-     Text: People living in one region usually
-share common food habits. You
-might have seen paddy fields near
-your village. In our state geographical
-and climatic conditions are more
-suitable for growing paddy so we
-produce more rice. In which districts
-of our State is paddy grown widely?
-Even though farmers grow various
-types of food crops we generally use
-rice as staple food. A variety of food
-items are prepared using rice. A number
-of food items are made using rice in
-the form of Rava and flour. Make a list
-of those items. We eat more rice and
-rice products as compared to other
-cereals like wheat or maize. But in
-Rajasthan maize, bajra and wheat is
-produced more than rice. So the main
-food in Rajasthan is chapathi or roti.
-Many times we hear people saying that
-"I like this curry ". "I don't like that".
-This is not a good food  habit ,you
-should  make a habit of eating all
-varieties of vegetable food items. This
-makes you strong and energetic.
-Different methods of preparing food
+  2. Hybrid Score: 0.5566
+     Chapter: ACIDS AND BASES
+     Text: explain how would you convert an acidic
+solution into basic solution?
+If you are given a basic solution how can you
+turn it into an acidic solution?
+In the above experiment you might have
+noticed that if we add excess base (caustic
+soda) to acidic solution (Hydrochloric acid)
+it gets converted into a base; similarly we
+can change  a base into an acid by adding the
+acid in excess.
+If you are given a solution of Hydrochloric
+acid how can you make it into a solution which
+is neither acidic nor basic?
+If you are given a caustic soda solution, how
+can you make it into a solution which is neither
+acidic nor basic?
+When acids and bases are mixed in equal
+concentrations they give a neutral
+solution. We learn more about
+neutralization in higher classes.
+Manures:-
+In recent years the use of chemical fertilizers
+has increased. Though the use of chemical
+fertilizers increases the production of  crops,
+it changes the nature of the soil. Some
+fertilizers increase the acidity of the soil and
 
-  3. Hybrid Score: 0.2537
-     Chapter: WHAT DO ANIMALS EAT?
-     Text: SCERT TELANGANA41
-Science VI Class
-• Sucking, licking, picking,
-chewing, peeling, swallowing are
-all the ways by which animals take
-in their food .
-• Beaks of birds differ from one
-another depending upon the
-type of food they eat.
-• Most wild animals that eat
-other animals have sharp teeth.
-• Animals are divided into three
-types on the basis of their food.
-They are carnivores, herbivores,
-omnivores.
-• Food chain is the connection
-between animals on the basis of
-their food habits.
-• Food chain explains the
-interdependence of diverse
-organisms in nature.
+  3. Hybrid Score: 0.3843
+     Chapter: ACIDS AND BASES
+     Text: What do you observe?
+Bring a burning match stick near the test
+tube.
+What happens? The flame extinguishes.
+Pass the gas into lime water. What happens?
+Can you see the formation of  precipitation?
+Lime water turned milky white.
+Is it Carbon dioxide?
+Now try to write the properties of  acids and
+bases from your observations in the above
+experiments.
+We have seen that neutral solutions have no
+effect on indicators. We have also seen that
+acids and bases have different effects on
+indicators. When is the solution made by
+mixing of an acid and a base, be a neutral?
+SCERT, TELANGANAVII Science 15Free Distribution by Govt. of T.S. 2021-22
+Let us do - 8
+Take a clean test tube. Using a clean dropper
+put 10 drops of dilute Hydrochloric acid
+carefully in it and also add 2 drops of
+phenolphthalein indicator solution.
+What is the colour of the resulting solution?
+Now add Caustic soda solution
+(Whose concentration is equal to
+Hydrochloric acid) drop by drop
+to the test tube.
+
+  4. Hybrid Score: 0.3127
+     Chapter: ACIDS AND BASES
+     Text: Apart from natural acids, there are certain acids
+like Hydrochloric acid, Sulphuric acid and
+Nitric acid etc. that are prepared from
+minerals.
+Basic Nature:-
+How do you feel when you touch a cake of
+soap? Take it between your fingers and gently
+rub your fingers on it? Do the same with the
+other material. What difference do you
+notice?
+• You might have touched soap water or
+lime water. How do you feel?
+• Can you list out some more substances
+that are soapy to touch?
+The substances which are soapy to touch are
+basic in nature.
+Some substances that we use
+in our daily life, contain
+different bases. For example
+soap, glass cleaners etc.
+Various substances
+containing bases are listed in the below table.
+TABLE - 6
+TABLE - 6
+Let us do - 5
+Burn a small piece of
+Magnesium ribbon by
+holding it with tongs. Collect the white ash and
+dissolve it in a little water.  Touch the solutions
+formed and test this solution with blue litmus
+and red litmus.
+TABLE - 5
+cheese
+Butter Milk, Curd
+
+  5. Hybrid Score: 0.2938
+     Chapter: ACIDS AND BASES
+     Text: following categories from the above
+observations.
+TABLE 4
+SCERT, TELANGANAAcids and Bases12
+• Now take things which are sour in taste
+and used as food e.g. curd, lemon juice
+etc. Check with blue and red litmus, what
+happens?
+Indicators:
+The strips of litmus paper change the colour,
+based on the nature of the material put on
+them. These are all indicators. They tell us
+whether a substance is acidic or basic. They
+are used in studying acidic and basic properties
+of  substances.
+Acidic Nature:-
+You may have experienced a burning sensation
+when bitten by an ant. The sensation is due to
+the presence of  formic acid that the ant
+releases. The acids present in plants and
+animals are called as natural acids.
+The substances that contain different acids. are
+given in the table 5.
+Apart from natural acids, there are certain acids
+like Hydrochloric acid, Sulphuric acid and
+Nitric acid etc. that are prepared from
+minerals.
+Basic Nature:-
+How do you feel when you touch a cake of
+
+  6. Hybrid Score: 0.2840
+     Chapter: ACIDS AND BASES
+     Text: ———————————
+———————————
+———————————
+———————————
+• Do you find any difference in the taste
+of  a raw and a ripe fruit?
+TABLE - 1
+• Do substances change their taste when
+cooked?
+• Do substances change their taste when
+added to some other substances?
+• Add salt to lemon juice. How do the two
+together  taste now?
+• Add sugar to lemon juice what change
+do you notice in the taste?
+• Is there any difference in the taste in the
+above situations.
+2 ACIDS AND BASES
+SCERT, TELANGANAAcids and Bases10
+• Do substances change colour when
+added to other substances?
+• Do you observed any change when lime
+water is added to turmeric?
+Let us do - 1
+Take some turmeric powder. Add a bit of
+water to it and prepare turmeric paste. Rub
+the turmeric paste on a white paper dry it for
+some time. Then draw a flower daigram on
+that paper with a pencil. Colour the flower
+with soap water using a brush.
+• Does the colour of the flower remain the
+same when soap water is used?
+Similarly take some lime water. Add a few
+
+  7. Hybrid Score: 0.2831
+     Chapter: ACIDS AND BASES
+     Text: neutral are not salts. For eg. sugar and
+starch solutions are  neutral, but they are
+not salts.
+• In the process of Neutralization, both
+the acidic and basic qualities are
+neutralised.
+• Salts need not always be neutral, they can
+be acidic or basic.
 Improve your learning
-1. Name some animals in your
-house which have the same kind
-of food habit.
-2. Observe your  surroundings or
-go to a nearby field and write
-about the following :
-(a) How does the cow eat grass?
-(b) What parts are used while
-doing so?
-(c) In what way can you justify it
-as a herbivore?
-3. Compare the legs and nails of a
-dog and hen and say why they
-are different.
-4. Go to a nearby pond where cranes
+1. The sting of a wasp is
+basic. How can we treat
+the sting of a wasp?
+2. Why are acids not stored
+in a metal container?
+3. Acidic, basic and neutral solutions are
+given in three test tubes and you are given
+a strip of red litmus? How will you
+identify the three solutions?
+4. When drops of lemon juice are put on
+blue litmus it turns red what will happen
+if you put some drops of soap solution
+on the same position on litmus paper?
+5. What happens when Nitric acid is added
+to egg shell?
+6. Turmeric stains on white clothes, when
+washed with soap, turn red. Why?
+7. Ammonia is present in window cleaners.
+It turns red litmus blue. What is its
+nature?
+8. What is the nature of urea? Is it acidic,
 
-  4. Hybrid Score: 0.2381
-     Chapter: WHAT DO ANIMALS EAT?
-     Text: your pet animals eat?
-• Write about any two animals in
-your list, describing the type of
-food they eat and how they get
-their food?
-• Compare the types of food
-habits of two animals selected by
-you.
-• Regarding the types of food
-eaten by animals, what major
-groups can be made? Discuss
-with your friends and write. You
-could write like this :
-1. Some animals depend only on
-plants for food.
-2. ............................................................
-3. ............................................................
-4. ............................................................
-Table 1
-Animals are divided into six basic groups which include invertebrates, fishes, amphibians,
-reptiles, birds and mammals.
-SCERT TELANGANA32
-32
-WHAT DO ANIMALS EAT ? Free Distribution by Govt. of T.S. 2020-21
-We have seen that all animals depend on different types of  food. Now let us do
-the above exercise in a slightly different manner. Add your own examples in the
-last column of table 2.
-Table 2
+  8. Hybrid Score: 0.2709
+     Chapter: CHANGES AROUND US
+     Text: and  chemical changes. In physical changes no
+new substance is formed whereas in chemical
+change we have seen that one or more new
+substances are formed.
+Identifying physical and chemical change
+Have you ever thought of the process behind
+setting milk into curd?  Is it a physical change
+or chemical change ?
+What type of  change is the boiling of  an egg?
+Is it a chemical change or a physical change?
+Think about the following changes and
+decide whether they are physical or
+chemical changes. Write the type of change
+and reasons for that in the  table.
+Everyday we use many types of batteries and
+many of these batteries are recharged
+Table - 5
+SCERT, TELANGANAChanges Around Us166
+regularly.  Can you identify the types of  change
+taking place in this process?
+We use Turmeric with Limewater (Calcium
+Hydroxide) to decorate the feet (Parani)
+during some  occasions at our homes. What
+type of change is this? Think about  the
+reasons why chewing of  Pan (Killi) turns our
+mouth red.
 
-  5. Hybrid Score: 0.2361
-     Chapter: WHAT DO ANIMALS EAT?
-     Text: see how animals eat their food.
-Activity-1: Taking in food
-You can see many animals in your
-surroundings. Discuss about them with
-your friends. Make a list of  what they
-usually eat and what they usually do to
-find their food. Do not be in a hurry to
-complete this table. Keep adding to this
-list as you observe animals around you
-everyday. But don’t forget to observe
-animals wherever you go.
-Fig. 1 (a)
-Fig. 1 (b)
-The first animals evolved about 600 million years ago during the late Precambrian.
-SCERT TELANGANA31
-Science VI Class
-S. No. Animal/Bird What they How they find food
-eat/ drink
-1 Sparrow Worms, gr ains, ... Looking, seeing, ...
-2 Dog Bones, bread Sniffing
-3
-4
-5
-6
-7
-8
-9
-10
-• Which of  the animals, listed by
-you, eat nearly the same type of
-food?
-• What are the types of food that
-your pet animals eat?
-• Write about any two animals in
-your list, describing the type of
-food they eat and how they get
-their food?
-• Compare the types of food
-habits of two animals selected by
-you.
+  9. Hybrid Score: 0.2475
+     Chapter: ACIDS AND BASES
+     Text: Cool Drinks
+SCERT, TELANGANAVII Science 17Free Distribution by Govt. of T.S. 2021-22
+Key words:-
+Indicator, Acid, Base, Red litmus, Blue
+litmus, Acidic substance, Basic Substance,
+Neutral Substance, Salts, Neutralization,
+Acid rain.
+What we have learnt
+• Indicator helps us to find whether the
+solution is acidic or basic or neutral.
+• Red litmus paper, blue litmus paper,
+phenolphthalein, methyl orange  are
+indicators.
+• Hibiscus, turmeric and rose petals are
+natural indicators.
+• The substances that turn blue litmus to
+red are acidic in nature.
+• The substances that are soapy to touch
+and turn red litmus to blue are basic in
+nature.
+• Acid rains are the combination of
+Carbonic acid, sulphuric acid and Nitric
+acid with rain water.
+• All substances whose solutions are
+neutral are not salts. For eg. sugar and
+starch solutions are  neutral, but they are
+not salts.
+• In the process of Neutralization, both
+the acidic and basic qualities are
+neutralised.
 
-  6. Hybrid Score: 0.2351
-     Chapter: OUR FOOD
-     Text: Mustard (Avalu)
-Sugarcane
-Carrot
-Onion
-Cabbage
-Asafoetida (Inguva)
-Peanuts contain beneficial protien, but many people are allergic to them and find
-them hard to digest.
-SCERT TELANGANA6
-OUR FOOD Free Distribution by Govt. of T.S. 2020-21
-• Which parts of the plants do we
-generally use?
-• Do we also use flowers as food?
-Which plants are these?
-• Is there any plant of which whole
-parts of it can be eaten?
-We use various parts of  plants for our
-food. Leaves, roots, seeds and fruits of
-plants are widely used whereas stems
-and flowers are not so widely used. We
-need several ingredients to cook
-different types of food. Whatever may
-be the source of  ingredients - plants,
-animals or minerals, we use some in
-plenty but others are needed in only
-small quantities. Why is it so?
-How people develop food habits?
-People living in one region usually
-share common food habits. You
-might have seen paddy fields near
-your village. In our state geographical
-and climatic conditions are more
-
-  7. Hybrid Score: 0.2306
-     Chapter: OUR FOOD
-     Text: 12. Find out from your parents the
-various methods of  preserving
-food and write a note on them.
-13. Collect information about the
-main food habits of different
-states of  India. Refer to the Atlas,
-library books and discuss with
-your teacher.
-Cakes and cookies contain too much sugar and not enough vitamins and minerals
-SCERT TELANGANA11
-Science VI Class
-14. Suppose if  fish / raw mango / lemons are given to you how would you
-preserve them?
-15. Make a list of animals and insects from which we get food.
-(a) Write the names of these animals on slips of paper. On the other side
-of the slip write the names of food we get from the animals - milk, eggs
-or meat.
-(b) Sort the slips into groups. Write the names of the animals in the correct
-portions of the circles shown below.
-(c) Are there any portions where none of the animals fit? Explain why?
-* * * *
-Oranges are more fibrous. So take oranges for the source of fibrefood.
-milk
-giving
-meat
-giving
-egg
-giving
-SCERT TELANGANA
-
-  8. Hybrid Score: 0.2245
-     Chapter: OUR FOOD
-     Text: SCERT TELANGANA10
-OUR FOOD Free Distribution by Govt. of T.S. 2020-21
-4. Collect any wrapper of
-packaged food. Read the
-information details and answer
-the following questions.
-(a) Name of the food item
-(b) Price of the food item
-(c) When was it manufactured
-(d) How long can we use it?
-(e) What ingredients does it
-contain, name them?
-5 Shahina's mother always cooks
-plain rice! If the same rice is
-used to make kichidi, payasam
-or biryani how would you feel
-eating those?
-6 List out the names of some
-plants that grow in your village.
-Which parts of it are used as
-food?
-7. Some food material is given
-below. What are the diffrent
-possible ways of cooking them?
-Find out and write them.
-Meat - Groundnuts - Potatoes -
-Spinach
-8. With the help of your teacher
-form  groups of  5 or 6 students
-of  your class. Make a fruit chat
-or vegetable salad and eat it.
-How do you feel? Write few lines
-about your experience.
-9. Ask your friend to think of the
-name of any food item. Now
-
-  9. Hybrid Score: 0.2235
-     Chapter: WHAT DO ANIMALS EAT?
-     Text: 34
-WHAT DO ANIMALS EAT ? Free Distribution by Govt. of T.S. 2020-21
-Activity-2
-In the list given in table 3, write the bodyparts of animals that are used to collect or
-capture food.
-Table 3
-S. No. Animal Bod ypart used in taking food
-1. Hen Beak, ...
-2. Cow
-3. Dog
-4. Frog
-5. Snake
-6. Man
-7. Lizard
-8. Vulture
-9. Lion Legs, claws, mouth, ...
-10. Humming bird
-Look at table 3 and answer :
-• Which animals use  similar parts
-in taking food?
-• Compare the parts of dog to that
-of hen. Note down the similarities
-as well as differences observed by
-you.
-• Compare the parts of hen and
-humming bird in taking in food.
-Note down the similarities as well
-as differences observed by you.
-• What are the similarities between
-a dog and a lion in the parts
-involved in taking food?
-• What are the similarities and
-differences between a vulture and
-a lion in their mode of taking in
-food?
-• You may also add any other
-observations you may have made.
-You will see that the same part may be
-
-  10. Hybrid Score: 0.2189
-     Chapter: OUR FOOD
-     Text: Try to enrich this list as much as you
-can. You will find that from animals we
-get milk, eggs and meat. If  you observe
-carefully you will notice that there are  a
-number of animals from which we get
-different kinds of food. Goats and
-sheep give us meat. Hens and roosters
-are used as meat (chicken). Can you
-elaborate this list?  In plants we eat
-different parts, like leaf  of  spinach and
-coriander plants, flower of  cauliflower
-plant, fruit of  tomato and drumstick
-plants. You may be having some doubt
-about the salt. It is a mineral and
-obtained from the sea. In later classes
-you will learn about the components of
-food. Can you identify which part of
-the plant is eaten by us in the given
-table? You can also discuss with your
-friends (Fig.-3).
-* We get varieties of  food material
-from plants
-* In some plants we eat only some
-parts as food.
-* We take entire plant as food.
-Beet roots are high in carbohydrate levels and should therefore be used sparingly
-SCERT TELANGANA5
-Science VI Class
+  10. Hybrid Score: 0.2398
+     Chapter: CHANGES AROUND US
+     Text: the type of crystals formed by urea and Alum.
+SCERT, TELANGANA165VII Science Free Distribution by Govt. of T.S. 2021-22
+Let us do-12: Observing Crystallisation of
+Copper Sulphate.
+Take some hot, saturated solution of  Copper
+sulphate in a test tube.  Pour some of  it in an
+evaporating dish. Allow the solution to cool
+quickly.
+Observe with a magnifying glass, the size,
+colour and shape of  the crystals formed.
+From the above three activities we notice that
+we can separate dissolved substances in the
+form of  crystals.
+The process of separating a soluble
+solid from the solution by heating  or
+evaporating the solvent is called
+crystallization.
+What type of change is this? In
+crystallization no new substance is formed.
+Hence it is physical change.
+Till now we have discussed about some physical
+and  chemical changes. In physical changes no
+new substance is formed whereas in chemical
+change we have seen that one or more new
+substances are formed.
+Identifying physical and chemical change
 
 
 --- Semantic Search Results (10 Chunks) ---
 
-  1. Score: 0.5286 | Chapter: WHAT DO ANIMALS EAT? | Text: SCERT TELANGANA41
-Science VI Class
-• Sucking, licking, picking,
-chewing, peeling, swallowing are
-all the ways by which animals take
-in their food .
-• Beaks of birds differ from one
-another depending upon the
-type of food they eat.
-• Most wild animals that eat
-other animals have sharp teeth.
-• Animals are divided into three
-types on the basis of their food.
-They are carnivores, herbivores,
-omnivores.
-• Food chain is the connection
-between animals on the basis of
-their food habits.
-• Food chain explains the
-interdependence of diverse
-organisms in nature.
+  1. Score: 0.5392 | Chapter: ACIDS AND BASES | Text: Apart from natural acids, there are certain acids
+like Hydrochloric acid, Sulphuric acid and
+Nitric acid etc. that are prepared from
+minerals.
+Basic Nature:-
+How do you feel when you touch a cake of
+soap? Take it between your fingers and gently
+rub your fingers on it? Do the same with the
+other material. What difference do you
+notice?
+• You might have touched soap water or
+lime water. How do you feel?
+• Can you list out some more substances
+that are soapy to touch?
+The substances which are soapy to touch are
+basic in nature.
+Some substances that we use
+in our daily life, contain
+different bases. For example
+soap, glass cleaners etc.
+Various substances
+containing bases are listed in the below table.
+TABLE - 6
+TABLE - 6
+Let us do - 5
+Burn a small piece of
+Magnesium ribbon by
+holding it with tongs. Collect the white ash and
+dissolve it in a little water.  Touch the solutions
+formed and test this solution with blue litmus
+and red litmus.
+TABLE - 5
+cheese
+Butter Milk, Curd
+
+  2. Score: 0.5065 | Chapter: ACIDS AND BASES | Text: following categories from the above
+observations.
+TABLE 4
+SCERT, TELANGANAAcids and Bases12
+• Now take things which are sour in taste
+and used as food e.g. curd, lemon juice
+etc. Check with blue and red litmus, what
+happens?
+Indicators:
+The strips of litmus paper change the colour,
+based on the nature of the material put on
+them. These are all indicators. They tell us
+whether a substance is acidic or basic. They
+are used in studying acidic and basic properties
+of  substances.
+Acidic Nature:-
+You may have experienced a burning sensation
+when bitten by an ant. The sensation is due to
+the presence of  formic acid that the ant
+releases. The acids present in plants and
+animals are called as natural acids.
+The substances that contain different acids. are
+given in the table 5.
+Apart from natural acids, there are certain acids
+like Hydrochloric acid, Sulphuric acid and
+Nitric acid etc. that are prepared from
+minerals.
+Basic Nature:-
+How do you feel when you touch a cake of
+
+  3. Score: 0.4897 | Chapter: ACIDS AND BASES | Text: ———————————
+———————————
+———————————
+———————————
+• Do you find any difference in the taste
+of  a raw and a ripe fruit?
+TABLE - 1
+• Do substances change their taste when
+cooked?
+• Do substances change their taste when
+added to some other substances?
+• Add salt to lemon juice. How do the two
+together  taste now?
+• Add sugar to lemon juice what change
+do you notice in the taste?
+• Is there any difference in the taste in the
+above situations.
+2 ACIDS AND BASES
+SCERT, TELANGANAAcids and Bases10
+• Do substances change colour when
+added to other substances?
+• Do you observed any change when lime
+water is added to turmeric?
+Let us do - 1
+Take some turmeric powder. Add a bit of
+water to it and prepare turmeric paste. Rub
+the turmeric paste on a white paper dry it for
+some time. Then draw a flower daigram on
+that paper with a pencil. Colour the flower
+with soap water using a brush.
+• Does the colour of the flower remain the
+same when soap water is used?
+Similarly take some lime water. Add a few
+
+  4. Score: 0.4881 | Chapter: ACIDS AND BASES | Text: neutral are not salts. For eg. sugar and
+starch solutions are  neutral, but they are
+not salts.
+• In the process of Neutralization, both
+the acidic and basic qualities are
+neutralised.
+• Salts need not always be neutral, they can
+be acidic or basic.
 Improve your learning
-1. Name some animals in your
-house which have the same kind
-of food habit.
-2. Observe your  surroundings or
-go to a nearby field and write
-about the following :
-(a) How does the cow eat grass?
-(b) What parts are used while
-doing so?
-(c) In what way can you justify it
-as a herbivore?
-3. Compare the legs and nails of a
-dog and hen and say why they
-are different.
-4. Go to a nearby pond where cranes
+1. The sting of a wasp is
+basic. How can we treat
+the sting of a wasp?
+2. Why are acids not stored
+in a metal container?
+3. Acidic, basic and neutral solutions are
+given in three test tubes and you are given
+a strip of red litmus? How will you
+identify the three solutions?
+4. When drops of lemon juice are put on
+blue litmus it turns red what will happen
+if you put some drops of soap solution
+on the same position on litmus paper?
+5. What happens when Nitric acid is added
+to egg shell?
+6. Turmeric stains on white clothes, when
+washed with soap, turn red. Why?
+7. Ammonia is present in window cleaners.
+It turns red litmus blue. What is its
+nature?
+8. What is the nature of urea? Is it acidic,
 
-  2. Score: 0.5268 | Chapter: OUR FOOD | Text: food items and name them.
-Fig. 1 : Variety of  food
-Banana contains potassium which is useful for us.
-1 2 3
-4 5 6
-7 8 9
-SCERT TELANGANA2
-OUR FOOD Free Distribution by Govt. of T.S. 2020-21
- Activity-1:  Finding variety in our
-food
-Every day we eat different types of  food
-from morning to night. What did you
-eat yesterday? Make a list. Also discuss
-with your friends and collect
-information about what food they had
-eaten yesterday.
-Record the inf ormation in table 1.
-Table 1 - What did I eat
-Name  of student Food eaten
-Ashok Rice, Dal, Milk, Vegetables, Jam, Idly, Bread
-Neelam Biry ani, Chilli Chatni, Roti
-• Are there any common food items
-in the list of yours and your friends'?
-• Count the number of food
-varieties you have listed in the
-table?
-• Do all the students eat the same
-type of food items?
-• What food is served in your
-school at midday meal?
-We eat different types of  food material
-daily but some food items like rice, dal
-and vegetables are common in the daily
+  5. Score: 0.4605 | Chapter: CHANGES AROUND US | Text: and  chemical changes. In physical changes no
+new substance is formed whereas in chemical
+change we have seen that one or more new
+substances are formed.
+Identifying physical and chemical change
+Have you ever thought of the process behind
+setting milk into curd?  Is it a physical change
+or chemical change ?
+What type of  change is the boiling of  an egg?
+Is it a chemical change or a physical change?
+Think about the following changes and
+decide whether they are physical or
+chemical changes. Write the type of change
+and reasons for that in the  table.
+Everyday we use many types of batteries and
+many of these batteries are recharged
+Table - 5
+SCERT, TELANGANAChanges Around Us166
+regularly.  Can you identify the types of  change
+taking place in this process?
+We use Turmeric with Limewater (Calcium
+Hydroxide) to decorate the feet (Parani)
+during some  occasions at our homes. What
+type of change is this? Think about  the
+reasons why chewing of  Pan (Killi) turns our
+mouth red.
 
-  3. Score: 0.4960 | Chapter: WHAT DO ANIMALS EAT? | Text: your pet animals eat?
-• Write about any two animals in
-your list, describing the type of
-food they eat and how they get
-their food?
-• Compare the types of food
-habits of two animals selected by
-you.
-• Regarding the types of food
-eaten by animals, what major
-groups can be made? Discuss
-with your friends and write. You
-could write like this :
-1. Some animals depend only on
-plants for food.
-2. ............................................................
-3. ............................................................
-4. ............................................................
-Table 1
-Animals are divided into six basic groups which include invertebrates, fishes, amphibians,
-reptiles, birds and mammals.
-SCERT TELANGANA32
-32
-WHAT DO ANIMALS EAT ? Free Distribution by Govt. of T.S. 2020-21
-We have seen that all animals depend on different types of  food. Now let us do
-the above exercise in a slightly different manner. Add your own examples in the
-last column of table 2.
-Table 2
+  6. Score: 0.4479 | Chapter: ACIDS AND BASES | Text: explain how would you convert an acidic
+solution into basic solution?
+If you are given a basic solution how can you
+turn it into an acidic solution?
+In the above experiment you might have
+noticed that if we add excess base (caustic
+soda) to acidic solution (Hydrochloric acid)
+it gets converted into a base; similarly we
+can change  a base into an acid by adding the
+acid in excess.
+If you are given a solution of Hydrochloric
+acid how can you make it into a solution which
+is neither acidic nor basic?
+If you are given a caustic soda solution, how
+can you make it into a solution which is neither
+acidic nor basic?
+When acids and bases are mixed in equal
+concentrations they give a neutral
+solution. We learn more about
+neutralization in higher classes.
+Manures:-
+In recent years the use of chemical fertilizers
+has increased. Though the use of chemical
+fertilizers increases the production of  crops,
+it changes the nature of the soil. Some
+fertilizers increase the acidity of the soil and
 
-  4. Score: 0.4919 | Chapter: WHAT DO ANIMALS EAT? | Text: see how animals eat their food.
-Activity-1: Taking in food
-You can see many animals in your
-surroundings. Discuss about them with
-your friends. Make a list of  what they
-usually eat and what they usually do to
-find their food. Do not be in a hurry to
-complete this table. Keep adding to this
-list as you observe animals around you
-everyday. But don’t forget to observe
-animals wherever you go.
-Fig. 1 (a)
-Fig. 1 (b)
-The first animals evolved about 600 million years ago during the late Precambrian.
-SCERT TELANGANA31
-Science VI Class
-S. No. Animal/Bird What they How they find food
-eat/ drink
-1 Sparrow Worms, gr ains, ... Looking, seeing, ...
-2 Dog Bones, bread Sniffing
-3
-4
-5
-6
-7
-8
-9
-10
-• Which of  the animals, listed by
-you, eat nearly the same type of
-food?
-• What are the types of food that
-your pet animals eat?
-• Write about any two animals in
-your list, describing the type of
-food they eat and how they get
-their food?
-• Compare the types of food
-habits of two animals selected by
-you.
+  7. Score: 0.4281 | Chapter: ACIDS AND BASES | Text: neutral but they are not salts.
+Let us do - 9
+Test the following salt substances with red
+litmus and blue litmus papers. Record your
+observations in the table.
+TABLE - 8
+Let us do - 10: Classifying salts
+Collect some salt substances with the help
+of your teacher, make their salt solutions.
+Test the salt solutions with blue litmus and
+red litmus papers. Classify these salts as per
+your observations in the given table.
+TABLE - 9
+Why is our sweat  salty ?
+Our body needs many types of salts.  We
+lose some salts through excretion. So sweat
+is salty.
+Do you know?
+Uses of  some acids, bases and salts
+Salts which change blue litmus to red are
+acidic salts and  salts which change red
+litmus to blue are basic salts.  Some salts
+affect neither blue nor red litmus papers.
+These are called neutral salts. TABLE - 10
+Cool Drinks
+SCERT, TELANGANAVII Science 17Free Distribution by Govt. of T.S. 2021-22
+Key words:-
+Indicator, Acid, Base, Red litmus, Blue
+litmus, Acidic substance, Basic Substance,
 
-  5. Score: 0.4898 | Chapter: OUR FOOD | Text: Mustard (Avalu)
-Sugarcane
-Carrot
-Onion
-Cabbage
-Asafoetida (Inguva)
-Peanuts contain beneficial protien, but many people are allergic to them and find
-them hard to digest.
-SCERT TELANGANA6
-OUR FOOD Free Distribution by Govt. of T.S. 2020-21
-• Which parts of the plants do we
-generally use?
-• Do we also use flowers as food?
-Which plants are these?
-• Is there any plant of which whole
-parts of it can be eaten?
-We use various parts of  plants for our
-food. Leaves, roots, seeds and fruits of
-plants are widely used whereas stems
-and flowers are not so widely used. We
-need several ingredients to cook
-different types of food. Whatever may
-be the source of  ingredients - plants,
-animals or minerals, we use some in
-plenty but others are needed in only
-small quantities. Why is it so?
-How people develop food habits?
-People living in one region usually
-share common food habits. You
-might have seen paddy fields near
-your village. In our state geographical
-and climatic conditions are more
+  8. Score: 0.4268 | Chapter: ACIDS AND BASES | Text: Cool Drinks
+SCERT, TELANGANAVII Science 17Free Distribution by Govt. of T.S. 2021-22
+Key words:-
+Indicator, Acid, Base, Red litmus, Blue
+litmus, Acidic substance, Basic Substance,
+Neutral Substance, Salts, Neutralization,
+Acid rain.
+What we have learnt
+• Indicator helps us to find whether the
+solution is acidic or basic or neutral.
+• Red litmus paper, blue litmus paper,
+phenolphthalein, methyl orange  are
+indicators.
+• Hibiscus, turmeric and rose petals are
+natural indicators.
+• The substances that turn blue litmus to
+red are acidic in nature.
+• The substances that are soapy to touch
+and turn red litmus to blue are basic in
+nature.
+• Acid rains are the combination of
+Carbonic acid, sulphuric acid and Nitric
+acid with rain water.
+• All substances whose solutions are
+neutral are not salts. For eg. sugar and
+starch solutions are  neutral, but they are
+not salts.
+• In the process of Neutralization, both
+the acidic and basic qualities are
+neutralised.
 
-  6. Score: 0.4805 | Chapter: OUR FOOD | Text: 12. Find out from your parents the
-various methods of  preserving
-food and write a note on them.
-13. Collect information about the
-main food habits of different
-states of  India. Refer to the Atlas,
-library books and discuss with
-your teacher.
-Cakes and cookies contain too much sugar and not enough vitamins and minerals
-SCERT TELANGANA11
-Science VI Class
-14. Suppose if  fish / raw mango / lemons are given to you how would you
-preserve them?
-15. Make a list of animals and insects from which we get food.
-(a) Write the names of these animals on slips of paper. On the other side
-of the slip write the names of food we get from the animals - milk, eggs
-or meat.
-(b) Sort the slips into groups. Write the names of the animals in the correct
-portions of the circles shown below.
-(c) Are there any portions where none of the animals fit? Explain why?
-* * * *
-Oranges are more fibrous. So take oranges for the source of fibrefood.
-milk
-giving
-meat
-giving
-egg
-giving
-SCERT TELANGANA
+  9. Score: 0.4134 | Chapter: CHANGES AROUND US | Text: the type of crystals formed by urea and Alum.
+SCERT, TELANGANA165VII Science Free Distribution by Govt. of T.S. 2021-22
+Let us do-12: Observing Crystallisation of
+Copper Sulphate.
+Take some hot, saturated solution of  Copper
+sulphate in a test tube.  Pour some of  it in an
+evaporating dish. Allow the solution to cool
+quickly.
+Observe with a magnifying glass, the size,
+colour and shape of  the crystals formed.
+From the above three activities we notice that
+we can separate dissolved substances in the
+form of  crystals.
+The process of separating a soluble
+solid from the solution by heating  or
+evaporating the solvent is called
+crystallization.
+What type of change is this? In
+crystallization no new substance is formed.
+Hence it is physical change.
+Till now we have discussed about some physical
+and  chemical changes. In physical changes no
+new substance is formed whereas in chemical
+change we have seen that one or more new
+substances are formed.
+Identifying physical and chemical change
 
-  7. Score: 0.4676 | Chapter: OUR FOOD | Text: SCERT TELANGANA10
-OUR FOOD Free Distribution by Govt. of T.S. 2020-21
-4. Collect any wrapper of
-packaged food. Read the
-information details and answer
-the following questions.
-(a) Name of the food item
-(b) Price of the food item
-(c) When was it manufactured
-(d) How long can we use it?
-(e) What ingredients does it
-contain, name them?
-5 Shahina's mother always cooks
-plain rice! If the same rice is
-used to make kichidi, payasam
-or biryani how would you feel
-eating those?
-6 List out the names of some
-plants that grow in your village.
-Which parts of it are used as
-food?
-7. Some food material is given
-below. What are the diffrent
-possible ways of cooking them?
-Find out and write them.
-Meat - Groundnuts - Potatoes -
-Spinach
-8. With the help of your teacher
-form  groups of  5 or 6 students
-of  your class. Make a fruit chat
-or vegetable salad and eat it.
-How do you feel? Write few lines
-about your experience.
-9. Ask your friend to think of the
-name of any food item. Now
-
-  8. Score: 0.4657 | Chapter: WHAT DO ANIMALS EAT? | Text: 34
-WHAT DO ANIMALS EAT ? Free Distribution by Govt. of T.S. 2020-21
-Activity-2
-In the list given in table 3, write the bodyparts of animals that are used to collect or
-capture food.
-Table 3
-S. No. Animal Bod ypart used in taking food
-1. Hen Beak, ...
-2. Cow
-3. Dog
-4. Frog
-5. Snake
-6. Man
-7. Lizard
-8. Vulture
-9. Lion Legs, claws, mouth, ...
-10. Humming bird
-Look at table 3 and answer :
-• Which animals use  similar parts
-in taking food?
-• Compare the parts of dog to that
-of hen. Note down the similarities
-as well as differences observed by
-you.
-• Compare the parts of hen and
-humming bird in taking in food.
-Note down the similarities as well
-as differences observed by you.
-• What are the similarities between
-a dog and a lion in the parts
-involved in taking food?
-• What are the similarities and
-differences between a vulture and
-a lion in their mode of taking in
-food?
-• You may also add any other
-observations you may have made.
-You will see that the same part may be
-
-  9. Score: 0.4561 | Chapter: OUR FOOD | Text: Try to enrich this list as much as you
-can. You will find that from animals we
-get milk, eggs and meat. If  you observe
-carefully you will notice that there are  a
-number of animals from which we get
-different kinds of food. Goats and
-sheep give us meat. Hens and roosters
-are used as meat (chicken). Can you
-elaborate this list?  In plants we eat
-different parts, like leaf  of  spinach and
-coriander plants, flower of  cauliflower
-plant, fruit of  tomato and drumstick
-plants. You may be having some doubt
-about the salt. It is a mineral and
-obtained from the sea. In later classes
-you will learn about the components of
-food. Can you identify which part of
-the plant is eaten by us in the given
-table? You can also discuss with your
-friends (Fig.-3).
-* We get varieties of  food material
-from plants
-* In some plants we eat only some
-parts as food.
-* We take entire plant as food.
-Beet roots are high in carbohydrate levels and should therefore be used sparingly
-SCERT TELANGANA5
-Science VI Class
-
-  10. Score: 0.4550 | Chapter: OUR FOOD | Text: • We get food from plants and
-animals.
-   • For cooking food, we need
-different types of  ingredients.
-   • We use different parts of  plants
-like stems, roots, leaves, fruits and
-flowers as food.
-   • The taste of food is based on its
-ingredients, method of
-preparation and cultural practices
-of the region.
-   • Boiling, steaming, fermentation
-are some methods of preparing
-food.
-   • We use preservatives to preserve
-food for some time.
-Improve your learning
-1. What are the common food
-items usually eaten by you?
-2. Find out the ingredients of the
-given food items:
-Pachipulusu, coconut chutney,
-jilebi, onion pakodi
-3. Write down the process of
-making upma or any other snack
-of your choice.
-Tomatoes are rich in Carotenoid and Lycopene; eating foods containing
-Carotenoids can lower the risk of  cancer.
-SCERT TELANGANA10
-OUR FOOD Free Distribution by Govt. of T.S. 2020-21
-4. Collect any wrapper of
-packaged food. Read the
-information details and answer
-the following questions.
+  10. Score: 0.4098 | Chapter: CHANGES AROUND US | Text: Hydroxide) to decorate the feet (Parani)
+during some  occasions at our homes. What
+type of change is this? Think about  the
+reasons why chewing of  Pan (Killi) turns our
+mouth red.
+Look at the picture and circle all the Physical
+and Chemical changes. Write them in the table
+given below:
+Fig. 10
+Table - 6
+What we have learnt?
+• In a physical change generally no new
+substance is formed.
+• When a substance undergoes a change in
+its composition, it is called a chemical
+change.
+• In a chemical change new substance is
+formed.
+• A chemical change is also called chemical
+reaction.
+• In any change heat, light, radiation or
+sounds may also be produced.
+• In a change new colour or smell may
+appear.
+• The process of separating a soluble solid
+from the solution on heating is called
+Crystallization.
+• The process of depositing zinc on any
+metal is called Galvanisation
+Key words:
+Chemical Change, Reversible, Irreve-
+rsible, Rust, Physical Change, Composi-
+tion, Vinegar, Baking Soda, Lime Water,
 
 
 --- BM25 Keyword Search Results (10 Chunks) ---
 
-  1. Normalized Score: 1.0000 | Chapter: OUR FOOD | Text: People living in one region usually
-share common food habits. You
-might have seen paddy fields near
-your village. In our state geographical
-and climatic conditions are more
-suitable for growing paddy so we
-produce more rice. In which districts
-of our State is paddy grown widely?
-Even though farmers grow various
-types of food crops we generally use
-rice as staple food. A variety of food
-items are prepared using rice. A number
-of food items are made using rice in
-the form of Rava and flour. Make a list
-of those items. We eat more rice and
-rice products as compared to other
-cereals like wheat or maize. But in
-Rajasthan maize, bajra and wheat is
-produced more than rice. So the main
-food in Rajasthan is chapathi or roti.
-Many times we hear people saying that
-"I like this curry ". "I don't like that".
-This is not a good food  habit ,you
-should  make a habit of eating all
-varieties of vegetable food items. This
-makes you strong and energetic.
-Different methods of preparing food
+  1. Normalized Score: 1.0000 | Chapter: ACIDS AND BASES | Text: neutral but they are not salts.
+Let us do - 9
+Test the following salt substances with red
+litmus and blue litmus papers. Record your
+observations in the table.
+TABLE - 8
+Let us do - 10: Classifying salts
+Collect some salt substances with the help
+of your teacher, make their salt solutions.
+Test the salt solutions with blue litmus and
+red litmus papers. Classify these salts as per
+your observations in the given table.
+TABLE - 9
+Why is our sweat  salty ?
+Our body needs many types of salts.  We
+lose some salts through excretion. So sweat
+is salty.
+Do you know?
+Uses of  some acids, bases and salts
+Salts which change blue litmus to red are
+acidic salts and  salts which change red
+litmus to blue are basic salts.  Some salts
+affect neither blue nor red litmus papers.
+These are called neutral salts. TABLE - 10
+Cool Drinks
+SCERT, TELANGANAVII Science 17Free Distribution by Govt. of T.S. 2021-22
+Key words:-
+Indicator, Acid, Base, Red litmus, Blue
+litmus, Acidic substance, Basic Substance,
 
-  2. Normalized Score: 0.7606 | Chapter: OUR FOOD | Text: food items and name them.
-Fig. 1 : Variety of  food
-Banana contains potassium which is useful for us.
-1 2 3
-4 5 6
-7 8 9
-SCERT TELANGANA2
-OUR FOOD Free Distribution by Govt. of T.S. 2020-21
- Activity-1:  Finding variety in our
-food
-Every day we eat different types of  food
-from morning to night. What did you
-eat yesterday? Make a list. Also discuss
-with your friends and collect
-information about what food they had
-eaten yesterday.
-Record the inf ormation in table 1.
-Table 1 - What did I eat
-Name  of student Food eaten
-Ashok Rice, Dal, Milk, Vegetables, Jam, Idly, Bread
-Neelam Biry ani, Chilli Chatni, Roti
-• Are there any common food items
-in the list of yours and your friends'?
-• Count the number of food
-varieties you have listed in the
-table?
-• Do all the students eat the same
-type of food items?
-• What food is served in your
-school at midday meal?
-We eat different types of  food material
-daily but some food items like rice, dal
-and vegetables are common in the daily
+  2. Normalized Score: 0.9151 | Chapter: ACIDS AND BASES | Text: What do you observe?
+Bring a burning match stick near the test
+tube.
+What happens? The flame extinguishes.
+Pass the gas into lime water. What happens?
+Can you see the formation of  precipitation?
+Lime water turned milky white.
+Is it Carbon dioxide?
+Now try to write the properties of  acids and
+bases from your observations in the above
+experiments.
+We have seen that neutral solutions have no
+effect on indicators. We have also seen that
+acids and bases have different effects on
+indicators. When is the solution made by
+mixing of an acid and a base, be a neutral?
+SCERT, TELANGANAVII Science 15Free Distribution by Govt. of T.S. 2021-22
+Let us do - 8
+Take a clean test tube. Using a clean dropper
+put 10 drops of dilute Hydrochloric acid
+carefully in it and also add 2 drops of
+phenolphthalein indicator solution.
+What is the colour of the resulting solution?
+Now add Caustic soda solution
+(Whose concentration is equal to
+Hydrochloric acid) drop by drop
+to the test tube.
 
-  3. Normalized Score: 0.4005 | Chapter: OUR FOOD | Text: type of food items?
-• What food is served in your
-school at midday meal?
-We eat different types of  food material
-daily but some food items like rice, dal
-and vegetables are common in the daily
-menu in large parts of  Telangana. On
-special occasions we eat a larger variety
-of food.
-Food ingredients
-Activity-2:  Many things are needed to
-prepare food
-Srinivas wants to eat something special
-on Sunday. He asked his mother to make
-biryani. Srinivas wanted to help his
-mother. His mother asked him to
-prepare a list of materials which would
-be required to make biryani. Here is the
-list made by Srinivas - rice, salt, jeera,
-tomato, potato, onion, etc. Help Srinivas
-if he had missed any material and
-complete the list.
-Srinivas was surprised that while cooking
-boiled rice we need only two materials,
-Don’t eat bananas on an empty stomach; combining them with a bit of protein will
-help to normalize the insulin response caused by the sugar in the banana.
-SCERT TELANGANA3
-Science VI Class
+  3. Normalized Score: 0.7068 | Chapter: ACIDS AND BASES | Text: explain how would you convert an acidic
+solution into basic solution?
+If you are given a basic solution how can you
+turn it into an acidic solution?
+In the above experiment you might have
+noticed that if we add excess base (caustic
+soda) to acidic solution (Hydrochloric acid)
+it gets converted into a base; similarly we
+can change  a base into an acid by adding the
+acid in excess.
+If you are given a solution of Hydrochloric
+acid how can you make it into a solution which
+is neither acidic nor basic?
+If you are given a caustic soda solution, how
+can you make it into a solution which is neither
+acidic nor basic?
+When acids and bases are mixed in equal
+concentrations they give a neutral
+solution. We learn more about
+neutralization in higher classes.
+Manures:-
+In recent years the use of chemical fertilizers
+has increased. Though the use of chemical
+fertilizers increases the production of  crops,
+it changes the nature of the soil. Some
+fertilizers increase the acidity of the soil and
 
-  4. Normalized Score: 0.2468 | Chapter: WHAT DO ANIMALS EAT? | Text: hunting.
-(e) Most of the food chains end
-with herbivorous animals.
-14. If you want to understand more
-about food chain what questions
-would you like to ask?
-15. Write a play with dialogues
-between a parrot and a lion about
-their food habits and organs they
-use to get food. Act it with your
-friends. Send it to school/
-district childrens magzine.
-16. Identify the given animal :
-• What does it eat?
-• Which part of the body helps
-it in eating?
-Every creature is better alive than dead, men and
-mouse and mango tree, and he who understands it
-alright will rather preserve it’ s life than destroy it.
-....... Saleem Ali
-A rat can last longer without water than a camel can.
-SCERT TELANGANA
+  4. Normalized Score: 0.3685 | Chapter: ACIDS AND BASES | Text: Banamathi) and decieve the people. Now you
+can also do this!
+• What can you conclude from the above
+data? Keep in mind that some substances
+are acidic, some are basic and some are
+neutral.
+• Compare the above observations with
+those in case of litmus test.
+• Can you distinguish acids and bases using
+the indicators?
+• What would be the criteria for deciding
+this?
+SCERT, TELANGANAAcids and Bases14
+Methyl orange gives red colour with acids
+and yellow colour with bases.  Phenolphtha-
+lein remains colourless in acidic solution
+while it turns pink in basic solution.
+Let us do some more experiments
+Take a natural acid say lemon juice
+in six test tubes and add Copper,
+Zinc, Magnesium, Iron, Brass,
+Aluminium pieces to each one of
+the test tubes separately. Note
+your observations.
+Light a matchstick and introduce it into the
+test tubes.  What do you observe?
+Henry Cavendish, an Italian
+Scientist discovered  a colourless
+gas called Hydrogen Balloons
+are filled with this gas. The
 
-  5. Normalized Score: 0.2329 | Chapter: WHAT DO ANIMALS EAT? | Text: ant forces to do  work. There are
-mainly workers, soldiers, female and
-male ants.
-The workers collect and maintain
-food stock for others in the colony
-along with several other duties. Just
-as we keep cows for milk, some
-species of ants keep a type of insect
-called aphids for honeydew.
-Like us ants are good farmers as well
-they cut leaves into pieces and create a
-bed to grow a type of fungus which they
-eat!
-Think! What can we learn from ants?
-Write your opinion in your
-notebook.
-KeywordsKeywordsKeywordsKeywordsKeywords
-Food habit, food chain, sucking,
-picking, chewing, habitat, carnivore
-herbivore, omnivore, nocturnal,
-rumination
-What we have learnt
-• Different types of animals  that
-live in our surroundings  have
-their  own food habits (way of
-taking in food and type of food
-taken).
-Birds are vertebrate animals. They all have a backbone.
-SCERT TELANGANA41
-Science VI Class
-• Sucking, licking, picking,
-chewing, peeling, swallowing are
-all the ways by which animals take
-in their food .
+  5. Normalized Score: 0.1614 | Chapter: ACIDS AND BASES | Text: holding it with tongs. Collect the white ash and
+dissolve it in a little water.  Touch the solutions
+formed and test this solution with blue litmus
+and red litmus.
+TABLE - 5
+cheese
+Butter Milk, Curd
+SCERT, TELANGANAVII Science 13Free Distribution by Govt. of T.S. 2021-22
+• What do you observe?
+Oxides of Magnesium when dissolved in water
+form Magnesium Hydroxide. Similarly oxides
+of  Potassium and Sodium form Potassium
+Hydroxide and Sodium Hydroxide when
+dissolved in water.  All these are basic in nature.
+They would be soapy when touched.
+Chemical Indicators: Methyl orange and
+phenolphthalein used to test acids and bases
+are called chemical indicators.
+Let us do - 6
+Take the substances that are given in table (3)
+and test them with Phenolphthalein  and Methyl
+orange solutions. Take a small amount of  the
+substance in two test tubes. Add a few drops
+of  phenolphthalein and methyl orange to each
+test tube separately. Note the effect. Repeat
+the process for all the substances one by one.
 
-  6. Normalized Score: 0.1918 | Chapter: OUR FOOD | Text: ingredients have been listed below. Find
-out the source of each ingredient; if it
-is a plant mark (P) or an animal (A), or
-something else (O) (Table-3).
-Table 2 - Ingredients of  some food items.
-S.No. F ood items you lik e Required  ingredients
-1. Payasam
-2. Chicken curry
-3. Pallikaram
-are required to prepare food are known
-as ingredients.
-List out some food items you like to
-eat and try to find out what ingredients
-are used to prepare them (Table-2).
-SCERT TELANGANA4
-OUR FOOD Free Distribution by Govt. of T.S. 2020-21
-Name the plant or animal also. You can take the help of  your friends or elders.
-Table 3 : Who gives us food
-Ingredients Plant/Animal/Others Name of plant or animal
-Cooking Oil
-Honey
-Chips
-Turmeric powder
-Salt
-Dough
-Meat
-Rice
-Eggs
-Sugar
-Peanuts
-Try to enrich this list as much as you
-can. You will find that from animals we
-get milk, eggs and meat. If  you observe
-carefully you will notice that there are  a
-number of animals from which we get
+  6. Normalized Score: 0.1215 | Chapter: RESPIRATION IN ORGANISMS | Text: the decrease in mass was due to formation
+of an invisible substance which he named
+“gas”.
+In the year 1756, Joseph Black studied
+this gas in more detail. He found that when
+limestone is heated or reacted with acids,
+it gives rise to a gas which he called “fixed
+air”. He studied several properties of this
+gas. One of the properties was, lime water
+turned milky when this gas was passed
+through it. Now we know this gas as carbon
+dioxide.
+Discovery of  Oxygen
+After nearly two decades of  discovery of
+carbon dioxide, oxygen was discovered.
+Joseph Priestley, published his“Experiments
+and observations on different kinds of  air”
+and was the first to prove the different
+qualities of the gases released by plants
+and the one’s exhaled by animals (mice).
+He discovered that, although a candle
+burned out in a closed container, when he
+added a living sprig of mint to the container,
+the candle would continue to burn.
+At the time, Priestley did not know of
+Oxygen, but he correctly concluded that the
 
-  7. Normalized Score: 0.1152 | Chapter: OUR FOOD | Text: 1
-Science VI Class
-1 Our Food
-If any one asks you about your favourite
-food item, what will you answer? The
-list may include several things like laddu,
-biryani, idly-sambar, pulihora, cheese, dal,
-brinjal curry and so on. But if  you are
-asked about the components, their
-sources and how they have been cooked,
-then, it may be difficult for you to
-answer. Generally we take interest in
-eating food and don't bother about other
-things, like what material we need to
-prepare brinjal curry or biryani? How can
-idly be made soft? We take food for our
-health and energy, but we should also
-know the materials required for
-preparing the food we eat. This type
-of  information is very important. So,
-we will discuss about the ingredients,
-processing and sources of food in detail
-in this chapter. Observe the following
-food items and name them.
-Fig. 1 : Variety of  food
-Banana contains potassium which is useful for us.
-1 2 3
-4 5 6
-7 8 9
-SCERT TELANGANA2
-OUR FOOD Free Distribution by Govt. of T.S. 2020-21
+  7. Normalized Score: 0.0471 | Chapter: CHANGES AROUND US | Text: reduces and you sense the smell of it. It
+happens because camphor evaporates. Since
+SCERT, TELANGANAChanges Around Us164
+it has strong smell, it is used to keep  insects
+and flies away.  It is also used in medicines.
+From the  activities  discussed above  we
+conclude that, in a chemical change, material
+undergoes a change in its composition and a
+new substance is formed.
+In addition to new products the following may
+also occur in a chemical change.
+1. Heat, light or any other radiation may be
+given out or absorbed.
+2. Loud sound may be produced.
+3. A change in smell may take place or a
+new smell may be produced.
+4. A colour change may take place.
+5. A change in the state may occur.
+All chemical changes do not have the 5 traits
+mentioned above.
+Chemical changes are very important in our
+lives. Mostly, new substances are formed as a
+result of  chemical changes.
+Think about some of the chemical changes
+you observe around in your daily life.
+Can you list them?
+Crystallisation :
 
-  8. Normalized Score: 0.1100 | Chapter: WHAT DO ANIMALS EAT? | Text: of different birds are used to eat different
-types of food.
-Let us take some specific examples to
-observe how animals eat their food. The
-type of food and the ways in which an
-animal collects it, form the food habit
-of the organism.
-Let us study the food habits of birds in
-detail. How do birds eat their food?
-Look at (Fig. 4) and choose the correct
-The largest animal alive today is the blue whale.
-Eagle Sparrow Duck
-Hen
-Crow
-PigeonWood pecker
-SCERT TELANGANA36
-36
-WHAT DO ANIMALS EAT ? Free Distribution by Govt. of T.S. 2020-21
-options from  statements 1, 2 and 3
-given below.
-1. The reason for the beaks of
-different birds being different is to
-make it easy to recognize them.
-2. There is no reason for the
-difference, it just happens.
-3. The beaks are different because the
-birds eat different  kinds of food.
-Again look at Fig. 4 and try to answer :
-• Which two of the given birds
-(sparrow, duck, eagle, dove) would
-eat the same kind of food
-according to you?
+  8. Normalized Score: 0.0165 | Chapter: CHANGES AROUND US | Text: acid solution.
+e) Respiration
+f) Ripening of a Mango.
+g) Breaking of Glass.
+8. Fill in the blanks in the following
+statements
+a) The chemical name of vinegar is
+___________.
+b) Changes in which only _____________
+properties of a substance change are called
+physical changes.
+c) Changes in which new substances are
+formed are called ___________ changes.
+d) Magnesium+Oxygen
+→  _________
+e) Copper Sulphate+Iron →  _________
+9. Identify the incorrect statement.
+I) The gas we use in kitchen is in the form
+of liquid in the cylinder. When it comes
+out from the cylinder it becomes a gas
+(step – I), then it burns (step – II).
+Choose the correct statement from the
+following.
+a. Only step – I is a chemical change.
+b. Only step – II is a chemical change.
+c. Both steps – I & II are chemical changes.
+d. Both steps – I & II are physical changes.
+10. Identify the incorrect statements among
+the following and rewrite them
+correctly.
+a) Formation of manure from leaves is a
+physical change.
 
-  9. Normalized Score: 0.1047 | Chapter: OUR FOOD | Text: of  your class. Make a fruit chat
-or vegetable salad and eat it.
-How do you feel? Write few lines
-about your experience.
-9. Ask your friend to think of the
-name of any food item. Now
-you have to guess its name. For
-this you can ask some
-questions. Your friend can only
-answer Yes or No.   How many
-and what questions did you ask
-before you could guess the
-name?
-10. List out the ingredients needed
-to make vada. Are they same for
-dosa? Identify the differences in
-your list.
-11. Latha's mother has prepared the
-following statements for you.
-Find out the wrong ones among
-these, don't forget to give your
-reasons.
-(a) We can get food from plants
-and animals only.
-(b) Spices, oil, salt and meat are
-the ingredients of  a chicken curry.
-(c) Plants are the source of  honey.
-12. Find out from your parents the
-various methods of  preserving
-food and write a note on them.
-13. Collect information about the
-main food habits of different
-states of  India. Refer to the Atlas,
+  9. Normalized Score: 0.0091 | Chapter: CHANGES AROUND US | Text: and  chemical changes. In physical changes no
+new substance is formed whereas in chemical
+change we have seen that one or more new
+substances are formed.
+Identifying physical and chemical change
+Have you ever thought of the process behind
+setting milk into curd?  Is it a physical change
+or chemical change ?
+What type of  change is the boiling of  an egg?
+Is it a chemical change or a physical change?
+Think about the following changes and
+decide whether they are physical or
+chemical changes. Write the type of change
+and reasons for that in the  table.
+Everyday we use many types of batteries and
+many of these batteries are recharged
+Table - 5
+SCERT, TELANGANAChanges Around Us166
+regularly.  Can you identify the types of  change
+taking place in this process?
+We use Turmeric with Limewater (Calcium
+Hydroxide) to decorate the feet (Parani)
+during some  occasions at our homes. What
+type of change is this? Think about  the
+reasons why chewing of  Pan (Killi) turns our
+mouth red.
 
-  10. Normalized Score: 0.0000 | Chapter: OUR FOOD | Text: • We get food from plants and
-animals.
-   • For cooking food, we need
-different types of  ingredients.
-   • We use different parts of  plants
-like stems, roots, leaves, fruits and
-flowers as food.
-   • The taste of food is based on its
-ingredients, method of
-preparation and cultural practices
-of the region.
-   • Boiling, steaming, fermentation
-are some methods of preparing
-food.
-   • We use preservatives to preserve
-food for some time.
-Improve your learning
-1. What are the common food
-items usually eaten by you?
-2. Find out the ingredients of the
-given food items:
-Pachipulusu, coconut chutney,
-jilebi, onion pakodi
-3. Write down the process of
-making upma or any other snack
-of your choice.
-Tomatoes are rich in Carotenoid and Lycopene; eating foods containing
-Carotenoids can lower the risk of  cancer.
-SCERT TELANGANA10
-OUR FOOD Free Distribution by Govt. of T.S. 2020-21
-4. Collect any wrapper of
-packaged food. Read the
-information details and answer
-the following questions.
+  10. Normalized Score: 0.0000 | Chapter: CHANGES AROUND US | Text: d. Both steps – I & II are physical changes.
+10. Identify the incorrect statements among
+the following and rewrite them
+correctly.
+a) Formation of manure from leaves is a
+physical change.
+b) Iron pipes coated with Zinc don’t get
+rust.
+c) Setting of curd is a physical change.
+d) Condensation of steam is not a chemical
+change.
+e) Burning of Magnesium in air is a chemical
+change.
+II) Bacteria digest animal waste and produce
+biogas (step – I). The Biogas is then burnt
+as fuel (step – II). Choose the correct
+statement from the following.
+a. Only step – I is a chemical change.
+SCERT, TELANGANAChanges Around Us168
+b. Only step – II is a chemical change.
+c. Both steps – I & II are chemical changes.
+d. Both steps – I & II are physical changes.
+e. Step– I physical, step-II chemical change.
+III) A piece of paper was cut into four pieces.
+What type of change occurred in the
+property of the paper?
+a. Physical change       b.   Chemical change
+c. Both changes   d.   No change
 
 
 --- Generated Answer ---
-That is a wonderful question! While I, as your teacher, focus on observing and studying the food habits of people and animals, we can certainly identify the common food items that are usually eaten by students like you, based on what we have studied in our lesson on "Our Food."
+Hello there! That is a great question that gets right to the heart of understanding chemical substances. Acids, bases, and salts are three distinct types of substances we encounter frequently.
 
-We learn that people eat many different types of food throughout the day. However, when comparing the lists of what various students eat, certain items appear frequently and are considered staples.
+Here is a clear differentiation between them, based on their properties as discussed in our textbook:
 
-Here are the common food items typically eaten, according to our textbook context:
+### 1. Acids (Acidic Nature)
 
-1.  **Common Daily Items:** Although people eat different materials daily, some essential food items are very common in the everyday diet. These include:
-    *   Rice
-    *   Dal (Pulses)
-    *   Vegetables
+Acids are characterized primarily by how they react and what they are made of:
 
-2.  **Staple Food:** In our state, due to the suitable geographical and climatic conditions for growing paddy, **rice** is generally used as the staple food. This means that many common meals are based on rice or rice products (like Rava or flour items).
+*   **Indicators (Litmus Test):** Substances that are acidic in nature turn **blue litmus paper to red**.
+*   **Taste/Sensation:** While we should never taste unknown lab chemicals, many food substances containing acids (like lemon juice or curd) are typically **sour** in taste. The sensation from an ant bite is also due to the presence of formic acid.
+*   **Types:** Acids can be **natural acids** (found in plants and animals) or **mineral acids** (like Hydrochloric acid, Sulphuric acid, and Nitric acid).
 
-3.  **Examples from Peers:** If we look at the food lists recorded in Activity-1 (like what Ashok or Neelam ate), we see common items such as **Rice, Dal, Milk, Idly, Bread, Roti, and Vegetables** being consumed.
+### 2. Bases (Basic Nature)
+
+Bases are often defined by their physical feel and their contrasting reaction to indicators:
+
+*   **Indicators (Litmus Test):** Substances that are basic in nature turn **red litmus paper to blue**.
+*   **Touch/Feel:** Bases are typically **soapy to touch** (like soap water or caustic soda solution).
+*   **Examples:** Common bases are found in household items like soap and glass cleaners.
+
+### 3. Salts
+
+Salts are often formed when acids and bases interact, but they possess properties that make them unique:
+
+*   **Formation:** Salts are generally produced when acids and bases are mixed, leading to the process of **neutralization**.
+*   **Neutrality is Variable:** A common misconception is that all salts are neutral. However, salts **need not always be neutral**. Based on how they affect indicators, salts can be classified into three categories:
+    1.  **Acidic Salts:** Salts which change **blue litmus to red**.
+    2.  **Basic Salts:** Salts which change **red litmus to blue**.
+    3.  **Neutral Salts:** Salts which affect **neither blue nor red litmus papers**.
+*   **Examples:** While sweat is salty because we lose salts through excretion, the textbook also notes that not all neutral substances are salts (e.g., sugar solution is neutral but not a salt).
+
+***
+
+### Summary of Differentiation (Litmus Test)
+
+The most reliable way to differentiate these three categories using indicators (like litmus) is their specific reaction:
+
+| Substance | Effect on Blue Litmus Paper | Effect on Red Litmus Paper |
+| :---: | :---: | :---: |
+| **Acid** | Turns RED | No change (Stays Red) |
+| **Base** | No change (Stays Blue) | Turns BLUE |
+| **Neutral Salt** | No change (Stays Blue) | No change (Stays Red) |
 --- End Log ---
 
