@@ -306,7 +306,7 @@ function setupUserPage() {
 
     classSelect.addEventListener('change', () => {
         subjectSelect.disabled = false;
-        subjectSelect.value = '';
+        subjectSelect.selectedIndex = 0;
         resetUI();
     });
 

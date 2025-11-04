@@ -268,7 +268,7 @@ async def get_summary(request: SummaryRequest):
     chapter_name = request.chapter_name
 
     summary_filename = f"{subject.lower()}{class_name.replace(' ', '')}.json"
-    summary_filepath = os.path.join("..", "summary", summary_filename)
+    summary_filepath = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "summary", summary_filename)
 
     if not os.path.exists(summary_filepath):
         raise HTTPException(status_code=404, detail="Summary file not found for this book.")

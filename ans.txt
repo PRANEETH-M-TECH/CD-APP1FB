@@ -1,1166 +1,1411 @@
 --- Query Log ---
-Timestamp: 2025-10-29T20:29:08.217523
-Original Query: explain about types of soil?
-Book UUID: 9f4e8506f5d016caa6cd7c7b824396829225ed8d9fed9229a3e04d7fbf2a3372
-Class: 7, Subject: science
+Timestamp: 2025-11-04T12:09:25.738538
+Original Query: explain about the types of the magnets?
+Book UUID: 097025710c9d2a09420dda2755023e25b2106cc4e89dfc78be9f2adab9f8c6b9
+Class: 6, Subject: science
 
 --- LLM Query Processing ---
-Reformulated Query: Provide a detailed explanation and descriptive characteristics of the major types and classifications of soil, including examples such as sand, silt, clay, and loam.
+Reformulated Query: Provide a detailed explanation and classification of the different types and shapes of magnets, including their origins (natural versus man-made), based on the principles of magnetism.
 Classification: conceptual
 Conceptual Score: 0.85
-Keywords: types of soil, soil classification, soil, characteristics, sand, loam
+Keywords: Magnets, Types of magnets, Magnetic classification, Shapes of magnets, Natural magnets, Man-made magnets
 
 --- Formatted Top Chunks for LLM (Context) ---
 
-  --- Chunk 1 (Hybrid Score: 0.7642) ---
-     Chapter: SOIL : OUR LIFE
-     Text: soil and least in the clayey soil.
-• Water holding capacity of  soil depends on
-soil type.
-• Clay and loam are suitable for growing
-wheat, gram and paddy. Cotton is grown
-in sandy loam or black soil.
-• Soil profile is a section through different
-layers of the soil.
-• Removal of top soil by wind, water or any
-other means is known as soil erosion.
+  --- Chunk 1 (Hybrid Score: 0.7615) ---
+     Chapter: PLAYING WITH MAGNETS
+     Text: SCERT TELANGANAScience VI Class
+13
+ Story of Magnet
+Around 2500 years ago, there lived an old
+shepherd named Magnus. He used to take his
+goats and sheep to the hills for grazing. He
+always carried a wooden stick which had an
+iron cap on its lower end. One day, while his
+goats were grazing, Magnus dipped his stick
+into a spring of water and poked at the pebbles
+and stones at the bottom with it.  Suddenly he
+felt something pulling his stick. When he took
+it out of water, he saw a stone stuck to the iron cap. The stone which Magnus
+pulled out was called 
+Lode stone.  It is a natural magnet and possesses the
+property of attracting iron.
+The magnets we discussed are not natural magnets. These magnets are man-
+made magnets.
+Magnets of different shapes
+The magnets we see and use in our daily life possess different shapes. Some of
+the usual shapes of magnets are shown in Fig. 2.
+Horse Shoe
+Magnet
+Ring Magnet Disc Magnet
+Fig. 2
+Think: Can we make a magnet in a required shape?
+
+  --- Chunk 2 (Hybrid Score: 0.6813) ---
+     Chapter: PLAYING WITH MAGNETS
+     Text: SCERT TELANGANAPLAYING WITH MAGNETS Free Distribution by Govt. of T.S. 2020-21
+20
+Fig. 11 (b)
+Take a bar magnet in one hand and a
+safety pin in the other hand, hold
+them in such a way that
+they are close to each
+other but not in contact
+as shown in Fig. 11 (b).
+Ask your friend to
+bring an alpin and
+touch the safety pin.
+You will notice that the
+alpin will stick to the
+safety pin. This shows
+that due to magnetic
+induction safety pin acts as a magnet.
+Keywords
+Magnet, magnetic material, non-
+magnetic material, North Pole, South
+Pole, Magnetic compass, like poles,
+unlike poles, attraction, repulsion,
+magnetic induction
+What we have learnt
+• Lode stone is a natural magnet.
+• Magnets are of different shapes i.e.
+bar magnets, horse shoe magnets,
+ring type magnets, disc magnets,
+etc.
+• The materials that are attracted by
+magnets are called magnetic
+materials. The materials that are
+not attracted by magnets are called
+non-magnetic materials.
+• A bar magnet always has two
+
+  --- Chunk 3 (Hybrid Score: 0.6201) ---
+     Chapter: PLAYING WITH MAGNETS
+     Text: compass is then rotated until the north
+and south marked on the dial are exactly
+below the two ends of the needle. To
+identify the North pole of the magnetic
+needle, it is usually painted in a
+different colour (see Fig. 5). Then we
+identify north and south at that place.
+After that we can also identify the
+East and West between them.
+A compass is used to find directions.
+It is mostly used in ships and airplanes.
+Mountaineers and army people also
+carry a compass with them so that they
+do not lose their way in an unknown
+place.
+Note: Don't place compass and
+magnets together.
+Activity-6: Attraction and Repulsion
+Between Two Magnets
+Take two similar magnets, place them
+in four different ways as shown in Fig.
+6 and record your observations.
+Fig. 5
+Fig. 6
+Some vets use magnets to retrieve wire and metal from animals stomachs
+SCERT TELANGANAScience VI Class
+17
+• What do you observe?
+• When do the magnets attract
+each other?
+• When do the magnets repel each
+other?
+
+  --- Chunk 4 (Hybrid Score: 0.5822) ---
+     Chapter: PLAYING WITH MAGNETS
+     Text: the usual shapes of magnets are shown in Fig. 2.
+Horse Shoe
+Magnet
+Ring Magnet Disc Magnet
+Fig. 2
+Think: Can we make a magnet in a required shape?
+Usually, magnets are made of  steel or iron. However, special alloys of  iron, nickel,
+copper, cobalt, and aluminum can be made into powerful magnets.
+Bar Magnet
+SCERT TELANGANAPLAYING WITH MAGNETS Free Distribution by Govt. of T.S. 2020-21
+14
+  Activity-2:  Finding materials
+  attracted by magnets.
+Take a bar magnet, nail, jump-clip,
+plastic scale, a piece of glass, brass key,
+paper, iron bolt, pen, blade, pencil,
+knife, stainless steel spoon, piece of
+chalk, wood and touch the magnet
+to each item. Does the magnet attract
+every object? Observe and record
+your observations duly mentioning
+the name of the material of which the
+object is made in table 1.
+        Table 1
+Name of the object Material of which the Attracted
+object is made By Magnet
+(Iron/plastic/aluminum/ (Yes/No)
+wood/glass/ any other)
+Jump Clip Iron Yes
+Scale Plastic No
+
+  --- Chunk 5 (Hybrid Score: 0.5361) ---
+     Chapter: PLAYING WITH MAGNETS
+     Text: after testing all materials?
+Plastic, Iron, Stainless steel,
+Wood, Aluminium, Gold, Silver,
+Copper, Paper, Cloth.
+2. List out the magnetic and non
+magnetic materials in your class
+room.
+Earth magnets can be 20 times more powerful than a fridge magnet
+SCERT TELANGANAScience VI Class
+21
+3. For which purposes do people use
+magnets in their daily life? Ask
+your family members and other
+elders and collect the information
+and prepare a list of uses of
+magnets.
+4. Draw a bar magnet and locate the
+poles.
+5. Observe and locate North and
+South poles for the second bar
+magnet shown in the figure given
+below.
+6. Think and say, in which
+direction your house is facing?
+(a) Use the compass and findout
+the exact direction of your house
+and compare it with your
+prediction.
+(b) Similarly predict and findout
+in which direction you  keep your
+head while sleeping at night,
+(c)  The directions you face while
+you are reading, eating etc.
+7. Prepare a toy using magnets and
+write the procedure of preparation
+
+  --- Chunk 6 (Hybrid Score: 0.5231) ---
+     Chapter: PLAYING WITH MAGNETS
+     Text: etc.
+• The materials that are attracted by
+magnets are called magnetic
+materials. The materials that are
+not attracted by magnets are called
+non-magnetic materials.
+• A bar magnet always has two
+ends whose attracting capacity is
+more than other parts of  it. The
+poles of the magnet lie at these
+ends.
+• Each magnet has two magnetic
+poles :  North and South.
+• A freely suspended magnet
+always aligns in the North-South
+direction.
+• Unlike poles of two magnets
+attract each other; whereas like
+poles repel each other.
+• Magnetic property possessed by
+a magnetic substance due to the
+presence of a magnet near to it, is
+called magnetic induction.
 Improve your learning
-1. How can you say soil is
-a precious resource? Give
-reasons.
-2. Which type of soil is
-suitable for growing
-cotton?
-3. Give reasons for low
-percolation rate in clay soil
-when compared to sandy
-soil.
-4. Why is top soil more useful for us?
-5. What types of soils are there in your
-village? Make a list of crops grown on
-these soils.
-6. If  a farmer wants to improve water
-holding capacity of his sandy soil field
-what would you suggest him?
-7. Do you think rotting vegetation and
-animal remains are important for the
-soil?  In what way?
-8. Roots of  grasses hold soil particles. This
-conserves the ………………………
+1. Predict which of the following
+material are  magnetic and non-
+magnetic material. Test with a bar
+magnet and check your
+predictions. What do you say
+after testing all materials?
+Plastic, Iron, Stainless steel,
+Wood, Aluminium, Gold, Silver,
+Copper, Paper, Cloth.
+2. List out the magnetic and non
+magnetic materials in your class
 
-  --- Chunk 2 (Hybrid Score: 0.7620) ---
-     Chapter: SOIL : OUR LIFE
-     Text: in a year in your village. Why do they
-change crops after a period of time? Write
-your observations in your note book.
-• Which crops are grown one after another
-in your village?
-• Why are pulses grown every time?
-• Is there any crop that grows continuously
-in a same field?
-Generally, farmers cultivate pulses after
-completion of  paddy. This kind of  rotation
-of  crops retains soil fertility and productivity.
-Conservation of  soil is important factor in
-agriculture.
-Key words:
-Clay, Humus, Loamy, Sandy, Percolation,
-Water retention, Soil profile, Soil fertility,
-Soil erosion, Crop rotation
-What we have learnt?
-• Soil is a mixture of  rock particles and humus.
-• Clay, loam and sand are types of  soil.
-• Amount of water that passes through gives
-us  percolation rate. It is highest in the sandy
-soil and least in the clayey soil.
-• Water holding capacity of  soil depends on
-soil type.
-• Clay and loam are suitable for growing
-wheat, gram and paddy. Cotton is grown
+  --- Chunk 7 (Hybrid Score: 0.4333) ---
+     Chapter: PLAYING WITH MAGNETS
+     Text: in which direction you  keep your
+head while sleeping at night,
+(c)  The directions you face while
+you are reading, eating etc.
+7. Prepare a toy using magnets and
+write the procedure of preparation
+briefly.
+8. Think and say where the poles
+will be located in a ring magnet?
+Try to find out its poles using a
+bar magnet and check your
+prediction.
+9. Magnetize a needle using a bar
+magnet. Make a compass with that
+needle by following the process
+explained in activity 10.
+10. Sometimes people use magnets to
+keep the doors open and some
+times to close the doors firmly.
+Think and say how is it possible
+and how we should arrange the
+magnets in each case.
+11. Does the Earth behave as a
+magnet? How do you prove it?
+12. If you have two similar bars, one
+a magnet and another a piece of
+iron. can you findout which one
+of these is a magnet? Explain the
+process.
+13. Teacher said that Earth is a
+magnet. But Sreevidya has some
+doubts and she asked her teacher
+some questions. What may be the
+questions?
 
-  --- Chunk 3 (Hybrid Score: 0.4530) ---
-     Chapter: SOIL : OUR LIFE
-     Text: drop by drop, kneading the soil while doing
-so. Pour enough water so you can make small
-balls of soil, without the soil sticking to your
-palms. Make a 2.5 cm diameter ball of  soil.
-Put this ball on a flat surface and try and roll
-it into a 15-cm-long rod. If you can bend the
-rod without breaking it, then bend it into a
-ring.
-You can identify a soil type by the extent to
-which you can mould it.
-Identify the different types of soils in the line
-diagram given below. Determine the soil on
-the basis of following chart.
-SCERT, TELANGANA143VII Science Free Distribution by Govt. of T.S. 2021-22
-If the proportion of larger sized particles
-is more, we call the soil sandy. If the
-proportion of fine particles is more, the soil
-is clay. If large and fine particles are present
-in equal proportions, the soil is called loam.
-Let us do-7:  The Moisture Content of
-Soil
-There are many ways of finding out the
-moisture content of  different soils. We shall
-use a simple method. Grind the soil you wish
+  --- Chunk 8 (Hybrid Score: 0.3261) ---
+     Chapter: PLAYING WITH MAGNETS
+     Text: to the other pole of the bar magnet
+in the same way and record your
+observations.
+What do you conclude by comparing
+the recorded observations?
+By the above observations we conclude
+the following:
+If an object is attracted by one pole of
+the bar magnet and repelled by the its other
+pole, then you can say that it is a magnet.
+If an object is attracted by both the
+poles of a bar magnet and not repelled
+by any pole, then you can say that it is
+not a magnet but a magnetic substance.
+If an object is neither attracted by
+magnet nor repelled by it, then you
+can say that it is neither a magnet nor
+a magnetic substance.
+Activity-9: Make your own magnet
+Take an iron nail and place it on a table.
+Make sure that the nail neither attracts
+nor repels iron pins or iron filings. Take
+a bar magnet and place one of its poles
+near one edge of the nail. Without lifting
+the bar magnet, move it along the length
+of the iron nail till you reach the other
+end. Then lift the bar magnet, bring it to
 
-  --- Chunk 4 (Hybrid Score: 0.4477) ---
-     Chapter: SOIL : OUR LIFE
-     Text: organic material is found in this layer.
-• R Horizon -  The un weathered rock
-(bedrock) layer that is beneath all the
-other layers.
-• These different layers of soil are called
-soil profile.
-Do you know?
-Soil Formation: Soil is formed slowly
-as rock (the parent material) erodes into
-tiny pieces near the Earth’s surface.
-Organic matter decays and mixes with
-inorganic material (rock particles,
-minerals and water) to form soil. These
-days farmers  test the soil in the field using
-soil technologies in order to grow suitable
-crops in the fields. Engineers also test the
-soil profile before constructing multi-
-storied buildings, bridges and dams.
-Soils in our village:
-We will see different types of soils in different parts of our state. Most of the places in a
-district generally have same type of soil. In some cases we can see different types of soil in a
-district or  same type of  soil in different areas also. Lets us observe experiences of  students
-from different parts of our state.
+  --- Chunk 9 (Hybrid Score: 0.3193) ---
+     Chapter: PLAYING WITH MAGNETS
+     Text: Table 1
+Name of the object Material of which the Attracted
+object is made By Magnet
+(Iron/plastic/aluminum/ (Yes/No)
+wood/glass/ any other)
+Jump Clip Iron Yes
+Scale Plastic No
+• Which materials are attracted by
+a magnet?
+• Which materials are not attracted
+by a magnet?
+The materials that are attracted by
+magnets are called magnetic materials.
+The materials that are not attracted by
+magnets are called non-magnetic
+materials.
+• Give your own examples for
+magnetic materials.
+• Give your own examples for non-
+magnetic materials.
+Magnets have the property of
+attracting materials like Iron. Based on
+this property of magnets they can be
+used to separate some mixtures.
+Activity-3:  Can we separate iron
+filings from soil?
+Take a bar magnet and roll it in the soil
+in your school ground for some time.
+Pull out the magnet.  What do you find?
+Does anything get attached to the
+magnet?
+You may find some dark particles of
+soil sticking to the magnet.
+Now gently remove these dark particles
 
-  --- Chunk 5 (Hybrid Score: 0.4117) ---
-     Chapter: SOIL : OUR LIFE
-     Text: Farmers grow ground nut and castor and in some places cotton
-is also grown. Our people said that this is red sand soil.
-I am Sujatha. I am living in Dantaguntla of Kanumolu
-mandal in Krishna district. We have black soil in our
-village. We can make any type of model by using this soil.
-It is sticky in nature. We call it  black soil. This soil retains
-water for a long time. Farmers grow cotton, sugar cane
-and paddy. I saw the same type of soil in Indukurupeta of
-Nellore district also.
-I am David. I am living in Kanala of Sanjamala mandal
-in Kurnool district. We can only make cracked rings  using
-the soil in our village. My father said that this soil contains
-sand also. We grow Jowar, Bengal Gram and Paddy .
-I am Ramadevi. I am living in Ramapuram of Vetapalem
-mandal in Prakasham district. In my village we can see
-sandy soil. We can’t make even a ball by using this soil.
-Most of the farmers practise Aqua culture. Paddy is not
-grown in my village. Farmers grow Jasmine,
-
-  --- Chunk 6 (Hybrid Score: 0.3514) ---
-     Chapter: SOIL : OUR LIFE
-     Text: in this type of  soil.
-Let us do-10: Connection between crop
-and soil
-Can you identify any connection between
-crops and soil?  Make group with four or
-five students study the Atlas and other books
-in your school library. Make list of soils and
-crops growing in those soils in our State.
-• Which type of soil is generally seen in
-our State?
-• Which type of crops are grown in our
-state?
-• The districts that cultivate paddy in
-large areas have which type of soil?
-Along with seasonal rainfall fertility of soil
-also influence  crop production. Do you
-know why farmers dump cattle dung in the
-fields? Farmers always take care of the soil
-in their fields.
-Soil Conservation:
-During heavy winds we observe that the
-surface soil particles are carried away by
-air. Sometimes during heavy rains, rain
-water carries away top layers of soil. This
-is called soil erosion. As a result of storms
-and floods fertile soil layers are removed
-and the soil become barren. Our farmers
-
-  --- Chunk 7 (Hybrid Score: 0.3441) ---
-     Chapter: SOIL : OUR LIFE
-     Text: what would you suggest him?
-7. Do you think rotting vegetation and
-animal remains are important for the
-soil?  In what way?
-8. Roots of  grasses hold soil particles. This
-conserves the ………………………
-9. Which of the following statement is
-correct? Correct the wrong one.
-• Soil form from sand.
-• Crop rotation protects soil fertility.
-• Clay soil can’t hold water for a long time.
-• Upper layers of  soil are made of  rocks.
-SCERT, TELANGANA149VII Science Free Distribution by Govt. of T.S. 2021-22
-SOIL SCIENCE
-Soil science is the study of soil as a natural
-resource on the surface of the Earth. This
-includes Soil formation, Clssification and
-mapping, physical-chemical-biological and
-fertility properties of soil.
-Some times terms which refer to branches of soil science such
-as pedology and edaphology are used as if synonymous with
-soil science. Study of formation, chemistry, morphology and
-classification of soil is called pedology. Study of influence of
-
-  --- Chunk 8 (Hybrid Score: 0.3405) ---
-     Chapter: SOIL : OUR LIFE
-     Text: Remember to collect the soil only on the day
-you begin the experiments in class. Don’t forget
-to put a label on your soil sample, stating
-where you got it from and the date on which
-you collected it.
-First copy the following Table in your Note
-book and note all your observations in this
-table. Instructions given after the table will
-help you to fill it.
-Let us do-5:  Examining The Soil After
-Returning To School
-Examine the different soil samples brought
-to class and see whether you can identify
-various properties of soil as given in the
-table. Some points to study the properties
-are given below.
-1. How does the soil look? Is it like fine
-powder or granular?
-SCERT, TELANGANASoil: Our Life142
-2. What is its colour? Is it black, brown
-or any other colour?
-3. How does it feel when you touch or press
-it? Hard, soft, elastic, dry, sticky etc?
-4. How does it smell? Is it aromatic, foul
-smelling or without a scent?
-5. Can you find anything new when you
-examine the soil under a microscope?
-
-  --- Chunk 9 (Hybrid Score: 0.3340) ---
-     Chapter: SOIL : OUR LIFE
-     Text: This is an ancient creative occupation.
-During Harappan civilization, different
-varieties of designer pots and clay utensils
-were used. Pottery is a cottage industry in
-our country. Potters make pots by using
-clay soil on a pottery wheel.
-Fig. 3
-Know more about your soil
-Now we have come to know that soil is a good
-habitat of  organisms. We have also studied
-its different uses. Now let us study some other
-properties of soil.
-Let us do-4: Is the soil  from different places
-same?
-For our study, we require soils collected from
-different places. Examples of  some of  these
-locations are given below:
-SCERT, TELANGANA141VII Science Free Distribution by Govt. of T.S. 2021-22
-fields, lakeside, open meadows,
-river banks, gardens, forests,
-roadside, fallow land
-You can change the list, adding or subtracting
-names, to suit your convenience. But you
-should make sure that you get different types
-of  soil from different places. It would be even
-better if  the soils are of  different colours.
-
-  --- Chunk 10 (Hybrid Score: 0.3213) ---
-     Chapter: SOIL : OUR LIFE
-     Text: Soil: Our Life138
-Figure 1
-Rafi and Vasanthi were asked by their teacher
-to make models of  some vegetables.  They
-collected some soil from their garden, mixed
-the soil with water and made some models.
-They were not satisfied, as sometimes, their
-models would break when they tried to shape
-them. The surface of the models was rough
-and not smooth. Rafi’s grandma saw them
-doing  this and said, “To make models, you
-have to collect soil from the bank of our
-village pond which is sticky”.
-• Guess why soil of the garden was not
-suitable to make models?
-• Why was grandma’s suggestion useful?
-• Are soils different from place to place?
-• How is soil useful for us?
-• Guess what  soil is made up of?
-Let us try to find out
-the answers to some
-of  these questions.
-For this lets do some
-activities.
-Let us do-1 :
-Usefulness of soil
-Work in groups of   3
-to 4 students. Discuss
-and list out the ways
-in which soil is useful
-for us. Compare the
-list with that of other groups and add any
+  --- Chunk 10 (Hybrid Score: 0.2922) ---
+     Chapter: PLAYING WITH MAGNETS
+     Text: cases). Where does this invisible
+magnet come from? The earth
+possesses magnetic property which
+acts upon the suspended bar magnet
+(see Fig. 8).Fig. 7
+Fig. 8
+Magnet attracts only magnetic objects
+SCERT TELANGANAPLAYING WITH MAGNETS Free Distribution by Govt. of T.S. 2020-21
+18
+ Activity-8:  Finding out whether
+ the given object is a magnet or not .
+You have been given three objects of
+same size, shape and colour and a bar
+magnet. You have to decide which one
+among them is a magnet, which is not
+a magnet but made up of a magnetic
+material or a non-magnetic material.
+Bring three objects one after the other
+close to one pole of the bar magnet
+and observe whether they get
+attracted, repelled or not attracted.
+Record your observation in table 2.
+After that bring those objects close
+to the other pole of the bar magnet
+in the same way and record your
+observations.
+What do you conclude by comparing
+the recorded observations?
+By the above observations we conclude
+the following:
 
 
 --- Hybrid Search Results (10 Chunks) ---
 
-  1. Hybrid Score: 0.7642
-     Chapter: SOIL : OUR LIFE
-     Text: soil and least in the clayey soil.
-• Water holding capacity of  soil depends on
-soil type.
-• Clay and loam are suitable for growing
-wheat, gram and paddy. Cotton is grown
-in sandy loam or black soil.
-• Soil profile is a section through different
-layers of the soil.
-• Removal of top soil by wind, water or any
-other means is known as soil erosion.
+  1. Hybrid Score: 0.7615
+     Chapter: PLAYING WITH MAGNETS
+     Text: SCERT TELANGANAScience VI Class
+13
+ Story of Magnet
+Around 2500 years ago, there lived an old
+shepherd named Magnus. He used to take his
+goats and sheep to the hills for grazing. He
+always carried a wooden stick which had an
+iron cap on its lower end. One day, while his
+goats were grazing, Magnus dipped his stick
+into a spring of water and poked at the pebbles
+and stones at the bottom with it.  Suddenly he
+felt something pulling his stick. When he took
+it out of water, he saw a stone stuck to the iron cap. The stone which Magnus
+pulled out was called 
+Lode stone.  It is a natural magnet and possesses the
+property of attracting iron.
+The magnets we discussed are not natural magnets. These magnets are man-
+made magnets.
+Magnets of different shapes
+The magnets we see and use in our daily life possess different shapes. Some of
+the usual shapes of magnets are shown in Fig. 2.
+Horse Shoe
+Magnet
+Ring Magnet Disc Magnet
+Fig. 2
+Think: Can we make a magnet in a required shape?
+
+  2. Hybrid Score: 0.6813
+     Chapter: PLAYING WITH MAGNETS
+     Text: SCERT TELANGANAPLAYING WITH MAGNETS Free Distribution by Govt. of T.S. 2020-21
+20
+Fig. 11 (b)
+Take a bar magnet in one hand and a
+safety pin in the other hand, hold
+them in such a way that
+they are close to each
+other but not in contact
+as shown in Fig. 11 (b).
+Ask your friend to
+bring an alpin and
+touch the safety pin.
+You will notice that the
+alpin will stick to the
+safety pin. This shows
+that due to magnetic
+induction safety pin acts as a magnet.
+Keywords
+Magnet, magnetic material, non-
+magnetic material, North Pole, South
+Pole, Magnetic compass, like poles,
+unlike poles, attraction, repulsion,
+magnetic induction
+What we have learnt
+• Lode stone is a natural magnet.
+• Magnets are of different shapes i.e.
+bar magnets, horse shoe magnets,
+ring type magnets, disc magnets,
+etc.
+• The materials that are attracted by
+magnets are called magnetic
+materials. The materials that are
+not attracted by magnets are called
+non-magnetic materials.
+• A bar magnet always has two
+
+  3. Hybrid Score: 0.6201
+     Chapter: PLAYING WITH MAGNETS
+     Text: compass is then rotated until the north
+and south marked on the dial are exactly
+below the two ends of the needle. To
+identify the North pole of the magnetic
+needle, it is usually painted in a
+different colour (see Fig. 5). Then we
+identify north and south at that place.
+After that we can also identify the
+East and West between them.
+A compass is used to find directions.
+It is mostly used in ships and airplanes.
+Mountaineers and army people also
+carry a compass with them so that they
+do not lose their way in an unknown
+place.
+Note: Don't place compass and
+magnets together.
+Activity-6: Attraction and Repulsion
+Between Two Magnets
+Take two similar magnets, place them
+in four different ways as shown in Fig.
+6 and record your observations.
+Fig. 5
+Fig. 6
+Some vets use magnets to retrieve wire and metal from animals stomachs
+SCERT TELANGANAScience VI Class
+17
+• What do you observe?
+• When do the magnets attract
+each other?
+• When do the magnets repel each
+other?
+
+  4. Hybrid Score: 0.5822
+     Chapter: PLAYING WITH MAGNETS
+     Text: the usual shapes of magnets are shown in Fig. 2.
+Horse Shoe
+Magnet
+Ring Magnet Disc Magnet
+Fig. 2
+Think: Can we make a magnet in a required shape?
+Usually, magnets are made of  steel or iron. However, special alloys of  iron, nickel,
+copper, cobalt, and aluminum can be made into powerful magnets.
+Bar Magnet
+SCERT TELANGANAPLAYING WITH MAGNETS Free Distribution by Govt. of T.S. 2020-21
+14
+  Activity-2:  Finding materials
+  attracted by magnets.
+Take a bar magnet, nail, jump-clip,
+plastic scale, a piece of glass, brass key,
+paper, iron bolt, pen, blade, pencil,
+knife, stainless steel spoon, piece of
+chalk, wood and touch the magnet
+to each item. Does the magnet attract
+every object? Observe and record
+your observations duly mentioning
+the name of the material of which the
+object is made in table 1.
+        Table 1
+Name of the object Material of which the Attracted
+object is made By Magnet
+(Iron/plastic/aluminum/ (Yes/No)
+wood/glass/ any other)
+Jump Clip Iron Yes
+Scale Plastic No
+
+  5. Hybrid Score: 0.5361
+     Chapter: PLAYING WITH MAGNETS
+     Text: after testing all materials?
+Plastic, Iron, Stainless steel,
+Wood, Aluminium, Gold, Silver,
+Copper, Paper, Cloth.
+2. List out the magnetic and non
+magnetic materials in your class
+room.
+Earth magnets can be 20 times more powerful than a fridge magnet
+SCERT TELANGANAScience VI Class
+21
+3. For which purposes do people use
+magnets in their daily life? Ask
+your family members and other
+elders and collect the information
+and prepare a list of uses of
+magnets.
+4. Draw a bar magnet and locate the
+poles.
+5. Observe and locate North and
+South poles for the second bar
+magnet shown in the figure given
+below.
+6. Think and say, in which
+direction your house is facing?
+(a) Use the compass and findout
+the exact direction of your house
+and compare it with your
+prediction.
+(b) Similarly predict and findout
+in which direction you  keep your
+head while sleeping at night,
+(c)  The directions you face while
+you are reading, eating etc.
+7. Prepare a toy using magnets and
+write the procedure of preparation
+
+  6. Hybrid Score: 0.5231
+     Chapter: PLAYING WITH MAGNETS
+     Text: etc.
+• The materials that are attracted by
+magnets are called magnetic
+materials. The materials that are
+not attracted by magnets are called
+non-magnetic materials.
+• A bar magnet always has two
+ends whose attracting capacity is
+more than other parts of  it. The
+poles of the magnet lie at these
+ends.
+• Each magnet has two magnetic
+poles :  North and South.
+• A freely suspended magnet
+always aligns in the North-South
+direction.
+• Unlike poles of two magnets
+attract each other; whereas like
+poles repel each other.
+• Magnetic property possessed by
+a magnetic substance due to the
+presence of a magnet near to it, is
+called magnetic induction.
 Improve your learning
-1. How can you say soil is
-a precious resource? Give
-reasons.
-2. Which type of soil is
-suitable for growing
-cotton?
-3. Give reasons for low
-percolation rate in clay soil
-when compared to sandy
-soil.
-4. Why is top soil more useful for us?
-5. What types of soils are there in your
-village? Make a list of crops grown on
-these soils.
-6. If  a farmer wants to improve water
-holding capacity of his sandy soil field
-what would you suggest him?
-7. Do you think rotting vegetation and
-animal remains are important for the
-soil?  In what way?
-8. Roots of  grasses hold soil particles. This
-conserves the ………………………
+1. Predict which of the following
+material are  magnetic and non-
+magnetic material. Test with a bar
+magnet and check your
+predictions. What do you say
+after testing all materials?
+Plastic, Iron, Stainless steel,
+Wood, Aluminium, Gold, Silver,
+Copper, Paper, Cloth.
+2. List out the magnetic and non
+magnetic materials in your class
 
-  2. Hybrid Score: 0.7620
-     Chapter: SOIL : OUR LIFE
-     Text: in a year in your village. Why do they
-change crops after a period of time? Write
-your observations in your note book.
-• Which crops are grown one after another
-in your village?
-• Why are pulses grown every time?
-• Is there any crop that grows continuously
-in a same field?
-Generally, farmers cultivate pulses after
-completion of  paddy. This kind of  rotation
-of  crops retains soil fertility and productivity.
-Conservation of  soil is important factor in
-agriculture.
-Key words:
-Clay, Humus, Loamy, Sandy, Percolation,
-Water retention, Soil profile, Soil fertility,
-Soil erosion, Crop rotation
-What we have learnt?
-• Soil is a mixture of  rock particles and humus.
-• Clay, loam and sand are types of  soil.
-• Amount of water that passes through gives
-us  percolation rate. It is highest in the sandy
-soil and least in the clayey soil.
-• Water holding capacity of  soil depends on
-soil type.
-• Clay and loam are suitable for growing
-wheat, gram and paddy. Cotton is grown
+  7. Hybrid Score: 0.4333
+     Chapter: PLAYING WITH MAGNETS
+     Text: in which direction you  keep your
+head while sleeping at night,
+(c)  The directions you face while
+you are reading, eating etc.
+7. Prepare a toy using magnets and
+write the procedure of preparation
+briefly.
+8. Think and say where the poles
+will be located in a ring magnet?
+Try to find out its poles using a
+bar magnet and check your
+prediction.
+9. Magnetize a needle using a bar
+magnet. Make a compass with that
+needle by following the process
+explained in activity 10.
+10. Sometimes people use magnets to
+keep the doors open and some
+times to close the doors firmly.
+Think and say how is it possible
+and how we should arrange the
+magnets in each case.
+11. Does the Earth behave as a
+magnet? How do you prove it?
+12. If you have two similar bars, one
+a magnet and another a piece of
+iron. can you findout which one
+of these is a magnet? Explain the
+process.
+13. Teacher said that Earth is a
+magnet. But Sreevidya has some
+doubts and she asked her teacher
+some questions. What may be the
+questions?
 
-  3. Hybrid Score: 0.4530
-     Chapter: SOIL : OUR LIFE
-     Text: drop by drop, kneading the soil while doing
-so. Pour enough water so you can make small
-balls of soil, without the soil sticking to your
-palms. Make a 2.5 cm diameter ball of  soil.
-Put this ball on a flat surface and try and roll
-it into a 15-cm-long rod. If you can bend the
-rod without breaking it, then bend it into a
-ring.
-You can identify a soil type by the extent to
-which you can mould it.
-Identify the different types of soils in the line
-diagram given below. Determine the soil on
-the basis of following chart.
-SCERT, TELANGANA143VII Science Free Distribution by Govt. of T.S. 2021-22
-If the proportion of larger sized particles
-is more, we call the soil sandy. If the
-proportion of fine particles is more, the soil
-is clay. If large and fine particles are present
-in equal proportions, the soil is called loam.
-Let us do-7:  The Moisture Content of
-Soil
-There are many ways of finding out the
-moisture content of  different soils. We shall
-use a simple method. Grind the soil you wish
+  8. Hybrid Score: 0.3261
+     Chapter: PLAYING WITH MAGNETS
+     Text: to the other pole of the bar magnet
+in the same way and record your
+observations.
+What do you conclude by comparing
+the recorded observations?
+By the above observations we conclude
+the following:
+If an object is attracted by one pole of
+the bar magnet and repelled by the its other
+pole, then you can say that it is a magnet.
+If an object is attracted by both the
+poles of a bar magnet and not repelled
+by any pole, then you can say that it is
+not a magnet but a magnetic substance.
+If an object is neither attracted by
+magnet nor repelled by it, then you
+can say that it is neither a magnet nor
+a magnetic substance.
+Activity-9: Make your own magnet
+Take an iron nail and place it on a table.
+Make sure that the nail neither attracts
+nor repels iron pins or iron filings. Take
+a bar magnet and place one of its poles
+near one edge of the nail. Without lifting
+the bar magnet, move it along the length
+of the iron nail till you reach the other
+end. Then lift the bar magnet, bring it to
 
-  4. Hybrid Score: 0.4477
-     Chapter: SOIL : OUR LIFE
-     Text: organic material is found in this layer.
-• R Horizon -  The un weathered rock
-(bedrock) layer that is beneath all the
-other layers.
-• These different layers of soil are called
-soil profile.
-Do you know?
-Soil Formation: Soil is formed slowly
-as rock (the parent material) erodes into
-tiny pieces near the Earth’s surface.
-Organic matter decays and mixes with
-inorganic material (rock particles,
-minerals and water) to form soil. These
-days farmers  test the soil in the field using
-soil technologies in order to grow suitable
-crops in the fields. Engineers also test the
-soil profile before constructing multi-
-storied buildings, bridges and dams.
-Soils in our village:
-We will see different types of soils in different parts of our state. Most of the places in a
-district generally have same type of soil. In some cases we can see different types of soil in a
-district or  same type of  soil in different areas also. Lets us observe experiences of  students
-from different parts of our state.
+  9. Hybrid Score: 0.3193
+     Chapter: PLAYING WITH MAGNETS
+     Text: Table 1
+Name of the object Material of which the Attracted
+object is made By Magnet
+(Iron/plastic/aluminum/ (Yes/No)
+wood/glass/ any other)
+Jump Clip Iron Yes
+Scale Plastic No
+• Which materials are attracted by
+a magnet?
+• Which materials are not attracted
+by a magnet?
+The materials that are attracted by
+magnets are called magnetic materials.
+The materials that are not attracted by
+magnets are called non-magnetic
+materials.
+• Give your own examples for
+magnetic materials.
+• Give your own examples for non-
+magnetic materials.
+Magnets have the property of
+attracting materials like Iron. Based on
+this property of magnets they can be
+used to separate some mixtures.
+Activity-3:  Can we separate iron
+filings from soil?
+Take a bar magnet and roll it in the soil
+in your school ground for some time.
+Pull out the magnet.  What do you find?
+Does anything get attached to the
+magnet?
+You may find some dark particles of
+soil sticking to the magnet.
+Now gently remove these dark particles
 
-  5. Hybrid Score: 0.4117
-     Chapter: SOIL : OUR LIFE
-     Text: Farmers grow ground nut and castor and in some places cotton
-is also grown. Our people said that this is red sand soil.
-I am Sujatha. I am living in Dantaguntla of Kanumolu
-mandal in Krishna district. We have black soil in our
-village. We can make any type of model by using this soil.
-It is sticky in nature. We call it  black soil. This soil retains
-water for a long time. Farmers grow cotton, sugar cane
-and paddy. I saw the same type of soil in Indukurupeta of
-Nellore district also.
-I am David. I am living in Kanala of Sanjamala mandal
-in Kurnool district. We can only make cracked rings  using
-the soil in our village. My father said that this soil contains
-sand also. We grow Jowar, Bengal Gram and Paddy .
-I am Ramadevi. I am living in Ramapuram of Vetapalem
-mandal in Prakasham district. In my village we can see
-sandy soil. We can’t make even a ball by using this soil.
-Most of the farmers practise Aqua culture. Paddy is not
-grown in my village. Farmers grow Jasmine,
-
-  6. Hybrid Score: 0.3514
-     Chapter: SOIL : OUR LIFE
-     Text: in this type of  soil.
-Let us do-10: Connection between crop
-and soil
-Can you identify any connection between
-crops and soil?  Make group with four or
-five students study the Atlas and other books
-in your school library. Make list of soils and
-crops growing in those soils in our State.
-• Which type of soil is generally seen in
-our State?
-• Which type of crops are grown in our
-state?
-• The districts that cultivate paddy in
-large areas have which type of soil?
-Along with seasonal rainfall fertility of soil
-also influence  crop production. Do you
-know why farmers dump cattle dung in the
-fields? Farmers always take care of the soil
-in their fields.
-Soil Conservation:
-During heavy winds we observe that the
-surface soil particles are carried away by
-air. Sometimes during heavy rains, rain
-water carries away top layers of soil. This
-is called soil erosion. As a result of storms
-and floods fertile soil layers are removed
-and the soil become barren. Our farmers
-
-  7. Hybrid Score: 0.3441
-     Chapter: SOIL : OUR LIFE
-     Text: what would you suggest him?
-7. Do you think rotting vegetation and
-animal remains are important for the
-soil?  In what way?
-8. Roots of  grasses hold soil particles. This
-conserves the ………………………
-9. Which of the following statement is
-correct? Correct the wrong one.
-• Soil form from sand.
-• Crop rotation protects soil fertility.
-• Clay soil can’t hold water for a long time.
-• Upper layers of  soil are made of  rocks.
-SCERT, TELANGANA149VII Science Free Distribution by Govt. of T.S. 2021-22
-SOIL SCIENCE
-Soil science is the study of soil as a natural
-resource on the surface of the Earth. This
-includes Soil formation, Clssification and
-mapping, physical-chemical-biological and
-fertility properties of soil.
-Some times terms which refer to branches of soil science such
-as pedology and edaphology are used as if synonymous with
-soil science. Study of formation, chemistry, morphology and
-classification of soil is called pedology. Study of influence of
-
-  8. Hybrid Score: 0.3405
-     Chapter: SOIL : OUR LIFE
-     Text: Remember to collect the soil only on the day
-you begin the experiments in class. Don’t forget
-to put a label on your soil sample, stating
-where you got it from and the date on which
-you collected it.
-First copy the following Table in your Note
-book and note all your observations in this
-table. Instructions given after the table will
-help you to fill it.
-Let us do-5:  Examining The Soil After
-Returning To School
-Examine the different soil samples brought
-to class and see whether you can identify
-various properties of soil as given in the
-table. Some points to study the properties
-are given below.
-1. How does the soil look? Is it like fine
-powder or granular?
-SCERT, TELANGANASoil: Our Life142
-2. What is its colour? Is it black, brown
-or any other colour?
-3. How does it feel when you touch or press
-it? Hard, soft, elastic, dry, sticky etc?
-4. How does it smell? Is it aromatic, foul
-smelling or without a scent?
-5. Can you find anything new when you
-examine the soil under a microscope?
-
-  9. Hybrid Score: 0.3340
-     Chapter: SOIL : OUR LIFE
-     Text: This is an ancient creative occupation.
-During Harappan civilization, different
-varieties of designer pots and clay utensils
-were used. Pottery is a cottage industry in
-our country. Potters make pots by using
-clay soil on a pottery wheel.
-Fig. 3
-Know more about your soil
-Now we have come to know that soil is a good
-habitat of  organisms. We have also studied
-its different uses. Now let us study some other
-properties of soil.
-Let us do-4: Is the soil  from different places
-same?
-For our study, we require soils collected from
-different places. Examples of  some of  these
-locations are given below:
-SCERT, TELANGANA141VII Science Free Distribution by Govt. of T.S. 2021-22
-fields, lakeside, open meadows,
-river banks, gardens, forests,
-roadside, fallow land
-You can change the list, adding or subtracting
-names, to suit your convenience. But you
-should make sure that you get different types
-of  soil from different places. It would be even
-better if  the soils are of  different colours.
-
-  10. Hybrid Score: 0.3213
-     Chapter: SOIL : OUR LIFE
-     Text: Soil: Our Life138
-Figure 1
-Rafi and Vasanthi were asked by their teacher
-to make models of  some vegetables.  They
-collected some soil from their garden, mixed
-the soil with water and made some models.
-They were not satisfied, as sometimes, their
-models would break when they tried to shape
-them. The surface of the models was rough
-and not smooth. Rafi’s grandma saw them
-doing  this and said, “To make models, you
-have to collect soil from the bank of our
-village pond which is sticky”.
-• Guess why soil of the garden was not
-suitable to make models?
-• Why was grandma’s suggestion useful?
-• Are soils different from place to place?
-• How is soil useful for us?
-• Guess what  soil is made up of?
-Let us try to find out
-the answers to some
-of  these questions.
-For this lets do some
-activities.
-Let us do-1 :
-Usefulness of soil
-Work in groups of   3
-to 4 students. Discuss
-and list out the ways
-in which soil is useful
-for us. Compare the
-list with that of other groups and add any
+  10. Hybrid Score: 0.2922
+     Chapter: PLAYING WITH MAGNETS
+     Text: cases). Where does this invisible
+magnet come from? The earth
+possesses magnetic property which
+acts upon the suspended bar magnet
+(see Fig. 8).Fig. 7
+Fig. 8
+Magnet attracts only magnetic objects
+SCERT TELANGANAPLAYING WITH MAGNETS Free Distribution by Govt. of T.S. 2020-21
+18
+ Activity-8:  Finding out whether
+ the given object is a magnet or not .
+You have been given three objects of
+same size, shape and colour and a bar
+magnet. You have to decide which one
+among them is a magnet, which is not
+a magnet but made up of a magnetic
+material or a non-magnetic material.
+Bring three objects one after the other
+close to one pole of the bar magnet
+and observe whether they get
+attracted, repelled or not attracted.
+Record your observation in table 2.
+After that bring those objects close
+to the other pole of the bar magnet
+in the same way and record your
+observations.
+What do you conclude by comparing
+the recorded observations?
+By the above observations we conclude
+the following:
 
 
 --- Semantic Search Results (10 Chunks) ---
 
-  1. Score: 0.6600 | Chapter: SOIL : OUR LIFE | Text: soil and least in the clayey soil.
-• Water holding capacity of  soil depends on
-soil type.
-• Clay and loam are suitable for growing
-wheat, gram and paddy. Cotton is grown
-in sandy loam or black soil.
-• Soil profile is a section through different
-layers of the soil.
-• Removal of top soil by wind, water or any
-other means is known as soil erosion.
+  1. Score: 0.5816 | Chapter: PLAYING WITH MAGNETS | Text: SCERT TELANGANAScience VI Class
+13
+ Story of Magnet
+Around 2500 years ago, there lived an old
+shepherd named Magnus. He used to take his
+goats and sheep to the hills for grazing. He
+always carried a wooden stick which had an
+iron cap on its lower end. One day, while his
+goats were grazing, Magnus dipped his stick
+into a spring of water and poked at the pebbles
+and stones at the bottom with it.  Suddenly he
+felt something pulling his stick. When he took
+it out of water, he saw a stone stuck to the iron cap. The stone which Magnus
+pulled out was called 
+Lode stone.  It is a natural magnet and possesses the
+property of attracting iron.
+The magnets we discussed are not natural magnets. These magnets are man-
+made magnets.
+Magnets of different shapes
+The magnets we see and use in our daily life possess different shapes. Some of
+the usual shapes of magnets are shown in Fig. 2.
+Horse Shoe
+Magnet
+Ring Magnet Disc Magnet
+Fig. 2
+Think: Can we make a magnet in a required shape?
+
+  2. Score: 0.5806 | Chapter: PLAYING WITH MAGNETS | Text: the usual shapes of magnets are shown in Fig. 2.
+Horse Shoe
+Magnet
+Ring Magnet Disc Magnet
+Fig. 2
+Think: Can we make a magnet in a required shape?
+Usually, magnets are made of  steel or iron. However, special alloys of  iron, nickel,
+copper, cobalt, and aluminum can be made into powerful magnets.
+Bar Magnet
+SCERT TELANGANAPLAYING WITH MAGNETS Free Distribution by Govt. of T.S. 2020-21
+14
+  Activity-2:  Finding materials
+  attracted by magnets.
+Take a bar magnet, nail, jump-clip,
+plastic scale, a piece of glass, brass key,
+paper, iron bolt, pen, blade, pencil,
+knife, stainless steel spoon, piece of
+chalk, wood and touch the magnet
+to each item. Does the magnet attract
+every object? Observe and record
+your observations duly mentioning
+the name of the material of which the
+object is made in table 1.
+        Table 1
+Name of the object Material of which the Attracted
+object is made By Magnet
+(Iron/plastic/aluminum/ (Yes/No)
+wood/glass/ any other)
+Jump Clip Iron Yes
+Scale Plastic No
+
+  3. Score: 0.5721 | Chapter: PLAYING WITH MAGNETS | Text: to the other pole of the bar magnet
+in the same way and record your
+observations.
+What do you conclude by comparing
+the recorded observations?
+By the above observations we conclude
+the following:
+If an object is attracted by one pole of
+the bar magnet and repelled by the its other
+pole, then you can say that it is a magnet.
+If an object is attracted by both the
+poles of a bar magnet and not repelled
+by any pole, then you can say that it is
+not a magnet but a magnetic substance.
+If an object is neither attracted by
+magnet nor repelled by it, then you
+can say that it is neither a magnet nor
+a magnetic substance.
+Activity-9: Make your own magnet
+Take an iron nail and place it on a table.
+Make sure that the nail neither attracts
+nor repels iron pins or iron filings. Take
+a bar magnet and place one of its poles
+near one edge of the nail. Without lifting
+the bar magnet, move it along the length
+of the iron nail till you reach the other
+end. Then lift the bar magnet, bring it to
+
+  4. Score: 0.5715 | Chapter: PLAYING WITH MAGNETS | Text: etc.
+• The materials that are attracted by
+magnets are called magnetic
+materials. The materials that are
+not attracted by magnets are called
+non-magnetic materials.
+• A bar magnet always has two
+ends whose attracting capacity is
+more than other parts of  it. The
+poles of the magnet lie at these
+ends.
+• Each magnet has two magnetic
+poles :  North and South.
+• A freely suspended magnet
+always aligns in the North-South
+direction.
+• Unlike poles of two magnets
+attract each other; whereas like
+poles repel each other.
+• Magnetic property possessed by
+a magnetic substance due to the
+presence of a magnet near to it, is
+called magnetic induction.
 Improve your learning
-1. How can you say soil is
-a precious resource? Give
-reasons.
-2. Which type of soil is
-suitable for growing
-cotton?
-3. Give reasons for low
-percolation rate in clay soil
-when compared to sandy
-soil.
-4. Why is top soil more useful for us?
-5. What types of soils are there in your
-village? Make a list of crops grown on
-these soils.
-6. If  a farmer wants to improve water
-holding capacity of his sandy soil field
-what would you suggest him?
-7. Do you think rotting vegetation and
-animal remains are important for the
-soil?  In what way?
-8. Roots of  grasses hold soil particles. This
-conserves the ………………………
+1. Predict which of the following
+material are  magnetic and non-
+magnetic material. Test with a bar
+magnet and check your
+predictions. What do you say
+after testing all materials?
+Plastic, Iron, Stainless steel,
+Wood, Aluminium, Gold, Silver,
+Copper, Paper, Cloth.
+2. List out the magnetic and non
+magnetic materials in your class
 
-  2. Score: 0.6566 | Chapter: SOIL : OUR LIFE | Text: organic material is found in this layer.
-• R Horizon -  The un weathered rock
-(bedrock) layer that is beneath all the
-other layers.
-• These different layers of soil are called
-soil profile.
-Do you know?
-Soil Formation: Soil is formed slowly
-as rock (the parent material) erodes into
-tiny pieces near the Earth’s surface.
-Organic matter decays and mixes with
-inorganic material (rock particles,
-minerals and water) to form soil. These
-days farmers  test the soil in the field using
-soil technologies in order to grow suitable
-crops in the fields. Engineers also test the
-soil profile before constructing multi-
-storied buildings, bridges and dams.
-Soils in our village:
-We will see different types of soils in different parts of our state. Most of the places in a
-district generally have same type of soil. In some cases we can see different types of soil in a
-district or  same type of  soil in different areas also. Lets us observe experiences of  students
-from different parts of our state.
+  5. Score: 0.5602 | Chapter: PLAYING WITH MAGNETS | Text: Table 1
+Name of the object Material of which the Attracted
+object is made By Magnet
+(Iron/plastic/aluminum/ (Yes/No)
+wood/glass/ any other)
+Jump Clip Iron Yes
+Scale Plastic No
+• Which materials are attracted by
+a magnet?
+• Which materials are not attracted
+by a magnet?
+The materials that are attracted by
+magnets are called magnetic materials.
+The materials that are not attracted by
+magnets are called non-magnetic
+materials.
+• Give your own examples for
+magnetic materials.
+• Give your own examples for non-
+magnetic materials.
+Magnets have the property of
+attracting materials like Iron. Based on
+this property of magnets they can be
+used to separate some mixtures.
+Activity-3:  Can we separate iron
+filings from soil?
+Take a bar magnet and roll it in the soil
+in your school ground for some time.
+Pull out the magnet.  What do you find?
+Does anything get attached to the
+magnet?
+You may find some dark particles of
+soil sticking to the magnet.
+Now gently remove these dark particles
 
-  3. Score: 0.6449 | Chapter: SOIL : OUR LIFE | Text: drop by drop, kneading the soil while doing
-so. Pour enough water so you can make small
-balls of soil, without the soil sticking to your
-palms. Make a 2.5 cm diameter ball of  soil.
-Put this ball on a flat surface and try and roll
-it into a 15-cm-long rod. If you can bend the
-rod without breaking it, then bend it into a
-ring.
-You can identify a soil type by the extent to
-which you can mould it.
-Identify the different types of soils in the line
-diagram given below. Determine the soil on
-the basis of following chart.
-SCERT, TELANGANA143VII Science Free Distribution by Govt. of T.S. 2021-22
-If the proportion of larger sized particles
-is more, we call the soil sandy. If the
-proportion of fine particles is more, the soil
-is clay. If large and fine particles are present
-in equal proportions, the soil is called loam.
-Let us do-7:  The Moisture Content of
-Soil
-There are many ways of finding out the
-moisture content of  different soils. We shall
-use a simple method. Grind the soil you wish
+  6. Score: 0.5545 | Chapter: PLAYING WITH MAGNETS | Text: SCERT TELANGANAPLAYING WITH MAGNETS Free Distribution by Govt. of T.S. 2020-21
+20
+Fig. 11 (b)
+Take a bar magnet in one hand and a
+safety pin in the other hand, hold
+them in such a way that
+they are close to each
+other but not in contact
+as shown in Fig. 11 (b).
+Ask your friend to
+bring an alpin and
+touch the safety pin.
+You will notice that the
+alpin will stick to the
+safety pin. This shows
+that due to magnetic
+induction safety pin acts as a magnet.
+Keywords
+Magnet, magnetic material, non-
+magnetic material, North Pole, South
+Pole, Magnetic compass, like poles,
+unlike poles, attraction, repulsion,
+magnetic induction
+What we have learnt
+• Lode stone is a natural magnet.
+• Magnets are of different shapes i.e.
+bar magnets, horse shoe magnets,
+ring type magnets, disc magnets,
+etc.
+• The materials that are attracted by
+magnets are called magnetic
+materials. The materials that are
+not attracted by magnets are called
+non-magnetic materials.
+• A bar magnet always has two
 
-  4. Score: 0.6164 | Chapter: SOIL : OUR LIFE | Text: in this type of  soil.
-Let us do-10: Connection between crop
-and soil
-Can you identify any connection between
-crops and soil?  Make group with four or
-five students study the Atlas and other books
-in your school library. Make list of soils and
-crops growing in those soils in our State.
-• Which type of soil is generally seen in
-our State?
-• Which type of crops are grown in our
-state?
-• The districts that cultivate paddy in
-large areas have which type of soil?
-Along with seasonal rainfall fertility of soil
-also influence  crop production. Do you
-know why farmers dump cattle dung in the
-fields? Farmers always take care of the soil
-in their fields.
-Soil Conservation:
-During heavy winds we observe that the
-surface soil particles are carried away by
-air. Sometimes during heavy rains, rain
-water carries away top layers of soil. This
-is called soil erosion. As a result of storms
-and floods fertile soil layers are removed
-and the soil become barren. Our farmers
+  7. Score: 0.5513 | Chapter: PLAYING WITH MAGNETS | Text: after testing all materials?
+Plastic, Iron, Stainless steel,
+Wood, Aluminium, Gold, Silver,
+Copper, Paper, Cloth.
+2. List out the magnetic and non
+magnetic materials in your class
+room.
+Earth magnets can be 20 times more powerful than a fridge magnet
+SCERT TELANGANAScience VI Class
+21
+3. For which purposes do people use
+magnets in their daily life? Ask
+your family members and other
+elders and collect the information
+and prepare a list of uses of
+magnets.
+4. Draw a bar magnet and locate the
+poles.
+5. Observe and locate North and
+South poles for the second bar
+magnet shown in the figure given
+below.
+6. Think and say, in which
+direction your house is facing?
+(a) Use the compass and findout
+the exact direction of your house
+and compare it with your
+prediction.
+(b) Similarly predict and findout
+in which direction you  keep your
+head while sleeping at night,
+(c)  The directions you face while
+you are reading, eating etc.
+7. Prepare a toy using magnets and
+write the procedure of preparation
 
-  5. Score: 0.5973 | Chapter: SOIL : OUR LIFE | Text: Remember to collect the soil only on the day
-you begin the experiments in class. Don’t forget
-to put a label on your soil sample, stating
-where you got it from and the date on which
-you collected it.
-First copy the following Table in your Note
-book and note all your observations in this
-table. Instructions given after the table will
-help you to fill it.
-Let us do-5:  Examining The Soil After
-Returning To School
-Examine the different soil samples brought
-to class and see whether you can identify
-various properties of soil as given in the
-table. Some points to study the properties
-are given below.
-1. How does the soil look? Is it like fine
-powder or granular?
-SCERT, TELANGANASoil: Our Life142
-2. What is its colour? Is it black, brown
-or any other colour?
-3. How does it feel when you touch or press
-it? Hard, soft, elastic, dry, sticky etc?
-4. How does it smell? Is it aromatic, foul
-smelling or without a scent?
-5. Can you find anything new when you
-examine the soil under a microscope?
+  8. Score: 0.5420 | Chapter: PLAYING WITH MAGNETS | Text: in which direction you  keep your
+head while sleeping at night,
+(c)  The directions you face while
+you are reading, eating etc.
+7. Prepare a toy using magnets and
+write the procedure of preparation
+briefly.
+8. Think and say where the poles
+will be located in a ring magnet?
+Try to find out its poles using a
+bar magnet and check your
+prediction.
+9. Magnetize a needle using a bar
+magnet. Make a compass with that
+needle by following the process
+explained in activity 10.
+10. Sometimes people use magnets to
+keep the doors open and some
+times to close the doors firmly.
+Think and say how is it possible
+and how we should arrange the
+magnets in each case.
+11. Does the Earth behave as a
+magnet? How do you prove it?
+12. If you have two similar bars, one
+a magnet and another a piece of
+iron. can you findout which one
+of these is a magnet? Explain the
+process.
+13. Teacher said that Earth is a
+magnet. But Sreevidya has some
+doubts and she asked her teacher
+some questions. What may be the
+questions?
 
-  6. Score: 0.5860 | Chapter: SOIL : OUR LIFE | Text: This is an ancient creative occupation.
-During Harappan civilization, different
-varieties of designer pots and clay utensils
-were used. Pottery is a cottage industry in
-our country. Potters make pots by using
-clay soil on a pottery wheel.
-Fig. 3
-Know more about your soil
-Now we have come to know that soil is a good
-habitat of  organisms. We have also studied
-its different uses. Now let us study some other
-properties of soil.
-Let us do-4: Is the soil  from different places
-same?
-For our study, we require soils collected from
-different places. Examples of  some of  these
-locations are given below:
-SCERT, TELANGANA141VII Science Free Distribution by Govt. of T.S. 2021-22
-fields, lakeside, open meadows,
-river banks, gardens, forests,
-roadside, fallow land
-You can change the list, adding or subtracting
-names, to suit your convenience. But you
-should make sure that you get different types
-of  soil from different places. It would be even
-better if  the soils are of  different colours.
+  9. Score: 0.5287 | Chapter: PLAYING WITH MAGNETS | Text: compass is then rotated until the north
+and south marked on the dial are exactly
+below the two ends of the needle. To
+identify the North pole of the magnetic
+needle, it is usually painted in a
+different colour (see Fig. 5). Then we
+identify north and south at that place.
+After that we can also identify the
+East and West between them.
+A compass is used to find directions.
+It is mostly used in ships and airplanes.
+Mountaineers and army people also
+carry a compass with them so that they
+do not lose their way in an unknown
+place.
+Note: Don't place compass and
+magnets together.
+Activity-6: Attraction and Repulsion
+Between Two Magnets
+Take two similar magnets, place them
+in four different ways as shown in Fig.
+6 and record your observations.
+Fig. 5
+Fig. 6
+Some vets use magnets to retrieve wire and metal from animals stomachs
+SCERT TELANGANAScience VI Class
+17
+• What do you observe?
+• When do the magnets attract
+each other?
+• When do the magnets repel each
+other?
 
-  7. Score: 0.5825 | Chapter: SOIL : OUR LIFE | Text: in a year in your village. Why do they
-change crops after a period of time? Write
-your observations in your note book.
-• Which crops are grown one after another
-in your village?
-• Why are pulses grown every time?
-• Is there any crop that grows continuously
-in a same field?
-Generally, farmers cultivate pulses after
-completion of  paddy. This kind of  rotation
-of  crops retains soil fertility and productivity.
-Conservation of  soil is important factor in
-agriculture.
-Key words:
-Clay, Humus, Loamy, Sandy, Percolation,
-Water retention, Soil profile, Soil fertility,
-Soil erosion, Crop rotation
-What we have learnt?
-• Soil is a mixture of  rock particles and humus.
-• Clay, loam and sand are types of  soil.
-• Amount of water that passes through gives
-us  percolation rate. It is highest in the sandy
-soil and least in the clayey soil.
-• Water holding capacity of  soil depends on
-soil type.
-• Clay and loam are suitable for growing
-wheat, gram and paddy. Cotton is grown
-
-  8. Score: 0.5662 | Chapter: SOIL : OUR LIFE | Text: what would you suggest him?
-7. Do you think rotting vegetation and
-animal remains are important for the
-soil?  In what way?
-8. Roots of  grasses hold soil particles. This
-conserves the ………………………
-9. Which of the following statement is
-correct? Correct the wrong one.
-• Soil form from sand.
-• Crop rotation protects soil fertility.
-• Clay soil can’t hold water for a long time.
-• Upper layers of  soil are made of  rocks.
-SCERT, TELANGANA149VII Science Free Distribution by Govt. of T.S. 2021-22
-SOIL SCIENCE
-Soil science is the study of soil as a natural
-resource on the surface of the Earth. This
-includes Soil formation, Clssification and
-mapping, physical-chemical-biological and
-fertility properties of soil.
-Some times terms which refer to branches of soil science such
-as pedology and edaphology are used as if synonymous with
-soil science. Study of formation, chemistry, morphology and
-classification of soil is called pedology. Study of influence of
-
-  9. Score: 0.5636 | Chapter: SOIL : OUR LIFE | Text: Soil: Our Life138
-Figure 1
-Rafi and Vasanthi were asked by their teacher
-to make models of  some vegetables.  They
-collected some soil from their garden, mixed
-the soil with water and made some models.
-They were not satisfied, as sometimes, their
-models would break when they tried to shape
-them. The surface of the models was rough
-and not smooth. Rafi’s grandma saw them
-doing  this and said, “To make models, you
-have to collect soil from the bank of our
-village pond which is sticky”.
-• Guess why soil of the garden was not
-suitable to make models?
-• Why was grandma’s suggestion useful?
-• Are soils different from place to place?
-• How is soil useful for us?
-• Guess what  soil is made up of?
-Let us try to find out
-the answers to some
-of  these questions.
-For this lets do some
-activities.
-Let us do-1 :
-Usefulness of soil
-Work in groups of   3
-to 4 students. Discuss
-and list out the ways
-in which soil is useful
-for us. Compare the
-list with that of other groups and add any
-
-  10. Score: 0.5468 | Chapter: SOIL : OUR LIFE | Text: Farmers grow ground nut and castor and in some places cotton
-is also grown. Our people said that this is red sand soil.
-I am Sujatha. I am living in Dantaguntla of Kanumolu
-mandal in Krishna district. We have black soil in our
-village. We can make any type of model by using this soil.
-It is sticky in nature. We call it  black soil. This soil retains
-water for a long time. Farmers grow cotton, sugar cane
-and paddy. I saw the same type of soil in Indukurupeta of
-Nellore district also.
-I am David. I am living in Kanala of Sanjamala mandal
-in Kurnool district. We can only make cracked rings  using
-the soil in our village. My father said that this soil contains
-sand also. We grow Jowar, Bengal Gram and Paddy .
-I am Ramadevi. I am living in Ramapuram of Vetapalem
-mandal in Prakasham district. In my village we can see
-sandy soil. We can’t make even a ball by using this soil.
-Most of the farmers practise Aqua culture. Paddy is not
-grown in my village. Farmers grow Jasmine,
+  10. Score: 0.5126 | Chapter: PLAYING WITH MAGNETS | Text: cases). Where does this invisible
+magnet come from? The earth
+possesses magnetic property which
+acts upon the suspended bar magnet
+(see Fig. 8).Fig. 7
+Fig. 8
+Magnet attracts only magnetic objects
+SCERT TELANGANAPLAYING WITH MAGNETS Free Distribution by Govt. of T.S. 2020-21
+18
+ Activity-8:  Finding out whether
+ the given object is a magnet or not .
+You have been given three objects of
+same size, shape and colour and a bar
+magnet. You have to decide which one
+among them is a magnet, which is not
+a magnet but made up of a magnetic
+material or a non-magnetic material.
+Bring three objects one after the other
+close to one pole of the bar magnet
+and observe whether they get
+attracted, repelled or not attracted.
+Record your observation in table 2.
+After that bring those objects close
+to the other pole of the bar magnet
+in the same way and record your
+observations.
+What do you conclude by comparing
+the recorded observations?
+By the above observations we conclude
+the following:
 
 
 --- BM25 Keyword Search Results (10 Chunks) ---
 
-  1. Normalized Score: 1.0000 | Chapter: SOIL : OUR LIFE | Text: in a year in your village. Why do they
-change crops after a period of time? Write
-your observations in your note book.
-• Which crops are grown one after another
-in your village?
-• Why are pulses grown every time?
-• Is there any crop that grows continuously
-in a same field?
-Generally, farmers cultivate pulses after
-completion of  paddy. This kind of  rotation
-of  crops retains soil fertility and productivity.
-Conservation of  soil is important factor in
-agriculture.
-Key words:
-Clay, Humus, Loamy, Sandy, Percolation,
-Water retention, Soil profile, Soil fertility,
-Soil erosion, Crop rotation
-What we have learnt?
-• Soil is a mixture of  rock particles and humus.
-• Clay, loam and sand are types of  soil.
-• Amount of water that passes through gives
-us  percolation rate. It is highest in the sandy
-soil and least in the clayey soil.
-• Water holding capacity of  soil depends on
-soil type.
-• Clay and loam are suitable for growing
-wheat, gram and paddy. Cotton is grown
+  1. Normalized Score: 1.0000 | Chapter: PLAYING WITH MAGNETS | Text: SCERT TELANGANAScience VI Class
+13
+ Story of Magnet
+Around 2500 years ago, there lived an old
+shepherd named Magnus. He used to take his
+goats and sheep to the hills for grazing. He
+always carried a wooden stick which had an
+iron cap on its lower end. One day, while his
+goats were grazing, Magnus dipped his stick
+into a spring of water and poked at the pebbles
+and stones at the bottom with it.  Suddenly he
+felt something pulling his stick. When he took
+it out of water, he saw a stone stuck to the iron cap. The stone which Magnus
+pulled out was called 
+Lode stone.  It is a natural magnet and possesses the
+property of attracting iron.
+The magnets we discussed are not natural magnets. These magnets are man-
+made magnets.
+Magnets of different shapes
+The magnets we see and use in our daily life possess different shapes. Some of
+the usual shapes of magnets are shown in Fig. 2.
+Horse Shoe
+Magnet
+Ring Magnet Disc Magnet
+Fig. 2
+Think: Can we make a magnet in a required shape?
 
-  2. Normalized Score: 0.9025 | Chapter: SOIL : OUR LIFE | Text: soil and least in the clayey soil.
-• Water holding capacity of  soil depends on
-soil type.
-• Clay and loam are suitable for growing
-wheat, gram and paddy. Cotton is grown
-in sandy loam or black soil.
-• Soil profile is a section through different
-layers of the soil.
-• Removal of top soil by wind, water or any
-other means is known as soil erosion.
+  2. Normalized Score: 0.8494 | Chapter: PLAYING WITH MAGNETS | Text: SCERT TELANGANAPLAYING WITH MAGNETS Free Distribution by Govt. of T.S. 2020-21
+20
+Fig. 11 (b)
+Take a bar magnet in one hand and a
+safety pin in the other hand, hold
+them in such a way that
+they are close to each
+other but not in contact
+as shown in Fig. 11 (b).
+Ask your friend to
+bring an alpin and
+touch the safety pin.
+You will notice that the
+alpin will stick to the
+safety pin. This shows
+that due to magnetic
+induction safety pin acts as a magnet.
+Keywords
+Magnet, magnetic material, non-
+magnetic material, North Pole, South
+Pole, Magnetic compass, like poles,
+unlike poles, attraction, repulsion,
+magnetic induction
+What we have learnt
+• Lode stone is a natural magnet.
+• Magnets are of different shapes i.e.
+bar magnets, horse shoe magnets,
+ring type magnets, disc magnets,
+etc.
+• The materials that are attracted by
+magnets are called magnetic
+materials. The materials that are
+not attracted by magnets are called
+non-magnetic materials.
+• A bar magnet always has two
+
+  3. Normalized Score: 0.7412 | Chapter: PLAYING WITH MAGNETS | Text: compass is then rotated until the north
+and south marked on the dial are exactly
+below the two ends of the needle. To
+identify the North pole of the magnetic
+needle, it is usually painted in a
+different colour (see Fig. 5). Then we
+identify north and south at that place.
+After that we can also identify the
+East and West between them.
+A compass is used to find directions.
+It is mostly used in ships and airplanes.
+Mountaineers and army people also
+carry a compass with them so that they
+do not lose their way in an unknown
+place.
+Note: Don't place compass and
+magnets together.
+Activity-6: Attraction and Repulsion
+Between Two Magnets
+Take two similar magnets, place them
+in four different ways as shown in Fig.
+6 and record your observations.
+Fig. 5
+Fig. 6
+Some vets use magnets to retrieve wire and metal from animals stomachs
+SCERT TELANGANAScience VI Class
+17
+• What do you observe?
+• When do the magnets attract
+each other?
+• When do the magnets repel each
+other?
+
+  4. Normalized Score: 0.5993 | Chapter: PLAYING WITH MAGNETS | Text: of these is a magnet? Explain the
+process.
+13. Teacher said that Earth is a
+magnet. But Sreevidya has some
+doubts and she asked her teacher
+some questions. What may be the
+questions?
+14 (a) Surya was wonderstruck to
+know that Earth is a big magnet
+and appreciated efforts of
+scientistis to discover this.
+14 (b) Do you notice any such things
+in magnets to appreciate? Explain.
+15. Kiran wants to prepare a toy using
+some magnets to make people
+understand the slogan "Reject bad
+food and accept only good food".
+Can you help him to prepare the
+toy? If yes, how?
+* * * *
+It is believed that the earth's magnet power comes from a current in the liquid
+center of  the Earth causing it to become a gigantic electromagnet!
+SCERT TELANGANA
+
+  5. Normalized Score: 0.5843 | Chapter: PLAYING WITH MAGNETS | Text: the usual shapes of magnets are shown in Fig. 2.
+Horse Shoe
+Magnet
+Ring Magnet Disc Magnet
+Fig. 2
+Think: Can we make a magnet in a required shape?
+Usually, magnets are made of  steel or iron. However, special alloys of  iron, nickel,
+copper, cobalt, and aluminum can be made into powerful magnets.
+Bar Magnet
+SCERT TELANGANAPLAYING WITH MAGNETS Free Distribution by Govt. of T.S. 2020-21
+14
+  Activity-2:  Finding materials
+  attracted by magnets.
+Take a bar magnet, nail, jump-clip,
+plastic scale, a piece of glass, brass key,
+paper, iron bolt, pen, blade, pencil,
+knife, stainless steel spoon, piece of
+chalk, wood and touch the magnet
+to each item. Does the magnet attract
+every object? Observe and record
+your observations duly mentioning
+the name of the material of which the
+object is made in table 1.
+        Table 1
+Name of the object Material of which the Attracted
+object is made By Magnet
+(Iron/plastic/aluminum/ (Yes/No)
+wood/glass/ any other)
+Jump Clip Iron Yes
+Scale Plastic No
+
+  6. Normalized Score: 0.5160 | Chapter: PLAYING WITH MAGNETS | Text: after testing all materials?
+Plastic, Iron, Stainless steel,
+Wood, Aluminium, Gold, Silver,
+Copper, Paper, Cloth.
+2. List out the magnetic and non
+magnetic materials in your class
+room.
+Earth magnets can be 20 times more powerful than a fridge magnet
+SCERT TELANGANAScience VI Class
+21
+3. For which purposes do people use
+magnets in their daily life? Ask
+your family members and other
+elders and collect the information
+and prepare a list of uses of
+magnets.
+4. Draw a bar magnet and locate the
+poles.
+5. Observe and locate North and
+South poles for the second bar
+magnet shown in the figure given
+below.
+6. Think and say, in which
+direction your house is facing?
+(a) Use the compass and findout
+the exact direction of your house
+and compare it with your
+prediction.
+(b) Similarly predict and findout
+in which direction you  keep your
+head while sleeping at night,
+(c)  The directions you face while
+you are reading, eating etc.
+7. Prepare a toy using magnets and
+write the procedure of preparation
+
+  7. Normalized Score: 0.4590 | Chapter: PLAYING WITH MAGNETS | Text: etc.
+• The materials that are attracted by
+magnets are called magnetic
+materials. The materials that are
+not attracted by magnets are called
+non-magnetic materials.
+• A bar magnet always has two
+ends whose attracting capacity is
+more than other parts of  it. The
+poles of the magnet lie at these
+ends.
+• Each magnet has two magnetic
+poles :  North and South.
+• A freely suspended magnet
+always aligns in the North-South
+direction.
+• Unlike poles of two magnets
+attract each other; whereas like
+poles repel each other.
+• Magnetic property possessed by
+a magnetic substance due to the
+presence of a magnet near to it, is
+called magnetic induction.
 Improve your learning
-1. How can you say soil is
-a precious resource? Give
-reasons.
-2. Which type of soil is
-suitable for growing
-cotton?
-3. Give reasons for low
-percolation rate in clay soil
-when compared to sandy
-soil.
-4. Why is top soil more useful for us?
-5. What types of soils are there in your
-village? Make a list of crops grown on
-these soils.
-6. If  a farmer wants to improve water
-holding capacity of his sandy soil field
-what would you suggest him?
-7. Do you think rotting vegetation and
-animal remains are important for the
-soil?  In what way?
-8. Roots of  grasses hold soil particles. This
-conserves the ………………………
+1. Predict which of the following
+material are  magnetic and non-
+magnetic material. Test with a bar
+magnet and check your
+predictions. What do you say
+after testing all materials?
+Plastic, Iron, Stainless steel,
+Wood, Aluminium, Gold, Silver,
+Copper, Paper, Cloth.
+2. List out the magnetic and non
+magnetic materials in your class
 
-  3. Normalized Score: 0.3700 | Chapter: SOIL : OUR LIFE | Text: Calculate the difference between amounts of
-water. Record the time taken for water to pass
-through the sample. Fill the following table.
-Fig 4
-SCERT, TELANGANASoil: Our Life144
-• Which type of soil retains the highest
-amount of water?
-• Which type of soil took least time to pass
-down water?
-• Which type of soil took maximum time
-to pass down water?
-• Which type of soil retains least amount
-of water?
-Water passing down through the soil
-particles is called percolation.
-• Why does sand soil not retain water for
-a long time?
-• Is there any relation between percolation
-rate and water holding capacity of soil?
-Write your observations?
-Activity 9: Substances present in Soil
-Fill a beaker half  full with soil. Pour some
-rainwater or distilled water over the soil. You
-should pour enough water to fill the beaker
-three-fourths. Stir the soil and water with a
-twig. Then let the solution stand for some
-time. Once the soil settles down, drain out the
+  8. Normalized Score: 0.4519 | Chapter: PLAYING WITH MAGNETS | Text: SCERT TELANGANAScience VI Class
+17
+• What do you observe?
+• When do the magnets attract
+each other?
+• When do the magnets repel each
+other?
+You notice that like poles (N-N, S-
+S) repel each other and unlike poles
+(N-S) attract each other.
+Earth as a Magnet:
+We saw that a suspended bar magnet
+always comes to rest in the North-South
+direction.
+• Why does it come to rest in that
+particular direction only?
+• What force is acting on it?
+Activity-7:
+Place a bar magnet on
+a table in any
+direction.  Suspend
+another bar magnet
+over it as shown in
+Fig. 7. The suspended
+bar magnet should be
+fairly close to the one kept
+on the table.  Observe in which
+direction the suspended bar magnet
+comes to rest.
+Change the direction of the bar magnet
+placed on the table.
+  
+• Do you find any change in the
+direction of suspended bar magnet?
+   • Is there a change in the direction it
+comes to rest? What is that change?
+The suspended bar magnet always
+comes to rest in the direction of the
 
-  4. Normalized Score: 0.2401 | Chapter: SOIL : OUR LIFE | Text: district or  same type of  soil in different areas also. Lets us observe experiences of  students
-from different parts of our state.
-I am Madhu. I am living in Dondapadu village of Mellacherucu mandal
-in Nalgonda district. We have black soil in our village. We can make a
-ball by using this soil. But we can make cracked ring only. So
-it is light clay soil. Farmers grow cotton and Mirchi. If you
-dig two or three feet we will get lime stone in the soil. We use
-those stones for different purposes like construction of
-compound walls etc.
-SCERT, TELANGANASoil: Our Life146
-I am Kalesha. I am living in Padakal of Talakondapalli
-mandal in Mahaboobnagar district. We have red soil in our
-village. We can make a ball by using this soil. But we can’t
-make a ring by using this soil, because this contains sand too.
-Farmers grow ground nut and castor and in some places cotton
-is also grown. Our people said that this is red sand soil.
-I am Sujatha. I am living in Dantaguntla of Kanumolu
+  9. Normalized Score: 0.2894 | Chapter: PLAYING WITH MAGNETS | Text: in which direction you  keep your
+head while sleeping at night,
+(c)  The directions you face while
+you are reading, eating etc.
+7. Prepare a toy using magnets and
+write the procedure of preparation
+briefly.
+8. Think and say where the poles
+will be located in a ring magnet?
+Try to find out its poles using a
+bar magnet and check your
+prediction.
+9. Magnetize a needle using a bar
+magnet. Make a compass with that
+needle by following the process
+explained in activity 10.
+10. Sometimes people use magnets to
+keep the doors open and some
+times to close the doors firmly.
+Think and say how is it possible
+and how we should arrange the
+magnets in each case.
+11. Does the Earth behave as a
+magnet? How do you prove it?
+12. If you have two similar bars, one
+a magnet and another a piece of
+iron. can you findout which one
+of these is a magnet? Explain the
+process.
+13. Teacher said that Earth is a
+magnet. But Sreevidya has some
+doubts and she asked her teacher
+some questions. What may be the
+questions?
 
-  5. Normalized Score: 0.2326 | Chapter: SOIL : OUR LIFE | Text: Farmers grow ground nut and castor and in some places cotton
-is also grown. Our people said that this is red sand soil.
-I am Sujatha. I am living in Dantaguntla of Kanumolu
-mandal in Krishna district. We have black soil in our
-village. We can make any type of model by using this soil.
-It is sticky in nature. We call it  black soil. This soil retains
-water for a long time. Farmers grow cotton, sugar cane
-and paddy. I saw the same type of soil in Indukurupeta of
-Nellore district also.
-I am David. I am living in Kanala of Sanjamala mandal
-in Kurnool district. We can only make cracked rings  using
-the soil in our village. My father said that this soil contains
-sand also. We grow Jowar, Bengal Gram and Paddy .
-I am Ramadevi. I am living in Ramapuram of Vetapalem
-mandal in Prakasham district. In my village we can see
-sandy soil. We can’t make even a ball by using this soil.
-Most of the farmers practise Aqua culture. Paddy is not
-grown in my village. Farmers grow Jasmine,
-
-  6. Normalized Score: 0.1987 | Chapter: SOIL : OUR LIFE | Text: drop by drop, kneading the soil while doing
-so. Pour enough water so you can make small
-balls of soil, without the soil sticking to your
-palms. Make a 2.5 cm diameter ball of  soil.
-Put this ball on a flat surface and try and roll
-it into a 15-cm-long rod. If you can bend the
-rod without breaking it, then bend it into a
-ring.
-You can identify a soil type by the extent to
-which you can mould it.
-Identify the different types of soils in the line
-diagram given below. Determine the soil on
-the basis of following chart.
-SCERT, TELANGANA143VII Science Free Distribution by Govt. of T.S. 2021-22
-If the proportion of larger sized particles
-is more, we call the soil sandy. If the
-proportion of fine particles is more, the soil
-is clay. If large and fine particles are present
-in equal proportions, the soil is called loam.
-Let us do-7:  The Moisture Content of
-Soil
-There are many ways of finding out the
-moisture content of  different soils. We shall
-use a simple method. Grind the soil you wish
-
-  7. Normalized Score: 0.1708 | Chapter: SOIL : OUR LIFE | Text: organic material is found in this layer.
-• R Horizon -  The un weathered rock
-(bedrock) layer that is beneath all the
-other layers.
-• These different layers of soil are called
-soil profile.
-Do you know?
-Soil Formation: Soil is formed slowly
-as rock (the parent material) erodes into
-tiny pieces near the Earth’s surface.
-Organic matter decays and mixes with
-inorganic material (rock particles,
-minerals and water) to form soil. These
-days farmers  test the soil in the field using
-soil technologies in order to grow suitable
-crops in the fields. Engineers also test the
-soil profile before constructing multi-
-storied buildings, bridges and dams.
-Soils in our village:
-We will see different types of soils in different parts of our state. Most of the places in a
-district generally have same type of soil. In some cases we can see different types of soil in a
-district or  same type of  soil in different areas also. Lets us observe experiences of  students
-from different parts of our state.
-
-  8. Normalized Score: 0.0497 | Chapter: SOIL : OUR LIFE | Text: what would you suggest him?
-7. Do you think rotting vegetation and
-animal remains are important for the
-soil?  In what way?
-8. Roots of  grasses hold soil particles. This
-conserves the ………………………
-9. Which of the following statement is
-correct? Correct the wrong one.
-• Soil form from sand.
-• Crop rotation protects soil fertility.
-• Clay soil can’t hold water for a long time.
-• Upper layers of  soil are made of  rocks.
-SCERT, TELANGANA149VII Science Free Distribution by Govt. of T.S. 2021-22
-SOIL SCIENCE
-Soil science is the study of soil as a natural
-resource on the surface of the Earth. This
-includes Soil formation, Clssification and
-mapping, physical-chemical-biological and
-fertility properties of soil.
-Some times terms which refer to branches of soil science such
-as pedology and edaphology are used as if synonymous with
-soil science. Study of formation, chemistry, morphology and
-classification of soil is called pedology. Study of influence of
-
-  9. Normalized Score: 0.0108 | Chapter: SOIL : OUR LIFE | Text: Let us do-7:  The Moisture Content of
-Soil
-There are many ways of finding out the
-moisture content of  different soils. We shall
-use a simple method. Grind the soil you wish
-to find the moisture content of, into a fine
-powder. Weigh 100 gm of  soil from this pile.
-Spread it on a newspaper and dry it for about
-two hours in the sun. While drying the soil,
-the sky must be clear and the heat of the sun
-intense. Keep turning the soil over while you
-are drying it. Be careful that the soil does not
-spill out of  the newspaper. Weigh the soil
-again after it has completely dried. The
-difference in the two weights will tell you how
-much water 100 gm of the soil contained. This
-quantity is known as the percent moisture
-content of the soil.
-Let all the groups do the experiment with
-different soil samples.
-• Write the percent moisture content of
-the soil samples in the table.
-• Are the figures of the percent
-moisture content of all the soil
-samples the same?
-
-  10. Normalized Score: 0.0000 | Chapter: SOIL : OUR LIFE | Text: names, to suit your convenience. But you
-should make sure that you get different types
-of  soil from different places. It would be even
-better if  the soils are of  different colours.
-Collect the soil samples while you are on your
-way to school from home. But, first, let your
-teacher distribute the work of collecting
-different soil samples among the different
-groups in the class. The class can decide which
-group should visit which location and bring
-back which type of soil samples to school.
-This work distribution should be done a day
-before the chapter is begun in the class.
-Leave home a little early on that day, go to
-the location allotted to you, collect about 250
-gm of soil for your sample, and bring it to
-school. You can carry the soil in a bag.
-Remember to collect the soil only on the day
-you begin the experiments in class. Don’t forget
-to put a label on your soil sample, stating
-where you got it from and the date on which
-you collected it.
+  10. Normalized Score: 0.0000 | Chapter: PLAYING WITH MAGNETS | Text: Table 1
+Name of the object Material of which the Attracted
+object is made By Magnet
+(Iron/plastic/aluminum/ (Yes/No)
+wood/glass/ any other)
+Jump Clip Iron Yes
+Scale Plastic No
+• Which materials are attracted by
+a magnet?
+• Which materials are not attracted
+by a magnet?
+The materials that are attracted by
+magnets are called magnetic materials.
+The materials that are not attracted by
+magnets are called non-magnetic
+materials.
+• Give your own examples for
+magnetic materials.
+• Give your own examples for non-
+magnetic materials.
+Magnets have the property of
+attracting materials like Iron. Based on
+this property of magnets they can be
+used to separate some mixtures.
+Activity-3:  Can we separate iron
+filings from soil?
+Take a bar magnet and roll it in the soil
+in your school ground for some time.
+Pull out the magnet.  What do you find?
+Does anything get attached to the
+magnet?
+You may find some dark particles of
+soil sticking to the magnet.
+Now gently remove these dark particles
 
 
 --- Generated Answer ---
-That is a very important question! Understanding the different types of soil is crucial, as the type of soil determines its properties, like how well it holds water, and which crops can be successfully grown in it.
+That is an excellent question! Magnets are fascinating objects, and we classify them mainly based on how they originate and based on their shape.
 
-Based on the size of the rock particles present, soil is primarily classified into three main types: **Sandy**, **Clay**, and **Loamy** soil.
+Based on their origin, magnets are broadly categorized into two types:
 
-Here is a detailed explanation of each type:
+### 1. Natural Magnets
 
-### 1. Sandy Soil (Sand)
+These are magnets that are found naturally in the Earth.
 
-Sandy soil is characterized by having a high proportion of large-sized particles.
+*   **Example:** The textbook mentions the **Lode stone**. This stone is a natural magnet and possesses the property of attracting iron.
 
-*   **Composition:** The proportion of larger sized particles (sand) is dominant.
-*   **Percolation Rate:** This soil has the **highest** percolation rate, meaning water passes through it very quickly and easily.
-*   **Water Retention:** It has poor water-holding capacity, which is why it is difficult to mould or make a ball with this type of soil.
-*   **Suitability:** It is generally not suitable for water-intensive crops like paddy but may be used for specific crops like Jasmine or for aquaculture.
+### 2. Man-Made Magnets (Artificial Magnets)
 
-### 2. Clay Soil (Clay)
+These are magnets that are created by humans, usually for specific uses in daily life.
 
-Clay soil is the opposite of sandy soil, characterized by very fine particles.
-
-*   **Composition:** The proportion of fine particles is dominant.
-*   **Characteristics:** It is sticky in nature when wet. It is often used by potters to make pots and models because it is highly malleable.
-*   **Percolation Rate:** This soil has the **least** percolation rate, meaning water passes through it very slowly.
-*   **Water Retention:** It has high water-holding capacity and retains water for a long time.
-*   **Suitability:** Clay is suitable for growing crops such as wheat, gram, and paddy.
-
-### 3. Loamy Soil (Loam)
-
-Loamy soil is considered a balance between the other two types.
-
-*   **Composition:** Large particles (sand) and fine particles (clay) are present in approximately equal proportions.
-*   **Suitability:** Along with clay, loam is also highly suitable for growing crops like wheat, gram, and paddy.
+*   The magnets we commonly see and use are man-made. They are often made of materials like steel, iron, or special alloys of iron, nickel, cobalt, copper, and aluminum.
 
 ***
 
-**Note on Regional Variations and Crop Suitability:**
+### Types Based on Shape
 
-The textbook also mentions other descriptive types of soil based on color or specific location:
+Man-made magnets are created in different shapes depending on their function. Some of the common shapes of magnets you will encounter are:
 
-*   **Sandy Loam:** A mix suitable for crops like **cotton**.
-*   **Black Soil:** This soil is sticky and retains water for a long time. It is highly suitable for growing cotton, sugarcane, and paddy.
+1.  **Bar Magnet:** This is a rectangular-shaped magnet, often used in experiments and shown in many of our activities.
+2.  **Horse Shoe Magnet:** A magnet bent into the shape of a horseshoe or the letter 'U'.
+3.  **Ring Magnet:** A circular magnet with a hole in the center, resembling a ring.
+4.  **Disc Magnet:** A flat, circular magnet.
+
+These different shapes allow magnets to be used effectively in various applications.
 --- End Log ---
 
