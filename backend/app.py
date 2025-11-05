@@ -8,15 +8,16 @@ from contextlib import asynccontextmanager
 from dotenv import load_dotenv
 from fastapi import FastAPI, File, UploadFile, Form, HTTPException, Query, BackgroundTasks
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse, JSONResponse
+from fastapi.responses import FileResponse, JSONResponse, StreamingResponse
 from pydantic import BaseModel
 from typing import List, Dict, Optional
-from pypdf import PdfReader
+import asyncio
 
 # Load environment variables
 load_dotenv()
 from .qdrant import (
     initialize, # Updated import
+    log_query_details,
     process_and_embed_book,
     get_books,
     get_book_metadata,
@@ -30,6 +31,7 @@ from .qdrant import (
 )
 
 # --- Lifespan Management ---
+@asynccontextmanager
 async def lifespan(app: FastAPI):
     # On startup, initialize all models and database connections
     initialize()
@@ -108,111 +110,82 @@ async def list_books(class_name: Optional[str] = None, subject: Optional[str] = 
     """
     return get_books(class_name=class_name, subject=subject)
 
-@app.post("/api/query")
-async def query_book(request: QueryRequest):
+@app.get("/api/query")
+async def query_book(query: str, book_uuid: str, chapter: Optional[str] = None):
     """
-    Performs RAG pipeline to generate an answer.
+    Performs RAG pipeline to generate an answer and streams the response.
     """
-    # --- Start of New RAG Workflow ---
-    # 1. Fetch context for the LLM
-    metadata = get_book_metadata(request.book_uuid)
-    class_name = metadata.get("class_name")
-    subject = metadata.get("subject")
-    
-    chapters_data = get_chapters_for_book(request.book_uuid)
-    chapter_list = [chapter['chapter_name'] for chapter in chapters_data]
+    print(f"--- Raw Query: {query} ---")
+    async def stream_generator():
+        # --- Start of New RAG Workflow ---
+        # 1. Fetch context for the LLM
+        metadata = get_book_metadata(book_uuid)
+        class_name = metadata.get("class_name")
+        subject = metadata.get("subject")
+        
+        chapters_data = get_chapters_for_book(book_uuid)
+        chapter_list = [chapter['chapter_name'] for chapter in chapters_data]
 
-    # 2. Reformulate and Classify Query using the full context
-    processed_query_data = reformulate_and_classify_query(
-        query=request.query,
-        class_name=class_name,
-        subject=subject,
-        chapter_list=chapter_list
-    )
-    
-    reformulated_query = processed_query_data.get("reformulated_query", request.query)
-    classification = processed_query_data.get("classification", "conceptual")
-    keywords = processed_query_data.get("keywords", [])
-    conceptual_score = processed_query_data.get("conceptual_score", 0.5)
+        # 2. Reformulate and Classify Query using the full context
+        processed_query_data = reformulate_and_classify_query(
+            query=query,
+            class_name=class_name,
+            subject=subject,
+            chapter_list=chapter_list
+        )
+        
+        reformulated_query = processed_query_data.get("reformulated_query", query)
+        print(f"--- Reformulated Query: {reformulated_query} ---")
+        classification = processed_query_data.get("classification", "conceptual")
+        keywords = processed_query_data.get("keywords", [])
+        conceptual_score = processed_query_data.get("conceptual_score", 0.5)
 
-    # 3. Perform Hybrid Search
-    filters = {}
-    if request.chapter:
-        filters['chapter'] = request.chapter
+        # 3. Perform Hybrid Search
+        filters = {}
+        if chapter:
+            filters['chapter'] = chapter
 
-    search_results, semantic_results, normalized_bm25_results = hybrid_search(
-        book_uuid=request.book_uuid,
-        query=reformulated_query,
-        keywords=keywords,
-        conceptual_score=conceptual_score,
-        metadata_filters=filters
-    )
-    
-    # 4. Log all steps to ans.txt, clearing previous content
-    ans_log_filename = "ans.txt"
-    with open(ans_log_filename, "w", encoding="utf-8") as f:
-        f.write(f"--- Query Log ---\n")
-        f.write(f"Timestamp: {datetime.datetime.now().isoformat()}\n")
-        f.write(f"Original Query: {request.query}\n")
-        f.write(f"Book UUID: {request.book_uuid}\n")
-        f.write(f"Class: {class_name}, Subject: {subject}\n")
-        f.write(f"\n--- LLM Query Processing ---\n")
-        f.write(f"Reformulated Query: {reformulated_query}\n")
-        f.write(f"Classification: {classification}\n")
-        f.write(f"Conceptual Score: {conceptual_score:.2f}\n")
-        f.write(f"Keywords: {', '.join([item['keyword'] for item in keywords])}\n")
-
-        # 1. Print Formatted Top 10 Chunks for LLM (context)
-        f.write(f"\n--- Formatted Top Chunks for LLM (Context) ---\n\n")
+        search_results, semantic_results, normalized_bm25_results = hybrid_search(
+            book_uuid=book_uuid,
+            query=reformulated_query,
+            keywords=keywords,
+            conceptual_score=conceptual_score,
+            metadata_filters=filters
+        )
+        
+        # 4. Generate Final Answer
         if not search_results:
-            f.write("No chunks retrieved for LLM context.\n")
-        else:
-            for i, (score, payload) in enumerate(search_results):
-                f.write(f"  --- Chunk {i+1} (Hybrid Score: {score:.4f}) ---\n")
-                f.write(f"     Chapter: {payload.get('chapter', 'N/A')}\n")
-                f.write(f"     Text: {payload.get('text', '').strip()}\n\n")
-
-        # 2. Print Hybrid Search Results
-        f.write(f"\n--- Hybrid Search Results ({len(search_results)} Chunks) ---\n\n")
-        if not search_results:
-            f.write("No chunks retrieved from Hybrid Search.\n")
-        else:
-            for i, (score, payload) in enumerate(search_results):
-                f.write(f"  {i+1}. Hybrid Score: {score:.4f}\n")
-                f.write(f"     Chapter: {payload.get('chapter', 'N/A')}\n")
-                f.write(f"     Text: {payload.get('text', '').strip()}\n\n")
-
-        # 3. Print Semantic Search Results
-        f.write(f"\n--- Semantic Search Results ({len(semantic_results)} Chunks) ---\n\n")
-        if not semantic_results:
-            f.write("No chunks retrieved from Semantic Search.\n")
-        else:
-            for i, res in enumerate(semantic_results):
-                f.write(f"  {i+1}. Score: {res.score:.4f} | Chapter: {res.payload.get('chapter', 'N/A')} | Text: {res.payload['text'].strip()}\n\n") # Added chapter name
-
-        # 4. Print BM25 Keyword Search Results
-        f.write(f"\n--- BM25 Keyword Search Results ({len(normalized_bm25_results)} Chunks) ---\n\n")
-        if not normalized_bm25_results:
-            f.write("No chunks retrieved from BM25 Keyword Search.\n")
-        else:
-            for i, (score, doc) in enumerate(normalized_bm25_results):
-                f.write(f"  {i+1}. Normalized Score: {score:.4f} | Chapter: {doc.get('chapter', 'N/A')} | Text: {doc['text'].strip()}\n\n") # Added chapter name
-
-        # 5. Generate Final Answer
-        if not search_results:
-            answer = "I couldn't find any relevant information to answer your question."
-            sources = []
+            answer = {"display_text": "I couldn't find any relevant information to answer your question.", "read_text": "I couldn't find any relevant information to answer your question."}
+            yield f"data: {json.dumps(answer)}\n\n"
         else:
             context = "\n\n---\n\n".join([payload['text'] for score, payload in search_results])
             book_details = {"class_name": class_name, "subject": subject}
-            answer = generate_answer(request.query, book_details, context)
-            sources = [payload for score, payload in search_results]
-        
-        f.write(f"\n--- Generated Answer ---\n")
-        f.write(answer)
-        f.write(f"\n--- End Log ---\n\n")
+            display_text_sent = False
+            read_text_buffer = ""
+            in_read_text = False
 
-    return {"answer": answer, "sources": sources}
+            for chunk in generate_answer(query, book_details, context):
+                if "[READ_TEXT_START]" in chunk:
+                    parts = chunk.split("[READ_TEXT_START]")
+                    display_chunk = parts[0]
+                    if display_chunk:
+                        yield f"data: {json.dumps({'display_text': display_chunk, 'read_text': ''})}\n\n"
+                    
+                    in_read_text = True
+                    read_text_buffer += parts[1]
+                elif in_read_text:
+                    read_text_buffer += chunk
+                else:
+                    yield f"data: {json.dumps({'display_text': chunk, 'read_text': ''})}\n\n"
+
+            if read_text_buffer:
+                yield f"data: {json.dumps({'display_text': '', 'read_text': read_text_buffer})}\n\n"
+
+            print(f"--- Generated Answer: {read_text_buffer} ---")
+            log_query_details(query, {"id": book_uuid, "class_name": class_name, "subject": subject}, processed_query_data, search_results, read_text_buffer)
+        yield f"data: [DONE]\n\n"
+
+    return StreamingResponse(stream_generator(), media_type="text/event-stream")
 
 
 

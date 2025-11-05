@@ -1,3 +1,4 @@
+import datetime
 import os
 import uuid
 import hashlib
@@ -723,35 +724,67 @@ def reformulate_and_classify_query(query: str, class_name: Optional[str] = None,
         return result
 
 
-def generate_answer(raw_query: str, book_details: Dict, context: str) -> str:
+def generate_answer(raw_query: str, book_details: Dict, context: str):
     """
     Use the generative model (Gemini) with a teacher-system prompt to answer the query.
+    This function is a generator that yields chunks of the response (both for display and TTS).
     """
     if not generation_model:
         raise RuntimeError("Generation model not initialized.")
 
     system_prompt = (
-        "# System Prompt for CHADUVU-GURU\n\n"
-        "You are an AI teacher assistant. Your role is to answer student queries in a way a real teacher would, "
-        "explaining concepts clearly, using examples if needed, and staying within the context of the textbook provided. "
-        "Follow these rules:\n\n"
-        "1. Teacher Role: Assume you are the teacher for the given class and subject.\n"
-        "2. Context Usage: Use the provided textbook chunks as the primary reference. "
-        "Do not include outside information unless necessary to explain a concept.\n"
-        "3. Answer Style: Explain clearly and concisely. Provide examples or analogies if useful.\n"
-        "4. Always Generate an Answer: Even if similarity is low, produce the best possible answer.\n"
-        "5. Formatting: Use readable paragraphs, bullet points or numbered lists as appropriate.\n"
+        "You are an AI teacher assistant. Your role is to answer student queries in a way a real teacher would.\n"
+        "First, stream the answer for display. Use markdown for formatting.\n"
+        "After you have finished streaming the display answer, you MUST output a special token `[READ_TEXT_START]` followed by the simplified version of the same content for text-to-speech (TTS) reading.\n"
+        "The simplified version must be free from symbols, HTML tags, LaTeX, markdown, or special characters.\n"
+        "Example:\n"
+        "This is the display text, with **bolding** and lists:\n"
+        "* item 1\n"
+        "* item 2\n"
+        "[READ_TEXT_START]\n"
+        "This is the read text with bolding and lists removed. item 1. item 2.\n"
     )
 
     user_prompt = (
         f"**Class:** {book_details.get('class_name', 'N/A')}\n"
         f"**Subject:** {book_details.get('subject', 'N/A')}\n\n"
-        f'**Student\'s Query:** "{raw_query}"\n\n'  # Corrected escaping for apostrophe
+        f"**Student Query:** \"{raw_query}\"\n\n"
         f"**Textbook Context:**\n{context}\n"
     )
 
-    response = generation_model.generate_content([system_prompt, user_prompt])
-    return response.text
+    response = generation_model.generate_content([system_prompt, user_prompt], stream=True)
+    for chunk in response:
+        yield chunk.text
+
+def log_query_details(raw_query: str, selected_book: Dict, processed_data: Dict, search_results: List, generated_answer: str):
+    """
+    Logs the details of a query to ans.txt.
+    """
+    output_filename = "ans.txt"
+    with open(output_filename, "w", encoding="utf-8") as f:
+        f.write(f"--- Query Log ---\n")
+        f.write(f"Timestamp: {datetime.datetime.now().isoformat()}\n")
+        f.write(f"Original Query: {raw_query}\n")
+        f.write(f"Book UUID: {selected_book['id']}\n")
+        f.write(f"Class: {selected_book.get('class_name', 'N/A')}, Subject: {selected_book.get('subject', 'N/A')}\n\n")
+
+        f.write("--- LLM Query Processing ---\n")
+        f.write(f"Reformulated Query: {processed_data.get('reformulated_query', raw_query)}\n")
+        f.write(f"Classification: {processed_data.get('classification', 'N/A')}\n")
+        f.write(f"Conceptual Score: {processed_data.get('conceptual_score', 0.0):.2f}\n")
+        keywords = processed_data.get("keywords", [])
+        keyword_details = ", ".join([f"{item['keyword']} (Score: {item['importance']:.2f})" for item in keywords])
+        f.write(f"Keywords: {keyword_details}\n\n")
+
+        f.write("--- Formatted Top Chunks for LLM (Context) ---\n\n")
+        for i, (score, doc) in enumerate(search_results[:10]):
+            f.write(f"  --- Chunk {i+1} (Hybrid Score: {score:.4f}) ---\n")
+            f.write(f"     Chapter: {doc.get('chapter', 'N/A')}\n")
+            f.write(f"     Text: {doc.get('text','').strip()}\n\n")
+
+        f.write("--- Generated Answer ---\n")
+        f.write(generated_answer)
+
 
 
 def generate_teacher_explanation(class_name: str, subject: str, chapter_name: str, summary_text: str) -> str:

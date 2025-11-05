@@ -279,6 +279,10 @@ function setupChaptersPage() {
  * Sets up the main user query page wizard.
  */
 function setupUserPage() {
+    const voiceSearchBtn = document.getElementById('voice-search-btn');
+    const voiceModal = document.getElementById('voice-modal');
+    const micButton = document.getElementById('mic-button');
+    const voiceStatus = document.getElementById('voice-status');
     // Left Pane Elements
     const classSelect = document.getElementById('class-select');
     const subjectSelect = document.getElementById('subject-select');
@@ -302,6 +306,9 @@ function setupUserPage() {
     let pageNumPending = null;
     let isFirstQuery = true; // To handle the welcome message
 
+    let sentenceQueue = '';
+    let isSpeakingStream = false;
+
     // --- Event Listeners ---
 
     classSelect.addEventListener('change', () => {
@@ -316,6 +323,7 @@ function setupUserPage() {
 
     queryForm.addEventListener('submit', (e) => {
         e.preventDefault();
+        isSpeakingStream = true; // Enable streaming speech for new query
         handleQuerySubmit();
     });
 
@@ -342,51 +350,174 @@ function setupUserPage() {
         queueRenderPage(pageNum);
     });
 
-    const voiceSearchBtn = document.getElementById('voice-search-btn');
-    const voiceModal = document.getElementById('voice-modal');
-    const micButton = document.getElementById('mic-button');
-    const voiceStatus = document.getElementById('voice-status');
+    const conversationalModal = document.getElementById('conversational-modal');
+    const exitConversationalBtn = document.getElementById('exit-conversational-btn');
+
+    const conversationalModeBtn = document.getElementById('conversational-mode-btn');
+    const voiceWaveformCanvas = conversationalModal.querySelector('#voice-waveform-modal'); // Correctly select canvas inside modal
+    const waveformCtx = voiceWaveformCanvas.getContext('2d');
+    let animationFrameId;
 
     let isRecording = false;
+    let isConversationalMode = false;
+
     const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
     recognition.interimResults = true;
     recognition.lang = 'en-US';
 
+    // Event listener for the voice search modal
     recognition.addEventListener('result', e => {
-    const transcript = Array.from(e.results)
-        .map(result => result[0])
-        .map(result => result.transcript)
-        .join('');
-    queryText.value = transcript;
+        const transcript = Array.from(e.results)
+            .map(result => result[0])
+            .map(result => result.transcript)
+            .join('');
+        if (isConversationalMode) {
+            if (e.results[0].isFinal) {
+                handleTranscription(transcript);
+            }
+        } else {
+            queryText.value = transcript;
+        }
     });
 
     recognition.addEventListener('end', () => {
-    micButton.textContent = 'Start Recording';
-    isRecording = false;
-    voiceModal.classList.add('hidden');
+        if (isConversationalMode) {
+            if (speechSynthesis.speaking) {
+                // If AI is speaking, don't restart recognition yet.
+                // It will be restarted after AI finishes speaking.
+            } else {
+                recognition.start();
+            }
+        } else {
+            micButton.textContent = 'Start Recording';
+            isRecording = false;
+        }
     });
 
     voiceSearchBtn.addEventListener('click', () => {
-    voiceModal.classList.remove('hidden');
+        voiceModal.classList.remove('hidden');
     });
 
     micButton.addEventListener('click', () => {
-    if (isRecording) {
-        recognition.stop();
-    } else {
-        recognition.start();
-        micButton.textContent = 'Stop Recording';
-        voiceStatus.textContent = 'Recording...';
-        isRecording = true;
-    }
+        if (isRecording) {
+            recognition.stop();
+        } else {
+            recognition.start();
+            micButton.textContent = 'Stop Recording';
+            voiceStatus.textContent = 'Recording...';
+            isRecording = true;
+        }
     });
 
     voiceModal.addEventListener('click', (e) => {
-    if (e.target === voiceModal) {
-        voiceModal.classList.add('hidden');
-    }
+        if (e.target === voiceModal) {
+            voiceModal.classList.add('hidden');
+        }
     });
 
+    conversationalModeBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (!selectedBook) {
+            alert('Please select a book first to start conversational mode.');
+            return;
+        }
+        startConversationalMode();
+    });
+
+    exitConversationalBtn.addEventListener('click', () => {
+        stopConversationalMode();
+    });
+
+    function startConversationalMode() {
+        isConversationalMode = true;
+        conversationalModal.classList.remove('hidden');
+        recognition.start();
+    }
+
+    function stopConversationalMode() {
+        isConversationalMode = false;
+        conversationalModal.classList.add('hidden');
+        recognition.stop();
+        speechSynthesis.cancel();
+        cancelAnimationFrame(animationFrameId);
+        waveformCtx.clearRect(0, 0, voiceWaveformCanvas.width, voiceWaveformCanvas.height);
+    }
+
+    async function handleTranscription(transcript) {
+        if (!transcript.trim() || !selectedBook) return;
+
+        console.log(`--- Transcribed Text: ${transcript} ---`);
+
+        const source = new EventSource(`/api/query?book_uuid=${selectedBook.id}&query=${transcript}`);
+        let fullReadText = "";
+
+        source.onmessage = function(event) {
+            if (event.data === "[DONE]") {
+                source.close();
+                if (fullReadText) {
+                    const utterance = new SpeechSynthesisUtterance(fullReadText);
+                    utterance.onstart = () => {
+                        animateWaveform();
+                    };
+                    utterance.onend = () => {
+                        if (isConversationalMode) {
+                            recognition.start();
+                        }
+                    };
+                    speechSynthesis.speak(utterance);
+                }
+                return;
+            }
+            const data = JSON.parse(event.data);
+            if (data.read_text) {
+                fullReadText += data.read_text;
+            }
+        };
+
+        source.onerror = function(error) {
+            console.error('EventSource failed:', error);
+            source.close();
+        };
+    }
+
+    function animateWaveform() {
+        if (!isConversationalMode || !speechSynthesis.speaking) {
+            cancelAnimationFrame(animationFrameId);
+            waveformCtx.clearRect(0, 0, voiceWaveformCanvas.width, voiceWaveformCanvas.height);
+            return;
+        }
+
+        const width = voiceWaveformCanvas.width;
+        const height = voiceWaveformCanvas.height;
+        const time = Date.now();
+
+        waveformCtx.clearRect(0, 0, width, height);
+        waveformCtx.lineWidth = 2;
+        waveformCtx.strokeStyle = '#3b82f6';
+
+        waveformCtx.beginPath();
+
+        const sliceWidth = width * 1.0 / 100;
+        let x = 0;
+
+        for (let i = 0; i < 100; i++) {
+            const v = 1.5 * Math.sin(i / 2 + time / 100);
+            const y = v * height / 2 + height / 2;
+
+            if (i === 0) {
+                waveformCtx.moveTo(x, y);
+            } else {
+                waveformCtx.lineTo(x, y);
+            }
+
+            x += sliceWidth;
+        }
+
+        waveformCtx.lineTo(width, height / 2);
+        waveformCtx.stroke();
+
+        animationFrameId = requestAnimationFrame(animateWaveform);
+    }
 
     // --- Core Functions ---
 
@@ -535,35 +666,58 @@ function setupUserPage() {
         listChaptersBtn.classList.add('hidden');
 
         const thinkingMessage = appendAIResponse('...');
+        const contentDiv = thinkingMessage.querySelector('.markdown-content');
+        let fullResponse = "";
+        contentDiv.innerHTML = '';
 
-        try {
-            const response = await fetch('/api/query', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    book_uuid: selectedBook.id,
-                    query: query
-                })
-            });
+        const source = new EventSource(`/api/query?book_uuid=${selectedBook.id}&query=${query}`);
 
-            if (!response.ok) {
-                const errorResult = await response.json();
-                throw new Error(errorResult.detail || 'Failed to get answer.');
+        let fullReadText = "";
+        source.onmessage = function(event) {
+            if (event.data === "[DONE]") {
+                source.close();
+                if (fullReadText && isSpeakingStream) {
+                    const utterance = new SpeechSynthesisUtterance(fullReadText);
+                    speechSynthesis.speak(utterance);
+                }
+                isSpeakingStream = false;
+                submitButton.removeAttribute('disabled');
+                listChaptersBtn.classList.remove('hidden');
+                return;
             }
+            const data = JSON.parse(event.data);
+            if (data.display_text) {
+                fullResponse += data.display_text;
+                contentDiv.innerHTML = marked.parse(fullResponse);
+            }
+            if (data.read_text) {
+                fullReadText += data.read_text;
+            }
+            chatHistory.scrollTop = chatHistory.scrollHeight;
+        };
 
-            const result = await response.json();
-            const formatted = marked.parse(result.answer);
-            thinkingMessage.querySelector('.markdown-content').innerHTML = formatted;
+        source.onerror = function(error) {
+            console.error('EventSource failed:', error);
+            contentDiv.innerHTML = `<p class="error-message">Error: ${error.message}</p>`;
+            source.close();
+        };
 
-        } catch (error) {
-            thinkingMessage.querySelector('.markdown-content').innerHTML = `<p class="error-message">Error: ${error.message}</p>`;
-        } finally {
+        source.onopen = function() {
+            // This is called when the connection is established
+        };
+
+        source.onend = function() {
             submitButton.removeAttribute('disabled');
             listChaptersBtn.classList.remove('hidden');
-            chatHistory.scrollTop = chatHistory.scrollHeight;
-        }
+            isSpeakingStream = false; // Disable streaming speech when done
+            // Speak any remaining text in the queue
+            if (sentenceQueue.trim()) {
+                const utterance = new SpeechSynthesisUtterance(sentenceQueue.trim());
+                speechSynthesis.speak(utterance);
+                sentenceQueue = '';
+            }
+        };
     }
-
     async function handleListChapters() {
         if (!selectedBook) return;
         
@@ -660,9 +814,42 @@ function copyMessage(btn) {
     setTimeout(() => (btn.textContent = "📋"), 1200);
 }
 
-function speakMessage(button) {
-    const card = button.closest('.ai-card');
-    const content = card.querySelector('.markdown-content').innerText;
-    const utterance = new SpeechSynthesisUtterance(content);
-    speechSynthesis.speak(utterance);
+function speakStream(chunk) {
+    if (!isSpeakingStream) return; // Only speak if streaming is enabled
+
+    sentenceQueue += chunk;
+
+    // Use a simple regex to detect sentence endings
+    const sentenceEndings = /[.!?。？！]/;
+    const parts = sentenceQueue.split(sentenceEndings);
+
+    // If the last part is not a complete sentence, keep it in the queue
+    if (parts.length > 1 && sentenceEndings.test(sentenceQueue.slice(-1))) {
+        for (let i = 0; i < parts.length - 1; i++) {
+            const sentence = parts[i].trim();
+            if (sentence) {
+                const utterance = new SpeechSynthesisUtterance(sentence);
+                speechSynthesis.speak(utterance);
+            }
+        }
+        sentenceQueue = parts[parts.length - 1]; // Keep the incomplete sentence
+    }
+}
+
+
+// Call window.speakMessage to use an updated version.
+window.speakMessage = function(button) {
+    if (speechSynthesis.speaking || isSpeakingStream) {
+        speechSynthesis.cancel();
+        isSpeakingStream = false;
+        button.textContent = '🔊'; // Reset icon
+    } else {
+        // If no speech is active, start speaking the full message content
+        const card = button.closest('.ai-card');
+        const content = card.querySelector('.markdown-content').innerText;
+        const utterance = new SpeechSynthesisUtterance(content);
+        utterance.onstart = () => { button.textContent = '🔇'; };
+        utterance.onend = () => { button.textContent = '🔊'; };
+        speechSynthesis.speak(utterance);
+    }
 }

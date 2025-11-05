@@ -1,1302 +1,324 @@
 --- Query Log ---
-Timestamp: 2025-11-04T15:13:56.836802
-Original Query: differentiate between acid bases and salts
-Book UUID: 9f4e8506f5d016caa6cd7c7b824396829225ed8d9fed9229a3e04d7fbf2a3372
-Class: 7, Subject: science
+Timestamp: 2025-11-05T10:42:37.993260
+Original Query: hey can you explain me about how tanks for build in an easy steps
+Book UUID: b250da676f2f0c2a2b1423a27ae133c1a32829112733470fc683ceab06193ba0
+Class: 7, Subject: social
 
 --- LLM Query Processing ---
-Reformulated Query: Provide a comprehensive comparison detailing the fundamental chemical differences, definitions (e.g., pH, conductivity, reaction types), and characteristic properties used to distinguish acids, bases, and salts.
+Reformulated Query: What is the simplified, step-by-step manufacturing and assembly process used to construct modern military armored fighting vehicles (tanks)?
 Classification: conceptual
 Conceptual Score: 0.90
-Keywords: acids, bases, salts, differentiation, chemical properties, pH scale, chemistry
+Keywords: tanks (Score: 1.00), manufacturing process (Score: 0.90), construction (Score: 0.85), step-by-step (Score: 0.80), military vehicles (Score: 0.70)
 
 --- Formatted Top Chunks for LLM (Context) ---
 
-  --- Chunk 1 (Hybrid Score: 0.6683) ---
-     Chapter: ACIDS AND BASES
-     Text: neutral but they are not salts.
-Let us do - 9
-Test the following salt substances with red
-litmus and blue litmus papers. Record your
-observations in the table.
-TABLE - 8
-Let us do - 10: Classifying salts
-Collect some salt substances with the help
-of your teacher, make their salt solutions.
-Test the salt solutions with blue litmus and
-red litmus papers. Classify these salts as per
-your observations in the given table.
-TABLE - 9
-Why is our sweat  salty ?
-Our body needs many types of salts.  We
-lose some salts through excretion. So sweat
-is salty.
-Do you know?
-Uses of  some acids, bases and salts
-Salts which change blue litmus to red are
-acidic salts and  salts which change red
-litmus to blue are basic salts.  Some salts
-affect neither blue nor red litmus papers.
-These are called neutral salts. TABLE - 10
-Cool Drinks
-SCERT, TELANGANAVII Science 17Free Distribution by Govt. of T.S. 2021-22
-Key words:-
-Indicator, Acid, Base, Red litmus, Blue
-litmus, Acidic substance, Basic Substance,
+  --- Chunk 1 (Hybrid Score: 0.5140) ---
+     Chapter: Tanks and Ground Water
+     Text: SCERT, TEALANGANA
+22 Diversity on the Earth Social Studies
+Tanks (Cheruvulu)
+For thousands of years, our ancestors
+have tried to utilize run-off rain-water by
+building tanks. We have evidence of tanks
+being built and used for agriculture from
+the times of the Megaliths. You will also
+read about the Kakatiya  kings who built a
+large number of tanks in Telangana. This
+enabled the extension of agriculture into
+dry regions. To this day, most of the villages
+in these regions have at least one or two
+major tanks.
+How were the tanks built?
+The tanks were usually built by building
+a strong wall of stones and mud across a
+small stream in such a way that with a wall
+on just one side, a large lake could be
+formed. Look at the picture below:
+Tanks were sometimes built by a king,
+sometimes by a military leader or nayaka
+or often by the people of the village
+themselves. Usually, every village preserved
+the memory of those who were responsible
+for building the tank through stories or
 
-  --- Chunk 2 (Hybrid Score: 0.5566) ---
-     Chapter: ACIDS AND BASES
-     Text: explain how would you convert an acidic
-solution into basic solution?
-If you are given a basic solution how can you
-turn it into an acidic solution?
-In the above experiment you might have
-noticed that if we add excess base (caustic
-soda) to acidic solution (Hydrochloric acid)
-it gets converted into a base; similarly we
-can change  a base into an acid by adding the
-acid in excess.
-If you are given a solution of Hydrochloric
-acid how can you make it into a solution which
-is neither acidic nor basic?
-If you are given a caustic soda solution, how
-can you make it into a solution which is neither
-acidic nor basic?
-When acids and bases are mixed in equal
-concentrations they give a neutral
-solution. We learn more about
-neutralization in higher classes.
-Manures:-
-In recent years the use of chemical fertilizers
-has increased. Though the use of chemical
-fertilizers increases the production of  crops,
-it changes the nature of the soil. Some
-fertilizers increase the acidity of the soil and
+  --- Chunk 2 (Hybrid Score: 0.4200) ---
+     Chapter: Tanks and Ground Water
+     Text: of Telangana has started a programme for minor irrigation
+tanks in the state. This programme, called ‘Mission
+Kakatiya, mana uru mana cheruvu”, aims at removal of
+silt from tank beds and repair and construction of tank
+bunds on about 47000 tanks.
+Find out about the implementation of this programme
+in your area. How many tanks have been improved and
+whether people have benefitted from this.
+Fig 3.1 (c) : Veerala Devi Tank
+Fig 3.1 (d) : Goddess of Katta Maisamma
+Fishing in Tanks
+Tanks not only provide drinking water
+and water for irrigation of fields, but also
+provide livlihood for fisherfolk. Many of
+the fisherfolk are from traditional fishing
+communities like Besta (Gangaputra),
+Goondla and Mudiraj (Tenugu) Community
+depend upon these tanks and rivers for
+leading their lives. Let’s find out more
+about their lives by visiting a village in
+Suryapet district.
+Bhethavolu village
+This village is 16 kilometers from
+Kodada near Suryapet.
+According to village elders ‘Bhethavolu’
 
-  --- Chunk 3 (Hybrid Score: 0.3843) ---
-     Chapter: ACIDS AND BASES
-     Text: What do you observe?
-Bring a burning match stick near the test
-tube.
-What happens? The flame extinguishes.
-Pass the gas into lime water. What happens?
-Can you see the formation of  precipitation?
-Lime water turned milky white.
-Is it Carbon dioxide?
-Now try to write the properties of  acids and
-bases from your observations in the above
-experiments.
-We have seen that neutral solutions have no
-effect on indicators. We have also seen that
-acids and bases have different effects on
-indicators. When is the solution made by
-mixing of an acid and a base, be a neutral?
-SCERT, TELANGANAVII Science 15Free Distribution by Govt. of T.S. 2021-22
-Let us do - 8
-Take a clean test tube. Using a clean dropper
-put 10 drops of dilute Hydrochloric acid
-carefully in it and also add 2 drops of
-phenolphthalein indicator solution.
-What is the colour of the resulting solution?
-Now add Caustic soda solution
-(Whose concentration is equal to
-Hydrochloric acid) drop by drop
-to the test tube.
+  --- Chunk 3 (Hybrid Score: 0.2042) ---
+     Chapter: Production in a Factory - A Paper Mill
+     Text: completely, we get a sheet of paper which
+is then rolled up.
+(v) Cutting: The paper is cut in the
+cutting machines according to the size
+required. Paper is made into rolls and sheets
+as well. It is then packed and sent to
+godowns.
+The production work takes place
+continuously in all the sections
+simultaneously.
+Work in Batches
+The paper in the form of rolls
+and sheets is preserved in
+godowns. Each roll is labeled with
+a Batch / Lot no., weight etc.  What
+is a batch? When a lorry load of
+wood is brought into the factory,
+the entire quantity of wood is
+given a batch number. This batch
+is then sent to different sections
+one after the other. Raw material
+of one batch would be processed
+together at each stage. For example, when
+batch No. 201 is being cut into small
+pieces, simultaneously the previous batch
+(No. 200) would be in the section for
+making pulp and batch No. 199 would be in
+the spreading section and so on. As soon
+as No. 201 is cut into pieces, it would be
 
-  --- Chunk 4 (Hybrid Score: 0.3127) ---
-     Chapter: ACIDS AND BASES
-     Text: Apart from natural acids, there are certain acids
-like Hydrochloric acid, Sulphuric acid and
-Nitric acid etc. that are prepared from
-minerals.
-Basic Nature:-
-How do you feel when you touch a cake of
-soap? Take it between your fingers and gently
-rub your fingers on it? Do the same with the
-other material. What difference do you
-notice?
-• You might have touched soap water or
-lime water. How do you feel?
-• Can you list out some more substances
-that are soapy to touch?
-The substances which are soapy to touch are
-basic in nature.
-Some substances that we use
-in our daily life, contain
-different bases. For example
-soap, glass cleaners etc.
-Various substances
-containing bases are listed in the below table.
-TABLE - 6
-TABLE - 6
-Let us do - 5
-Burn a small piece of
-Magnesium ribbon by
-holding it with tongs. Collect the white ash and
-dissolve it in a little water.  Touch the solutions
-formed and test this solution with blue litmus
-and red litmus.
-TABLE - 5
-cheese
-Butter Milk, Curd
+  --- Chunk 4 (Hybrid Score: 0.1815) ---
+     Chapter: Industrial Revolution
+     Text: adaptation of steam engine to locomotives.
+George Stephenson’s locomotive pulled
+heavy loads along a 64 kilometre track from
+Liverpool to Manchester at a speed of 46
+kilometers per hour.
+In 1840s, John Loudon McAdam devised
+a method of laying the road using broken
+stones. This created a hard surface, which
+was an important advancement in the
+construction of roads. Within another
+decade, bitumen-based binding, which we
+see in our areas as tar(mac) roads,were
+built. This was further followed by the use
+of motor cars.
+In the early  20th Century, an aircraft
+was developed by Wright Brothers and
+today, air transport is the fastest means of
+transport.
+Trade in Industrial Products
+Industrial production increased so much
+that it was not possible to sell all the
+products in their own countries. The
+factory owners began to sell them in other
+countries too. Machine made goods were
+cheap and durable. Hence, the demand for
+them increased all over the world. This gave
 
-  --- Chunk 5 (Hybrid Score: 0.2938) ---
-     Chapter: ACIDS AND BASES
-     Text: following categories from the above
-observations.
-TABLE 4
-SCERT, TELANGANAAcids and Bases12
-• Now take things which are sour in taste
-and used as food e.g. curd, lemon juice
-etc. Check with blue and red litmus, what
-happens?
-Indicators:
-The strips of litmus paper change the colour,
-based on the nature of the material put on
-them. These are all indicators. They tell us
-whether a substance is acidic or basic. They
-are used in studying acidic and basic properties
-of  substances.
-Acidic Nature:-
-You may have experienced a burning sensation
-when bitten by an ant. The sensation is due to
-the presence of  formic acid that the ant
-releases. The acids present in plants and
-animals are called as natural acids.
-The substances that contain different acids. are
-given in the table 5.
-Apart from natural acids, there are certain acids
-like Hydrochloric acid, Sulphuric acid and
-Nitric acid etc. that are prepared from
-minerals.
-Basic Nature:-
-How do you feel when you touch a cake of
+  --- Chunk 5 (Hybrid Score: 0.1768) ---
+     Chapter: Tanks and Ground Water
+     Text: Decline of Tanks in Our Times
+During the last twenty or thirty years,
+tanks have been neglected and have been
+allowed to break down. Repairs to the
+tanks, desilting etc. have not been done
+regularly. People also have gradually taken
+over the tank land for building houses or
+for agriculture. As a result, in almost every
+part of the state, we see the sad state of dry
+tanks lying uncared for. Instead of caring
+for the tanks, we have been digging deeper
+and deeper tube wells at a great expense.
+But they only benefit a few, and in the long
+run, deplete the water resources. On the
+other hand, tanks build resources for all.
+  Project
+ Prepare a report with the following
+details about the tank in your
+village or town.
+ Prepare a sketch map of the tank
+and its nearby areas.
+ Find out from where does the water
+come into the tank and where does
+the excess water go.
+ Find out the names of the river or
+stream across which it has been
+built or the names of the hills near
 
-  --- Chunk 6 (Hybrid Score: 0.2840) ---
-     Chapter: ACIDS AND BASES
-     Text: ———————————
-———————————
-———————————
-———————————
-• Do you find any difference in the taste
-of  a raw and a ripe fruit?
-TABLE - 1
-• Do substances change their taste when
-cooked?
-• Do substances change their taste when
-added to some other substances?
-• Add salt to lemon juice. How do the two
-together  taste now?
-• Add sugar to lemon juice what change
-do you notice in the taste?
-• Is there any difference in the taste in the
-above situations.
-2 ACIDS AND BASES
-SCERT, TELANGANAAcids and Bases10
-• Do substances change colour when
-added to other substances?
-• Do you observed any change when lime
-water is added to turmeric?
-Let us do - 1
-Take some turmeric powder. Add a bit of
-water to it and prepare turmeric paste. Rub
-the turmeric paste on a white paper dry it for
-some time. Then draw a flower daigram on
-that paper with a pencil. Colour the flower
-with soap water using a brush.
-• Does the colour of the flower remain the
-same when soap water is used?
-Similarly take some lime water. Add a few
+  --- Chunk 6 (Hybrid Score: 0.1584) ---
+     Chapter: Production in a Factory - A Paper Mill
+     Text: When we visited the paper mill, we
+found 4-5 lorries with loads of subabul
+wood waiting outside the mill gate.They
+would be allowed to enter the mill only
+after 9.30 a.m. There were separate gates
+– one for the workers and the other large
+gate for the vehicles. We had to take prior
+permission from the paper mill authorities
+to visit the mill.
+Process of Paper-making
+Inside the factory compound, we saw  a
+lifter crane lifting subabul wood from a
+lorry and placing it on an iron platform. A
+conveyor belt took the wood to the cutting
+machine. Paper is actually made in five
+stages. This paper mill has separate
+sections for each stage which uses different
+machines and raw materials. The stages are
+as follows:
+S.No. Product     Name of the industry Raw Material
+1 Shoe/ Chappel   Footwear industry   Leather / rubber / canvas
+2
+3
+4
+ Do you think if we use more paper, we need to cut more forests or reduce the area
+under cultivation? Discuss.
+(i) Chipping: In the first stage, large
 
-  --- Chunk 7 (Hybrid Score: 0.2831) ---
-     Chapter: ACIDS AND BASES
-     Text: neutral are not salts. For eg. sugar and
-starch solutions are  neutral, but they are
-not salts.
-• In the process of Neutralization, both
-the acidic and basic qualities are
-neutralised.
-• Salts need not always be neutral, they can
-be acidic or basic.
-Improve your learning
-1. The sting of a wasp is
-basic. How can we treat
-the sting of a wasp?
-2. Why are acids not stored
-in a metal container?
-3. Acidic, basic and neutral solutions are
-given in three test tubes and you are given
-a strip of red litmus? How will you
-identify the three solutions?
-4. When drops of lemon juice are put on
-blue litmus it turns red what will happen
-if you put some drops of soap solution
-on the same position on litmus paper?
-5. What happens when Nitric acid is added
-to egg shell?
-6. Turmeric stains on white clothes, when
-washed with soap, turn red. Why?
-7. Ammonia is present in window cleaners.
-It turns red litmus blue. What is its
-nature?
-8. What is the nature of urea? Is it acidic,
+  --- Chunk 7 (Hybrid Score: 0.1444) ---
+     Chapter: Handicrafts and Handlooms
+     Text: SCERT, TEALANGANASCERT, TEALANGANA
+72 Production, Exchange and Livelihoods Social Studies
+Tools:
+Weavers own the wooden loom, which
+is the main tool required for weaving. Apart
+from it, they also use small knives. For
+weavers, it is also important to know the
+plan of the design to weave the saree. If
+you look at a saree, you will notice that
+there are very intricate designs on them.
+These designs are marked on special
+sheets of paper with specific notations.
+Weavers follow them without making
+errors. With years of practice, they even
+develop new designs.
+ Look at a saree and draw any of the
+common designs on them in the
+box below.
+Stages of Weaving a Saree
+There are different stages of  weaving
+a saree. The first is preparing the yarn. Silk
+yarn is wound on a bobbin. These yarns are
+then marked with the design. These
+markings of the designs help the weaver
+to identify what colours need to be dyed
+into which part of the yarn. Dyeing the yarn
+is a long repeated process. Each colour
 
-  --- Chunk 8 (Hybrid Score: 0.2709) ---
-     Chapter: CHANGES AROUND US
-     Text: and  chemical changes. In physical changes no
-new substance is formed whereas in chemical
-change we have seen that one or more new
-substances are formed.
-Identifying physical and chemical change
-Have you ever thought of the process behind
-setting milk into curd?  Is it a physical change
-or chemical change ?
-What type of  change is the boiling of  an egg?
-Is it a chemical change or a physical change?
-Think about the following changes and
-decide whether they are physical or
-chemical changes. Write the type of change
-and reasons for that in the  table.
-Everyday we use many types of batteries and
-many of these batteries are recharged
-Table - 5
-SCERT, TELANGANAChanges Around Us166
-regularly.  Can you identify the types of  change
-taking place in this process?
-We use Turmeric with Limewater (Calcium
-Hydroxide) to decorate the feet (Parani)
-during some  occasions at our homes. What
-type of change is this? Think about  the
-reasons why chewing of  Pan (Killi) turns our
-mouth red.
+  --- Chunk 8 (Hybrid Score: 0.1436) ---
+     Chapter: Production in a Factory - A Paper Mill
+     Text: SCERT, TEALANGANA
+86 Production, Exchange and Livelihoods Social Studies
+ Have you ever visited any factory?
+Describe it.
+ Draw a picture of the factory you
+visited and using your imagination,
+describe the activities inside a
+factory in 300 words.
+We use so much of paper in our day to
+day lives. Do you know how is the paper
+found in books, records, registers, progress
+reports and newspapers made? There are
+ Handicraft production is done at home by small families with the help of some
+simple tools. In contrast, factories produce goods on a large scale with the help of
+machines and a large number of workers. Let us find out how production is organised
+in large factories. CHAPTER
+Production in a Factory –
+A Paper Mill
+two paper mills in Telangana - Sirpur
+Kagaznagar (Komrambheem district) and
+Bhadrachalam (Bhadradri district).
+ Mark the two districts in a map of
+Telangana. Why do you think are
+they located there?
+Raw Materials
+The material required to produce a
 
-  --- Chunk 9 (Hybrid Score: 0.2475) ---
-     Chapter: ACIDS AND BASES
-     Text: Cool Drinks
-SCERT, TELANGANAVII Science 17Free Distribution by Govt. of T.S. 2021-22
-Key words:-
-Indicator, Acid, Base, Red litmus, Blue
-litmus, Acidic substance, Basic Substance,
-Neutral Substance, Salts, Neutralization,
-Acid rain.
-What we have learnt
-• Indicator helps us to find whether the
-solution is acidic or basic or neutral.
-• Red litmus paper, blue litmus paper,
-phenolphthalein, methyl orange  are
-indicators.
-• Hibiscus, turmeric and rose petals are
-natural indicators.
-• The substances that turn blue litmus to
-red are acidic in nature.
-• The substances that are soapy to touch
-and turn red litmus to blue are basic in
-nature.
-• Acid rains are the combination of
-Carbonic acid, sulphuric acid and Nitric
-acid with rain water.
-• All substances whose solutions are
-neutral are not salts. For eg. sugar and
-starch solutions are  neutral, but they are
-not salts.
-• In the process of Neutralization, both
-the acidic and basic qualities are
-neutralised.
+  --- Chunk 9 (Hybrid Score: 0.1435) ---
+     Chapter: Handicrafts and Handlooms
+     Text: markings of the designs help the weaver
+to identify what colours need to be dyed
+into which part of the yarn. Dyeing the yarn
+is a long repeated process. Each colour
+needs to be dyed separately and dried one
+after the other. Only when the colouring is
+completed, the thread can be used for
+weaving.
+Dyeing yarn
+For dyeing, the silk yarn is taken off, but
+when it becomes dry, it is stretched, partly
+opened and tied again for dyeing. This
+process is repeated several times. For
+making sarees in different colours and
+shades, different methods of dyeing are
+followed. The red and brown shades,
+between white and black colours, are
+printed using alizarin dyes. For this, the
+yarn is first soaked in a mixture of castor
+oil and alkaline earth, then dried, soaked
+again, dipped in alizarin paste and finally
+boiled till it becomes red. For the brown
+shades, iron filings are added to the colour.
+Dissolving iron filings in vinegar produces
+black colour.
+     Warp and Weft
 
-  --- Chunk 10 (Hybrid Score: 0.2398) ---
-     Chapter: CHANGES AROUND US
-     Text: the type of crystals formed by urea and Alum.
-SCERT, TELANGANA165VII Science Free Distribution by Govt. of T.S. 2021-22
-Let us do-12: Observing Crystallisation of
-Copper Sulphate.
-Take some hot, saturated solution of  Copper
-sulphate in a test tube.  Pour some of  it in an
-evaporating dish. Allow the solution to cool
-quickly.
-Observe with a magnifying glass, the size,
-colour and shape of  the crystals formed.
-From the above three activities we notice that
-we can separate dissolved substances in the
-form of  crystals.
-The process of separating a soluble
-solid from the solution by heating  or
-evaporating the solvent is called
-crystallization.
-What type of change is this? In
-crystallization no new substance is formed.
-Hence it is physical change.
-Till now we have discussed about some physical
-and  chemical changes. In physical changes no
-new substance is formed whereas in chemical
-change we have seen that one or more new
-substances are formed.
-Identifying physical and chemical change
-
-
---- Hybrid Search Results (10 Chunks) ---
-
-  1. Hybrid Score: 0.6683
-     Chapter: ACIDS AND BASES
-     Text: neutral but they are not salts.
-Let us do - 9
-Test the following salt substances with red
-litmus and blue litmus papers. Record your
-observations in the table.
-TABLE - 8
-Let us do - 10: Classifying salts
-Collect some salt substances with the help
-of your teacher, make their salt solutions.
-Test the salt solutions with blue litmus and
-red litmus papers. Classify these salts as per
-your observations in the given table.
-TABLE - 9
-Why is our sweat  salty ?
-Our body needs many types of salts.  We
-lose some salts through excretion. So sweat
-is salty.
-Do you know?
-Uses of  some acids, bases and salts
-Salts which change blue litmus to red are
-acidic salts and  salts which change red
-litmus to blue are basic salts.  Some salts
-affect neither blue nor red litmus papers.
-These are called neutral salts. TABLE - 10
-Cool Drinks
-SCERT, TELANGANAVII Science 17Free Distribution by Govt. of T.S. 2021-22
-Key words:-
-Indicator, Acid, Base, Red litmus, Blue
-litmus, Acidic substance, Basic Substance,
-
-  2. Hybrid Score: 0.5566
-     Chapter: ACIDS AND BASES
-     Text: explain how would you convert an acidic
-solution into basic solution?
-If you are given a basic solution how can you
-turn it into an acidic solution?
-In the above experiment you might have
-noticed that if we add excess base (caustic
-soda) to acidic solution (Hydrochloric acid)
-it gets converted into a base; similarly we
-can change  a base into an acid by adding the
-acid in excess.
-If you are given a solution of Hydrochloric
-acid how can you make it into a solution which
-is neither acidic nor basic?
-If you are given a caustic soda solution, how
-can you make it into a solution which is neither
-acidic nor basic?
-When acids and bases are mixed in equal
-concentrations they give a neutral
-solution. We learn more about
-neutralization in higher classes.
-Manures:-
-In recent years the use of chemical fertilizers
-has increased. Though the use of chemical
-fertilizers increases the production of  crops,
-it changes the nature of the soil. Some
-fertilizers increase the acidity of the soil and
-
-  3. Hybrid Score: 0.3843
-     Chapter: ACIDS AND BASES
-     Text: What do you observe?
-Bring a burning match stick near the test
-tube.
-What happens? The flame extinguishes.
-Pass the gas into lime water. What happens?
-Can you see the formation of  precipitation?
-Lime water turned milky white.
-Is it Carbon dioxide?
-Now try to write the properties of  acids and
-bases from your observations in the above
-experiments.
-We have seen that neutral solutions have no
-effect on indicators. We have also seen that
-acids and bases have different effects on
-indicators. When is the solution made by
-mixing of an acid and a base, be a neutral?
-SCERT, TELANGANAVII Science 15Free Distribution by Govt. of T.S. 2021-22
-Let us do - 8
-Take a clean test tube. Using a clean dropper
-put 10 drops of dilute Hydrochloric acid
-carefully in it and also add 2 drops of
-phenolphthalein indicator solution.
-What is the colour of the resulting solution?
-Now add Caustic soda solution
-(Whose concentration is equal to
-Hydrochloric acid) drop by drop
-to the test tube.
-
-  4. Hybrid Score: 0.3127
-     Chapter: ACIDS AND BASES
-     Text: Apart from natural acids, there are certain acids
-like Hydrochloric acid, Sulphuric acid and
-Nitric acid etc. that are prepared from
-minerals.
-Basic Nature:-
-How do you feel when you touch a cake of
-soap? Take it between your fingers and gently
-rub your fingers on it? Do the same with the
-other material. What difference do you
-notice?
-• You might have touched soap water or
-lime water. How do you feel?
-• Can you list out some more substances
-that are soapy to touch?
-The substances which are soapy to touch are
-basic in nature.
-Some substances that we use
-in our daily life, contain
-different bases. For example
-soap, glass cleaners etc.
-Various substances
-containing bases are listed in the below table.
-TABLE - 6
-TABLE - 6
-Let us do - 5
-Burn a small piece of
-Magnesium ribbon by
-holding it with tongs. Collect the white ash and
-dissolve it in a little water.  Touch the solutions
-formed and test this solution with blue litmus
-and red litmus.
-TABLE - 5
-cheese
-Butter Milk, Curd
-
-  5. Hybrid Score: 0.2938
-     Chapter: ACIDS AND BASES
-     Text: following categories from the above
-observations.
-TABLE 4
-SCERT, TELANGANAAcids and Bases12
-• Now take things which are sour in taste
-and used as food e.g. curd, lemon juice
-etc. Check with blue and red litmus, what
-happens?
-Indicators:
-The strips of litmus paper change the colour,
-based on the nature of the material put on
-them. These are all indicators. They tell us
-whether a substance is acidic or basic. They
-are used in studying acidic and basic properties
-of  substances.
-Acidic Nature:-
-You may have experienced a burning sensation
-when bitten by an ant. The sensation is due to
-the presence of  formic acid that the ant
-releases. The acids present in plants and
-animals are called as natural acids.
-The substances that contain different acids. are
-given in the table 5.
-Apart from natural acids, there are certain acids
-like Hydrochloric acid, Sulphuric acid and
-Nitric acid etc. that are prepared from
-minerals.
-Basic Nature:-
-How do you feel when you touch a cake of
-
-  6. Hybrid Score: 0.2840
-     Chapter: ACIDS AND BASES
-     Text: ———————————
-———————————
-———————————
-———————————
-• Do you find any difference in the taste
-of  a raw and a ripe fruit?
-TABLE - 1
-• Do substances change their taste when
-cooked?
-• Do substances change their taste when
-added to some other substances?
-• Add salt to lemon juice. How do the two
-together  taste now?
-• Add sugar to lemon juice what change
-do you notice in the taste?
-• Is there any difference in the taste in the
-above situations.
-2 ACIDS AND BASES
-SCERT, TELANGANAAcids and Bases10
-• Do substances change colour when
-added to other substances?
-• Do you observed any change when lime
-water is added to turmeric?
-Let us do - 1
-Take some turmeric powder. Add a bit of
-water to it and prepare turmeric paste. Rub
-the turmeric paste on a white paper dry it for
-some time. Then draw a flower daigram on
-that paper with a pencil. Colour the flower
-with soap water using a brush.
-• Does the colour of the flower remain the
-same when soap water is used?
-Similarly take some lime water. Add a few
-
-  7. Hybrid Score: 0.2831
-     Chapter: ACIDS AND BASES
-     Text: neutral are not salts. For eg. sugar and
-starch solutions are  neutral, but they are
-not salts.
-• In the process of Neutralization, both
-the acidic and basic qualities are
-neutralised.
-• Salts need not always be neutral, they can
-be acidic or basic.
-Improve your learning
-1. The sting of a wasp is
-basic. How can we treat
-the sting of a wasp?
-2. Why are acids not stored
-in a metal container?
-3. Acidic, basic and neutral solutions are
-given in three test tubes and you are given
-a strip of red litmus? How will you
-identify the three solutions?
-4. When drops of lemon juice are put on
-blue litmus it turns red what will happen
-if you put some drops of soap solution
-on the same position on litmus paper?
-5. What happens when Nitric acid is added
-to egg shell?
-6. Turmeric stains on white clothes, when
-washed with soap, turn red. Why?
-7. Ammonia is present in window cleaners.
-It turns red litmus blue. What is its
-nature?
-8. What is the nature of urea? Is it acidic,
-
-  8. Hybrid Score: 0.2709
-     Chapter: CHANGES AROUND US
-     Text: and  chemical changes. In physical changes no
-new substance is formed whereas in chemical
-change we have seen that one or more new
-substances are formed.
-Identifying physical and chemical change
-Have you ever thought of the process behind
-setting milk into curd?  Is it a physical change
-or chemical change ?
-What type of  change is the boiling of  an egg?
-Is it a chemical change or a physical change?
-Think about the following changes and
-decide whether they are physical or
-chemical changes. Write the type of change
-and reasons for that in the  table.
-Everyday we use many types of batteries and
-many of these batteries are recharged
-Table - 5
-SCERT, TELANGANAChanges Around Us166
-regularly.  Can you identify the types of  change
-taking place in this process?
-We use Turmeric with Limewater (Calcium
-Hydroxide) to decorate the feet (Parani)
-during some  occasions at our homes. What
-type of change is this? Think about  the
-reasons why chewing of  Pan (Killi) turns our
-mouth red.
-
-  9. Hybrid Score: 0.2475
-     Chapter: ACIDS AND BASES
-     Text: Cool Drinks
-SCERT, TELANGANAVII Science 17Free Distribution by Govt. of T.S. 2021-22
-Key words:-
-Indicator, Acid, Base, Red litmus, Blue
-litmus, Acidic substance, Basic Substance,
-Neutral Substance, Salts, Neutralization,
-Acid rain.
-What we have learnt
-• Indicator helps us to find whether the
-solution is acidic or basic or neutral.
-• Red litmus paper, blue litmus paper,
-phenolphthalein, methyl orange  are
-indicators.
-• Hibiscus, turmeric and rose petals are
-natural indicators.
-• The substances that turn blue litmus to
-red are acidic in nature.
-• The substances that are soapy to touch
-and turn red litmus to blue are basic in
-nature.
-• Acid rains are the combination of
-Carbonic acid, sulphuric acid and Nitric
-acid with rain water.
-• All substances whose solutions are
-neutral are not salts. For eg. sugar and
-starch solutions are  neutral, but they are
-not salts.
-• In the process of Neutralization, both
-the acidic and basic qualities are
-neutralised.
-
-  10. Hybrid Score: 0.2398
-     Chapter: CHANGES AROUND US
-     Text: the type of crystals formed by urea and Alum.
-SCERT, TELANGANA165VII Science Free Distribution by Govt. of T.S. 2021-22
-Let us do-12: Observing Crystallisation of
-Copper Sulphate.
-Take some hot, saturated solution of  Copper
-sulphate in a test tube.  Pour some of  it in an
-evaporating dish. Allow the solution to cool
-quickly.
-Observe with a magnifying glass, the size,
-colour and shape of  the crystals formed.
-From the above three activities we notice that
-we can separate dissolved substances in the
-form of  crystals.
-The process of separating a soluble
-solid from the solution by heating  or
-evaporating the solvent is called
-crystallization.
-What type of change is this? In
-crystallization no new substance is formed.
-Hence it is physical change.
-Till now we have discussed about some physical
-and  chemical changes. In physical changes no
-new substance is formed whereas in chemical
-change we have seen that one or more new
-substances are formed.
-Identifying physical and chemical change
-
-
---- Semantic Search Results (10 Chunks) ---
-
-  1. Score: 0.5392 | Chapter: ACIDS AND BASES | Text: Apart from natural acids, there are certain acids
-like Hydrochloric acid, Sulphuric acid and
-Nitric acid etc. that are prepared from
-minerals.
-Basic Nature:-
-How do you feel when you touch a cake of
-soap? Take it between your fingers and gently
-rub your fingers on it? Do the same with the
-other material. What difference do you
-notice?
-• You might have touched soap water or
-lime water. How do you feel?
-• Can you list out some more substances
-that are soapy to touch?
-The substances which are soapy to touch are
-basic in nature.
-Some substances that we use
-in our daily life, contain
-different bases. For example
-soap, glass cleaners etc.
-Various substances
-containing bases are listed in the below table.
-TABLE - 6
-TABLE - 6
-Let us do - 5
-Burn a small piece of
-Magnesium ribbon by
-holding it with tongs. Collect the white ash and
-dissolve it in a little water.  Touch the solutions
-formed and test this solution with blue litmus
-and red litmus.
-TABLE - 5
-cheese
-Butter Milk, Curd
-
-  2. Score: 0.5065 | Chapter: ACIDS AND BASES | Text: following categories from the above
-observations.
-TABLE 4
-SCERT, TELANGANAAcids and Bases12
-• Now take things which are sour in taste
-and used as food e.g. curd, lemon juice
-etc. Check with blue and red litmus, what
-happens?
-Indicators:
-The strips of litmus paper change the colour,
-based on the nature of the material put on
-them. These are all indicators. They tell us
-whether a substance is acidic or basic. They
-are used in studying acidic and basic properties
-of  substances.
-Acidic Nature:-
-You may have experienced a burning sensation
-when bitten by an ant. The sensation is due to
-the presence of  formic acid that the ant
-releases. The acids present in plants and
-animals are called as natural acids.
-The substances that contain different acids. are
-given in the table 5.
-Apart from natural acids, there are certain acids
-like Hydrochloric acid, Sulphuric acid and
-Nitric acid etc. that are prepared from
-minerals.
-Basic Nature:-
-How do you feel when you touch a cake of
-
-  3. Score: 0.4897 | Chapter: ACIDS AND BASES | Text: ———————————
-———————————
-———————————
-———————————
-• Do you find any difference in the taste
-of  a raw and a ripe fruit?
-TABLE - 1
-• Do substances change their taste when
-cooked?
-• Do substances change their taste when
-added to some other substances?
-• Add salt to lemon juice. How do the two
-together  taste now?
-• Add sugar to lemon juice what change
-do you notice in the taste?
-• Is there any difference in the taste in the
-above situations.
-2 ACIDS AND BASES
-SCERT, TELANGANAAcids and Bases10
-• Do substances change colour when
-added to other substances?
-• Do you observed any change when lime
-water is added to turmeric?
-Let us do - 1
-Take some turmeric powder. Add a bit of
-water to it and prepare turmeric paste. Rub
-the turmeric paste on a white paper dry it for
-some time. Then draw a flower daigram on
-that paper with a pencil. Colour the flower
-with soap water using a brush.
-• Does the colour of the flower remain the
-same when soap water is used?
-Similarly take some lime water. Add a few
-
-  4. Score: 0.4881 | Chapter: ACIDS AND BASES | Text: neutral are not salts. For eg. sugar and
-starch solutions are  neutral, but they are
-not salts.
-• In the process of Neutralization, both
-the acidic and basic qualities are
-neutralised.
-• Salts need not always be neutral, they can
-be acidic or basic.
-Improve your learning
-1. The sting of a wasp is
-basic. How can we treat
-the sting of a wasp?
-2. Why are acids not stored
-in a metal container?
-3. Acidic, basic and neutral solutions are
-given in three test tubes and you are given
-a strip of red litmus? How will you
-identify the three solutions?
-4. When drops of lemon juice are put on
-blue litmus it turns red what will happen
-if you put some drops of soap solution
-on the same position on litmus paper?
-5. What happens when Nitric acid is added
-to egg shell?
-6. Turmeric stains on white clothes, when
-washed with soap, turn red. Why?
-7. Ammonia is present in window cleaners.
-It turns red litmus blue. What is its
-nature?
-8. What is the nature of urea? Is it acidic,
-
-  5. Score: 0.4605 | Chapter: CHANGES AROUND US | Text: and  chemical changes. In physical changes no
-new substance is formed whereas in chemical
-change we have seen that one or more new
-substances are formed.
-Identifying physical and chemical change
-Have you ever thought of the process behind
-setting milk into curd?  Is it a physical change
-or chemical change ?
-What type of  change is the boiling of  an egg?
-Is it a chemical change or a physical change?
-Think about the following changes and
-decide whether they are physical or
-chemical changes. Write the type of change
-and reasons for that in the  table.
-Everyday we use many types of batteries and
-many of these batteries are recharged
-Table - 5
-SCERT, TELANGANAChanges Around Us166
-regularly.  Can you identify the types of  change
-taking place in this process?
-We use Turmeric with Limewater (Calcium
-Hydroxide) to decorate the feet (Parani)
-during some  occasions at our homes. What
-type of change is this? Think about  the
-reasons why chewing of  Pan (Killi) turns our
-mouth red.
-
-  6. Score: 0.4479 | Chapter: ACIDS AND BASES | Text: explain how would you convert an acidic
-solution into basic solution?
-If you are given a basic solution how can you
-turn it into an acidic solution?
-In the above experiment you might have
-noticed that if we add excess base (caustic
-soda) to acidic solution (Hydrochloric acid)
-it gets converted into a base; similarly we
-can change  a base into an acid by adding the
-acid in excess.
-If you are given a solution of Hydrochloric
-acid how can you make it into a solution which
-is neither acidic nor basic?
-If you are given a caustic soda solution, how
-can you make it into a solution which is neither
-acidic nor basic?
-When acids and bases are mixed in equal
-concentrations they give a neutral
-solution. We learn more about
-neutralization in higher classes.
-Manures:-
-In recent years the use of chemical fertilizers
-has increased. Though the use of chemical
-fertilizers increases the production of  crops,
-it changes the nature of the soil. Some
-fertilizers increase the acidity of the soil and
-
-  7. Score: 0.4281 | Chapter: ACIDS AND BASES | Text: neutral but they are not salts.
-Let us do - 9
-Test the following salt substances with red
-litmus and blue litmus papers. Record your
-observations in the table.
-TABLE - 8
-Let us do - 10: Classifying salts
-Collect some salt substances with the help
-of your teacher, make their salt solutions.
-Test the salt solutions with blue litmus and
-red litmus papers. Classify these salts as per
-your observations in the given table.
-TABLE - 9
-Why is our sweat  salty ?
-Our body needs many types of salts.  We
-lose some salts through excretion. So sweat
-is salty.
-Do you know?
-Uses of  some acids, bases and salts
-Salts which change blue litmus to red are
-acidic salts and  salts which change red
-litmus to blue are basic salts.  Some salts
-affect neither blue nor red litmus papers.
-These are called neutral salts. TABLE - 10
-Cool Drinks
-SCERT, TELANGANAVII Science 17Free Distribution by Govt. of T.S. 2021-22
-Key words:-
-Indicator, Acid, Base, Red litmus, Blue
-litmus, Acidic substance, Basic Substance,
-
-  8. Score: 0.4268 | Chapter: ACIDS AND BASES | Text: Cool Drinks
-SCERT, TELANGANAVII Science 17Free Distribution by Govt. of T.S. 2021-22
-Key words:-
-Indicator, Acid, Base, Red litmus, Blue
-litmus, Acidic substance, Basic Substance,
-Neutral Substance, Salts, Neutralization,
-Acid rain.
-What we have learnt
-• Indicator helps us to find whether the
-solution is acidic or basic or neutral.
-• Red litmus paper, blue litmus paper,
-phenolphthalein, methyl orange  are
-indicators.
-• Hibiscus, turmeric and rose petals are
-natural indicators.
-• The substances that turn blue litmus to
-red are acidic in nature.
-• The substances that are soapy to touch
-and turn red litmus to blue are basic in
-nature.
-• Acid rains are the combination of
-Carbonic acid, sulphuric acid and Nitric
-acid with rain water.
-• All substances whose solutions are
-neutral are not salts. For eg. sugar and
-starch solutions are  neutral, but they are
-not salts.
-• In the process of Neutralization, both
-the acidic and basic qualities are
-neutralised.
-
-  9. Score: 0.4134 | Chapter: CHANGES AROUND US | Text: the type of crystals formed by urea and Alum.
-SCERT, TELANGANA165VII Science Free Distribution by Govt. of T.S. 2021-22
-Let us do-12: Observing Crystallisation of
-Copper Sulphate.
-Take some hot, saturated solution of  Copper
-sulphate in a test tube.  Pour some of  it in an
-evaporating dish. Allow the solution to cool
-quickly.
-Observe with a magnifying glass, the size,
-colour and shape of  the crystals formed.
-From the above three activities we notice that
-we can separate dissolved substances in the
-form of  crystals.
-The process of separating a soluble
-solid from the solution by heating  or
-evaporating the solvent is called
-crystallization.
-What type of change is this? In
-crystallization no new substance is formed.
-Hence it is physical change.
-Till now we have discussed about some physical
-and  chemical changes. In physical changes no
-new substance is formed whereas in chemical
-change we have seen that one or more new
-substances are formed.
-Identifying physical and chemical change
-
-  10. Score: 0.4098 | Chapter: CHANGES AROUND US | Text: Hydroxide) to decorate the feet (Parani)
-during some  occasions at our homes. What
-type of change is this? Think about  the
-reasons why chewing of  Pan (Killi) turns our
-mouth red.
-Look at the picture and circle all the Physical
-and Chemical changes. Write them in the table
-given below:
-Fig. 10
-Table - 6
-What we have learnt?
-• In a physical change generally no new
-substance is formed.
-• When a substance undergoes a change in
-its composition, it is called a chemical
-change.
-• In a chemical change new substance is
-formed.
-• A chemical change is also called chemical
-reaction.
-• In any change heat, light, radiation or
-sounds may also be produced.
-• In a change new colour or smell may
-appear.
-• The process of separating a soluble solid
-from the solution on heating is called
-Crystallization.
-• The process of depositing zinc on any
-metal is called Galvanisation
-Key words:
-Chemical Change, Reversible, Irreve-
-rsible, Rust, Physical Change, Composi-
-tion, Vinegar, Baking Soda, Lime Water,
-
-
---- BM25 Keyword Search Results (10 Chunks) ---
-
-  1. Normalized Score: 1.0000 | Chapter: ACIDS AND BASES | Text: neutral but they are not salts.
-Let us do - 9
-Test the following salt substances with red
-litmus and blue litmus papers. Record your
-observations in the table.
-TABLE - 8
-Let us do - 10: Classifying salts
-Collect some salt substances with the help
-of your teacher, make their salt solutions.
-Test the salt solutions with blue litmus and
-red litmus papers. Classify these salts as per
-your observations in the given table.
-TABLE - 9
-Why is our sweat  salty ?
-Our body needs many types of salts.  We
-lose some salts through excretion. So sweat
-is salty.
-Do you know?
-Uses of  some acids, bases and salts
-Salts which change blue litmus to red are
-acidic salts and  salts which change red
-litmus to blue are basic salts.  Some salts
-affect neither blue nor red litmus papers.
-These are called neutral salts. TABLE - 10
-Cool Drinks
-SCERT, TELANGANAVII Science 17Free Distribution by Govt. of T.S. 2021-22
-Key words:-
-Indicator, Acid, Base, Red litmus, Blue
-litmus, Acidic substance, Basic Substance,
-
-  2. Normalized Score: 0.9151 | Chapter: ACIDS AND BASES | Text: What do you observe?
-Bring a burning match stick near the test
-tube.
-What happens? The flame extinguishes.
-Pass the gas into lime water. What happens?
-Can you see the formation of  precipitation?
-Lime water turned milky white.
-Is it Carbon dioxide?
-Now try to write the properties of  acids and
-bases from your observations in the above
-experiments.
-We have seen that neutral solutions have no
-effect on indicators. We have also seen that
-acids and bases have different effects on
-indicators. When is the solution made by
-mixing of an acid and a base, be a neutral?
-SCERT, TELANGANAVII Science 15Free Distribution by Govt. of T.S. 2021-22
-Let us do - 8
-Take a clean test tube. Using a clean dropper
-put 10 drops of dilute Hydrochloric acid
-carefully in it and also add 2 drops of
-phenolphthalein indicator solution.
-What is the colour of the resulting solution?
-Now add Caustic soda solution
-(Whose concentration is equal to
-Hydrochloric acid) drop by drop
-to the test tube.
-
-  3. Normalized Score: 0.7068 | Chapter: ACIDS AND BASES | Text: explain how would you convert an acidic
-solution into basic solution?
-If you are given a basic solution how can you
-turn it into an acidic solution?
-In the above experiment you might have
-noticed that if we add excess base (caustic
-soda) to acidic solution (Hydrochloric acid)
-it gets converted into a base; similarly we
-can change  a base into an acid by adding the
-acid in excess.
-If you are given a solution of Hydrochloric
-acid how can you make it into a solution which
-is neither acidic nor basic?
-If you are given a caustic soda solution, how
-can you make it into a solution which is neither
-acidic nor basic?
-When acids and bases are mixed in equal
-concentrations they give a neutral
-solution. We learn more about
-neutralization in higher classes.
-Manures:-
-In recent years the use of chemical fertilizers
-has increased. Though the use of chemical
-fertilizers increases the production of  crops,
-it changes the nature of the soil. Some
-fertilizers increase the acidity of the soil and
-
-  4. Normalized Score: 0.3685 | Chapter: ACIDS AND BASES | Text: Banamathi) and decieve the people. Now you
-can also do this!
-• What can you conclude from the above
-data? Keep in mind that some substances
-are acidic, some are basic and some are
-neutral.
-• Compare the above observations with
-those in case of litmus test.
-• Can you distinguish acids and bases using
-the indicators?
-• What would be the criteria for deciding
-this?
-SCERT, TELANGANAAcids and Bases14
-Methyl orange gives red colour with acids
-and yellow colour with bases.  Phenolphtha-
-lein remains colourless in acidic solution
-while it turns pink in basic solution.
-Let us do some more experiments
-Take a natural acid say lemon juice
-in six test tubes and add Copper,
-Zinc, Magnesium, Iron, Brass,
-Aluminium pieces to each one of
-the test tubes separately. Note
-your observations.
-Light a matchstick and introduce it into the
-test tubes.  What do you observe?
-Henry Cavendish, an Italian
-Scientist discovered  a colourless
-gas called Hydrogen Balloons
-are filled with this gas. The
-
-  5. Normalized Score: 0.1614 | Chapter: ACIDS AND BASES | Text: holding it with tongs. Collect the white ash and
-dissolve it in a little water.  Touch the solutions
-formed and test this solution with blue litmus
-and red litmus.
-TABLE - 5
-cheese
-Butter Milk, Curd
-SCERT, TELANGANAVII Science 13Free Distribution by Govt. of T.S. 2021-22
-• What do you observe?
-Oxides of Magnesium when dissolved in water
-form Magnesium Hydroxide. Similarly oxides
-of  Potassium and Sodium form Potassium
-Hydroxide and Sodium Hydroxide when
-dissolved in water.  All these are basic in nature.
-They would be soapy when touched.
-Chemical Indicators: Methyl orange and
-phenolphthalein used to test acids and bases
-are called chemical indicators.
-Let us do - 6
-Take the substances that are given in table (3)
-and test them with Phenolphthalein  and Methyl
-orange solutions. Take a small amount of  the
-substance in two test tubes. Add a few drops
-of  phenolphthalein and methyl orange to each
-test tube separately. Note the effect. Repeat
-the process for all the substances one by one.
-
-  6. Normalized Score: 0.1215 | Chapter: RESPIRATION IN ORGANISMS | Text: the decrease in mass was due to formation
-of an invisible substance which he named
-“gas”.
-In the year 1756, Joseph Black studied
-this gas in more detail. He found that when
-limestone is heated or reacted with acids,
-it gives rise to a gas which he called “fixed
-air”. He studied several properties of this
-gas. One of the properties was, lime water
-turned milky when this gas was passed
-through it. Now we know this gas as carbon
-dioxide.
-Discovery of  Oxygen
-After nearly two decades of  discovery of
-carbon dioxide, oxygen was discovered.
-Joseph Priestley, published his“Experiments
-and observations on different kinds of  air”
-and was the first to prove the different
-qualities of the gases released by plants
-and the one’s exhaled by animals (mice).
-He discovered that, although a candle
-burned out in a closed container, when he
-added a living sprig of mint to the container,
-the candle would continue to burn.
-At the time, Priestley did not know of
-Oxygen, but he correctly concluded that the
-
-  7. Normalized Score: 0.0471 | Chapter: CHANGES AROUND US | Text: reduces and you sense the smell of it. It
-happens because camphor evaporates. Since
-SCERT, TELANGANAChanges Around Us164
-it has strong smell, it is used to keep  insects
-and flies away.  It is also used in medicines.
-From the  activities  discussed above  we
-conclude that, in a chemical change, material
-undergoes a change in its composition and a
-new substance is formed.
-In addition to new products the following may
-also occur in a chemical change.
-1. Heat, light or any other radiation may be
-given out or absorbed.
-2. Loud sound may be produced.
-3. A change in smell may take place or a
-new smell may be produced.
-4. A colour change may take place.
-5. A change in the state may occur.
-All chemical changes do not have the 5 traits
-mentioned above.
-Chemical changes are very important in our
-lives. Mostly, new substances are formed as a
-result of  chemical changes.
-Think about some of the chemical changes
-you observe around in your daily life.
-Can you list them?
-Crystallisation :
-
-  8. Normalized Score: 0.0165 | Chapter: CHANGES AROUND US | Text: acid solution.
-e) Respiration
-f) Ripening of a Mango.
-g) Breaking of Glass.
-8. Fill in the blanks in the following
-statements
-a) The chemical name of vinegar is
-___________.
-b) Changes in which only _____________
-properties of a substance change are called
-physical changes.
-c) Changes in which new substances are
-formed are called ___________ changes.
-d) Magnesium+Oxygen
-→  _________
-e) Copper Sulphate+Iron →  _________
-9. Identify the incorrect statement.
-I) The gas we use in kitchen is in the form
-of liquid in the cylinder. When it comes
-out from the cylinder it becomes a gas
-(step – I), then it burns (step – II).
-Choose the correct statement from the
-following.
-a. Only step – I is a chemical change.
-b. Only step – II is a chemical change.
-c. Both steps – I & II are chemical changes.
-d. Both steps – I & II are physical changes.
-10. Identify the incorrect statements among
-the following and rewrite them
-correctly.
-a) Formation of manure from leaves is a
-physical change.
-
-  9. Normalized Score: 0.0091 | Chapter: CHANGES AROUND US | Text: and  chemical changes. In physical changes no
-new substance is formed whereas in chemical
-change we have seen that one or more new
-substances are formed.
-Identifying physical and chemical change
-Have you ever thought of the process behind
-setting milk into curd?  Is it a physical change
-or chemical change ?
-What type of  change is the boiling of  an egg?
-Is it a chemical change or a physical change?
-Think about the following changes and
-decide whether they are physical or
-chemical changes. Write the type of change
-and reasons for that in the  table.
-Everyday we use many types of batteries and
-many of these batteries are recharged
-Table - 5
-SCERT, TELANGANAChanges Around Us166
-regularly.  Can you identify the types of  change
-taking place in this process?
-We use Turmeric with Limewater (Calcium
-Hydroxide) to decorate the feet (Parani)
-during some  occasions at our homes. What
-type of change is this? Think about  the
-reasons why chewing of  Pan (Killi) turns our
-mouth red.
-
-  10. Normalized Score: 0.0000 | Chapter: CHANGES AROUND US | Text: d. Both steps – I & II are physical changes.
-10. Identify the incorrect statements among
-the following and rewrite them
-correctly.
-a) Formation of manure from leaves is a
-physical change.
-b) Iron pipes coated with Zinc don’t get
-rust.
-c) Setting of curd is a physical change.
-d) Condensation of steam is not a chemical
-change.
-e) Burning of Magnesium in air is a chemical
-change.
-II) Bacteria digest animal waste and produce
-biogas (step – I). The Biogas is then burnt
-as fuel (step – II). Choose the correct
-statement from the following.
-a. Only step – I is a chemical change.
-SCERT, TELANGANAChanges Around Us168
-b. Only step – II is a chemical change.
-c. Both steps – I & II are chemical changes.
-d. Both steps – I & II are physical changes.
-e. Step– I physical, step-II chemical change.
-III) A piece of paper was cut into four pieces.
-What type of change occurred in the
-property of the paper?
-a. Physical change       b.   Chemical change
-c. Both changes   d.   No change
-
+  --- Chunk 10 (Hybrid Score: 0.1411) ---
+     Chapter: Industrial Revolution
+     Text: happen in the same place but in different
+households. Each trader engaged 20-25
+craftspersons at each stage of production.
+Sometime later, the traders brought the
+craftspersons under one roof so that they
+could explain their requirements and
+organise the production more effectively.
+They set up small workshops called
+manufactories. The craftsmen brought their
+own tools and worked with raw materials
+given by the trader. Then, the trader took
+the  product and sold it in the market. In
+this way, slowly, the control of the trader
+over the craftpersons increased. This phase
+is called ‘proto-industrialisation’ – a phase
+in which more and more people entered
+craft production,  traders established
+control over the workers, and a large
+market for craft products  developed across
+the world.
+8
+SCERT, TEALANGANASCERT, TEALANGANA
+ 79Free Distribution by Govt. of  Telangana 2021-22
+Beginning of Industrial
+Revolution - 1750-1850 BCE
+Many changes took place during this
 
 --- Generated Answer ---
-Hello there! That is a great question that gets right to the heart of understanding chemical substances. Acids, bases, and salts are three distinct types of substances we encounter frequently.
 
-Here is a clear differentiation between them, based on their properties as discussed in our textbook:
+Hello. That is a really interesting question. These water tanks, often called Cheruvulu in Telangana, are very old and clever structures our ancestors built to capture and store rainwater.
 
-### 1. Acids (Acidic Nature)
+It was not a complex, step by step factory process, but rather a simple and effective engineering solution using natural resources.
 
-Acids are characterized primarily by how they react and what they are made of:
+Based on how tanks were traditionally built, here are the easy steps for construction:
 
-*   **Indicators (Litmus Test):** Substances that are acidic in nature turn **blue litmus paper to red**.
-*   **Taste/Sensation:** While we should never taste unknown lab chemicals, many food substances containing acids (like lemon juice or curd) are typically **sour** in taste. The sensation from an ant bite is also due to the presence of formic acid.
-*   **Types:** Acids can be **natural acids** (found in plants and animals) or **mineral acids** (like Hydrochloric acid, Sulphuric acid, and Nitric acid).
+1. Find the Stream. The builders would first identify a suitable location, usually a small natural stream or a path where rainwater naturally flowed, which is called run off water.
+2. Gather Materials. They needed strong materials that were locally available, primarily stones and mud.
+3. Build the Wall or Bund. They constructed a very strong, thick wall using the stones and mud.
+4. Block the Flow. This strong wall was built across the small stream or flow path.
+5. Form the Lake. The wall was positioned strategically so that by building a barrier on just one side, the water flowing down the stream would be trapped, backing up and forming a large, useful reservoir or lake behind the wall.
 
-### 2. Bases (Basic Nature)
-
-Bases are often defined by their physical feel and their contrasting reaction to indicators:
-
-*   **Indicators (Litmus Test):** Substances that are basic in nature turn **red litmus paper to blue**.
-*   **Touch/Feel:** Bases are typically **soapy to touch** (like soap water or caustic soda solution).
-*   **Examples:** Common bases are found in household items like soap and glass cleaners.
-
-### 3. Salts
-
-Salts are often formed when acids and bases interact, but they possess properties that make them unique:
-
-*   **Formation:** Salts are generally produced when acids and bases are mixed, leading to the process of **neutralization**.
-*   **Neutrality is Variable:** A common misconception is that all salts are neutral. However, salts **need not always be neutral**. Based on how they affect indicators, salts can be classified into three categories:
-    1.  **Acidic Salts:** Salts which change **blue litmus to red**.
-    2.  **Basic Salts:** Salts which change **red litmus to blue**.
-    3.  **Neutral Salts:** Salts which affect **neither blue nor red litmus papers**.
-*   **Examples:** While sweat is salty because we lose salts through excretion, the textbook also notes that not all neutral substances are salts (e.g., sugar solution is neutral but not a salt).
-
-***
-
-### Summary of Differentiation (Litmus Test)
-
-The most reliable way to differentiate these three categories using indicators (like litmus) is their specific reaction:
-
-| Substance | Effect on Blue Litmus Paper | Effect on Red Litmus Paper |
-| :---: | :---: | :---: |
-| **Acid** | Turns RED | No change (Stays Red) |
-| **Base** | No change (Stays Blue) | Turns BLUE |
-| **Neutral Salt** | No change (Stays Blue) | No change (Stays Red) |
---- End Log ---
-
+This simple method allowed them to collect water that could be used throughout the year for drinking and irrigating fields, even in dry regions.
