@@ -6,9 +6,10 @@ import datetime
 import re
 from contextlib import asynccontextmanager
 from dotenv import load_dotenv
-from fastapi import FastAPI, File, UploadFile, Form, HTTPException, Query, BackgroundTasks
+from fastapi import FastAPI, File, UploadFile, Form, HTTPException, Query, BackgroundTasks, WebSocket, WebSocketDisconnect
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, JSONResponse, StreamingResponse
+from .conversation import conversation_manager  # Import the new conversation manager
 from pydantic import BaseModel
 from typing import List, Dict, Optional
 import asyncio
@@ -430,3 +431,28 @@ async def user_page():
 @app.get("/chapters")
 async def chapters_page():
     return FileResponse('public/chapters.html')
+
+@app.websocket("/ws/conversation/{conversation_id}")
+async def websocket_conversation(websocket: WebSocket, conversation_id: str, book_uuid: str):
+    try:
+        await conversation_manager.connect(websocket, conversation_id, book_uuid)
+        print(f"[App] WebSocket handler started for conversation_id={conversation_id}, book_uuid={book_uuid}")
+        
+        while True:
+            data = await websocket.receive_json()
+            print(f"[App] Received WS message for {conversation_id}: {str(data)[:200]}")
+            
+            if data.get("type") == "query":
+                # Log that query processing is starting
+                print(f"[App] Dispatching 'query' to ConversationManager for {conversation_id}")
+                await conversation_manager.process_query(conversation_id, data.get("query", ""))
+            elif data.get("type") == "interrupt":
+                print(f"[App] Received 'interrupt' for {conversation_id}")
+                await conversation_manager.interrupt(conversation_id)
+    
+    except WebSocketDisconnect:
+        conversation_manager.disconnect(conversation_id)
+        print(f"[App] WebSocket disconnected for conversation_id={conversation_id}")
+    except Exception as e:
+        await websocket.close(code=1001, reason=str(e))
+        print(f"[App] WebSocket error for {conversation_id}: {e}")

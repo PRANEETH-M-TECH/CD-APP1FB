@@ -311,9 +311,40 @@ function setupUserPage() {
 
     // --- Event Listeners ---
 
+    // Function to fetch and populate subjects for a class
+    async function populateSubjects(className) {
+        try {
+            const response = await fetch(`/api/books?class_name=${className}`);
+            if (!response.ok) throw new Error('Failed to fetch subjects');
+            const books = await response.json();
+            
+            // Get unique subjects from the books
+            const subjects = [...new Set(books.map(book => book.subject))];
+            
+            // Clear and populate the subjects dropdown
+            subjectSelect.innerHTML = '<option value="">Select Subject</option>';
+            subjects.forEach(subject => {
+                const option = document.createElement('option');
+                option.value = subject;
+                option.textContent = subject;
+                subjectSelect.appendChild(option);
+            });
+            
+            subjectSelect.disabled = false;
+        } catch (error) {
+            console.error('Error fetching subjects:', error);
+            showStatus('Failed to load subjects', 'error');
+        }
+    }
+
     classSelect.addEventListener('change', () => {
-        subjectSelect.disabled = false;
-        subjectSelect.value = '';
+        const selectedClass = classSelect.value;
+        if (selectedClass) {
+            populateSubjects(selectedClass);
+        } else {
+            subjectSelect.innerHTML = '<option value="">Select Subject</option>';
+            subjectSelect.disabled = true;
+        }
         resetUI();
     });
 
@@ -350,11 +381,8 @@ function setupUserPage() {
         queueRenderPage(pageNum);
     });
 
-    const conversationalModal = document.getElementById('conversational-modal');
-    const exitConversationalBtn = document.getElementById('exit-conversational-btn');
-
-    const conversationalModeBtn = document.getElementById('conversational-mode-btn');
-    const voiceWaveformCanvas = conversationalModal.querySelector('#voice-waveform-modal'); // Correctly select canvas inside modal
+    // Voice-related elements
+    const voiceWaveformCanvas = document.getElementById('user-waveform');
     const waveformCtx = voiceWaveformCanvas.getContext('2d');
     let animationFrameId;
 
@@ -415,33 +443,7 @@ function setupUserPage() {
         }
     });
 
-    conversationalModeBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        if (!selectedBook) {
-            alert('Please select a book first to start conversational mode.');
-            return;
-        }
-        startConversationalMode();
-    });
-
-    exitConversationalBtn.addEventListener('click', () => {
-        stopConversationalMode();
-    });
-
-    function startConversationalMode() {
-        isConversationalMode = true;
-        conversationalModal.classList.remove('hidden');
-        recognition.start();
-    }
-
-    function stopConversationalMode() {
-        isConversationalMode = false;
-        conversationalModal.classList.add('hidden');
-        recognition.stop();
-        speechSynthesis.cancel();
-        cancelAnimationFrame(animationFrameId);
-        waveformCtx.clearRect(0, 0, voiceWaveformCanvas.width, voiceWaveformCanvas.height);
-    }
+    // Conversational mode is handled by conversation.js
 
     async function handleTranscription(transcript) {
         if (!transcript.trim() || !selectedBook) return;
@@ -554,8 +556,34 @@ function setupUserPage() {
             if (books.length === 0) throw new Error('Book not found for this selection.');
             
             selectedBook = books[0]; // Assume the first book is the correct one
+            // Make book globally accessible
+            window.selectedBook = selectedBook;
+            console.log('[Book] Selected book:', selectedBook);
 
-            // Step 2: Load the PDF document
+            // Enable features immediately after getting book metadata
+            console.log('[Book] Enabling features based on book metadata');
+            // Enable chat and conversation mode
+            queryText.removeAttribute('disabled');
+            submitButton.removeAttribute('disabled');
+            listChaptersBtn.classList.remove('hidden');
+
+            // Enable conversation mode button immediately
+            const conversationalModeBtn = document.getElementById('conversational-mode-btn');
+            if (conversationalModeBtn) {
+                console.log('[Book] Enabling conversation mode button');
+                conversationalModeBtn.removeAttribute('disabled');
+                conversationalModeBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                conversationalModeBtn.innerHTML = `
+                    <span class="flex items-center">
+                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+                        </svg>
+                        Start Conversation Mode
+                    </span>
+                `;
+            }
+
+            // Load PDF in parallel - this shouldn't block conversation features
             const pdfUrl = `/uploads/${selectedBook.filename}`;
             pdfDoc = await pdfjsLib.getDocument(pdfUrl).promise;
             
@@ -565,11 +593,29 @@ function setupUserPage() {
             
             document.getElementById('page-count-user').textContent = pdfDoc.numPages;
             renderPage(pageNum); // Render the first page
-
-            // Enable chat
             queryText.removeAttribute('disabled');
             submitButton.removeAttribute('disabled');
             listChaptersBtn.classList.remove('hidden'); // Show the button
+            
+            // Update conversation mode button state if needed
+            if (conversationalModeBtn) {
+                conversationalModeBtn.removeAttribute('disabled');
+                conversationalModeBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+            }
+            if (conversationalModeBtn) {
+                console.log('[Book] Enabling conversation mode button');
+                conversationalModeBtn.removeAttribute('disabled');
+                conversationalModeBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                // Update button text to show it's ready
+                conversationalModeBtn.innerHTML = `
+                    <span class="flex items-center">
+                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+                        </svg>
+                        Start Conversation Mode
+                    </span>
+                `;
+            }
             
             // Clear welcome and add loaded message
             chatHistory.innerHTML = '';

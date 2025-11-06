@@ -6,3 +6,5 @@ pypdf
 python-dotenv
 python-multipart
 rank-bm25
+websockets
+cachetools
