@@ -13,6 +13,8 @@ from pydantic import BaseModel
 from typing import List, Dict, Optional
 import asyncio
 
+from pypdf import PdfReader
+
 # Load environment variables
 load_dotenv()
 from .qdrant import (
