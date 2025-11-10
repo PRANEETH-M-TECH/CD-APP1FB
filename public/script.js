@@ -279,64 +279,44 @@ function setupChaptersPage() {
  * Sets up the main user query page wizard.
  */
 function setupUserPage() {
-    const voiceSearchBtn = document.getElementById('voice-search-btn');
-    const voiceModal = document.getElementById('voice-modal');
-    const micButton = document.getElementById('mic-button');
-    const voiceStatus = document.getElementById('voice-status');
-    // Left Pane Elements
+    // --- Element Selectors ---
     const classSelect = document.getElementById('class-select');
     const subjectSelect = document.getElementById('subject-select');
     const viewerPlaceholder = document.getElementById('viewer-placeholder');
     const pdfLoadingIndicator = document.getElementById('pdf-loading-user');
     const pdfCanvas = document.getElementById('pdf-canvas-user');
-    const ctx = pdfCanvas.getContext('2d');
-
-    // Right Pane Elements
+    const pdfHeader = document.getElementById('pdf-viewer-header-user');
+    const pageNumEl = document.getElementById('page-num-user');
+    const pageCountEl = document.getElementById('page-count-user');
+    const prevPageBtn = document.getElementById('prev-page-user');
+    const nextPageBtn = document.getElementById('next-page-user');
     const chatHistory = document.getElementById('chat-history');
     const queryForm = document.getElementById('user-query-form');
     const queryText = document.getElementById('query-text');
     const submitButton = document.getElementById('submit-query-btn');
     const listChaptersBtn = document.getElementById('list-chapters-btn');
+    const conversationalModeBtn = document.getElementById('conversational-mode-btn');
+    const voiceSearchBtn = document.getElementById('voice-search-btn');
+    const voiceStatus = document.getElementById('voice-status');
+    const ctx = pdfCanvas.getContext('2d');
 
-    // App State
+    // --- App State ---
     let selectedBook = null;
     let pdfDoc = null;
-    let pageNum = 1; // Current page number
+    let pageNum = 1;
     let pageRendering = false;
     let pageNumPending = null;
-    let isFirstQuery = true; // To handle the welcome message
+    let isFirstQuery = true;
+    // Removed isSpeakingStream and sentenceQueue
 
-    let sentenceQueue = '';
-    let isSpeakingStream = false;
+    // --- Voice Search State (simple mode) ---
+    let simpleRecognition;
+    let isSimpleRecording = false;
 
+    // --- Initialization ---
+    setupSimpleVoiceSearch();
+    
     // --- Event Listeners ---
-
-    // Function to fetch and populate subjects for a class
-    async function populateSubjects(className) {
-        try {
-            const response = await fetch(`/api/books?class_name=${className}`);
-            if (!response.ok) throw new Error('Failed to fetch subjects');
-            const books = await response.json();
-            
-            // Get unique subjects from the books
-            const subjects = [...new Set(books.map(book => book.subject))];
-            
-            // Clear and populate the subjects dropdown
-            subjectSelect.innerHTML = '<option value="">Select Subject</option>';
-            subjects.forEach(subject => {
-                const option = document.createElement('option');
-                option.value = subject;
-                option.textContent = subject;
-                subjectSelect.appendChild(option);
-            });
-            
-            subjectSelect.disabled = false;
-        } catch (error) {
-            console.error('Error fetching subjects:', error);
-            showStatus('Failed to load subjects', 'error');
-        }
-    }
-
     classSelect.addEventListener('change', () => {
         const selectedClass = classSelect.value;
         if (selectedClass) {
@@ -348,199 +328,134 @@ function setupUserPage() {
         resetUI();
     });
 
-    subjectSelect.addEventListener('change', () => {
-        loadBook();
-    });
-
+    subjectSelect.addEventListener('change', () => loadBook());
     queryForm.addEventListener('submit', (e) => {
         e.preventDefault();
-        isSpeakingStream = true; // Enable streaming speech for new query
         handleQuerySubmit();
     });
-
-    listChaptersBtn.addEventListener('click', () => {
-        handleListChapters();
+    listChaptersBtn.addEventListener('click', () => handleListChapters());
+    prevPageBtn.addEventListener('click', () => {
+        if (pageNum <= 1) return;
+        pageNum--;
+        queueRenderPage(pageNum);
     });
-
-    // Auto-resize textarea
+    nextPageBtn.addEventListener('click', () => {
+        if (pdfDoc && pageNum >= pdfDoc.numPages) return;
+        pageNum++;
+        queueRenderPage(pageNum);
+    });
     queryText.addEventListener('input', () => {
         queryText.style.height = 'auto';
         queryText.style.height = (queryText.scrollHeight) + 'px';
     });
 
-    // PDF Navigation Buttons
-    document.getElementById('prev-page-user').addEventListener('click', () => {
-        if (pageNum <= 1) return;
-        pageNum--;
-        queueRenderPage(pageNum);
-    });
-
-    document.getElementById('next-page-user').addEventListener('click', () => {
-        if (pdfDoc && pageNum >= pdfDoc.numPages) return;
-        pageNum++;
-        queueRenderPage(pageNum);
-    });
-
-    // Voice-related elements
-    const voiceWaveformCanvas = document.getElementById('user-waveform');
-    const waveformCtx = voiceWaveformCanvas.getContext('2d');
-    let animationFrameId;
-
-    let isRecording = false;
-    let isConversationalMode = false;
-
-    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-    recognition.interimResults = true;
-    recognition.lang = 'en-US';
-
-    // Event listener for the voice search modal
-    recognition.addEventListener('result', e => {
-        const transcript = Array.from(e.results)
-            .map(result => result[0])
-            .map(result => result.transcript)
-            .join('');
-        if (isConversationalMode) {
-            if (e.results[0].isFinal) {
-                handleTranscription(transcript);
-            }
-        } else {
-            queryText.value = transcript;
-        }
-    });
-
-    recognition.addEventListener('end', () => {
-        if (isConversationalMode) {
-            if (speechSynthesis.speaking) {
-                // If AI is speaking, don't restart recognition yet.
-                // It will be restarted after AI finishes speaking.
-            } else {
-                recognition.start();
-            }
-        } else {
-            micButton.textContent = 'Start Recording';
-            isRecording = false;
-        }
-    });
-
-    voiceSearchBtn.addEventListener('click', () => {
-        voiceModal.classList.remove('hidden');
-    });
-
-    micButton.addEventListener('click', () => {
-        if (isRecording) {
-            recognition.stop();
-        } else {
-            recognition.start();
-            micButton.textContent = 'Stop Recording';
-            voiceStatus.textContent = 'Recording...';
-            isRecording = true;
-        }
-    });
-
-    voiceModal.addEventListener('click', (e) => {
-        if (e.target === voiceModal) {
-            voiceModal.classList.add('hidden');
-        }
-    });
-
-    // Conversational mode is handled by conversation.js
-
-    async function handleTranscription(transcript) {
-        if (!transcript.trim() || !selectedBook) return;
-
-        console.log(`--- Transcribed Text: ${transcript} ---`);
-
-        const source = new EventSource(`/api/query?book_uuid=${selectedBook.id}&query=${transcript}`);
-        let fullReadText = "";
-
-        source.onmessage = function(event) {
-            if (event.data === "[DONE]") {
-                source.close();
-                if (fullReadText) {
-                    const utterance = new SpeechSynthesisUtterance(fullReadText);
-                    utterance.onstart = () => {
-                        animateWaveform();
-                    };
-                    utterance.onend = () => {
-                        if (isConversationalMode) {
-                            recognition.start();
-                        }
-                    };
-                    speechSynthesis.speak(utterance);
-                }
-                return;
-            }
-            const data = JSON.parse(event.data);
-            if (data.read_text) {
-                fullReadText += data.read_text;
-            }
-        };
-
-        source.onerror = function(error) {
-            console.error('EventSource failed:', error);
-            source.close();
-        };
-    }
-
-    function animateWaveform() {
-        if (!isConversationalMode || !speechSynthesis.speaking) {
-            cancelAnimationFrame(animationFrameId);
-            waveformCtx.clearRect(0, 0, voiceWaveformCanvas.width, voiceWaveformCanvas.height);
+    // --- Voice Search Setup ---
+    function setupSimpleVoiceSearch() {
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (!SpeechRecognition) {
+            voiceSearchBtn.disabled = true;
+            voiceSearchBtn.title = "Voice search not supported";
             return;
         }
 
-        const width = voiceWaveformCanvas.width;
-        const height = voiceWaveformCanvas.height;
-        const time = Date.now();
+        simpleRecognition = new SpeechRecognition();
+        simpleRecognition.interimResults = true;
+        simpleRecognition.lang = 'en-US';
 
-        waveformCtx.clearRect(0, 0, width, height);
-        waveformCtx.lineWidth = 2;
-        waveformCtx.strokeStyle = '#3b82f6';
+        simpleRecognition.onstart = () => {
+            isSimpleRecording = true;
+            voiceStatus.textContent = 'Recording...';
+            voiceStatus.classList.remove('hidden');
+            voiceSearchBtn.classList.remove('bg-gray-200', 'hover:bg-gray-300');
+            voiceSearchBtn.classList.add('bg-red-500', 'hover:bg-red-600');
+        };
 
-        waveformCtx.beginPath();
+        simpleRecognition.onend = () => {
+            isSimpleRecording = false;
+            voiceStatus.classList.add('hidden');
+            voiceSearchBtn.classList.remove('bg-red-500', 'hover:bg-red-600');
+            voiceSearchBtn.classList.add('bg-gray-200', 'hover:bg-gray-300');
+        };
 
-        const sliceWidth = width * 1.0 / 100;
-        let x = 0;
+        simpleRecognition.onerror = (event) => {
+            console.error('Speech recognition error:', event.error);
+            voiceStatus.textContent = `Error: ${event.error}`;
+        };
 
-        for (let i = 0; i < 100; i++) {
-            const v = 1.5 * Math.sin(i / 2 + time / 100);
-            const y = v * height / 2 + height / 2;
+        simpleRecognition.onresult = (event) => {
+            let interimTranscript = '';
+            let finalTranscript = '';
 
-            if (i === 0) {
-                waveformCtx.moveTo(x, y);
-            } else {
-                waveformCtx.lineTo(x, y);
+            for (let i = event.resultIndex; i < event.results.length; ++i) {
+                if (event.results[i].isFinal) {
+                    finalTranscript += event.results[i][0].transcript;
+                } else {
+                    interimTranscript += event.results[i][0].transcript;
+                }
             }
+            // Update the queryText with both final and interim results for live feedback
+            queryText.value = finalTranscript + interimTranscript;
+        };
 
-            x += sliceWidth;
-        }
-
-        waveformCtx.lineTo(width, height / 2);
-        waveformCtx.stroke();
-
-        animationFrameId = requestAnimationFrame(animateWaveform);
+        voiceSearchBtn.addEventListener('click', () => {
+            if (isSimpleRecording) {
+                simpleRecognition.stop();
+            } else {
+                // Prevent conflict with conversational mode
+                if (window.conversationMode && window.conversationMode.isRecording) {
+                    alert("Please stop the conversational mode first.");
+                    return;
+                }
+                try {
+                    simpleRecognition.start();
+                } catch (e) {
+                    console.error("Could not start recognition:", e);
+                    voiceStatus.textContent = "Mic error.";
+                    voiceStatus.classList.remove('hidden');
+                }
+            }
+        });
     }
 
     // --- Core Functions ---
+    async function populateSubjects(className) {
+        try {
+            const response = await fetch(`/api/books?class_name=${className}`);
+            if (!response.ok) throw new Error('Failed to fetch subjects');
+            const books = await response.json();
+            const subjects = [...new Set(books.map(book => book.subject))];
+            subjectSelect.innerHTML = '<option value="">Select Subject</option>';
+            subjects.forEach(subject => {
+                const option = document.createElement('option');
+                option.value = subject;
+                option.textContent = subject;
+                subjectSelect.appendChild(option);
+            });
+            subjectSelect.disabled = false;
+        } catch (error) {
+            console.error('Error fetching subjects:', error);
+        }
+    }
 
     function resetUI() {
         pdfDoc = null;
         selectedBook = null;
-        pageNum = 1; // Reset page number
+        pageNum = 1;
         pdfCanvas.style.display = 'none';
-        document.getElementById('pdf-viewer-header-user').style.display = 'none'; // Hide header
+        pdfHeader.style.display = 'none';
         viewerPlaceholder.style.display = 'flex';
         pdfLoadingIndicator.style.display = 'none';
-        queryText.setAttribute('disabled', 'true');
-        submitButton.setAttribute('disabled', 'true');
-        listChaptersBtn.classList.add('hidden'); // Hide the button
+        queryText.disabled = true;
+        submitButton.disabled = true;
+        listChaptersBtn.classList.add('hidden');
+        conversationalModeBtn.disabled = true;
+        conversationalModeBtn.classList.add('opacity-50', 'cursor-not-allowed');
         queryText.placeholder = 'Ask a question about the selected book...';
     }
 
     async function loadBook() {
         const className = classSelect.value;
         const subject = subjectSelect.value;
-
         if (!className || !subject) return;
 
         resetUI();
@@ -548,79 +463,33 @@ function setupUserPage() {
         pdfLoadingIndicator.style.display = 'flex';
 
         try {
-            // Step 1: Fetch book metadata (including filename)
             const response = await fetch(`/api/books?class_name=${className}&subject=${subject}`);
             if (!response.ok) throw new Error('Book not found.');
-            
             const books = await response.json();
             if (books.length === 0) throw new Error('Book not found for this selection.');
             
-            selectedBook = books[0]; // Assume the first book is the correct one
-            // Make book globally accessible
+            selectedBook = books[0];
             window.selectedBook = selectedBook;
-            console.log('[Book] Selected book:', selectedBook);
 
-            // Enable features immediately after getting book metadata
-            console.log('[Book] Enabling features based on book metadata');
-            // Enable chat and conversation mode
-            queryText.removeAttribute('disabled');
-            submitButton.removeAttribute('disabled');
+            queryText.disabled = false;
+            submitButton.disabled = false;
             listChaptersBtn.classList.remove('hidden');
-
-            // Enable conversation mode button immediately
-            const conversationalModeBtn = document.getElementById('conversational-mode-btn');
-            if (conversationalModeBtn) {
-                console.log('[Book] Enabling conversation mode button');
-                conversationalModeBtn.removeAttribute('disabled');
-                conversationalModeBtn.classList.remove('opacity-50', 'cursor-not-allowed');
-                conversationalModeBtn.innerHTML = `
-                    <span class="flex items-center">
-                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
-                        </svg>
-                        Start Conversation Mode
-                    </span>
-                `;
-            }
-
-            // Load PDF in parallel - this shouldn't block conversation features
+            conversationalModeBtn.disabled = false;
+            conversationalModeBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+            
             const pdfUrl = `/uploads/${selectedBook.filename}`;
             pdfDoc = await pdfjsLib.getDocument(pdfUrl).promise;
             
             pdfLoadingIndicator.style.display = 'none';
             pdfCanvas.style.display = 'block';
-            document.getElementById('pdf-viewer-header-user').style.display = 'flex'; // Show header
+            pdfHeader.style.display = 'flex';
+            pageCountEl.textContent = pdfDoc.numPages;
+            renderPage(pageNum);
             
-            document.getElementById('page-count-user').textContent = pdfDoc.numPages;
-            renderPage(pageNum); // Render the first page
-            queryText.removeAttribute('disabled');
-            submitButton.removeAttribute('disabled');
-            listChaptersBtn.classList.remove('hidden'); // Show the button
-            
-            // Update conversation mode button state if needed
-            if (conversationalModeBtn) {
-                conversationalModeBtn.removeAttribute('disabled');
-                conversationalModeBtn.classList.remove('opacity-50', 'cursor-not-allowed');
-            }
-            if (conversationalModeBtn) {
-                console.log('[Book] Enabling conversation mode button');
-                conversationalModeBtn.removeAttribute('disabled');
-                conversationalModeBtn.classList.remove('opacity-50', 'cursor-not-allowed');
-                // Update button text to show it's ready
-                conversationalModeBtn.innerHTML = `
-                    <span class="flex items-center">
-                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
-                        </svg>
-                        Start Conversation Mode
-                    </span>
-                `;
-            }
-            
-            // Clear welcome and add loaded message
             chatHistory.innerHTML = '';
             isFirstQuery = false;
-            appendAIResponse(`Book "${selectedBook.subject}" loaded. You can now ask questions about it.`);
+            // appendAIResponse now handles speech based on isSpeechEnabledByDefault
+            appendAIResponse(`Book "${selectedBook.subject}" loaded. You can now ask questions about it.`, `Book ${selectedBook.subject} loaded. You can now ask questions about it.`);
 
         } catch (error) {
             pdfLoadingIndicator.style.display = 'none';
@@ -630,50 +499,33 @@ function setupUserPage() {
         }
     }
 
-    /**
-     * Get page info from document, resize canvas accordingly, and render page.
-     */
     async function renderPage(num) {
         pageRendering = true;
-        pdfLoadingIndicator.style.display = 'flex'; // Show loading indicator
-
-        // Using promise to fetch the page
+        pdfLoadingIndicator.style.display = 'flex';
         const page = await pdfDoc.getPage(num);
         const container = document.getElementById('pdf-render-area-user');
-        const unscaledViewport = page.getViewport({ scale: 1 });
-        
-        // Dynamically calculate scale to fit container width
-        const scale = container.clientWidth / unscaledViewport.width;
-        
-        const viewport = page.getViewport({ scale: scale });
-
+        const viewport = page.getViewport({ scale: container.clientWidth / page.getViewport({ scale: 1 }).width });
         const outputScale = window.devicePixelRatio || 1;
 
-        pdfCanvas.height = Math.floor(viewport.height * outputScale);
         pdfCanvas.width = Math.floor(viewport.width * outputScale);
+        pdfCanvas.height = Math.floor(viewport.height * outputScale);
         pdfCanvas.style.width = Math.floor(viewport.width) + 'px';
         pdfCanvas.style.height = Math.floor(viewport.height) + 'px';
 
-        // Render PDF page into canvas context
         const renderContext = {
             canvasContext: ctx,
             viewport: viewport,
             transform: [outputScale, 0, 0, outputScale, 0, 0]
         };
         const renderTask = page.render(renderContext);
-
-        // Wait for rendering to finish
         await renderTask.promise;
         pageRendering = false;
-        pdfLoadingIndicator.style.display = 'none'; // Hide loading indicator
+        pdfLoadingIndicator.style.display = 'none';
         if (pageNumPending !== null) {
-            // New page rendering is pending
             renderPage(pageNumPending);
             pageNumPending = null;
         }
-
-        // Update page counters
-        document.getElementById('page-num-user').textContent = num;
+        pageNumEl.textContent = num;
     }
 
     /**
@@ -711,24 +563,25 @@ function setupUserPage() {
         submitButton.setAttribute('disabled', 'true');
         listChaptersBtn.classList.add('hidden');
 
-        const thinkingMessage = appendAIResponse('...');
+        const thinkingMessage = appendAIResponse('...', 'Thinking...'); // Pass initial read text as well
         const contentDiv = thinkingMessage.querySelector('.markdown-content');
         let fullResponse = "";
-        contentDiv.innerHTML = '';
+        let fullReadText = ""; 
 
         const source = new EventSource(`/api/query?book_uuid=${selectedBook.id}&query=${query}`);
 
-        let fullReadText = "";
         source.onmessage = function(event) {
             if (event.data === "[DONE]") {
                 source.close();
-                if (fullReadText && isSpeakingStream) {
-                    const utterance = new SpeechSynthesisUtterance(fullReadText);
-                    speechSynthesis.speak(utterance);
-                }
-                isSpeakingStream = false;
                 submitButton.removeAttribute('disabled');
                 listChaptersBtn.classList.remove('hidden');
+                
+                // Now speak the received fullReadText
+                if (fullReadText) {
+                    const utterance = new SpeechSynthesisUtterance(fullReadText);
+                    speechSynthesis.cancel(); // Stop any previous speech
+                    speechSynthesis.speak(utterance);
+                }
                 return;
             }
             const data = JSON.parse(event.data);
@@ -737,7 +590,7 @@ function setupUserPage() {
                 contentDiv.innerHTML = marked.parse(fullResponse);
             }
             if (data.read_text) {
-                fullReadText += data.read_text;
+                fullReadText += data.read_text; 
             }
             chatHistory.scrollTop = chatHistory.scrollHeight;
         };
@@ -748,20 +601,11 @@ function setupUserPage() {
             source.close();
         };
 
-        source.onopen = function() {
-            // This is called when the connection is established
-        };
-
         source.onend = function() {
             submitButton.removeAttribute('disabled');
             listChaptersBtn.classList.remove('hidden');
-            isSpeakingStream = false; // Disable streaming speech when done
-            // Speak any remaining text in the queue
-            if (sentenceQueue.trim()) {
-                const utterance = new SpeechSynthesisUtterance(sentenceQueue.trim());
-                speechSynthesis.speak(utterance);
-                sentenceQueue = '';
-            }
+            // isStreamingSpeech = false; // This was for old speakStream, no longer needed
+            // sentenceQueue = ''; // This was for old speakStream, no longer needed
         };
     }
     async function handleListChapters() {
@@ -773,7 +617,7 @@ function setupUserPage() {
         }
 
         addUserMessage('List all chapters');
-        const thinkingMessage = appendAIResponse('Fetching chapters...');
+        const thinkingMessage = appendAIResponse('Fetching chapters...', 'Fetching chapters'); // Pass initial read text as well
 
         submitButton.setAttribute('disabled', 'true');
         listChaptersBtn.classList.add('hidden');
@@ -807,9 +651,15 @@ function setupUserPage() {
 
             const formatted = marked.parse(tableMd);
             thinkingMessage.querySelector('.markdown-content').innerHTML = formatted;
+            // Always speak the chapters list
+            speechSynthesis.cancel();
+            speechSynthesis.speak(new SpeechSynthesisUtterance("Here are the chapters."));
 
         } catch (error) {
             thinkingMessage.querySelector('.markdown-content').innerHTML = `<p style="color: red;"><strong>Error:</strong> ${error.message}</p>`;
+            // Always speak the error message
+            speechSynthesis.cancel();
+            speechSynthesis.speak(new SpeechSynthesisUtterance(`Sorry, an error occurred: ${error.message}`));
         } finally {
             submitButton.removeAttribute('disabled');
             listChaptersBtn.classList.remove('hidden');
@@ -832,7 +682,8 @@ function showStatus(message, type) {
     }
 }
 
-function appendAIResponse(markdownText) {
+// Modified appendAIResponse to take both display and read text, and handle speech
+function appendAIResponse(displayText, readText = '') {
     const chatHistory = document.getElementById("chat-history");
     const messageDiv = document.createElement("div");
     messageDiv.className = "ai-card fade-in";
@@ -846,10 +697,18 @@ function appendAIResponse(markdownText) {
           </div>
         </div>`;
 
-    const formatted = marked.parse(markdownText);
+    const formatted = marked.parse(displayText);
     messageDiv.innerHTML = header + `<div class="markdown-content">${formatted}</div>`;
     chatHistory.appendChild(messageDiv);
     chatHistory.scrollTop = chatHistory.scrollHeight;
+    
+    // Auto-read by default
+    if (readText) { 
+        speechSynthesis.cancel(); // Stop any previous speech
+        const utterance = new SpeechSynthesisUtterance(readText);
+        speechSynthesis.speak(utterance);
+    }
+
     return messageDiv; // Return the element
 }
 
@@ -860,42 +719,23 @@ function copyMessage(btn) {
     setTimeout(() => (btn.textContent = "📋"), 1200);
 }
 
-function speakStream(chunk) {
-    if (!isSpeakingStream) return; // Only speak if streaming is enabled
-
-    sentenceQueue += chunk;
-
-    // Use a simple regex to detect sentence endings
-    const sentenceEndings = /[.!?。？！]/;
-    const parts = sentenceQueue.split(sentenceEndings);
-
-    // If the last part is not a complete sentence, keep it in the queue
-    if (parts.length > 1 && sentenceEndings.test(sentenceQueue.slice(-1))) {
-        for (let i = 0; i < parts.length - 1; i++) {
-            const sentence = parts[i].trim();
-            if (sentence) {
-                const utterance = new SpeechSynthesisUtterance(sentence);
-                speechSynthesis.speak(utterance);
-            }
-        }
-        sentenceQueue = parts[parts.length - 1]; // Keep the incomplete sentence
-    }
-}
 
 
-// Call window.speakMessage to use an updated version.
+
+// Modified window.speakMessage to use the global mute functionality and correctly get content
 window.speakMessage = function(button) {
-    if (speechSynthesis.speaking || isSpeakingStream) {
+    // Determine the content to speak. If this is a re-read, get the display text.
+    const card = button.closest('.ai-card');
+    const content = card ? card.querySelector('.markdown-content').innerText : ''; // Fallback for auto-read
+
+    if (speechSynthesis.speaking) {
         speechSynthesis.cancel();
-        isSpeakingStream = false;
-        button.textContent = '🔊'; // Reset icon
+        // Reset all speak buttons to '🔊'
+        document.querySelectorAll('.speak-btn').forEach(btn => btn.textContent = '🔊');
     } else {
-        // If no speech is active, start speaking the full message content
-        const card = button.closest('.ai-card');
-        const content = card.querySelector('.markdown-content').innerText;
         const utterance = new SpeechSynthesisUtterance(content);
-        utterance.onstart = () => { button.textContent = '🔇'; };
-        utterance.onend = () => { button.textContent = '🔊'; };
+        utterance.onstart = () => { if (button) button.textContent = '🔇'; };
+        utterance.onend = () => { if (button) button.textContent = '🔊'; };
         speechSynthesis.speak(utterance);
     }
 }

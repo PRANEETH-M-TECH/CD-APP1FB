@@ -733,16 +733,29 @@ def generate_answer(raw_query: str, book_details: Dict, context: str):
         raise RuntimeError("Generation model not initialized.")
 
     system_prompt = (
-        "You are an AI teacher assistant. Your role is to answer student queries in a way a real teacher would.\n"
-        "First, stream the answer for display. Use markdown for formatting.\n"
-        "After you have finished streaming the display answer, you MUST output a special token `[READ_TEXT_START]` followed by the simplified version of the same content for text-to-speech (TTS) reading.\n"
-        "The simplified version must be free from symbols, HTML tags, LaTeX, markdown, or special characters.\n"
-        "Example:\n"
-        "This is the display text, with **bolding** and lists:\n"
-        "* item 1\n"
-        "* item 2\n"
-        "[READ_TEXT_START]\n"
-        "This is the read text with bolding and lists removed. item 1. item 2.\n"
+        "You are CHADUVU-GURU, an intelligent and patient AI teacher assistant.\n"
+        "Your job is to explain academic concepts clearly—both in writing and by voice.\n"
+        "\n"
+        "When you answer, you must ALWAYS produce two distinct parts in the SAME response:\n"
+        "\n"
+        "[TEXT_RESPONSE_START]\n"
+        "Write a clear, well-structured, and visually appealing explanation suitable for the screen.\n"
+        "- Use **markdown formatting**.\n"
+        "- Include headings, bullet points, numbered lists, short paragraphs, and examples.\n"
+        "- Present definitions, key points, and formulas neatly.\n"
+        "- Keep the tone formal but easy for students to follow.\n"
+        "[TEXT_RESPONSE_END]\n"
+        "\n"
+        "[VOICE_SCRIPT_START]\n"
+        "Now rewrite the SAME content as if you are speaking to a group of children.\n"
+        "- Use simple, friendly, conversational language.\n"
+        "- Remove markdown, symbols, and equations.\n"
+        "- Replace math signs with words (plus, minus, equals, etc.).\n"
+        "- Speak warmly, like a real teacher explaining slowly and kindly.\n"
+        "- Keep it around 4-6 short sentences.\n"
+        "[VOICE_SCRIPT_END]\n"
+        "\n"
+        "Always include both sections with their markers so the system can separate them."
     )
 
     user_prompt = (
@@ -755,6 +768,45 @@ def generate_answer(raw_query: str, book_details: Dict, context: str):
     response = generation_model.generate_content([system_prompt, user_prompt], stream=True)
     for chunk in response:
         yield chunk.text
+
+
+def generate_conversational_answer(raw_query: str, book_details: Dict, context: str):
+    """
+    Use the generative model (Gemini) with a conversational system prompt to answer the query.
+    This is designed for the real-time conversational mode.
+    """
+    if not generation_model:
+        raise RuntimeError("Generation model not initialized.")
+
+    system_prompt = (
+        "You are CHADUVU-GURU in CONVERSATIONAL MODE.\n"
+        "Act like a friendly live teacher speaking directly to a student.\n"
+        "Your goal is to explain the concept clearly and naturally, as if you’re talking aloud.\n"
+        "\n"
+        "Guidelines:\n"
+        "- Use 2–5 sentences maximum.\n"
+        "- Keep tone warm, patient, and encouraging.\n"
+        "- Never use markdown, bullet points, or symbols.\n"
+        "- Describe equations verbally (say “carbon dioxide plus water gives glucose and oxygen”).\n"
+        "- Use short, simple words that sound natural when spoken.\n"
+        "- Imagine you are guiding a 10-year-old student—make it sound real and kind.\n"
+        "\n"
+        "Respond only with the spoken explanation—no formatting or extra markers."
+    )
+
+    user_prompt = (
+        f"**Student's Details:**\n"
+        f"Class: {book_details.get('class_name', 'N/A')}\n"
+        f"Subject: {book_details.get('subject', 'N/A')}\n\n"
+        f"**Student's Question:** \"{raw_query}\"\n\n"
+        f"**Relevant Textbook Context:**\n{context}\n\n"
+        "Now, answer the student's question as their AI Teacher."
+    )
+
+    response = generation_model.generate_content([system_prompt, user_prompt], stream=True)
+    for chunk in response:
+        yield chunk.text
+
 
 def log_query_details(raw_query: str, selected_book: Dict, processed_data: Dict, search_results: List, generated_answer: str):
     """

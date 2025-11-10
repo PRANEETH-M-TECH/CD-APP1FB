@@ -163,14 +163,136 @@
       100% { box-shadow: 0 0 0 0 rgba(16,185,129,0); }
     }
 
-    .robot-anim { width:56px; height:56px; transition: transform 0.18s ease; }
-    .robot-anim.speaking { transform: translateY(-6px) rotate(-4deg); }
+    /* Enhanced robot and mic animations */
+    .robot-anim { 
+      width: 56px; height: 56px; 
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
+    }
+    .robot-anim.speaking { 
+      transform: translateY(-6px); 
+      filter: drop-shadow(0 8px 16px rgba(59,130,246,0.3));
+      animation: robotPulse 2s infinite;
+    }
+    @keyframes robotPulse {
+      0% { transform: translateY(-6px) scale(1); }
+      50% { transform: translateY(-6px) scale(1.05); }
+      100% { transform: translateY(-6px) scale(1); }
+    }
 
-    .progress-bar { width: 100%; max-width: 480px; height: 6px; background: #e6eef6; border-radius: 6px; overflow: hidden; }
-    .progress-bar .fill { width: 0%; height: 100%; background: linear-gradient(90deg,#10B981,#3b82f6); transition: width 200ms linear; }
+    .progress-bar { 
+      width: 100%; max-width: 480px; 
+      height: 6px; 
+      background: #e6eef6; 
+      border-radius: 6px; 
+      overflow: hidden;
+      box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+    }
+    .progress-bar .fill { 
+      width: 0%; height: 100%; 
+      background: linear-gradient(90deg,#10B981,#3b82f6); 
+      transition: width 200ms linear;
+      box-shadow: 0 0 8px rgba(59,130,246,0.4);
+    }
+
+    /* Speaking state indicators */
+    .state-user #user-waveform { opacity: 1; }
+    .state-user #ai-waveform { opacity: 0.1; }
+    .state-ai #user-waveform { opacity: 0.1; }
+    .state-ai #ai-waveform { opacity: 1; }
+    
+    #waveform-area {
+      position: relative;
+      transition: all 0.3s ease;
+    }
+    
+    .waveform-canvas {
+      transition: all 0.3s ease;
+      background: rgba(255,255,255,0.05);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(226,232,240,0.6);
+    }
+    
+    /* Mic button states */
+    .mic-button {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .mic-button.recording {
+      background: #ef4444 !important;
+      box-shadow: 0 12px 36px rgba(239,68,68,0.28), 0 6px 18px rgba(239,68,68,0.12) !important;
+      transform: scale(0.96) !important;
+    }
+    .mic-button.ai-speaking {
+      background: #3b82f6 !important;
+      box-shadow: 0 12px 36px rgba(59,130,246,0.28), 0 6px 18px rgba(59,130,246,0.12) !important;
+    }
+    .mic-button.recording:hover {
+      background: #dc2626 !important;
+    }
+    .mic-button.ai-speaking:hover {
+      background: #2563eb !important;
+    }
+    
+    /* Status indicator states */
+    .status-indicator {
+      padding: 6px 12px;
+      border-radius: 16px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+    .status-indicator.recording {
+      background: rgba(239,68,68,0.1);
+      color: #ef4444;
+    }
+    .status-indicator.ai-speaking {
+      background: rgba(59,130,246,0.1);
+      color: #3b82f6;
+    }
 
     .debug-panel { width:100%; max-width:720px; height:120px; background:#0f172a; color:#d1d5db; font-family:monospace; font-size:12px; overflow:auto; padding:8px; border-radius:8px; display:none; }
     .debug-controls { display:flex; align-items:center; gap:8px; }
+
+    /* New Mic Button Styles */
+    #mic-button {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    #mic-button.idle {
+      background-color: #3b82f6; /* Blue */
+    }
+    #mic-button.listening {
+      background-color: #ef4444; /* Red */
+      animation: pulse 1.5s infinite;
+    }
+    #mic-button.processing {
+      background-color: #f97316; /* Orange */
+      cursor: not-allowed;
+    }
+    #mic-button.speaking {
+      background-color: #10b981; /* Green */
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+      50% { transform: scale(1.05); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+      100% { transform: scale(1); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    }
+
+    #status-indicator {
+      font-size: 16px;
+      font-weight: 500;
+      color: #4b5563;
+      min-height: 24px;
+    }
   </style>
 </head>
 
@@ -276,76 +398,37 @@
   </div>
 
   <div id="conversation-modal" class="conversation-modal" style="display: none;">
-    <div class="conversation-container" style="display:flex;flex-direction:column;align-items:center;gap:12px;padding:24px;">
+    <div class="conversation-container" style="display:flex;flex-direction:column;align-items:center;gap:12px;padding:24px;width:100%;max-width:720px;">
       <div class="conversation-header" style="width:100%;display:flex;justify-content:space-between;align-items:center;">
         <h2 class="text-lg font-semibold">AI Teacher Mode</h2>
         <div style="display:flex;align-items:center;gap:8px;">
           <label for="show-ai-text-toggle" class="text-sm text-gray-600">Show Text</label>
           <input type="checkbox" id="show-ai-text-toggle" title="Toggle AI text display">
-          <label for="show-debug-toggle" class="text-sm text-gray-600">Debug</label>
-          <input type="checkbox" id="show-debug-toggle" title="Toggle debug panel">
-          <label for="voice-select" class="text-sm text-gray-600">Voice</label>
-          <select id="voice-select" class="text-sm" title="Select TTS voice" style="min-width:160px;padding:4px 6px;border-radius:6px;border:1px solid #e2e8f0;background:white;"></select>
           <button id="exit-conversation" class="text-gray-500 hover:text-gray-700 text-2xl" title="Close">&times;</button>
         </div>
       </div>
 
-      <!-- Central single-mic layout -->
-      <div id="conversation-main" style="display:flex;flex-direction:column;align-items:center;gap:8px;width:100%">
-        <div id="waveform-area" style="width:100%;max-width:720px;display:flex;justify-content:center;position:relative;">
-          <!-- Two stacked canvases: user (bottom) and AI (top) - we control visibility by animation -->
-          <canvas id="user-waveform" class="waveform-canvas" width="680" height="120" style="position:absolute;z-index:1;border-radius:8px;"></canvas>
-          <canvas id="ai-waveform" class="waveform-canvas" width="680" height="120" style="position:relative;z-index:2;border-radius:8px;"></canvas>
+      <div id="conversation-main" style="display:flex;flex-direction:column;align-items:center;gap:16px;width:100%;margin-top:24px;">
+        <div id="waveform-area" style="width:100%;height:120px;position:relative;">
+          <canvas id="user-waveform" class="waveform-canvas" width="680" height="120" style="position:absolute;left:50%;transform:translateX(-50%);"></canvas>
+          <canvas id="ai-waveform" class="waveform-canvas" width="680" height="120" style="position:absolute;left:50%;transform:translateX(-50%);"></canvas>
         </div>
 
-        <div id="mic-area" style="display:flex;flex-direction:column;align-items:center;gap:8px;margin-top:8px;">
-          <button id="mic-button" class="mic-button" style="width:96px;height:96px;border-radius:48px;background:#10B981;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 24px rgba(16,185,129,0.2);border:none;">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="white">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 1v11m0 0a3 3 0 01-3 3H7a3 3 0 01-3-3V6a3 3 0 013-3h2a3 3 0 013 3z" />
-            </svg>
-          </button>
-          <div style="display:flex;align-items:center;gap:12px;">
-            <div id="status-indicator" class="status-indicator" style="color:#6B7280;font-size:14px;">Click mic to start</div>
-            <div id="robot-indicator" style="width:56px;height:56px;display:flex;align-items:center;justify-content:center;">
-              <!-- Simple robot head SVG -->
-              <svg class="robot-anim" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-                <rect x="8" y="12" width="48" height="36" rx="6" fill="#e6eef6" stroke="#94a3b8" />
-                <circle cx="22" cy="30" r="4" fill="#0f172a" />
-                <circle cx="42" cy="30" r="4" fill="#0f172a" />
-                <rect x="24" y="40" width="16" height="4" rx="2" fill="#c7d2fe" />
-              </svg>
-            </div>
-          </div>
-          <div class="progress-bar" id="response-progress" style="display:none;margin-top:6px;"><div class="fill"></div></div>
-        </div>
+        <button id="mic-button" class="mic-button">
+          <!-- Icon will be set by JavaScript -->
+        </button>
+        
+        <div id="status-indicator" class="status-indicator">Click the mic to start</div>
       </div>
 
-      <!-- Conversation body (optional text display) -->
-      <div id="conversation-body" class="conversation-body" style="width:100%;max-width:720px;display:none;margin-top:12px;">
-        <!-- Messages will be inserted here if Show Text is enabled -->
-      </div>
-      <!-- Hidden aggregated response container for TTS accessibility/fallback -->
-      <div id="aggregated-ai-response" style="display:none;visibility:hidden;height:0;overflow:hidden;">&nbsp;</div>
-      
-      <!-- Debug panel -->
-      <div id="debug-panel" class="debug-panel" aria-hidden="true"></div>
+      <div id="conversation-body" class="conversation-body" style="width:100%;display:none;margin-top:12px;"></div>
+      <div id="aggregated-ai-response" style="display:none;"></div>
+      <div id="debug-panel" class="debug-panel"></div>
     </div>
   </div>
 
-  <div id="voice-modal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
-    <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
-      <div class="mt-3 text-center">
-        <h3 class="text-lg leading-6 font-medium text-gray-900">Voice Search</h3>
-        <div class="mt-2 px-7 py-3">
-          <p id="voice-status" class="text-sm text-gray-500">Click the button to start recording.</p>
-        </div>
-        <div class="items-center px-4 py-3">
-          <button id="voice-modal-mic-button" class="px-4 py-2 bg-green-500 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-300">
-            Start Recording
-          </button>
-        </div>
-      </div>
-    </div>
+  <div id="voice-status" class="text-sm text-gray-500 hidden absolute right-24 top-4 bg-white px-2 py-1 rounded shadow">
+    Recording...
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.4.120/build/pdf.min.js"></script>

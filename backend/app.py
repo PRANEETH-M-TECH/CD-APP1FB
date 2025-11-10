@@ -163,29 +163,37 @@ async def query_book(query: str, book_uuid: str, chapter: Optional[str] = None):
         else:
             context = "\n\n---\n\n".join([payload['text'] for score, payload in search_results])
             book_details = {"class_name": class_name, "subject": subject}
-            display_text_sent = False
-            read_text_buffer = ""
-            in_read_text = False
-
+            full_response_content = ""
             for chunk in generate_answer(query, book_details, context):
-                if "[READ_TEXT_START]" in chunk:
-                    parts = chunk.split("[READ_TEXT_START]")
-                    display_chunk = parts[0]
-                    if display_chunk:
-                        yield f"data: {json.dumps({'display_text': display_chunk, 'read_text': ''})}\n\n"
-                    
-                    in_read_text = True
-                    read_text_buffer += parts[1]
-                elif in_read_text:
-                    read_text_buffer += chunk
-                else:
-                    yield f"data: {json.dumps({'display_text': chunk, 'read_text': ''})}\n\n"
+                full_response_content += chunk
 
-            if read_text_buffer:
-                yield f"data: {json.dumps({'display_text': '', 'read_text': read_text_buffer})}\n\n"
+            display_text = ""
+            read_text = ""
 
-            print(f"--- Generated Answer: {read_text_buffer} ---")
-            log_query_details(query, {"id": book_uuid, "class_name": class_name, "subject": subject}, processed_query_data, search_results, read_text_buffer)
+            # Extract TEXT_RESPONSE
+            text_start_match = re.search(r'\[TEXT_RESPONSE_START\](.*?)\[TEXT_RESPONSE_END\]', full_response_content, re.DOTALL)
+            if text_start_match:
+                display_text = text_start_match.group(1).strip()
+
+            # Extract VOICE_SCRIPT
+            voice_start_match = re.search(r'\[VOICE_SCRIPT_START\](.*?)\[VOICE_SCRIPT_END\]', full_response_content, re.DOTALL)
+            if voice_start_match:
+                read_text = voice_start_match.group(1).strip()
+
+            if not display_text and not read_text:
+                # Fallback if markers are not found or content is empty
+                display_text = "I couldn't generate a clear answer based on the provided context."
+                read_text = "I couldn't generate a clear answer."
+            elif not display_text:
+                display_text = read_text # Use read_text as fallback for display
+            elif not read_text:
+                read_text = display_text # Use display_text as fallback for read
+
+            answer = {"display_text": display_text, "read_text": read_text}
+            yield f"data: {json.dumps(answer)}\n\n"
+
+            print(f"--- Generated Answer: {read_text} ---")
+            log_query_details(query, {"id": book_uuid, "class_name": class_name, "subject": subject}, processed_query_data, search_results, read_text)
         yield f"data: [DONE]\n\n"
 
     return StreamingResponse(stream_generator(), media_type="text/event-stream")
@@ -434,10 +442,9 @@ async def chapters_page():
 
 @app.websocket("/ws/conversation/{conversation_id}")
 async def websocket_conversation(websocket: WebSocket, conversation_id: str, book_uuid: str):
+    await conversation_manager.connect(websocket, conversation_id, book_uuid)
+    print(f"[App] WebSocket handler started for conversation_id={conversation_id}, book_uuid={book_uuid}")
     try:
-        await conversation_manager.connect(websocket, conversation_id, book_uuid)
-        print(f"[App] WebSocket handler started for conversation_id={conversation_id}, book_uuid={book_uuid}")
-        
         while True:
             data = await websocket.receive_json()
             print(f"[App] Received WS message for {conversation_id}: {str(data)[:200]}")
@@ -451,8 +458,8 @@ async def websocket_conversation(websocket: WebSocket, conversation_id: str, boo
                 await conversation_manager.interrupt(conversation_id)
     
     except WebSocketDisconnect:
-        conversation_manager.disconnect(conversation_id)
         print(f"[App] WebSocket disconnected for conversation_id={conversation_id}")
     except Exception as e:
-        await websocket.close(code=1001, reason=str(e))
         print(f"[App] WebSocket error for {conversation_id}: {e}")
+    finally:
+        conversation_manager.disconnect(conversation_id)

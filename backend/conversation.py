@@ -11,10 +11,9 @@ import json
 
 from .qdrant import (
     get_book_metadata,
-    get_chapters_for_book,
     hybrid_search,
     reformulate_and_classify_query,
-    generate_answer
+    generate_conversational_answer
 )
 
 @dataclass
@@ -93,7 +92,6 @@ class ConversationManager:
             else:
                 # Get fresh context if not cached
                 metadata = get_book_metadata(conv.book_uuid)
-                chapters_data = get_chapters_for_book(conv.book_uuid)
                 
                 # Use lighter query processing for follow-ups
                 processed_query_data = reformulate_and_classify_query(
@@ -169,7 +167,7 @@ class ConversationManager:
         }
         print(f"[ConversationManager] Starting to stream answer for book {conv.book_uuid}")
         
-        for chunk in generate_answer(query, book_details, context):
+        for chunk in generate_conversational_answer(query, book_details, context):
             if conv.should_stop:
                 break
             # Optionally log chunk size
