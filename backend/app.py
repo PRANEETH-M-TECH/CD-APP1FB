@@ -18,6 +18,19 @@ from pypdf import PdfReader
 
 # Load environment variables
 load_dotenv()
+
+# --- Configure Gemini ---
+import google.generativeai as genai
+
+api_key = os.getenv("GOOGLE_API_KEY") or os.getenv("GEMINI_API_KEY")
+if not api_key:
+    raise RuntimeError(
+        "❌ No Gemini API key found in environment (.env). "
+        "Please check GOOGLE_API_KEY or GEMINI_API_KEY."
+    )
+
+genai.configure(api_key=api_key)
+print("✅ Google Gemini configured successfully.")
 from .qdrant import (
     initialize, # Updated import
     log_query_details,
