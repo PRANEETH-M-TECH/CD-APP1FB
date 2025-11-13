@@ -293,6 +293,94 @@
       color: #4b5563;
       min-height: 24px;
     }
+
+    /* Voice search animation */
+    #voice-search-btn {
+      position: relative;
+      overflow: visible;
+      transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+    }
+    #voice-search-btn > * {
+      position: relative;
+      z-index: 2;
+    }
+    #voice-search-btn.recording {
+      transform: translateY(-1px);
+      box-shadow: 0 16px 32px rgba(239,68,68,0.28);
+    }
+    #voice-search-btn.recording::before,
+    #voice-search-btn.recording::after {
+      content: '';
+      position: absolute;
+      inset: -8px;
+      border-radius: 9999px;
+      background: radial-gradient(circle at center, rgba(239,68,68,0.35), rgba(239,68,68,0));
+      z-index: 1;
+      opacity: 0;
+      animation: voicePulse 1.6s infinite ease-out;
+    }
+    #voice-search-btn.recording::after {
+      inset: -16px;
+      animation-delay: 0.4s;
+    }
+    @keyframes voicePulse {
+      0% {
+        opacity: 0.55;
+        transform: scale(0.92);
+      }
+      70% {
+        opacity: 0.0;
+        transform: scale(1.3);
+      }
+      100% {
+        opacity: 0;
+        transform: scale(1.35);
+      }
+    }
+
+    .voice-visualizer {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(59,130,246,0.14);
+      background: rgba(37,99,235,0.08);
+      box-shadow: 0 4px 12px rgba(37,99,235,0.1);
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      opacity: 0;
+      transform: translateY(4px);
+    }
+    .voice-visualizer.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .voice-visualizer span {
+      width: 4px;
+      height: 12px;
+      background: linear-gradient(180deg, #60a5fa 0%, #2563eb 100%);
+      border-radius: 999px;
+      animation: voiceBar 1.1s infinite ease-in-out;
+      animation-play-state: paused;
+    }
+    .voice-visualizer span:nth-child(2) { animation-delay: 0.12s; }
+    .voice-visualizer span:nth-child(3) { animation-delay: 0.24s; }
+    .voice-visualizer span:nth-child(4) { animation-delay: 0.36s; }
+    .voice-visualizer span:nth-child(5) { animation-delay: 0.48s; }
+    .voice-visualizer.active span {
+      animation-play-state: running;
+    }
+    @keyframes voiceBar {
+      0%, 100% {
+        transform: scaleY(0.35);
+      }
+      40% {
+        transform: scaleY(1.4);
+      }
+      60% {
+        transform: scaleY(0.6);
+      }
+    }
   </style>
 </head>
 
@@ -367,9 +455,6 @@
       <!-- Chat Input -->
       <div id="chat-input-container" class="p-4 border-t border-gray-200 bg-white shadow-inner">
         <div class="flex justify-start mb-2 gap-2">
-            <button type="button" id="conversational-mode-btn" class="bg-green-500 hover:bg-green-600 text-white p-2 px-4 transition text-sm rounded-lg opacity-50 cursor-not-allowed" disabled>
-              Conversational Mode
-            </button>
             <button type="button" id="list-chapters-btn" class="hidden bg-indigo-500 hover:bg-indigo-600 text-white p-2 px-4 transition text-sm">
               List Chapters
             </button>
@@ -381,6 +466,13 @@
           <textarea id="query-text" placeholder="Ask a question about the selected book..." required disabled
             class="w-full border border-gray-300 rounded-lg p-3 h-12 focus:ring-2 focus:ring-blue-400"></textarea>
           <div class="flex justify-end items-center gap-2 mt-2">
+            <div id="voice-visualizer" class="voice-visualizer hidden" aria-hidden="true">
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
             <button type="button" id="voice-search-btn"
             class="bg-gray-200 hover:bg-gray-300 text-gray-600 rounded-lg p-2 px-4 transition">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -397,36 +489,6 @@
     </div>
   </div>
 
-  <div id="conversation-modal" class="conversation-modal" style="display: none;">
-    <div class="conversation-container" style="display:flex;flex-direction:column;align-items:center;gap:12px;padding:24px;width:100%;max-width:720px;">
-      <div class="conversation-header" style="width:100%;display:flex;justify-content:space-between;align-items:center;">
-        <h2 class="text-lg font-semibold">AI Teacher Mode</h2>
-        <div style="display:flex;align-items:center;gap:8px;">
-          <label for="show-ai-text-toggle" class="text-sm text-gray-600">Show Text</label>
-          <input type="checkbox" id="show-ai-text-toggle" title="Toggle AI text display">
-          <button id="exit-conversation" class="text-gray-500 hover:text-gray-700 text-2xl" title="Close">&times;</button>
-        </div>
-      </div>
-
-      <div id="conversation-main" style="display:flex;flex-direction:column;align-items:center;gap:16px;width:100%;margin-top:24px;">
-        <div id="waveform-area" style="width:100%;height:120px;position:relative;">
-          <canvas id="user-waveform" class="waveform-canvas" width="680" height="120" style="position:absolute;left:50%;transform:translateX(-50%);"></canvas>
-          <canvas id="ai-waveform" class="waveform-canvas" width="680" height="120" style="position:absolute;left:50%;transform:translateX(-50%);"></canvas>
-        </div>
-
-        <button id="mic-button" class="mic-button">
-          <!-- Icon will be set by JavaScript -->
-        </button>
-        
-        <div id="status-indicator" class="status-indicator">Click the mic to start</div>
-      </div>
-
-      <div id="conversation-body" class="conversation-body" style="width:100%;display:none;margin-top:12px;"></div>
-      <div id="aggregated-ai-response" style="display:none;"></div>
-      <div id="debug-panel" class="debug-panel"></div>
-    </div>
-  </div>
-
   <div id="voice-status" class="text-sm text-gray-500 hidden absolute right-24 top-4 bg-white px-2 py-1 rounded shadow">
     Recording...
   </div>
@@ -438,7 +500,7 @@
   </script>
 
   <link rel="stylesheet" href="/static/conversation.css">
-  <script src="/static/script.js?v=1.2"></script>
+  <script src="/static/script.js?v=1.4"></script>
   <script src="/static/conversation.js"></script>
 
   <!-- New script for 'List Chapters' and 'Summarize' button functionality -->

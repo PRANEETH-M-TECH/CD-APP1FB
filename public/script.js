@@ -298,6 +298,8 @@ function setupUserPage() {
     const conversationalModeBtn = document.getElementById('conversational-mode-btn');
     const voiceSearchBtn = document.getElementById('voice-search-btn');
     const voiceStatus = document.getElementById('voice-status');
+    const voiceVisualizer = document.getElementById('voice-visualizer');
+    let hideVoiceVisualizerTimeout = null;
     const ctx = pdfCanvas.getContext('2d');
 
     // --- App State ---
@@ -362,12 +364,36 @@ function setupUserPage() {
         simpleRecognition.interimResults = true;
         simpleRecognition.lang = 'en-US';
 
+        const scheduleFrame = typeof window !== 'undefined' && window.requestAnimationFrame
+            ? window.requestAnimationFrame.bind(window)
+            : (cb) => setTimeout(cb, 16);
+
+        function showVoiceVisualizer() {
+            if (!voiceVisualizer) return;
+            if (hideVoiceVisualizerTimeout) {
+                clearTimeout(hideVoiceVisualizerTimeout);
+                hideVoiceVisualizerTimeout = null;
+            }
+            voiceVisualizer.classList.remove('hidden');
+            scheduleFrame(() => voiceVisualizer.classList.add('active'));
+        }
+
+        function hideVoiceVisualizer() {
+            if (!voiceVisualizer) return;
+            voiceVisualizer.classList.remove('active');
+            hideVoiceVisualizerTimeout = window.setTimeout(() => {
+                voiceVisualizer.classList.add('hidden');
+            }, 220);
+        }
+
         simpleRecognition.onstart = () => {
             isSimpleRecording = true;
             voiceStatus.textContent = 'Recording...';
             voiceStatus.classList.remove('hidden');
             voiceSearchBtn.classList.remove('bg-gray-200', 'hover:bg-gray-300');
             voiceSearchBtn.classList.add('bg-red-500', 'hover:bg-red-600');
+            voiceSearchBtn.classList.add('recording');
+            showVoiceVisualizer();
         };
 
         simpleRecognition.onend = () => {
@@ -375,11 +401,19 @@ function setupUserPage() {
             voiceStatus.classList.add('hidden');
             voiceSearchBtn.classList.remove('bg-red-500', 'hover:bg-red-600');
             voiceSearchBtn.classList.add('bg-gray-200', 'hover:bg-gray-300');
+            voiceSearchBtn.classList.remove('recording');
+            hideVoiceVisualizer();
         };
 
         simpleRecognition.onerror = (event) => {
             console.error('Speech recognition error:', event.error);
             voiceStatus.textContent = `Error: ${event.error}`;
+            isSimpleRecording = false;
+            voiceStatus.classList.remove('hidden');
+            voiceSearchBtn.classList.remove('bg-red-500', 'hover:bg-red-600');
+            voiceSearchBtn.classList.add('bg-gray-200', 'hover:bg-gray-300');
+            voiceSearchBtn.classList.remove('recording');
+            hideVoiceVisualizer();
         };
 
         simpleRecognition.onresult = (event) => {
@@ -448,8 +482,10 @@ function setupUserPage() {
         queryText.disabled = true;
         submitButton.disabled = true;
         listChaptersBtn.classList.add('hidden');
-        conversationalModeBtn.disabled = true;
-        conversationalModeBtn.classList.add('opacity-50', 'cursor-not-allowed');
+        if (conversationalModeBtn) {
+            conversationalModeBtn.disabled = true;
+            conversationalModeBtn.classList.add('opacity-50', 'cursor-not-allowed');
+        }
         queryText.placeholder = 'Ask a question about the selected book...';
     }
 
@@ -474,8 +510,10 @@ function setupUserPage() {
             queryText.disabled = false;
             submitButton.disabled = false;
             listChaptersBtn.classList.remove('hidden');
-            conversationalModeBtn.disabled = false;
-            conversationalModeBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+            if (conversationalModeBtn) {
+                conversationalModeBtn.disabled = false;
+                conversationalModeBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+            }
             
             const pdfUrl = `/uploads/${selectedBook.filename}`;
             pdfDoc = await pdfjsLib.getDocument(pdfUrl).promise;

@@ -9,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
         <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="/static/conversation.css">
 </head>
 <body>
     <div class="landing-page-container">
@@ -22,9 +23,64 @@
             <div class="hero-content">
                 <h1 class="app-title">Chaduvu Guru</h1>
                 <p class="app-tagline">Your personal AI study partner. Upload your textbooks, ask questions, and get instant, accurate answers.</p>
-                <a href="/user" class="cta-button">Ask a Question</a>
+                <div class="hero-actions">
+                    <a href="/user" class="cta-button">Ask a Question</a>
+                    <button type="button" id="conversational-mode-btn" class="cta-button">Conversational Mode</button>
+                </div>
             </div>
         </main>
     </div>
+
+    <div id="conversation-modal" class="conversation-modal" style="display: none;">
+        <div class="conversation-container">
+            <div class="conversation-header">
+                <h2 class="modal-title">AI Teacher Mode</h2>
+                <div class="header-actions">
+                    <label for="show-ai-text-toggle" class="toggle-label">Show Text</label>
+                    <input type="checkbox" id="show-ai-text-toggle" title="Toggle AI text display">
+                    <button id="exit-conversation" class="exit-button" title="Close">&times;</button>
+                </div>
+            </div>
+
+            <div id="conversation-setup" class="conversation-setup">
+                <div class="field">
+                    <label for="conversation-class-select">Class</label>
+                    <select id="conversation-class-select">
+                        <option value="" disabled selected>Select class...</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label for="conversation-subject-select">Subject</label>
+                    <select id="conversation-subject-select" disabled>
+                        <option value="" disabled selected>Select subject...</option>
+                    </select>
+                </div>
+                <div class="setup-actions">
+                    <button type="button" id="start-conversation-btn" class="start-conversation-btn">Start Conversation</button>
+                </div>
+                <p id="conversation-setup-status" class="setup-status" aria-live="polite"></p>
+            </div>
+
+            <div id="conversation-main" class="conversation-main" style="display: none;">
+                <div id="waveform-area" class="waveform-area">
+                    <canvas id="user-waveform" class="waveform-canvas" width="680" height="120"></canvas>
+                    <canvas id="ai-waveform" class="waveform-canvas" width="680" height="120"></canvas>
+                </div>
+                <button id="mic-button" class="mic-button"></button>
+                <div id="status-indicator" class="status-indicator">Click the mic to start</div>
+            </div>
+
+            <div id="conversation-body" class="conversation-body" style="display: none;"></div>
+            <div id="aggregated-ai-response" style="display: none;"></div>
+            <div id="debug-panel" class="debug-panel"></div>
+        </div>
+    </div>
+
+    <script src="/static/conversation.js"></script>
 </body>
 </html>

@@ -1,344 +1,320 @@
 --- Query Log ---
-Timestamp: 2025-11-10T13:24:02.987575
-Original Query: what are acids?
+Timestamp: 2025-11-12T16:34:57.013765
+Original Query: Hey half Mr. school yesterday due to fever and my teacher taught me about balance date can you explain me what is balance date
 Book UUID: 9f4e8506f5d016caa6cd7c7b824396829225ed8d9fed9229a3e04d7fbf2a3372
 Class: 7, Subject: science
 
 --- LLM Query Processing ---
-Reformulated Query: Provide a detailed definition and comprehensive explanation of acids in chemistry, outlining their key chemical properties, common classification theories (Arrhenius, Brønsted-Lowry), and characteristic examples.
+Reformulated Query: Provide a comprehensive explanation and definition of the term 'Balance Date,' detailing its meaning, application, and typical context, potentially in business, accounting, or financial reporting.
 Classification: conceptual
-Conceptual Score: 0.90
-Keywords: acids (Score: 1.00), chemistry (Score: 0.90), definition (Score: 0.85), chemical properties (Score: 0.75), Arrhenius (Score: 0.60), Brønsted-Lowry (Score: 0.60)
+Conceptual Score: 0.85
+Keywords: balance date (Score: 1.00), explain (Score: 0.75), definition (Score: 0.60), accounting concept (Score: 0.50)
 
 --- Formatted Top Chunks for LLM (Context) ---
 
-  --- Chunk 1 (Hybrid Score: 0.4969) ---
-     Chapter: ACIDS AND BASES
-     Text: explain how would you convert an acidic
-solution into basic solution?
-If you are given a basic solution how can you
-turn it into an acidic solution?
-In the above experiment you might have
-noticed that if we add excess base (caustic
-soda) to acidic solution (Hydrochloric acid)
-it gets converted into a base; similarly we
-can change  a base into an acid by adding the
-acid in excess.
-If you are given a solution of Hydrochloric
-acid how can you make it into a solution which
-is neither acidic nor basic?
-If you are given a caustic soda solution, how
-can you make it into a solution which is neither
-acidic nor basic?
-When acids and bases are mixed in equal
-concentrations they give a neutral
-solution. We learn more about
-neutralization in higher classes.
-Manures:-
-In recent years the use of chemical fertilizers
-has increased. Though the use of chemical
-fertilizers increases the production of  crops,
-it changes the nature of the soil. Some
-fertilizers increase the acidity of the soil and
+  --- Chunk 1 (Hybrid Score: 0.4300) ---
+     Chapter: AIR, WINDS AND CYCLONES
+     Text: Fig 6a                          Fig 6b
+Take two paper bags or empty paper cups of
+the same size. Take a broomstick. Hang the
+two bags in the inverted position on the two
+ends of the broom stick. Tie a piece of thread
+in the middle of the stick. Hold the stick by
+the thread, like a weighing balance. Put a
+burning candle below one of the bags as
+shown in the figure 6 (b) and observe what
+happens.
+Note that we have used paper bags or cups as
+they are of  light weight and it would be easier
+to see the results of this experiment if we take
+any such light objects to hang on the thread.
+• Why is the balance of the bags disturbed?
+Handle the burning candle carefully.
+Let us do -6
+Take a balloon and fill it with air. Heat it slowly.
+What happens?
+The balloon expands and the air inside exerts
+more pressure on the walls.
+• If  the tied end is opened now, what
+would happen?
+The air from the balloon would slowly escape.
+• Why does that happen?
+Let us do - 7
 
-  --- Chunk 2 (Hybrid Score: 0.4771) ---
-     Chapter: ACIDS AND BASES
-     Text: holding it with tongs. Collect the white ash and
-dissolve it in a little water.  Touch the solutions
-formed and test this solution with blue litmus
-and red litmus.
-TABLE - 5
-cheese
-Butter Milk, Curd
-SCERT, TELANGANAVII Science 13Free Distribution by Govt. of T.S. 2021-22
-• What do you observe?
-Oxides of Magnesium when dissolved in water
-form Magnesium Hydroxide. Similarly oxides
-of  Potassium and Sodium form Potassium
-Hydroxide and Sodium Hydroxide when
-dissolved in water.  All these are basic in nature.
-They would be soapy when touched.
-Chemical Indicators: Methyl orange and
-phenolphthalein used to test acids and bases
-are called chemical indicators.
-Let us do - 6
-Take the substances that are given in table (3)
-and test them with Phenolphthalein  and Methyl
-orange solutions. Take a small amount of  the
-substance in two test tubes. Add a few drops
-of  phenolphthalein and methyl orange to each
-test tube separately. Note the effect. Repeat
-the process for all the substances one by one.
+  --- Chunk 2 (Hybrid Score: 0.3690) ---
+     Chapter: NUTRITION IN PLANTS
+     Text: Do you think Von Helmont’s conclusions
+were correct?
+People tried to check this
+and thus experiment after
+experiment followed.
+Stephan Hales described
+the leaves as organs of
+transpiration ( loss of
+excess water from plant
+body) and he said that
+plants exchange gases with
+their surrounding air.
+Furthermore, he was the first to point out a
+possible role of light in plant nutrition.
+It was Priestley who
+carried out a sequence of
+experiments. He could
+demonstrate that what
+animals were doing to
+the air was being
+reversed by plants. That
+is, according to him, if
+animals were making the
+air impure, plants were making it pure.
+Ingenhouz tried to repeat Priestley’s
+experiments under different conditions
+and found that only the
+green parts of plants when
+exposed to sunlight could
+do that. Several scientists
+started working on what
+green plants were doing
+with water and air and
+sunlight and till date we
+know that-
+Green parts of plants use carbon dioxide in
 
-  --- Chunk 3 (Hybrid Score: 0.4200) ---
-     Chapter: ACIDS AND BASES
-     Text: What do you observe?
-Bring a burning match stick near the test
-tube.
-What happens? The flame extinguishes.
-Pass the gas into lime water. What happens?
-Can you see the formation of  precipitation?
-Lime water turned milky white.
-Is it Carbon dioxide?
-Now try to write the properties of  acids and
-bases from your observations in the above
-experiments.
-We have seen that neutral solutions have no
-effect on indicators. We have also seen that
-acids and bases have different effects on
-indicators. When is the solution made by
-mixing of an acid and a base, be a neutral?
-SCERT, TELANGANAVII Science 15Free Distribution by Govt. of T.S. 2021-22
-Let us do - 8
-Take a clean test tube. Using a clean dropper
-put 10 drops of dilute Hydrochloric acid
-carefully in it and also add 2 drops of
-phenolphthalein indicator solution.
-What is the colour of the resulting solution?
-Now add Caustic soda solution
-(Whose concentration is equal to
-Hydrochloric acid) drop by drop
-to the test tube.
+  --- Chunk 3 (Hybrid Score: 0.3260) ---
+     Chapter: NUTRITION IN PLANTS
+     Text: do that. Several scientists
+started working on what
+green plants were doing
+with water and air and
+sunlight and till date we
+know that-
+Green parts of plants use carbon dioxide in
+the presence of sunlight (as well as other
+sources of light) along with water to make
+glucose, starch and other food materials. This
+process of making food materials is called as
+photosynthesis and such plants are called
+Autotrophs.
+List the four major things needed by plants
+to carry out the process of  photosynthesis.
+In nature, the presence of the green substance
+in leaves is essential for photosynthesis to take
+place. This green substance is called
+chlorophyll.
+Mass (kg)
+ At start After five years Change in mass (kg)
+Tree 2.27 76.74 74.47
+Dry soil 90.72 90.66 0.06
+Fig 4
+Stephen Hales
+Fig 5
+Priestley
+Fig 6
+Ingenhouz
+Fig 7
+SCERT, TELANGANA99VII Science Free Distribution by Govt. of T.S. 2021-22
+Where does water come from?
+We have learnt that plants absorb food from
 
-  --- Chunk 4 (Hybrid Score: 0.3254) ---
+  --- Chunk 4 (Hybrid Score: 0.1816) ---
+     Chapter: SOIL : OUR LIFE
+     Text: Remember to collect the soil only on the day
+you begin the experiments in class. Don’t forget
+to put a label on your soil sample, stating
+where you got it from and the date on which
+you collected it.
+First copy the following Table in your Note
+book and note all your observations in this
+table. Instructions given after the table will
+help you to fill it.
+Let us do-5:  Examining The Soil After
+Returning To School
+Examine the different soil samples brought
+to class and see whether you can identify
+various properties of soil as given in the
+table. Some points to study the properties
+are given below.
+1. How does the soil look? Is it like fine
+powder or granular?
+SCERT, TELANGANASoil: Our Life142
+2. What is its colour? Is it black, brown
+or any other colour?
+3. How does it feel when you touch or press
+it? Hard, soft, elastic, dry, sticky etc?
+4. How does it smell? Is it aromatic, foul
+smelling or without a scent?
+5. Can you find anything new when you
+examine the soil under a microscope?
+
+  --- Chunk 5 (Hybrid Score: 0.1765) ---
+     Chapter: SOIL : OUR LIFE
+     Text: names, to suit your convenience. But you
+should make sure that you get different types
+of  soil from different places. It would be even
+better if  the soils are of  different colours.
+Collect the soil samples while you are on your
+way to school from home. But, first, let your
+teacher distribute the work of collecting
+different soil samples among the different
+groups in the class. The class can decide which
+group should visit which location and bring
+back which type of soil samples to school.
+This work distribution should be done a day
+before the chapter is begun in the class.
+Leave home a little early on that day, go to
+the location allotted to you, collect about 250
+gm of soil for your sample, and bring it to
+school. You can carry the soil in a bag.
+Remember to collect the soil only on the day
+you begin the experiments in class. Don’t forget
+to put a label on your soil sample, stating
+where you got it from and the date on which
+you collected it.
+
+  --- Chunk 6 (Hybrid Score: 0.1310) ---
+     Chapter: WATER
+     Text: • Only one percent of all water resources
+is available as freshwater.
+• The available resource of fresh water is
+getting depleted at a very fast pace due
+to different human activities.
+• Wastewater is generated at homes,
+industries, etc. by different human
+activities.
+• All the wastewater released by home,
+industries, hospitals, offices and other
+users are collectively called  Sewage.
+• Sewage is a liquid waste. Most of it is
+water, which has dissolved and
+suspended impurities, disease causing
+bacteria and other microbes.
+• Sewage water contains inorganic,
+organic and bacterial as well as other
+microbial contaminants.
+• Wastewater is treated in treatment plants
+• Physical, chemical and biological
+processes are involved in treatment of
+wastewater at the treatment plants.
+• Chlorine kills harmful disease causing
+organisms present in wastewater.
+• Aeration allows growth of microbes that
+break down wastes.
+• Different types of drainage systems are
+open, closed and underground ones.
+
+  --- Chunk 7 (Hybrid Score: 0.1211) ---
+     Chapter: REFLECTION OF LIGHT
+     Text: have excited Sai? Some questions came to
+his mind. Can you guess the questions?
+Write a few such questions.
+12. Unexpectedly some water sprinkled on a
+mirror while Madhu was shaving his face.
+Did he observe any difference in his
+image? If  yes, explain why?
+13. Imagine that all the houses in your street
+have elevation with mirrors.  Suppose you
+and your friends are walking in the street.
+Would you experience any difficulties
+when you walk through that street? Predict
+and explain. Is it difficult for birds to live
+or fly in that street? Why?
+14. Take an empty tooth paste box and two
+mirror strips of required size and make a
+periscope.
+SURSURSURSURSURYYYYYAAAAA
+SCERT, TELANGANAReflection of light96
+15. What is the angle between  two plane
+mirrors when there are five images?
+16. What is the difference between convex
+and concave mirrors? Draw the diagrams
+of  concave and convex mirrors.
+17. Where do you find irregular reflection in
+daily life? Give some examples.
+
+  --- Chunk 8 (Hybrid Score: 0.1147) ---
      Chapter: CHANGES AROUND US
-     Text: acid solution.
-e) Respiration
-f) Ripening of a Mango.
-g) Breaking of Glass.
-8. Fill in the blanks in the following
-statements
-a) The chemical name of vinegar is
-___________.
-b) Changes in which only _____________
-properties of a substance change are called
-physical changes.
-c) Changes in which new substances are
-formed are called ___________ changes.
-d) Magnesium+Oxygen
-→  _________
-e) Copper Sulphate+Iron →  _________
-9. Identify the incorrect statement.
-I) The gas we use in kitchen is in the form
-of liquid in the cylinder. When it comes
-out from the cylinder it becomes a gas
-(step – I), then it burns (step – II).
-Choose the correct statement from the
-following.
-a. Only step – I is a chemical change.
-b. Only step – II is a chemical change.
-c. Both steps – I & II are chemical changes.
-d. Both steps – I & II are physical changes.
-10. Identify the incorrect statements among
-the following and rewrite them
-correctly.
-a) Formation of manure from leaves is a
-physical change.
+     Text: 157VII Science Free Distribution by Govt. of T.S. 2021-22
+In Class VI, we learnt that many changes are
+taking place around us. There are certain
+factors that influence these changes and there
+are reasons for every change. Among the
+changes we observe in our daily life some
+changes are slow and some fast. There are
+some changes that are temporary and some
+are permanent. There are many changes which
+take place naturally but for some we need to
+initiate or intervene in some way for the change
+to occur. In this lesson we try to learn about
+some more changes.
+We know that there are certain changes that
+repeat after roughly a fixed period of time.
+For example we observe the repetition of
+sunrise and sunset every day. Similarly we
+notice changes in seasons after every few
+months every year.
+Can you think of such other changes from
+your daily life?
+Make a list of  changes you observe in your
+daily life that are repeated after some period
+of time.
+Let us do-1:  Finding the period of
 
-  --- Chunk 5 (Hybrid Score: 0.3203) ---
-     Chapter: ACIDS AND BASES
-     Text: following categories from the above
-observations.
-TABLE 4
-SCERT, TELANGANAAcids and Bases12
-• Now take things which are sour in taste
-and used as food e.g. curd, lemon juice
-etc. Check with blue and red litmus, what
-happens?
-Indicators:
-The strips of litmus paper change the colour,
-based on the nature of the material put on
-them. These are all indicators. They tell us
-whether a substance is acidic or basic. They
-are used in studying acidic and basic properties
-of  substances.
-Acidic Nature:-
-You may have experienced a burning sensation
-when bitten by an ant. The sensation is due to
-the presence of  formic acid that the ant
-releases. The acids present in plants and
-animals are called as natural acids.
-The substances that contain different acids. are
-given in the table 5.
-Apart from natural acids, there are certain acids
-like Hydrochloric acid, Sulphuric acid and
-Nitric acid etc. that are prepared from
-minerals.
-Basic Nature:-
-How do you feel when you touch a cake of
+  --- Chunk 9 (Hybrid Score: 0.1145) ---
+     Chapter: HEAT - MEASUREMENT
+     Text: the Mercury level.  Now let the ice melt.
+Can you observe any change in Mercury level?
+ The level of Mercury remains same while ice
+melts. This means that temperature is
+Fig. 10
+SCERT, TELANGANA47VII Science Free Distribution by Govt. of T.S. 2021-22
+constant.  This constant temperature at which
+ice melts is called melting point of ice and
+mark  it  0°C.
+Take some water in a beaker.  Immerse the
+thermometer in it and start heating the water.
+It will start boiling while getting converted
+into steam.  Mercury level starts rising and
+reaches a point beyond which it doesn’t rise.
+Mark the level of mercury at this point.
+Observe the constant level at which Mercury
+stays while water is boiling, this constant
+temperature is called boiling point of  water.
+We mark the level of  mercury at this point as
+100°C.
+Thus temperature at which ice melts or water
+boils is constant.  These values are fixed as
+0°C and 100°C respectively.  Like water, all
+substances in pure form melt and boil at
 
-  --- Chunk 6 (Hybrid Score: 0.2768) ---
-     Chapter: ACIDS AND BASES
-     Text: Apart from natural acids, there are certain acids
-like Hydrochloric acid, Sulphuric acid and
-Nitric acid etc. that are prepared from
-minerals.
-Basic Nature:-
-How do you feel when you touch a cake of
-soap? Take it between your fingers and gently
-rub your fingers on it? Do the same with the
-other material. What difference do you
-notice?
-• You might have touched soap water or
-lime water. How do you feel?
-• Can you list out some more substances
-that are soapy to touch?
-The substances which are soapy to touch are
-basic in nature.
-Some substances that we use
-in our daily life, contain
-different bases. For example
-soap, glass cleaners etc.
-Various substances
-containing bases are listed in the below table.
-TABLE - 6
-TABLE - 6
-Let us do - 5
-Burn a small piece of
-Magnesium ribbon by
-holding it with tongs. Collect the white ash and
-dissolve it in a little water.  Touch the solutions
-formed and test this solution with blue litmus
-and red litmus.
-TABLE - 5
-cheese
-Butter Milk, Curd
-
-  --- Chunk 7 (Hybrid Score: 0.2561) ---
-     Chapter: ACIDS AND BASES
-     Text: neutral are not salts. For eg. sugar and
-starch solutions are  neutral, but they are
-not salts.
-• In the process of Neutralization, both
-the acidic and basic qualities are
-neutralised.
-• Salts need not always be neutral, they can
-be acidic or basic.
-Improve your learning
-1. The sting of a wasp is
-basic. How can we treat
-the sting of a wasp?
-2. Why are acids not stored
-in a metal container?
-3. Acidic, basic and neutral solutions are
-given in three test tubes and you are given
-a strip of red litmus? How will you
-identify the three solutions?
-4. When drops of lemon juice are put on
-blue litmus it turns red what will happen
-if you put some drops of soap solution
-on the same position on litmus paper?
-5. What happens when Nitric acid is added
-to egg shell?
-6. Turmeric stains on white clothes, when
-washed with soap, turn red. Why?
-7. Ammonia is present in window cleaners.
-It turns red litmus blue. What is its
-nature?
-8. What is the nature of urea? Is it acidic,
-
-  --- Chunk 8 (Hybrid Score: 0.2425) ---
-     Chapter: ACIDS AND BASES
-     Text: Cool Drinks
-SCERT, TELANGANAVII Science 17Free Distribution by Govt. of T.S. 2021-22
-Key words:-
-Indicator, Acid, Base, Red litmus, Blue
-litmus, Acidic substance, Basic Substance,
-Neutral Substance, Salts, Neutralization,
-Acid rain.
-What we have learnt
-• Indicator helps us to find whether the
-solution is acidic or basic or neutral.
-• Red litmus paper, blue litmus paper,
-phenolphthalein, methyl orange  are
-indicators.
-• Hibiscus, turmeric and rose petals are
-natural indicators.
-• The substances that turn blue litmus to
-red are acidic in nature.
-• The substances that are soapy to touch
-and turn red litmus to blue are basic in
-nature.
-• Acid rains are the combination of
-Carbonic acid, sulphuric acid and Nitric
-acid with rain water.
-• All substances whose solutions are
-neutral are not salts. For eg. sugar and
-starch solutions are  neutral, but they are
-not salts.
-• In the process of Neutralization, both
-the acidic and basic qualities are
-neutralised.
-
-  --- Chunk 9 (Hybrid Score: 0.2208) ---
-     Chapter: ACIDS AND BASES
-     Text: ———————————
-———————————
-———————————
-———————————
-• Do you find any difference in the taste
-of  a raw and a ripe fruit?
-TABLE - 1
-• Do substances change their taste when
-cooked?
-• Do substances change their taste when
-added to some other substances?
-• Add salt to lemon juice. How do the two
-together  taste now?
-• Add sugar to lemon juice what change
-do you notice in the taste?
-• Is there any difference in the taste in the
-above situations.
-2 ACIDS AND BASES
-SCERT, TELANGANAAcids and Bases10
-• Do substances change colour when
-added to other substances?
-• Do you observed any change when lime
-water is added to turmeric?
-Let us do - 1
-Take some turmeric powder. Add a bit of
-water to it and prepare turmeric paste. Rub
-the turmeric paste on a white paper dry it for
-some time. Then draw a flower daigram on
-that paper with a pencil. Colour the flower
-with soap water using a brush.
-• Does the colour of the flower remain the
-same when soap water is used?
-Similarly take some lime water. Add a few
-
-  --- Chunk 10 (Hybrid Score: 0.2106) ---
-     Chapter: ACIDS AND BASES
-     Text: vessels the acids in the above substances
-will react with copper and brass vessels,
-damage them.
-Have you heard about Acid rains?
-Do you know what acid rains are? Acid rains
-are the combination of Carbonic acid,
-Sulphuric acid and Nitric acid with rain water.
-Acid rains cause damage to buildings and
-monuments like
-Tajmahal and our skin.
-Industrial waste gases
-contain Sulphur
-dioxide, Nitrogen
-Oxide, Carbon
-dioxide. When they get
-mixed with moisture
-they change to
-Sulphuric acid, Nitric acid, Carbonic acid.
-Acid rains are also witnessed in A.P State
-in Visakhapatnam district.  Can you guess
-the reason for acid rain in Visakhapatnam?
-                             Let us do - 7
-Take lemon juice in two test tubes and
-add some pieces of marble to one test
-tube and egg shells to another.
-What do you observe?
-Bring a burning match stick near the test
-tube.
-What happens? The flame extinguishes.
-Pass the gas into lime water. What happens?
-Can you see the formation of  precipitation?
+  --- Chunk 10 (Hybrid Score: 0.1119) ---
+     Chapter: MOTION AND TIME
+     Text: • Who will reach the school first?  How
+much earlier will he be compared to the
+other?
+• How do you measure ‘early’ or ‘late’
+arrival at  school?
+You can easily estimate that Ravi reaches the
+school earlier than Sathish.  But to answer the
+question of how early Ravi reached, we need
+to measure the times taken by both Ravi and
+Sathish and find the difference of time
+between both the cases.
+For this we need time measuring instruments
+like watches, clocks etc.
+Try to give some more examples of  how to
+measure time in addition to watches
+Now-a-days, we use different instruments like
+electronic clocks, digital clocks, quartz clocks
+etc to measure time. A few decades ago people
+used pendulum clocks that have now become
+rare.
+Fig. 31                       Fig. 32
+Do you know:
+Like minutes and hours, week, fortnight,
+month, season, ayanam are also units for
+measuring time. Sand clock, water clock, sun
+dial etc. were used earlier instruments for
+estimating time.
 
 --- Generated Answer ---
-Hi everyone! Acids are special substances that usually taste very sour, just like lemon juice, curd, or vinegar. If you test an acid using a special indicator, like a blue litmus paper strip, the acid will make that blue paper change color to red. We find some acids naturally in food, like the acid in an ant sting, but other acids, like Hydrochloric acid, are very strong chemicals made in labs and must never be touched or tasted.
+Hello! I am sorry you were sick, but let me explain balanced diet for you. Think of your body like a fantastic machine. A balanced diet is simply making sure you fuel that machine with all the right types of food, not too much or too little of anything. This means you need energy foods like bread, building foods like eggs, and protecting foods like fruits and vegetables. When you eat a good mix of all these, your body stays strong, you grow well, and you can fight off those nasty fevers and germs!

@@ -38,8 +38,24 @@ body {
 .hero-content { max-width: 600px; padding: 20px; }
 .app-title { font-size: 3.5rem; font-weight: 700; color: var(--heading-color); margin: 0; }
 .app-tagline { font-size: 1.1rem; color: var(--subtle-text-color); margin: 20px 0 40px 0; line-height: 1.6; }
-.cta-button { background-color: var(--primary-color); color: white; text-decoration: none; padding: 15px 40px; border-radius: 8px; font-size: 1.1rem; font-weight: 600; transition: background-color 0.3s, transform 0.2s; }
+.cta-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--primary-color);
+    color: white;
+    text-decoration: none;
+    padding: 15px 40px;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
 .cta-button:hover { background-color: var(--secondary-color); transform: translateY(-3px); }
+.cta-button:focus-visible { outline: 3px solid rgba(74, 105, 189, 0.35); outline-offset: 2px; }
+.hero-actions { display: flex; gap: 16px; justify-content: center; align-items: center; flex-wrap: wrap; }
 
 /* --- General Page & Form Styles --- */
 .page-container { width: 100%; margin: 0 auto; padding: 20px 40px; box-sizing: border-box; }
