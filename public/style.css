@@ -167,9 +167,16 @@ input:focus, select:focus { outline: none; border-color: var(--primary-color); b
 }
 
 /* --- User App Two-Pane Layout --- */
+/* REMOVE global scroll lock */
 html, body {
-    height: 100%;
-    overflow: hidden; /* Prevent body scroll */
+    height: auto;
+    overflow: auto;
+}
+
+/* Apply scroll lock ONLY on user page */
+.user-app-container {
+    height: 100vh;
+    overflow: hidden;
 }
 
 .user-app-container {

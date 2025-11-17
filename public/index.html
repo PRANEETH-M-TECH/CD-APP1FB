@@ -1,86 +1,239 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chaduvu Guru - Your AI Study Partner</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-        <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
-    <link rel="stylesheet" href="/static/style.css">
-    <link rel="stylesheet" href="/static/conversation.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Chaduvu Guru — AI Study Partner</title>
+  <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+
+  <!-- existing global styles -->
+  <link rel="stylesheet" href="/static/style.css">
+
+  <!-- conversation modal styles (existing) -->
+  <link rel="stylesheet" href="/static/conversation.css">
+
+  <!-- new landing page styles -->
+  <link rel="stylesheet" href="/static/landing.css">
+
+  <!-- small inline critical CSS for font display fallback -->
+  <style>
+    :root{--brand:#6b5cff;--accent:#a56bff;--muted:#9aa3b2}
+    body{font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;}
+  </style>
 </head>
 <body>
-    <div class="landing-page-container">
-        <header class="main-header">
-            <div class="header-content">
-                <a href="/admin" class="admin-login-link">Admin Login</a>
-            </div>
-        </header>
 
-        <main class="hero-section">
-            <div class="hero-content">
-                <h1 class="app-title">Chaduvu Guru</h1>
-                <p class="app-tagline">Your personal AI study partner. Upload your textbooks, ask questions, and get instant, accurate answers.</p>
-                <div class="hero-actions">
-                    <a href="/user" class="cta-button">Ask a Question</a>
-                    <button type="button" id="conversational-mode-btn" class="cta-button">Conversational Mode</button>
-                </div>
-            </div>
-        </main>
+  <!-- NAVBAR -->
+  <header class="lg-nav">
+    <div class="lg-nav-inner">
+      <a class="brand" href="/">
+        <span class="logo-dot" aria-hidden="true"></span>
+        <span class="brand-text">Chaduvu Guru</span>
+      </a>
+
+      <nav class="lg-nav-links" aria-label="Main navigation">
+        <a href="#about">About</a>
+        <a href="#features">Features</a>
+      </nav>
+
+      <div class="lg-nav-cta">
+        <a href="/admin" class="btn small outline">Admin Login</a>
+      </div>
     </div>
+  </header>
 
-    <div id="conversation-modal" class="conversation-modal" style="display: none;">
-        <div class="conversation-container">
-            <div class="conversation-header">
-                <h2 class="modal-title">AI Teacher Mode</h2>
-                <div class="header-actions">
-                    <label for="show-ai-text-toggle" class="toggle-label">Show Text</label>
-                    <input type="checkbox" id="show-ai-text-toggle" title="Toggle AI text display">
-                    <button id="exit-conversation" class="exit-button" title="Close">&times;</button>
-                </div>
-            </div>
+  <!-- HERO -->
+  <main class="landing-main">
+    <section class="hero">
+      <div class="hero-left">
+        <h1 class="hero-title">Chaduvu Guru</h1>
+        <p class="hero-sub">A fun, visual, and smart AI study partner for Classes 6–10.</p>
 
-            <div id="conversation-setup" class="conversation-setup">
-                <div class="field">
-                    <label for="conversation-class-select">Class</label>
-                    <select id="conversation-class-select">
-                        <option value="" disabled selected>Select class...</option>
-                        <option value="6">6</option>
-                        <option value="7">7</option>
-                        <option value="8">8</option>
-                        <option value="9">9</option>
-                        <option value="10">10</option>
-                    </select>
-                </div>
-                <div class="field">
-                    <label for="conversation-subject-select">Subject</label>
-                    <select id="conversation-subject-select" disabled>
-                        <option value="" disabled selected>Select subject...</option>
-                    </select>
-                </div>
-                <div class="setup-actions">
-                    <button type="button" id="start-conversation-btn" class="start-conversation-btn">Start Conversation</button>
-                </div>
-                <p id="conversation-setup-status" class="setup-status" aria-live="polite"></p>
-            </div>
+        <div class="hero-ctas">
+          <a href="/user" class="btn primary" id="ask-question-cta">
+            <span class="btn-ic">💬</span> Ask a Question
+          </a>
 
-            <div id="conversation-main" class="conversation-main" style="display: none;">
-                <div id="waveform-area" class="waveform-area">
-                    <canvas id="user-waveform" class="waveform-canvas" width="680" height="120"></canvas>
-                    <canvas id="ai-waveform" class="waveform-canvas" width="680" height="120"></canvas>
-                </div>
-                <button id="mic-button" class="mic-button"></button>
-                <div id="status-indicator" class="status-indicator">Click the mic to start</div>
-            </div>
-
-            <div id="conversation-body" class="conversation-body" style="display: none;"></div>
-            <div id="aggregated-ai-response" style="display: none;"></div>
-            <div id="debug-panel" class="debug-panel"></div>
+          <!-- Must keep this ID so conversation.js finds it -->
+          <button id="conversational-mode-btn" class="btn ghost" title="Open conversational mode">
+            <span class="btn-ic">🤖</span> Conversational Mode
+          </button>
         </div>
-    </div>
 
-    <script src="/static/conversation.js"></script>
+        <div class="hero-badges">
+          <span class="badge">NCERT-Aligned Answers</span>
+          <span class="badge">Visual Diagrams Included</span>
+          <span class="badge pill red">Voice Tutor Support</span>
+        </div>
+      </div>
+
+      <div class="hero-right" id="hero-mascot-wrap">
+        <!-- Decorative floating blobs -->
+        <div class="floating-bg">
+          <div class="circle c1"></div>
+          <div class="circle c2"></div>
+          <div class="circle c3"></div>
+        </div>
+
+        <!-- Mascot SVG (animated) -->
+        <div class="mascot-wrap" aria-hidden="true">
+          <!-- simple friendly robot cube -->
+          <svg class="mascot" viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="g1" x1="0" x2="1" y1="0" y2="1">
+                <stop offset="0" stop-color="#7B5CFF"/>
+                <stop offset="1" stop-color="#5D7CFF"/>
+              </linearGradient>
+              <filter id="soft" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur stdDeviation="10" result="b"/>
+                <feBlend in="SourceGraphic" in2="b"/>
+              </filter>
+            </defs>
+
+            <!-- soft glow -->
+            <g filter="url(#soft)">
+              <rect x="30" y="40" rx="28" ry="28" width="160" height="140" fill="url(#g1)" />
+            </g>
+
+            <!-- antenna -->
+            <rect x="102" y="10" width="8" height="36" rx="4" fill="#4b5563"/>
+            <circle cx="106" cy="10" r="8" fill="#7B5CFF" />
+
+            <!-- eyes -->
+            <circle cx="80" cy="95" r="10" fill="#fff"/>
+            <circle cx="130" cy="95" r="10" fill="#fff"/>
+
+            <!-- smile -->
+            <path d="M82 128 q24 20 46 0" stroke="#fff" stroke-width="6" stroke-linecap="round" fill="none" />
+
+            <!-- decorative gradient blob -->
+            <ellipse cx="60" cy="150" rx="22" ry="12" fill="rgba(255,255,255,0.12)"/>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <!-- SUPPORTS / boards -->
+    <section class="supports" id="about">
+      <div class="supports-inner">
+        <span class="support-label">Supports</span>
+        <div class="support-pills">
+          <span class="pill">CBSE</span>
+          <span class="pill">ICSE</span>
+          <span class="pill pink">State Boards</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section id="features" class="features">
+      <h2 class="section-title">Learn Smarter, Not Harder</h2>
+      <p class="section-sub">Our AI is designed to make learning intuitive, fun, and effective.</p>
+
+      <div class="feature-cards">
+        <article class="card">
+          <div class="card-icon">💬</div>
+          <h3>Real-Time AI Teacher</h3>
+          <p>Talk naturally with voice or text. Get instant teaching responses in real time.</p>
+        </article>
+
+        <article class="card">
+          <div class="card-icon">🧠</div>
+          <h3>Context-Aware Answers</h3>
+          <p>Accurate, syllabus-based answers using intelligent retrieval + context memory.</p>
+        </article>
+
+        <article class="card">
+          <div class="card-icon">🎤</div>
+          <h3>Voice-Enabled Learning</h3>
+          <p>Ask doubts using your voice and get answers in voice — hands-free learning.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <div>© 2025 Chaduvu Guru. All rights reserved.</div>
+        <div class="footer-links">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+          <a href="#">Contact</a>
+        </div>
+      </div>
+    </footer>
+  </main>
+
+  <!-- Conversation modal: re-used from original layout (keeps ids for conversation.js) -->
+  <div id="conversation-modal" class="conversation-modal" style="display: none;">
+    <div class="conversation-container">
+      <div class="conversation-header">
+        <h2 class="modal-title">AI Teacher Mode</h2>
+        <div class="header-actions">
+          <label for="show-ai-text-toggle" class="toggle-label">Show Text</label>
+          <input type="checkbox" id="show-ai-text-toggle" title="Toggle AI text display">
+          <button id="exit-conversation" class="exit-button" title="Close">&times;</button>
+        </div>
+      </div>
+
+      <div id="conversation-setup" class="conversation-setup">
+        <div class="field">
+          <label for="conversation-class-select">Class</label>
+          <select id="conversation-class-select">
+            <option value="" disabled selected>Select class.</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="conversation-subject-select">Subject</label>
+          <select id="conversation-subject-select" disabled>
+            <option value="" disabled selected>Select subject.</option>
+          </select>
+        </div>
+        <div class="setup-actions">
+          <button type="button" id="start-conversation-btn" class="start-conversation-btn">Start Conversation</button>
+        </div>
+        <p id="conversation-setup-status" class="setup-status" aria-live="polite"></p>
+      </div>
+
+      <div id="conversation-main" class="conversation-main" style="display:none;">
+        <div class="waveform-area">
+          <canvas id="user-waveform" class="waveform-canvas"></canvas>
+          <canvas id="ai-waveform" class="waveform-canvas"></canvas>
+        </div>
+
+        <div id="conversation-body" class="conversation-body"></div>
+
+        <div class="conversation-controls">
+          <button id="mic-button" class="mic-button" aria-label="microphone">
+            <!-- conversation.js will set the inner icon -->
+          </button>
+          <div id="status-indicator" class="status-indicator">Click the mic to speak</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- load existing scripts last -->
+  <script src="/static/script.js?v=1.4"></script>
+  <script src="/static/conversation.js"></script>
+
+  <!-- optional small helper for hero parallax (non-intrusive) -->
+  <script>
+    (function(){
+      const wrap = document.getElementById('hero-mascot-wrap');
+      if (!wrap) return;
+      window.addEventListener('mousemove', (e) => {
+        const w = window.innerWidth, h = window.innerHeight;
+        const nx = (e.clientX - w/2) / (w/2);
+        const ny = (e.clientY - h/2) / (h/2);
+        wrap.style.transform = `translate(${nx * 8}px, ${ny * 6}px)`;
+      });
+    })();
+  </script>
 </body>
 </html>

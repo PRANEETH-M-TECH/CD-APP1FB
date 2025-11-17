@@ -158,9 +158,8 @@
       transform: scale(0.98);
     }
     @keyframes micPulse {
-      0% { box-shadow: 0 0 0 0 rgba(16,185,129,0.28); }
-      70% { box-shadow: 0 0 0 18px rgba(16,185,129,0); }
-      100% { box-shadow: 0 0 0 0 rgba(16,185,129,0); }
+      from { box-shadow: 0 0 0 0 rgba(16,185,129,0.28); }
+      to { box-shadow: 0 0 0 18px rgba(16,185,129,0); }
     }
 
     /* Enhanced robot and mic animations */
@@ -384,7 +383,7 @@
   </style>
 </head>
 
-<body class="text-gray-800">
+<body class="text-gray-800 user-page-body">
   <div class="user-app-container flex flex-col md:flex-row h-screen relative">
     <button id="toggle-left-pane" class="absolute top-4 right-1/2 z-10 bg-gray-200 p-2 rounded-full hover:bg-gray-300 transition-all duration-300">
         <svg id="toggle-icon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -409,7 +408,7 @@
             <option disabled selected>Select...</option>
             <option>Telugu</option><option>Hindi</option><option>English</option>
             <option>Maths</option><option>Science</option><option>Social</option>
-          </select>
+          </select>.
         </div>
 
       </div>

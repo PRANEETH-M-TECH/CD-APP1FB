@@ -1,320 +1,355 @@
 --- Query Log ---
-Timestamp: 2025-11-12T16:34:57.013765
-Original Query: Hey half Mr. school yesterday due to fever and my teacher taught me about balance date can you explain me what is balance date
-Book UUID: 9f4e8506f5d016caa6cd7c7b824396829225ed8d9fed9229a3e04d7fbf2a3372
-Class: 7, Subject: science
+Timestamp: 2025-11-15T20:05:56.262259
+Original Query: which chapter is question I asked belong
+Book UUID: 097025710c9d2a09420dda2755023e25b2106cc4e89dfc78be9f2adab9f8c6b9
+Class: 6, Subject: science
 
 --- LLM Query Processing ---
-Reformulated Query: Provide a comprehensive explanation and definition of the term 'Balance Date,' detailing its meaning, application, and typical context, potentially in business, accounting, or financial reporting.
-Classification: conceptual
-Conceptual Score: 0.85
-Keywords: balance date (Score: 1.00), explain (Score: 0.75), definition (Score: 0.60), accounting concept (Score: 0.50)
+Reformulated Query: Determine the relevant content chapter from the provided summaries that discusses the classification, categorization, or organizational structure of instructional material.
+Classification: factual
+Conceptual Score: 0.40
+Keywords: chapter (Score: 0.90), question (Score: 0.70), belong (Score: 0.50)
 
 --- Formatted Top Chunks for LLM (Context) ---
 
-  --- Chunk 1 (Hybrid Score: 0.4300) ---
-     Chapter: AIR, WINDS AND CYCLONES
-     Text: Fig 6a                          Fig 6b
-Take two paper bags or empty paper cups of
-the same size. Take a broomstick. Hang the
-two bags in the inverted position on the two
-ends of the broom stick. Tie a piece of thread
-in the middle of the stick. Hold the stick by
-the thread, like a weighing balance. Put a
-burning candle below one of the bags as
-shown in the figure 6 (b) and observe what
-happens.
-Note that we have used paper bags or cups as
-they are of  light weight and it would be easier
-to see the results of this experiment if we take
-any such light objects to hang on the thread.
-• Why is the balance of the bags disturbed?
-Handle the burning candle carefully.
-Let us do -6
-Take a balloon and fill it with air. Heat it slowly.
-What happens?
-The balloon expands and the air inside exerts
-more pressure on the walls.
-• If  the tied end is opened now, what
-would happen?
-The air from the balloon would slowly escape.
-• Why does that happen?
-Let us do - 7
+  --- Chunk 1 (Hybrid Score: 0.5200) ---
+     Chapter: HABITAT
+     Text: But we find several other small plants
+growing on the ground and also find
+different types of animals there.
+• Are all plants that grow in an
+orchard the same as the plants
+in a forest? Why is it so?
+Grasslands and savannas are habitats characterized by the predominance of grass
+vegetation and the absence of forests or thick tree stands
+SCERT TELANGANAHABITAT Free Distribution by Govt. of T.S. 2020-21
+60
+Tamarind, mango, amla are examples
+of plants that grow in forests or in the
+house-gardens or fields.
+Plants and animals that live in different
+places on the land like those living on
+trees, in our houses, fields, forests etc  are
+said to belong to terrestrial habitat. All
+habitats on land are collectively known
+as terrestrial habitats.
+Now let us do a small activity to see the
+difference in the ways in which plants
+and animals adjust or adapt to their
+surroundings.
+A study of the difference between
+aquatic and terrestrial plants will help us
+understand  this better.
 
-  --- Chunk 2 (Hybrid Score: 0.3690) ---
-     Chapter: NUTRITION IN PLANTS
-     Text: Do you think Von Helmont’s conclusions
-were correct?
-People tried to check this
-and thus experiment after
-experiment followed.
-Stephan Hales described
-the leaves as organs of
-transpiration ( loss of
-excess water from plant
-body) and he said that
-plants exchange gases with
-their surrounding air.
-Furthermore, he was the first to point out a
-possible role of light in plant nutrition.
-It was Priestley who
-carried out a sequence of
-experiments. He could
-demonstrate that what
-animals were doing to
-the air was being
-reversed by plants. That
-is, according to him, if
-animals were making the
-air impure, plants were making it pure.
-Ingenhouz tried to repeat Priestley’s
-experiments under different conditions
-and found that only the
-green parts of plants when
-exposed to sunlight could
-do that. Several scientists
-started working on what
-green plants were doing
-with water and air and
-sunlight and till date we
-know that-
-Green parts of plants use carbon dioxide in
+  --- Chunk 2 (Hybrid Score: 0.1653) ---
+     Chapter: LIGHT, SHADOWS AND IMAGES
+     Text: we don’t get their shadows. Such
+substances are called transparent.
+The substances such as polythene cover
+and oily paper partially allows the light
+to pass through them. Their shadows
+Red, green and blue are the primary colours of  light. Mixing them in various ways will
+make all other colours, including white.
+SCERT TELANGANA154
+LIGHT, SHADOWS AND IMAGES Free Distribution by Govt. of T.S. 2020-21
+are unclear. These are called translucent substances. You have  also come across
+these terms in the chapter on materials.
+Observe Fig. 2. Write whether the sheet held by the boy is transparent, translucent
+or opaque below each of  the pictures.
+Fig. 2
+Check the above objects in sunlight to
+verify your guess and make corrections
+in table 1 if needed. After checking, give
+your own examples for transparent,
+translucent and opaque substances.
+Transparent Substances : .........................
+.......................................................................
 
-  --- Chunk 3 (Hybrid Score: 0.3260) ---
-     Chapter: NUTRITION IN PLANTS
-     Text: do that. Several scientists
-started working on what
-green plants were doing
-with water and air and
-sunlight and till date we
-know that-
-Green parts of plants use carbon dioxide in
-the presence of sunlight (as well as other
-sources of light) along with water to make
-glucose, starch and other food materials. This
-process of making food materials is called as
-photosynthesis and such plants are called
-Autotrophs.
-List the four major things needed by plants
-to carry out the process of  photosynthesis.
-In nature, the presence of the green substance
-in leaves is essential for photosynthesis to take
-place. This green substance is called
-chlorophyll.
-Mass (kg)
- At start After five years Change in mass (kg)
-Tree 2.27 76.74 74.47
-Dry soil 90.72 90.66 0.06
-Fig 4
-Stephen Hales
-Fig 5
-Priestley
-Fig 6
-Ingenhouz
-Fig 7
-SCERT, TELANGANA99VII Science Free Distribution by Govt. of T.S. 2021-22
-Where does water come from?
-We have learnt that plants absorb food from
+  --- Chunk 3 (Hybrid Score: 0.1350) ---
+     Chapter: OUR FOOD
+     Text: Try to enrich this list as much as you
+can. You will find that from animals we
+get milk, eggs and meat. If  you observe
+carefully you will notice that there are  a
+number of animals from which we get
+different kinds of food. Goats and
+sheep give us meat. Hens and roosters
+are used as meat (chicken). Can you
+elaborate this list?  In plants we eat
+different parts, like leaf  of  spinach and
+coriander plants, flower of  cauliflower
+plant, fruit of  tomato and drumstick
+plants. You may be having some doubt
+about the salt. It is a mineral and
+obtained from the sea. In later classes
+you will learn about the components of
+food. Can you identify which part of
+the plant is eaten by us in the given
+table? You can also discuss with your
+friends (Fig.-3).
+* We get varieties of  food material
+from plants
+* In some plants we eat only some
+parts as food.
+* We take entire plant as food.
+Beet roots are high in carbohydrate levels and should therefore be used sparingly
+SCERT TELANGANA5
+Science VI Class
 
-  --- Chunk 4 (Hybrid Score: 0.1816) ---
-     Chapter: SOIL : OUR LIFE
-     Text: Remember to collect the soil only on the day
-you begin the experiments in class. Don’t forget
-to put a label on your soil sample, stating
-where you got it from and the date on which
-you collected it.
-First copy the following Table in your Note
-book and note all your observations in this
-table. Instructions given after the table will
-help you to fill it.
-Let us do-5:  Examining The Soil After
-Returning To School
-Examine the different soil samples brought
-to class and see whether you can identify
-various properties of soil as given in the
-table. Some points to study the properties
-are given below.
-1. How does the soil look? Is it like fine
-powder or granular?
-SCERT, TELANGANASoil: Our Life142
-2. What is its colour? Is it black, brown
-or any other colour?
-3. How does it feel when you touch or press
-it? Hard, soft, elastic, dry, sticky etc?
-4. How does it smell? Is it aromatic, foul
-smelling or without a scent?
-5. Can you find anything new when you
-examine the soil under a microscope?
+  --- Chunk 4 (Hybrid Score: 0.1332) ---
+     Chapter: SEPARATION OF SUBSTANCES
+     Text: water, tea leaves (tea powder) from tea
+etc. Can you mention some more?
+Mixtures
+Have you observed tea being prepared?
+What substances are used for preparing tea?
+Fig. 1
+List them in table 1. and also  list out the
+different substances that are used to make
+the items given in table 1.
+Fig. 2
+Table 1
+Item Substances
+Tea Milk, ...
+Laddu
+Lemon Juice
+Concrete
+Soil
+The above items are mixtures as they
+contain more than one substance.
+Combination of more than one
+The natural variety, Japan camphor, is obtained by steam distillation of  the wood of  the
+camphor tree ( Cinnamomum camphora )
+SCERT TELANGANA65Science
+65
+Science VI Class
+substance forms a mixture. Some
+mixtures are natural like soil. Some
+mixtures are man-made like laddu,
+lemon juice etc.
+Write in table 2 some mixtures that you
+know and their substances. Also mention
+whether they are natural or man-made.
+Table 2
+Mixture Substances Natural / Man made
+ Lemon water Lemon juice, sugar, water Man-made
 
-  --- Chunk 5 (Hybrid Score: 0.1765) ---
-     Chapter: SOIL : OUR LIFE
-     Text: names, to suit your convenience. But you
-should make sure that you get different types
-of  soil from different places. It would be even
-better if  the soils are of  different colours.
-Collect the soil samples while you are on your
-way to school from home. But, first, let your
-teacher distribute the work of collecting
-different soil samples among the different
-groups in the class. The class can decide which
-group should visit which location and bring
-back which type of soil samples to school.
-This work distribution should be done a day
-before the chapter is begun in the class.
-Leave home a little early on that day, go to
-the location allotted to you, collect about 250
-gm of soil for your sample, and bring it to
-school. You can carry the soil in a bag.
-Remember to collect the soil only on the day
-you begin the experiments in class. Don’t forget
-to put a label on your soil sample, stating
-where you got it from and the date on which
-you collected it.
+  --- Chunk 5 (Hybrid Score: 0.1317) ---
+     Chapter: HABITAT
+     Text: All organisms depend on their
+surrounding for their needs like food,
+water, air and shelter. The
+surrounding which meets the needs
+of a particular organism in the best
+manner is the habitat  of that
+organism. For example, pond is the
+habitat of royyalu or the fresh water
+prawn. Fish lives in ponds so it is a
+habitat for fish as well.
+Can you say what is the habitat for
+crow? A crow makes its nest on the
+tree. So tree is a habitat for the crow.
+We often find some insects on the skin
+of buffalo. So, buffalo skin is the habitat
+for that insect.
+With such a lot of different types of
+organisms it is difficult to find areas with
+just one type of plant or animal. It is
+also difficult to study the needs of each
+organism separately, so usually we study
+them collectively according to the
+habitat.
+Some examples are filled in to help you.
+Copy the table 1 in your notebook. Try
+to enrich the list as much as you can.
+How many organisms are present in
+more than one column? Why did you
 
-  --- Chunk 6 (Hybrid Score: 0.1310) ---
-     Chapter: WATER
-     Text: • Only one percent of all water resources
-is available as freshwater.
-• The available resource of fresh water is
-getting depleted at a very fast pace due
-to different human activities.
-• Wastewater is generated at homes,
-industries, etc. by different human
-activities.
-• All the wastewater released by home,
-industries, hospitals, offices and other
-users are collectively called  Sewage.
-• Sewage is a liquid waste. Most of it is
-water, which has dissolved and
-suspended impurities, disease causing
-bacteria and other microbes.
-• Sewage water contains inorganic,
-organic and bacterial as well as other
-microbial contaminants.
-• Wastewater is treated in treatment plants
-• Physical, chemical and biological
-processes are involved in treatment of
-wastewater at the treatment plants.
-• Chlorine kills harmful disease causing
-organisms present in wastewater.
-• Aeration allows growth of microbes that
-break down wastes.
-• Different types of drainage systems are
-open, closed and underground ones.
+  --- Chunk 6 (Hybrid Score: 0.1305) ---
+     Chapter: PLANTS: PARTS AND FUNCTIONS
+     Text: • Leaves are involved in preparing
+food. They also help in exchange
+of gases and transpiration.
+• Leaf base, petiole and lamina are
+all parts of a leaf.
+• Reticulate and parallel venation are
+found in leaves.
+Improve your learning
+1. What are the important parts of a
+plant?
+2. How will you tell which part of a
+plant is the stem and which is the
+root?
+3. Collect any plant from your
+surroundings. Draw its  root
+structure. What can you say about
+its root system?
+4. John has no place in his house but
+he wants to plant vegetables like
+tomato  in his house. Suggest him
+different ways to do so.
+5. What will happen if a plant doesn’t
+have any leaves?
+6. How does the stem help the plant?
+7. What type of venation is found in
+the leaves of plants with fibrous
+roots?
+8. If the leaves have reticulate venation
+what would be the type of  root?
+9. Explain the various parts of a plant
+with the help of a diagram.
+10. Explain the parts of a leaf with the
+help of a diagram.
 
-  --- Chunk 7 (Hybrid Score: 0.1211) ---
-     Chapter: REFLECTION OF LIGHT
-     Text: have excited Sai? Some questions came to
-his mind. Can you guess the questions?
-Write a few such questions.
-12. Unexpectedly some water sprinkled on a
-mirror while Madhu was shaving his face.
-Did he observe any difference in his
-image? If  yes, explain why?
-13. Imagine that all the houses in your street
-have elevation with mirrors.  Suppose you
-and your friends are walking in the street.
-Would you experience any difficulties
-when you walk through that street? Predict
-and explain. Is it difficult for birds to live
-or fly in that street? Why?
-14. Take an empty tooth paste box and two
-mirror strips of required size and make a
-periscope.
-SURSURSURSURSURYYYYYAAAAA
-SCERT, TELANGANAReflection of light96
-15. What is the angle between  two plane
-mirrors when there are five images?
-16. What is the difference between convex
-and concave mirrors? Draw the diagrams
-of  concave and convex mirrors.
-17. Where do you find irregular reflection in
-daily life? Give some examples.
+  --- Chunk 7 (Hybrid Score: 0.1299) ---
+     Chapter: MATERIALS AND THINGS
+     Text: Improve your learning
+1. Name any five objects which are
+made up of only one material?
+2. Name any five objects which are
+made up of more than two
+materials?
+3. List five things which we can
+make using each of the following
+materials :
+a. glass b. metal
+c. plastic d. wood
+4. Mary saw a ship travelling on a
+sea. She knows that iron nail sinks
+in water. She has many doubts,
+what are her doubts? Write them.
+5. Mary, while examining whether a
+boiled egg sinks or floats, found
+that it floats but Vakula made
+it  sink, How is it possible?
+Guess and  write it.
+6. Drop an egg in a beaker of
+water. Now drop the same egg
+in another beaker of water in
+which excessive salt is added.
+Write your observation.
+7. Do the following activities.
+Write down your observations.
+What do you conclude.
+a. Mix chalk powder in water.
+b. Place a piece of candle in
+water.
+c. Add some oil drops to a
+beaker of  water.
+8. Make a list of items from your
+kitchen like utensils, food
+ingredients etc. classify them as
 
-  --- Chunk 8 (Hybrid Score: 0.1147) ---
-     Chapter: CHANGES AROUND US
-     Text: 157VII Science Free Distribution by Govt. of T.S. 2021-22
-In Class VI, we learnt that many changes are
-taking place around us. There are certain
-factors that influence these changes and there
-are reasons for every change. Among the
-changes we observe in our daily life some
-changes are slow and some fast. There are
-some changes that are temporary and some
-are permanent. There are many changes which
-take place naturally but for some we need to
-initiate or intervene in some way for the change
-to occur. In this lesson we try to learn about
-some more changes.
-We know that there are certain changes that
-repeat after roughly a fixed period of time.
-For example we observe the repetition of
-sunrise and sunset every day. Similarly we
-notice changes in seasons after every few
-months every year.
-Can you think of such other changes from
-your daily life?
-Make a list of  changes you observe in your
-daily life that are repeated after some period
-of time.
-Let us do-1:  Finding the period of
+  --- Chunk 8 (Hybrid Score: 0.1292) ---
+     Chapter: PLANTS: PARTS AND FUNCTIONS
+     Text: 83
+Science VI Class
+9 Plants : Parts and Functions
+What kind of plants have you seen at
+home and outside? You must have
+observed a variety of  plants; some are
+big and some are small. We can find plants
+near our home, in the school campus, on
+the way to school, in the parks and almost
+everywhere.
+• Are all plants similar?
+• What are the similarities among
+them?
+Let us get to know more about plants,
+especially about their parts and functions.
+Parts of  plants
+We know that we have different parts in
+our body. In the same way plants  also
+have different parts.  Do you know them?
+Here is a plant . Try to name its parts.
+Which plant is this?
+In this chapter, Let us try to understand
+about different parts of  plants
+through activities. For this, make
+groups of  4-5 students. Each group will
+collect 5 to 6 different types of plants
+along with their roots.  You can collect
+different small plants from your garden
+or surroundings but be careful not to
+damage too many plants.
 
-  --- Chunk 9 (Hybrid Score: 0.1145) ---
-     Chapter: HEAT - MEASUREMENT
-     Text: the Mercury level.  Now let the ice melt.
-Can you observe any change in Mercury level?
- The level of Mercury remains same while ice
-melts. This means that temperature is
-Fig. 10
-SCERT, TELANGANA47VII Science Free Distribution by Govt. of T.S. 2021-22
-constant.  This constant temperature at which
-ice melts is called melting point of ice and
-mark  it  0°C.
-Take some water in a beaker.  Immerse the
-thermometer in it and start heating the water.
-It will start boiling while getting converted
-into steam.  Mercury level starts rising and
-reaches a point beyond which it doesn’t rise.
-Mark the level of mercury at this point.
-Observe the constant level at which Mercury
-stays while water is boiling, this constant
-temperature is called boiling point of  water.
-We mark the level of  mercury at this point as
-100°C.
-Thus temperature at which ice melts or water
-boils is constant.  These values are fixed as
-0°C and 100°C respectively.  Like water, all
-substances in pure form melt and boil at
+  --- Chunk 9 (Hybrid Score: 0.1267) ---
+     Chapter: LEARNING HOW TO MEASURE
+     Text: spans in table 2 :
+Table 2
+S. Name of Number of
+No. the student foot-spans
+1.
+2.
+3.
+4.
+5.
+• Is the number of foot-spans
+same when different students
+measure the length of class room?
+• Who got more number of foot-
+spans? Why?
+• Who got least number of foot-
+spans? Why?
+We do not get the same measurements
+in two cases mentioned above because
+the hand-spans / foot-spans are not
+same for each one of  us.
+We often use these type of  conventional
+methods to measure certain lengths. For
+example, cubits for the length of a string
+of flowers and length and breadth of a
+Activity-1: Measuring Lengths
+Measure the length of one side of a
+table using your hand-span (Fig. 3). Ask
+your classmates to do the same. Record
+the length of  the table in terms of
+number of hand-spans in table 1 :
+Table 1
+S. Name of Number of
+No. the student hand-spans
+1.
+2.
+3.
+4.
+5.
+Do all of you get the same number of
+hand-spans for the length of the table?
+• Who got more number of hand-
+spans?
 
-  --- Chunk 10 (Hybrid Score: 0.1119) ---
-     Chapter: MOTION AND TIME
-     Text: • Who will reach the school first?  How
-much earlier will he be compared to the
-other?
-• How do you measure ‘early’ or ‘late’
-arrival at  school?
-You can easily estimate that Ravi reaches the
-school earlier than Sathish.  But to answer the
-question of how early Ravi reached, we need
-to measure the times taken by both Ravi and
-Sathish and find the difference of time
-between both the cases.
-For this we need time measuring instruments
-like watches, clocks etc.
-Try to give some more examples of  how to
-measure time in addition to watches
-Now-a-days, we use different instruments like
-electronic clocks, digital clocks, quartz clocks
-etc to measure time. A few decades ago people
-used pendulum clocks that have now become
-rare.
-Fig. 31                       Fig. 32
-Do you know:
-Like minutes and hours, week, fortnight,
-month, season, ayanam are also units for
-measuring time. Sand clock, water clock, sun
-dial etc. were used earlier instruments for
-estimating time.
+  --- Chunk 10 (Hybrid Score: 0.1234) ---
+     Chapter: SEPARATION OF SUBSTANCES
+     Text: know and their substances. Also mention
+whether they are natural or man-made.
+Table 2
+Mixture Substances Natural / Man made
+ Lemon water Lemon juice, sugar, water Man-made
+• Identify the mixtures among the
+following : milk, tea, sand,
+turmeric powder, red chilly
+• From which mixture in the
+examples mentioned above are
+you able to separate  substances?
+Activity-1:  Use of water in
+separation
+Collect some solid materials such as
+ghee, wax, sand, sugar, salt, turmeric
+powder, dal, plastic, wood, iron nails.
+Take a bucketful of  water and a beaker.
+Now try to discover the following.
+• Which materials float on water?
+• Which materials sink in water?
+• Which materials are soluble in water?
+• Which materials are not soluble in water?
+Fig. 3
+You have studied about materials and
+their properties in a previous chapter.
+We make use of  several properties of
+the materials for separating the  desired
+items from the mixture.
+You might come across some situations
+where you have to separate some
 
 --- Generated Answer ---
-Hello! I am sorry you were sick, but let me explain balanced diet for you. Think of your body like a fantastic machine. A balanced diet is simply making sure you fuel that machine with all the right types of food, not too much or too little of anything. This means you need energy foods like bread, building foods like eggs, and protecting foods like fruits and vegetables. When you eat a good mix of all these, your body stays strong, you grow well, and you can fight off those nasty fevers and germs!
+That’s a good question! The textbook pages you shared cover a few different lessons in your science book. We saw parts of the chapter on **Habitats**, which talks about where animals and plants live, like forests or ponds. We also saw parts of the chapter about **Light and Shadows**, and the chapter explaining the different **Parts of Plants** like the roots and leaves. Finally, there was content about **Food Sources** and how we make and separate **Mixtures**. If you tell me the actual question you asked, I can tell you exactly which chapter to look in!
