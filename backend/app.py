@@ -3,21 +3,22 @@ import shutil
 import json
 import re
 import datetime
-import re
 from contextlib import asynccontextmanager
 from dotenv import load_dotenv
 from fastapi import FastAPI, File, UploadFile, Form, HTTPException, Query, BackgroundTasks, WebSocket, WebSocketDisconnect
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, JSONResponse, StreamingResponse
-from .conversation import conversation_manager  # Import the new conversation manager
+from .conversation import conversation_manager
 from pydantic import BaseModel
 from typing import List, Dict, Optional
 import asyncio
-
 from pypdf import PdfReader
 
 # Load environment variables
 load_dotenv()
+
+import logging
+logger = logging.getLogger(__name__)
 
 # --- Configure Gemini ---
 import google.generativeai as genai
@@ -31,45 +32,44 @@ if not api_key:
 
 genai.configure(api_key=api_key)
 print("✅ Google Gemini configured successfully.")
-from .qdrant import (
-    initialize, # Updated import
-    log_query_details,
-    process_and_embed_book,
-    get_books,
-    get_book_metadata,
-    get_chapters_for_book,
-    hybrid_search,
-    reformulate_and_classify_query,
-
-    generate_answer,
-    generate_chapters_from_text,
-    generate_teacher_explanation,
-)
+from . import qdrant
+from . import local_chap_service
+from . import firestore_service
 
 # --- Lifespan Management ---
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # On startup, initialize all models and database connections
-    initialize()
+    qdrant.initialize()
     yield
     # On shutdown (not used here, but good practice)
 
 # Initialize FastAPI app with the lifespan manager
 app = FastAPI(lifespan=lifespan)
 
+from .firebase.firebase_init import db, bucket
+
 # --- DIRECTORY SETUP ---
-UPLOADS_DIR = "uploads"
+# Make the path absolute to avoid CWD issues
+APP_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJECT_ROOT = os.path.dirname(APP_DIR)
+UPLOADS_DIR = os.path.join(PROJECT_ROOT, "uploads")
+
 if not os.path.exists(UPLOADS_DIR):
     os.makedirs(UPLOADS_DIR)
 
 # --- API MODELS ---
 class QueryRequest(BaseModel):
     query: str
+    class_name: str
+    subject: str
     book_uuid: str
-    # Optional filter for chapter
-    chapter: Optional[str] = None
 
-
+class BookCreateRequest(BaseModel):
+    class_name: str
+    subject: str
+    filename: str
+    chapters: List[Dict]
 
 # --- API ENDPOINTS ---
 @app.post("/api/upload")
@@ -88,165 +88,384 @@ async def upload_file(file: UploadFile = File(...)):
     return {"filename": safe_filename}
 
 @app.post("/api/books")
-async def create_book(
+async def create_book_and_process(
     background_tasks: BackgroundTasks,
-    class_name: str = Form(...),
-    subject: str = Form(...),
-    filename: str = Form(...)
+    book_data: BookCreateRequest
 ):
     """
-    Processes and stores book metadata and content based on the uploaded file.
+    Starts the background processing task for a book.
     """
+    class_name = book_data.class_name
+    subject = book_data.subject
+    filename = book_data.filename
+    chapters = book_data.chapters
+
+    logger.info(f"Received request to process and save book: {filename}")
     pdf_path = os.path.join(UPLOADS_DIR, os.path.basename(filename))
     if not os.path.exists(pdf_path):
         raise HTTPException(status_code=404, detail=f"Uploaded file not found: {filename}")
 
-    cache_path = "chapterdata/chapters_cache.json"
-    try:
-        with open(cache_path, "r") as f:
-            cache = json.load(f)
-        cache_key = f"{class_name}_{subject}"
-        cached_chapters_data = cache.get(cache_key)
-        if not cached_chapters_data or not cached_chapters_data.get("chapters"):
-            raise HTTPException(status_code=404, detail="Chapter data not found in cache. Please extract chapters first.")
-        chapters_list = cached_chapters_data.get("chapters")
-    except (FileNotFoundError, json.JSONDecodeError):
-        raise HTTPException(status_code=404, detail="Chapter cache not found or invalid. Please extract chapters first.")
-
-    # Run the long-running task in the background
-    background_tasks.add_task(process_and_embed_book, pdf_path, class_name, subject, chapters_list)
+    book_uuid = qdrant.get_book_uuid(pdf_path)
     
-    # Immediately return a response to the user
-    return {"message": "Book processing started in the background. This may take several minutes.", "status": "processing"}
+    # Save the book details to the cache
+    local_chap_service.save_book_details(class_name, subject, book_uuid, filename, chapters)
+
+    # Start the background processing task
+    logger.info(f"Starting background processing for book {book_uuid}")
+    background_tasks.add_task(process_book_in_background, book_uuid, pdf_path, class_name, subject, chapters)
+    
+    return {"message": "Book processing started in the background.", "status": "processing", "book_id": book_uuid}
+
+from qdrant_client import models
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+import uuid
+
+async def process_book_in_background(book_uuid: str, pdf_path: str, class_name: str, subject: str, chapters: List[Dict]):
+    """
+    Processes the book in the background, creates summaries, and saves to databases.
+    """
+    print("\n[ADMIN] Starting book processing pipeline...\n")
+    logger.info(f"BACKGROUND TASK STARTED for book {book_uuid}")
+
+    try:
+        # Initialize services
+        qdrant.initialize()
+        reader = PdfReader(pdf_path)
+        text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
+
+        chapters_to_process = chapters
+        if not chapters_to_process:
+            raise ValueError("No confirmed chapters found to process.")
+
+        print(f"[ADMIN] Total chapters to process: {len(chapters_to_process)}")
+
+        all_chapters_with_summaries = []
+
+        # Steps 1 & 3: Generate Summaries and Upload Chunks to Qdrant
+        for i, chapter_data in enumerate(chapters_to_process):
+            chapter_name = chapter_data['chapter_name']
+            print(f"[ADMIN] Processing Chapter {i+1}/{len(chapters_from_cache)}: {chapter_name}")
+
+            start_page = chapter_data.get("pdf_startpg")
+            end_page = chapter_data.get("pdf_endpg")
+
+            if start_page is None or end_page is None:
+                print(f"[WARN] Skipping chapter '{chapter_name}' due to missing page numbers.")
+                continue
+
+            # Extract text
+            chapter_text = ""
+            for page_num in range(start_page - 1, end_page):
+                if 0 <= page_num < len(reader.pages):
+                    chapter_text += reader.pages[page_num].extract_text() or ""
+
+            # Create and upload chunks to Qdrant
+            text_chunks = text_splitter.split_text(chapter_text)
+            print(f"  - Split into {len(text_chunks)} chunks.")
+            
+            points_to_upload = []
+            for j, chunk_text in enumerate(text_chunks):
+                chunk_id = str(uuid.uuid4())
+                qdrant_id = str(uuid.uuid4())
+                embedding = qdrant.local_embedder.encode(chunk_text).tolist()
+                points_to_upload.append(
+                    models.PointStruct(
+                        id=qdrant_id,
+                        vector=embedding,
+                        payload={
+                            "book_uuid": book_uuid,
+                            "chapter_id": str(i + 1),
+                            "chunk_id": chunk_id,
+                            "text": chunk_text,
+                            "chapter_name": chapter_name,
+                        },
+                    )
+                )
+
+            if points_to_upload:
+                qdrant.qdrant_client.upsert(collection_name="data", points=points_to_upload, wait=True)
+                print(f"  - Saved {len(points_to_upload)} chunks to Qdrant.")
+
+            # Generate summary
+            summary_text = qdrant.generate_chapter_summary(class_name, subject, chapter_name, text_chunks)
+            print(f"  - Generated summary for chapter.")
+            
+            chapter_summary_data = {
+                "chapter_name": chapter_name,
+                "summary": summary_text
+            }
+            all_chapters_with_summaries.append(chapter_summary_data)
+
+        # Step 4: Save single summary document for LLM context
+        print("[ADMIN] Saving summary document for LLM.")
+        firestore_service.save_summary_document(
+            class_name=class_name,
+            subject=subject,
+            book_uuid=book_uuid,
+            chapters=all_chapters_with_summaries
+        )
+
+        print("\n[ADMIN] Book processing finished successfully.\n")
+
+    except Exception as e:
+        logger.error(f"BACKGROUND TASK FAILED for book {book_uuid}: {e}", exc_info=True)
+
+    logger.info(f"Finished background processing for book {book_uuid}")
 
 @app.get("/api/books")
 async def list_books(class_name: Optional[str] = None, subject: Optional[str] = None):
     """
-    Returns a list of available books, optionally filtered by class and subject.
+    Returns a list of available books from the local cache, optionally filtered by class and subject.
     """
-    return get_books(class_name=class_name, subject=subject)
+    return local_chap_service.get_books(class_name=class_name, subject=subject)
 
-@app.get("/api/query")
-async def query_book(query: str, book_uuid: str, chapter: Optional[str] = None):
+import time
+from google.cloud import firestore
+
+#############################################################
+# FINAL BACKEND PIPELINE (FAST, CACHED, FIRESTORE SUMMARIES)
+#############################################################
+
+# 1. SUMMARY CACHE (IN MEMORY)
+SUMMARY_CACHE = {}
+
+
+def load_summary_from_firestore(class_name: str, subject: str):
     """
-    Performs RAG pipeline to generate an answer and streams the response.
+    Loads summaries/{subject}_{class} from Firestore.
+    Caches in memory for FAST access (0ms after first load).
     """
-    print(f"--- Raw Query: {query} ---")
-    async def stream_generator():
-        # --- Start of New RAG Workflow ---
-        # 1. Fetch context for the LLM
-        metadata = get_book_metadata(book_uuid)
-        class_name = metadata.get("class_name")
-        subject = metadata.get("subject")
-        
-        chapters_data = get_chapters_for_book(book_uuid)
-        chapter_list = [chapter['chapter_name'] for chapter in chapters_data]
+    key = f"{subject.lower()}_{class_name.replace(' ', '')}"
 
-        # 2. Reformulate and Classify Query using the full context
-        processed_query_data = reformulate_and_classify_query(
-            query=query,
-            class_name=class_name,
-            subject=subject,
-            chapter_list=chapter_list
-        )
-        
-        reformulated_query = processed_query_data.get("reformulated_query", query)
-        print(f"--- Reformulated Query: {reformulated_query} ---")
-        classification = processed_query_data.get("classification", "conceptual")
-        keywords = processed_query_data.get("keywords", [])
-        conceptual_score = processed_query_data.get("conceptual_score", 0.5)
+    # Check cached
+    if key in SUMMARY_CACHE:
+        return SUMMARY_CACHE[key]
 
-        # 3. Perform Hybrid Search
-        filters = {}
-        if chapter:
-            filters['chapter'] = chapter
+    # Fetch from Firestore
+    db = firestore.Client()
+    doc_ref = db.collection("summaries").document(key)
+    doc = doc_ref.get()
 
-        search_results, semantic_results, normalized_bm25_results = hybrid_search(
-            book_uuid=book_uuid,
-            query=reformulated_query,
-            keywords=keywords,
-            conceptual_score=conceptual_score,
-            metadata_filters=filters
-        )
-        
-        # 4. Generate Final Answer
-        if not search_results:
-            answer = {"display_text": "I couldn't find any relevant information to answer your question.", "read_text": "I couldn't find any relevant information to answer your question."}
-            yield f"data: {json.dumps(answer)}\n\n"
-        else:
-            context = "\n\n---\n\n".join([payload['text'] for score, payload in search_results])
-            book_details = {"class_name": class_name, "subject": subject}
-            full_response_content = ""
-            for chunk in generate_answer(query, book_details, context):
-                full_response_content += chunk
+    if not doc.exists:
+        raise Exception(f"Summary document not found: summaries/{key}")
 
-            display_text = ""
-            read_text = ""
+    data = doc.to_dict()
+    SUMMARY_CACHE[key] = data  # cache it
 
-            # Extract TEXT_RESPONSE
-            text_start_match = re.search(r'\[TEXT_RESPONSE_START\](.*?)\[TEXT_RESPONSE_END\]', full_response_content, re.DOTALL)
-            if text_start_match:
-                display_text = text_start_match.group(1).strip()
+    print(f"[CACHE] Loaded summary → summaries/{key}")
 
-            # Extract VOICE_SCRIPT
-            voice_start_match = re.search(r'\[VOICE_SCRIPT_START\](.*?)\[VOICE_SCRIPT_END\]', full_response_content, re.DOTALL)
-            if voice_start_match:
-                read_text = voice_start_match.group(1).strip()
+    return data
 
-            if not display_text and not read_text:
-                # Fallback if markers are not found or content is empty
-                display_text = "I couldn't generate a clear answer based on the provided context."
-                read_text = "I couldn't generate a clear answer."
-            elif not display_text:
-                display_text = read_text # Use read_text as fallback for display
-            elif not read_text:
-                read_text = display_text # Use display_text as fallback for read
 
-            answer = {"display_text": display_text, "read_text": read_text}
-            yield f"data: {json.dumps(answer)}\n\n"
+# 2. JSON Extractor (LLM Output Cleaner)
+def extract_json_block(text: str):
+    start = text.find("{")
+    end = text.rfind("}") + 1
+    if start != -1 and end != -1 and end > start:
+        return text[start:end]
+    return None
 
-            print(f"--- Generated Answer: {read_text} ---")
-            log_query_details(query, {"id": book_uuid, "class_name": class_name, "subject": subject}, processed_query_data, search_results, read_text)
-        yield f"data: [DONE]\n\n"
 
-    return StreamingResponse(stream_generator(), media_type="text/event-stream")
+# 3. REFORMULATION + CHAPTER RANKING LLM
+def reformulate_with_llm(raw_query: str, class_name: str, subject: str, chapters):
+    # Convert chapters to JSON string
+    chapters_json = json.dumps(chapters, ensure_ascii=False, indent=2)
+
+    # --------------- FINAL PROMPT ---------------
+    prompt = f"""
+You are an expert ASR-correction and curriculum-aware query processor.
+
+Your tasks:
+
+1) Correct ASR mistakes in the raw query. Only correct errors clearly wrong based on the summaries.
+
+2) Reformulate the corrected query into a descriptive, retrieval-ready form (8–30 words).
+
+3) Extract important keywords (importance >= 0.3).
+
+4) Return conceptual_score (0-1) and classification:
+   - "conceptual" if >0.5
+   - "factual" otherwise
+
+5) Rank the most relevant chapters using ONLY the provided summaries.
+   Return:
+   [
+     {{
+       "chapter_id": str,
+       "chapter_name": str,
+       "start_page": int,
+       "end_page": int,
+       "score": float
+     }}
+   ]
+
+6) STRICT JSON OUTPUT ONLY:
+{{
+  "reformulated_query": str,
+  "normalized_query": str,
+  "keywords": [...],
+  "conceptual_score": float,
+  "classification": str,
+  "chapter_ranking": [...]
+}}
+
+--------------------------------------
+
+CLASS = "{class_name}"
+SUBJECT = "{subject}"
+RAW_QUERY = "{raw_query}"
+
+# CHAPTER SUMMARIES:
+{chapters_json}
+
+--------------------------------------
+Return ONLY the JSON response.
+"""
+
+    # LLM Call
+    try:
+        response = qdrant.generation_model.generate_content(prompt)
+        raw = response.text.strip()
+    except Exception as e:
+        print("[LLM ERROR]", e)
+        raw = "{}"
+
+    json_block = extract_json_block(raw)
+
+    if not json_block:
+        return {
+            "reformulated_query": raw_query,
+            "normalized_query": raw_query.lower(),
+            "keywords": [],
+            "classification": "conceptual",
+            "conceptual_score": 0.5,
+            "chapter_ranking": []
+        }
+
+    try:
+        parsed = json.loads(json_block)
+    except:
+        parsed = {
+            "reformulated_query": raw_query,
+            "normalized_query": raw_query.lower(),
+            "keywords": [],
+            "classification": "conceptual",
+            "conceptual_score": 0.5,
+            "chapter_ranking": []
+        }
+
+    # classification rule
+    cs = parsed.get("conceptual_score", 0.5)
+    parsed["classification"] = "conceptual" if cs > 0.5 else "factual"
+
+    return parsed
+
+
+# 4. QDRANT RETRIEVAL (FILTER BY CHAPTERS)
+def retrieve_from_qdrant(query: str, book_uuid: str, chapter_ranking: List[Dict]):
+    embedding = qdrant.embed_query(query)
+
+    chapter_ids = [
+        ch.get("chapter_id") or ch["chapter_name"].replace(" ", "_")
+        for ch in chapter_ranking
+    ]
+
+    q_filter = {
+        "must": [
+            {"key": "book_uuid", "match": {"value": book_uuid}}
+        ]
+    }
+
+    if chapter_ids:
+        q_filter["must"].append({
+            "key": "chapter_id",
+            "match": {"any": chapter_ids}
+        })
+
+    results = qdrant.qdrant_client.search(
+        collection_name="data",
+        query_vector=embedding,
+        limit=5,
+        filter=q_filter
+    )
+
+    return results
+
+
+# 5. MAIN ENDPOINT — COMPLETE PIPELINE
+@app.get("/api/query", tags=["LLM"])
+def query_engine(
+    book_uuid: str = Query(...),
+    query: str = Query(...),
+    class_name: str = Query(...),
+    subject: str = Query(...)
+):
+    start = time.time()
+
+    # Load cached summaries (no Firestore after first load)
+    summary_doc = load_summary_from_firestore(class_name, subject)
+    chapters = summary_doc["chapters"]
+
+    # Reformulate query + chapter ranking
+    reform = reformulate_with_llm(
+        raw_query=query,
+        class_name=class_name,
+        subject=subject,
+        chapters=chapters
+    )
+
+    # Retrieve context from Qdrant
+    qdrant_hits = retrieve_from_qdrant(
+        reform["reformulated_query"],
+        book_uuid,
+        reform["chapter_ranking"]
+    )
+
+    context = "\n".join([
+        hit.payload.get("text", "") for hit in qdrant_hits
+    ])
+
+    # Final answer
+    final_prompt = f"""
+You are a helpful teacher. Use the context to answer the question clearly:
+
+QUESTION:
+{reform['reformulated_query']}
+
+CONTEXT:
+{context}
+
+Return only the answer.
+"""
+
+    try:
+        final_resp = qdrant.generation_model.generate_content(final_prompt)
+        answer = final_resp.text.strip()
+    except:
+        answer = "Sorry, I couldn't generate the answer."
+
+    return {
+        "raw_query": query,
+        "reformulated_query": reform["reformulated_query"],
+        "classification": reform["classification"],
+        "chapter_ranking": reform["chapter_ranking"],
+        "answer": answer,
+        "latency": round(time.time() - start, 2)
+    }
 
 
 
 @app.get("/api/list-chapters")
 async def list_chapters(class_name: str, subject: str):
     """
-    Returns a sorted list of chapters for a given book, using a cache.
+    Returns a sorted list of chapters for a given book from the local cache.
     """
-    cache_path = "chapterdata/chapters_cache.json"
-    cache_key = f"{class_name}_{subject.lower()}"
-
-    print(f"--- API: /api/list-chapters called for Class: {class_name}, Subject: {subject} (Cache Key: {cache_key}) ---")
-
-    # 1. Check cache first
-    try:
-        with open(cache_path, "r") as f:
-            cache = json.load(f)
-        if cache_key in cache:
-            print(f"--- Cache HIT for {cache_key}. Returning {len(cache[cache_key]['chapters'])} chapters from cache. ---")
-            return {"chapters": cache[cache_key]["chapters"]}
-    except (FileNotFoundError, json.JSONDecodeError):
-        print(f"--- Cache MISS or invalid cache file for {cache_key}. Attempting to retrieve from database. ---")
-        cache = {} # Ensure cache is empty if file not found or invalid
-
-    # 2. If not in cache, get from database
-    books = get_books(class_name=class_name, subject=subject)
-    if not books:
-        raise HTTPException(status_code=404, detail="Book not found.")
-
-    book_uuid = books[0]['id']
-    chapters = get_chapters_for_book(book_uuid)
-    print(f"--- Retrieved {len(chapters)} chapters from database for book UUID: {book_uuid}. ---")
-
-    # This endpoint should not write to the cache. The cache is managed by /extract-chapters.
-    # If the data is not in cache, it means /extract-chapters hasn't been run for this book.
-    # The frontend should handle this by prompting the user to extract chapters first.
-
+    chapters = local_chap_service.get_chapters(class_name=class_name, subject=subject)
+    if not chapters:
+        raise HTTPException(status_code=404, detail="Chapters not found for this book.")
+    
+    # The chapters from the cache are already sorted.
+    
     return {"chapters": chapters}
 
 
@@ -264,29 +483,13 @@ async def get_summary(request: SummaryRequest):
     subject = request.subject
     chapter_name = request.chapter_name
 
-    summary_filename = f"{subject.lower()}{class_name.replace(' ', '')}.json"
-    summary_filepath = os.path.join("..", "summary", summary_filename)
-
-    if not os.path.exists(summary_filepath):
-        raise HTTPException(status_code=404, detail="Summary file not found for this book.")
-
-    try:
-        with open(summary_filepath, "r", encoding="utf-8") as f:
-            summary_data = json.load(f)
-    except (FileNotFoundError, json.JSONDecodeError):
-        raise HTTPException(status_code=404, detail="Summary data not found or invalid.")
-
-    chapter_summary = None
-    for chapter in summary_data.get("chapters", []):
-        if chapter.get("chapter_name") == chapter_name:
-            chapter_summary = chapter.get("summary")
-            break
+    chapter_summary = local_chap_service.get_summary(class_name, subject, chapter_name)
     
-    if chapter_summary is None:
-        raise HTTPException(status_code=404, detail="Summary not found for this chapter.")
+    if chapter_summary is None or chapter_summary == "":
+        raise HTTPException(status_code=404, detail="Summary not found for this chapter or is being generated.")
 
     # Generate the detailed explanation using the new function
-    explanation = generate_teacher_explanation(
+    explanation = qdrant.generate_teacher_explanation(
         class_name=class_name,
         subject=subject,
         chapter_name=chapter_name,
@@ -306,8 +509,8 @@ def extract_chapters_from_pdf(pdf_path: str) -> Dict:
         
         pages_to_extract_indices = set()
 
-        # Add first 20 pages
-        for i in range(min(20, num_pages)):
+        # Add first 30 pages
+        for i in range(min(30, num_pages)):
             pages_to_extract_indices.add(i)
 
         # Add last 5 pages
@@ -325,7 +528,7 @@ def extract_chapters_from_pdf(pdf_path: str) -> Dict:
             json.dump(pdf_pages_data, f, indent=2)
         
         try:
-            llm_response_str = generate_chapters_from_text("chapterdata/chap_extraction.json")
+            llm_response_str = qdrant.generate_chapters_from_text("chapterdata/chap_extraction.json")
         except Exception as e:
             raise HTTPException(status_code=500, detail=f"AI model failed to generate chapters: {e}")
 
@@ -417,7 +620,10 @@ async def extract_chapters(
             raise HTTPException(status_code=404, detail=f"PDF file not found: {safe_filename}")
 
         # extract_chapters_from_pdf now returns a dict with "pdf_offset" and "chapters"
-        extracted_data = extract_chapters_from_pdf(pdf_path) 
+        extracted_data = extract_chapters_from_pdf(pdf_path)
+        book_uuid = qdrant.get_book_uuid(pdf_path)
+        extracted_data['book_uuid'] = book_uuid
+        extracted_data['filename'] = safe_filename
         
         # 3. Save to cache
         cache[cache_key] = extracted_data # Save with new cache key
@@ -428,7 +634,20 @@ async def extract_chapters(
     except HTTPException as e:
         raise e # Re-raise HTTPExceptions directly
     except Exception as e:
+        logger.error(f"Failed to extract chapters due to an unexpected error: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail=f"Failed to extract chapters: {e}")
+
+
+@app.get("/api/clear-qdrant")
+async def clear_qdrant_data():
+    """
+    Clears all data from the Qdrant collection.
+    """
+    try:
+        qdrant.clear_qdrant_collection()
+        return {"message": "Qdrant collection cleared and re-initialized successfully."}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to clear Qdrant collection: {e}")
 
 
 # --- STATIC FILE SERVING ---

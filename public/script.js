@@ -245,13 +245,21 @@ function setupChaptersPage() {
         
         showStatus('Processing book and chapters...', 'info');
 
-        const finalFormData = new FormData();
-        finalFormData.append('class_name', className);
-        finalFormData.append('subject', subject);
-        finalFormData.append('filename', filename);
+        const finalData = {
+            class_name: className,
+            subject: subject,
+            filename: filename,
+            chapters: chapters
+        };
 
         try {
-            const response = await fetch('/api/books', { method: 'POST', body: finalFormData });
+            const response = await fetch('/api/books', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(finalData)
+            });
             const result = await response.json();
             if (!response.ok) throw new Error(result.detail || 'Failed to process book.');
             
@@ -606,7 +614,7 @@ function setupUserPage() {
         let fullResponse = "";
         let fullReadText = ""; 
 
-        const source = new EventSource(`/api/query?book_uuid=${selectedBook.id}&query=${query}`);
+        const source = new EventSource(`/api/query?book_uuid=${selectedBook.id}&query=${encodeURIComponent(query)}&class_name=${encodeURIComponent(selectedBook.class_name)}&subject=${encodeURIComponent(selectedBook.subject)}`);
 
         source.onmessage = function(event) {
             if (event.data === "[DONE]") {
