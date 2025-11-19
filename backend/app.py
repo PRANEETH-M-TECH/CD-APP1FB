@@ -95,26 +95,31 @@ async def create_book_and_process(
     """
     Starts the background processing task for a book.
     """
-    class_name = book_data.class_name
-    subject = book_data.subject
-    filename = book_data.filename
-    chapters = book_data.chapters
+    logger.info(f"Received request to process and save book with data: {book_data.dict()}")
+    try:
+        class_name = book_data.class_name
+        subject = book_data.subject
+        filename = book_data.filename
+        chapters = book_data.chapters
 
-    logger.info(f"Received request to process and save book: {filename}")
-    pdf_path = os.path.join(UPLOADS_DIR, os.path.basename(filename))
-    if not os.path.exists(pdf_path):
-        raise HTTPException(status_code=404, detail=f"Uploaded file not found: {filename}")
+        logger.info(f"Received request to process and save book: {filename}")
+        pdf_path = os.path.join(UPLOADS_DIR, os.path.basename(filename))
+        if not os.path.exists(pdf_path):
+            raise HTTPException(status_code=404, detail=f"Uploaded file not found: {filename}")
 
-    book_uuid = qdrant.get_book_uuid(pdf_path)
-    
-    # Save the book details to the cache
-    local_chap_service.save_book_details(class_name, subject, book_uuid, filename, chapters)
+        book_uuid = qdrant.get_book_uuid(pdf_path)
+        
+        # Save the book details to the cache
+        local_chap_service.save_book_details(class_name, subject, book_uuid, filename, chapters)
 
-    # Start the background processing task
-    logger.info(f"Starting background processing for book {book_uuid}")
-    background_tasks.add_task(process_book_in_background, book_uuid, pdf_path, class_name, subject, chapters)
-    
-    return {"message": "Book processing started in the background.", "status": "processing", "book_id": book_uuid}
+        # Start the background processing task
+        logger.info(f"Starting background processing for book {book_uuid}")
+        background_tasks.add_task(process_book_in_background, book_uuid, pdf_path, class_name, subject, chapters)
+        
+        return {"message": "Book processing started in the background.", "status": "processing", "book_id": book_uuid}
+    except Exception as e:
+        logger.error(f"Error processing book creation request: {e}", exc_info=True)
+        raise HTTPException(status_code=422, detail=f"Error processing book creation request: {e}")
 
 from qdrant_client import models
 from langchain.text_splitter import RecursiveCharacterTextSplitter
