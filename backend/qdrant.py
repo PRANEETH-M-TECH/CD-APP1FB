@@ -28,6 +28,7 @@ book_corpus: Dict[str, List[Dict]] = {}
 def initialize():
     """
     Initialize models and Qdrant client. Called once at application startup.
+    DEVELOPMENT MODE: Deletes and recreates collection on every startup.
     """
     global client, local_embedder, generation_model
 
@@ -43,12 +44,32 @@ def initialize():
     client = QC(
         url=os.environ.get("QDRANT_URL", "http://localhost:6333"),
         api_key=os.environ.get("QDRANT_API_KEY"),
+        timeout=120,  # 120 second timeout for slow cloud connections
+        prefer_grpc=False,  # Use HTTP/REST instead of gRPC for better compatibility
+        verify=False,  # Disable SSL certificate verification for self-signed certificates
     )
 
-    # Ensure collection exists and create payload indexes if new
+
+    # ========== PRODUCTION MODE: PRESERVE DATA ==========
+    # Development mode (clear on startup) is DISABLED
+    # Collection will only be created if it doesn't exist
+    print(f"\n{'='*70}")
+    print(f"[QDRANT] PRODUCTION MODE - Preserving existing data")
+    print(f"{'='*70}\n")
+    
     model_embedding_dimension = local_embedder.get_sentence_embedding_dimension()
+    
     try:
-        if not client.collection_exists(collection_name=COLLECTION_NAME):
+        # Check if collection exists
+        collections = client.get_collections().collections
+        collection_exists = any(c.name == COLLECTION_NAME for c in collections)
+        
+        if collection_exists:
+            print(f"[QDRANT] ✓ Collection '{COLLECTION_NAME}' already exists")
+            print(f"[QDRANT] ✓ Preserving existing data\n")
+        else:
+            print(f"[QDRANT] Collection '{COLLECTION_NAME}' not found")
+            print(f"[QDRANT] Creating new collection: {COLLECTION_NAME}")
             client.create_collection(
                 collection_name=COLLECTION_NAME,
                 vectors_config=models.VectorParams(
@@ -56,17 +77,29 @@ def initialize():
                     distance=models.Distance.COSINE,
                 ),
             )
+            print(f"[QDRANT] ✓ Fresh collection created")
 
-        for field in ["class_name", "subject", "chapter", "textbook_uuid", "chpstpage", "chpendpage"]: # Added chpstpage, chpendpage
-            try:
-                client.create_payload_index(
-                    collection_name=COLLECTION_NAME,
-                    field_name=field,
-                    field_schema=models.PayloadSchemaType.KEYWORD,
-                )
-            except Exception as e:
-                pass # Silently fail
+        
+        # Create indexes for filtering
+        print(f"[QDRANT] Creating payload indexes...")
+        client.create_payload_index(
+            collection_name=COLLECTION_NAME,
+            field_name="book_uuid",
+            field_schema=models.PayloadSchemaType.KEYWORD,
+        )
+        client.create_payload_index(
+            collection_name=COLLECTION_NAME,
+            field_name="chapter_name",
+            field_schema=models.PayloadSchemaType.KEYWORD,
+        )
+        print(f"[QDRANT] ✓ Indexes created\n")
+        
+        print(f"{'='*70}")
+        print(f"[QDRANT] Ready with clean collection: {COLLECTION_NAME}")
+        print(f"{'='*70}\n")
+        
     except Exception as e:
+        print(f"[QDRANT] Error during initialization: {e}")
         raise # Re-raise to prevent app from running with broken Qdrant connection
 
 
@@ -85,7 +118,7 @@ def check_if_book_exists(book_uuid: str) -> bool:
     response, _ = client.scroll(
         collection_name=COLLECTION_NAME,
         scroll_filter=models.Filter(
-            must=[models.FieldCondition(key="textbook_uuid", match=models.MatchValue(value=book_uuid))]
+            must=[models.FieldCondition(key="book_uuid", match=models.MatchValue(value=book_uuid))]
         ),
         limit=1,
     )
@@ -94,7 +127,7 @@ def check_if_book_exists(book_uuid: str) -> bool:
 
 def _get_all_chunks_for_book(book_uuid: str) -> List[Dict]:
     """
-    Scrolls through all points in the collection for a given textbook_uuid and
+    Scrolls through all points in the collection for a given book_uuid and
     returns a list of payload dicts.
     """
     if not client:
@@ -107,7 +140,7 @@ def _get_all_chunks_for_book(book_uuid: str) -> List[Dict]:
         response, next_offset = client.scroll(
             collection_name=COLLECTION_NAME,
             scroll_filter=models.Filter(
-                must=[models.FieldCondition(key="textbook_uuid", match=models.MatchValue(value=book_uuid))]
+                must=[models.FieldCondition(key="book_uuid", match=models.MatchValue(value=book_uuid))]
             ),
             limit=250,
             with_payload=True,
@@ -170,7 +203,7 @@ def process_and_embed_book(pdf_path: str, class_name: str, subject: str, chapter
             collection_name=COLLECTION_NAME,
             points_selector=models.FilterSelector(
                 filter=models.Filter(
-                    must=[models.FieldCondition(key="textbook_uuid", match=models.MatchValue(value=book_uuid))]
+                    must=[models.FieldCondition(key="book_uuid", match=models.MatchValue(value=book_uuid))]
                 )
             ),
         )
@@ -236,7 +269,7 @@ def process_and_embed_book(pdf_path: str, class_name: str, subject: str, chapter
                     payload={
                         "class_name": class_name,
                         "subject": subject,
-                        "textbook_uuid": book_uuid,
+                        "book_uuid": book_uuid,
                         "filename": os.path.basename(pdf_path),
                         "chapter": chapter_name,
                         "pdf_startpg": pdf_start_page_llm,
@@ -276,7 +309,7 @@ def process_and_embed_book(pdf_path: str, class_name: str, subject: str, chapter
 
 def get_books(class_name: Optional[str] = None, subject: Optional[str] = None) -> List[Dict[str, str]]:
     """
-    Returns a list of unique books (by textbook_uuid) optionally filtered by class_name
+    Returns a list of unique books (by book_uuid) optionally filtered by class_name
     and case-insensitively filtered by subject.
     """
     if not client:
@@ -292,12 +325,12 @@ def get_books(class_name: Optional[str] = None, subject: Optional[str] = None) -
         collection_name=COLLECTION_NAME,
         scroll_filter=scroll_filter,
         limit=1000,
-        with_payload=["textbook_uuid", "subject", "class_name", "filename"],
+        with_payload=["book_uuid", "subject", "class_name", "filename"],
     )
 
     unique_books: Dict[str, Dict[str, str]] = {}
     for p in response:
-        book_uuid = p.payload.get("textbook_uuid")
+        book_uuid = p.payload.get("book_uuid")
         payload_subject = p.payload.get("subject")
 
         if subject and payload_subject and subject.lower() != payload_subject.lower():
@@ -321,7 +354,7 @@ def get_book_metadata(book_uuid: str) -> Dict[str, Optional[str]]:
     response, _ = client.scroll(
         collection_name=COLLECTION_NAME,
         scroll_filter=models.Filter(
-            must=[models.FieldCondition(key="textbook_uuid", match=models.MatchValue(value=book_uuid))]
+            must=[models.FieldCondition(key="book_uuid", match=models.MatchValue(value=book_uuid))]
         ),
         limit=1,
         with_payload=["class_name", "subject"],
@@ -331,6 +364,7 @@ def get_book_metadata(book_uuid: str) -> Dict[str, Optional[str]]:
         payload = response[0].payload
         return {"class_name": payload.get("class_name"), "subject": payload.get("subject")}
     return {}
+
 
 
 def get_chapter_names(book_uuid: str) -> List[str]:
@@ -343,7 +377,7 @@ def get_chapter_names(book_uuid: str) -> List[str]:
     response, _ = client.scroll(
         collection_name=COLLECTION_NAME,
         scroll_filter=models.Filter(
-            must=[models.FieldCondition(key="textbook_uuid", match=models.MatchValue(value=book_uuid))]
+            must=[models.FieldCondition(key="book_uuid", match=models.MatchValue(value=book_uuid))]
         ),
         limit=1000,
         with_payload=["chapter"],
@@ -376,7 +410,7 @@ def get_chapters_for_book(book_uuid: str) -> List[Dict]:
             collection_name=COLLECTION_NAME,
             scroll_filter=models.Filter(
                 must=[
-                    models.FieldCondition(key="textbook_uuid", match=models.MatchValue(value=book_uuid)),
+                    models.FieldCondition(key="book_uuid", match=models.MatchValue(value=book_uuid)),
                     models.FieldCondition(key="chapter", match=models.MatchValue(value=name)),
                 ]
             ),
@@ -420,10 +454,25 @@ def hybrid_search(book_uuid: str, query: str, keywords: List[Dict], conceptual_s
     keyword_query_str = " ".join([item["keyword"] for item in keywords])
 
     # Semantic search
-    must_conditions = [models.FieldCondition(key="textbook_uuid", match=models.MatchValue(value=book_uuid))]
+    must_conditions = [models.FieldCondition(key="book_uuid", match=models.MatchValue(value=book_uuid))]
+    
+    # Add chapter filter if chapter_names provided (for ranking-based filtering)
+    if metadata_filters and "chapter_names" in metadata_filters:
+        chapter_names = metadata_filters["chapter_names"]
+        if chapter_names:  # Only add if list is not empty
+            must_conditions.append(
+                models.FieldCondition(
+                    key="chapter_name",
+                    match=models.MatchAny(any=chapter_names)
+                )
+            )
+            print(f"[HYBRID_SEARCH] 🎯 Filtering to top {len(chapter_names)} chapters: {', '.join(chapter_names[:3])}...")
+    
+    # Add other metadata filters
     if metadata_filters:
         for key, value in metadata_filters.items():
-            must_conditions.append(models.FieldCondition(key=key, match=models.MatchValue(value=value)))
+            if key != "chapter_names":  # Skip chapter_names as it's already handled
+                must_conditions.append(models.FieldCondition(key=key, match=models.MatchValue(value=value)))
 
     query_embedding = local_embedder.encode(query).tolist()
     semantic_results = []
@@ -533,7 +582,7 @@ def perform_retrieval(raw_query: str, selected_book: Dict):
                 collection_name=COLLECTION_NAME,
                 query=query_embedding,
                 query_filter=models.Filter(
-                    must=[models.FieldCondition(key="textbook_uuid", match=models.MatchValue(value=book_uuid))]
+                    must=[models.FieldCondition(key="book_uuid", match=models.MatchValue(value=book_uuid))]
                 ),
                 limit=10,
                 with_payload=True,
@@ -1035,5 +1084,49 @@ def generate_chapters_from_text(json_path: str) -> str:
         return json.dumps({"pdf_offset": 0, "chapters": []})
     
 
+def embed_query(query: str):
+    """
+    Encode a query string into an embedding vector using the local embedder.
+    """
+    if not local_embedder:
+        raise RuntimeError("Local embedder not initialized.")
+    return local_embedder.encode(query).tolist()
 
+
+def clear_qdrant_collection():
+    """
+    Deletes and re-creates the Qdrant collection, effectively clearing all data.
+    """
+    if not client:
+        raise RuntimeError("Qdrant client not initialized.")
     
+    try:
+        # Delete the collection if it exists
+        if client.collection_exists(collection_name=COLLECTION_NAME):
+            client.delete_collection(collection_name=COLLECTION_NAME)
+        
+        # Re-create the collection
+        model_embedding_dimension = local_embedder.get_sentence_embedding_dimension()
+        client.create_collection(
+            collection_name=COLLECTION_NAME,
+            vectors_config=models.VectorParams(
+                size=model_embedding_dimension,
+                distance=models.Distance.COSINE,
+            ),
+        )
+        
+        # Re-create payload indexes
+        for field in ["class_name", "subject", "chapter", "book_uuid", "chpstpage", "chpendpage"]:
+            try:
+                client.create_payload_index(
+                    collection_name=COLLECTION_NAME,
+                    field_name=field,
+                    field_schema=models.PayloadSchemaType.KEYWORD,
+                )
+            except Exception as e:
+                pass  # Silently fail if index already exists
+        
+        print(f"[Qdrant] Collection '{COLLECTION_NAME}' cleared and re-initialized successfully.")
+    except Exception as e:
+        print(f"[Qdrant] Error clearing collection: {e}")
+        raise

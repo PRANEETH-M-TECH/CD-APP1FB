@@ -109,8 +109,32 @@ async def create_book_and_process(
 
         book_uuid = qdrant.get_book_uuid(pdf_path)
         
-        # Save the book details to the cache
-        local_chap_service.save_book_details(class_name, subject, book_uuid, filename, chapters)
+        # Get PDF offset from cache to calculate PDF pages
+        try:
+            with open("chapterdata/chapters_cache.json", "r") as f:
+                book_cache = json.load(f)
+        except (FileNotFoundError, json.JSONDecodeError):
+            book_cache = {}
+            
+        book_key = f"{class_name}_{subject.lower()}"
+        pdf_offset = book_cache.get(book_key, {}).get("pdf_offset", 0)
+        
+        logger.info(f"📖 Book key: {book_key}, PDF offset: {pdf_offset}")
+        
+        # Calculate PDF pages from chapter pages if needed
+        # Frontend now sends chpstpage/chpendpage, we need to calculate pdf_startpg/pdf_endpg
+        for chapter in chapters:
+            if 'chpstpage' in chapter and 'chpendpage' in chapter:
+                chapter['pdf_startpg'] = chapter['chpstpage'] + pdf_offset
+                chapter['pdf_endpg'] = chapter['chpendpage'] + pdf_offset
+                logger.info(f"Calculated PDF pages for {chapter.get('chapter_name')}: "
+                           f"chp {chapter['chpstpage']}-{chapter['chpendpage']} → "
+                           f"pdf {chapter['pdf_startpg']}-{chapter['pdf_endpg']}")
+        
+        # NOTE: Do NOT save to cache here! The cache was already saved during chapter extraction.
+        # The frontend sends incomplete chapter data (missing chpstpage/chpendpage in some cases),
+        # and saving it here would corrupt the cache. The cache is the source of truth.
+        # REMOVED: local_chap_service.save_book_details(class_name, subject, book_uuid, filename, chapters)
 
         # Start the background processing task
         logger.info(f"Starting background processing for book {book_uuid}")
@@ -129,34 +153,47 @@ async def process_book_in_background(book_uuid: str, pdf_path: str, class_name: 
     """
     Processes the book in the background, creates summaries, and saves to databases.
     """
-    print("\n[ADMIN] Starting book processing pipeline...\n")
+    print(f"\n{'='*100}")
+    print(f"[PROCESS] ========== BOOK PROCESSING START ==========")
+    print(f"[PROCESS] Book: Class {class_name} - {subject.capitalize()}")
+    print(f"[PROCESS] UUID: {book_uuid}")
+    print(f"[PROCESS] PDF: {os.path.basename(pdf_path)}")
+    print(f"[PROCESS] Total Chapters: {len(chapters)}")
+    print(f"{'='*100}\n")
+    
     logger.info(f"BACKGROUND TASK STARTED for book {book_uuid}")
 
     try:
         # Initialize services
+        print(f"[PROCESS] Initializing services...")
         qdrant.initialize()
         reader = PdfReader(pdf_path)
         text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
+        print(f"[PROCESS] ✓ Services initialized\n")
 
         chapters_to_process = chapters
         if not chapters_to_process:
             raise ValueError("No confirmed chapters found to process.")
-
-        print(f"[ADMIN] Total chapters to process: {len(chapters_to_process)}")
 
         all_chapters_with_summaries = []
 
         # Steps 1 & 3: Generate Summaries and Upload Chunks to Qdrant
         for i, chapter_data in enumerate(chapters_to_process):
             chapter_name = chapter_data['chapter_name']
-            print(f"[ADMIN] Processing Chapter {i+1}/{len(chapters_from_cache)}: {chapter_name}")
+            
+            print(f"[PROCESS] ┌─ [{i+1}/{len(chapters_to_process)}] {chapter_name}")
 
             start_page = chapter_data.get("pdf_startpg")
             end_page = chapter_data.get("pdf_endpg")
+            chp_start = chapter_data.get("chpstpage")
+            chp_end = chapter_data.get("chpendpage")
 
             if start_page is None or end_page is None:
-                print(f"[WARN] Skipping chapter '{chapter_name}' due to missing page numbers.")
+                print(f"[PROCESS] │  ✗ Skipping - missing page numbers\n")
                 continue
+            
+            print(f"[PROCESS] │  Pages: PDF {start_page}-{end_page}, Chapter {chp_start}-{chp_end}")
+            print(f"[PROCESS] │  Extracting text from PDF...")
 
             # Extract text
             chapter_text = ""
@@ -166,7 +203,8 @@ async def process_book_in_background(book_uuid: str, pdf_path: str, class_name: 
 
             # Create and upload chunks to Qdrant
             text_chunks = text_splitter.split_text(chapter_text)
-            print(f"  - Split into {len(text_chunks)} chunks.")
+            print(f"[PROCESS] │  ✓ Extracted and split into {len(text_chunks)} chunks")
+            print(f"[PROCESS] │  Uploading to Qdrant...")
             
             points_to_upload = []
             for j, chunk_text in enumerate(text_chunks):
@@ -183,36 +221,94 @@ async def process_book_in_background(book_uuid: str, pdf_path: str, class_name: 
                             "chunk_id": chunk_id,
                             "text": chunk_text,
                             "chapter_name": chapter_name,
+                            "pdf_startpg": chapter_data.get("pdf_startpg"),
+                            "pdf_endpg": chapter_data.get("pdf_endpg"),
+                            "chpstpage": chapter_data.get("chpstpage"),
+                            "chpendpage": chapter_data.get("chpendpage"),
                         },
                     )
                 )
 
             if points_to_upload:
-                qdrant.qdrant_client.upsert(collection_name="data", points=points_to_upload, wait=True)
-                print(f"  - Saved {len(points_to_upload)} chunks to Qdrant.")
+                print(f"[PROCESS] │  ✓ Saved {len(points_to_upload)} chunks to Qdrant")
+                
+                # Upload in batches to prevent timeout
+                BATCH_SIZE = 50  # Upload 50 points at a time
+                total_points = len(points_to_upload)
+                
+                for batch_start in range(0, total_points, BATCH_SIZE):
+                    batch_end = min(batch_start + BATCH_SIZE, total_points)
+                    batch = points_to_upload[batch_start:batch_end]
+                    
+                    print(f"[PROCESS] │  Uploading batch {batch_start+1}-{batch_end} of {total_points}...")
+                    
+                    # Retry logic for network issues
+                    max_retries = 3
+                    for attempt in range(max_retries):
+                        try:
+                            qdrant.client.upsert(
+                                collection_name="data",
+                                points=batch,
+                                wait=True
+                            )
+                            print(f"[PROCESS] │  ✓ Batch uploaded successfully")
+                            break  # Success, exit retry loop
+                        except Exception as e:
+                            if attempt < max_retries - 1:
+                                wait_time = (attempt + 1) * 2  # 2, 4, 6 seconds
+                                print(f"[PROCESS] │  ⚠️ Upload failed (attempt {attempt+1}/{max_retries}), retrying in {wait_time}s...")
+                                import time
+                                time.sleep(wait_time)
+                            else:
+                                print(f"[PROCESS] │  ✗ Upload failed after {max_retries} attempts: {e}")
+                                raise  # Re-raise after all retries exhausted
 
             # Generate summary
+            print(f"[PROCESS] │  Generating summary with LLM...")
             summary_text = qdrant.generate_chapter_summary(class_name, subject, chapter_name, text_chunks)
-            print(f"  - Generated summary for chapter.")
+            print(f"[PROCESS] │  ✓ Summary generated ({len(summary_text)} chars)")
             
             chapter_summary_data = {
+                "sno": i + 1,  # Serial number starting from 1
                 "chapter_name": chapter_name,
-                "summary": summary_text
+                "summary": summary_text,
+                "pdf_startpg": chapter_data.get("pdf_startpg"),
+                "pdf_endpg": chapter_data.get("pdf_endpg"),
+                "chpstpage": chapter_data.get("chpstpage"),
+                "chpendpage": chapter_data.get("chpendpage"),
             }
+            
+            # Log what we're saving to Firestore for debugging
+            print(f"[PROCESS] │  ✓ Firestore data for chapter {i + 1}:")
+            print(f"[PROCESS] │    - sno: {i + 1}")
+            print(f"[PROCESS] │    - chapter_name: {chapter_name}")
+            print(f"[PROCESS] │    - pdf_startpg: {chapter_data.get('pdf_startpg')}")
+            print(f"[PROCESS] │    - pdf_endpg: {chapter_data.get('pdf_endpg')}")
+            print(f"[PROCESS] │    - chpstpage: {chapter_data.get('chpstpage')}")
+            print(f"[PROCESS] │    - chpendpage: {chapter_data.get('chpendpage')}")
+            print(f"[PROCESS] │    - summary_length: {len(summary_text)} chars")
+            
             all_chapters_with_summaries.append(chapter_summary_data)
+            print(f"[PROCESS] └─ ✓ Chapter complete\n")
 
         # Step 4: Save single summary document for LLM context
-        print("[ADMIN] Saving summary document for LLM.")
+        print(f"[PROCESS] Saving {len(all_chapters_with_summaries)} summaries to Firestore...")
         firestore_service.save_summary_document(
             class_name=class_name,
             subject=subject,
             book_uuid=book_uuid,
             chapters=all_chapters_with_summaries
         )
+        print(f"[PROCESS] ✓ Summaries saved to Firestore\n")
 
-        print("\n[ADMIN] Book processing finished successfully.\n")
+        print(f"{'='*100}")
+        print(f"[PROCESS] ========== BOOK PROCESSING COMPLETE ==========")
+        print(f"[PROCESS] ✓ {len(chapters_to_process)} chapters processed")
+        print(f"[PROCESS] ✓ All data saved to Qdrant and Firestore")
+        print(f"{'='*100}\n")
 
     except Exception as e:
+        print(f"\n[PROCESS] ✗ ERROR: {e}\n")
         logger.error(f"BACKGROUND TASK FAILED for book {book_uuid}: {e}", exc_info=True)
 
     logger.info(f"Finished background processing for book {book_uuid}")
@@ -387,76 +483,299 @@ def retrieve_from_qdrant(query: str, book_uuid: str, chapter_ranking: List[Dict]
             "match": {"any": chapter_ids}
         })
 
-    results = qdrant.qdrant_client.search(
+    results = qdrant.client.search(
         collection_name="data",
         query_vector=embedding,
         limit=5,
-        filter=q_filter
+        query_filter=q_filter
     )
 
     return results
 
 
-# 5. MAIN ENDPOINT — COMPLETE PIPELINE
+# 5. MAIN ENDPOINT — SSE STREAMING FOR REAL-TIME DISPLAY
 @app.get("/api/query", tags=["LLM"])
-def query_engine(
+async def query_engine(
     book_uuid: str = Query(...),
     query: str = Query(...),
     class_name: str = Query(...),
     subject: str = Query(...)
 ):
-    start = time.time()
-
-    # Load cached summaries (no Firestore after first load)
-    summary_doc = load_summary_from_firestore(class_name, subject)
-    chapters = summary_doc["chapters"]
-
-    # Reformulate query + chapter ranking
-    reform = reformulate_with_llm(
-        raw_query=query,
-        class_name=class_name,
-        subject=subject,
-        chapters=chapters
-    )
-
-    # Retrieve context from Qdrant
-    qdrant_hits = retrieve_from_qdrant(
-        reform["reformulated_query"],
-        book_uuid,
-        reform["chapter_ranking"]
-    )
-
-    context = "\n".join([
-        hit.payload.get("text", "") for hit in qdrant_hits
-    ])
-
-    # Final answer
-    final_prompt = f"""
+    """
+    Streams the answer in real-time using Server-Sent Events (SSE).
+    Frontend uses EventSource to receive chunks incrementally.
+    """
+    
+    async def event_generator():
+        start = time.time()
+        
+        # ========== START QUERY LOGGING ==========
+        print(f"\n{'='*80}")
+        print(f"[QUERY] New query received at {datetime.datetime.now().strftime('%H:%M:%S')}")
+        print(f"[QUERY] User question: {query}")
+        print(f"[QUERY] Book: Class {class_name} - {subject.capitalize()}")
+        print(f"[QUERY] Book UUID: {book_uuid[:16]}...")
+        print(f"{'='*80}\n")
+        
+        # Load cached summaries (no Firestore after first load)
+        print(f"[FIRESTORE] Loading summaries from cache/Firestore...")
+        summary_doc = load_summary_from_firestore(class_name, subject)
+        chapters = summary_doc["chapters"]
+        print(f"[FIRESTORE] ✓ Loaded {len(chapters)} chapters\n")
+        
+        # Reformulate query + chapter ranking
+        print(f"[REFORMULATE] Processing query with LLM...")
+        try:
+            reform = reformulate_with_llm(
+                raw_query=query,
+                class_name=class_name,
+                subject=subject,
+                chapters=chapters
+            )
+            
+            # Validate response structure
+            if not isinstance(reform, dict):
+                print(f"[REFORMULATE] ⚠️ Invalid response type: {type(reform)}")
+                raise ValueError("LLM returned non-dict response")
+            
+            if "reformulated_query" not in reform:
+                print(f"[REFORMULATE] ⚠️ Missing 'reformulated_query' in response")
+                print(f"[REFORMULATE] Response keys: {list(reform.keys())}")
+                raise ValueError("Missing reformulated_query in LLM response")
+            
+            reformulated_query = reform["reformulated_query"]
+            classification = reform.get("classification", "general")
+            chapter_ranking = reform.get("chapter_ranking", [])
+            
+            print(f"[REFORMULATE] ✓ Original query: {query}")
+            print(f"[REFORMULATE] ✓ Reformulated: {reformulated_query}")
+            print(f"[REFORMULATE] ✓ Classification: {classification}")
+            print(f"[REFORMULATE] ✓ Top chapters identified: {len(chapter_ranking)}\n")
+            
+        except Exception as e:
+            print(f"[REFORMULATE] ✗ Error: {e}")
+            print(f"[REFORMULATE] Using fallback: original query without reformulation\n")
+            # Fallback to using original query
+            reformulated_query = query
+            classification = "general"
+            chapter_ranking = chapters[:5]  # Use first 5 chapters as fallback
+        
+        # ========== CALCULATE SEMANTIC SIMILARITY SCORES ==========
+        # This adds actual relevance scores instead of relying on LLM
+        print(f"[SIMILARITY] Calculating semantic similarity scores for chapters...")
+        try:
+            from sentence_transformers import util
+            
+            # Embed the reformulated query
+            query_embedding = qdrant.local_embedder.encode(reformulated_query, convert_to_tensor=True)
+            
+            # Calculate similarity for each chapter
+            scored_chapters = []
+            for chapter in chapters:
+                summary = chapter.get("summary", "")
+                if summary:
+                    summary_embedding = qdrant.local_embedder.encode(summary, convert_to_tensor=True)
+                    similarity = util.cos_sim(query_embedding, summary_embedding)[0][0].item()
+                    
+                    chapter_with_score = chapter.copy()
+                    chapter_with_score['relevance_score'] = round(similarity, 3)
+                    scored_chapters.append(chapter_with_score)
+                else:
+                    chapter_copy = chapter.copy()
+                    chapter_copy['relevance_score'] = 0.0
+                    scored_chapters.append(chapter_copy)
+            
+            # Sort by relevance score
+            scored_chapters.sort(key=lambda x: x['relevance_score'], reverse=True)
+            
+            # Use top 5 most relevant chapters
+            chapter_ranking = scored_chapters[:5]
+            
+            print(f"[SIMILARITY] ✓ Calculated similarity scores for {len(scored_chapters)} chapters")
+            print(f"[SIMILARITY] Top 3 most relevant:")
+            for idx, ch in enumerate(chapter_ranking[:3], 1):
+                print(f"  {idx}. {ch.get('chapter_name', 'Unknown')} (score: {ch.get('relevance_score', 0):.3f})")
+            print()
+            
+        except Exception as e:
+            print(f"[SIMILARITY] ✗ Error calculating similarity: {e}")
+            # Fallback: map LLM scores if available
+            if chapter_ranking:
+                for ch in chapter_ranking:
+                    if 'score' in ch and 'relevance_score' not in ch:
+                        ch['relevance_score'] = ch['score']
+                    elif 'relevance_score' not in ch:
+                        ch['relevance_score'] = 0.0
+            print()
+        
+        print(f"[RANKING] Chapter ranking (top 5):")
+        for idx, ch in enumerate(chapter_ranking[:5], 1):
+            print(f"  {idx}. {ch.get('chapter_name', 'Unknown')} (relevance: {ch.get('relevance_score', 'N/A')})")
+        print()
+        
+        
+        # Retrieve context from Qdrant with hybrid search
+        print(f"[RETRIEVAL] Performing hybrid search...")
+        
+        # Get metadata from qdrant for hybrid search
+        metadata = qdrant.get_book_metadata(book_uuid)
+        
+        # Perform reformulation with keywords
+        processed_data = qdrant.reformulate_and_classify_query(
+            query=reformulated_query,
+            class_name=metadata.get("class_name"),
+            subject=metadata.get("subject"),
+            chapter_list=[ch["chapter_name"] for ch in chapter_ranking]
+        )
+        
+        keywords = processed_data.get("keywords", [])
+        conceptual_score = processed_data.get("conceptual_score", 0.5)
+        
+        
+        # Perform hybrid search with chapter filtering
+        # Only search in top 5 most relevant chapters
+        top_chapter_names = [ch["chapter_name"] for ch in chapter_ranking[:5]]
+        
+        print(f"[RETRIEVAL] 🎯 Restricting search to top {len(top_chapter_names)} chapters")
+        
+        hybrid_results, semantic_results, bm25_results = qdrant.hybrid_search(
+            book_uuid=book_uuid,
+            query=reformulated_query,
+            keywords=keywords,
+            conceptual_score=conceptual_score,
+            metadata_filters={"chapter_names": top_chapter_names}
+        )
+        
+        print(f"[RETRIEVAL] ✓ Semantic search returned {len(semantic_results)} results")
+        print(f"[RETRIEVAL] ✓ BM25 keyword search returned {len(bm25_results)} results")
+        print(f"[RETRIEVAL] ✓ Hybrid ranking produced {len(hybrid_results)} final chunks\n")
+        
+        # Build context for LLM
+        context = "\n\n---\n\n".join([doc["text"] for score, doc in hybrid_results[:10]])
+        
+        # ========== WRITE TO ans.txt (in background) ==========
+        # We'll write after streaming completes
+        ans_txt_data = {
+            "query": query,
+            "reformulated_query": reformulated_query,
+            "classification": classification,
+            "conceptual_score": conceptual_score,
+            "chapter_ranking": chapter_ranking,
+            "semantic_results": semantic_results,
+            "bm25_results": bm25_results,
+            "hybrid_results": hybrid_results,
+            "start_time": start
+        }
+        
+        # ========== STREAM ANSWER ==========
+        print(f"[LLM] Streaming answer with top {min(10, len(hybrid_results))} chunks as context...")
+        
+        final_prompt = f"""
 You are a helpful teacher. Use the context to answer the question clearly:
 
 QUESTION:
-{reform['reformulated_query']}
+{reformulated_query}
 
 CONTEXT:
 {context}
 
 Return only the answer.
 """
+        
+        full_answer = ""
+        try:
+            response = qdrant.generation_model.generate_content(final_prompt, stream=True)
+            
+            for chunk in response:
+                if chunk.text:
+                    full_answer += chunk.text
+                    # Send SSE event with both display and read text
+                    event_data = json.dumps({
+                        "display_text": chunk.text,
+                        "read_text": chunk.text 
+                    })
+                    yield f"data: {event_data}\n\n"
+                    await asyncio.sleep(0.01)  # Small delay for smooth streaming
+            
+            print(f"[LLM] ✓ Answer streamed ({len(full_answer)} characters)\n")
+            
+        except Exception as e:
+            print(f"[LLM] ✗ Error generating answer: {e}\n")
+            error_msg = "Sorry, I couldn't generate the answer."
+            full_answer = error_msg
+            event_data = json.dumps({"display_text": error_msg, "read_text": error_msg})
+            yield f"data: {event_data}\n\n"
+        
+        # Send completion signal
+        yield "data: [DONE]\n\n"
+        
+        # Write to ans.txt after streaming
+        print(f"[LOG] Writing detailed log to ans.txt...")
+        try:
+            with open("ans.txt", "w", encoding="utf-8") as f:
+                f.write(f"{'='*80}\n")
+                f.write(f"QUERY LOG - {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
+                f.write(f"{'='*80}\n\n")
+                
+                f.write(f"1. ORIGINAL QUERY:\n")
+                f.write(f"   {ans_txt_data['query']}\n\n")
+                
+                f.write(f"2. REFORMULATED QUERY:\n")
+                f.write(f"   {ans_txt_data['reformulated_query']}\n")
+                f.write(f"   Classification: {ans_txt_data['classification']}\n")
+                f.write(f"   Conceptual Score: {ans_txt_data['conceptual_score']:.2f}\n\n")
+                
+                f.write(f"3. CHAPTER RANKING ({len(ans_txt_data['chapter_ranking'])} chapters):\n")
+                for idx, ch in enumerate(ans_txt_data['chapter_ranking'], 1):
+                    relevance = ch.get('relevance_score', 'N/A')
+                    f.write(f"   {idx}. {ch['chapter_name']} (relevance: {relevance})\n")
+                f.write(f"\n")
+                
+                f.write(f"4. TOP 10 SEMANTIC SEARCH RESULTS:\n")
+                for idx, result in enumerate(ans_txt_data['semantic_results'][:10], 1):
+                    chapter = result.payload.get("chapter_name", "N/A")
+                    score = result.score
+                    text = result.payload.get("text", "")
+                    f.write(f"\n   --- Semantic Result #{idx} (score: {score:.4f}) ---\n")
+                    f.write(f"   Chapter: {chapter}\n")
+                    f.write(f"   Text: {text[:300]}...\n")
+                f.write(f"\n")
+                
+                f.write(f"5. TOP 10 BM25 KEYWORD SEARCH RESULTS:\n")
+                for idx, (score, doc) in enumerate(ans_txt_data['bm25_results'][:10], 1):
+                    chapter = doc.get("chapter_name", "N/A")
+                    text = doc.get("text", "")
+                    f.write(f"\n   --- BM25 Result #{idx} (score: {score:.4f}) ---\n")
+                    f.write(f"   Chapter: {chapter}\n")
+                    f.write(f"   Text: {text[:300]}...\n")
+                f.write(f"\n")
+                
+                f.write(f"6. FINAL HYBRID CHUNKS (Context sent to LLM):\n")
+                for idx, (score, doc) in enumerate(ans_txt_data['hybrid_results'][:10], 1):
+                    chapter = doc.get("chapter_name", "N/A")
+                    text = doc.get("text", "")
+                    f.write(f"\n   --- Hybrid Chunk #{idx} (score: {score:.4f}) ---\n")
+                    f.write(f"   Chapter: {chapter}\n")
+                    f.write(f"   Text: {text}\n")
+                f.write(f"\n")
+                
+                f.write(f"7. GENERATED ANSWER:\n")
+                f.write(f"{full_answer}\n\n")
+                
+                f.write(f"{'='*80}\n")
+                f.write(f"Query processed in {time.time() - ans_txt_data['start_time']:.2f} seconds\n")
+                f.write(f"{'='*80}\n")
+            
+            print(f"[LOG] ✓ Detailed log written to ans.txt\n")
+        except Exception as e:
+            print(f"[LOG] ✗ Error writing to ans.txt: {e}\n")
+        
+        print(f"{'='*80}")
+        print(f"[COMPLETE] Query processed in {time.time() - start:.2f} seconds")
+        print(f"{'='*80}\n")
+    
+    return StreamingResponse(event_generator(), media_type="text/event-stream")
 
-    try:
-        final_resp = qdrant.generation_model.generate_content(final_prompt)
-        answer = final_resp.text.strip()
-    except:
-        answer = "Sorry, I couldn't generate the answer."
-
-    return {
-        "raw_query": query,
-        "reformulated_query": reform["reformulated_query"],
-        "classification": reform["classification"],
-        "chapter_ranking": reform["chapter_ranking"],
-        "answer": answer,
-        "latency": round(time.time() - start, 2)
-    }
 
 
 
@@ -488,7 +807,15 @@ async def get_summary(request: SummaryRequest):
     subject = request.subject
     chapter_name = request.chapter_name
 
-    chapter_summary = local_chap_service.get_summary(class_name, subject, chapter_name)
+    # Load summaries from Firestore (or cache)
+    summary_doc = firestore_service.load_summary_from_firestore(class_name, subject)
+    
+    chapter_summary = None
+    if summary_doc and "chapters" in summary_doc:
+        for chap in summary_doc["chapters"]:
+            if chap.get("chapter_name") == chapter_name:
+                chapter_summary = chap.get("summary")
+                break
     
     if chapter_summary is None or chapter_summary == "":
         raise HTTPException(status_code=404, detail="Summary not found for this chapter or is being generated.")
@@ -554,29 +881,57 @@ def extract_chapters_from_pdf(pdf_path: str) -> Dict:
         pdf_offset = llm_pdf_offset
 
         processed_chapters = []
-        for chapter in llm_chapters_list: # Iterate over the actual list of chapters
+        for chapter in llm_chapters_list:
             pdf_startpg = chapter.get("pdf_startpg")
             pdf_endpg = chapter.get("pdf_endpg")
 
-            # If pdf_startpg or pdf_endpg are missing, try to use start_page and end_page
+            # Fallback to alternative field names
             if pdf_startpg is None:
                 pdf_startpg = chapter.get("start_page")
             if pdf_endpg is None:
                 pdf_endpg = chapter.get("end_page")
 
             if pdf_startpg is None or pdf_endpg is None:
-                print(f"Warning: Chapter '{chapter.get('chapter_name', 'Unknown')}' is missing start or end page numbers. Appending as is.")
+                print(f"[WARN] Chapter '{chapter.get('chapter_name', 'Unknown')}' missing page numbers")
                 processed_chapters.append({
                     "chapter_name": chapter.get("chapter_name"),
                     "pdf_startpg": pdf_startpg,
                     "pdf_endpg": pdf_endpg,
-                    "chpstpage": None, # Assign None for consistency
-                    "chpendpage": None   # Assign None for consistency
+                    "chpstpage": None,
+                    "chpendpage": None
                 })
                 continue
 
+            # ========== CRITICAL: Detect if LLM returned chapter pages instead of PDF pages ==========
+            # If pdf_startpg < pdf_offset, LLM probably gave us chapter page numbers
+            if pdf_startpg < pdf_offset:
+                print(f"\n{'='*70}")
+                print(f"[AUTO-FIX] LLM returned chapter page instead of PDF page!")
+                print(f"[AUTO-FIX] Chapter: {chapter.get('chapter_name')}")
+                print(f"[AUTO-FIX] LLM gave: pdf_startpg={pdf_startpg}, pdf_endpg={pdf_endpg}")
+                print(f"[AUTO-FIX] pdf_offset={pdf_offset}")
+                print(f"[AUTO-FIX] Correcting: Adding offset to convert to PDF pages")
+                
+                # Convert chapter pages to PDF pages
+                original_start = pdf_startpg
+                original_end = pdf_endpg
+                pdf_startpg = pdf_startpg + pdf_offset
+                pdf_endpg = pdf_endpg + pdf_offset
+                
+                print(f"[AUTO-FIX] Corrected: pdf_startpg={pdf_startpg}, pdf_endpg={pdf_endpg}")
+                print(f"{'='*70}\n")
+
+            # Calculate chapter pages
             chpstpage = pdf_startpg - pdf_offset
             chpendpage = pdf_endpg - pdf_offset
+            
+            # Validate the calculation
+            if chpstpage < 1:
+                error_msg = f"Invalid calculation: chpstpage={chpstpage} (pdf_startpg={pdf_startpg} - pdf_offset={pdf_offset})"
+                print(f"\n[ERROR] {error_msg}")
+                print(f"[ERROR] This indicates the LLM data is incorrect!")
+                print(f"[ERROR] Chapter: {chapter.get('chapter_name')}\n")
+                raise HTTPException(status_code=500, detail=error_msg)
             
             processed_chapters.append({
                 "chapter_name": chapter.get("chapter_name"),
@@ -585,6 +940,9 @@ def extract_chapters_from_pdf(pdf_path: str) -> Dict:
                 "chpstpage": chpstpage,
                 "chpendpage": chpendpage
             })
+            
+            # Log successful processing
+            print(f"[CHAPTER] {chapter.get('chapter_name')}: PDF pages {pdf_startpg}-{pdf_endpg}, Chapter pages {chpstpage}-{chpendpage}")
         
         return {"pdf_offset": pdf_offset, "chapters": processed_chapters}
 
@@ -609,37 +967,52 @@ async def extract_chapters(
         safe_filename = os.path.basename(book_id)
         pdf_path = os.path.join(UPLOADS_DIR, safe_filename)
         cache_path = "chapterdata/chapters_cache.json"
-        cache_key = f"{class_name}_{subject.lower()}" # Define cache_key before the try block
+        cache_key = f"{class_name}_{subject.lower()}"
 
-        # 1. Check cache first
+        # 1. Load existing cache - PRESERVE all books
         try:
             with open(cache_path, "r") as f:
                 cache = json.load(f)
-            if cache_key in cache: # Check with new cache key
-                return JSONResponse(content=cache[cache_key])
+            print(f"[CACHE] Loaded existing cache with {len(cache)} books")
         except (FileNotFoundError, json.JSONDecodeError):
             cache = {}
+            print(f"[CACHE] No existing cache found, starting fresh")
+        
+        # 2. Check if this book is already cached
+        if cache_key in cache:
+            print(f"[CACHE] Found cached data for {cache_key}")
+            return JSONResponse(content=cache[cache_key])
 
-        # 2. If not in cache, process the PDF
+        # 3. If not in cache, process the PDF
         if not os.path.exists(pdf_path):
             raise HTTPException(status_code=404, detail=f"PDF file not found: {safe_filename}")
 
-        # extract_chapters_from_pdf now returns a dict with "pdf_offset" and "chapters"
+        print(f"[EXTRACT] Processing PDF for {cache_key}...")
+        
+        # extract_chapters_from_pdf returns dict with pdf_offset and chapters
         extracted_data = extract_chapters_from_pdf(pdf_path)
         book_uuid = qdrant.get_book_uuid(pdf_path)
+        
+        # Add metadata
         extracted_data['book_uuid'] = book_uuid
         extracted_data['filename'] = safe_filename
+        extracted_data['class_name'] = class_name
+        extracted_data['subject'] = subject
         
-        # 3. Save to cache
-        cache[cache_key] = extracted_data # Save with new cache key
+        # 4. Update cache for THIS book only (preserves other books)
+        cache[cache_key] = extracted_data
+        
+        # 5. Save back to file - KEEPS all other books intact
         with open(cache_path, "w") as f:
-            json.dump(cache, f, indent=2)
+            json.dump(cache, f, indent=2, ensure_ascii=False)
+        
+        print(f"[CACHE] Saved {cache_key} to cache (now {len(cache)} books total)")
             
-        return JSONResponse(content=extracted_data) # Return the entire dict
+        return JSONResponse(content=extracted_data)
     except HTTPException as e:
-        raise e # Re-raise HTTPExceptions directly
+        raise e
     except Exception as e:
-        logger.error(f"Failed to extract chapters due to an unexpected error: {e}", exc_info=True)
+        logger.error(f"Failed to extract chapters: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail=f"Failed to extract chapters: {e}")
 
 

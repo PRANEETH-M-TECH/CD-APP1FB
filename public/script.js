@@ -7,6 +7,16 @@ document.addEventListener('DOMContentLoaded', () => {
     } else if (document.getElementById('user-query-form')) {
         setupUserPage();
     }
+
+    // Global visibility change handler to stop TTS
+    document.addEventListener('visibilitychange', () => {
+        if (document.hidden && window.speechSynthesis) {
+            console.log('[Global] Tab hidden, stopping TTS.');
+            window.speechSynthesis.cancel();
+            // Reset all speak buttons
+            document.querySelectorAll('.speak-btn').forEach(btn => btn.textContent = '🔊');
+        }
+    });
 });
 
 /**
@@ -72,7 +82,7 @@ function setupChaptersPage() {
 
     const pdfUrl = `/uploads/${filename}`;
     const chaptersForm = document.getElementById('chapters-form');
-    
+
     // PDF.js state
     let pdfDoc = null;
     let pageNum = 1;
@@ -90,10 +100,10 @@ function setupChaptersPage() {
         document.getElementById('pdf-loading-message').style.display = 'block';
 
         // Using promise to fetch the page
-        pdfDoc.getPage(num).then(function(page) {
+        pdfDoc.getPage(num).then(function (page) {
             const container = document.getElementById('pdf-render-area');
             const unscaledViewport = page.getViewport({ scale: 1 });
-            
+
             // Dynamically calculate scale to fit container width
             const scale = container.clientWidth / unscaledViewport.width;
             const viewport = page.getViewport({ scale: scale });
@@ -109,7 +119,7 @@ function setupChaptersPage() {
             const renderTask = page.render(renderContext);
 
             // Wait for rendering to finish
-            renderTask.promise.then(function() {
+            renderTask.promise.then(function () {
                 pageRendering = false;
                 document.getElementById('pdf-loading-message').style.display = 'none';
                 if (pageNumPending !== null) {
@@ -137,7 +147,7 @@ function setupChaptersPage() {
     }
 
     // Load the PDF
-    pdfjsLib.getDocument(pdfUrl).promise.then(function(pdfDoc_) {
+    pdfjsLib.getDocument(pdfUrl).promise.then(function (pdfDoc_) {
         pdfDoc = pdfDoc_;
         document.getElementById('page-count').textContent = pdfDoc.numPages;
         renderPage(pageNum);
@@ -172,7 +182,7 @@ function setupChaptersPage() {
             <td><input type="number" class="end-page" placeholder="e.g., 10" min="1" required></td>
             <td><button type="button" class="remove-chapter-btn">Remove</button></td>
         `;
-        
+
         row.querySelector('.remove-chapter-btn').addEventListener('click', () => {
             row.remove();
         });
@@ -216,7 +226,7 @@ function setupChaptersPage() {
             const name = nameInput.value;
             const start_page = parseInt(startPageInput.value, 10);
             const end_page = parseInt(endPageInput.value, 10);
-            
+
             let hasRowError = false;
             if (!name) {
                 nameInput.classList.add('input-error');
@@ -234,7 +244,12 @@ function setupChaptersPage() {
             if (hasRowError) {
                 validationError = true;
             } else {
-                chapters.push({ chapter_name: name, pdf_startpg: start_page, pdf_endpg: end_page });
+                // Send chapter pages - backend will calculate PDF pages using offset
+                chapters.push({
+                    chapter_name: name,
+                    chpstpage: start_page,  // Chapter start page
+                    chpendpage: end_page    // Chapter end page
+                });
             }
         });
 
@@ -242,7 +257,7 @@ function setupChaptersPage() {
             showStatus('Please fix the errors in the highlighted fields.', 'error');
             return;
         }
-        
+
         showStatus('Processing book and chapters...', 'info');
 
         const finalData = {
@@ -262,7 +277,7 @@ function setupChaptersPage() {
             });
             const result = await response.json();
             if (!response.ok) throw new Error(result.detail || 'Failed to process book.');
-            
+
             const finalMessage = "Processing started in the background. You can now safely leave this page. The book will be available in a few minutes.";
             showStatus(finalMessage, 'success');
 
@@ -325,7 +340,7 @@ function setupUserPage() {
 
     // --- Initialization ---
     setupSimpleVoiceSearch();
-    
+
     // --- Event Listeners ---
     classSelect.addEventListener('change', () => {
         const selectedClass = classSelect.value;
@@ -511,7 +526,7 @@ function setupUserPage() {
             if (!response.ok) throw new Error('Book not found.');
             const books = await response.json();
             if (books.length === 0) throw new Error('Book not found for this selection.');
-            
+
             selectedBook = books[0];
             window.selectedBook = selectedBook;
 
@@ -522,16 +537,16 @@ function setupUserPage() {
                 conversationalModeBtn.disabled = false;
                 conversationalModeBtn.classList.remove('opacity-50', 'cursor-not-allowed');
             }
-            
+
             const pdfUrl = `/uploads/${selectedBook.filename}`;
             pdfDoc = await pdfjsLib.getDocument(pdfUrl).promise;
-            
+
             pdfLoadingIndicator.style.display = 'none';
             pdfCanvas.style.display = 'block';
             pdfHeader.style.display = 'flex';
             pageCountEl.textContent = pdfDoc.numPages;
             renderPage(pageNum);
-            
+
             chatHistory.innerHTML = '';
             isFirstQuery = false;
             // appendAIResponse now handles speech based on isSpeechEnabledByDefault
@@ -612,16 +627,16 @@ function setupUserPage() {
         const thinkingMessage = appendAIResponse('...', 'Thinking...'); // Pass initial read text as well
         const contentDiv = thinkingMessage.querySelector('.markdown-content');
         let fullResponse = "";
-        let fullReadText = ""; 
+        let fullReadText = "";
 
         const source = new EventSource(`/api/query?book_uuid=${selectedBook.id}&query=${encodeURIComponent(query)}&class_name=${encodeURIComponent(selectedBook.class_name)}&subject=${encodeURIComponent(selectedBook.subject)}`);
 
-        source.onmessage = function(event) {
+        source.onmessage = function (event) {
             if (event.data === "[DONE]") {
                 source.close();
                 submitButton.removeAttribute('disabled');
                 listChaptersBtn.classList.remove('hidden');
-                
+
                 // Now speak the received fullReadText
                 if (fullReadText) {
                     const utterance = new SpeechSynthesisUtterance(fullReadText);
@@ -636,18 +651,18 @@ function setupUserPage() {
                 contentDiv.innerHTML = marked.parse(fullResponse);
             }
             if (data.read_text) {
-                fullReadText += data.read_text; 
+                fullReadText += data.read_text;
             }
             chatHistory.scrollTop = chatHistory.scrollHeight;
         };
 
-        source.onerror = function(error) {
+        source.onerror = function (error) {
             console.error('EventSource failed:', error);
             contentDiv.innerHTML = `<p class="error-message">Error: ${error.message}</p>`;
             source.close();
         };
 
-        source.onend = function() {
+        source.onend = function () {
             submitButton.removeAttribute('disabled');
             listChaptersBtn.classList.remove('hidden');
             // isStreamingSpeech = false; // This was for old speakStream, no longer needed
@@ -656,7 +671,7 @@ function setupUserPage() {
     }
     async function handleListChapters() {
         if (!selectedBook) return;
-        
+
         if (isFirstQuery) {
             chatHistory.innerHTML = '';
             isFirstQuery = false;
@@ -747,9 +762,9 @@ function appendAIResponse(displayText, readText = '') {
     messageDiv.innerHTML = header + `<div class="markdown-content">${formatted}</div>`;
     chatHistory.appendChild(messageDiv);
     chatHistory.scrollTop = chatHistory.scrollHeight;
-    
+
     // Auto-read by default
-    if (readText) { 
+    if (readText) {
         speechSynthesis.cancel(); // Stop any previous speech
         const utterance = new SpeechSynthesisUtterance(readText);
         speechSynthesis.speak(utterance);
@@ -769,7 +784,7 @@ function copyMessage(btn) {
 
 
 // Modified window.speakMessage to use the global mute functionality and correctly get content
-window.speakMessage = function(button) {
+window.speakMessage = function (button) {
     // Determine the content to speak. If this is a re-read, get the display text.
     const card = button.closest('.ai-card');
     const content = card ? card.querySelector('.markdown-content').innerText : ''; // Fallback for auto-read

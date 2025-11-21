@@ -176,7 +176,7 @@ class ConversationMode {
         if (exitButton) {
             exitButton.addEventListener('click', () => this.exitConversationMode());
         }
-        
+
         const showTextToggle = document.getElementById('show-ai-text-toggle');
         const conversationBody = document.getElementById('conversation-body');
         if (conversationBody) {
@@ -191,8 +191,60 @@ class ConversationMode {
                 }
             });
         }
+
+        // Stop TTS when tab becomes hidden
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                console.log('[ConversationMode] Tab hidden, stopping TTS.');
+                this.stopTTS();
+            }
+        });
     }
-    
+
+    stopTTS() {
+        this.ttsBuffer = '';
+        if (this.ttsTimer) {
+            clearTimeout(this.ttsTimer);
+            this.ttsTimer = null;
+        }
+        if (window.speechSynthesis) {
+            window.speechSynthesis.cancel();
+        }
+        if (this.state === 'speaking') {
+            this.setState('idle');
+        }
+    }
+
+    exitConversationMode() {
+        console.log('[ConversationMode] Exiting conversation mode');
+
+        // Stop TTS immediately
+        this.stopTTS();
+
+        if (this.recognition && this.state === 'listening') {
+            this.recognition.stop();
+        }
+
+        this.stopWaveformAnimation();
+
+        if (this.ws) {
+            this.ws.close();
+            this.ws = null;
+        }
+
+        const modal = document.getElementById('conversation-modal');
+        if (modal) {
+            modal.style.display = 'none';
+        }
+
+        if (this.mainSection) {
+            this.mainSection.style.display = 'none';
+        }
+        this.prepareSetupView();
+
+        this.setState('idle');
+    }
+
     async startConversationMode(bookUuid) {
         console.log('[ConversationMode] Starting for book:', bookUuid);
         const modal = document.getElementById('conversation-modal');
@@ -200,7 +252,7 @@ class ConversationMode {
 
         this.userWaveformCtx = document.getElementById('user-waveform').getContext('2d');
         this.aiWaveformCtx = document.getElementById('ai-waveform').getContext('2d');
-        
+
         const conversationBody = document.getElementById('conversation-body');
         if (conversationBody) {
             conversationBody.innerHTML = '';
@@ -268,35 +320,90 @@ class ConversationMode {
                 this.showError(data.message);
                 this.setState('idle');
                 break;
+            case 'interrupt_acknowledged':
+            case 'interrupted':
+                console.log('[WebSocket] Interruption acknowledged by server');
+                this.ttsBuffer = '';
+                if (this.ttsTimer) {
+                    clearTimeout(this.ttsTimer);
+                    this.ttsTimer = null;
+                }
+                if (window.speechSynthesis) window.speechSynthesis.cancel();
+                break;
         }
     }
 
     speakChunk(text) {
         if (!text || !text.trim()) return;
         this.ttsBuffer += (this.ttsBuffer ? ' ' : '') + text;
-        if (this.ttsTimer) clearTimeout(this.ttsTimer);
-        this.ttsTimer = setTimeout(() => this.flushTTSBuffer(), this.ttsFlushMs);
+
+        // Check if we have a complete sentence to speak (greedy match to last punctuation)
+        // Matches anything ending in . ? ! followed by whitespace
+        const sentenceMatch = this.ttsBuffer.match(/^(.+[.?!])\s+(.*)$/s);
+
+        if (sentenceMatch) {
+            // We have at least one complete sentence
+            const sentence = sentenceMatch[1];
+            const remainder = sentenceMatch[2];
+
+            this.speakText(sentence);
+            this.ttsBuffer = remainder;
+
+            // Clear timer as we just spoke
+            if (this.ttsTimer) clearTimeout(this.ttsTimer);
+
+            // Re-set timer for the remainder (in case stream stalls or ends)
+            this.ttsTimer = setTimeout(() => this.flushTTSBuffer(), this.ttsFlushMs);
+        } else {
+            // No complete sentence yet, debounce flush
+            if (this.ttsTimer) clearTimeout(this.ttsTimer);
+            this.ttsTimer = setTimeout(() => this.flushTTSBuffer(), this.ttsFlushMs);
+        }
     }
 
     flushTTSBuffer() {
-        if (!this.ttsBuffer || !this.ttsBuffer.trim() || !window.speechSynthesis) {
-            if (this.state === 'speaking') this.setState('idle');
-            return;
-        }
-        const textToSpeak = this.ttsBuffer.trim();
-        this.ttsBuffer = '';
         if (this.ttsTimer) {
             clearTimeout(this.ttsTimer);
             this.ttsTimer = null;
         }
+        if (!this.ttsBuffer || !this.ttsBuffer.trim()) {
+            // Ensure state resets if nothing to speak
+            if (this.state === 'speaking' && !window.speechSynthesis.speaking) {
+                // Give a small buffer to ensure we don't flip to idle prematurely if a new utterance is about to start
+                setTimeout(() => {
+                    if (!window.speechSynthesis.speaking && this.state === 'speaking') {
+                        this.setState('idle');
+                    }
+                }, 500);
+            }
+            return;
+        }
 
-        const utterance = new SpeechSynthesisUtterance(textToSpeak);
+        const textToSpeak = this.ttsBuffer.trim();
+        this.ttsBuffer = '';
+        this.speakText(textToSpeak);
+    }
+
+    speakText(text) {
+        if (!window.speechSynthesis || !text) return;
+
+        const utterance = new SpeechSynthesisUtterance(text);
         if (this.ttsVoice) utterance.voice = this.ttsVoice;
+
         utterance.onend = () => {
-            if (this.state === 'speaking') {
+            // Only set to idle if queue is empty and buffer is empty
+            if (this.state === 'speaking' && !window.speechSynthesis.pending && !window.speechSynthesis.speaking && !this.ttsBuffer) {
                 this.setState('idle');
             }
         };
+
+        utterance.onerror = (e) => {
+            console.error('[TTS] Error:', e);
+            if (this.state === 'speaking' && !window.speechSynthesis.pending && !window.speechSynthesis.speaking) {
+                this.setState('idle');
+            }
+        };
+
         speechSynthesis.speak(utterance);
     }
 
@@ -309,27 +416,27 @@ class ConversationMode {
 
         const drawFrame = () => {
             if (!shouldContinue) return;
-            
+
             const time = Date.now() / 200;
             ctx.clearRect(0, 0, width, height);
             ctx.beginPath();
             ctx.strokeStyle = color;
             ctx.lineWidth = 2;
-            
+
             for (let x = 0; x < width; x++) {
-                const y = height/2 + 
-                        Math.sin(x/50 + time) * 15 * Math.sin(time/3) + 
-                        Math.sin(x/30 + time*2) * 10 * Math.cos(time/2) +
-                        Math.sin(x/20 + time*1.5) * 5 * Math.sin(time/5);
-                
+                const y = height / 2 +
+                    Math.sin(x / 50 + time) * 15 * Math.sin(time / 3) +
+                    Math.sin(x / 30 + time * 2) * 10 * Math.cos(time / 2) +
+                    Math.sin(x / 20 + time * 1.5) * 5 * Math.sin(time / 5);
+
                 if (x === 0) ctx.moveTo(x, y);
                 else ctx.lineTo(x, y);
             }
-            
+
             ctx.stroke();
             this.animationFrameId = requestAnimationFrame(drawFrame);
         };
-        
+
         this.stopWaveformAnimation = () => {
             shouldContinue = false;
             if (this.animationFrameId) {
@@ -343,13 +450,13 @@ class ConversationMode {
 
         drawFrame();
     }
-    
+
     stopWaveformAnimation() {
         if (this.animationFrameId) {
             cancelAnimationFrame(this.animationFrameId);
             this.animationFrameId = null;
         }
-         try {
+        try {
             if (this.userWaveformCtx && this.userWaveformCtx.canvas) {
                 this.userWaveformCtx.clearRect(0, 0, this.userWaveformCtx.canvas.width, this.userWaveformCtx.canvas.height);
             }
@@ -360,7 +467,7 @@ class ConversationMode {
             console.warn('[Waveform] Failed to clear canvases:', e);
         }
     }
-    
+
     addMessage(type, content) {
         const conversationBody = document.getElementById('conversation-body');
         if (!conversationBody) return;
@@ -368,7 +475,7 @@ class ConversationMode {
 
         const messageDiv = document.createElement('div');
         messageDiv.className = 'message ' + type + '-message';
-        
+
         if (type === 'ai') {
             messageDiv.id = 'current-ai-message';
         }
@@ -377,7 +484,7 @@ class ConversationMode {
         conversationBody.appendChild(messageDiv);
         conversationBody.scrollTop = conversationBody.scrollHeight;
     }
-    
+
     addOrUpdateAIMessage(content) {
         const conversationBody = document.getElementById('conversation-body');
         if (!conversationBody) return;
@@ -388,47 +495,23 @@ class ConversationMode {
         } else {
             this.addMessage('ai', content);
         }
-        
+
         conversationBody.scrollTop = conversationBody.scrollHeight;
     }
-    
+
     showError(message) {
         const statusIndicator = document.getElementById('status-indicator');
-        if(statusIndicator) {
+        if (statusIndicator) {
             statusIndicator.textContent = 'Error: ' + message;
             statusIndicator.style.color = '#ff6b6b';
-            
+
             setTimeout(() => {
                 this.setState('idle');
             }, 3000);
         }
     }
-    
-    exitConversationMode() {
-        console.log('[ConversationMode] Exiting conversation mode');
-        if (this.recognition && this.state === 'listening') {
-            this.recognition.stop();
-        }
-        
-        this.stopWaveformAnimation();
-        
-        if (this.ws) {
-            this.ws.close();
-            this.ws = null;
-        }
-        
-        const modal = document.getElementById('conversation-modal');
-        if (modal) {
-            modal.style.display = 'none';
-        }
-        
-        if (this.mainSection) {
-            this.mainSection.style.display = 'none';
-        }
-        this.prepareSetupView();
 
-        this.setState('idle');
-    }
+
 
     normalizeChunkText(chunk) {
         try {
@@ -630,7 +713,7 @@ class ConversationMode {
 
 document.addEventListener('DOMContentLoaded', () => {
     const modal = document.getElementById('conversation-modal');
-    
+
     if (modal) {
         window.conversationMode = new ConversationMode();
         const button = document.getElementById('conversational-mode-btn');

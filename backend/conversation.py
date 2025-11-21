@@ -80,7 +80,13 @@ class ConversationManager:
             return
         
         conv = self.active_conversations[conversation_id]
-        print(f"[ConversationManager] Received query for conversation_id={conversation_id}: {query[:120]}")
+        print(f"\n{'='*60}")
+        print(f"[CONVERSATION] New message from user")
+        print(f"[CONVERSATION] Conversation ID: {conversation_id}")
+        print(f"[CONVERSATION] User input: {query}")
+        print(f"[CONVERSATION] Book UUID: {conv.book_uuid[:16]}...")
+        print(f"{'='*60}\n")
+        
         conv.should_stop = False
         conv.is_speaking = True
         
@@ -89,7 +95,9 @@ class ConversationManager:
             cached_context = self.get_cached_context(conv.book_uuid, query)
             if cached_context:
                 search_results = cached_context.get("search_results", [])
+                print(f"[CONVERSATION] ✓ Using cached search results\n")
             else:
+                print(f"[CONVERSATION] Performing new search...")
                 # Get fresh context if not cached
                 metadata = get_book_metadata(conv.book_uuid)
                 
@@ -107,6 +115,8 @@ class ConversationManager:
                     conceptual_score=processed_query_data.get("conceptual_score", 0.5)
                 )
                 
+                print(f"[CONVERSATION] ✓ Retrieved {len(search_results)} chunks\n")
+                
                 # Cache the results
                 context_to_cache = {
                     "search_results": search_results,
@@ -117,6 +127,7 @@ class ConversationManager:
             # Stream the answer
             if search_results:
                 context = "\n\n---\n\n".join([payload['text'] for score, payload in search_results])
+                print(f"[CONVERSATION] Streaming answer to user...\n")
                 async for chunk in self._stream_answer(conv, query, context):
                     if conv.should_stop:
                         print(f"[ConversationManager] Conversation {conversation_id} interrupted by user")
