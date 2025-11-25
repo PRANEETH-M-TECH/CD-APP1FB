@@ -1051,36 +1051,57 @@ def generate_chapters_from_text(json_path: str) -> str:
     try:
         response = generation_model.generate_content(prompt)
         text = response.text.strip()
-
-        json_start = text.find("{")
-        if json_start == -1:
-            return json.dumps({"pdf_offset": 0, "chapters": []})
-
-        open_braces = 0
-        json_end = -1
-        for i, char in enumerate(text[json_start:]):
-            if char == "{":
-                open_braces += 1
-            elif char == "}":
-                open_braces -= 1
-
-            if open_braces == 0:
-                json_end = json_start + i + 1
-                break
-
-        if json_end == -1:
-            return json.dumps({"pdf_offset": 0, "chapters": []})
-
-        clean_json_str = text[json_start:json_end]
+        
+        # DEBUG: Log the raw LLM response
+        print(f"[CHAPTER EXTRACTION] LLM Raw Response (first 100 chars):")
+        print(repr(text[:100]))
+        print(f"[CHAPTER EXTRACTION] Full response length: {len(text)} characters")
+        
+        # Strip markdown code fences if present (more robust)
+        if text.startswith("```json"):
+            first_newline = text.find('\n')
+            if first_newline != -1:
+                text = text[first_newline+1:]
+        elif text.startswith("```"):
+            first_newline = text.find('\n')
+            if first_newline != -1:
+                text = text[first_newline+1:]
+        
+        # Remove closing fence
+        if text.rstrip().endswith("```"):
+            text = text.rstrip()[:-3]
+        
+        text = text.strip()
+        
+        print(f"[CHAPTER EXTRACTION] After fence stripping, length: {len(text)} characters")
+        
+        # Try to parse the entire cleaned text as JSON
+        # (No need for brace counting - the LLM returns clean JSON)
         try:
-            data = json.loads(clean_json_str)
-            # The LLM's pdf_startpg/endpg are taken as is.
+            data = json.loads(text)
+            num_chapters = len(data.get('chapters', []))
+            print(f"[CHAPTER EXTRACTION] ✅ Successfully parsed JSON with {num_chapters} chapters")
+            
+            # Log chapter names for debugging
+            if num_chapters > 0:
+                print(f"[CHAPTER EXTRACTION] First 3 chapter names:")
+                for ch in data.get('chapters', [])[:3]:
+                    print(f"  - {ch.get('chapter_name', 'UNNAMED')}")
+            
             return json.dumps(data)
-        except json.JSONDecodeError:
-            # If parsing fails, return the safe default, not the broken string.
+            
+        except json.JSONDecodeError as e:
+            print(f"[CHAPTER EXTRACTION] ❌ JSON decode failed: {e}")
+            print(f"[CHAPTER EXTRACTION] First 300 chars of text:")
+            print(text[:300])
+            print(f"[CHAPTER EXTRACTION] Last 200 chars of text:")
+            print(text[-200:])
             return json.dumps({"pdf_offset": 0, "chapters": []})
 
     except Exception as e:
+        print(f"[CHAPTER EXTRACTION] ❌ Exception during LLM call: {e}")
+        import traceback
+        traceback.print_exc()
         return json.dumps({"pdf_offset": 0, "chapters": []})
     
 

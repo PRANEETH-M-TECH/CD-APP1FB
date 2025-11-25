@@ -334,6 +334,11 @@ function setupUserPage() {
     let isFirstQuery = true;
     // Removed isSpeakingStream and sentenceQueue
 
+    // --- Smart Conversational Context State ---
+    let currentSessionId = null;
+    let turnCount = 0;
+    let currentFollowUps = [];
+
     // --- Voice Search State (simple mode) ---
     let simpleRecognition;
     let isSimpleRecording = false;
@@ -549,6 +554,12 @@ function setupUserPage() {
 
             chatHistory.innerHTML = '';
             isFirstQuery = false;
+
+            // Reset session when book changes
+            currentSessionId = null;
+            turnCount = 0;
+            currentFollowUps = [];
+
             // appendAIResponse now handles speech based on isSpeechEnabledByDefault
             appendAIResponse(`Book "${selectedBook.subject}" loaded. You can now ask questions about it.`, `Book ${selectedBook.subject} loaded. You can now ask questions about it.`);
 
@@ -613,23 +624,55 @@ function setupUserPage() {
         const query = queryText.value.trim();
         if (!query || !selectedBook) return;
 
+        // Use the new smart query system
+        await submitSmartQuery(query, false);
+
+        queryText.value = '';
+        queryText.style.height = 'auto'; // Reset height
+    }
+
+    /**
+     * Smart Query Submission with Conversational Context
+     * Connects to /api/smart_query endpoint with session management
+     */
+    async function submitSmartQuery(query, isClickedFollowup = false) {
+        if (!selectedBook) return;
+
         if (isFirstQuery) {
             chatHistory.innerHTML = '';
             isFirstQuery = false;
         }
 
+        // Add user message
         addUserMessage(query);
-        queryText.value = '';
-        queryText.style.height = 'auto'; // Reset height
         submitButton.setAttribute('disabled', 'true');
         listChaptersBtn.classList.add('hidden');
 
-        const thinkingMessage = appendAIResponse('...', 'Thinking...'); // Pass initial read text as well
-        const contentDiv = thinkingMessage.querySelector('.markdown-content');
+        // Create AI message card with loading state
+        let intentType = 'independent';
+        let followups = [];
         let fullResponse = "";
         let fullReadText = "";
 
-        const source = new EventSource(`/api/query?book_uuid=${selectedBook.id}&query=${encodeURIComponent(query)}&class_name=${encodeURIComponent(selectedBook.class_name)}&subject=${encodeURIComponent(selectedBook.subject)}`);
+        const thinkingCard = createAIMessageCard(turnCount + 1, 'loading');
+        chatHistory.appendChild(thinkingCard);
+        const contentDiv = thinkingCard.querySelector('.markdown-content');
+        contentDiv.innerHTML = marked.parse('...');
+
+        // Build request URL
+        const params = new URLSearchParams({
+            book_uuid: selectedBook.id,
+            query: query,
+            class_name: selectedBook.class_name,
+            subject: selectedBook.subject,
+            is_clicked_followup: isClickedFollowup.toString()
+        });
+
+        if (currentSessionId) {
+            params.append('session_id', currentSessionId);
+        }
+
+        const source = new EventSource(`/api/smart_query?${params.toString()}`);
 
         source.onmessage = function (event) {
             if (event.data === "[DONE]") {
@@ -637,38 +680,172 @@ function setupUserPage() {
                 submitButton.removeAttribute('disabled');
                 listChaptersBtn.classList.remove('hidden');
 
-                // Now speak the received fullReadText
+                // Update turn counter and UI
+                turnCount++;
+                const headerEl = thinkingCard.querySelector('.ai-card-header');
+                if (headerEl) {
+                    const turnIndicator = headerEl.querySelector('.turn-indicator');
+                    if (turnIndicator) {
+                        turnIndicator.textContent = `Turn ${turnCount} of ${turnCount}`;
+                    }
+                }
+
+                // Speak the response
                 if (fullReadText) {
                     const utterance = new SpeechSynthesisUtterance(fullReadText);
-                    speechSynthesis.cancel(); // Stop any previous speech
+                    speechSynthesis.cancel();
                     speechSynthesis.speak(utterance);
                 }
+
+                chatHistory.scrollTop = chatHistory.scrollHeight;
                 return;
             }
-            const data = JSON.parse(event.data);
-            if (data.display_text) {
-                fullResponse += data.display_text;
-                contentDiv.innerHTML = marked.parse(fullResponse);
+
+            try {
+                const data = JSON.parse(event.data);
+
+                if (data.type === 'intent') {
+                    intentType = data.intent || 'independent';
+                    // Update intent badge
+                    updateIntentBadge(thinkingCard, intentType);
+                }
+
+                if (data.type === 'followups') {
+                    followups = data.followups || [];
+                    currentFollowUps = followups;
+                    // Add follow-up UI
+                    addFollowUpsUI(thinkingCard, followups);
+                }
+
+                if (data.type === 'metadata') {
+                    if (data.session_id) {
+                        currentSessionId = data.session_id;
+                    }
+                    if (data.turn) {
+                        turnCount = data.turn;
+                    }
+                }
+
+                if (data.display_text) {
+                    fullResponse += data.display_text;
+                    contentDiv.innerHTML = marked.parse(fullResponse);
+                }
+
+                if (data.read_text) {
+                    fullReadText += data.read_text;
+                }
+
+                if (data.error) {
+                    contentDiv.innerHTML = `<p class="error-message">Error: ${data.error}</p>`;
+                    source.close();
+                    submitButton.removeAttribute('disabled');
+                    listChaptersBtn.classList.remove('hidden');
+                }
+
+                chatHistory.scrollTop = chatHistory.scrollHeight;
+
+            } catch (e) {
+                console.error('Error parsing SSE data:', e, event.data);
             }
-            if (data.read_text) {
-                fullReadText += data.read_text;
-            }
-            chatHistory.scrollTop = chatHistory.scrollHeight;
         };
 
         source.onerror = function (error) {
             console.error('EventSource failed:', error);
-            contentDiv.innerHTML = `<p class="error-message">Error: ${error.message}</p>`;
+            contentDiv.innerHTML = `<p class="error-message">Connection error. Please try again.</p>`;
             source.close();
-        };
-
-        source.onend = function () {
             submitButton.removeAttribute('disabled');
             listChaptersBtn.classList.remove('hidden');
-            // isStreamingSpeech = false; // This was for old speakStream, no longer needed
-            // sentenceQueue = ''; // This was for old speakStream, no longer needed
         };
     }
+
+    /**
+     * Create AI Message Card with Turn Counter and Intent Badge
+     */
+    function createAIMessageCard(turnNumber, initialIntent = 'loading') {
+        const messageDiv = document.createElement("div");
+        messageDiv.className = "ai-card fade-in";
+
+        const header = `
+            <div class="ai-card-header">
+                <div class="flex items-center gap-2">
+                    <h2 class="font-semibold text-gray-700">🤖 AI Response</h2>
+                    <span class="intent-badge ${initialIntent}" style="display: none;"></span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="turn-indicator">Turn ${turnNumber}</span>
+                    <button class="copy-btn" onclick="copyMessage(this)">📋</button>
+                    <button class="speak-btn" onclick="speakMessage(this)">🔊</button>
+                </div>
+            </div>
+            <div class="markdown-content"></div>
+            <div class="followup-section" style="display: none;"></div>
+        `;
+
+        messageDiv.innerHTML = header;
+        return messageDiv;
+    }
+
+    /**
+     * Update Intent Badge when intent is received from backend
+     */
+    function updateIntentBadge(cardElement, intentType) {
+        const badge = cardElement.querySelector('.intent-badge');
+        if (!badge) return;
+
+        badge.style.display = 'inline-flex';
+        badge.className = `intent-badge ${intentType}`;
+
+        if (intentType === 'followup') {
+            badge.innerHTML = '🔄 Follow-up';
+        } else if (intentType === 'independent') {
+            badge.innerHTML = '✨ New Topic';
+        }
+    }
+
+    /**
+     * Add Follow-up Suggestions UI to AI Card
+     */
+    function addFollowUpsUI(cardElement, followups) {
+        if (!followups || followups.length === 0) return;
+
+        const followupSection = cardElement.querySelector('.followup-section');
+        if (!followupSection) return;
+
+        followupSection.style.display = 'block';
+
+        let html = `
+            <h4 onclick="toggleFollowups(this)">
+                <span class="toggle-icon">▼</span>
+                💡 Follow-up Suggestions
+            </h4>
+            <div class="followup-chips">
+        `;
+
+        followups.forEach((followup, index) => {
+            html += `
+                <button class="followup-chip" onclick="handleFollowupClick('${followup.replace(/'/g, "\\'")}')">
+                    <span>🔹</span>
+                    <span>${followup}</span>
+                </button>
+            `;
+        });
+
+        html += `
+            </div>
+            <div class="inline-followup-container">
+                <label>✏️ Or ask your own follow-up:</label>
+                <div class="inline-input-group">
+                    <input type="text" 
+                           placeholder="Type your question here..." 
+                           onkeypress="if(event.key === 'Enter') handleInlineFollowup(this)" />
+                    <button onclick="handleInlineFollowup(this.previousElementSibling)">📤 Send</button>
+                </div>
+            </div>
+        `;
+
+        followupSection.innerHTML = html;
+    }
+
     async function handleListChapters() {
         if (!selectedBook) return;
 
@@ -728,6 +905,65 @@ function setupUserPage() {
         }
     }
 }
+
+/**
+ * Global Helper Functions for Smart Follow-ups
+ */
+
+// Toggle follow-up suggestions panel
+window.toggleFollowups = function (header) {
+    const chips = header.nextElementSibling;
+    const icon = header.querySelector('.toggle-icon');
+
+    if (chips.style.display === 'none') {
+        chips.style.display = 'flex';
+        icon.textContent = '▼';
+        icon.classList.remove('collapsed');
+    } else {
+        chips.style.display = 'none';
+        icon.textContent = '▶';
+        icon.classList.add('collapsed');
+    }
+};
+
+// Handle follow-up chip click
+window.handleFollowupClick = async function (question) {
+    const queryText = document.getElementById('query-text');
+    if (!queryText) return;
+
+    // Get the submitSmartQuery function from the setupUserPage scope
+    // We need to trigger a smart query with isClickedFollowup=true
+    queryText.value = question;
+
+    // Find the user page's submit handler
+    const form = document.getElementById('user-query-form');
+    if (form) {
+        // Programmatically trigger the form submission
+        // which calls handleQuerySubmit -> submitSmartQuery
+        const event = new Event('submit', { bubbles: true, cancelable: true });
+        form.dispatchEvent(event);
+    }
+};
+
+// Handle inline follow-up input
+window.handleInlineFollowup = function (input) {
+    const question = input.value.trim();
+    if (!question) return;
+
+    const queryText = document.getElementById('query-text');
+    if (!queryText) return;
+
+    queryText.value = question;
+    input.value = '';
+
+    // Trigger form submission
+    const form = document.getElementById('user-query-form');
+    if (form) {
+        const event = new Event('submit', { bubbles: true, cancelable: true });
+        form.dispatchEvent(event);
+    }
+};
+
 
 /**
  * Utility to show status messages to the user.

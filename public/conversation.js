@@ -16,6 +16,13 @@ class ConversationMode {
         this.ttsVoice = null;
         this.showAIText = false;
         this.conversationId = null;
+
+        // Smart conversational context
+        this.sessionId = null;
+        this.currentTurn = 0;
+        this.currentFollowups = [];
+        this.conversationHistory = [];  // Store last 3 turns
+
         this.setupSection = document.getElementById('conversation-setup');
         this.mainSection = document.getElementById('conversation-main');
         this.setupStatusEl = document.getElementById('conversation-setup-status');
@@ -296,15 +303,174 @@ class ConversationMode {
         if (!transcript.trim()) {
             this.setState('idle');
             return;
-        };
+        }
+
+        const normalizedTranscript = transcript.trim().toLowerCase();
+
+        // VOICE COMMAND DETECTION
+        // Check for "new topic" command
+        if (this.detectNewTopicCommand(normalizedTranscript)) {
+            console.log('[Voice Command] New topic detected');
+            this.handleNewTopic();
+            this.setState('idle');
+            // Show visual feedback
+            const statusEl = document.getElementById('status-indicator');
+            if (statusEl) {
+                statusEl.textContent = '🔄 Starting new topic...';
+                setTimeout(() => {
+                    statusEl.textContent = 'Click the mic to speak';
+                }, 2000);
+            }
+            return;
+        }
+
+        // Check for "repeat" command
+        if (this.detectRepeatCommand(normalizedTranscript)) {
+            console.log('[Voice Command] Repeat detected');
+            this.repeatLastResponse();
+            return;
+        }
+
+        // Check for "stop" command
+        if (this.detectStopCommand(normalizedTranscript)) {
+            console.log('[Voice Command] Stop detected');
+            this.handleStopCommand();
+            return;
+        }
+
+        // Regular query - send to server
         console.log('[Transcript] Sending:', transcript);
         this.setState('processing');
         if (this.showAIText) this.addMessage('user', transcript);
         this.ws.send(JSON.stringify({ type: 'query', query: transcript }));
     }
 
+    /**
+     * Detect "new topic" voice command
+     */
+    detectNewTopicCommand(text) {
+        const patterns = [
+            /^new topic$/i,
+            /^start new topic$/i,
+            /^begin new topic$/i,
+            /^change topic$/i,
+            /^switch topic$/i,
+            /^reset$/i,
+            /^start over$/i,
+            /^new conversation$/i
+        ];
+        return patterns.some(pattern => pattern.test(text));
+    }
+
+    /**
+     * Detect "repeat" voice command
+     */
+    detectRepeatCommand(text) {
+        const patterns = [
+            /^repeat$/i,
+            /^say that again$/i,
+            /^repeat that$/i,
+            /^can you repeat$/i,
+            /^repeat please$/i,
+            /^what did you say$/i
+        ];
+        return patterns.some(pattern => pattern.test(text));
+    }
+
+    /**
+     * Detect "stop" voice command
+     */
+    detectStopCommand(text) {
+        const patterns = [
+            /^stop$/i,
+            /^stop talking$/i,
+            /^be quiet$/i,
+            /^silence$/i,
+            /^shut up$/i,
+            /^pause$/i,
+            /^cancel$/i
+        ];
+        return patterns.some(pattern => pattern.test(text));
+    }
+
+    /**
+     * Repeat the last AI response
+     */
+    repeatLastResponse() {
+        // Cancel any current speech
+        if (window.speechSynthesis) {
+            window.speechSynthesis.cancel();
+        }
+
+        // Find the last AI message
+        const aiMessages = document.querySelectorAll('.ai-message');
+        if (aiMessages.length === 0) {
+            this.speakText('There is nothing to repeat.');
+            this.setState('idle');
+            return;
+        }
+
+        const lastMessage = aiMessages[aiMessages.length - 1];
+        const messageContent = lastMessage.querySelector('.message-content');
+        if (messageContent) {
+            const textToSpeak = messageContent.textContent;
+            this.speakText(textToSpeak);
+
+            // Show visual feedback
+            const statusEl = document.getElementById('status-indicator');
+            if (statusEl) {
+                statusEl.textContent = '🔄 Repeating last response...';
+            }
+        } else {
+            this.setState('idle');
+        }
+    }
+
+    /**
+     * Handle stop command - stops current speech
+     */
+    handleStopCommand() {
+        // Stop speech synthesis
+        if (window.speechSynthesis) {
+            window.speechSynthesis.cancel();
+        }
+
+        // Clear TTS buffer
+        this.ttsBuffer = '';
+        if (this.ttsTimer) {
+            clearTimeout(this.ttsTimer);
+            this.ttsTimer = null;
+        }
+
+        // Send interrupt to server
+        if (this.ws && this.ws.readyState === WebSocket.OPEN) {
+            this.ws.send(JSON.stringify({ type: 'interrupt' }));
+        }
+
+        this.setState('idle');
+
+        // Show visual feedback
+        const statusEl = document.getElementById('status-indicator');
+        if (statusEl) {
+            statusEl.textContent = '⏹️ Stopped';
+            setTimeout(() => {
+                statusEl.textContent = 'Click the mic to speak';
+            }, 2000);
+        }
+    }
+
     handleWebSocketMessage(data) {
         switch (data.type) {
+            case 'intent':
+                // Update UI to show intent type
+                this.updateSessionStatus(data.intent_type, data.turn);
+                break;
+            case 'followups':
+                // Store and display follow-up suggestions
+                this.currentFollowups = data.followups || [];
+                this.currentTurn = data.turn || 0;
+                this.displayFollowups();
+                break;
             case 'chunk':
                 if (this.state !== 'speaking') {
                     this.setState('speaking');
@@ -708,6 +874,146 @@ class ConversationMode {
         this.prepareSetupView();
         modal.style.display = 'flex';
         this.setState('idle');
+    }
+
+    /**
+     * Display follow-up suggestions in the voice UI
+     */
+    displayFollowups() {
+        const followupsContainer = document.getElementById('voice-followups-container');
+        if (!followupsContainer) return;
+
+        if (this.currentFollowups.length === 0) {
+            followupsContainer.style.display = 'none';
+            return;
+        }
+
+        followupsContainer.style.display = 'block';
+        followupsContainer.innerHTML = `
+            <div class="voice-followups-header" style="color: #1f2937; font-weight: 700;">
+                <span class="icon">💡</span>
+                <h4 style="color: #1f2937; margin: 0;">You could ask about:</h4>
+            </div>
+            <ul class="voice-followups-list" style="list-style: none; padding: 0;">
+                ${this.currentFollowups.map((followup, idx) => `
+                    <li class="voice-followup-item" 
+                        data-followup="${followup.replace(/"/g, '&quot;')}" 
+                        style="margin: 0.5rem 0; padding: 0.75rem; background: #f3f4f6; border-left: 3px solid #3b82f6; border-radius: 8px; cursor: pointer; transition: all 0.2s ease;">
+                        <span class="followup-icon" style="color: #3b82f6; font-weight: bold; margin-right: 0.5rem;">•</span>
+                        <span class="followup-text" style="color: #1f2937; font-size: 0.9375rem; font-weight: 500;">${followup}</span>
+                    </li>
+                `).join('')}
+            </ul>
+            <p class="voice-followup-hint" style="color: #6b7280; font-style: italic; text-align: center; margin-top: 0.75rem;">🎙️ Tap a question or speak your own</p>
+        `;
+
+        // Add click handlers to each follow-up item
+        const followupItems = followupsContainer.querySelectorAll('.voice-followup-item');
+        followupItems.forEach(item => {
+            item.addEventListener('click', () => {
+                const followupText = item.getAttribute('data-followup');
+                this.handleFollowupClick(followupText);
+            });
+
+            // Hover effects
+            item.addEventListener('mouseenter', () => {
+                item.style.background = '#e0e7ff';
+                item.style.borderLeftColor = '#10b981';
+                item.style.transform = 'translateX(4px)';
+            });
+            item.addEventListener('mouseleave', () => {
+                item.style.background = '#f3f4f6';
+                item.style.borderLeftColor = '#3b82f6';
+                item.style.transform = 'translateX(0)';
+            });
+        });
+    }
+
+    /**
+     * Handle follow-up click - stop current output and process new query
+     */
+    handleFollowupClick(followupText) {
+        console.log('[FOLLOWUP CLICKED]', followupText);
+
+        // Stop any current speech
+        if (window.speechSynthesis) {
+            window.speechSynthesis.cancel();
+        }
+
+        // Clear TTS buffer
+        this.ttsBuffer = '';
+        if (this.ttsTimer) {
+            clearTimeout(this.ttsTimer);
+            this.ttsTimer = null;
+        }
+
+        // Send interrupt to server
+        if (this.ws && this.ws.readyState === WebSocket.OPEN) {
+            this.ws.send(JSON.stringify({ type: 'interrupt' }));
+        }
+
+        // Hide follow-ups container
+        const followupsContainer = document.getElementById('voice-followups-container');
+        if (followupsContainer) {
+            followupsContainer.style.display = 'none';
+        }
+
+        // Display user's selected question
+        if (this.showAIText) {
+            this.addMessage('user', followupText);
+        }
+
+        // Send the follow-up query to server
+        this.setState('processing');
+        if (this.ws && this.ws.readyState === WebSocket.OPEN) {
+            this.ws.send(JSON.stringify({
+                type: 'query',
+                query: followupText,
+                is_followup_click: true  // Flag for backend
+            }));
+        }
+    }
+
+    /**
+     * Update session status badge (shows intent and turn)
+     */
+    updateSessionStatus(intentType, turn) {
+        const statusEl = document.getElementById('voice-session-status');
+        if (!statusEl) return;
+
+        const badgeClass = intentType === 'followup' ? 'badge-followup' : 'badge-newtopic';
+        const badgeText = intentType === 'followup' ? '🔄 Follow-up' : '✨ New Topic';
+        const turnText = turn ? `Turn ${turn}` : '';
+
+        statusEl.innerHTML = `
+            <span class="${badgeClass}">${badgeText}</span>
+            ${turnText ? `<span class="turn-counter">${turnText}</span>` : ''}
+        `;
+    }
+
+    /**
+     * Handle "New Topic" button click -  resets session
+     */
+    handleNewTopic() {
+        // Reset session state
+        this.sessionId = null;
+        this.currentTurn = 0;
+        this.currentFollowups = [];
+        this.conversationHistory = [];
+
+        // Clear follow-ups display
+        const followupsContainer = document.getElementById('voice-followups-container');
+        if (followupsContainer) {
+            followupsContainer.style.display = 'none';
+        }
+
+        // Update status
+        const statusEl = document.getElementById('voice-session-status');
+        if (statusEl) {
+            statusEl.innerHTML = '<span class="session-reset">🔄 Session Reset</span>';
+        }
+
+        console.log('[ConversationMode] Session reset - ready for new topic');
     }
 }
 

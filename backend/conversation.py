@@ -2,7 +2,7 @@
 Conversation state management and optimized processing for real-time interactions.
 """
 import asyncio
-from typing import Dict, Optional, Set
+from typing import Dict, Optional, Set, List
 from dataclasses import dataclass
 from datetime import datetime
 from cachetools import TTLCache
@@ -15,6 +15,10 @@ from .qdrant import (
     reformulate_and_classify_query,
     generate_conversational_answer
 )
+from .session_service import session_manager
+from .intent_classifier import classify_query_intent
+# Removed: from .app import generate_smart_followups (causes circular import)
+# Will import locally where needed
 
 @dataclass
 class ConversationState:
@@ -24,6 +28,8 @@ class ConversationState:
     cached_context: Dict
     is_speaking: bool = False
     should_stop: bool = False
+    session_id: Optional[str] = None  # Track session for smart context
+    turn_count: int = 0  # Track conversation turns
 
 class ConversationManager:
     def __init__(self):
@@ -91,17 +97,43 @@ class ConversationManager:
         conv.is_speaking = True
         
         try:
-            # Check cache first
-            cached_context = self.get_cached_context(conv.book_uuid, query)
-            if cached_context:
-                search_results = cached_context.get("search_results", [])
-                print(f"[CONVERSATION] ✓ Using cached search results\n")
+            # STEP 1: Get or create session (book-scoped)
+            if not conv.session_id:
+                session = session_manager.get_or_create_session(conv.book_uuid, None)
+                conv.session_id = session["session_id"]
+                print(f"[SESSION] Created new session: {conv.session_id}\n")
             else:
-                print(f"[CONVERSATION] Performing new search...")
-                # Get fresh context if not cached
-                metadata = get_book_metadata(conv.book_uuid)
+                session = session_manager.get_or_create_session(conv.book_uuid, conv.session_id)
+                print(f"[SESSION] Using existing session: {conv.session_id}\n")
+            
+            conversation_window = session["conversation_window"]
+            
+            # STEP 2: Classify intent (is this a follow-up or new topic?)
+            intent = classify_query_intent(
+                current_query=query,
+                conversation_window=conversation_window,
+                book_uuid=conv.book_uuid,
+                is_clicked_followup=False  # Voice mode doesn't have clicked follow-ups
+            )
+            
+            print(f"[INTENT] Type: {intent['type']}")
+            print(f"[INTENT] Needs retrieval: {intent['needs_retrieval']}")
+            print(f"[INTENT] Reason: {intent['reason']}\n")
+            
+            # Send intent info to frontend
+            await conv.websocket.send_json({
+                'type': 'intent',
+                'intent_type': intent['type'],
+                'turn': len(conversation_window) + 1
+            })
+            
+            # STEP 3: Get context (retrieve or reuse)
+            metadata = get_book_metadata(conv.book_uuid)
+            
+            if intent["needs_retrieval"]:
+                print(f"[PATH] Independent query - Full retrieval\n")
                 
-                # Use lighter query processing for follow-ups
+                # Use reformulation for cleaner search
                 processed_query_data = reformulate_and_classify_query(
                     query=query,
                     class_name=metadata.get("class_name"),
@@ -115,16 +147,41 @@ class ConversationManager:
                     conceptual_score=processed_query_data.get("conceptual_score", 0.5)
                 )
                 
-                print(f"[CONVERSATION] ✓ Retrieved {len(search_results)} chunks\n")
+                print(f"[RETRIEVAL] ✓ Retrieved {len(search_results)} chunks\n")
                 
-                # Cache the results
-                context_to_cache = {
-                    "search_results": search_results,
-                    "metadata": metadata
-                }
-                self.cache_context(conv.book_uuid, query, context_to_cache)
+            else:
+                print(f"[PATH] ⚡ Follow-up query - Reusing turn {intent['reuse_turn']} context\n")
+                
+                # Reuse cached context from previous turn
+                cached_turn = conversation_window[intent["reuse_turn"] - 1]
+                
+                # Backtrack to find context_cache if needed
+                original_turn_idx = intent["reuse_turn"] - 1
+                while "context_cache" not in cached_turn and "reused_from_turn" in cached_turn:
+                    original_turn_idx = cached_turn["reused_from_turn"] - 1
+                    cached_turn = conversation_window[original_turn_idx]
+                
+                if "context_cache" in cached_turn:
+                    search_results = cached_turn["context_cache"]["retrieved_chunks"]
+                    print(f"[REUSE] Using {len(search_results)} cached chunks from turn {original_turn_idx + 1}\n")
+                else:
+                    # Fallback to fresh search
+                    print(f"[WARN] Could not find context_cache, falling back to fresh search\n")
+                    processed_query_data = reformulate_and_classify_query(
+                        query=query,
+                        class_name=metadata.get("class_name"),
+                        subject=metadata.get("subject")
+                    )
+                    search_results, _, _ = hybrid_search(
+                        book_uuid=conv.book_uuid,
+                        query=processed_query_data.get("reformulated_query", query),
+                        keywords=processed_query_data.get("keywords", []),
+                        conceptual_score=0.5
+                    )
+                    intent["needs_retrieval"] = True
             
-            # Stream the answer
+            # STEP 4: Stream the answer
+            full_answer = ""
             if search_results:
                 context = "\n\n---\n\n".join([payload['text'] for score, payload in search_results])
                 print(f"[CONVERSATION] Streaming answer to user...\n")
@@ -145,6 +202,7 @@ class ConversationManager:
                     except Exception:
                         preview = '<non-printable chunk>'
                     print(f"[ConversationManager] Sending chunk to {conversation_id}: {preview}")
+                    full_answer += chunk  # Accumulate full answer
                     ok = await self._safe_send(conv.websocket, {
                         "type": "chunk",
                         "content": chunk
@@ -153,6 +211,46 @@ class ConversationManager:
                         # Client disconnected, stop processing
                         print(f"[ConversationManager] Stop streaming to {conversation_id} because send failed")
                         break
+                
+                # STEP 5: Generate fresh follow-ups for voice mode
+                print("[FOLLOWUPS] Generating answer-specific follow-ups for voice...\n")
+                
+                # Lazy import to avoid circular dependency
+                from .app import generate_smart_followups
+                
+                followups = generate_smart_followups(query, full_answer, search_results[:5])
+                print(f"[FOLLOWUPS] ✓ Generated {len(followups)} follow-ups\n")
+                
+                # Send follow-ups to frontend
+                await self._safe_send(conv.websocket, {
+                    "type": "followups",
+                    "followups": followups,
+                    "turn": len(conversation_window) + 1
+                })
+                
+                # STEP 6: Save turn to session
+                turn_data = {
+                    "query": query,
+                    "answer": full_answer,
+                    "intent_type": intent["type"],
+                    "follow_ups": followups,
+                    "timestamp": datetime.now().isoformat()
+                }
+                
+                if intent["needs_retrieval"]:
+                    # Cache context for future follow-ups
+                    turn_data["context_cache"] = {
+                        "retrieved_chunks": search_results,
+                        "context": context
+                    }
+                else:
+                    turn_data["reused_from_turn"] = intent["reuse_turn"]
+                
+                session_manager.add_turn(conv.session_id, turn_data)
+                conv.turn_count += 1
+                
+                print(f"[SESSION] Saved turn {len(conversation_window) + 1} to session\n")
+                
             else:
                 await self._safe_send(conv.websocket, {
                     "type": "error",

@@ -201,18 +201,31 @@
       </div>
 
       <div id="conversation-main" class="conversation-main" style="display:none;">
+        <!-- Session Status Badge -->
+        <div id="voice-session-status" class="voice-session-status"></div>
+        
         <div class="waveform-area">
           <canvas id="user-waveform" class="waveform-canvas"></canvas>
           <canvas id="ai-waveform" class="waveform-canvas"></canvas>
         </div>
 
         <div id="conversation-body" class="conversation-body"></div>
+        
+        <!-- Follow-up Suggestions Container -->
+        <div id="voice-followups-container" class="voice-followups-container" style="display: none;"></div>
 
         <div class="conversation-controls">
           <button id="mic-button" class="mic-button" aria-label="microphone">
             <!-- conversation.js will set the inner icon -->
           </button>
           <div id="status-indicator" class="status-indicator">Click the mic to speak</div>
+        </div>
+        
+        <!-- Action Buttons -->
+        <div class="conversation-actions">
+          <button id="new-topic-btn" class="new-topic-btn" onclick="window.conversationMode?.handleNewTopic()">
+            🔄 New Topic
+          </button>
         </div>
       </div>
     </div>
