@@ -345,6 +345,7 @@ function setupUserPage() {
 
     // --- Initialization ---
     setupSimpleVoiceSearch();
+    createFollowupVoiceOverlay();
 
     // --- Event Listeners ---
     classSelect.addEventListener('change', () => {
@@ -809,31 +810,25 @@ function setupUserPage() {
     /**
      * Add Follow-up Suggestions UI to AI Card
      */
-    // Updated to use sticky panel instead of inline
     function addFollowUpsUI(cardElement, followups) {
-        if (!followups || followups.length === 0) {
-            // Hide sticky panel if no follow-ups
-            const stickyPanel = document.getElementById('followup-sticky-panel');
-            if (stickyPanel) {
-                stickyPanel.classList.add('hidden');
-            }
-            return;
-        }
+        if (!followups || followups.length === 0) return;
 
-        // Show and populate sticky panel
-        const stickyPanel = document.getElementById('followup-sticky-panel');
-        const stickyContent = document.getElementById('followup-sticky-content');
+        const followupSection = cardElement.querySelector('.followup-section');
+        if (!followupSection) return;
 
-        if (!stickyPanel || !stickyContent) return;
-
-        // Show panel
-        stickyPanel.classList.remove('hidden');
-        stickyPanel.classList.remove('collapsed');
+        // Show section
+        followupSection.style.display = 'block';
 
         // Fun emoji array
         const emojis = ['💡', '🤔', '🔍', '⭐', '🎯', '💭', '🌟', '✨'];
 
-        let html = '';
+        let html = `
+            <div class="followup-header">
+                <span class="icon">💡</span>
+                <h4>Quick Follow-ups</h4>
+            </div>
+            <div class="followup-chips-container">
+        `;
 
         // Add follow-up chips
         followups.forEach((followup, index) => {
@@ -847,29 +842,36 @@ function setupUserPage() {
             `;
         });
 
-        // Add custom input
+        html += `</div>`;
+
+        // Add custom input inline
         html += `
-            <div class="followup-sticky-custom">
+            <div class="followup-inline-custom">
                 <label>📝 Or ask your own:</label>
-                <div class="followup-sticky-input-group">
+                <div class="followup-inline-input-group">
                     <input type="text" 
-                           id="sticky-followup-input"
                            placeholder="Type or speak your question..." 
-                           onkeypress="if(event.key === 'Enter') handleStickyFollowup(this)" />
-                    <button class="followup-sticky-voice-btn" 
+                           onkeypress="if(event.key === 'Enter') handleInlineFollowup(this)" />
+                    <button class="followup-voice-btn" 
                             onclick="handleCustomFollowupVoice()"
                             title="Speak your question">
                         🎤
                     </button>
-                    <button class="followup-sticky-send-btn" 
-                            onclick="handleStickyFollowup(document.getElementById('sticky-followup-input'))">
-                        📤 Send
+                    <button class="followup-send-btn" 
+                            onclick="handleInlineFollowup(this.previousElementSibling.previousElementSibling)">
+                        📤
                     </button>
                 </div>
             </div>
         `;
 
-        stickyContent.innerHTML = html;
+        followupSection.innerHTML = html;
+
+        // Hide sticky panel if it exists (cleanup)
+        const stickyPanel = document.getElementById('followup-sticky-panel');
+        if (stickyPanel) {
+            stickyPanel.classList.add('hidden');
+        }
     }
 
     // Handle sticky panel input

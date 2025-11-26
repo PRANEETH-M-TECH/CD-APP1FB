@@ -1,16 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ask a Query - CHADUVU GURU</title>
   <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/static/style.css">
+  <link rel="stylesheet" href="/static/conversation.css">
+  <link rel="stylesheet" href="/static/voice-overlay.css">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV" crossorigin="anonymous">
-  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmImMNkdTe" crossorigin="anonymous"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"
+    integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV" crossorigin="anonymous">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"
+    integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmImMNkdTe"
+    crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05"
+    crossorigin="anonymous"></script>
 
   <style>
     body {
@@ -22,9 +30,17 @@
     .fade-in {
       animation: fadeIn 0.4s ease forwards;
     }
+
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     .markdown-content table {
@@ -33,17 +49,20 @@
       margin-top: 1rem;
       margin-bottom: 1rem;
     }
+
     .markdown-content th,
     .markdown-content td {
       border: 1px solid #e2e8f0;
       padding: 0.75rem;
       text-align: left;
     }
+
     .markdown-content th {
       background-color: #f1f5f9;
       font-weight: 600;
       color: #334155;
     }
+
     .markdown-content tr:nth-child(even) {
       background-color: #f8fafc;
     }
@@ -53,11 +72,12 @@
       background: #fff;
       border: 1px solid #e2e8f0;
       border-radius: 1rem;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
       padding: 1rem 1.25rem;
       margin-top: 1rem;
       transition: transform 0.2s ease;
     }
+
     .ai-card:hover {
       transform: translateY(-2px);
     }
@@ -69,6 +89,7 @@
       color: #64748b;
       cursor: pointer;
     }
+
     .copy-btn:hover {
       color: #2563eb;
     }
@@ -80,6 +101,7 @@
       color: #64748b;
       cursor: pointer;
     }
+
     .speak-btn:hover {
       color: #2563eb;
     }
@@ -93,7 +115,7 @@
     .left-pane {
       background: #ffffff;
       border-right: 1px solid #e2e8f0;
-      box-shadow: 2px 0 10px rgba(0,0,0,0.04);
+      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.04);
       padding: 1.2rem;
     }
 
@@ -102,7 +124,7 @@
       border-radius: 0.75rem;
       border: 1px solid #e2e8f0;
       background: #f9fafb;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
       flex-grow: 1;
       display: flex;
       flex-direction: column;
@@ -111,7 +133,8 @@
     #pdf-render-area-user {
       display: flex;
       justify-content: center;
-      align-items: flex-start; /* Changed from center to flex-start */
+      align-items: flex-start;
+      /* Changed from center to flex-start */
       flex-grow: 1;
       overflow: auto;
     }
@@ -120,7 +143,7 @@
       width: 100%;
       height: auto;
       border-radius: 0.5rem;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
     }
 
     /* Chat pane */
@@ -136,102 +159,139 @@
       resize: none;
       transition: border-color 0.2s, box-shadow 0.2s;
     }
+
     textarea#query-text:focus {
       outline: none;
       border-color: #3b82f6;
-      box-shadow: 0 0 0 2px rgba(59,130,246,0.2);
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
     }
 
     /* Scrollbar */
     ::-webkit-scrollbar {
       width: 8px;
     }
+
     ::-webkit-scrollbar-thumb {
       background-color: #cbd5e1;
       border-radius: 10px;
     }
-    
+
     /* Conversation modal extras: pulse mic, robot animation, progress bar, debug panel */
     .mic-button.recording {
-      box-shadow: 0 12px 36px rgba(16,185,129,0.28), 0 6px 18px rgba(16,185,129,0.12);
+      box-shadow: 0 12px 36px rgba(16, 185, 129, 0.28), 0 6px 18px rgba(16, 185, 129, 0.12);
       animation: micPulse 1.2s infinite;
       transform: scale(0.98);
     }
+
     @keyframes micPulse {
-      from { box-shadow: 0 0 0 0 rgba(16,185,129,0.28); }
-      to { box-shadow: 0 0 0 18px rgba(16,185,129,0); }
+      from {
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.28);
+      }
+
+      to {
+        box-shadow: 0 0 0 18px rgba(16, 185, 129, 0);
+      }
     }
 
     /* Enhanced robot and mic animations */
-    .robot-anim { 
-      width: 56px; height: 56px; 
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
-      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
-    }
-    .robot-anim.speaking { 
-      transform: translateY(-6px); 
-      filter: drop-shadow(0 8px 16px rgba(59,130,246,0.3));
-      animation: robotPulse 2s infinite;
-    }
-    @keyframes robotPulse {
-      0% { transform: translateY(-6px) scale(1); }
-      50% { transform: translateY(-6px) scale(1.05); }
-      100% { transform: translateY(-6px) scale(1); }
+    .robot-anim {
+      width: 56px;
+      height: 56px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
     }
 
-    .progress-bar { 
-      width: 100%; max-width: 480px; 
-      height: 6px; 
-      background: #e6eef6; 
-      border-radius: 6px; 
-      overflow: hidden;
-      box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+    .robot-anim.speaking {
+      transform: translateY(-6px);
+      filter: drop-shadow(0 8px 16px rgba(59, 130, 246, 0.3));
+      animation: robotPulse 2s infinite;
     }
-    .progress-bar .fill { 
-      width: 0%; height: 100%; 
-      background: linear-gradient(90deg,#10B981,#3b82f6); 
+
+    @keyframes robotPulse {
+      0% {
+        transform: translateY(-6px) scale(1);
+      }
+
+      50% {
+        transform: translateY(-6px) scale(1.05);
+      }
+
+      100% {
+        transform: translateY(-6px) scale(1);
+      }
+    }
+
+    .progress-bar {
+      width: 100%;
+      max-width: 480px;
+      height: 6px;
+      background: #e6eef6;
+      border-radius: 6px;
+      overflow: hidden;
+      box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+    }
+
+    .progress-bar .fill {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, #10B981, #3b82f6);
       transition: width 200ms linear;
-      box-shadow: 0 0 8px rgba(59,130,246,0.4);
+      box-shadow: 0 0 8px rgba(59, 130, 246, 0.4);
     }
 
     /* Speaking state indicators */
-    .state-user #user-waveform { opacity: 1; }
-    .state-user #ai-waveform { opacity: 0.1; }
-    .state-ai #user-waveform { opacity: 0.1; }
-    .state-ai #ai-waveform { opacity: 1; }
-    
+    .state-user #user-waveform {
+      opacity: 1;
+    }
+
+    .state-user #ai-waveform {
+      opacity: 0.1;
+    }
+
+    .state-ai #user-waveform {
+      opacity: 0.1;
+    }
+
+    .state-ai #ai-waveform {
+      opacity: 1;
+    }
+
     #waveform-area {
       position: relative;
       transition: all 0.3s ease;
     }
-    
+
     .waveform-canvas {
       transition: all 0.3s ease;
-      background: rgba(255,255,255,0.05);
+      background: rgba(255, 255, 255, 0.05);
       backdrop-filter: blur(8px);
-      border: 1px solid rgba(226,232,240,0.6);
+      border: 1px solid rgba(226, 232, 240, 0.6);
     }
-    
+
     /* Mic button states */
     .mic-button {
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
+
     .mic-button.recording {
       background: #ef4444 !important;
-      box-shadow: 0 12px 36px rgba(239,68,68,0.28), 0 6px 18px rgba(239,68,68,0.12) !important;
+      box-shadow: 0 12px 36px rgba(239, 68, 68, 0.28), 0 6px 18px rgba(239, 68, 68, 0.12) !important;
       transform: scale(0.96) !important;
     }
+
     .mic-button.ai-speaking {
       background: #3b82f6 !important;
-      box-shadow: 0 12px 36px rgba(59,130,246,0.28), 0 6px 18px rgba(59,130,246,0.12) !important;
+      box-shadow: 0 12px 36px rgba(59, 130, 246, 0.28), 0 6px 18px rgba(59, 130, 246, 0.12) !important;
     }
+
     .mic-button.recording:hover {
       background: #dc2626 !important;
     }
+
     .mic-button.ai-speaking:hover {
       background: #2563eb !important;
     }
-    
+
     /* Status indicator states */
     .status-indicator {
       padding: 6px 12px;
@@ -239,17 +299,36 @@
       font-weight: 500;
       transition: all 0.3s ease;
     }
+
     .status-indicator.recording {
-      background: rgba(239,68,68,0.1);
+      background: rgba(239, 68, 68, 0.1);
       color: #ef4444;
     }
+
     .status-indicator.ai-speaking {
-      background: rgba(59,130,246,0.1);
+      background: rgba(59, 130, 246, 0.1);
       color: #3b82f6;
     }
 
-    .debug-panel { width:100%; max-width:720px; height:120px; background:#0f172a; color:#d1d5db; font-family:monospace; font-size:12px; overflow:auto; padding:8px; border-radius:8px; display:none; }
-    .debug-controls { display:flex; align-items:center; gap:8px; }
+    .debug-panel {
+      width: 100%;
+      max-width: 720px;
+      height: 120px;
+      background: #0f172a;
+      color: #d1d5db;
+      font-family: monospace;
+      font-size: 12px;
+      overflow: auto;
+      padding: 8px;
+      border-radius: 8px;
+      display: none;
+    }
+
+    .debug-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
 
     /* New Mic Button Styles */
     #mic-button {
@@ -262,28 +341,46 @@
       align-items: center;
       justify-content: center;
       transition: all 0.3s ease;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     }
 
     #mic-button.idle {
-      background-color: #3b82f6; /* Blue */
+      background-color: #3b82f6;
+      /* Blue */
     }
+
     #mic-button.listening {
-      background-color: #ef4444; /* Red */
+      background-color: #ef4444;
+      /* Red */
       animation: pulse 1.5s infinite;
     }
+
     #mic-button.processing {
-      background-color: #f97316; /* Orange */
+      background-color: #f97316;
+      /* Orange */
       cursor: not-allowed;
     }
+
     #mic-button.speaking {
-      background-color: #10b981; /* Green */
+      background-color: #10b981;
+      /* Green */
     }
 
     @keyframes pulse {
-      0% { transform: scale(1); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-      50% { transform: scale(1.05); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
-      100% { transform: scale(1); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+      0% {
+        transform: scale(1);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+
+      50% {
+        transform: scale(1.05);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+      }
+
+      100% {
+        transform: scale(1);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
     }
 
     #status-indicator {
@@ -299,38 +396,45 @@
       overflow: visible;
       transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
     }
-    #voice-search-btn > * {
+
+    #voice-search-btn>* {
       position: relative;
       z-index: 2;
     }
+
     #voice-search-btn.recording {
       transform: translateY(-1px);
-      box-shadow: 0 16px 32px rgba(239,68,68,0.28);
+      box-shadow: 0 16px 32px rgba(239, 68, 68, 0.28);
     }
+
     #voice-search-btn.recording::before,
     #voice-search-btn.recording::after {
       content: '';
       position: absolute;
       inset: -8px;
       border-radius: 9999px;
-      background: radial-gradient(circle at center, rgba(239,68,68,0.35), rgba(239,68,68,0));
+      background: radial-gradient(circle at center, rgba(239, 68, 68, 0.35), rgba(239, 68, 68, 0));
       z-index: 1;
       opacity: 0;
       animation: voicePulse 1.6s infinite ease-out;
     }
+
     #voice-search-btn.recording::after {
       inset: -16px;
       animation-delay: 0.4s;
     }
+
     @keyframes voicePulse {
       0% {
         opacity: 0.55;
         transform: scale(0.92);
       }
+
       70% {
         opacity: 0.0;
         transform: scale(1.3);
       }
+
       100% {
         opacity: 0;
         transform: scale(1.35);
@@ -343,17 +447,19 @@
       gap: 6px;
       padding: 6px 14px;
       border-radius: 999px;
-      border: 1px solid rgba(59,130,246,0.14);
-      background: rgba(37,99,235,0.08);
-      box-shadow: 0 4px 12px rgba(37,99,235,0.1);
+      border: 1px solid rgba(59, 130, 246, 0.14);
+      background: rgba(37, 99, 235, 0.08);
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.1);
       transition: opacity 0.2s ease, transform 0.2s ease;
       opacity: 0;
       transform: translateY(4px);
     }
+
     .voice-visualizer.active {
       opacity: 1;
       transform: translateY(0);
     }
+
     .voice-visualizer span {
       width: 4px;
       height: 12px;
@@ -362,20 +468,38 @@
       animation: voiceBar 1.1s infinite ease-in-out;
       animation-play-state: paused;
     }
-    .voice-visualizer span:nth-child(2) { animation-delay: 0.12s; }
-    .voice-visualizer span:nth-child(3) { animation-delay: 0.24s; }
-    .voice-visualizer span:nth-child(4) { animation-delay: 0.36s; }
-    .voice-visualizer span:nth-child(5) { animation-delay: 0.48s; }
+
+    .voice-visualizer span:nth-child(2) {
+      animation-delay: 0.12s;
+    }
+
+    .voice-visualizer span:nth-child(3) {
+      animation-delay: 0.24s;
+    }
+
+    .voice-visualizer span:nth-child(4) {
+      animation-delay: 0.36s;
+    }
+
+    .voice-visualizer span:nth-child(5) {
+      animation-delay: 0.48s;
+    }
+
     .voice-visualizer.active span {
       animation-play-state: running;
     }
+
     @keyframes voiceBar {
-      0%, 100% {
+
+      0%,
+      100% {
         transform: scaleY(0.35);
       }
+
       40% {
         transform: scaleY(1.4);
       }
+
       60% {
         transform: scaleY(0.6);
       }
@@ -385,10 +509,12 @@
 
 <body class="text-gray-800 user-page-body">
   <div class="user-app-container flex flex-col md:flex-row h-screen relative">
-    <button id="toggle-left-pane" class="absolute top-4 right-1/2 z-10 bg-gray-200 p-2 rounded-full hover:bg-gray-300 transition-all duration-300">
-        <svg id="toggle-icon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-        </svg>
+    <button id="toggle-left-pane"
+      class="absolute top-4 right-1/2 z-10 bg-gray-200 p-2 rounded-full hover:bg-gray-300 transition-all duration-300">
+      <svg id="toggle-icon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+        stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+      </svg>
     </button>
 
     <!-- Left Pane (Book Viewer) -->
@@ -399,15 +525,23 @@
           <label for="class-select" class="block text-sm font-medium text-gray-600">Class</label>
           <select id="class-select" class="w-full border border-gray-300 rounded-lg px-3 py-2 mt-1">
             <option disabled selected>Select...</option>
-            <option>6</option><option>7</option><option>8</option><option>9</option><option>10</option>
+            <option>6</option>
+            <option>7</option>
+            <option>8</option>
+            <option>9</option>
+            <option>10</option>
           </select>
         </div>
         <div class="flex-1">
           <label for="subject-select" class="block text-sm font-medium text-gray-600">Subject</label>
           <select id="subject-select" disabled class="w-full border border-gray-300 rounded-lg px-3 py-2 mt-1">
             <option disabled selected>Select...</option>
-            <option>Telugu</option><option>Hindi</option><option>English</option>
-            <option>Maths</option><option>Science</option><option>Social</option>
+            <option>Telugu</option>
+            <option>Hindi</option>
+            <option>English</option>
+            <option>Maths</option>
+            <option>Science</option>
+            <option>Social</option>
           </select>.
         </div>
 
@@ -416,9 +550,12 @@
       <!-- PDF Viewer -->
       <div id="book-viewer-container" class="mt-4">
         <div id="pdf-viewer-header-user" class="flex justify-between items-center mb-2 hidden">
-          <button id="prev-page-user" class="bg-blue-500 text-white px-3 py-1 rounded-lg text-sm hover:bg-blue-600">Prev</button>
-          <span class="text-gray-600 text-sm">Page: <span id="page-num-user"></span> / <span id="page-count-user"></span></span>
-          <button id="next-page-user" class="bg-blue-500 text-white px-3 py-1 rounded-lg text-sm hover:bg-blue-600">Next</button>
+          <button id="prev-page-user"
+            class="bg-blue-500 text-white px-3 py-1 rounded-lg text-sm hover:bg-blue-600">Prev</button>
+          <span class="text-gray-600 text-sm">Page: <span id="page-num-user"></span> / <span
+              id="page-count-user"></span></span>
+          <button id="next-page-user"
+            class="bg-blue-500 text-white px-3 py-1 rounded-lg text-sm hover:bg-blue-600">Next</button>
         </div>
         <div id="pdf-render-area-user">
           <canvas id="pdf-canvas-user"></canvas>
@@ -445,7 +582,8 @@
               <button class="copy-btn" onclick="copyMessage(this)">📋</button>
             </div>
             <div class="markdown-content">
-              <p>Welcome! I am <strong>Chaduvu Guru</strong>, your personal AI study assistant. Please select a book on the left to begin.</p>
+              <p>Welcome! I am <strong>Chaduvu Guru</strong>, your personal AI study assistant. Please select a book on
+                the left to begin.</p>
             </div>
           </div>
         </div>
@@ -456,7 +594,8 @@
         <div class="followup-sticky-header">
           <span class="followup-sticky-title">💡 Quick Follow-ups</span>
           <button id="toggle-followup-btn" onclick="toggleFollowupPanel()" aria-label="Toggle follow-up panel">
-            <svg class="followup-toggle-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg class="followup-toggle-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
             </svg>
           </button>
@@ -469,12 +608,14 @@
       <!-- Chat Input -->
       <div id="chat-input-container" class="p-4 border-t border-gray-200 bg-white shadow-inner">
         <div class="flex justify-start mb-2 gap-2">
-            <button type="button" id="list-chapters-btn" class="hidden bg-indigo-500 hover:bg-indigo-600 text-white p-2 px-4 transition text-sm">
-              List Chapters
-            </button>
-            <button type="button" id="summarize-btn" class="hidden bg-indigo-500 hover:bg-indigo-600 text-white p-2 px-4 transition text-sm">
-              Summarize
-            </button>
+          <button type="button" id="list-chapters-btn"
+            class="hidden bg-indigo-500 hover:bg-indigo-600 text-white p-2 px-4 transition text-sm">
+            List Chapters
+          </button>
+          <button type="button" id="summarize-btn"
+            class="hidden bg-indigo-500 hover:bg-indigo-600 text-white p-2 px-4 transition text-sm">
+            Summarize
+          </button>
         </div>
         <form id="user-query-form">
           <textarea id="query-text" placeholder="Ask a question about the selected book..." required disabled
@@ -488,11 +629,13 @@
               <span></span>
             </div>
             <button type="button" id="voice-search-btn"
-            class="bg-gray-200 hover:bg-gray-300 text-gray-600 rounded-lg p-2 px-4 transition">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
-            </svg>
-          </button>
+              class="bg-gray-200 hover:bg-gray-300 text-gray-600 rounded-lg p-2 px-4 transition">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+              </svg>
+            </button>
             <button type="submit" id="submit-query-btn" disabled
               class="bg-blue-600 hover:bg-blue-700 text-white rounded-lg p-2 px-4 transition disabled:bg-gray-300 disabled:cursor-not-allowed">
               Ask ➤
@@ -520,15 +663,15 @@
   <!-- New script for 'List Chapters' and 'Summarize' button functionality -->
   <script>
     function addMessageToChat({ role, content }) {
-        const chatHistory = document.getElementById('chat-history');
-        const messageElement = document.createElement('div');
-        messageElement.classList.add('ai-card', 'fade-in');
+      const chatHistory = document.getElementById('chat-history');
+      const messageElement = document.createElement('div');
+      messageElement.classList.add('ai-card', 'fade-in');
 
-        const header = role === 'ai' ? '🤖 Chaduvu Guru' : '👤 You';
-        
-        const htmlContent = marked.parse(content);
+      const header = role === 'ai' ? '🤖 Chaduvu Guru' : '👤 You';
 
-        messageElement.innerHTML = `
+      const htmlContent = marked.parse(content);
+
+      messageElement.innerHTML = `
             <div class="flex justify-between items-center mb-2">
                 <h2 class="font-semibold text-gray-700">${header}</h2>
                 <button class="copy-btn" onclick="copyMessage(this)">📋</button>
@@ -537,31 +680,31 @@
             <div class="markdown-content">${htmlContent}</div>
         `;
 
-        chatHistory.appendChild(messageElement);
-        chatHistory.scrollTop = chatHistory.scrollHeight; // Auto-scroll to bottom
-    }    
+      chatHistory.appendChild(messageElement);
+      chatHistory.scrollTop = chatHistory.scrollHeight; // Auto-scroll to bottom
+    }
     function copyMessage(button) {
-        const card = button.closest('.ai-card');
-        const content = card.querySelector('.markdown-content').innerText;
-        navigator.clipboard.writeText(content).then(() => {
-            button.textContent = '✅';
-            setTimeout(() => { button.textContent = '📋'; }, 1000);
-        });
+      const card = button.closest('.ai-card');
+      const content = card.querySelector('.markdown-content').innerText;
+      navigator.clipboard.writeText(content).then(() => {
+        button.textContent = '✅';
+        setTimeout(() => { button.textContent = '📋'; }, 1000);
+      });
     }
 
     function speakMessage(button) {
-        const card = button.closest('.ai-card');
-        const content = card.querySelector('.markdown-content').innerText;
-        
-        if (speechSynthesis.speaking) {
-            speechSynthesis.cancel();
-            button.textContent = '🔊'; // Reset icon
-        } else {
-            const utterance = new SpeechSynthesisUtterance(content);
-            utterance.onstart = () => { button.textContent = '🔇'; }; // Change icon to mute
-            utterance.onend = () => { button.textContent = '🔊'; }; // Reset icon when done
-            speechSynthesis.speak(utterance);
-        }
+      const card = button.closest('.ai-card');
+      const content = card.querySelector('.markdown-content').innerText;
+
+      if (speechSynthesis.speaking) {
+        speechSynthesis.cancel();
+        button.textContent = '🔊'; // Reset icon
+      } else {
+        const utterance = new SpeechSynthesisUtterance(content);
+        utterance.onstart = () => { button.textContent = '🔇'; }; // Change icon to mute
+        utterance.onend = () => { button.textContent = '🔊'; }; // Reset icon when done
+        speechSynthesis.speak(utterance);
+      }
     }
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -569,105 +712,105 @@
       const summarizeBtn = document.getElementById('summarize-btn');
 
       if (listChaptersBtn) {
-          listChaptersBtn.addEventListener('click', async () => {
-            const classSelect = document.getElementById('class-select');
-            const subjectSelect = document.getElementById('subject-select');
+        listChaptersBtn.addEventListener('click', async () => {
+          const classSelect = document.getElementById('class-select');
+          const subjectSelect = document.getElementById('subject-select');
 
-            const selectedClass = classSelect.value;
-            const selectedSubject = subjectSelect.value;
+          const selectedClass = classSelect.value;
+          const selectedSubject = subjectSelect.value;
 
-            if (!selectedClass || selectedClass === 'Select...') {
-              alert('Please select a class first.');
-              return;
+          if (!selectedClass || selectedClass === 'Select...') {
+            alert('Please select a class first.');
+            return;
+          }
+          if (!selectedSubject || selectedSubject === 'Select...') {
+            alert('Please select a subject first.');
+            return;
+          }
+
+          // Clear previous chat history before adding new messages
+          document.getElementById('chat-history').innerHTML = '';
+
+          addMessageToChat({
+            role: 'ai',
+            content: 'Fetching chapter list...'
+          });
+
+          try {
+            const response = await fetch(`/api/list-chapters?class_name=${selectedClass}&subject=${selectedSubject}`);
+
+            if (!response.ok) {
+              throw new Error('Could not retrieve chapters. Please ensure the book has been processed.');
             }
-            if (!selectedSubject || selectedSubject === 'Select...') {
-              alert('Please select a subject first.');
-              return;
-            }
 
-            // Clear previous chat history before adding new messages
-            document.getElementById('chat-history').innerHTML = '';
+            const data = await response.json();
 
-            addMessageToChat({
-              role: 'ai',
-              content: 'Fetching chapter list...'
-            });
-
-            try {
-              const response = await fetch(`/api/list-chapters?class_name=${selectedClass}&subject=${selectedSubject}`);
-              
-              if (!response.ok) {
-                throw new Error('Could not retrieve chapters. Please ensure the book has been processed.');
-              }
-
-              const data = await response.json();
-              
-              if (data && data.chapters && data.chapters.length > 0) {
-                displayChaptersInChat(data.chapters);
-              } else {
-                addMessageToChat({
-                  role: 'ai',
-                  content: 'No chapters found for this book.'
-                });
-              }
-
-            } catch (error) {
-              console.error('Error fetching chapters:', error);
+            if (data && data.chapters && data.chapters.length > 0) {
+              displayChaptersInChat(data.chapters);
+            } else {
               addMessageToChat({
                 role: 'ai',
-                content: `Sorry, an error occurred while fetching chapters: ${error.message}`
+                content: 'No chapters found for this book.'
               });
             }
-          });
+
+          } catch (error) {
+            console.error('Error fetching chapters:', error);
+            addMessageToChat({
+              role: 'ai',
+              content: `Sorry, an error occurred while fetching chapters: ${error.message}`
+            });
+          }
+        });
       }
 
       if (summarizeBtn) {
-          summarizeBtn.addEventListener('click', async () => {
-            const classSelect = document.getElementById('class-select');
-            const subjectSelect = document.getElementById('subject-select');
+        summarizeBtn.addEventListener('click', async () => {
+          const classSelect = document.getElementById('class-select');
+          const subjectSelect = document.getElementById('subject-select');
 
-            const selectedClass = classSelect.value;
-            const selectedSubject = subjectSelect.value;
+          const selectedClass = classSelect.value;
+          const selectedSubject = subjectSelect.value;
 
-            if (!selectedClass || selectedClass === 'Select...') {
-              alert('Please select a class first.');
-              return;
+          if (!selectedClass || selectedClass === 'Select...') {
+            alert('Please select a class first.');
+            return;
+          }
+          if (!selectedSubject || selectedSubject === 'Select...') {
+            alert('Please select a subject first.');
+            return;
+          }
+
+          // Clear previous chat history before adding new messages
+          document.getElementById('chat-history').innerHTML = '';
+
+          try {
+            const response = await fetch(`/api/list-chapters?class_name=${selectedClass}&subject=${selectedSubject}`);
+
+            if (!response.ok) {
+              throw new Error('Could not retrieve chapters. Please ensure the book has been processed.');
             }
-            if (!selectedSubject || selectedSubject === 'Select...') {
-              alert('Please select a subject first.');
-              return;
+
+            const data = await response.json();
+
+            if (data && data.chapters && data.chapters.length > 0) {
+              displayChapterDropdown(data.chapters);
             }
-
-            // Clear previous chat history before adding new messages
-            document.getElementById('chat-history').innerHTML = '';
-
-            try {
-              const response = await fetch(`/api/list-chapters?class_name=${selectedClass}&subject=${selectedSubject}`);
-              
-              if (!response.ok) {
-                throw new Error('Could not retrieve chapters. Please ensure the book has been processed.');
-              }
-
-              const data = await response.json();
-              
-              if (data && data.chapters && data.chapters.length > 0) {
-                displayChapterDropdown(data.chapters);
-              }
-              else {
-                addMessageToChat({
-                  role: 'ai',
-                  content: 'No chapters found for this book.'
-                });
-              }
-
-            } catch (error) {
-              console.error('Error fetching chapters:', error);
+            else {
               addMessageToChat({
                 role: 'ai',
-                content: `Sorry, an error occurred while fetching chapters: ${error.message}`
+                content: 'No chapters found for this book.'
               });
             }
-          });
+
+          } catch (error) {
+            console.error('Error fetching chapters:', error);
+            addMessageToChat({
+              role: 'ai',
+              content: `Sorry, an error occurred while fetching chapters: ${error.message}`
+            });
+          }
+        });
       }
 
       function displayChaptersInChat(chapters) {
@@ -754,9 +897,10 @@
           }
         }
       });
-      
+
       window.copyMessage = copyMessage;
     });
   </script>
 </body>
+
 </html>
