@@ -36,7 +36,7 @@ from . import qdrant
 from . import local_chap_service
 from . import firestore_service
 from .session_service import session_manager
-from .intent_classifier import classify_query_intent
+from .intent_classifier import determine_next_action
 
 
 # --- Lifespan Management ---
@@ -630,7 +630,7 @@ def generate_smart_followups(query: str, answer: str, top_chunks: List) -> List[
                 class_num = 8  # Default to middle school
         else:
             class_num = 8
-        
+
         # Define language complexity based on class
         if class_num <= 5:
             language_level = "very simple words, short sentences (like talking to a 10-year-old)"
@@ -699,6 +699,12 @@ Generate 3 follow-up questions NOW:
 """
         
         response = qdrant.generation_model.generate_content(prompt)
+        
+        if not response.parts:
+            finish_reason = response.candidates[0].finish_reason if response.candidates else "Unknown"
+            print(f"[FOLLOWUPS] ⚠️ LLM returned an empty response. Finish Reason: {finish_reason}.")
+            raise ValueError(f"Empty response from LLM (finish reason: {finish_reason})")
+
         raw = response.text.strip()
         
         # Extract JSON
@@ -1029,260 +1035,185 @@ async def smart_query_engine(
     is_clicked_followup: bool = Query(False)
 ):
     """
-    Smart query endpoint with conversational context.
-    Streams answer via SSE with intent detection and follow-up suggestions.
-    
-    Features:
-    - Book-scoped session management
-    - Smart intent classification (independent vs follow-up)
-    - Context reuse for follow-ups (60% faster)
-    - Answer-specific follow-up generation
-    - Automatic topic switching detection
+    Smart query endpoint with conversational context, using an action-based routing model.
     """
     import time
     
     async def event_generator():
-        start = time.time()
-        
+        start_time = time.time()
         print(f"\n{'='*80}")
         print(f"[SMART QUERY] New query at {datetime.datetime.now().strftime('%H:%M:%S')}")
-        print(f"[SMART QUERY] Query: {query}")
-        print(f"[SMART QUERY] Book: Class {class_name} - {subject}")
-        print(f"[SMART QUERY] Session ID: {session_id}")
-        print(f"[SMART QUERY] Clicked follow-up: {is_clicked_followup}")
+        print(f"  Query: {query} | Book: {class_name} - {subject} | Session: {session_id}")
         print(f"{'='*80}\n")
-        
+
         try:
-            print(f"[DEBUG] Step 1: Getting/creating session...")
-            # STEP 1: Get or create session (book-scoped)
+            # 1. Get or create session
             session = session_manager.get_or_create_session(book_uuid, session_id)
-            conversation_window = session["conversation_window"]
+            active_context_window = session["active_context_window"]
             
-            print(f"[SESSION] Using session: {session['session_id']}")
-            print(f"[SESSION] Conversation window size: {len(conversation_window)}\n")
-            
-            print(f"[DEBUG] Step 2: Classifying intent...")
-            # STEP 2: Classify intent
-            intent = classify_query_intent(
+            # 2. Determine the next action using the new classifier
+            action_details = determine_next_action(
                 current_query=query,
-                conversation_window=conversation_window,
-                book_uuid=book_uuid,
-                is_clicked_followup=is_clicked_followup,
+                conversation_window=active_context_window,
                 generation_model=qdrant.generation_model
             )
+            action = action_details.get("action")
+            reason = action_details.get("reason", "No reason provided.")
             
-            print(f"[INTENT] Type: {intent['type']}")
-            print(f"[INTENT] Needs retrieval: {intent['needs_retrieval']}")
-            print(f"[INTENT] Reason: {intent['reason']}\n")
+            print(f"[ACTION] Determined Action: {action}")
+            print(f"[ACTION] Reason: {reason}\n")
             
-            print(f"[DEBUG] Step 3: Sending intent to frontend...")
-            # Send intent info to frontend
-            yield f"data: {json.dumps({'type': 'intent', 'intent': intent['type']})}\n\n"
-            print(f"[DEBUG] Intent sent successfully\n")
-            
-            print(f"[DEBUG] Step 4: Loading summaries...")
-            # STEP 3: Load summaries for chapter ranking (if needed for new search)
-            chapters = []
-            if intent["needs_retrieval"]:
-                try:
-                    summary_doc = load_summary_from_firestore(class_name, subject)
-                    if isinstance(summary_doc, dict):
-                        chapters = summary_doc.get("chapters", [])
-                        print(f"[DEBUG] Loaded {len(chapters)} chapters")
-                    else:
-                        print(f"[ERROR] summary_doc is not a dict: {type(summary_doc)}")
-                        chapters = []
-                except Exception as e:
-                    print(f"[ERROR] Failed to load summary: {e}")
-                    import traceback
-                    traceback.print_exc()
-                    chapters = []
-            else:
-                print(f"[DEBUG] Skipping summary load (follow-up query)")
-            
-            print(f"[DEBUG] Step 5: Reformulating query...")
-            # STEP 4: Reformulate query (context-aware if follow-up)
-            if is_clicked_followup:
-                # Skip reformulation for clicked follow-ups (already well-formed)
-                reformulated_query = query
-                keywords = []
-                print("[REFORM] Skipped (clicked follow-up)\n")
-            elif intent["needs_retrieval"]:
-                # Standard reformulation for independent queries
+            # Send action info to the frontend for debugging/display
+            yield f"data: {json.dumps({'type': 'intent', 'intent': action})}\n\n"
+
+            # Initialize variables
+            context = ""
+            hybrid_results = []
+            reformulated_query = query
+            keywords = []
+            full_answer = ""
+
+            # 3. Execute the determined action
+            if action == "RETRIEVE_NEW_CONTEXT":
+                print("[PATH] 🔍 New topic detected. Starting full retrieval pipeline...\n")
+                # If it's a new topic, start a new topic in the session manager
+                new_topic_name = action_details.get("new_topic_name", "New Topic")
+                session_manager.start_new_topic(session['session_id'], new_topic_name)
+
+                # Load summaries for chapter ranking
+                summary_doc = load_summary_from_firestore(class_name, subject)
+                chapters = summary_doc.get("chapters", [])
+                
+                # Reformulate query for retrieval
                 reform = reformulate_with_llm(query, class_name, subject, chapters)
                 reformulated_query = reform.get("reformulated_query", query)
                 keywords = reform.get("keywords", [])
                 chapter_ranking = reform.get("chapter_ranking", [])
-                print(f"[REFORM] Standard reformulation")
-                print(f"[REFORM] Reformulated: {reformulated_query}\n")
-            else:
-                # Context-aware reformulation for follow-ups
-                reform = context_aware_reformulate(query, conversation_window)
-                reformulated_query = reform.get("reformulated_query", query)
-                keywords = reform.get("keywords", [])
-                chapter_ranking = []
-                print(f"[REFORM] Context-aware reformulation\n")
-            
-            # STEP 5: Get context (retrieve or reuse)
-            if intent["needs_retrieval"]:
-                print("[PATH] 🔍 Independent query - Full retrieval\n")
-                
-                # Get top chapter names for filtering
+                conceptual_score = reform.get("conceptual_score", 0.5) # Extract conceptual_score
+                print(f"[REFORM] Reformulated for retrieval: {reformulated_query}\n")
+
+                # Perform hybrid search
                 top_chapter_names = [ch["chapter_name"] for ch in chapter_ranking[:5]] if chapter_ranking else []
-                
-                # Convert keywords to expected format if needed
-                # hybrid_search expects: [{"keyword": "word", "importance": 0.8}, ...]
-                # But context_aware_reformulate returns: ["word1", "word2", ...]
-                formatted_keywords = []
-                if keywords:
-                    if isinstance(keywords[0], str):
-                        # Convert string list to dict list
-                        formatted_keywords = [{"keyword": kw, "importance": 0.5} for kw in keywords]
-                    else:
-                        # Already in correct format
-                        formatted_keywords = keywords
-                
-                print(f"[DEBUG] Formatted {len(formatted_keywords)} keywords for search")
-                
-                # Full hybrid search
-                hybrid_results, semantic_results, bm25_results = qdrant.hybrid_search(
+                hybrid_results, _, _ = qdrant.hybrid_search(
                     book_uuid=book_uuid,
                     query=reformulated_query,
-                    keywords=formatted_keywords,
-                    conceptual_score=0.5,
+                    keywords=[{"keyword": kw, "importance": 0.5} for kw in keywords],
+                    conceptual_score=conceptual_score, # Pass conceptual_score
                     metadata_filters={"chapter_names": top_chapter_names} if top_chapter_names else {}
                 )
-                
-                print(f"[RETRIEVAL] ✓ Retrieved {len(hybrid_results)} chunks\n")
-                
-                # Build context
+                print(f"[RETRIEVAL] Retrieved {len(hybrid_results)} new chunks for topic '{new_topic_name}'.\n")
+
+                # Build context and cache it
                 context = "\n\n---\n\n".join([doc["text"] for score, doc in hybrid_results[:10]])
-                
-            else:
-                print(f"[PATH] ⚡ Follow-up query - Reusing turn {intent['reuse_turn']} context\n")
-                
-                # Reuse cached context from previous turn
-                # Need to backtrack through chain to find a turn with context_cache
-                cached_turn = conversation_window[intent["reuse_turn"] - 1]
-                
-                # If this turn was itself a follow-up, backtrack to the original turn with context
-                original_turn_idx = intent["reuse_turn"] - 1
-                while "context_cache" not in cached_turn and "reused_from_turn" in cached_turn:
-                    original_turn_idx = cached_turn["reused_from_turn"] - 1
-                    cached_turn = conversation_window[original_turn_idx]
-                
-                # Now we have a turn with context_cache
-                if "context_cache" in cached_turn:
-                    hybrid_results = cached_turn["context_cache"]["retrieved_chunks"]
-                    context = cached_turn["context_cache"]["context"]
-                    print(f"[REUSE] Using {len(hybrid_results)} cached chunks from turn {original_turn_idx + 1}\n")
+                session_manager.update_topic_chunks(session['session_id'], hybrid_results)
+
+            elif action == "USE_CACHED_CONTEXT":
+                print("[PATH] ⚡ Follow-up detected. Using cached context...\n")
+                cached_chunks = session_manager.get_current_topic_chunks(session['session_id'])
+                if cached_chunks:
+                    hybrid_results = cached_chunks
+                    context = "\n\n---\n\n".join([doc["text"] for score, doc in hybrid_results[:10]])
+                    print(f"[REUSE] Successfully reused {len(hybrid_results)} cached chunks.\n")
                 else:
-                    # Fallback: treat as independent query
-                    print(f"[WARN] Could not find context_cache, falling back to fresh search\n")
-                    intent["needs_retrieval"] = True
-                    # Re-run the retrieval logic
-                    reform = reformulate_with_llm(query, class_name, subject, [])
+                    # Fallback if cache is somehow empty
+                    print("[WARN] 'USE_CACHED_CONTEXT' chosen, but cache was empty. Falling back to full retrieval.\n")
+                    action = "RETRIEVE_NEW_CONTEXT" # Force retrieval
+                    # This will re-run the logic in the next step, might need a refactor later
+                    # For now, we will just re-do the retrieval logic here.
+                    summary_doc = load_summary_from_firestore(class_name, subject)
+                    chapters = summary_doc.get("chapters", [])
+                    reform = reformulate_with_llm(query, class_name, subject, chapters)
                     reformulated_query = reform.get("reformulated_query", query)
                     keywords = reform.get("keywords", [])
-                    formatted_keywords = []
-                    if keywords:
-                        if isinstance(keywords[0], dict):
-                            formatted_keywords = [kw["keyword"] if "keyword" in kw else kw.get("term", "") for kw in keywords]
-                        else:
-                            formatted_keywords = keywords
-                    hybrid_results, semantic_results, bm25_results = qdrant.hybrid_search(
-                        book_uuid=book_uuid,
-                        query=reformulated_query,
-                        keywords=formatted_keywords,
-                        conceptual_score=0.5
+                    chapter_ranking = reform.get("chapter_ranking", [])
+                    top_chapter_names = [ch["chapter_name"] for ch in chapter_ranking[:5]] if chapter_ranking else []
+                    hybrid_results, _, _ = qdrant.hybrid_search(
+                        book_uuid=book_uuid, query=reformulated_query, keywords=[{"keyword": kw, "importance": 0.5} for kw in keywords],
+                        metadata_filters={"chapter_names": top_chapter_names} if top_chapter_names else {}
                     )
                     context = "\n\n---\n\n".join([doc["text"] for score, doc in hybrid_results[:10]])
-            
-            # STEP 6: Generate answer
-            final_prompt = f"""You are a helpful teacher. Use the context to answer the question clearly.
+                    session_manager.update_topic_chunks(session['session_id'], hybrid_results)
 
-QUESTION:
-{reformulated_query}
+                # For follow-ups, we still want to reformulate the query for clarity in the prompt
+                reform = context_aware_reformulate(query, active_context_window)
+                reformulated_query = reform.get("reformulated_query", query)
+                print(f"[REFORM] Context-aware reformulation for follow-up: {reformulated_query}\n")
 
-CONTEXT:
+            # 4. Generate Answer
+            if action in ["RETRIEVE_NEW_CONTEXT", "USE_CACHED_CONTEXT"]:
+                conversation_context = "\n\nPREVIOUS CONVERSATION:\n"
+                for turn in session.get("full_history", [])[-3:]:
+                    conversation_context += f"Q: {turn['query']}\nA: {turn.get('answer', 'N/A')[:200]}...\n\n"
+
+                final_prompt = f"""You are a helpful AI tutor. Maintain conversational continuity.
+
+{conversation_context}
+CURRENT QUESTION: {reformulated_query}
+
+Use the following retrieved information to answer the current question:
+RETRIEVED INFORMATION:
 {context}
 
-Return only the answer in a clear, educational manner.
+Answer the current question clearly and educationally.
 """
+            else: # ANSWER_FROM_HISTORY
+                print("[PATH] 🗣️ Answering directly from history...\n")
+                final_prompt = f"""You are an AI assistant. Answer the following question based ONLY on the provided conversation history.
+
+CONVERSATION HISTORY:
+{context_summary}
+
+QUESTION:
+"{current_query}"
+
+Answer the question based only on the history.
+"""
+
+            print(f"[LLM] Streaming answer for action: {action}...\n")
+            response_stream = qdrant.generation_model.generate_content(final_prompt, stream=True)
+            for chunk in response_stream:
+                if chunk.text:
+                    full_answer += chunk.text
+                    yield f"data: {json.dumps({'display_text': chunk.text})}\n\n"
+                    await asyncio.sleep(0.01)
+            print(f"[LLM] ✓ Answer generated ({len(full_answer)} chars)\n")
+
+            # 5. Generate and send follow-ups (if not answering from history)
+            follow_ups = []
+            if action != "ANSWER_FROM_HISTORY":
+                print("[FOLLOWUPS] Generating answer-specific follow-ups...\n")
+                follow_ups = generate_smart_followups(reformulated_query, full_answer, hybrid_results[:5])
             
-            full_answer = ""
-            print(f"[LLM] Streaming answer...\n")
-            
-            try:
-                response = qdrant.generation_model.generate_content(final_prompt, stream=True)
-                
-                for chunk in response:
-                    if chunk.text:
-                        full_answer += chunk.text
-                        event_data = json.dumps({
-                            "display_text": chunk.text,
-                            "read_text": chunk.text 
-                        })
-                        yield f"data: {event_data}\n\n"
-                        await asyncio.sleep(0.01)
-                
-                print(f"[LLM] ✓ Answer generated ({len(full_answer)} chars)\n")
-            
-            except Exception as e:
-                print(f"[ERROR] Answer generation failed: {e}")
-                yield f"data: {json.dumps({'error': str(e)})}\n\n"
-                return
-            
-            # STEP 7: Generate FRESH follow-ups for EVERY answer (context-aware)
-            # This ensures each answer gets relevant, answer-specific follow-up suggestions
-            print("[FOLLOWUPS] Generating answer-specific follow-ups based on current answer...\n")
-            follow_ups = generate_smart_followups(reformulated_query, full_answer, hybrid_results[:5])
-            print(f"[FOLLOWUPS] ✓ Generated {len(follow_ups)} fresh follow-ups\n")
-            
-            # STEP 8: Save turn to session
-            turn_number = len(conversation_window) + 1
-            turn_data = {
-                "query": query,
-                "reformulated": reformulated_query,
-                "answer": full_answer,
-                "intent_type": intent["type"],
-                "is_clicked_followup": is_clicked_followup,
-                "follow_ups": follow_ups,
-                "timestamp": datetime.datetime.now().isoformat()
-            }
-            
-            if intent["needs_retrieval"]:
-                # Cache context for future follow-ups
-                turn_data["context_cache"] = {
-                    "retrieved_chunks": hybrid_results,
-                    "context": context,
-                    "keywords": keywords
-                }
-            else:
-                turn_data["reused_from_turn"] = intent["reuse_turn"]
-            
-            session_manager.add_turn(session["session_id"], turn_data)
-            
-            # STEP 9: Send follow-ups and metadata to frontend
             yield f"data: {json.dumps({'type': 'followups', 'followups': follow_ups})}\n\n"
-            
+
+            # 6. Save the complete turn to the session
+            turn_data = {
+                "query": query, "reformulated": reformulated_query, "answer": full_answer,
+                "intent_type": action, "is_clicked_followup": is_clicked_followup,
+                "follow_ups": follow_ups, "timestamp": datetime.datetime.now().isoformat()
+            }
+            if action == "RETRIEVE_NEW_CONTEXT":
+                 turn_data["context_cache"] = {"retrieved_chunks": hybrid_results, "context": context, "keywords": keywords}
+
+            session_manager.add_turn(session["session_id"], turn_data)
+
+            # 7. Send final metadata
+            updated_history = session_manager.get_full_history(session["session_id"])
+            current_turn_number = len(updated_history)
             metadata = {
-                "type": "metadata",
-                "turn": turn_number,
-                "total": len(conversation_window) + 1,
-                "session_id": session["session_id"],
-                "intent_type": intent["type"]
+                "type": "metadata", "turn": current_turn_number, "session_id": session["session_id"],
+                "intent_type": action, "topic_change": action == "RETRIEVE_NEW_CONTEXT"
             }
             yield f"data: {json.dumps(metadata)}\n\n"
             
-            elapsed = time.time() - start
+            elapsed = time.time() - start_time
             print(f"{'='*80}")
             print(f"[COMPLETE] Smart query processed in {elapsed:.2f}s")
-            print(f"[COMPLETE] Type: {intent['type']} | Turn: {turn_number}")
+            print(f"[COMPLETE] Action: {action} | Turn: {current_turn_number}")
             print(f"{'='*80}\n")
             
             yield "data: [DONE]\n\n"
-        
+
         except Exception as e:
             print(f"[ERROR] Smart query failed: {e}")
             import traceback

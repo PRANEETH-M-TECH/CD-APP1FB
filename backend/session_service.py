@@ -1,138 +1,188 @@
 """
-Smart session management with book-scoped context.
-Maintains rolling conversation window (last 5 turns) per book.
+Smart session management with full conversational context.
+Maintains complete conversation history with automatic topic segmentation.
 """
 from datetime import datetime
 from typing import Dict, List, Optional
 import time
+import uuid
+
+from backend.redis_service import redis_service
 
 
 class SmartSessionManager:
     """
-    Manages conversation sessions with book-scoped context.
+    Manages conversation sessions with full context and topic awareness.
     Each session is tied to a specific book (book_uuid).
-    Maintains a rolling window of the last N conversation turns.
+    Uses Redis for persistent session storage.
     """
     
     def __init__(self):
-        self.memory_cache: Dict[str, dict] = {}  # {session_id: session_data}
-        self.ttl = 3600  # 1 hour session timeout
-    
+        self.ttl = 86400  # 24 hours session timeout for Redis
+
     def get_or_create_session(self, book_uuid: str, session_id: Optional[str] = None) -> dict:
         """
-        Get existing session or create new one (book-scoped).
+        Get existing session from Redis or create a new one.
         
         Args:
             book_uuid: UUID of the current book
             session_id: Optional existing session ID
         
         Returns:
-            Session dictionary with conversation window
+            Session dictionary with full history and topic tracking
         """
-        # Create new session if no ID provided or session doesn't exist
-        if not session_id or session_id not in self.memory_cache:
-            session_id = f"{book_uuid}_{int(time.time())}"
-            session = {
-                "session_id": session_id,
-                "book_uuid": book_uuid,
-                "conversation_window": [],  # Last N turns
-                "created_at": datetime.now().isoformat(),
-                "last_updated": datetime.now().isoformat(),
-                "max_window_size": 5  # Keep last 5 turns
-            }
-            self.memory_cache[session_id] = session
-            print(f"[SESSION] ✨ Created new session: {session_id}")
-            return session
+        if session_id:
+            session = redis_service.get_session(session_id)
+            if session:
+                # Validate book match - if book changed, create new session
+                if session["book_uuid"] != book_uuid:
+                    print(f"[SESSION] 📚 Book changed from {session['book_uuid'][:16]}... to {book_uuid[:16]}...")
+                    print(f"[SESSION] Creating new session for new book")
+                    return self.get_or_create_session(book_uuid, None)
+                
+                print(f"[SESSION] ♻️ Reusing existing session from Redis: {session_id}")
+                return session
+
+        # Create new session if no ID provided or session doesn't exist in Redis
+        session_id = f"{book_uuid}_{int(time.time())}_{uuid.uuid4().hex[:8]}"
         
-        session = self.memory_cache[session_id]
+        # Initialize first topic
+        first_topic_id = f"topic_{uuid.uuid4().hex[:8]}"
         
-        # Validate book match - if book changed, create new session
-        if session["book_uuid"] != book_uuid:
-            print(f"[SESSION] 📚 Book changed from {session['book_uuid'][:16]}... to {book_uuid[:16]}...")
-            print(f"[SESSION] Creating new session for new book")
-            return self.get_or_create_session(book_uuid, None)
-        
-        print(f"[SESSION] ♻️ Reusing existing session: {session_id}")
+        session = {
+            "session_id": session_id,
+            "book_uuid": book_uuid,
+            "full_history": [],
+            "active_context_window": [],
+            "topics": [
+                {
+                    "topic_id": first_topic_id,
+                    "topic_name": "Initial Topic",
+                    "started_at": datetime.now().isoformat(),
+                    "turns": []
+                }
+            ],
+            "current_topic_id": first_topic_id,
+            "current_topic_chunks": None,
+            "created_at": datetime.now().isoformat(),
+            "last_updated": datetime.now().isoformat(),
+        }
+        redis_service.save_session(session_id, session, ttl=self.ttl)
+        print(f"[SESSION] ✨ Created new session in Redis: {session_id}")
         return session
-    
+
+    def start_new_topic(self, session_id: str, topic_name: str) -> str:
+        """
+        Start a new topic in the conversation.
+        
+        Args:
+            session_id: Session ID
+            topic_name: Human-readable name for the new topic
+        
+        Returns:
+            New topic ID or None if session not found
+        """
+        session = redis_service.get_session(session_id)
+        if not session:
+            print(f"[SESSION] ⚠️ Session {session_id} not found in Redis")
+            return None
+        
+        # Create new topic
+        new_topic_id = f"topic_{uuid.uuid4().hex[:8]}"
+        new_topic = {
+            "topic_id": new_topic_id,
+            "topic_name": topic_name,
+            "started_at": datetime.now().isoformat(),
+            "turns": []
+        }
+        
+        session["topics"].append(new_topic)
+        session["current_topic_id"] = new_topic_id
+        session["active_context_window"] = []
+        session["current_topic_chunks"] = None
+        session["last_updated"] = datetime.now().isoformat()
+        
+        redis_service.save_session(session_id, session, ttl=self.ttl)
+        print(f"[SESSION] 🆕 Started new topic: {topic_name} (ID: {new_topic_id})")
+        return new_topic_id
+
     def add_turn(self, session_id: str, turn_data: dict):
         """
-        Add a new conversation turn and maintain rolling window.
+        Add a new conversation turn to the session.
         
         Args:
             session_id: Session ID
             turn_data: Dictionary containing turn information
         """
-        if session_id not in self.memory_cache:
-            print(f"[SESSION] ⚠️ Session {session_id} not found")
+        session = redis_service.get_session(session_id)
+        if not session:
+            print(f"[SESSION] ⚠️ Session {session_id} not found in Redis")
             return
+
+        turn_data["turn"] = len(session["full_history"]) + 1
+        turn_data["topic_id"] = session["current_topic_id"]
+        turn_data["timestamp"] = datetime.now().isoformat()
         
-        session = self.memory_cache[session_id]
-        turn_data["turn"] = len(session["conversation_window"]) + 1
-        session["conversation_window"].append(turn_data)
+        session["full_history"].append(turn_data)
+        session["active_context_window"].append(turn_data)
         
-        # Rolling window: keep last N turns only
-        max_size = session.get("max_window_size", 5)
-        if len(session["conversation_window"]) > max_size:
-            removed_turn = session["conversation_window"].pop(0)
-            print(f"[SESSION] 🗑️ Removed turn {removed_turn['turn']} (window full)")
+        for topic in session["topics"]:
+            if topic["topic_id"] == session["current_topic_id"]:
+                topic["turns"].append(turn_data["turn"])
+                break
         
         session["last_updated"] = datetime.now().isoformat()
-        print(f"[SESSION] ✅ Added turn {turn_data['turn']} (window size: {len(session['conversation_window'])})")
-    
+        
+        redis_service.save_session(session_id, session, ttl=self.ttl)
+        print(f"[SESSION] ✅ Added turn {turn_data['turn']} to session {session_id}")
+
+    def update_topic_chunks(self, session_id: str, chunks: list):
+        """
+        Cache retrieved chunks for the current topic in Redis.
+        
+        Args:
+            session_id: Session ID
+            chunks: Retrieved text chunks from Qdrant
+        """
+        session = redis_service.get_session(session_id)
+        if not session:
+            return
+        
+        session["current_topic_chunks"] = chunks
+        session["last_updated"] = datetime.now().isoformat()
+        redis_service.save_session(session_id, session, ttl=self.ttl)
+        print(f"[SESSION] 💾 Cached {len(chunks)} chunks for session {session_id}")
+
     def get_window(self, session_id: str) -> List[dict]:
         """
-        Get conversation window for a session.
-        
-        Args:
-            session_id: Session ID
-        
-        Returns:
-            List of conversation turns
+        Get active context window from Redis.
         """
-        if session_id not in self.memory_cache:
-            return []
-        return self.memory_cache[session_id]["conversation_window"]
-    
+        session = redis_service.get_session(session_id)
+        return session.get("active_context_window", []) if session else []
+
+    def get_full_history(self, session_id: str) -> List[dict]:
+        """
+        Get complete conversation history from Redis.
+        """
+        session = redis_service.get_session(session_id)
+        return session.get("full_history", []) if session else []
+
+    def get_current_topic_chunks(self, session_id: str) -> Optional[list]:
+        """
+        Get cached chunks for current topic from Redis.
+        """
+        session = redis_service.get_session(session_id)
+        return session.get("current_topic_chunks") if session else None
+
     def get_turn(self, session_id: str, turn_number: int) -> Optional[dict]:
         """
-        Get a specific turn from the session.
-        
-        Args:
-            session_id: Session ID
-            turn_number: Turn number (1-indexed)
-        
-        Returns:
-            Turn data or None if not found
+        Get a specific turn from full history in Redis.
         """
-        window = self.get_window(session_id)
-        for turn in window:
+        full_history = self.get_full_history(session_id)
+        for turn in full_history:
             if turn["turn"] == turn_number:
                 return turn
         return None
-    
-    def cleanup_expired_sessions(self):
-        """
-        Remove expired sessions based on TTL.
-        Called periodically to free memory.
-        """
-        current_time = datetime.now()
-        expired_sessions = []
-        
-        for session_id, session in self.memory_cache.items():
-            last_updated = datetime.fromisoformat(session["last_updated"])
-            age = (current_time - last_updated).total_seconds()
-            
-            if age > self.ttl:
-                expired_sessions.append(session_id)
-        
-        for session_id in expired_sessions:
-            del self.memory_cache[session_id]
-            print(f"[SESSION] 🧹 Cleaned up expired session: {session_id}")
-        
-        if expired_sessions:
-            print(f"[SESSION] Removed {len(expired_sessions)} expired sessions")
-
 
 # Global session manager instance
 session_manager = SmartSessionManager()

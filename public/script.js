@@ -811,6 +811,10 @@ function setupUserPage() {
      * Add Follow-up Suggestions UI to AI Card
      */
     function addFollowUpsUI(cardElement, followups) {
+        // Always return to prevent displaying follow-up suggestions
+        // This keeps the backend generating them for testing, but hides them from the UI.
+        return;
+
         if (!followups || followups.length === 0) return;
 
         const followupSection = cardElement.querySelector('.followup-section');

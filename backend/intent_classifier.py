@@ -1,344 +1,110 @@
 """
-Smart query intent classification for conversational context.
-Determines if a query is independent, follow-up, or clarification.
+Intelligent conversation action classifier.
+Determines the next best action for the system to take based on conversational context.
 """
-from typing import List, Dict, Optional
+from typing import List, Dict
 import json
-import re
 
-
-def classify_query_intent(
-    current_query: str,
-    conversation_window: List[dict],
-    book_uuid: str,
-    is_clicked_followup: bool = False,
-    generation_model = None
-) -> dict:
-    """
-    Determines query type and decides retrieval strategy.
-    
-    Uses three-tier detection:
-    1. Pattern matching (fast, obvious cases)
-    2. Clicked follow-up flag (frontend tells us)
-    3. LLM-based detection (smart, handles edge cases)
-    
-    Args:
-        current_query: User's current question
-        conversation_window: List of previous turns
-        book_uuid: Current book UUID
-        is_clicked_followup: Whether user clicked a suggested follow-up
-        generation_model: Gemini model for LLM-based detection
-    
-    Returns:
-        {
-            "type": "independent" | "followup" | "clarification",
-            "needs_retrieval": bool,
-            "reuse_turn": int | null,
-            "context_needed": bool,
-            "reason": str
-        }
-    """
-    
-    # CASE 1: Empty conversation → Independent
-    if not conversation_window or len(conversation_window) == 0:
-        return {
-            "type": "independent",
-            "needs_retrieval": True,
-            "reuse_turn": None,
-            "context_needed": False,
-            "reason": "First query in session"
-        }
-    
-    # CASE 2: Clicked follow-up button → Reuse context
-    if is_clicked_followup:
-        last_turn = conversation_window[-1]["turn"]
-        return {
-            "type": "followup",
-            "needs_retrieval": False,
-            "reuse_turn": last_turn,
-            "context_needed": True,
-            "reason": "User clicked suggested follow-up button"
-        }
-    
-    # CASE 2.5: Check if spoken query matches any suggested follow-ups (FUZZY MATCH)
-    # This helps children who ask follow-ups in their own words
-    last_turn_data = conversation_window[-1] if conversation_window else None
-    if last_turn_data and "follow_ups" in last_turn_data:
-        suggested_followups = last_turn_data.get("follow_ups", [])
-        matched_followup = _fuzzy_match_followup(current_query, suggested_followups)
-        
-        if matched_followup:
-            last_turn = conversation_window[-1]["turn"]
-            return {
-                "type": "followup",
-                "needs_retrieval": False,
-                "reuse_turn": last_turn,
-                "context_needed": True,
-                "reason": f"Fuzzy matched to suggested follow-up: '{matched_followup}'"
-            }
-    
-    # CASE 3: Pattern matching for obvious follow-ups
-    followup_patterns = [
-        r"\bexplain (that|it|this)\b",
-        r"\belaborate\b",
-        r"\bmore about\b",
-        r"\btell me more\b",
-        r"\bsimpler (terms|words)\b",
-        r"\bgive (me )?(an? )?example\b",
-        r"\bcan you (explain|clarify|elaborate)\b",
-        r"\bwhat about (that|it|this)\b",
-        r"\bhow about (that|it|this)\b",
-        r"\bclarify (that|it|this)\b",
-        r"\bin detail\b",
-        r"\bexpand on\b",
-        r"\b(what|how) (does|is|are) (that|it|this)\b"
-    ]
-    
-    query_lower = current_query.lower()
-    for pattern in followup_patterns:
-        if re.search(pattern, query_lower):
-            last_turn = conversation_window[-1]["turn"]
-            matched_pattern = pattern.replace("\\b", "").replace("(", "").replace(")", "")
-            return {
-                "type": "followup",
-                "needs_retrieval": False,
-                "reuse_turn": last_turn,
-                "context_needed": True,
-                "reason": f"Pattern match: '{matched_pattern}' in query"
-            }
-    
-    # CASE 4: LLM-based smart detection (handles complex cases)
-    if generation_model:
-        return _llm_based_detection(
-            current_query,
-            conversation_window,
-            generation_model
-        )
-    else:
-        # Fallback: assume independent if no LLM available
-        return {
-            "type": "independent",
-            "needs_retrieval": True,
-            "reuse_turn": None,
-            "context_needed": False,
-            "reason": "No generation model available, defaulting to independent"
-        }
-
-
-def _llm_based_detection(
+def determine_next_action(
     current_query: str,
     conversation_window: List[dict],
     generation_model
 ) -> dict:
     """
-    Use LLM to detect if query is follow-up or new topic.
-    Handles complex cases like topic switching.
+    Determines the next best action for the system using an LLM-based router.
+
+    Args:
+        current_query: The user's latest query.
+        conversation_window: The last few turns of the conversation.
+
+    Returns:
+        A dictionary containing the chosen action and any related metadata.
+        Example:
+        {
+            "action": "USE_CACHED_CONTEXT",
+            "new_topic_name": None,
+            "reason": "The user is asking a direct follow-up question."
+        }
     """
-    
-    # Get last 2 turns for context
-    recent_turns = conversation_window[-2:] if len(conversation_window) >= 2 else conversation_window
-    context_summary = ""
-    
-    for turn in recent_turns:
-        context_summary += f"Turn {turn['turn']}: {turn['query']}\n"
-    
-    prompt = f"""You are analyzing if a student's question is a FOLLOW-UP to previous questions or a NEW TOPIC.
-
-PREVIOUS CONVERSATION:
-{context_summary}
-
-CURRENT QUERY: "{current_query}"
-
-RULES:
-1. It's a FOLLOW-UP if:
-   - References previous answers ("that", "it", "those")
-   - Same subject/topic as previous questions
-   - Asks for clarification, examples, or elaboration
-   
-2. It's a NEW TOPIC if:
-   - Completely different subject (e.g., photosynthesis → motion)
-   - No connection to previous questions
-   - Fresh question unrelated to context
-
-Respond ONLY with this JSON format:
-{{
-  "is_followup": true/false,
-  "is_same_topic": true/false,
-  "reasoning": "brief explanation (1 sentence)"
-}}
-
-Examples:
-
-Previous: "What is photosynthesis?"
-Current: "What is Newton's law?"
-Response: {{"is_followup": false, "is_same_topic": false, "reasoning": "Different topics - biology vs physics"}}
-
-Previous: "What is photosynthesis?"
-Current: "How do plants use chlorophyll?"
-Response: {{"is_followup": true, "is_same_topic": true, "reasoning": "Same topic, asking about component of photosynthesis"}}
-
-Previous: "Explain democracy"
-Current: "give me an example"
-Response: {{"is_followup": true, "is_same_topic": true, "reasoning": "Requesting example of previous topic"}}
-"""
-    
-    try:
-        response = generation_model.generate_content(prompt)
-        raw = response.text.strip()
-        
-        # Extract JSON from response
-        if "```json" in raw:
-            raw = raw.split("```json")[1].split("```")[0].strip()
-        elif "```" in raw:
-            raw = raw.split("```")[1].split("```")[0].strip()
-        
-        # Clean up any markdown or extra text
-        raw = raw.strip()
-        
-        result = json.loads(raw)
-        
-        # Validate response structure
-        if "is_followup" not in result or "is_same_topic" not in result:
-            raise ValueError("Invalid LLM response structure")
-        
-        # Determine intent based on LLM analysis
-        if result.get("is_followup") and result.get("is_same_topic"):
-            last_turn = conversation_window[-1]["turn"]
-            return {
-                "type": "followup",
-                "needs_retrieval": False,
-                "reuse_turn": last_turn,
-                "context_needed": True,
-                "reason": f"LLM: {result.get('reasoning', 'Follow-up detected')}"
-            }
-        else:
-            return {
-                "type": "independent",
-                "needs_retrieval": True,
-                "reuse_turn": None,
-                "context_needed": False,
-                "reason": f"LLM: {result.get('reasoning', 'New topic detected')}"
-            }
-    
-    except Exception as e:
-        print(f"[INTENT] ⚠️ LLM detection failed: {e}")
-        # Fallback: assume independent on error
+    # If there's no history, the only action is to retrieve new context.
+    if not conversation_window:
         return {
-            "type": "independent",
-            "needs_retrieval": True,
-            "reuse_turn": None,
-            "context_needed": False,
-            "reason": f"LLM check failed ({str(e)}), defaulting to independent"
+            "action": "RETRIEVE_NEW_CONTEXT",
+            "new_topic_name": current_query, # Use the query as the initial topic name
+            "reason": "This is the first query in the conversation."
         }
 
+    # Build a summary of the last few turns for the LLM prompt.
+    context_summary = ""
+    for turn in conversation_window[-3:]: # Use last 3 turns
+        answer_preview = turn.get('answer', 'No answer was given.')[:200]
+        if len(turn.get('answer', '')) > 200:
+            answer_preview += "..."
+        context_summary += f"Q: {turn['query']}\nA: {answer_preview}\n\n"
 
-def extract_voice_command(query: str) -> Optional[str]:
-    """
-    Extract voice commands from user query.
-    
-    Commands:
-    - "new topic" - Force new search
-    - "repeat" - Repeat last answer
-    - "stop" - Stop current response
-    
-    Args:
-        query: User's voice input
-    
-    Returns:
-        Command name or None
-    """
-    query_lower = query.lower().strip()
-    
-    # New topic command
-    if re.search(r"\bnew topic\b", query_lower):
-        return "new_topic"
-    
-    # Repeat command
-    if re.search(r"\b(repeat|say (that|it) again)\b", query_lower):
-        return "repeat"
-    
-    # Stop command
-    if re.search(r"\b(stop|cancel|nevermind)\b", query_lower):
-        return "stop"
-    
-    return None
+    prompt = f"""You are an AI assistant that analyzes a user's query within an ongoing conversation to decide the next best action.
 
+## Conversation History:
+{context_summary}
 
-def _fuzzy_match_followup(user_query: str, suggested_followups: List[str]) -> Optional[str]:
-    """
-    Check if user's query (in their own words) matches any suggested follow-up.
-    
-    This helps children who cannot speak the exact suggested follow-up text.
-    
-    Example:
-        Suggested: "What are the products of photosynthesis?"
-        Child says: "what does it make?"
-        → Should match!
-    
-    Args:
-        user_query: What the child actually said
-        suggested_followups: List of suggested follow-up questions
-    
-    Returns:
-        Matched follow-up string or None
-    """
-    if not suggested_followups or not user_query:
-        return None
-    
-    user_query_clean = user_query.lower().strip()
-    
-    # Extract keywords from user query (remove common words)
-    stopwords = {'a', 'an', 'the', 'is', 'are', 'was', 'were', 'be', 'been', 'being',
-                 'have', 'has', 'had', 'do', 'does', 'did', 'will', 'would', 'could',
-                 'should', 'can', 'may', 'might', 'must', 'of', 'in', 'on', 'at', 'to',
-                 'for', 'with', 'from', 'by', 'about', 'as', 'into', 'through', 'during',
-                 'before', 'after', 'above', 'below', 'up', 'down', 'out', 'off', 'over',
-                 'under', 'again', 'further', 'then', 'once', 'here', 'there', 'when',
-                 'where', 'why', 'how', 'all', 'both', 'each', 'few', 'more', 'most',
-                 'other', 'some', 'such', 'no', 'nor', 'not', 'only', 'own', 'same',
-                 'so', 'than', 'too', 'very', 'that', 'this', 'these', 'those'}
-    
-    user_words = [w for w in re.findall(r'\b\w+\b', user_query_clean) if w not in stopwords]
-    
-    # Check each suggested follow-up for similarity
-    best_match = None
-    best_score = 0
-    
-    for suggested in suggested_followups:
-        suggested_clean = suggested.lower().strip()
-        suggested_words = [w for w in re.findall(r'\b\w+\b', suggested_clean) if w not in stopwords]
+## User's New Query:
+"{current_query}"
+
+## Available Actions:
+1.  `USE_CACHED_CONTEXT`: Choose this if the user's query is a direct follow-up that can be answered using the same information retrieved for the previous question. Examples: "explain that in more detail," "give me an example," "what does that mean?"
+
+2.  `RETRIEVE_NEW_CONTEXT`: Choose this if the user is asking about a completely new topic, or a related but distinctly different topic that requires searching the textbook for new information. Examples: "Okay, now tell me about photosynthesis," "What about the French Revolution?," "How are magnets different from electricity?"
+
+3.  `ANSWER_FROM_HISTORY`: Choose this if the query can be answered directly from the `Conversation History` provided above, without needing the textbook. Examples: "What was the first question I asked?," "Summarize what we just talked about."
+
+## Your Task:
+Analyze the user's intent and respond in the following JSON format. Choose ONLY ONE action.
+
+{{
+  "analysis": "A brief analysis of the user's intent.",
+  "action": "The single best action to take from the list above.",
+  "new_topic_name": "If the action is 'RETRIEVE_NEW_CONTEXT', provide a short name for the new topic (e.g., 'Photosynthesis'). Otherwise, null."
+}}
+"""
+
+    try:
+        response = generation_model.generate_content(prompt)
+
+        # Safety check: Ensure the response has content.
+        if not response.parts:
+            finish_reason = response.candidates[0].finish_reason if response.candidates else "Unknown"
+            print(f"[ACTION_CLASSIFIER] LLM returned an empty response. Finish Reason: {finish_reason}. Defaulting to new retrieval.")
+            return {
+                "action": "RETRIEVE_NEW_CONTEXT",
+                "new_topic_name": current_query,
+                "reason": f"LLM response was empty or blocked (finish reason: {finish_reason})."
+            }
+
+        response_text = response.text.strip()
         
-        # Calculate keyword overlap
-        if not user_words or not suggested_words:
-            continue
-        
-        common_words = set(user_words) & set(suggested_words)
-        overlap_ratio = len(common_words) / max(len(user_words), len(suggested_words))
-        
-        # Boost score if question words match (what, how, why, where, when, who)
-        question_words = {'what', 'how', 'why', 'where', 'when', 'who', 'which'}
-        user_question_words = set(user_query_clean.split()) & question_words
-        suggested_question_words = set(suggested_clean.split()) & question_words
-        
-        question_match = len(user_question_words & suggested_question_words) > 0
-        
-        # Calculate final score
-        score = overlap_ratio
-        if question_match:
-            score += 0.2  # Boost for matching question type
-        
-        # Special case: user says very short query like "what does it make?"
-        # Check if it's asking about the same core concept
-        if len(user_words) <= 4 and overlap_ratio > 0.4:
-            score += 0.3  # Boost for short, simple questions
-        
-        if score > best_score:
-            best_score = score
-            best_match = suggested
-    
-    # Threshold: need at least 50% similarity
-    if best_score >= 0.5:
-        print(f"[FUZZY MATCH] User query '{user_query}' matched to '{best_match}' (score: {best_score:.2f})")
-        return best_match
-    
-    return None
+        # Extract JSON from response, handling markdown code blocks
+        if "```json" in response_text:
+            response_text = response_text.split("```json")[1].split("```")[0].strip()
+        elif "```" in response_text:
+            response_text = response_text.split("```")[1].split("```")[0].strip()
+
+        result = json.loads(response_text)
+
+        # Validate the response from the LLM
+        if "action" not in result or result["action"] not in ["USE_CACHED_CONTEXT", "RETRIEVE_NEW_CONTEXT", "ANSWER_FROM_HISTORY"]:
+             raise ValueError("LLM response missing or has invalid 'action'.")
+
+        return {
+            "action": result["action"],
+            "new_topic_name": result.get("new_topic_name"),
+            "reason": result.get("analysis", "LLM-based action determination.")
+        }
+
+    except Exception as e:
+        print(f"[ACTION_CLASSIFIER] ⚠️ Action determination failed: {e}. Defaulting to new retrieval.")
+        # In case of any failure, the safest fallback is to re-run the retrieval.
+        return {
+            "action": "RETRIEVE_NEW_CONTEXT",
+            "new_topic_name": current_query,
+            "reason": f"Classifier failed ({str(e)[:100]}), defaulting to new retrieval."
+        }
