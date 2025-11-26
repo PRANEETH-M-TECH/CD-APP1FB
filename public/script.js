@@ -705,15 +705,14 @@ function setupUserPage() {
                 const data = JSON.parse(event.data);
 
                 if (data.type === 'intent') {
-                    intentType = data.intent || 'independent';
-                    // Update intent badge
+                    const intentType = data.intent || 'unknown';
                     updateIntentBadge(thinkingCard, intentType);
                 }
 
                 if (data.type === 'followups') {
                     followups = data.followups || [];
                     currentFollowUps = followups;
-                    // Add follow-up UI
+                    // Add follow-up UI to sticky panel (NO auto-scroll)
                     addFollowUpsUI(thinkingCard, followups);
                 }
 
@@ -729,6 +728,13 @@ function setupUserPage() {
                 if (data.display_text) {
                     fullResponse += data.display_text;
                     contentDiv.innerHTML = marked.parse(fullResponse);
+
+                    // Only scroll if displaying content (NOT for follow-ups)
+                    // Check if user is near bottom before scrolling
+                    const isNearBottom = (chatHistory.scrollHeight - chatHistory.scrollTop - chatHistory.clientHeight) < 100;
+                    if (isNearBottom) {
+                        chatHistory.scrollTop = chatHistory.scrollHeight;
+                    }
                 }
 
                 if (data.read_text) {
@@ -741,8 +747,6 @@ function setupUserPage() {
                     submitButton.removeAttribute('disabled');
                     listChaptersBtn.classList.remove('hidden');
                 }
-
-                chatHistory.scrollTop = chatHistory.scrollHeight;
 
             } catch (e) {
                 console.error('Error parsing SSE data:', e, event.data);
@@ -805,46 +809,96 @@ function setupUserPage() {
     /**
      * Add Follow-up Suggestions UI to AI Card
      */
+    // Updated to use sticky panel instead of inline
     function addFollowUpsUI(cardElement, followups) {
-        if (!followups || followups.length === 0) return;
+        if (!followups || followups.length === 0) {
+            // Hide sticky panel if no follow-ups
+            const stickyPanel = document.getElementById('followup-sticky-panel');
+            if (stickyPanel) {
+                stickyPanel.classList.add('hidden');
+            }
+            return;
+        }
 
-        const followupSection = cardElement.querySelector('.followup-section');
-        if (!followupSection) return;
+        // Show and populate sticky panel
+        const stickyPanel = document.getElementById('followup-sticky-panel');
+        const stickyContent = document.getElementById('followup-sticky-content');
 
-        followupSection.style.display = 'block';
+        if (!stickyPanel || !stickyContent) return;
 
-        let html = `
-            <h4 onclick="toggleFollowups(this)">
-                <span class="toggle-icon">▼</span>
-                💡 Follow-up Suggestions
-            </h4>
-            <div class="followup-chips">
-        `;
+        // Show panel
+        stickyPanel.classList.remove('hidden');
+        stickyPanel.classList.remove('collapsed');
 
+        // Fun emoji array
+        const emojis = ['💡', '🤔', '🔍', '⭐', '🎯', '💭', '🌟', '✨'];
+
+        let html = '';
+
+        // Add follow-up chips
         followups.forEach((followup, index) => {
+            const escapedFollowup = followup.replace(/'/g, "\\'");
+            const emoji = emojis[index % emojis.length];
             html += `
-                <button class="followup-chip" onclick="handleFollowupClick('${followup.replace(/'/g, "\\'")}')">
-                    <span>🔹</span>
-                    <span>${followup}</span>
+                <button class="followup-chip" onclick="handleFollowupClick('${escapedFollowup}')">
+                    <span class="followup-chip-icon">${emoji}</span>
+                    <span class="followup-chip-text">${followup}</span>
                 </button>
             `;
         });
 
+        // Add custom input
         html += `
-            </div>
-            <div class="inline-followup-container">
-                <label>✏️ Or ask your own follow-up:</label>
-                <div class="inline-input-group">
+            <div class="followup-sticky-custom">
+                <label>📝 Or ask your own:</label>
+                <div class="followup-sticky-input-group">
                     <input type="text" 
-                           placeholder="Type your question here..." 
-                           onkeypress="if(event.key === 'Enter') handleInlineFollowup(this)" />
-                    <button onclick="handleInlineFollowup(this.previousElementSibling)">📤 Send</button>
+                           id="sticky-followup-input"
+                           placeholder="Type or speak your question..." 
+                           onkeypress="if(event.key === 'Enter') handleStickyFollowup(this)" />
+                    <button class="followup-sticky-voice-btn" 
+                            onclick="handleCustomFollowupVoice()"
+                            title="Speak your question">
+                        🎤
+                    </button>
+                    <button class="followup-sticky-send-btn" 
+                            onclick="handleStickyFollowup(document.getElementById('sticky-followup-input'))">
+                        📤 Send
+                    </button>
                 </div>
             </div>
         `;
 
-        followupSection.innerHTML = html;
+        stickyContent.innerHTML = html;
     }
+
+    // Handle sticky panel input
+    window.handleStickyFollowup = function (input) {
+        const question = input.value.trim();
+        if (!question) return;
+
+        const queryText = document.getElementById('query-text');
+        if (!queryText) return;
+
+        queryText.value = question;
+        input.value = '';
+
+        // Trigger form submission
+        const form = document.getElementById('user-query-form');
+        if (form) {
+            const event = new Event('submit', { bubbles: true, cancelable: true });
+            form.dispatchEvent(event);
+        }
+    };
+
+    // Toggle sticky panel collapsed state
+    window.toggleFollowupPanel = function () {
+        const panel = document.getElementById('followup-sticky-panel');
+        if (panel) {
+            panel.classList.toggle('collapsed');
+        }
+    };
+
 
     async function handleListChapters() {
         if (!selectedBook) return;
@@ -1034,5 +1088,218 @@ window.speakMessage = function (button) {
         utterance.onstart = () => { if (button) button.textContent = '🔇'; };
         utterance.onend = () => { if (button) button.textContent = '🔊'; };
         speechSynthesis.speak(utterance);
+    }
+}
+
+/**
+ * =====================================================
+ * VOICE INPUT FOR FOLLOW-UP QUESTIONS
+ * =====================================================
+ */
+
+// Global state for followup voice recognition
+let followupVoiceRecognition = null;
+let followupVoiceTranscript = '';
+let isFollowupVoiceActive = false;
+
+// Create voice overlay for follow-up recording
+function createFollowupVoiceOverlay() {
+    const overlay = document.createElement('div');
+    overlay.id = 'followup-voice-overlay';
+    overlay.className = 'followup-voice-overlay';
+    overlay.innerHTML = `
+        <div class="followup-voice-content">
+            <h3>🎤 Speak Your Follow-up Question</h3>
+            <div class="followup-voice-animation">
+                <div class="followup-voice-bar"></div>
+                <div class="followup-voice-bar"></div>
+                <div class="followup-voice-bar"></div>
+                <div class="followup-voice-bar"></div>
+                <div class="followup-voice-bar"></div>
+            </div>
+            <div class="followup-voice-transcript" id="followup-voice-transcript">
+                Listening...
+            </div>
+            <div class="followup-voice-actions">
+                <button class="followup-voice-cancel" onclick="cancelFollowupVoice()">
+                    ✕ Cancel
+                </button>
+                <button class="followup-voice-submit" id="followup-voice-submit" onclick="submitFollowupVoice()" disabled>
+                    ✓ Submit
+                </button>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(overlay);
+}
+
+// Initialize speech recognition for follow-ups
+function initFollowupVoiceRecognition() {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+        alert('Voice recognition is not supported in your browser. Please use Chrome, Edge, or Safari.');
+        return null;
+    }
+
+    const recognition = new SpeechRecognition();
+    recognition.continuous = true;
+    recognition.interimResults = true;
+    recognition.lang = 'en-US';
+
+    recognition.onstart = () => {
+        console.log('[FollowupVoice] Recognition started');
+        isFollowupVoiceActive = true;
+    };
+
+    recognition.onresult = (event) => {
+        let interimTranscript = '';
+        let finalTranscript = '';
+
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+            const transcript = event.results[i][0].transcript;
+            if (event.results[i].isFinal) {
+                finalTranscript += transcript + ' ';
+            } else {
+                interimTranscript += transcript;
+            }
+        }
+
+        // Update global transcript
+        if (finalTranscript) {
+            followupVoiceTranscript = (followupVoiceTranscript + ' ' + finalTranscript).trim();
+        }
+
+        // Display transcript
+        const transcriptEl = document.getElementById('followup-voice-transcript');
+        if (transcriptEl) {
+            const displayText = followupVoiceTranscript + (interimTranscript ? ' ' + interimTranscript : '');
+            transcriptEl.textContent = displayText || 'Listening...';
+
+            // Enable submit button if we have text
+            const submitBtn = document.getElementById('followup-voice-submit');
+            if (submitBtn) {
+                submitBtn.disabled = !followupVoiceTranscript.trim();
+            }
+        }
+    };
+
+    recognition.onerror = (event) => {
+        console.error('[FollowupVoice] Recognition error:', event.error);
+        const transcriptEl = document.getElementById('followup-voice-transcript');
+        if (transcriptEl) {
+            transcriptEl.textContent = `Error: ${event.error}. Please try again.`;
+            transcriptEl.style.color = '#ef4444';
+        }
+    };
+
+    recognition.onend = () => {
+        console.log('[FollowupVoice] Recognition ended');
+        isFollowupVoiceActive = false;
+    };
+
+    return recognition;
+}
+
+// Handle voice button click for custom follow-up input
+window.handleCustomFollowupVoice = function () {
+    console.log('[FollowupVoice] Starting voice input for custom follow-up');
+
+    // Reset transcript
+    followupVoiceTranscript = '';
+
+    // Initialize recognition if needed
+    if (!followupVoiceRecognition) {
+        followupVoiceRecognition = initFollowupVoiceRecognition();
+        if (!followupVoiceRecognition) return; // Not supported
+    }
+
+    // Show overlay
+    const overlay = document.getElementById('followup-voice-overlay');
+    if (overlay) {
+        overlay.classList.add('active');
+
+        // Reset UI
+        const transcriptEl = document.getElementById('followup-voice-transcript');
+        if (transcriptEl) {
+            transcriptEl.textContent = 'Listening...';
+            transcriptEl.style.color = '#374151';
+        }
+
+        const submitBtn = document.getElementById('followup-voice-submit');
+        if (submitBtn) {
+            submitBtn.disabled = true;
+        }
+    }
+
+    // Start recognition
+    try {
+        followupVoiceRecognition.start();
+    } catch (e) {
+        console.error('[FollowupVoice] Failed to start recognition:', e);
+        // If already running, stop and restart
+        followupVoiceRecognition.stop();
+        setTimeout(() => {
+            try {
+                followupVoiceRecognition.start();
+            } catch (err) {
+                console.error('[FollowupVoice] Failed to restart recognition:', err);
+                alert('Could not start voice recognition. Please try again.');
+                closeFollowupVoiceOverlay();
+            }
+        }, 300);
+    }
+};
+
+// Cancel voice input
+window.cancelFollowupVoice = function () {
+    console.log('[FollowupVoice] Canceling voice input');
+
+    if (followupVoiceRecognition && isFollowupVoiceActive) {
+        followupVoiceRecognition.stop();
+    }
+
+    closeFollowupVoiceOverlay();
+    followupVoiceTranscript = '';
+};
+
+// Submit voice input as follow-up query
+window.submitFollowupVoice = function () {
+    console.log('[FollowupVoice] Submitting voice input:', followupVoiceTranscript);
+
+    if (!followupVoiceTranscript.trim()) {
+        alert('No speech detected. Please try again.');
+        return;
+    }
+
+    // Stop recognition
+    if (followupVoiceRecognition && isFollowupVoiceActive) {
+        followupVoiceRecognition.stop();
+    }
+
+    // Close overlay
+    closeFollowupVoiceOverlay();
+
+    // Submit as follow-up query
+    const queryText = document.getElementById('query-text');
+    if (queryText) {
+        queryText.value = followupVoiceTranscript;
+
+        // Trigger form submission
+        const form = document.getElementById('user-query-form');
+        if (form) {
+            const event = new Event('submit', { bubbles: true, cancelable: true });
+            form.dispatchEvent(event);
+        }
+    }
+
+    // Reset transcript
+    followupVoiceTranscript = '';
+};
+
+// Helper to close overlay
+function closeFollowupVoiceOverlay() {
+    const overlay = document.getElementById('followup-voice-overlay');
+    if (overlay) {
+        overlay.classList.remove('active');
     }
 }

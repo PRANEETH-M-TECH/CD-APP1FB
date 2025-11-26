@@ -451,6 +451,21 @@
         </div>
       </div>
 
+      <!-- Sticky Follow-up Panel -->
+      <div id="followup-sticky-panel" class="hidden">
+        <div class="followup-sticky-header">
+          <span class="followup-sticky-title">💡 Quick Follow-ups</span>
+          <button id="toggle-followup-btn" onclick="toggleFollowupPanel()" aria-label="Toggle follow-up panel">
+            <svg class="followup-toggle-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+        </div>
+        <div id="followup-sticky-content" class="followup-sticky-content">
+          <!-- Follow-up chips will be inserted here -->
+        </div>
+      </div>
+
       <!-- Chat Input -->
       <div id="chat-input-container" class="p-4 border-t border-gray-200 bg-white shadow-inner">
         <div class="flex justify-start mb-2 gap-2">
