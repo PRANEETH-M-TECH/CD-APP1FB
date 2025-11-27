@@ -47,43 +47,93 @@ def determine_next_action(
     current_query: str,
     conversation_window: List[dict],
     generation_model,
-    embedder=None
+    embedder=None,
+    is_clicked_followup: bool = False,  # NEW: Flag for pre-generated follow-up clicks
+    last_action: str = None  # NEW: Previous action for context awareness
 ) -> dict:
     """
-    Determines the next best action for the system using semantic similarity + LLM-based routing.
+    Determine the next action using 5-TIER intelligent routing:
     
-    Enhanced with semantic similarity scoring for intelligent cache reuse.
-
+    TIER 1: Clicked follow-ups (absolute priority - always use cache)
+    TIER 2: Empty conversation (must retrieve)
+    TIER 3: Meta-conversational queries (answer from history)
+    TIER 4: Semantic similarity analysis (smart cache/retrieval)
+    TIER 5: LLM fallback for edge cases
+    
     Args:
-        current_query: The user's latest query.
-        conversation_window: The last few turns of the conversation.
-        generation_model: LLM model for classification
-        embedder: Sentence transformer for similarity calculation (optional)
-
+        current_query: User's current query
+        conversation_window: List of recent conversation turns
+        generation_model: LLM for classification
+        embedder: Sentence transformer for similarity
+        is_clicked_followup: True if user clicked a pre-generated follow-up
+        last_action: Previous action taken (for context)
+    
     Returns:
-        A dictionary containing the chosen action and any related metadata.
-        Example:
         {
-            "action": "USE_CACHED_CONTEXT",
-            "new_topic_name": None,
-            "reason": "High semantic similarity with recent queries",
-            "similarity_score": 0.82
+            "action": "USE_CACHED_CONTEXT" | "RETRIEVE_NEW_CONTEXT" | "ANSWER_FROM_HISTORY",
+            "reason": str,
+            "similarity_score": float,
+            "tier": str,
+            "new_topic_name": str (optional)
         }
     """
+    
+    # === TIER 1: ABSOLUTE PRIORITY FOR CLICKED FOLLOW-UPS ===
+    if is_clicked_followup:
+        # If parent query used cache, follow-up definitely can too
+        if last_action == "USE_CACHED_CONTEXT":
+            print(f"[TIER 1] ⚡ Clicked follow-up + cached parent → Guaranteed cache reuse")
+            return {
+                "action": "USE_CACHED_CONTEXT",
+                "reason": "Pre-generated follow-up with cached parent context",
+                "similarity_score": 1.0,
+                "tier": "ABSOLUTE_PRIORITY",
+                "confidence": "GUARANTEED"
+            }
+        
+        # Even if parent did retrieval, follow-ups are generated from those chunks
+        print(f"[TIER 1] ✓ Clicked follow-up → Strong cache preference")
+        return {
+            "action": "USE_CACHED_CONTEXT",
+            "reason": "Pre-generated follow-ups are contextually guaranteed to be related",
+            "similarity_score": 0.95,
+            "tier": "STRONG_PREFERENCE",
+            "confidence": "HIGH"
+        }
+    
     # Similarity thresholds for cache decisions
     HIGH_SIMILARITY_THRESHOLD = 0.75  # Very similar → use cache
     MEDIUM_SIMILARITY_THRESHOLD = 0.50  # Somewhat similar → ask LLM
     
-    # If there's no history, the only action is to retrieve new context.
+    # === TIER 2: EMPTY CONVERSATION ===
     if not conversation_window:
+        print(f"[TIER 2] 🆕 First query → Retrieval required")
         return {
             "action": "RETRIEVE_NEW_CONTEXT",
             "new_topic_name": current_query[:50],  # Use query as initial topic name
-            "reason": "This is the first query in the conversation.",
-            "similarity_score": 0.0
+            "reason": "First query in conversation - no context available",
+            "similarity_score": 0.0,
+            "tier": "INITIAL_QUERY"
         }
 
-    # === SEMANTIC SIMILARITY ANALYSIS ===
+    # === TIER 3: META-CONVERSATIONAL QUERIES ===
+    # Queries about the conversation itself, not about the topic
+    meta_patterns = [
+        "what was", "what did", "earlier", "previous", "before",
+        "remind me", "first question", "last", "summarize", "review"
+    ]
+    query_lower = current_query.lower()
+    if any(pattern in query_lower for pattern in meta_patterns):
+        print(f"[TIER 3] 💬 Meta-conversational query detected → Answer from history")
+        return {
+            "action": "ANSWER_FROM_HISTORY",
+            "new_topic_name": None,
+            "reason": "User asking about previous conversation content",
+            "similarity_score": 0.0,
+            "tier": "META_QUERY"
+        }
+
+    # === TIER 4: SEMANTIC SIMILARITY ANALYSIS ===
     max_similarity = 0.0
     similarity_scores = []
     
@@ -94,46 +144,46 @@ def determine_next_action(
             similarity_scores = calculate_query_similarity(current_query, recent_queries, embedder)
             max_similarity = max(similarity_scores) if similarity_scores else 0.0
             
-            print(f"[SIMILARITY] Current query: '{current_query[:50]}...'")
-            print(f"[SIMILARITY] Comparing with {len(recent_queries)} recent queries")
+            print(f"[TIER 4] 🔍 Semantic similarity analysis:")
+            print(f"[TIER 4]   Current query: '{current_query[:50]}...'")
+            print(f"[TIER 4]   Comparing with {len(recent_queries)} recent queries")
             for i, (prev_q, score) in enumerate(zip(recent_queries, similarity_scores)):
-                print(f"[SIMILARITY]   {i+1}. '{prev_q[:40]}...' → {score:.3f}")
-            print(f"[SIMILARITY] Max similarity: {max_similarity:.3f}")
+                print(f"[TIER 4]     {i+1}. '{prev_q[:40]}...' → {score:.3f}")
+            print(f"[TIER 4]   Max similarity: {max_similarity:.3f}")
         except Exception as e:
-            print(f"[SIMILARITY] ⚠️ Error during similarity calculation: {e}")
+            print(f"[TIER 4] ⚠️ Error during similarity calculation: {e}")
             max_similarity = 0.0
     else:
-        print(f"[SIMILARITY] ⚠️ No embedder provided, skipping similarity check")
+        print(f"[TIER 4] ⚠️ No embedder provided, skipping similarity check")
     
-    # === FAST PATH: HIGH SIMILARITY → USE CACHE ===
+    # High similarity → Cache reuse
     if max_similarity >= HIGH_SIMILARITY_THRESHOLD:
-        print(f"[FAST PATH] ⚡ High similarity ({max_similarity:.3f}) → Using cached context")
+        print(f"[TIER 4] ⚡ High similarity ({max_similarity:.3f}) → Cache reuse")
         return {
             "action": "USE_CACHED_CONTEXT",
             "new_topic_name": None,
             "reason": f"High semantic similarity ({max_similarity:.2f}) with recent queries - using cached context for speed",
-            "similarity_score": max_similarity
+            "similarity_score": max_similarity,
+            "tier": "HIGH_SIMILARITY"
         }
     
-    # === FAST PATH: VERY LOW SIMILARITY + SUBSTANTIAL HISTORY → LIKELY NEW TOPIC ===
-    # But still use LLM for conversational queries like "what was my first question?"
+    # Low similarity + substantial history → Likely new topic
+    # But double-check it's not a meta-query first
     if max_similarity < MEDIUM_SIMILARITY_THRESHOLD and len(conversation_window) >= 2:
-        # Check if it's a meta-conversational query (about the conversation itself)
-        meta_keywords = ['first', 'previous', 'earlier', 'before', 'summarize', 'what did', 'talked about']
-        is_meta_query = any(keyword in current_query.lower() for keyword in meta_keywords)
-        
-        if not is_meta_query:
-            print(f"[FAST PATH] 🔍 Low similarity ({max_similarity:.3f}) + not meta-query → New retrieval")
+        if not any(p in query_lower for p in meta_patterns):
+            print(f"[TIER 4] 🔍 Low similarity ({max_similarity:.3f}) → New retrieval")
             return {
                 "action": "RETRIEVE_NEW_CONTEXT",
                 "new_topic_name": current_query[:50],
-                "reason": f"Low semantic similarity ({max_similarity:.2f}) indicates new topic",
-                "similarity_score": max_similarity
+                "reason": f"Low similarity ({max_similarity:.2f}) suggests topic change",
+                "similarity_score": max_similarity,
+                "tier": "LOW_SIMILARITY"
             }
 
 
-    # === LLM-BASED CLASSIFICATION (for edge cases) ===
-    print(f"[LLM CLASSIFIER] Using LLM for edge case (similarity: {max_similarity:.3f})")
+    # === TIER 5: LLM FALLBACK FOR EDGE CASES ===
+    # Medium similarity (0.50-0.75) or uncertain cases
+    print(f"[TIER 5] 🤖 LLM classifier for edge case (similarity: {max_similarity:.3f})")
     
     # Build a summary of the last few turns for the LLM prompt.
     context_summary = ""
@@ -217,15 +267,17 @@ Analyze the user's intent and respond in the following JSON format. Choose ONLY 
             "action": result["action"],
             "new_topic_name": result.get("new_topic_name"),
             "reason": result.get("analysis", "LLM-based action determination."),
-            "similarity_score": max_similarity
+            "similarity_score": max_similarity,
+            "tier": "LLM_FALLBACK"
         }
 
     except Exception as e:
-        print(f"[ACTION_CLASSIFIER] ⚠️ Action determination failed: {e}. Defaulting to new retrieval.")
-        # In case of any failure, the safest fallback is to re-run the retrieval.
+        print(f"[TIER 5] ❌ LLM classification error: {e}")
+        # Safe fallback: default to safe retrieval
         return {
             "action": "RETRIEVE_NEW_CONTEXT",
             "new_topic_name": current_query[:50],
-            "reason": f"Classifier failed ({str(e)[:100]}), defaulting to new retrieval.",
-            "similarity_score": max_similarity
+            "reason": f"Classification error - defaulting to safe retrieval (error: {str(e)[:100]})",
+            "similarity_score": max_similarity,
+            "tier": "ERROR_FALLBACK"
         }

@@ -108,17 +108,42 @@ class SmartSessionManager:
 
     def add_turn(self, session_id: str, turn_data: dict):
         """
-        Add a new conversation turn to the session.
+        Add a conversation turn to the current topic and update session statistics.
         
         Args:
             session_id: Session ID
-            turn_data: Dictionary containing turn information
+            turn_data: Turn data including query, answer, intent_type, tier, etc.
         """
         session = redis_service.get_session(session_id)
         if not session:
             print(f"[SESSION] ⚠️ Session {session_id} not found in Redis")
             return
-
+        
+        # Initialize statistics if not present (NEW)
+        if "statistics" not in session:
+            session["statistics"] = {
+                "total_turns": 0,
+                "cache_hits": 0,
+                "cache_misses": 0,
+                "tier_distribution": {},
+                "created_at": session.get("created_at")
+            }
+        
+        # Update statistics (NEW)
+        session["statistics"]["total_turns"] += 1
+        
+        intent_type = turn_data.get("intent_type")
+        if intent_type == "USE_CACHED_CONTEXT":
+            session["statistics"]["cache_hits"] += 1
+        elif intent_type == "RETRIEVE_NEW_CONTEXT":
+            session["statistics"]["cache_misses"] += 1
+        
+        # Track tier distribution (NEW)
+        tier = turn_data.get("tier", "unknown")
+        if tier not in session["statistics"]["tier_distribution"]:
+            session["statistics"]["tier_distribution"][tier] = 0
+        session["statistics"]["tier_distribution"][tier] += 1
+        
         turn_data["turn"] = len(session["full_history"]) + 1
         turn_data["topic_id"] = session["current_topic_id"]
         turn_data["timestamp"] = datetime.now().isoformat()

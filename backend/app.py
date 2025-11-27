@@ -1056,18 +1056,30 @@ async def smart_query_engine(
             session = session_manager.get_or_create_session(book_uuid, session_id)
             active_context_window = session["active_context_window"]
             
-            # 2. Determine the next action using the new classifier with semantic similarity
+            # Extract last action for context awareness (NEW)
+            last_action = None
+            if active_context_window:
+                last_action = active_context_window[-1].get("intent_type")
+            
+            print(f"[CONTEXT] Last action: {last_action}")
+            print(f"[CONTEXT] Is clicked follow-up: {is_clicked_followup}\n")
+            
+            # 2. Determine the next action using 5-tier routing (UPDATED)
             action_details = determine_next_action(
                 current_query=query,
                 conversation_window=active_context_window,
                 generation_model=qdrant.generation_model,
-                embedder=qdrant.local_embedder  # Pass embedder for similarity analysis
+                embedder=qdrant.local_embedder,  # Pass embedder for similarity analysis
+                is_clicked_followup=is_clicked_followup,  # NEW: Flag for clicked follow-ups
+                last_action=last_action  # NEW: Previous action for context
             )
             action = action_details.get("action")
             reason = action_details.get("reason", "No reason provided.")
             similarity_score = action_details.get("similarity_score", 0.0)
+            tier = action_details.get("tier", "UNKNOWN")
             
             print(f"[ACTION] Determined Action: {action}")
+            print(f"[ACTION] Tier: {tier}")
             print(f"[ACTION] Reason: {reason}")
             print(f"[ACTION] Similarity Score: {similarity_score:.3f}\n")
             
@@ -1210,6 +1222,8 @@ Answer the question based only on the history.
             turn_data = {
                 "query": query, "reformulated": reformulated_query, "answer": full_answer,
                 "intent_type": action, "is_clicked_followup": is_clicked_followup,
+                "tier": tier,  # NEW: Track which tier determined the action
+                "similarity_score": similarity_score,  # NEW: Track similarity for analytics
                 "follow_ups": follow_ups, "timestamp": datetime.datetime.now().isoformat()
             }
             if action == "RETRIEVE_NEW_CONTEXT":

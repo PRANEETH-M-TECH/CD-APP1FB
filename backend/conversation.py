@@ -9,6 +9,7 @@ from cachetools import TTLCache
 from fastapi import WebSocket
 import json
 
+from . import qdrant  # NEW: Import qdrant module for generation_model and embedder
 from .qdrant import (
     get_book_metadata,
     hybrid_search,
@@ -84,21 +85,36 @@ class ConversationManager:
             conv.session_id = session["session_id"]
             active_context_window = session["active_context_window"]
             
-            # 2. Determine next action with semantic similarity
+            # Extract last action for context awareness (NEW)
+            last_action = None
+            if active_context_window:
+                last_action = active_context_window[-1].get("intent_type")
+            
+            # 2. Determine next action with semantic similarity and 5-tier routing
             action_details = determine_next_action(
                 current_query=query,
                 conversation_window=active_context_window,
                 generation_model=qdrant.generation_model,
-                embedder=qdrant.local_embedder  # Pass embedder for similarity analysis
+                embedder=qdrant.local_embedder,  # Pass embedder for similarity analysis
+                is_clicked_followup=False,  # WebSocket queries are always typed (not clicked)
+                last_action=last_action  # NEW: Previous action for context
             )
             action = action_details.get("action")
             similarity_score = action_details.get("similarity_score", 0.0)
+            tier = action_details.get("tier", "UNKNOWN")
             
             print(f"[ACTION] Determined Action: {action}")
+            print(f"[ACTION] Tier: {tier}")
             print(f"[ACTION] Reason: {action_details.get('reason')}")
             print(f"[ACTION] Similarity Score: {similarity_score:.3f}\n")
             
-            await self._safe_send(conv.websocket, {'type': 'intent', 'intent_type': action})
+            await self._safe_send(conv.websocket, {
+                'type': 'intent', 
+                'intent_type': action,
+                'tier': tier,  # NEW: Send tier information
+                'similarity_score': similarity_score,  # NEW: Send similarity score
+                'cache_hit': action == "USE_CACHED_CONTEXT"  # NEW: Cache hit indicator
+            })
             
             # 3. Execute action
             search_results = []
@@ -118,7 +134,8 @@ class ConversationManager:
                 search_results, _, _ = hybrid_search(
                     book_uuid=conv.book_uuid,
                     query=processed_query_data.get("reformulated_query", query),
-                    keywords=processed_query_data.get("keywords", [])
+                    keywords=processed_query_data.get("keywords", []),
+                    conceptual_score=processed_query_data.get("conceptual_score", 0.5)
                 )
                 print(f"[RETRIEVAL] ✓ Retrieved {len(search_results)} chunks\n")
                 
@@ -139,7 +156,12 @@ class ConversationManager:
                     action = "RETRIEVE_NEW_CONTEXT" # Update action for logging
                     metadata = get_book_metadata(conv.book_uuid)
                     processed_query_data = reformulate_and_classify_query(query=query, class_name=metadata.get("class_name"), subject=metadata.get("subject"))
-                    search_results, _, _ = hybrid_search(book_uuid=conv.book_uuid, query=processed_query_data.get("reformulated_query", query), keywords=processed_query_data.get("keywords", []))
+                    search_results, _, _ = hybrid_search(
+                        book_uuid=conv.book_uuid,
+                        query=processed_query_data.get("reformulated_query", query),
+                        keywords=processed_query_data.get("keywords", []),
+                        conceptual_score=processed_query_data.get("conceptual_score", 0.5)
+                    )
                     if search_results:
                         context = "\n\n---\n\n".join([payload['text'] for score, payload in search_results])
                         session_manager.update_topic_chunks(conv.session_id, search_results)

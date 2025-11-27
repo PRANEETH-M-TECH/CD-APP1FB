@@ -462,8 +462,8 @@ class ConversationMode {
     handleWebSocketMessage(data) {
         switch (data.type) {
             case 'intent':
-                // Update UI to show intent type
-                this.updateSessionStatus(data.intent_type, data.turn);
+                // Update UI to show intent type with tier and cache info
+                this.updateSessionStatus(data.intent_type, data.turn, data.tier, data.similarity_score, data.cache_hit);
                 break;
             case 'followups':
                 // Store and display follow-up suggestions
@@ -497,6 +497,87 @@ class ConversationMode {
                 if (window.speechSynthesis) window.speechSynthesis.cancel();
                 break;
         }
+    }
+
+    /**
+     * Update session status display with tier and cache information
+     */
+    updateSessionStatus(intentType, turn, tier, similarityScore, cacheHit) {
+        const statusEl = document.getElementById('conversation-session-status');
+        if (!statusEl) return;
+
+        // Create tier badge
+        const tierBadge = this.createTierBadge(tier);
+
+        // Create cache indicator
+        const cacheIndicator = cacheHit ?
+            '<span class="cache-hit">⚡ Cache Hit</span>' :
+            '<span class="cache-miss">🔍 Full Retrieval</span>';
+
+        // Create similarity display
+        const similarityDisplay = similarityScore !== undefined && similarityScore > 0 ?
+            `<span class="similarity-score">📊 ${(similarityScore * 100).toFixed(0)}% similar</span>` :
+            '';
+
+        statusEl.innerHTML = `
+            <div class="session-status-content">
+                ${tierBadge}
+                ${cacheIndicator}
+                ${similarityDisplay}
+                <span class="intent-type">${this.formatIntentType(intentType)}</span>
+            </div>
+        `;
+
+        // Auto-hide after 5 seconds
+        setTimeout(() => {
+            if (statusEl) statusEl.innerHTML = '';
+        }, 5000);
+    }
+
+    /**
+     * Create tier badge HTML
+     */
+    createTierBadge(tier) {
+        if (!tier) return '';
+
+        const tierColors = {
+            'ABSOLUTE_PRIORITY': '#10b981', // Green
+            'STRONG_PREFERENCE': '#6366f1', // Indigo
+            'INITIAL_QUERY': '#f59e0b',     // Amber
+            'META_QUERY': '#8b5cf6',        // Purple
+            'HIGH_SIMILARITY': '#06b6d4',   // Cyan
+            'LOW_SIMILARITY': '#ef4444',    // Red
+            'LLM_FALLBACK': '#64748b',      // Slate
+            'ERROR_FALLBACK': '#dc2626'     // Dark red
+        };
+
+        const tierLabels = {
+            'ABSOLUTE_PRIORITY': 'TIER 1: Clicked',
+            'STRONG_PREFERENCE': 'TIER 1: Follow-up',
+            'INITIAL_QUERY': 'TIER 2: First Query',
+            'META_QUERY': 'TIER 3: Meta',
+            'HIGH_SIMILARITY': 'TIER 4: High Sim',
+            'LOW_SIMILARITY': 'TIER 4: New Topic',
+            'LLM_FALLBACK': 'TIER 5: LLM',
+            'ERROR_FALLBACK': 'ERROR'
+        };
+
+        const color = tierColors[tier] || '#64748b';
+        const label = tierLabels[tier] || tier;
+
+        return `<span class="tier-badge" style="background-color: ${color};">${label}</span>`;
+    }
+
+    /**
+     * Format intent type for display
+     */
+    formatIntentType(intentType) {
+        const labels = {
+            'USE_CACHED_CONTEXT': 'Using Cache',
+            'RETRIEVE_NEW_CONTEXT': 'New Retrieval',
+            'ANSWER_FROM_HISTORY': 'From History'
+        };
+        return labels[intentType] || intentType;
     }
 
     speakChunk(text) {
@@ -890,21 +971,19 @@ class ConversationMode {
 
         followupsContainer.style.display = 'block';
         followupsContainer.innerHTML = `
-            <div class="voice-followups-header" style="color: #1f2937; font-weight: 700;">
+            <div class="voice-followups-header">
                 <span class="icon">💡</span>
-                <h4 style="color: #1f2937; margin: 0;">You could ask about:</h4>
+                <h4>You could ask about:</h4>
             </div>
-            <ul class="voice-followups-list" style="list-style: none; padding: 0;">
+            <ul class="voice-followups-list">
                 ${this.currentFollowups.map((followup, idx) => `
-                    <li class="voice-followup-item" 
-                        data-followup="${followup.replace(/"/g, '&quot;')}" 
-                        style="margin: 0.5rem 0; padding: 0.75rem; background: #f3f4f6; border-left: 3px solid #3b82f6; border-radius: 8px; cursor: pointer; transition: all 0.2s ease;">
-                        <span class="followup-icon" style="color: #3b82f6; font-weight: bold; margin-right: 0.5rem;">•</span>
-                        <span class="followup-text" style="color: #1f2937; font-size: 0.9375rem; font-weight: 500;">${followup}</span>
+                    <li class="voice-followup-item" data-followup="${followup.replace(/"/g, '&quot;')}">
+                        <span class="followup-icon">•</span>
+                        <span class="followup-text">${followup}</span>
                     </li>
                 `).join('')}
             </ul>
-            <p class="voice-followup-hint" style="color: #6b7280; font-style: italic; text-align: center; margin-top: 0.75rem;">🎙️ Tap a question or speak your own</p>
+            <p class="voice-followup-hint">🎙️ Tap a question or speak your own</p>
         `;
 
         // Add click handlers to each follow-up item
@@ -913,18 +992,6 @@ class ConversationMode {
             item.addEventListener('click', () => {
                 const followupText = item.getAttribute('data-followup');
                 this.handleFollowupClick(followupText);
-            });
-
-            // Hover effects
-            item.addEventListener('mouseenter', () => {
-                item.style.background = '#e0e7ff';
-                item.style.borderLeftColor = '#10b981';
-                item.style.transform = 'translateX(4px)';
-            });
-            item.addEventListener('mouseleave', () => {
-                item.style.background = '#f3f4f6';
-                item.style.borderLeftColor = '#3b82f6';
-                item.style.transform = 'translateX(0)';
             });
         });
     }

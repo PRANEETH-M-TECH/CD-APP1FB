@@ -811,10 +811,6 @@ function setupUserPage() {
      * Add Follow-up Suggestions UI to AI Card
      */
     function addFollowUpsUI(cardElement, followups) {
-        // Always return to prevent displaying follow-up suggestions
-        // This keeps the backend generating them for testing, but hides them from the UI.
-        return;
-
         if (!followups || followups.length === 0) return;
 
         const followupSection = cardElement.querySelector('.followup-section');
@@ -847,27 +843,8 @@ function setupUserPage() {
         });
 
         html += `</div>`;
-
-        // Add custom input inline
-        html += `
-            <div class="followup-inline-custom">
-                <label>📝 Or ask your own:</label>
-                <div class="followup-inline-input-group">
-                    <input type="text" 
-                           placeholder="Type or speak your question..." 
-                           onkeypress="if(event.key === 'Enter') handleInlineFollowup(this)" />
-                    <button class="followup-voice-btn" 
-                            onclick="handleCustomFollowupVoice()"
-                            title="Speak your question">
-                        🎤
-                    </button>
-                    <button class="followup-send-btn" 
-                            onclick="handleInlineFollowup(this.previousElementSibling.previousElementSibling)">
-                        📤
-                    </button>
-                </div>
-            </div>
-        `;
+        
+        // Removed custom input field as per user request (redundant with main chat)
 
         followupSection.innerHTML = html;
 
