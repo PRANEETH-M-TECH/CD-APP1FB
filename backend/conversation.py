@@ -84,16 +84,19 @@ class ConversationManager:
             conv.session_id = session["session_id"]
             active_context_window = session["active_context_window"]
             
-            # 2. Determine next action
+            # 2. Determine next action with semantic similarity
             action_details = determine_next_action(
                 current_query=query,
                 conversation_window=active_context_window,
-                generation_model=qdrant.generation_model
+                generation_model=qdrant.generation_model,
+                embedder=qdrant.local_embedder  # Pass embedder for similarity analysis
             )
             action = action_details.get("action")
+            similarity_score = action_details.get("similarity_score", 0.0)
             
             print(f"[ACTION] Determined Action: {action}")
-            print(f"[ACTION] Reason: {action_details.get('reason')}\n")
+            print(f"[ACTION] Reason: {action_details.get('reason')}")
+            print(f"[ACTION] Similarity Score: {similarity_score:.3f}\n")
             
             await self._safe_send(conv.websocket, {'type': 'intent', 'intent_type': action})
             

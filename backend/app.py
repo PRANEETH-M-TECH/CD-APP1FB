@@ -933,15 +933,20 @@ Return only the answer.
             response = qdrant.generation_model.generate_content(final_prompt, stream=True)
             
             for chunk in response:
-                if chunk.text:
-                    full_answer += chunk.text
-                    # Send SSE event with both display and read text
-                    event_data = json.dumps({
-                        "display_text": chunk.text,
-                        "read_text": chunk.text 
-                    })
-                    yield f"data: {event_data}\n\n"
-                    await asyncio.sleep(0.01)  # Small delay for smooth streaming
+                try:
+                    if chunk.text:
+                        full_answer += chunk.text
+                        # Send SSE event with both display and read text
+                        event_data = json.dumps({
+                            "display_text": chunk.text,
+                            "read_text": chunk.text 
+                        })
+                        yield f"data: {event_data}\n\n"
+                        await asyncio.sleep(0.01)  # Small delay for smooth streaming
+                except ValueError:
+                    # This can happen if the chunk has no 'parts' but a finish_reason.
+                    # We can safely ignore it and continue to the next chunk.
+                    pass
             
             print(f"[LLM] ✓ Answer streamed ({len(full_answer)} characters)\n")
             
@@ -1051,17 +1056,20 @@ async def smart_query_engine(
             session = session_manager.get_or_create_session(book_uuid, session_id)
             active_context_window = session["active_context_window"]
             
-            # 2. Determine the next action using the new classifier
+            # 2. Determine the next action using the new classifier with semantic similarity
             action_details = determine_next_action(
                 current_query=query,
                 conversation_window=active_context_window,
-                generation_model=qdrant.generation_model
+                generation_model=qdrant.generation_model,
+                embedder=qdrant.local_embedder  # Pass embedder for similarity analysis
             )
             action = action_details.get("action")
             reason = action_details.get("reason", "No reason provided.")
+            similarity_score = action_details.get("similarity_score", 0.0)
             
             print(f"[ACTION] Determined Action: {action}")
-            print(f"[ACTION] Reason: {reason}\n")
+            print(f"[ACTION] Reason: {reason}")
+            print(f"[ACTION] Similarity Score: {similarity_score:.3f}\n")
             
             # Send action info to the frontend for debugging/display
             yield f"data: {json.dumps({'type': 'intent', 'intent': action})}\n\n"
@@ -1158,13 +1166,20 @@ Answer the current question clearly and educationally.
 """
             else: # ANSWER_FROM_HISTORY
                 print("[PATH] 🗣️ Answering directly from history...\n")
+                context_summary = ""
+                for turn in session.get("full_history", []):
+                    answer_preview = turn.get('answer', '')[:200]
+                    if len(turn.get('answer', '')) > 200:
+                        answer_preview += "..."
+                    context_summary += f"Q: {turn['query']}\nA: {answer_preview}\n\n"
+                
                 final_prompt = f"""You are an AI assistant. Answer the following question based ONLY on the provided conversation history.
 
 CONVERSATION HISTORY:
 {context_summary}
 
 QUESTION:
-"{current_query}"
+"{query}"
 
 Answer the question based only on the history.
 """
@@ -1172,10 +1187,15 @@ Answer the question based only on the history.
             print(f"[LLM] Streaming answer for action: {action}...\n")
             response_stream = qdrant.generation_model.generate_content(final_prompt, stream=True)
             for chunk in response_stream:
-                if chunk.text:
-                    full_answer += chunk.text
-                    yield f"data: {json.dumps({'display_text': chunk.text})}\n\n"
-                    await asyncio.sleep(0.01)
+                try:
+                    if chunk.text:
+                        full_answer += chunk.text
+                        yield f"data: {json.dumps({'display_text': chunk.text})}\n\n"
+                        await asyncio.sleep(0.01)
+                except ValueError:
+                    # This can happen if the chunk has no 'parts' but a finish_reason.
+                    # We can safely ignore it and continue to the next chunk.
+                    pass
             print(f"[LLM] ✓ Answer generated ({len(full_answer)} chars)\n")
 
             # 5. Generate and send follow-ups (if not answering from history)
@@ -1197,12 +1217,41 @@ Answer the question based only on the history.
 
             session_manager.add_turn(session["session_id"], turn_data)
 
-            # 7. Send final metadata
+            # 7. Send final metadata with cache info and chunks
             updated_history = session_manager.get_full_history(session["session_id"])
             current_turn_number = len(updated_history)
+            
+            # Prepare retrieved chunks summary for user visibility
+            chunks_summary = []
+            if hybrid_results:
+                for score, doc in hybrid_results[:5]:  # Top 5 chunks
+                    chunks_summary.append({
+                        "chapter_name": doc.get("chapter_name", "Unknown"),
+                        "relevance_score": round(score, 3),
+                        "text_preview": doc.get("text", "")[:150] + "..." if len(doc.get("text", "")) > 150 else doc.get("text", ""),
+                        "pdf_pages": f"{doc.get('pdf_startpg', '?')}-{doc.get('pdf_endpg', '?')}",
+                        "chapter_pages": f"{doc.get('chpstpage', '?')}-{doc.get('chpendpage', '?')}"
+                    })
+            
+            # Calculate cache performance metrics
+            cache_hit = (action == "USE_CACHED_CONTEXT")
+            retrieval_time_saved = 0
+            if cache_hit:
+                retrieval_time_saved = 1500  # Approximate ms saved by not doing retrieval
+            
             metadata = {
-                "type": "metadata", "turn": current_turn_number, "session_id": session["session_id"],
-                "intent_type": action, "topic_change": action == "RETRIEVE_NEW_CONTEXT"
+                "type": "metadata",
+                "turn": current_turn_number,
+                "session_id": session["session_id"],
+                "intent_type": action,
+                "topic_change": action == "RETRIEVE_NEW_CONTEXT",
+                "cache_info": {
+                    "cache_hit": cache_hit,
+                    "similarity_score": round(similarity_score, 3),
+                    "chunks_reused": len(hybrid_results) if cache_hit else 0,
+                    "retrieval_time_saved_ms": retrieval_time_saved
+                },
+                "retrieved_chunks": chunks_summary
             }
             yield f"data: {json.dumps(metadata)}\n\n"
             
@@ -1223,6 +1272,87 @@ Answer the question based only on the history.
     return StreamingResponse(event_generator(), media_type="text/event-stream")
 
 
+# === SESSION VISIBILITY ENDPOINTS ===
+
+@app.get("/api/session/history", tags=["Session"])
+async def get_session_history(session_id: str = Query(...)):
+    """
+    Returns complete chat history with metadata for a given session.
+    Provides full transparency into conversation state and topics.
+    
+    Args:
+        session_id: The session ID to retrieve history for
+    
+    Returns:
+        Complete session data including topics, history, and cache status
+    """
+    from .redis_service import redis_service
+    
+    session = redis_service.get_session(session_id)
+    if not session:
+        raise HTTPException(status_code=404, detail=f"Session not found: {session_id}")
+    
+    # Calculate statistics
+    total_turns = len(session.get("full_history", []))
+    cache_hits = sum(1 for turn in session.get("full_history", []) 
+                     if turn.get("intent_type") == "USE_CACHED_CONTEXT")
+    cache_hit_rate = (cache_hits / total_turns * 100) if total_turns > 0 else 0
+    
+    return {
+        "session_id": session_id,
+        "book_uuid": session.get("book_uuid"),
+        "created_at": session.get("created_at"),
+        "last_updated": session.get("last_updated"),
+        "statistics": {
+            "total_turns": total_turns,
+            "cache_hits": cache_hits,
+            "cache_hit_rate": round(cache_hit_rate, 1),
+            "total_topics": len(session.get("topics", []))
+        },
+        "topics": session.get("topics", []),
+        "current_topic_id": session.get("current_topic_id"),
+        "full_history": session.get("full_history", []),
+        "active_context_window": session.get("active_context_window", [])
+    }
+
+
+@app.get("/api/session/chunks", tags=["Session"])
+async def get_current_chunks(session_id: str = Query(...)):
+    """
+    Returns currently cached chunks for the active topic.
+    Shows what context is being reused for follow-up queries.
+    
+    Args:
+        session_id: The session ID to retrieve chunks for
+    
+    Returns:
+        List of cached chunks with relevance scores and metadata
+    """
+    chunks = session_manager.get_current_topic_chunks(session_id)
+    
+    if not chunks:
+        return {
+            "chunks": [],
+            "total_count": 0,
+            "message": "No cached chunks for current topic"
+        }
+    
+    formatted_chunks = []
+    for score, doc in chunks:
+        formatted_chunks.append({
+            "relevance_score": round(score, 4),
+            "chapter_name": doc.get("chapter_name", "Unknown"),
+            "text": doc.get("text", ""),
+            "text_length": len(doc.get("text", "")),
+            "pdf_pages": f"{doc.get('pdf_startpg', '?')}-{doc.get('pdf_endpg', '?')}",
+            "chapter_pages": f"{doc.get('chpstpage', '?')}-{doc.get('chpendpage', '?')}"
+        })
+    
+    return {
+        "chunks": formatted_chunks,
+        "total_count": len(formatted_chunks),
+        "message": f"Currently using {len(formatted_chunks)} cached chunks"
+    }
 
 
 @app.get("/api/list-chapters")
