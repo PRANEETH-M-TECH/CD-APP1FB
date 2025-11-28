@@ -605,7 +605,8 @@
                 document.getElementById('loading-state').style.display = 'none';
                 document.getElementById('main-content').style.display = 'block';
 
-                initializeSidebar(userData);
+                // Initialize sidebar (hide "Switch Mode" since we're already on mode selection)
+                initializeSidebar(userData, { hideSwitchMode: true });
 
             } catch (error) {
                 console.error('[MODE SELECT] Error loading user:', error);

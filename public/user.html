@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="/static/conversation.css">
   <link rel="stylesheet" href="/static/voice-overlay.css">
   <link rel="stylesheet" href="/static/sidebar.css">
+  <link rel="stylesheet" href="/static/sidebar.css">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"
@@ -26,14 +27,17 @@
       font-family: 'Inter', sans-serif;
       background-color: #f8fafc;
       margin-left: 280px;
-      /* Space for sidebar on desktop */
-      transition: margin-left 0.3s ease;
+      transition: margin-left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* When sidebar is collapsed */
+    body.sidebar-collapsed {
+      margin-left: 0;
     }
 
     @media (max-width: 768px) {
       body {
         margin-left: 0;
-        /* No margin on mobile */
       }
     }
 
@@ -507,18 +511,15 @@
         transform: scaleY(0.35);
       }
 
-      40% {
-        transform: scaleY(1.4);
-      }
-
-      60% {
-        transform: scaleY(0.6);
-      }
+      40% {}
     }
   </style>
 </head>
 
-<body class="text-gray-800 user-page-body">
+<body class="flex text-gray-800 user-page-body">
+  <!-- Sidebar -->
+  <div id="sidebar-container"></div>
+
   <div class="user-app-container flex flex-col md:flex-row h-screen relative">
     <button id="toggle-left-pane"
       class="absolute top-4 right-1/2 z-10 bg-gray-200 p-2 rounded-full hover:bg-gray-300 transition-all duration-300">
@@ -534,14 +535,10 @@
       <div class="flex gap-4">
         <div class="flex-1">
           <label for="class-select" class="block text-sm font-medium text-gray-600">Class</label>
-          <select id="class-select" class="w-full border border-gray-300 rounded-lg px-3 py-2 mt-1">
-            <option disabled selected>Select...</option>
-            <option>6</option>
-            <option>7</option>
-            <option>8</option>
-            <option>9</option>
-            <option>10</option>
-          </select>
+          <!-- Class info (read-only, shown from profile) -->
+          <div style="padding: 0.5rem 1rem; background: #f3f4f6; border-radius: 8px; color: #374151; font-weight: 600;">
+            <span id="student-class-display">Class: Loading...</span>
+          </div>
         </div>
         <div class="flex-1">
           <label for="subject-select" class="block text-sm font-medium text-gray-600">Subject</label>
@@ -685,31 +682,55 @@
 
   <!-- Initialize Sidebar -->
   <script>
+    console.log('[USER PAGE] Starting sidebar initialization...');
+
     // Check auth and initialize sidebar
     firebase.auth().onAuthStateChanged(async (user) => {
+      console.log('[USER PAGE] Auth state changed:', user ? user.email : 'No user');
+
       if (!user) {
         // Not logged in - redirect to home
+        console.warn('[USER PAGE] No user logged in, redirecting to home');
         window.location.href = '/';
         return;
       }
 
       try {
         // Load user data
+        console.log('[USER PAGE] Loading user data from Firestore...');
         const userDoc = await db.collection('users').doc(user.uid).get();
+
         if (userDoc.exists) {
           const userData = userDoc.data();
+          console.log('[USER PAGE] User data loaded:', userData);
 
-          // Initialize sidebar
-          initializeSidebar(userData);
-
-          // Auto-populate class dropdown (if exists)
-          const classSelect = document.getElementById('class-select');
-          if (classSelect && userData.class) {
-            classSelect.value = userData.class;
+          // Initialize sidebar (THIS IS THE KEY PART!)
+          if (typeof initializeSidebar === 'function') {
+            console.log('[USER PAGE] Calling initializeSidebar with userData');
+            initializeSidebar(userData);
+            console.log('[USER PAGE] ✅ Sidebar initialized successfully!');
+          } else {
+            console.error('[USER PAGE] ❌ initializeSidebar function not found! Check if sidebar.js is loaded.');
+            // Fallback: Show error message
+            const container = document.getElementById('sidebar-container');
+            if (container) {
+              container.innerHTML = `<div style="color: red; padding: 20px;">Error: Sidebar script not loaded</div>`;
+            }
           }
+
+          // Display class statically (not editable)
+          const classDisplay = document.getElementById('student-class-display');
+          if (classDisplay && userData.class) {
+            classDisplay.textContent = `Class ${userData.class}`;
+            console.log('[USER PAGE] Class displayed:', userData.class);
+          }
+        } else {
+          console.error('[USER PAGE] User document not found in Firestore');
+          alert('User profile not found. Please contact admin.');
         }
       } catch (error) {
         console.error('[USER PAGE] Error loading profile:', error);
+        alert('Error loading your profile: ' + error.message);
       }
     });
   </script>

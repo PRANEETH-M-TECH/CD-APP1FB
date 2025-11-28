@@ -11,52 +11,59 @@
     padding: 2rem 0;
     box-shadow: 4px 0 20px rgba(0, 0, 0, 0.3);
     z-index: 1000;
-    transition: transform 0.3s ease;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     overflow-y: auto;
 }
 
-.sidebar.hidden {
-    transform: translateX(-100%);
+/* Collapsed state */
+.sidebar.collapsed {
+    transform: translateX(-280px);
 }
 
-/* Mobile Toggle */
-.sidebar-toggle {
-    position: fixed;
-    left: 20px;
-    top: 20px;
-    width: 50px;
-    height: 50px;
-    background: linear-gradient(135deg, #6b5cff, #764ba2);
-    border: none;
-    border-radius: 12px;
-    color: white;
-    font-size: 1.5rem;
-    cursor: pointer;
-    z-index: 1001;
-    box-shadow: 0 4px 15px rgba(107, 92, 255, 0.4);
-    transition: all 0.3s ease;
-    display: none;
-}
-
-.sidebar-toggle:hover {
-    transform: scale(1.1);
-    box-shadow: 0 6px 20px rgba(107, 92, 255, 0.6);
-}
-
+/* Mobile: Hidden by default */
 @media (max-width: 768px) {
-    .sidebar-toggle {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
     .sidebar {
-        transform: translateX(-100%);
+        transform: translateX(-280px);
     }
 
     .sidebar.visible {
         transform: translateX(0);
     }
+
+    /* On mobile, body doesn't shift */
+    body {
+        margin-left: 0 !important;
+    }
+}
+
+/* Toggle Button - Always Visible */
+.sidebar-toggle {
+    position: fixed;
+    left: 20px;
+    top: 20px;
+    width: 56px;
+    height: 56px;
+    background: linear-gradient(135deg, #6b5cff, #764ba2);
+    border: none;
+    border-radius: 16px;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    z-index: 1001;
+    box-shadow: 0 4px 15px rgba(107, 92, 255, 0.4);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sidebar-toggle:hover {
+    transform: scale(1.1) rotate(5deg);
+    box-shadow: 0 6px 25px rgba(107, 92, 255, 0.6);
+}
+
+.sidebar-toggle:active {
+    transform: scale(0.95);
 }
 
 /* Profile Section */

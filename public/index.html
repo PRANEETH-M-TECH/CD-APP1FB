@@ -197,22 +197,47 @@
   <div id="class-selection-modal" class="auth-modal" style="display: none;">
     <div class="auth-modal-content">
       <div class="auth-modal-header">
-        <h2>📚 Which class are you in?</h2>
+        <h2>Complete Your Profile</h2>
+        <p style="color: #6b7280; font-size: 0.9rem; margin-top: 0.5rem;">
+          Step 1: Choose your avatar, Step 2: Select your class
+        </p>
       </div>
+
       <div class="auth-modal-body">
-        <div class="class-buttons">
-          <button class="class-btn" onclick="selectClass(6)">6</button>
-          <button class="class-btn" onclick="selectClass(7)">7</button>
-          <button class="class-btn" onclick="selectClass(8)">8</button>
-          <button class="class-btn" onclick="selectClass(9)">9</button>
-          <button class="class-btn" onclick="selectClass(10)">10</button>
+        <!-- Step 1: Avatar Selection -->
+        <div id="avatar-step" style="margin-bottom: 2rem;">
+          <h3 style="margin-bottom: 1rem; color: #374151;">Pick Your Avatar</h3>
+          <div id="avatar-grid" class="avatar-grid" style="
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+          ">
+            <!-- Avatars will be inserted here -->
+          </div>
+          <p id="avatar-error" style="color: #ef4444; font-size: 0.85rem; display: none; margin-top: 0.5rem;">
+            Please select an avatar
+          </p>
         </div>
-        <div class="form-group">
-          <label>Section (optional)</label>
-          <input type="text" id="student-section" maxlength="1" placeholder="A">
+
+        <!-- Step 2: Class Selection -->
+        <div id="class-step">
+          <h3 style="margin-bottom: 1rem; color: #374151;">Select Your Class</h3>
+          <div class="class-buttons">
+            <button class="class-btn" onclick="selectClass(6)">6</button>
+            <button class="class-btn" onclick="selectClass(7)">7</button>
+            <button class="class-btn" onclick="selectClass(8)">8</button>
+            <button class="class-btn" onclick="selectClass(9)">9</button>
+            <button class="class-btn" onclick="selectClass(10)">10</button>
+          </div>
+          <p id="class-error" style="color: #ef4444; font-size: 0.85rem; display: none; margin-top: 1rem;">
+            Please select your class
+          </p>
         </div>
-        <button id="save-class-btn" class="btn primary full-width" onclick="saveClass()" disabled>✅ Save and
-          Continue</button>
+
+        <button id="save-class-btn" class="btn primary full-width" onclick="saveClassAndAvatar()" disabled>
+          Complete Profile
+        </button>
       </div>
     </div>
   </div>
@@ -290,6 +315,7 @@
           <!-- Firebase config and auth -->
           <script src="/static/firebase-config.js"></script>
           <script src="/static/auth.js"></script>
+          <script src="/static/avatar-selection.js"></script>
           <script src="/static/auth-modal.js"></script>
 
           <!-- load existing scripts last -->

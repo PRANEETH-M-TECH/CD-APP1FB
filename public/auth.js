@@ -126,9 +126,33 @@ class AuthManager {
         }
     }
 
-    // Check if user needs to select class (first-time login)
+    async updateUserProfile(data) {
+        if (!this.currentUser) return { success: false, error: 'Not authenticated' };
+
+        try {
+            await db.collection('users').doc(this.currentUser.uid).update(data);
+            // Update local userData
+            Object.assign(this.userData, data);
+            // Update localStorage
+            if (data.class) localStorage.setItem('userClass', data.class);
+            if (data.avatar) localStorage.setItem('userAvatar', data.avatar);
+            this.updateUI();
+            return { success: true };
+        } catch (error) {
+            console.error('[AUTH] Error updating profile:', error);
+            return { success: false, error: error.message };
+        }
+    }
+
+    // Check if user needs to complete profile (class or avatar missing)
+    needsProfileSetup() {
+        if (!this.userData || this.userData.role !== 'student') return false;
+        return !this.userData.class || !this.userData.avatar;
+    }
+
+    // Legacy method - kept for compatibility
     needsClassSelection() {
-        return this.userData && !this.userData.class && this.userData.role === 'student';
+        return this.needsProfileSetup();
     }
 }
 
