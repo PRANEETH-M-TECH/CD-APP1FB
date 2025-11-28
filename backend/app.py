@@ -149,7 +149,7 @@ async def create_book_and_process(
         raise HTTPException(status_code=422, detail=f"Error processing book creation request: {e}")
 
 from qdrant_client import models
-from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 import uuid
 
 async def process_book_in_background(book_uuid: str, pdf_path: str, class_name: str, subject: str, chapters: List[Dict]):

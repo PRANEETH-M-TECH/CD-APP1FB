@@ -9,7 +9,7 @@ from qdrant_client import QdrantClient as QC, models
 import google.generativeai as genai
 from pypdf import PdfReader
 from sentence_transformers import SentenceTransformer
-from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 from rank_bm25 import BM25Okapi
 
