@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -15,12 +16,23 @@
   <!-- new landing page styles -->
   <link rel="stylesheet" href="/static/landing.css">
 
+  <!-- auth modal styles -->
+  <link rel="stylesheet" href="/static/auth-modal.css">
+
   <!-- small inline critical CSS for font display fallback -->
   <style>
-    :root{--brand:#6b5cff;--accent:#a56bff;--muted:#9aa3b2}
-    body{font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;}
+    :root {
+      --brand: #6b5cff;
+      --accent: #a56bff;
+      --muted: #9aa3b2
+    }
+
+    body {
+      font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    }
   </style>
 </head>
+
 <body>
 
   <!-- NAVBAR -->
@@ -37,7 +49,7 @@
       </nav>
 
       <div class="lg-nav-cta">
-        <a href="/admin" class="btn small outline">Admin Login</a>
+        <a href="/admin-login.html" class="btn small outline">Admin Login</a>
       </div>
     </div>
   </header>
@@ -47,24 +59,16 @@
     <section class="hero">
       <div class="hero-left">
         <h1 class="hero-title">Chaduvu Guru</h1>
-        <p class="hero-sub">A fun, visual, and smart AI study partner for Classes 6–10.</p>
+        <p class="hero-sub">Your AI study partner for Classes 6–10</p>
 
         <div class="hero-ctas">
-          <a href="/user" class="btn primary" id="ask-question-cta">
-            <span class="btn-ic">💬</span> Ask a Question
-          </a>
-
-          <!-- Must keep this ID so conversation.js finds it -->
-          <button id="conversational-mode-btn" class="btn ghost" title="Open conversational mode">
-            <span class="btn-ic">🤖</span> Conversational Mode
+          <!-- Single unified CTA -->
+          <button id="start-learning-btn" class="btn primary">
+            <span class="btn-ic">🚀</span> Start Learning
           </button>
         </div>
 
-        <div class="hero-badges">
-          <span class="badge">NCERT-Aligned Answers</span>
-          <span class="badge">Visual Diagrams Included</span>
-          <span class="badge pill red">Voice Tutor Support</span>
-        </div>
+        <p class="hero-note">NCERT-aligned answers • Visual diagrams • Voice tutor support</p>
       </div>
 
       <div class="hero-right" id="hero-mascot-wrap">
@@ -81,12 +85,12 @@
           <svg class="mascot" viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">
             <defs>
               <linearGradient id="g1" x1="0" x2="1" y1="0" y2="1">
-                <stop offset="0" stop-color="#7B5CFF"/>
-                <stop offset="1" stop-color="#5D7CFF"/>
+                <stop offset="0" stop-color="#7B5CFF" />
+                <stop offset="1" stop-color="#5D7CFF" />
               </linearGradient>
               <filter id="soft" x="-50%" y="-50%" width="200%" height="200%">
-                <feGaussianBlur stdDeviation="10" result="b"/>
-                <feBlend in="SourceGraphic" in2="b"/>
+                <feGaussianBlur stdDeviation="10" result="b" />
+                <feBlend in="SourceGraphic" in2="b" />
               </filter>
             </defs>
 
@@ -96,18 +100,18 @@
             </g>
 
             <!-- antenna -->
-            <rect x="102" y="10" width="8" height="36" rx="4" fill="#4b5563"/>
+            <rect x="102" y="10" width="8" height="36" rx="4" fill="#4b5563" />
             <circle cx="106" cy="10" r="8" fill="#7B5CFF" />
 
             <!-- eyes -->
-            <circle cx="80" cy="95" r="10" fill="#fff"/>
-            <circle cx="130" cy="95" r="10" fill="#fff"/>
+            <circle cx="80" cy="95" r="10" fill="#fff" />
+            <circle cx="130" cy="95" r="10" fill="#fff" />
 
             <!-- smile -->
             <path d="M82 128 q24 20 46 0" stroke="#fff" stroke-width="6" stroke-linecap="round" fill="none" />
 
             <!-- decorative gradient blob -->
-            <ellipse cx="60" cy="150" rx="22" ry="12" fill="rgba(255,255,255,0.12)"/>
+            <ellipse cx="60" cy="150" rx="22" ry="12" fill="rgba(255,255,255,0.12)" />
           </svg>
         </div>
       </div>
@@ -164,6 +168,60 @@
     </footer>
   </main>
 
+  <!-- Student Login Modal -->
+  <div id="student-login-modal" class="auth-modal" style="display: none;">
+    <div class="auth-modal-content">
+      <div class="auth-modal-header">
+        <h2>🎓 Welcome to Chaduvu Guru!</h2>
+        <button class="auth-modal-close" onclick="closeStudentLoginModal()">&times;</button>
+      </div>
+      <div class="auth-modal-body">
+        <form id="student-login-form" onsubmit="handleStudentLogin(event)">
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" id="student-email" required placeholder="your.email@school.edu">
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <input type="password" id="student-password" required placeholder="Enter your password">
+          </div>
+          <button type="submit" class="btn primary full-width">🚀 Login</button>
+          <p class="auth-note">Forgot password? Contact your teacher</p>
+        </form>
+        <div id="login-error" class="error-message" style="display: none;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Class Selection Modal -->
+  <div id="class-selection-modal" class="auth-modal" style="display: none;">
+    <div class="auth-modal-content">
+      <div class="auth-modal-header">
+        <h2>📚 Which class are you in?</h2>
+      </div>
+      <div class="auth-modal-body">
+        <div class="class-buttons">
+          <button class="class-btn" onclick="selectClass(6)">6</button>
+          <button class="class-btn" onclick="selectClass(7)">7</button>
+          <button class="class-btn" onclick="selectClass(8)">8</button>
+          <button class="class-btn" onclick="selectClass(9)">9</button>
+          <button class="class-btn" onclick="selectClass(10)">10</button>
+        </div>
+        <div class="form-group">
+          <label>Section (optional)</label>
+          <input type="text" id="student-section" maxlength="1" placeholder="A">
+        </div>
+        <button id="save-class-btn" class="btn primary full-width" onclick="saveClass()" disabled>✅ Save and
+          Continue</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase SDK (v8 compat) -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
   <!-- Conversation modal: re-used from original layout (keeps ids for conversation.js) -->
   <div id="conversation-modal" class="conversation-modal" style="display: none;">
     <div class="conversation-container">
@@ -203,17 +261,17 @@
       <div id="conversation-main" class="conversation-main" style="display:none;">
         <!-- Tier & Cache Status Badge -->
         <div id="conversation-session-status" class="conversation-session-status"></div>
-        
+
         <!-- Session Status Badge -->
         <div id="voice-session-status" class="voice-session-status"></div>
-        
+
         <div class="waveform-area">
           <canvas id="user-waveform" class="waveform-canvas"></canvas>
           <canvas id="ai-waveform" class="waveform-canvas"></canvas>
         </div>
 
         <div id="conversation-body" class="conversation-body"></div>
-        
+
         <!-- Follow-up Suggestions Container -->
         <div id="voice-followups-container" class="voice-followups-container" style="display: none;"></div>
 
@@ -223,33 +281,34 @@
           </button>
           <div id="status-indicator" class="status-indicator">Click the mic to speak</div>
         </div>
-        
+
         <!-- Action Buttons -->
         <div class="conversation-actions">
           <button id="new-topic-btn" class="new-topic-btn" onclick="window.conversationMode?.handleNewTopic()">
             🔄 New Topic
           </button>
-        </div>
-      </div>
-    </div>
-  </div>
+          <!-- Firebase config and auth -->
+          <script src="/static/firebase-config.js"></script>
+          <script src="/static/auth.js"></script>
+          <script src="/static/auth-modal.js"></script>
 
-  <!-- load existing scripts last -->
-  <script src="/static/script.js?v=1.4"></script>
-  <script src="/static/conversation.js"></script>
+          <!-- load existing scripts last -->
+          <script src="/static/script.js?v=1.4"></script>
+          <script src="/static/conversation.js"></script>
 
-  <!-- optional small helper for hero parallax (non-intrusive) -->
-  <script>
-    (function(){
-      const wrap = document.getElementById('hero-mascot-wrap');
-      if (!wrap) return;
-      window.addEventListener('mousemove', (e) => {
-        const w = window.innerWidth, h = window.innerHeight;
-        const nx = (e.clientX - w/2) / (w/2);
-        const ny = (e.clientY - h/2) / (h/2);
-        wrap.style.transform = `translate(${nx * 8}px, ${ny * 6}px)`;
-      });
-    })();
-  </script>
+          <!-- optional small helper for hero parallax (non-intrusive) -->
+          <script>
+            (function () {
+              const wrap = document.getElementById('hero-mascot-wrap');
+              if (!wrap) return;
+              window.addEventListener('mousemove', (e) => {
+                const w = window.innerWidth, h = window.innerHeight;
+                const nx = (e.clientX - w / 2) / (w / 2);
+                const ny = (e.clientY - h / 2) / (h / 2);
+                wrap.style.transform = `translate(${nx * 8}px, ${ny * 6}px)`;
+              });
+            })();
+          </script>
 </body>
+
 </html>

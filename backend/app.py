@@ -1632,6 +1632,14 @@ async def read_root():
 async def admin_page():
     return FileResponse('public/admin.html')
 
+@app.get("/admin-login.html")
+async def admin_login():
+    return FileResponse('public/admin-login.html')
+
+@app.get("/mode-selection")
+async def mode_selection():
+    return FileResponse('public/mode-selection.html')
+
 @app.get("/user")
 async def user_page():
     return FileResponse('public/user.html')

@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="/static/style.css">
   <link rel="stylesheet" href="/static/conversation.css">
   <link rel="stylesheet" href="/static/voice-overlay.css">
+  <link rel="stylesheet" href="/static/sidebar.css">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"
@@ -24,6 +25,16 @@
     body {
       font-family: 'Inter', sans-serif;
       background-color: #f8fafc;
+      margin-left: 280px;
+      /* Space for sidebar on desktop */
+      transition: margin-left 0.3s ease;
+    }
+
+    @media (max-width: 768px) {
+      body {
+        margin-left: 0;
+        /* No margin on mobile */
+      }
     }
 
     /* Smooth fade for messages */
@@ -657,8 +668,51 @@
   </script>
 
   <link rel="stylesheet" href="/static/conversation.css">
-  <script src="/static/script.js?v=1.4"></script>
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+  <!-- Firebase config -->
+  <script src="/static/firebase-config.js"></script>
+
+  <!-- Sidebar -->
+  <script src="/static/sidebar.js"></script>
+
+  <!-- Main script -->
+  <script src="/static/script.js"></script>
   <script src="/static/conversation.js"></script>
+
+  <!-- Initialize Sidebar -->
+  <script>
+    // Check auth and initialize sidebar
+    firebase.auth().onAuthStateChanged(async (user) => {
+      if (!user) {
+        // Not logged in - redirect to home
+        window.location.href = '/';
+        return;
+      }
+
+      try {
+        // Load user data
+        const userDoc = await db.collection('users').doc(user.uid).get();
+        if (userDoc.exists) {
+          const userData = userDoc.data();
+
+          // Initialize sidebar
+          initializeSidebar(userData);
+
+          // Auto-populate class dropdown (if exists)
+          const classSelect = document.getElementById('class-select');
+          if (classSelect && userData.class) {
+            classSelect.value = userData.class;
+          }
+        }
+      } catch (error) {
+        console.error('[USER PAGE] Error loading profile:', error);
+      }
+    });
+  </script>
 
   <!-- New script for 'List Chapters' and 'Summarize' button functionality -->
   <script>
