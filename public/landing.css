@@ -31,7 +31,13 @@
 .lg-nav-cta .btn.outline { padding:9px 14px; border-radius:12px; }
 
 /* --- main / hero --- */
-.landing-main { width:100%; min-height:calc(100vh - 72px); background: linear-gradient(180deg,#fafbff,#f6f7fb 50%); }
+/* Command 3: Add a background gradient sweep */
+.landing-main {
+  width:100%;
+  min-height:calc(100vh - 72px);
+  background: linear-gradient(135deg, #f7f9fc 0%, #e0e7ff 100%); /* Soft diagonal blue/purple gradient */
+}
+
 .hero {
   max-width:1200px;
   margin: 36px auto;
@@ -61,13 +67,25 @@
 /* CTAs */
 .hero-ctas { display:flex; gap:16px; align-items:center; margin-bottom:18px; }
 .btn {
-  display:inline-flex; align-items:center; gap:10px; padding:14px 22px;
+  display:inline-flex; align-items:center; gap:10px;
+  padding:16px 26px; /* Command 1: Increased size by ~15% */
   border-radius:12px; font-weight:600; cursor:pointer; text-decoration:none; border:none;
   box-shadow: 0 6px 20px rgba(16,24,40,0.04);
+  font-size: 1.1rem; /* Command 1: Slightly increased font size */
+  transition: all 0.3s cubic-bezier(.2,.9,.25,1); /* Command 1: For hover lift */
 }
 .btn .btn-ic { font-size:16px; opacity:0.95; }
-.btn.primary { background: linear-gradient(90deg,var(--brand,#6b5cff),var(--accent,#a56bff)); color:white; transform:translateZ(0); }
-.btn.primary:hover { transform: translateY(-4px); box-shadow: 0 12px 36px rgba(91,69,255,0.12); }
+.btn.primary {
+  /* Command 1: Gradient matching mascot and hover lift */
+  background: linear-gradient(90deg, #7B5CFF, #5D7CFF); /* Mascot colors */
+  color:white;
+  transform:translateZ(0);
+  box-shadow: 0 8px 25px rgba(91,69,255,0.2); /* More prominent shadow */
+}
+.btn.primary:hover {
+  transform: translateY(-6px); /* More pronounced lift */
+  box-shadow: 0 15px 40px rgba(91,69,255,0.25); /* Stronger shadow on hover */
+}
 .btn.ghost { background: #fff; border: 1px solid rgba(15,23,42,0.04); color:#111827; }
 .btn.ghost:hover { transform: translateY(-3px); box-shadow: 0 10px 24px rgba(16,24,40,0.06); }
 .btn.small.outline { padding:10px 14px; background:linear-gradient(90deg,#eef2ff,#fbf0ff); }
@@ -84,17 +102,25 @@
 .floating-bg .c3 { width:90px; height:90px; right:6%; bottom:18%; background:#F8F6FF; }
 
 /* mascot */
-.mascot-wrap { width:420px; height:380px; display:flex; align-items:center; justify-content:center; transform:translateZ(0); }
+.mascot-wrap {
+  width:420px; height:380px; display:flex; align-items:center; justify-content:center; transform:translateZ(0);
+  animation: floaty 5s ease-in-out infinite, blinky 7s ease-in-out infinite; /* Command 2: Combined animations */
+}
 .mascot { width:100%; height:auto; transition: transform 0.28s cubic-bezier(.2,.9,.25,1); }
 .mascot-wrap:hover .mascot { transform: translateY(-6px) rotate(-1deg) scale(1.01); }
 
-/* soft glow animation */
+/* Command 2: Micro-animations for mascot */
 @keyframes floaty {
-  0% { transform: translateY(0px); filter: drop-shadow(0 16px 40px rgba(99,102,241,0.08)); }
-  50% { transform: translateY(-10px); filter: drop-shadow(0 30px 60px rgba(99,102,241,0.12)); }
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); } /* Slightly less movement */
   100% { transform: translateY(0px); }
 }
-.mascot-wrap { animation: floaty 6s ease-in-out infinite; }
+@keyframes blinky {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.95; } /* Subtle blink effect */
+}
+/* Re-applying floaty animation to mascot-wrap, and adding blinky */
+
 
 /* supports area */
 .supports { padding:36px 0; display:flex; justify-content:center; align-items:center; }

@@ -9,30 +9,32 @@ function initializeSidebar(userData, options = {}) {
 
   const streak = userData.studyStreak || 0;
   const avatarDisplay = userData.avatar || (userData.name || 'S').charAt(0).toUpperCase();
-  const isEmoji = userData.avatar && userData.avatar.length <= 2; // Emoji detection
+  const isEmoji = userData.avatar && userData.avatar.length <= 2;
 
-  // Options: { hideSwitchMode: true/false, hideProfile: true/false, hideAchievements: true/false }
   const showSwitchMode = !options.hideSwitchMode;
   const showProfile = !options.hideProfile;
   const showAchievements = !options.hideAchievements;
 
   const sidebarHTML = `
-    <!-- Mobile Toggle -->
-    <button class="sidebar-toggle" onclick="toggleSidebar()">
-      ☰
-    </button>
+    <!-- New Profile Toggle Button -->
+    <div class="profile-toggle" id="profile-toggle" onclick="toggleSidebar()">
+      <div class="profile-avatar" style="${isEmoji ? 'font-size: 2rem;' : ''}">${avatarDisplay}</div>
+      <div class="profile-name">${userData.name || 'Student'}</div>
+    </div>
 
     <!-- Overlay -->
     <div class="sidebar-overlay" onclick="closeSidebar()"></div>
 
     <!-- Sidebar -->
     <div class="sidebar" id="sidebar">
-      <!-- Profile Section -->
-      <div class="sidebar-profile">
-        <div class="profile-avatar" style="${isEmoji ? 'font-size: 3.5rem;' : ''}">${avatarDisplay}</div>
-        <div class="profile-name">${userData.name || 'Student'}</div>
-        <div class="profile-class">Class ${userData.class || '-'}</div>
-        ${streak > 0 ? `<div class="profile-streak">🔥 ${streak} day streak!</div>` : ''}
+      <!-- Full Profile Section (Inside Sidebar) - Now clickable to close -->
+      <div class="sidebar-profile" onclick="closeSidebar()">
+        <div class="profile-avatar" style="${isEmoji ? 'font-size: 2rem;' : ''}">${avatarDisplay}</div>
+        <div class="profile-details">
+          <div class="profile-name">${userData.name || 'Student'}</div>
+          <div class="profile-class">Class ${userData.class || '-'}</div>
+          ${streak > 0 ? `<div class="profile-streak">🔥 ${streak} day streak!</div>` : ''}
+        </div>
       </div>
 
       <!-- Navigation -->
@@ -71,33 +73,19 @@ function initializeSidebar(userData, options = {}) {
 function toggleSidebar() {
   const sidebar = document.getElementById('sidebar');
   const overlay = document.querySelector('.sidebar-overlay');
-  const isMobile = window.innerWidth <= 768;
-
-  if (isMobile) {
-    // Mobile: Toggle visible class
-    sidebar.classList.toggle('visible');
-    overlay.classList.toggle('visible');
-    document.body.classList.toggle('sidebar-open');
-  } else {
-    // Desktop: Toggle collapsed class
-    sidebar.classList.toggle('collapsed');
-    document.body.classList.toggle('sidebar-collapsed');
-  }
+  
+  const isVisible = sidebar.classList.toggle('visible');
+  overlay.classList.toggle('visible', isVisible);
+  document.body.classList.toggle('sidebar-open', isVisible);
 }
 
 function closeSidebar() {
   const sidebar = document.getElementById('sidebar');
   const overlay = document.querySelector('.sidebar-overlay');
-  const isMobile = window.innerWidth <= 768;
 
-  if (isMobile) {
-    sidebar.classList.remove('visible');
-    overlay.classList.remove('visible');
-    document.body.classList.remove('sidebar-open');
-  } else {
-    sidebar.classList.add('collapsed');
-    document.body.classList.add('sidebar-collapsed');
-  }
+  sidebar.classList.remove('visible');
+  overlay.classList.remove('visible');
+  document.body.classList.remove('sidebar-open');
 }
 
 function goToModeSelection() {

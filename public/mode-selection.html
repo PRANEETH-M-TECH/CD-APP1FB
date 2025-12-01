@@ -157,8 +157,8 @@
         }
 
         .btn-continue:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(107, 92, 255, 0.4);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(107, 92, 255, 0.5);
         }
 
         .btn-choose {
@@ -179,7 +179,7 @@
         /* Mode Cards Container */
         .modes-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 2.5rem;
             margin-bottom: 40px;
         }
@@ -215,7 +215,20 @@
 
         .mode-card:hover {
             transform: translateY(-12px);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.2);
+        }
+
+        .mode-card:hover .mode-icon {
+            animation: iconBounce 0.6s ease;
+        }
+
+        @keyframes iconBounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
         }
 
         .mode-card:hover::before {
@@ -347,9 +360,7 @@
             overflow: hidden;
         }
 
-        .mode-card.conversation .select-btn {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-        }
+
 
         .select-btn::after {
             content: '→';
@@ -422,6 +433,43 @@
             to {
                 transform: rotate(360deg);
             }
+        }
+
+        /* Welcome micro-animations */
+        .welcome-section h1 {
+            animation: wave-animation 2.5s ease-in-out infinite;
+            transform-origin: 70% 70%;
+            display: inline-block;
+        }
+
+        @keyframes wave-animation {
+            0% { transform: rotate(0.0deg) }
+            10% { transform: rotate(14.0deg) }
+            20% { transform: rotate(-8.0deg) }
+            30% { transform: rotate(14.0deg) }
+            40% { transform: rotate(-4.0deg) }
+            50% { transform: rotate(10.0deg) }
+            60% { transform: rotate(0.0deg) }
+            100% { transform: rotate(0.0deg) }
+        }
+
+        .fade-in-seq {
+            opacity: 0;
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .slide-out-left {
+            animation: slideOutLeft 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        @keyframes slideOutLeft {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(-100px); opacity: 0; }
         }
     </style>
 </head>
@@ -637,7 +685,7 @@
                 if (hoursSinceVisit < 24) {
                     lastModeValue = lastMode;
                     document.getElementById('last-mode-name').textContent =
-                        lastMode === 'ask-question' ? 'Ask a Question' : 'Conversation Mode';
+                        `You were in ${lastMode === 'ask-question' ? 'Ask a Question' : 'Conversation Mode'}`;
                     document.getElementById('continue-banner').style.display = 'flex';
                 }
             }
@@ -674,23 +722,27 @@
 
             console.log('[MODE SELECT] Selected:', mode);
 
-            try {
-                await db.collection('users').doc(currentUser.uid).update({
-                    lastMode: mode,
-                    lastVisit: firebase.firestore.FieldValue.serverTimestamp()
-                });
+            document.querySelector('.mode-container').classList.add('slide-out-left');
 
-                await updateStudyStreak();
+            setTimeout(async () => {
+                try {
+                    await db.collection('users').doc(currentUser.uid).update({
+                        lastMode: mode,
+                        lastVisit: firebase.firestore.FieldValue.serverTimestamp()
+                    });
 
-            } catch (error) {
-                console.error('[MODE SELECT] Error updating mode:', error);
-            }
+                    await updateStudyStreak();
 
-            if (mode === 'ask-question') {
-                window.location.href = '/user';
-            } else if (mode === 'conversation') {
-                window.location.href = '/?openConversation=true';
-            }
+                } catch (error) {
+                    console.error('[MODE SELECT] Error updating mode:', error);
+                }
+
+                if (mode === 'ask-question') {
+                    window.location.href = '/user';
+                } else if (mode === 'conversation') {
+                    window.location.href = '/?openConversation=true';
+                }
+            }, 500);
         }
 
         async function updateStudyStreak() {
@@ -723,6 +775,19 @@
                 }
             }
         }
+    </script>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const loadingState = document.getElementById('loading-state');
+        const mainContent = document.getElementById('main-content');
+
+        firebase.auth().onAuthStateChanged(async (user) => {
+            if (user) {
+                loadingState.style.display = 'none';
+                mainContent.style.display = 'block';
+            }
+        });
+      });
     </script>
 </body>
 

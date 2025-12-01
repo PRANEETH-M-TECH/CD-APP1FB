@@ -348,16 +348,18 @@ function setupUserPage() {
     createFollowupVoiceOverlay();
 
     // --- Event Listeners ---
-    classSelect.addEventListener('change', () => {
-        const selectedClass = classSelect.value;
-        if (selectedClass) {
-            populateSubjects(selectedClass);
-        } else {
-            subjectSelect.innerHTML = '<option value="">Select Subject</option>';
-            subjectSelect.disabled = true;
-        }
-        resetUI();
-    });
+    if (classSelect) {
+        classSelect.addEventListener('change', () => {
+            const selectedClass = classSelect.value;
+            if (selectedClass) {
+                populateSubjects(selectedClass);
+            } else {
+                subjectSelect.innerHTML = '<option value="">Select Subject</option>';
+                subjectSelect.disabled = true;
+            }
+            resetUI();
+        });
+    }
 
     subjectSelect.addEventListener('change', () => loadBook());
     queryForm.addEventListener('submit', (e) => {
@@ -499,6 +501,7 @@ function setupUserPage() {
             console.error('Error fetching subjects:', error);
         }
     }
+    window.populateSubjectsForUser = populateSubjects;
 
     function resetUI() {
         pdfDoc = null;
@@ -519,7 +522,7 @@ function setupUserPage() {
     }
 
     async function loadBook() {
-        const className = classSelect.value;
+        const className = window.currentUserClass;
         const subject = subjectSelect.value;
         if (!className || !subject) return;
 

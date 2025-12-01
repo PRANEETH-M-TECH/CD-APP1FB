@@ -82,9 +82,16 @@ class AuthManager {
     async login(email, password) {
         try {
             const userCredential = await firebase.auth().signInWithEmailAndPassword(email, password);
-            return { success: true, user: userCredential.user };
+            // Explicitly set current user and load their data to avoid race conditions.
+            // onAuthStateChanged will also fire but this ensures data is ready immediately.
+            this.currentUser = userCredential.user;
+            await this.loadUserData();
+            return { success: true, user: this.currentUser, userData: this.userData };
         } catch (error) {
             console.error('[AUTH] Login error:', error);
+            // Clear user data on login failure
+            this.currentUser = null;
+            this.userData = null;
             return { success: false, error: error.message };
         }
     }

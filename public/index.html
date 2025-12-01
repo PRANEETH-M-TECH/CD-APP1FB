@@ -30,10 +30,49 @@
     body {
       font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
     }
+
+    .hero-fade-out {
+      animation: fadeOut 0.3s ease forwards;
+    }
+
+    .modal-slide-in {
+      animation: slideInUp 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards, drop-shadow-animation 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+
+    @keyframes fadeOut {
+      from { opacity: 1; transform: translateY(0); }
+      to { opacity: 0; transform: translateY(-20px); }
+    }
+
+    @keyframes slideInUp {
+      from { transform: translateY(50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    @keyframes drop-shadow-animation {
+      from { box-shadow: 0 0 0 rgba(0, 0, 0, 0); }
+      to { box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3); }
+    }
   </style>
 </head>
 
 <body>
+  <header class="top-navbar">
+    <div class="navbar-inner">
+      <a class="brand" href="/">
+        <span class="logo-dot" aria-hidden="true"></span>
+        <span class="brand-text">Chaduvu Guru</span>
+      </a>
+      <div class="navbar-actions">
+        <button class="settings-btn" aria-label="Settings">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
 
   <!-- NAVBAR -->
   <header class="lg-nav">
@@ -172,7 +211,7 @@
   <div id="student-login-modal" class="auth-modal" style="display: none;">
     <div class="auth-modal-content">
       <div class="auth-modal-header">
-        <h2>🎓 Welcome to Chaduvu Guru!</h2>
+        <h2>🎓 <span id="mascot-icon">✨</span> Welcome to Chaduvu Guru!</h2>
         <button class="auth-modal-close" onclick="closeStudentLoginModal()">&times;</button>
       </div>
       <div class="auth-modal-body">
@@ -184,6 +223,7 @@
           <div class="form-group">
             <label>Password</label>
             <input type="password" id="student-password" required placeholder="Enter your password">
+            <p style="font-size: 0.85rem; color: #6b7280; margin-top: 0.5rem;">Your credentials are provided by your school</p>
           </div>
           <button type="submit" class="btn primary full-width">🚀 Login</button>
           <p class="auth-note">Forgot password? Contact your teacher</p>
@@ -199,11 +239,20 @@
       <div class="auth-modal-header">
         <h2>Complete Your Profile</h2>
         <p style="color: #6b7280; font-size: 0.9rem; margin-top: 0.5rem;">
-          Step 1: Choose your avatar, Step 2: Select your class
+          Complete your profile below.
         </p>
       </div>
 
       <div class="auth-modal-body">
+        <!-- New Step: Name -->
+        <div class="form-group">
+          <label for="student-display-name">Your Display Name</label>
+          <input type="text" id="student-display-name" required placeholder="e.g., Alex Doe" class="form-control">
+          <p id="name-error" style="color: #ef4444; font-size: 0.85rem; display: none; margin-top: 0.5rem;">
+            Please enter your name
+          </p>
+        </div>
+
         <!-- Step 1: Avatar Selection -->
         <div id="avatar-step" style="margin-bottom: 2rem;">
           <h3 style="margin-bottom: 1rem; color: #374151;">Pick Your Avatar</h3>
@@ -312,15 +361,17 @@
           <button id="new-topic-btn" class="new-topic-btn" onclick="window.conversationMode?.handleNewTopic()">
             🔄 New Topic
           </button>
-          <!-- Firebase config and auth -->
-          <script src="/static/firebase-config.js"></script>
-          <script src="/static/auth.js"></script>
-          <script src="/static/avatar-selection.js"></script>
-          <script src="/static/auth-modal.js"></script>
 
-          <!-- load existing scripts last -->
-          <script src="/static/script.js?v=1.4"></script>
-          <script src="/static/conversation.js"></script>
+
+  <!-- Firebase config and auth -->
+  <script src="/static/firebase-config.js"></script>
+  <script src="/static/auth.js"></script>
+  <script src="/static/avatar-selection.js"></script>
+  <script src="/static/auth-modal.js"></script>
+
+  <!-- load existing scripts last -->
+  <script src="/static/script.js?v=1.4"></script>
+  <script src="/static/conversation.js"></script>
 
           <!-- optional small helper for hero parallax (non-intrusive) -->
           <script>

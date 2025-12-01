@@ -30,9 +30,29 @@
       transition: margin-left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    /* When sidebar is collapsed */
-    body.sidebar-collapsed {
-      margin-left: 0;
+    /* When left pane is collapsed */
+    body.left-pane-collapsed #left-pane {
+      width: 0;
+      min-width: 0;
+      padding: 0;
+      margin: 0;
+      overflow: hidden;
+    }
+
+    body.left-pane-collapsed #right-pane {
+      width: 100%;
+    }
+
+    /* Left pane toggle button */
+    #toggle-left-pane-btn {
+      transition: transform 0.3s ease;
+    }
+
+    body.left-pane-collapsed #toggle-left-pane-btn {
+      transform: translateX(0);
+      position: fixed;
+      left: 300px;
+      border-radius: 0 0.5rem 0.5rem 0;
     }
 
     @media (max-width: 768px) {
@@ -129,9 +149,11 @@
     /* Left pane */
     .left-pane {
       background: #ffffff;
-      border-right: 1px solid #e2e8f0;
-      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.04);
-      padding: 1.2rem;
+      border-radius: 1rem;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+      padding: 1.5rem;
+      margin: 1rem;
+      border-right: none;
     }
 
     /* PDF viewer */
@@ -166,7 +188,12 @@
       flex: 1;
       display: flex;
       flex-direction: column;
-      background: #f8fafc;
+      background: #ffffff;
+      border-radius: 1rem;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+      padding: 1.5rem;
+      margin: 1rem;
+      margin-left: 0;
     }
 
     /* Chat input */
@@ -513,6 +540,59 @@
 
       40% {}
     }
+
+    /* AI Thinking Animation */
+    .typing-indicator {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+    }
+
+    .typing-indicator span {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: #9ca3af;
+      animation: typing 1s infinite ease-in-out;
+    }
+
+    .typing-indicator span:nth-child(2) {
+      animation-delay: 0.15s;
+    }
+
+    .typing-indicator span:nth-child(3) {
+      animation-delay: 0.3s;
+    }
+
+    @keyframes typing {
+
+      0%,
+      100% {
+        transform: translateY(0);
+        opacity: 0.5;
+      }
+
+      50% {
+        transform: translateY(-4px);
+        opacity: 1;
+      }
+    }
+
+    .slide-in-right {
+      animation: slideInRight 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+
+    @keyframes slideInRight {
+      from {
+        transform: translateX(100px);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
   </style>
 </head>
 
@@ -520,50 +600,57 @@
   <!-- Sidebar -->
   <div id="sidebar-container"></div>
 
-  <div class="user-app-container flex flex-col md:flex-row h-screen relative">
-    <button id="toggle-left-pane"
-      class="absolute top-4 right-1/2 z-10 bg-gray-200 p-2 rounded-full hover:bg-gray-300 transition-all duration-300">
-      <svg id="toggle-icon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-        stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-      </svg>
-    </button>
-
+  <div class="user-app-container flex flex-col md:flex-row h-screen relative slide-in-right">
     <!-- Left Pane (Book Viewer) -->
-    <div id="left-pane" class="left-pane w-1/2 flex flex-col transition-all duration-300">
+    <div id="left-pane" class="left-pane w-1/2 flex flex-col transition-all duration-300 relative">
 
-      <div class="flex gap-4">
-        <div class="flex-1">
-          <label for="class-select" class="block text-sm font-medium text-gray-600">Class</label>
-          <!-- Class info (read-only, shown from profile) -->
-          <div style="padding: 0.5rem 1rem; background: #f3f4f6; border-radius: 8px; color: #374151; font-weight: 600;">
-            <span id="student-class-display">Class: Loading...</span>
-          </div>
-        </div>
-        <div class="flex-1">
-          <label for="subject-select" class="block text-sm font-medium text-gray-600">Subject</label>
-          <select id="subject-select" disabled class="w-full border border-gray-300 rounded-lg px-3 py-2 mt-1">
-            <option disabled selected>Select...</option>
-            <option>Telugu</option>
-            <option>Hindi</option>
-            <option>English</option>
-            <option>Maths</option>
-            <option>Science</option>
-            <option>Social</option>
-          </select>.
+      <!-- Compact Top Bar - Subject dropdown and toggle -->
+      <div class="flex items-center justify-between px-4 py-2 bg-white border-b border-gray-200">
+        <!-- Subject Selector - Compact -->
+        <div class="flex items-center gap-2">
+          <label for="subject-select" class="text-sm font-medium text-gray-700 whitespace-nowrap">📚 Subject:</label>
+          <select id="subject-select"
+            class="text-sm border border-gray-300 rounded-lg px-3 py-1.5 bg-white focus:border-blue-500 focus:ring-1 focus:ring-blue-200 transition-all cursor-pointer">
+            <option disabled selected>Choose subject...</option>
+            <option value="Telugu">Telugu</option>
+            <option value="Hindi">Hindi</option>
+            <option value="English">English</option>
+            <option value="Maths">Maths</option>
+            <option value="Science">Science</option>
+            <option value="Social">Social</option>
+          </select>
         </div>
 
+        <!-- Collapse/Expand Toggle Button -->
+        <button id="toggle-left-pane-btn" title="Hide/Show PDF Viewer"
+          class="bg-blue-600 hover:bg-blue-700 text-white shadow-md p-2 rounded-lg transition-all duration-300">
+          <svg id="left-pane-toggle-icon" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
+            viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
       </div>
 
-      <!-- PDF Viewer -->
-      <div id="book-viewer-container" class="mt-4">
-        <div id="pdf-viewer-header-user" class="flex justify-between items-center mb-2 hidden">
-          <button id="prev-page-user"
-            class="bg-blue-500 text-white px-3 py-1 rounded-lg text-sm hover:bg-blue-600">Prev</button>
-          <span class="text-gray-600 text-sm">Page: <span id="page-num-user"></span> / <span
-              id="page-count-user"></span></span>
-          <button id="next-page-user"
-            class="bg-blue-500 text-white px-3 py-1 rounded-lg text-sm hover:bg-blue-600">Next</button>
+      <!-- PDF Viewer - Full Space -->
+      <div id="book-viewer-container" class="flex-1 flex flex-col bg-gray-50">
+        <div id="pdf-viewer-header-user" class="flex justify-center items-center mb-2 hidden">
+          <div class="flex items-center bg-gray-100 rounded-full p-1">
+            <button id="prev-page-user" class="px-4 py-2 rounded-full hover:bg-gray-200 transition-colors">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M15 18l-6-6 6-6" />
+              </svg>
+            </button>
+            <span class="text-gray-600 text-sm font-medium px-4">
+              <span id="page-num-user"></span> / <span id="page-count-user"></span>
+            </span>
+            <button id="next-page-user" class="px-4 py-2 rounded-full hover:bg-gray-200 transition-colors">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 18l6-6-6-6" />
+              </svg>
+            </button>
+          </div>
         </div>
         <div id="pdf-render-area-user">
           <canvas id="pdf-canvas-user"></canvas>
@@ -613,43 +700,58 @@
         </div>
       </div>
 
-      <!-- Chat Input -->
-      <div id="chat-input-container" class="p-4 border-t border-gray-200 bg-white shadow-inner">
-        <div class="flex justify-start mb-2 gap-2">
+      <!-- Quick Action Buttons -->
+      <div class="px-4 pb-2">
+        <div class="flex justify-center gap-3">
           <button type="button" id="list-chapters-btn"
-            class="hidden bg-indigo-500 hover:bg-indigo-600 text-white p-2 px-4 transition text-sm">
-            List Chapters
+            class="flex items-center gap-2 bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white px-5 py-2.5 rounded-xl shadow-md hover:shadow-lg transition-all transform hover:scale-105 font-medium">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 6h16M4 12h16M4 18h16"></path>
+            </svg>
+            <span>📚 List Chapters</span>
           </button>
           <button type="button" id="summarize-btn"
-            class="hidden bg-indigo-500 hover:bg-indigo-600 text-white p-2 px-4 transition text-sm">
-            Summarize
+            class="flex items-center gap-2 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white px-5 py-2.5 rounded-xl shadow-md hover:shadow-lg transition-all transform hover:scale-105 font-medium">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 20h9"></path>
+              <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+            </svg>
+            <span>✨ Summarize</span>
           </button>
         </div>
-        <form id="user-query-form">
-          <textarea id="query-text" placeholder="Ask a question about the selected book..." required disabled
-            class="w-full border border-gray-300 rounded-lg p-3 h-12 focus:ring-2 focus:ring-blue-400"></textarea>
-          <div class="flex justify-end items-center gap-2 mt-2">
-            <div id="voice-visualizer" class="voice-visualizer hidden" aria-hidden="true">
-              <span></span>
-              <span></span>
-              <span></span>
-              <span></span>
-              <span></span>
-            </div>
-            <button type="button" id="voice-search-btn"
-              class="bg-gray-200 hover:bg-gray-300 text-gray-600 rounded-lg p-2 px-4 transition">
+      </div>
+
+      <!-- Chat Input -->
+      <div id="chat-input-container" class="p-4 pt-2">
+        <div class="relative">
+          <form id="user-query-form"
+            class="flex items-center gap-2 bg-white rounded-2xl shadow-lg p-2 border-2 border-gray-100 hover:border-blue-200 transition-all">
+            <textarea id="query-text" placeholder="💬 Ask me anything about your book..." required disabled
+              class="flex-1 bg-transparent border-none rounded-2xl px-4 py-3 h-12 resize-none focus:ring-0 focus:outline-none text-gray-700 placeholder-gray-400"></textarea>
+
+            <!-- Voice Button Inside Form -->
+            <button type="button" id="voice-search-btn" title="Voice Search" disabled
+              class="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white rounded-xl p-3 shadow-md transition-all transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed">
               <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                 stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
               </svg>
             </button>
-            <button type="submit" id="submit-query-btn" disabled
-              class="bg-blue-600 hover:bg-blue-700 text-white rounded-lg p-2 px-4 transition disabled:bg-gray-300 disabled:cursor-not-allowed">
-              Ask ➤
+
+            <!-- Send Button -->
+            <button type="submit" id="submit-query-btn" title="Send Message" disabled
+              class="bg-blue-600 hover:bg-blue-700 text-white rounded-xl p-3 transition-all shadow-md hover:shadow-lg transform hover:scale-105 disabled:bg-gray-300 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="22" y1="2" x2="11" y2="13"></line>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+              </svg>
             </button>
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
     </div>
   </div>
@@ -718,11 +820,16 @@
             }
           }
 
-          // Display class statically (not editable)
-          const classDisplay = document.getElementById('student-class-display');
-          if (classDisplay && userData.class) {
-            classDisplay.textContent = `Class ${userData.class}`;
-            console.log('[USER PAGE] Class displayed:', userData.class);
+          // Store class globally for script.js to access
+          window.currentUserClass = userData.class;
+          console.log('[USER PAGE] Class stored globally:', userData.class);
+
+          // Populate subjects for the loaded class
+          if (window.populateSubjectsForUser) {
+            console.log('[USER PAGE] Calling populateSubjectsForUser with class:', userData.class);
+            window.populateSubjectsForUser(userData.class);
+          } else {
+            console.error('[USER PAGE] ❌ populateSubjectsForUser function not found!');
           }
         } else {
           console.error('[USER PAGE] User document not found in Firestore');
@@ -733,6 +840,30 @@
         alert('Error loading your profile: ' + error.message);
       }
     });
+
+    // Toggle left pane (PDF viewer) functionality
+    document.addEventListener('DOMContentLoaded', () => {
+      const toggleBtn = document.getElementById('toggle-left-pane-btn');
+      const body = document.body;
+
+      if (toggleBtn) {
+        toggleBtn.addEventListener('click', () => {
+          const isCollapsed = body.classList.toggle('left-pane-collapsed');
+
+          // Rotate icon
+          const icon = toggleBtn.querySelector('svg');
+          if (icon) {
+            if (isCollapsed) {
+              // Point left when collapsed (to show)
+              icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />';
+            } else {
+              // Point right when expanded (to hide)
+              icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />';
+            }
+          }
+        });
+      }
+    });
   </script>
 
   <!-- New script for 'List Chapters' and 'Summarize' button functionality -->
@@ -740,20 +871,25 @@
     function addMessageToChat({ role, content }) {
       const chatHistory = document.getElementById('chat-history');
       const messageElement = document.createElement('div');
-      messageElement.classList.add('ai-card', 'fade-in');
 
-      const header = role === 'ai' ? '🤖 Chaduvu Guru' : '👤 You';
+      const isAI = role === 'ai';
+      messageElement.className = `flex items-start gap-3 my-4 ${isAI ? '' : 'flex-row-reverse'}`;
 
-      const htmlContent = marked.parse(content);
+      const avatar = isAI
+        ? '<div class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-xl">🤖</div>'
+        : '';
+
+      const bubbleColor = isAI ? 'bg-gray-100' : 'bg-blue-500 text-white';
+      const bubbleRadius = isAI ? 'rounded-r-lg rounded-bl-lg' : 'rounded-l-lg rounded-br-lg';
 
       messageElement.innerHTML = `
-            <div class="flex justify-between items-center mb-2">
-                <h2 class="font-semibold text-gray-700">${header}</h2>
-                <button class="copy-btn" onclick="copyMessage(this)">📋</button>
-                <button class="speak-btn" onclick="speakMessage(this)">🔊</button>
-            </div>
-            <div class="markdown-content">${htmlContent}</div>
-        `;
+        ${avatar}
+        <div class="flex-1">
+          <div class="p-4 rounded-lg shadow-sm ${bubbleColor} ${bubbleRadius}">
+            <div class="markdown-content">${marked.parse(content)}</div>
+          </div>
+        </div>
+      `;
 
       chatHistory.appendChild(messageElement);
       chatHistory.scrollTop = chatHistory.scrollHeight; // Auto-scroll to bottom
@@ -782,23 +918,51 @@
       }
     }
 
+    function showThinkingIndicator() {
+      const chatHistory = document.getElementById('chat-history');
+      const thinkingElement = document.createElement('div');
+      thinkingElement.id = 'thinking-indicator';
+      thinkingElement.className = 'flex items-start gap-3 my-4';
+      thinkingElement.innerHTML = `
+        <div class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-xl">🤖</div>
+        <div class="flex-1">
+          <div class="p-4 rounded-lg shadow-sm bg-gray-100 rounded-r-lg rounded-bl-lg">
+            <div class="typing-indicator">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          </div>
+        </div>
+      `;
+      chatHistory.appendChild(thinkingElement);
+      chatHistory.scrollTop = chatHistory.scrollHeight;
+    }
+
+    function removeThinkingIndicator() {
+      const thinkingElement = document.getElementById('thinking-indicator');
+      if (thinkingElement) {
+        thinkingElement.remove();
+      }
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
       const listChaptersBtn = document.getElementById('list-chapters-btn');
       const summarizeBtn = document.getElementById('summarize-btn');
 
       if (listChaptersBtn) {
         listChaptersBtn.addEventListener('click', async () => {
-          const classSelect = document.getElementById('class-select');
           const subjectSelect = document.getElementById('subject-select');
 
-          const selectedClass = classSelect.value;
+          // Get class from user profile (stored in window.currentUserClass)
+          const selectedClass = window.currentUserClass;
           const selectedSubject = subjectSelect.value;
 
-          if (!selectedClass || selectedClass === 'Select...') {
-            alert('Please select a class first.');
+          if (!selectedClass) {
+            alert('Class information not loaded. Please refresh the page.');
             return;
           }
-          if (!selectedSubject || selectedSubject === 'Select...') {
+          if (!selectedSubject || selectedSubject === 'Choose your subject...') {
             alert('Please select a subject first.');
             return;
           }
@@ -806,10 +970,7 @@
           // Clear previous chat history before adding new messages
           document.getElementById('chat-history').innerHTML = '';
 
-          addMessageToChat({
-            role: 'ai',
-            content: 'Fetching chapter list...'
-          });
+          showThinkingIndicator();
 
           try {
             const response = await fetch(`/api/list-chapters?class_name=${selectedClass}&subject=${selectedSubject}`);
@@ -819,6 +980,8 @@
             }
 
             const data = await response.json();
+
+            removeThinkingIndicator();
 
             if (data && data.chapters && data.chapters.length > 0) {
               displayChaptersInChat(data.chapters);
@@ -831,6 +994,7 @@
 
           } catch (error) {
             console.error('Error fetching chapters:', error);
+            removeThinkingIndicator();
             addMessageToChat({
               role: 'ai',
               content: `Sorry, an error occurred while fetching chapters: ${error.message}`
@@ -841,23 +1005,25 @@
 
       if (summarizeBtn) {
         summarizeBtn.addEventListener('click', async () => {
-          const classSelect = document.getElementById('class-select');
           const subjectSelect = document.getElementById('subject-select');
 
-          const selectedClass = classSelect.value;
+          // Get class from user profile (stored in window.currentUserClass)
+          const selectedClass = window.currentUserClass;
           const selectedSubject = subjectSelect.value;
 
-          if (!selectedClass || selectedClass === 'Select...') {
-            alert('Please select a class first.');
+          if (!selectedClass) {
+            alert('Class information not loaded. Please refresh the page.');
             return;
           }
-          if (!selectedSubject || selectedSubject === 'Select...') {
+          if (!selectedSubject || selectedSubject === 'Choose your subject...') {
             alert('Please select a subject first.');
             return;
           }
 
           // Clear previous chat history before adding new messages
           document.getElementById('chat-history').innerHTML = '';
+
+          showThinkingIndicator();
 
           try {
             const response = await fetch(`/api/list-chapters?class_name=${selectedClass}&subject=${selectedSubject}`);
@@ -867,6 +1033,8 @@
             }
 
             const data = await response.json();
+
+            removeThinkingIndicator();
 
             if (data && data.chapters && data.chapters.length > 0) {
               displayChapterDropdown(data.chapters);
@@ -880,6 +1048,7 @@
 
           } catch (error) {
             console.error('Error fetching chapters:', error);
+            removeThinkingIndicator();
             addMessageToChat({
               role: 'ai',
               content: `Sorry, an error occurred while fetching chapters: ${error.message}`
@@ -935,10 +1104,12 @@
             return;
           }
 
-          const classSelect = document.getElementById('class-select');
           const subjectSelect = document.getElementById('subject-select');
-          const selectedClass = classSelect.value;
+          // Get class from user profile (stored in window.currentUserClass)
+          const selectedClass = window.currentUserClass;
           const selectedSubject = subjectSelect.value;
+
+          showThinkingIndicator();
 
           try {
             const response = await fetch('/api/summarize', {
@@ -958,6 +1129,9 @@
             }
 
             const data = await response.json();
+
+            removeThinkingIndicator();
+
             addMessageToChat({
               role: 'ai',
               content: data.summary
@@ -965,6 +1139,7 @@
 
           } catch (error) {
             console.error('Error fetching summary:', error);
+            removeThinkingIndicator();
             addMessageToChat({
               role: 'ai',
               content: `Sorry, an error occurred while fetching the summary: ${error.message}`

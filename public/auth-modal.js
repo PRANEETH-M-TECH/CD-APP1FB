@@ -9,7 +9,16 @@ let pendingRedirect = null;
 // Show student login modal
 function showStudentLoginModal(redirectTo = null) {
     pendingRedirect = redirectTo;
-    document.getElementById('student-login-modal').style.display = 'flex';
+    const modal = document.getElementById('student-login-modal');
+    const modalContent = modal.querySelector('.auth-modal-content');
+    const hero = document.querySelector('.landing-main');
+
+    hero.classList.add('hero-fade-out');
+    
+    modal.style.display = 'flex';
+    setTimeout(() => {
+        modalContent.classList.add('modal-slide-in');
+    }, 10);
 }
 
 // Close student login modal
@@ -37,18 +46,15 @@ async function handleStudentLogin(event) {
         console.log('[AUTH] Login successful');
         closeStudentLoginModal();
 
-        // Wait for userData to load
-        setTimeout(() => {
-            // Check if user needs to complete profile (class or avatar)
-            if (authManager.needsProfileSetup()) {
-                console.log('[AUTH] User needs profile setup');
-                showClassSelectionModal();
-            } else {
-                console.log('[AUTH] Profile complete, redirecting to mode selection');
-                // Redirect to mode selection page
-                window.location.href = '/mode-selection';
-            }
-        }, 500);
+        // No more timeout needed, data is loaded.
+        if (authManager.needsProfileSetup()) {
+            console.log('[AUTH] User needs profile setup');
+            showClassSelectionModal();
+        } else {
+            console.log('[AUTH] Profile complete, redirecting to mode selection');
+            // Redirect to mode selection page
+            window.location.href = '/mode-selection';
+        }
     } else {
         errorDiv.textContent = result.error;
         errorDiv.style.display = 'block';
@@ -59,9 +65,14 @@ async function handleStudentLogin(event) {
 function showClassSelectionModal() {
     document.getElementById('class-selection-modal').style.display = 'flex';
 
-    // Check if user already has a class (existing user without avatar)
     const userData = authManager.userData;
     const hasClass = userData && userData.class;
+
+    // Pre-fill name if it exists
+    const nameInput = document.getElementById('student-display-name');
+    if (nameInput && userData && userData.name) {
+        nameInput.value = userData.name;
+    }
 
     // Populate avatars if not already done
     const avatarGrid = document.getElementById('avatar-grid');
@@ -182,9 +193,22 @@ function updateSaveButton() {
 
 // Save class AND avatar selection
 async function saveClassAndAvatar() {
+    const nameInput = document.getElementById('student-display-name');
+    const nameError = document.getElementById('name-error');
+    const avatarError = document.getElementById('avatar-error');
+    const classError = document.getElementById('class-error');
+
+    // Validate name
+    const displayName = nameInput ? nameInput.value.trim() : '';
+    if (!displayName) {
+        if (nameError) nameError.style.display = 'block';
+        return; // Stop if name is missing
+    } else {
+        if (nameError) nameError.style.display = 'none';
+    }
+
     // Validate avatar selection
     if (!selectedAvatarId) {
-        const avatarError = document.getElementById('avatar-error');
         if (avatarError) {
             avatarError.style.display = 'block';
             avatarError.textContent = 'Please select an avatar';
@@ -198,7 +222,6 @@ async function saveClassAndAvatar() {
 
     // If no class selected and user doesn't have one, show error
     if (!selectedClassNum && !hasExistingClass) {
-        const classError = document.getElementById('class-error');
         if (classError) {
             classError.style.display = 'block';
             classError.textContent = 'Please select your class';
@@ -212,10 +235,11 @@ async function saveClassAndAvatar() {
     // Find avatar details
     const selectedAvatar = STUDENT_AVATARS.find(a => a.id === selectedAvatarId);
 
-    console.log('[AUTH] Saving profile - Class:', finalClass, 'Avatar:', selectedAvatar.name);
+    console.log('[AUTH] Saving profile - Name:', displayName, 'Class:', finalClass, 'Avatar:', selectedAvatar.name);
 
     // Update user profile in Firestore
     const result = await authManager.updateUserProfile({
+        name: displayName,
         class: finalClass,
         avatar: selectedAvatar.emoji,
         avatarId: selectedAvatar.id,
