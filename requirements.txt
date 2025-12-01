@@ -1,7 +1,10 @@
 fastapi
+uvicorn
 pydantic
 qdrant-client
 google-generativeai
+google-cloud-firestore
+firebase-admin
 pypdf
 python-dotenv
 python-multipart
@@ -9,4 +12,6 @@ rank-bm25
 websockets
 cachetools
 redis
-langchain
+sentence-transformers
+langchain-text-splitters
+numpy<2.0
