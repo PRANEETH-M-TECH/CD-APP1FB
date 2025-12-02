@@ -5,7 +5,11 @@ import re
 import datetime
 from contextlib import asynccontextmanager
 from dotenv import load_dotenv
-from fastapi import FastAPI, File, UploadFile, Form, HTTPException, Query, BackgroundTasks, WebSocket, WebSocketDisconnect
+
+# Load environment variables FIRST
+load_dotenv()
+
+from fastapi import FastAPI, File, UploadFile, Form, HTTPException, Query, BackgroundTasks, WebSocket, WebSocketDisconnect, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, JSONResponse, StreamingResponse
 from .conversation import conversation_manager
@@ -13,9 +17,6 @@ from pydantic import BaseModel
 from typing import List, Dict, Optional
 import asyncio
 from pypdf import PdfReader
-
-# Load environment variables
-load_dotenv()
 
 import logging
 logger = logging.getLogger(__name__)
@@ -43,12 +44,21 @@ from .intent_classifier import determine_next_action
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # On startup, initialize all models and database connections
-    qdrant.initialize()
+    try:
+        qdrant.initialize()
+        print("✅ Qdrant initialized successfully")
+    except Exception as e:
+        print(f"⚠️  Qdrant initialization failed: {e}")
+        print("⚠️  Server will continue without Qdrant (some features may be limited)")
     yield
     # On shutdown (not used here, but good practice)
 
 # Initialize FastAPI app with the lifespan manager
 app = FastAPI(lifespan=lifespan)
+
+# Add authentication middleware
+from .auth_middleware import auth_middleware
+app.middleware("http")(auth_middleware)
 
 from .firebase.firebase_init import db, bucket
 
@@ -74,7 +84,17 @@ class BookCreateRequest(BaseModel):
     filename: str
     chapters: List[Dict]
 
-# --- API ENDPOINTS ---
+# Analytics & Dashboard Models
+class NoteAddRequest(BaseModel):
+    uid: str
+    title: str
+    content: str
+
+class NoteDeleteRequest(BaseModel):
+    uid: str
+    note_index: int
+
+
 @app.post("/api/upload")
 async def upload_file(file: UploadFile = File(...)):
     """
@@ -1032,6 +1052,7 @@ Return only the answer.
 
 @app.get("/api/smart_query", tags=["LLM"])
 async def smart_query_engine(
+    request: Request,
     book_uuid: str = Query(...),
     query: str = Query(...),
     class_name: str = Query(...),
@@ -1045,10 +1066,18 @@ async def smart_query_engine(
     import time
     
     async def event_generator():
+        # DEBUG: Check authentication immediately
+        from .auth_middleware import get_user_id_or_default
+        uid = get_user_id_or_default(request)
+        logger.info(f"[DEBUG] request.state.uid = {getattr(request.state, 'uid', 'NOT SET')}")
+        logger.info(f"[DEBUG] get_user_id_or_default returned: {uid}")
+        logger.info(f"[DEBUG] Query params: {dict(request.query_params)}")
+        
         start_time = time.time()
         print(f"\n{'='*80}")
         print(f"[SMART QUERY] New query at {datetime.datetime.now().strftime('%H:%M:%S')}")
         print(f"  Query: {query} | Book: {class_name} - {subject} | Session: {session_id}")
+        print(f"  UID: {uid}")  # Show UID in console
         print(f"{'='*80}\n")
 
         try:
@@ -1230,8 +1259,109 @@ Answer the question based only on the history.
                  turn_data["context_cache"] = {"retrieved_chunks": hybrid_results, "context": context, "keywords": keywords}
 
             session_manager.add_turn(session["session_id"], turn_data)
+            
+            # 7. ANALYTICS LOGGING (Non-blocking)
+            try:
+                # Extract UID from authenticated request
+                from .auth_middleware import get_user_id_or_default
+                uid = get_user_id_or_default(request)
+                
+                logger.info(f"[ANALYTICS] Using UID for analytics: {uid}")
+                
+                # Extract chapter info from first retrieved chunk
+                chapter_id = None
+                chapter_name = "Unknown"
+                if hybrid_results and len(hybrid_results) > 0:
+                    first_chunk = hybrid_results[0][1]  # (score, doc) format
+                    chapter_id = first_chunk.get("chapter_id")
+                    chapter_name = first_chunk.get("chapter_name", "Unknown")
+                
+                # Determine mode (text/voice) - check query params or default to text
+                # Detect client mode
+                mode = "text"
+                
+                # HTTP mode detection
+                if request and hasattr(request, "headers"):
+                    if request.headers.get("X-Client-Mode") == "voice":
+                        mode = "voice"
+                
+                # WebSocket mode detection
+                if session and session.get("transport") == "websocket":
+                    if session.get("input_type") == "voice":
+                        mode = "voice"
+                
+                # Log query to analytics
+                analytics_service.log_query(
+                    uid=uid,
+                    class_name=class_name,
+                    subject=subject,
+                    chapter_id=chapter_id,
+                    chapter_name=chapter_name,
+                    query=query,
+                    reformulated_query=reformulated_query,
+                    mode=mode,
+                    llm_action=action,
+                    answer_length=len(full_answer)
+                )
+                
+                # Update user stats
+                analytics_service.update_user_stats(
+                    uid=uid,
+                    subject=subject,
+                    chapter_id=chapter_id,
+                    class_name=class_name
+                )
+                
+                # Update chapter stats
+                if chapter_id:
+                    analytics_service.update_chapter_stats(
+                        class_name=class_name,
+                        subject=subject,
+                        chapter_id=chapter_id,
+                        chapter_name=chapter_name,
+                        uid=uid
+                    )
+                    
+                    # --- ENHANCED ANALYTICS ---
+                    # Track topic analytics
+                    # Use keywords if available, otherwise use reformulated query as topic
+                    topics_to_track = keywords if keywords else [reformulated_query[:50]]
+                    enhanced_analytics.track_topic_analytics(
+                        uid=uid,
+                        subject=subject,
+                        chapter_id=chapter_id,
+                        chapter_name=chapter_name,
+                        topics=topics_to_track,
+                        difficulty_score=0.5 # Default for now, could be improved with LLM analysis
+                    )
+                    
+                    # Update frequent questions
+                    enhanced_analytics.update_frequent_questions(
+                        uid=uid,
+                        query=query,
+                        chapter_name=chapter_name,
+                        subject=subject
+                    )
+                
+                print(f"[ANALYTICS] ✓ Query logged successfully for user {uid}")
+                
+            except Exception as analytics_error:
+                # Analytics failure should not break the query
+                logger.error(f"[ANALYTICS] ✗ Analytics logging failed for user {uid}. Error: {analytics_error}", exc_info=True)
 
-            # 7. Send final metadata with cache info and chunks
+            # ---- OPTIONAL MISTAKE-PATTERNS ANALYTICS ----
+            try:
+                mistake_metadata = {
+                    "patterns": detected_patterns if 'detected_patterns' in locals() else [],
+                    "confusion_topics": detected_confusions if 'detected_confusions' in locals() else [],
+                    "recommended_tasks": recommended_tasks if 'recommended_tasks' in locals() else []
+                }
+                analytics_service.update_mistake_patterns(uid=uid, metadata=mistake_metadata)
+            except Exception as e:
+                logger.warning(f"[ANALYTICS] Mistake-pattern update skipped for {uid}: {e}")
+
+
+            # 8. Send final metadata with cache info and chunks
             updated_history = session_manager.get_full_history(session["session_id"])
             current_turn_number = len(updated_history)
             
@@ -1618,6 +1748,583 @@ async def clear_qdrant_data():
         raise HTTPException(status_code=500, detail=f"Failed to clear Qdrant collection: {e}")
 
 
+# ============================================
+# ANALYTICS & DASHBOARD ENDPOINTS
+# ============================================
+
+# Import analytics services
+from . import analytics_service
+from . import dashboard_service
+
+# --- STUDENT DASHBOARD ENDPOINTS ---
+
+@app.get("/api/dashboard/summary", tags=["Dashboard"])
+async def get_dashboard_summary_endpoint(uid: str = Query(...)):
+    """
+    Get summary statistics for student dashboard.
+    
+    Returns total queries, streak, last active date, and top subjects.
+    """
+    try:
+        summary = dashboard_service.get_dashboard_summary(uid)
+        return summary
+    except Exception as e:
+        logger.error(f"Failed to get dashboard summary: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/api/dashboard/weekly", tags=["Dashboard"])
+async def get_weekly_activity_endpoint(
+    uid: str = Query(...),
+    weeks: int = Query(4, ge=1, le=12)
+):
+    """
+    Get weekly activity data for charts.
+    
+    Args:
+        uid: User ID
+        weeks: Number of weeks (1-12, default 4)
+    
+    Returns:
+        {dates: [...], counts: [...]} for chart rendering
+    """
+    try:
+        activity = dashboard_service.get_weekly_activity(uid, weeks)
+        return activity
+    except Exception as e:
+        logger.error(f"Failed to get weekly activity: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/api/dashboard/strength-weakness", tags=["Dashboard"])
+async def get_strength_weakness_endpoint(uid: str = Query(...)):
+    """
+    Analyze student's strengths and weaknesses by subject.
+    
+    Returns top subjects (strengths) and bottom subjects (weaknesses).
+    """
+    try:
+        analysis = dashboard_service.get_strength_weakness(uid)
+        return analysis
+    except Exception as e:
+        logger.error(f"Failed to get strength/weakness analysis: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/api/dashboard/frequent-questions", tags=["Dashboard"])
+async def get_frequent_questions_endpoint(
+    uid: str = Query(...),
+    limit: int = Query(10, ge=1, le=50)
+):
+    """
+    Get recent frequent questions from the user.
+    
+    Args:
+        uid: User ID
+        limit: Number of questions to return (1-50, default 10)
+    """
+    try:
+        questions = dashboard_service.get_frequent_questions(uid, limit)
+        return {"questions": questions, "total": len(questions)}
+    except Exception as e:
+        logger.error(f"Failed to get frequent questions: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/api/dashboard/mistakes", tags=["Dashboard"])
+async def get_common_mistakes_endpoint(uid: str = Query(...)):
+    """
+    Get student's common mistakes and learning patterns.
+    
+    Returns patterns, confusion topics, and recommended tasks.
+    """
+    try:
+        mistakes = dashboard_service.get_common_mistakes(uid)
+        return mistakes
+    except Exception as e:
+        logger.error(f"Failed to get common mistakes: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# --- NOTES MANAGEMENT (MY BAG FEATURE) ---
+
+@app.get("/api/notes/list", tags=["Notes"])
+async def list_notes_endpoint(uid: str = Query(...)):
+    """
+    Get all saved notes for a user.
+    """
+    try:
+        notes = analytics_service.get_notes(uid)
+        return {"notes": notes, "total": len(notes)}
+    except Exception as e:
+        logger.error(f"Failed to list notes: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/api/notes/add", tags=["Notes"])
+async def add_note_endpoint(request: NoteAddRequest):
+    """
+    Add a new note to user's saved notes.
+    """
+    try:
+        analytics_service.add_note(
+            uid=request.uid,
+            title=request.title,
+            content=request.content
+        )
+        return {"success": True, "message": "Note added successfully"}
+    except Exception as e:
+        logger.error(f"Failed to add note: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.delete("/api/notes/delete", tags=["Notes"])
+async def delete_note_endpoint(request: NoteDeleteRequest):
+    """
+    Delete a note by index.
+    """
+    try:
+        analytics_service.delete_note(
+            uid=request.uid,
+            note_index=request.note_index
+        )
+        return {"success": True, "message": "Note deleted successfully"}
+    except Exception as e:
+        logger.error(f"Failed to delete note: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# --- ENHANCED DASHBOARD ENDPOINTS ---
+
+# Import enhanced services
+from . import enhanced_dashboard_service
+from . import bag_service
+
+@app.get("/api/dashboard/enhanced")
+def enhanced_dashboard(uid: str):
+    """
+    Returns the full analytics dataset required by enhanced-dashboard.html.
+    This merges user_stats, user_queries, chapter_stats, and generates AI-friendly feedback.
+    The structure matches exactly what the frontend expects.
+    """
+
+    # ------------------------------
+    # 1. Load Base Collections
+    # ------------------------------
+    user_stats_ref = db.collection("user_stats").document(uid).get()
+    if not user_stats_ref.exists:
+        return {
+            "summary": {
+                "total_queries": 0,
+                "streak": 0,
+                "total_subjects": 0,
+                "last_active": None
+            },
+            "weekly_activity": {"dates": [], "counts": []},
+            "chapter_hotspots": [],
+            "ai_feedback": {
+                "overall_feedback": "Start asking your first question!",
+                "motivation_message": "You're doing great!",
+                "weak_topics": [],
+                "suggestions": []
+            }
+        }
+
+    user_stats = user_stats_ref.to_dict()
+    total_queries = user_stats.get("total_queries", 0)
+    streak = user_stats.get("streak", 0)
+    subjects_count = user_stats.get("subjects_count", {})
+    last_active = user_stats.get("last_active")
+
+    # ------------------------------
+    # 2. Weekly Activity Format Cleanup
+    # Expected by frontend: { dates: [...], counts: [...] }
+    # ------------------------------
+    weekly_raw = user_stats.get("weekly_activity", {})
+    weekly_dates = []
+    weekly_counts = []
+
+    for day, count in weekly_raw.items():
+        weekly_dates.append(day)
+        weekly_counts.append(count)
+
+    weekly_activity = {
+        "dates": weekly_dates,
+        "counts": weekly_counts
+    }
+
+    # ------------------------------
+    # 3. Build Chapter Hotspots (Detailed breakdown)
+    # Expected by frontend: chapter_name, subject, query_count, last_asked, is_struggle_area
+    # ------------------------------
+    chapter_hotspots = []
+    user_query_docs = db.collection("user_queries").where("uid", "==", uid).stream()
+
+    chapter_map = {}  # (subject, chapter_name) → stats accumulator
+
+    for doc in user_query_docs:
+        d = doc.to_dict()
+        key = (d.get("subject"), d.get("chapter_name"))
+
+        if key not in chapter_map:
+            chapter_map[key] = {
+                "chapter_name": d.get("chapter_name"),
+                "subject": d.get("subject"),
+                "query_count": 0,
+                "last_asked": d.get("timestamp"),
+            }
+
+        chapter_map[key]["query_count"] += 1
+
+        # track the last asked timestamp
+        ts = d.get("timestamp")
+        if ts and (chapter_map[key]["last_asked"] is None or ts > chapter_map[key]["last_asked"]):
+            chapter_map[key]["last_asked"] = ts
+
+    # convert aggregated chapter stats
+    for key, data in chapter_map.items():
+        chapter_hotspots.append({
+            "chapter_name": data["chapter_name"],
+            "subject": data["subject"],
+            "query_count": data["query_count"],
+            "last_asked": str(data["last_asked"]),
+            "is_struggle_area": data["query_count"] >= 3
+        })
+
+    # ------------------------------
+    # 4. AI-style suggestions (simple logic)
+    # ------------------------------
+    if total_queries == 0:
+        overall_feedback = "Start exploring! Ask your first question!"
+        motivation_message = "Every question helps you understand better."
+        weak_topics = []
+        suggestions = ["Try asking questions from different subjects."]
+    else:
+        overall_feedback = "Great job! You're actively learning."
+        motivation_message = "Keep the streak alive!"
+        weak_topics = [h["chapter_name"] for h in chapter_hotspots if h["is_struggle_area"]]
+        suggestions = [
+            f"Practice more from {w}" for w in weak_topics
+        ] or ["You're doing great! No weak topics detected."]
+
+    # ------------------------------
+    # FINAL RESPONSE (Matches Frontend 100%)
+    # ------------------------------
+    return {
+        "summary": {
+            "total_queries": total_queries,
+            "streak": streak,
+            "total_subjects": len(subjects_count),
+            "last_active": str(last_active)
+        },
+
+        "weekly_activity": weekly_activity,
+
+        "chapter_hotspots": chapter_hotspots,
+
+        "ai_feedback": {
+            "overall_feedback": overall_feedback,
+            "motivation_message": motivation_message,
+            "weak_topics": weak_topics,
+            "suggestions": suggestions
+        }
+    }
+
+
+# Import enhanced analytics module
+from . import enhanced_analytics
+
+# ------------------------------
+# ENHANCED ANALYTICS ENDPOINTS
+# ------------------------------
+
+@app.get("/api/dashboard/topic-breakdown")
+def get_topic_breakdown(uid: str, subject: str = None, chapter_id: str = None):
+    """Get topic-level analytics with optional filters"""
+    try:
+        # This is a simplified implementation. In a real scenario, you'd query the topic_analytics collection
+        # For now, we'll return data derived from the enhanced_analytics module if possible, 
+        # or structure the response for the frontend.
+        
+        query = db.collection("topic_analytics").where("uid", "==", uid)
+        
+        if subject and subject != "All Subjects":
+            query = query.where("subject", "==", subject.lower())
+            
+        docs = query.stream()
+        topics = []
+        for doc in docs:
+            topics.append(doc.to_dict())
+            
+        return {"topics": topics}
+    except Exception as e:
+        logger.error(f"Error fetching topic breakdown: {e}")
+        return {"topics": []}
+
+@app.get("/api/dashboard/frequent-questions")  
+def get_frequent_questions(uid: str, limit: int = 10):
+    """Get most frequently asked questions"""
+    try:
+        doc = db.collection("frequent_questions").document(uid).get()
+        if doc.exists:
+            data = doc.to_dict()
+            return {"questions": data.get("questions", [])[:limit]}
+        return {"questions": []}
+    except Exception as e:
+        logger.error(f"Error fetching frequent questions: {e}")
+        return {"questions": []}
+
+@app.get("/api/dashboard/weak-areas")
+def get_weak_areas(uid: str):
+    """Get AI-analyzed weak areas"""
+    try:
+        # Trigger analysis if needed, or just fetch
+        # For performance, we might want to run analysis async, but here we'll fetch
+        return enhanced_analytics.analyze_weak_areas(uid)
+    except Exception as e:
+        logger.error(f"Error fetching weak areas: {e}")
+        return {}
+
+@app.get("/api/dashboard/suggestions")
+def get_suggestions(uid: str):
+    """Get personalized study suggestions"""
+    try:
+        return {"suggestions": enhanced_analytics.generate_suggestions(uid)}
+    except Exception as e:
+        logger.error(f"Error fetching suggestions: {e}")
+        return {"suggestions": []}
+
+@app.get("/api/admin/student-report")
+def get_student_report(uid: str):
+    """Get comprehensive student report for admin"""
+    try:
+        return enhanced_analytics.get_student_detailed_report(uid)
+    except Exception as e:
+        logger.error(f"Error generating student report: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+# Existing endpoints...
+@app.get("/api/dashboard/ai-feedback", tags=["Dashboard"])
+async def get_ai_feedback_endpoint(uid: str = Query(...)):
+    """
+    Get AI-powered student feedback and insights.
+    """
+    try:
+        feedback = enhanced_dashboard_service.generate_student_feedback(uid)
+        return feedback
+    except Exception as e:
+        logger.error(f"Failed to generate AI feedback: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/api/dashboard/my-chapter-hotspots", tags=["Dashboard"])
+async def get_my_chapter_hotspots_endpoint(
+    uid: str = Query(...),
+    limit: int = Query(5, ge=1, le=20)
+):
+    """
+    Get chapters this student asks about most.
+    """
+    try:
+        hotspots = enhanced_dashboard_service.get_chapter_hotspots_for_student(uid, limit)
+        return {"hotspots": hotspots, "total": len(hotspots)}
+    except Exception as e:
+        logger.error(f"Failed to get chapter hotspots: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# --- MY BAG (NOTEBOOKS) ENDPOINTS ---
+
+class NotebookCreateRequest(BaseModel):
+    uid: str
+    name: str
+    subject: str = "General"
+    color: str = "#4F46E5"
+
+class NotebookDeleteRequest(BaseModel):
+    uid: str
+    notebook_id: str
+
+class SaveToBagRequest(BaseModel):
+    uid: str
+    notebook_id: str
+    content: str
+    title: Optional[str] = None
+    source_query: Optional[str] = None
+    chapter_name: Optional[str] = None
+    subject: Optional[str] = None
+
+class DeleteBagItemRequest(BaseModel):
+    uid: str
+    item_id: str
+
+class ToggleFavoriteRequest(BaseModel):
+    uid: str
+    item_id: str
+
+
+@app.post("/api/bag/notebook/create", tags=["My Bag"])
+async def create_notebook_endpoint(request: NotebookCreateRequest):
+    """Create a new notebook."""
+    try:
+        notebook_id = bag_service.create_notebook(
+            uid=request.uid,
+            notebook_name=request.name,
+            subject=request.subject,
+            color=request.color
+        )
+        return {"success": True, "notebook_id": notebook_id, "message": "Notebook created!"}
+    except Exception as e:
+        logger.error(f"Failed to create notebook: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/api/bag/notebooks", tags=["My Bag"])
+async def get_notebooks_endpoint(uid: str = Query(...)):
+    """Get all notebooks for a user."""
+    try:
+        notebooks = bag_service.get_notebooks(uid)
+        return {"notebooks": notebooks, "total": len(notebooks)}
+    except Exception as e:
+        logger.error(f"Failed to get notebooks: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.delete("/api/bag/notebook/delete", tags=["My Bag"])
+async def delete_notebook_endpoint(request: NotebookDeleteRequest):
+    """Delete a notebook and all its contents."""
+    try:
+        bag_service.delete_notebook(request.uid, request.notebook_id)
+        return {"success": True, "message": "Notebook deleted"}
+    except Exception as e:
+        logger.error(f"Failed to delete notebook: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/api/bag/save", tags=["My Bag"])
+async def save_to_bag_endpoint(request: SaveToBagRequest):
+    """Save content to a notebook."""
+    try:
+        item_id = bag_service.save_to_bag(
+            uid=request.uid,
+            notebook_id=request.notebook_id,
+            content=request.content,
+            title=request.title,
+            source_query=request.source_query,
+            chapter_name=request.chapter_name,
+            subject=request.subject
+        )
+        return {"success": True, "item_id": item_id, "message": "Saved to bag!"}
+    except Exception as e:
+        logger.error(f"Failed to save to bag: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/api/bag/items", tags=["My Bag"])
+async def get_bag_items_endpoint(
+    uid: str = Query(...),
+    notebook_id: Optional[str] = Query(None)
+):
+    """Get items from bag, optionally filtered by notebook."""
+    try:
+        items = bag_service.get_bag_items(uid, notebook_id)
+        return {"items": items, "total": len(items)}
+    except Exception as e:
+        logger.error(f"Failed to get bag items: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.delete("/api/bag/item/delete", tags=["My Bag"])
+async def delete_bag_item_endpoint(request: DeleteBagItemRequest):
+    """Delete an item from bag."""
+    try:
+        bag_service.delete_bag_item(request.uid, request.item_id)
+        return {"success": True, "message": "Item deleted"}
+    except Exception as e:
+        logger.error(f"Failed to delete bag item: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/api/bag/item/toggle-favorite", tags=["My Bag"])
+async def toggle_favorite_endpoint(request: ToggleFavoriteRequest):
+    """Toggle favorite status of an item."""
+    try:
+        new_status = bag_service.toggle_favorite(request.uid, request.item_id)
+        return {"success": True, "is_favorite": new_status}
+    except Exception as e:
+        logger.error(f"Failed to toggle favorite: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# --- ADMIN DASHBOARD ENDPOINTS ---
+
+@app.get("/api/admin/class-overview", tags=["Admin Dashboard"])
+async def get_class_overview_endpoint():
+    """
+    Get overview of query distribution across all classes.
+    
+    Returns class distribution and total query count.
+    """
+    try:
+        overview = dashboard_service.get_class_overview()
+        return overview
+    except Exception as e:
+        logger.error(f"Failed to get class overview: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/api/admin/chapter-hotspots", tags=["Admin Dashboard"])
+async def get_chapter_hotspots_endpoint(
+    class_name: str = Query(...),
+    subject: str = Query(...),
+    limit: int = Query(10, ge=1, le=50)
+):
+    """
+    Get most queried chapters for a class and subject.
+    
+    Args:
+        class_name: Class (e.g., "8")
+        subject: Subject name (e.g., "science")
+        limit: Number of hotspots (1-50, default 10)
+    """
+    try:
+        hotspots = dashboard_service.get_chapter_hotspots(class_name, subject, limit)
+        return {"hotspots": hotspots, "total": len(hotspots)}
+    except Exception as e:
+        logger.error(f"Failed to get chapter hotspots: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/api/admin/subject-distribution", tags=["Admin Dashboard"])
+async def get_subject_distribution_endpoint():
+    """
+    Get query distribution across all subjects.
+    
+    Returns subjects and counts for chart rendering.
+    """
+    try:
+        distribution = dashboard_service.get_subject_distribution()
+        return distribution
+    except Exception as e:
+        logger.error(f"Failed to get subject distribution: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/api/admin/student-performance", tags=["Admin Dashboard"])
+async def get_student_performance_endpoint(uid: str = Query(...)):
+    """
+    Get detailed performance metrics for a specific student (admin view).
+    
+    Returns complete stats, recent queries, and learning patterns.
+    """
+    try:
+        performance = dashboard_service.get_student_performance(uid)
+        return performance
+    except Exception as e:
+        logger.error(f"Failed to get student performance: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
 # --- STATIC FILE SERVING ---
 # Mount the 'public' directory to serve HTML, CSS, JS
 app.mount("/static", StaticFiles(directory="public"), name="static")
@@ -1628,9 +2335,21 @@ app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
 async def read_root():
     return FileResponse('public/index.html')
 
+@app.get("/enhanced-dashboard")
+async def enhanced_dashboard_page():
+    return FileResponse('public/enhanced-dashboard.html')
+
 @app.get("/admin")
 async def admin_page():
     return FileResponse('public/admin.html')
+
+@app.get("/achievements")
+async def achievements_page():
+    return FileResponse('public/achievements.html')
+
+@app.get("/profile")
+async def profile_page():
+    return FileResponse('public/profile.html')
 
 @app.get("/admin-login.html")
 async def admin_login():
@@ -1643,6 +2362,14 @@ async def mode_selection():
 @app.get("/user")
 async def user_page():
     return FileResponse('public/user.html')
+
+@app.get("/dashboard")
+async def dashboard_page():
+    return FileResponse('public/dashboard.html')
+
+@app.get("/admin-dashboard")
+async def admin_dashboard_page():
+    return FileResponse('public/admin-dashboard.html')
 
 @app.get("/chapters")
 async def chapters_page():

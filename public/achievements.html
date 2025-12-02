@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Achievements - Chaduvu Guru</title>
+    <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
+    <link rel="stylesheet" href="/static/sidebar.css">
+    <link rel="stylesheet" href="/static/my-bag.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: #F3F4F6;
+        }
+
+        .badge-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .badge-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        .badge-locked {
+            filter: grayscale(100%);
+            opacity: 0.6;
+        }
+
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #f00;
+            animation: fall linear forwards;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(100vh) rotate(720deg);
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50">
+
+    <!-- Sidebar Container -->
+    <div id="sidebar-container"></div>
+
+    <!-- Main Content -->
+    <div class="ml-0 md:ml-64 p-8 transition-all duration-300">
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-8 fade-in">
+            <div>
+                <h1 class="text-3xl font-bold text-gray-800 flex items-center gap-3">
+                    🏆 My Trophy Room
+                </h1>
+                <p class="text-gray-500 mt-1">Keep learning to unlock more badges!</p>
+            </div>
+            <div class="bg-white px-6 py-3 rounded-2xl shadow-sm flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-yellow-100 flex items-center justify-center text-xl">⭐</div>
+                <div>
+                    <div class="text-sm text-gray-500">Total Points</div>
+                    <div class="text-xl font-bold text-yellow-600" id="total-points">0</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Streak Section -->
+        <div
+            class="bg-gradient-to-r from-orange-500 to-red-500 rounded-3xl p-8 text-white mb-10 shadow-lg relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -mr-16 -mt-16 blur-3xl"></div>
+            <div class="relative z-10 flex items-center justify-between">
+                <div>
+                    <h2 class="text-2xl font-bold mb-2">Current Streak</h2>
+                    <div class="flex items-baseline gap-2">
+                        <span class="text-6xl font-bold" id="streak-count">0</span>
+                        <span class="text-xl opacity-90">days</span>
+                    </div>
+                    <p class="mt-4 bg-white/20 inline-block px-4 py-2 rounded-lg text-sm backdrop-blur-sm">
+                        🔥 You're on fire! Come back tomorrow to keep it going!
+                    </p>
+                </div>
+                <div class="text-9xl animate-pulse">🔥</div>
+            </div>
+        </div>
+
+        <!-- Badges Grid -->
+        <h3 class="text-xl font-bold text-gray-800 mb-6">Your Badges</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" id="badges-grid">
+            <!-- Badges will be populated here -->
+            <div class="col-span-full text-center py-12">
+                <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto"></div>
+                <p class="mt-4 text-gray-500">Loading your trophies...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- My Bag Component -->
+    <link rel="stylesheet" href="/static/my-bag.css">
+
+    <!-- Bag Overlay -->
+    <div id="my-bag-overlay" class="my-bag-overlay" onclick="closeBag()"></div>
+
+    <!-- Bag Sidebar -->
+    <div id="my-bag-sidebar" class="my-bag-sidebar">
+        <!-- Header -->
+        <div class="bag-header">
+            <div class="bag-title">
+                <div class="bag-icon-wrapper">
+                    <span class="text-2xl">🎒</span>
+                </div>
+                <div>
+                    <h2 class="text-xl font-bold">My Bag</h2>
+                    <p class="text-xs opacity-80">Your Learning Collection</p>
+                </div>
+            </div>
+            <button onclick="closeBag()" class="bag-close-btn">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+            </button>
+        </div>
+
+        <!-- Content -->
+        <div class="bag-content">
+            <!-- Tabs -->
+            <div class="bag-tabs">
+                <button onclick="showBagTab('notebooks')" id="notebooks-tab" class="bag-tab active">
+                    <span>📚</span> Notebooks
+                </button>
+                <button onclick="showBagTab('saved')" id="saved-tab" class="bag-tab">
+                    <span>💾</span> Saved
+                </button>
+            </div>
+
+            <!-- Notebooks View -->
+            <div id="notebooks-view">
+                <button onclick="showCreateNotebookModal()" class="create-btn">
+                    <span>+</span> Create New Notebook
+                </button>
+                <div id="notebooks-grid" class="notebook-grid">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+
+            <!-- Saved Items View -->
+            <div id="saved-view" style="display: none;">
+                <button onclick="showCreateNoteModal()" class="create-btn">
+                    <span>+</span> Write a Note
+                </button>
+                <div class="form-group">
+                    <select id="notebook-filter" onchange="filterItems()" class="form-select">
+                        <option value="">All Notebooks</option>
+                    </select>
+                </div>
+                <div id="items-list" class="notebook-grid">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Notebook Modal -->
+    <div id="create-notebook-overlay" class="premium-modal-overlay">
+        <div id="create-notebook-modal" class="premium-modal">
+            <div class="modal-header">
+                <div class="modal-icon">📓</div>
+                <h3 class="modal-title">New Notebook</h3>
+                <p class="text-gray-500">Create a space for your notes</p>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Notebook Name</label>
+                <input id="notebook-name" type="text" class="form-input" placeholder="e.g., Science Notes">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Subject</label>
+                <select id="notebook-subject" class="form-select">
+                    <option value="science">🔬 Science</option>
+                    <option value="maths">🔢 Maths</option>
+                    <option value="social">🌍 Social</option>
+                    <option value="english">📖 English</option>
+                    <option value="general">📚 General</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Color Theme</label>
+                <div class="color-options">
+                    <button onclick="selectColor('#6366f1')" data-color="#6366f1" class="color-btn selected"
+                        style="background: #6366f1"></button>
+                    <button onclick="selectColor('#10b981')" data-color="#10b981" class="color-btn"
+                        style="background: #10b981"></button>
+                    <button onclick="selectColor('#f59e0b')" data-color="#f59e0b" class="color-btn"
+                        style="background: #f59e0b"></button>
+                    <button onclick="selectColor('#ef4444')" data-color="#ef4444" class="color-btn"
+                        style="background: #ef4444"></button>
+                    <button onclick="selectColor('#8b5cf6')" data-color="#8b5cf6" class="color-btn"
+                        style="background: #8b5cf6"></button>
+                    <button onclick="selectColor('#ec4899')" data-color="#ec4899" class="color-btn"
+                        style="background: #ec4899"></button>
+                </div>
+                <input type="hidden" id="notebook-color" value="#6366f1">
+            </div>
+
+            <div class="modal-actions">
+                <button onclick="hideCreateNotebookModal()" class="btn-secondary">Cancel</button>
+                <button onclick="createNotebook()" class="btn-primary">Create Notebook</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Note Modal -->
+    <div id="create-note-overlay" class="premium-modal-overlay">
+        <div id="create-note-modal" class="premium-modal">
+            <div class="modal-header">
+                <div class="modal-icon">📝</div>
+                <h3 class="modal-title">Write a Note</h3>
+                <p class="text-gray-500">Capture your thoughts</p>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Select Notebook</label>
+                <select id="note-notebook" class="form-select"></select>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Title</label>
+                <input id="note-title" type="text" class="form-input" placeholder="Note Title">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Content</label>
+                <textarea id="note-content" rows="4" class="form-textarea" placeholder="Write something..."></textarea>
+            </div>
+
+            <div class="modal-actions">
+                <button onclick="hideCreateNoteModal()" class="btn-secondary">Cancel</button>
+                <button onclick="saveNote()" class="btn-primary">Save Note</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/firebase-config.js"></script>
+    <script src="/static/sidebar.js"></script>
+    <script src="/static/my-bag.js"></script>
+
+    <script>
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                loadUserData(user);
+            } else {
+                window.location.href = '/';
+            }
+        });
+
+        async function loadUserData(user) {
+            try {
+                const doc = await db.collection('users').doc(user.uid).get();
+                if (doc.exists) {
+                    const userData = doc.data();
+                    initializeSidebar(userData, { hideAchievements: true }); // Hide link to self
+                    loadAchievements(user.uid, userData);
+                }
+            } catch (error) {
+                console.error('Error loading user data:', error);
+            }
+        }
+
+        async function loadAchievements(uid, userData) {
+            // Mock badges for now, but use real stats
+            const statsDoc = await db.collection('user_stats').doc(uid).get();
+            const stats = statsDoc.exists ? statsDoc.data() : { total_queries: 0, streak: 0 };
+
+            document.getElementById('streak-count').textContent = stats.streak || 0;
+            document.getElementById('total-points').textContent = (stats.total_queries || 0) * 10;
+
+            const badges = [
+                {
+                    id: 'first_login',
+                    name: 'First Steps',
+                    icon: '🚀',
+                    description: 'Logged in for the first time',
+                    condition: () => true // Always unlocked if here
+                },
+                {
+                    id: 'streak_3',
+                    name: 'On Fire',
+                    icon: '🔥',
+                    description: 'Reached a 3-day streak',
+                    condition: () => (stats.streak || 0) >= 3
+                },
+                {
+                    id: 'streak_7',
+                    name: 'Unstoppable',
+                    icon: '⚡',
+                    description: 'Reached a 7-day streak',
+                    condition: () => (stats.streak || 0) >= 7
+                },
+                {
+                    id: 'queries_10',
+                    name: 'Curious Mind',
+                    icon: '🤔',
+                    description: 'Asked 10 questions',
+                    condition: () => (stats.total_queries || 0) >= 10
+                },
+                {
+                    id: 'queries_50',
+                    name: 'Knowledge Seeker',
+                    icon: '📚',
+                    description: 'Asked 50 questions',
+                    condition: () => (stats.total_queries || 0) >= 50
+                },
+                {
+                    id: 'queries_100',
+                    name: 'Scholar',
+                    icon: '🎓',
+                    description: 'Asked 100 questions',
+                    condition: () => (stats.total_queries || 0) >= 100
+                }
+            ];
+
+            const grid = document.getElementById('badges-grid');
+            grid.innerHTML = badges.map(badge => {
+                const isUnlocked = badge.condition();
+                return `
+                    <div class="badge-card bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-center text-center ${isUnlocked ? '' : 'badge-locked'}">
+                        <div class="w-20 h-20 rounded-full ${isUnlocked ? 'bg-purple-100' : 'bg-gray-100'} flex items-center justify-center text-4xl mb-4">
+                            ${badge.icon}
+                        </div>
+                        <h4 class="font-bold text-gray-800 text-lg mb-1">${badge.name}</h4>
+                        <p class="text-sm text-gray-500">${badge.description}</p>
+                        ${isUnlocked ? '<div class="mt-4 text-xs font-bold text-green-500 bg-green-50 px-3 py-1 rounded-full">UNLOCKED</div>' : '<div class="mt-4 text-xs font-bold text-gray-400 bg-gray-100 px-3 py-1 rounded-full">LOCKED</div>'}
+                    </div>
+                `;
+            }).join('');
+        }
+    </script>
+</body>
+
+</html>

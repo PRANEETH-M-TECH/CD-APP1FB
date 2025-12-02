@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - Chaduvu Guru</title>
+    <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
+    <link rel="stylesheet" href="/static/sidebar.css">
+    <link rel="stylesheet" href="/static/my-bag.css">
+    <link rel="stylesheet" href="/static/auth-modal.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: #F3F4F6;
+        }
+
+        .profile-card {
+            transition: all 0.3s ease;
+        }
+
+        .profile-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .avatar-edit-overlay {
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .avatar-container:hover .avatar-edit-overlay {
+            opacity: 1;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50">
+
+    <!-- Sidebar Container -->
+    <div id="sidebar-container"></div>
+
+    <!-- Main Content -->
+    <div class="ml-0 md:ml-64 p-8 transition-all duration-300">
+        <!-- Header -->
+        <h1 class="text-3xl font-bold text-gray-800 mb-8 flex items-center gap-3">
+            👤 My Profile
+        </h1>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Left Column: User Card -->
+            <div class="lg:col-span-1">
+                <div class="bg-white rounded-3xl p-8 shadow-sm text-center profile-card relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-full h-32 bg-gradient-to-r from-purple-500 to-pink-500"></div>
+
+                    <div class="relative z-10 mt-12 mb-4 avatar-container inline-block cursor-pointer"
+                        onclick="changeAvatar()">
+                        <div class="w-32 h-32 rounded-full bg-white p-1 shadow-lg mx-auto">
+                            <div class="w-full h-full rounded-full bg-gray-100 flex items-center justify-center text-6xl"
+                                id="profile-avatar">
+                                👤
+                            </div>
+                        </div>
+                        <div
+                            class="avatar-edit-overlay absolute inset-0 flex items-center justify-center bg-black/50 rounded-full text-white font-medium text-sm mt-1 mx-1">
+                            Change
+                        </div>
+                    </div>
+
+                    <h2 class="text-2xl font-bold text-gray-800 mb-1" id="profile-name">Student Name</h2>
+                    <p class="text-gray-500 mb-6" id="profile-class">Class -</p>
+
+                    <div class="flex justify-center gap-4 mb-8">
+                        <div class="text-center">
+                            <div class="text-2xl font-bold text-gray-800" id="stats-streak">0</div>
+                            <div class="text-xs text-gray-500 uppercase tracking-wider">Day Streak</div>
+                        </div>
+                        <div class="w-px bg-gray-200"></div>
+                        <div class="text-center">
+                            <div class="text-2xl font-bold text-gray-800" id="stats-queries">0</div>
+                            <div class="text-xs text-gray-500 uppercase tracking-wider">Questions</div>
+                        </div>
+                    </div>
+
+                    <button onclick="handleLogout()"
+                        class="w-full py-3 rounded-xl border-2 border-red-100 text-red-500 font-semibold hover:bg-red-50 transition">
+                        Logout
+                    </button>
+                </div>
+            </div>
+
+            <!-- Right Column: Details & Settings -->
+            <div class="lg:col-span-2 space-y-6">
+                <!-- Personal Info -->
+                <div class="bg-white rounded-3xl p-8 shadow-sm profile-card">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-xl font-bold text-gray-800">Personal Information</h3>
+                        <button class="text-purple-600 font-medium hover:text-purple-700">Edit</button>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="p-4 bg-gray-50 rounded-xl">
+                                <div class="text-sm text-gray-500 mb-1">Full Name</div>
+                                <div class="font-medium text-gray-800" id="info-name">-</div>
+                            </div>
+                            <div class="p-4 bg-gray-50 rounded-xl">
+                                <div class="text-sm text-gray-500 mb-1">Class</div>
+                                <div class="font-medium text-gray-800" id="info-class">-</div>
+                            </div>
+                            <div class="p-4 bg-gray-50 rounded-xl">
+                                <div class="text-sm text-gray-500 mb-1">School</div>
+                                <div class="font-medium text-gray-800" id="info-school">Not set</div>
+                            </div>
+                            <div class="p-4 bg-gray-50 rounded-xl">
+                                <div class="text-sm text-gray-500 mb-1">Email</div>
+                                <div class="font-medium text-gray-800" id="info-email">-</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Account Settings -->
+                <div class="bg-white rounded-3xl p-8 shadow-sm profile-card">
+                    <h3 class="text-xl font-bold text-gray-800 mb-6">Account Settings</h3>
+                    <div class="space-y-3">
+                        <button
+                            class="w-full flex items-center justify-between p-4 hover:bg-gray-50 rounded-xl transition group">
+                            <div class="flex items-center gap-3">
+                                <div
+                                    class="w-10 h-10 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center">
+                                    🔔</div>
+                                <div class="text-left">
+                                    <div class="font-medium text-gray-800">Notifications</div>
+                                    <div class="text-sm text-gray-500">Manage your alerts</div>
+                                </div>
+                            </div>
+                            <span class="text-gray-400 group-hover:translate-x-1 transition">→</span>
+                        </button>
+                        <button
+                            class="w-full flex items-center justify-between p-4 hover:bg-gray-50 rounded-xl transition group">
+                            <div class="flex items-center gap-3">
+                                <div
+                                    class="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center">
+                                    🔒</div>
+                                <div class="text-left">
+                                    <div class="font-medium text-gray-800">Privacy & Security</div>
+                                    <div class="text-sm text-gray-500">Password and security</div>
+                                </div>
+                            </div>
+                            <span class="text-gray-400 group-hover:translate-x-1 transition">→</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- My Bag Component -->
+    <link rel="stylesheet" href="/static/my-bag.css">
+
+    <!-- Bag Overlay -->
+    <div id="my-bag-overlay" class="my-bag-overlay" onclick="closeBag()"></div>
+
+    <!-- Bag Sidebar -->
+    <div id="my-bag-sidebar" class="my-bag-sidebar">
+        <!-- Header -->
+        <div class="bag-header">
+            <div class="bag-title">
+                <div class="bag-icon-wrapper">
+                    <span class="text-2xl">🎒</span>
+                </div>
+                <div>
+                    <h2 class="text-xl font-bold">My Bag</h2>
+                    <p class="text-xs opacity-80">Your Learning Collection</p>
+                </div>
+            </div>
+            <button onclick="closeBag()" class="bag-close-btn">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+            </button>
+        </div>
+
+        <!-- Content -->
+        <div class="bag-content">
+            <!-- Tabs -->
+            <div class="bag-tabs">
+                <button onclick="showBagTab('notebooks')" id="notebooks-tab" class="bag-tab active">
+                    <span>📚</span> Notebooks
+                </button>
+                <button onclick="showBagTab('saved')" id="saved-tab" class="bag-tab">
+                    <span>💾</span> Saved
+                </button>
+            </div>
+
+            <!-- Notebooks View -->
+            <div id="notebooks-view">
+                <button onclick="showCreateNotebookModal()" class="create-btn">
+                    <span>+</span> Create New Notebook
+                </button>
+                <div id="notebooks-grid" class="notebook-grid">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+
+            <!-- Saved Items View -->
+            <div id="saved-view" style="display: none;">
+                <button onclick="showCreateNoteModal()" class="create-btn">
+                    <span>+</span> Write a Note
+                </button>
+                <div class="form-group">
+                    <select id="notebook-filter" onchange="filterItems()" class="form-select">
+                        <option value="">All Notebooks</option>
+                    </select>
+                </div>
+                <div id="items-list" class="notebook-grid">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Notebook Modal -->
+    <div id="create-notebook-overlay" class="premium-modal-overlay">
+        <div id="create-notebook-modal" class="premium-modal">
+            <div class="modal-header">
+                <div class="modal-icon">📓</div>
+                <h3 class="modal-title">New Notebook</h3>
+                <p class="text-gray-500">Create a space for your notes</p>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Notebook Name</label>
+                <input id="notebook-name" type="text" class="form-input" placeholder="e.g., Science Notes">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Subject</label>
+                <select id="notebook-subject" class="form-select">
+                    <option value="science">🔬 Science</option>
+                    <option value="maths">🔢 Maths</option>
+                    <option value="social">🌍 Social</option>
+                    <option value="english">📖 English</option>
+                    <option value="general">📚 General</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Color Theme</label>
+                <div class="color-options">
+                    <button onclick="selectColor('#6366f1')" data-color="#6366f1" class="color-btn selected"
+                        style="background: #6366f1"></button>
+                    <button onclick="selectColor('#10b981')" data-color="#10b981" class="color-btn"
+                        style="background: #10b981"></button>
+                    <button onclick="selectColor('#f59e0b')" data-color="#f59e0b" class="color-btn"
+                        style="background: #f59e0b"></button>
+                    <button onclick="selectColor('#ef4444')" data-color="#ef4444" class="color-btn"
+                        style="background: #ef4444"></button>
+                    <button onclick="selectColor('#8b5cf6')" data-color="#8b5cf6" class="color-btn"
+                        style="background: #8b5cf6"></button>
+                    <button onclick="selectColor('#ec4899')" data-color="#ec4899" class="color-btn"
+                        style="background: #ec4899"></button>
+                </div>
+                <input type="hidden" id="notebook-color" value="#6366f1">
+            </div>
+
+            <div class="modal-actions">
+                <button onclick="hideCreateNotebookModal()" class="btn-secondary">Cancel</button>
+                <button onclick="createNotebook()" class="btn-primary">Create Notebook</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Note Modal -->
+    <div id="create-note-overlay" class="premium-modal-overlay">
+        <div id="create-note-modal" class="premium-modal">
+            <div class="modal-header">
+                <div class="modal-icon">📝</div>
+                <h3 class="modal-title">Write a Note</h3>
+                <p class="text-gray-500">Capture your thoughts</p>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Select Notebook</label>
+                <select id="note-notebook" class="form-select"></select>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Title</label>
+                <input id="note-title" type="text" class="form-input" placeholder="Note Title">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Content</label>
+                <textarea id="note-content" rows="4" class="form-textarea" placeholder="Write something..."></textarea>
+            </div>
+
+            <div class="modal-actions">
+                <button onclick="hideCreateNoteModal()" class="btn-secondary">Cancel</button>
+                <button onclick="saveNote()" class="btn-primary">Save Note</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/firebase-config.js"></script>
+    <script src="/static/sidebar.js"></script>
+    <script src="/static/my-bag.js"></script>
+    <script src="/static/avatar-selection.js"></script>
+
+    <script>
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                loadUserData(user);
+            } else {
+                window.location.href = '/';
+            }
+        });
+
+        async function loadUserData(user) {
+            try {
+                const doc = await db.collection('users').doc(user.uid).get();
+                if (doc.exists) {
+                    const userData = doc.data();
+                    initializeSidebar(userData, { hideProfile: true }); // Hide link to self
+                    populateProfile(user, userData);
+                }
+            } catch (error) {
+                console.error('Error loading user data:', error);
+            }
+        }
+
+        async function populateProfile(user, userData) {
+            // Stats
+            const statsDoc = await db.collection('user_stats').doc(user.uid).get();
+            const stats = statsDoc.exists ? statsDoc.data() : { total_queries: 0, streak: 0 };
+
+            document.getElementById('stats-streak').textContent = stats.streak || 0;
+            document.getElementById('stats-queries').textContent = stats.total_queries || 0;
+
+            // Info
+            document.getElementById('profile-name').textContent = userData.name || 'Student';
+            document.getElementById('profile-class').textContent = `Class ${userData.class || '-'}`;
+            document.getElementById('profile-avatar').textContent = userData.avatar || (userData.name || 'S').charAt(0).toUpperCase();
+
+            document.getElementById('info-name').textContent = userData.name || '-';
+            document.getElementById('info-class').textContent = userData.class || '-';
+            document.getElementById('info-email').textContent = user.email || '-';
+            document.getElementById('info-school').textContent = userData.school || 'Not set';
+        }
+
+        function changeAvatar() {
+            showAvatarSelection(async (avatar) => {
+                const user = auth.currentUser;
+                if (!user) return;
+
+                try {
+                    // Update in Firestore
+                    await db.collection('users').doc(user.uid).update({
+                        avatar: avatar.emoji
+                    });
+
+                    // Update UI
+                    document.getElementById('profile-avatar').textContent = avatar.emoji;
+
+                    // Reload sidebar to update avatar there too
+                    const doc = await db.collection('users').doc(user.uid).get();
+                    initializeSidebar(doc.data(), { hideProfile: true });
+
+                } catch (error) {
+                    console.error('Error updating avatar:', error);
+                    alert('Failed to update avatar');
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>

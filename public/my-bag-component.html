@@ -1,0 +1,536 @@
+<!-- My Bag Modal/Sidebar Component -->
+<style>
+    .my-bag-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+        backdrop-filter: blur(4px);
+    }
+
+    .my-bag-overlay.active {
+        display: block;
+        animation: fade-in 0.3s ease;
+    }
+
+    .my-bag-sidebar {
+        position: fixed;
+        right: -450px;
+        top: 0;
+        width: 450px;
+        height: 100%;
+        background: white;
+        box-shadow: -4px 0 20px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+        transition: right 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        overflow-y: auto;
+    }
+
+    .my-bag-sidebar.active {
+        right: 0;
+    }
+
+    @keyframes fade-in {
+        from {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
+    }
+
+    .notebook-card {
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+
+    .notebook-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    }
+
+    .bag-item {
+        animation: slide-in 0.3s ease;
+    }
+
+    @keyframes slide-in {
+        from {
+            transform: translateX(20px);
+            opacity: 0;
+        }
+
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+</style>
+
+<!-- Overlay -->
+<div id="my-bag-overlay" class="my-bag-overlay" onclick="closeBag()"></div>
+
+<!-- Sidebar -->
+<div id="my-bag-sidebar" class="my-bag-sidebar">
+    <!-- Header -->
+    <div
+        class="bg-gradient-to-r from-purple-600 to-pink-500 text-white p-6 flex justify-between items-center sticky top-0 z-10">
+        <div class="flex items-center gap-3">
+            <span class="text-4xl">🎒</span>
+            <div>
+                <h2 class="text-2xl font-bold">My Bag</h2>
+                <p class="text-sm text-purple-100">Save your learning!</p>
+            </div>
+        </div>
+        <button onclick="closeBag()" class="text-white hover:bg-white/20 p-2 rounded-lg transition">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+        </button>
+    </div>
+
+    <!-- Content -->
+    <div class="p-6">
+        <!-- Tabs -->
+        <div class="flex gap-2 mb-6 bg-gray-100 p-1 rounded-lg">
+            <button onclick="showBagTab('notebooks')" id="notebooks-tab"
+                class="flex-1 py-2 px-4 rounded-lg font-medium transition bg-white text-purple-600 shadow-sm">
+                📚 Notebooks
+            </button>
+            <button onclick="showBagTab('saved')" id="saved-tab"
+                class="flex-1 py-2 px-4 rounded-lg font-medium transition text-gray-600 hover:bg-white/50">
+                💾 Saved Items
+            </button>
+        </div>
+
+        <!-- Notebooks View -->
+        <div id="notebooks-view">
+            <button onclick="showCreateNotebookModal()"
+                class="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white py-3 px-4 rounded-xl font-semibold hover:shadow-lg transition mb-4">
+                + Create New Notebook
+            </button>
+
+            <div id="notebooks-grid" class="grid grid-cols-1 gap-4">
+                <p class="text-gray-400 text-center py-8">Create your first notebook!</p>
+            </div>
+        </div>
+
+        <!-- Saved Items View -->
+        <div id="saved-view" style="display: none;">
+            <div class="mb-4">
+                <select id="notebook-filter" onchange="filterItems()"
+                    class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-purple-500 focus:border-purple-500">
+                    <option value="">All Notebooks</option>
+                </select>
+            </div>
+            <div id="items-list" class="space-y-3">
+                <p class="text-gray-400 text-center py-8">No items saved yet</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Create Notebook Modal -->
+<div id="create-notebook-modal"
+    class="fixed inset-0 bg-black/50 backdrop-blur-sm z-[1001] hidden flex items-center justify-center">
+    <div class="bg-white rounded-2xl p-8 w-full max-w-md shadow-2xl animate-bounce-in m-4">
+        <h3 class="text-2xl font-bold mb-6 text-gray-800 flex items-center gap-2">
+            <span>📓</span> Create Notebook
+        </h3>
+
+        <div class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Notebook Name</label>
+                <input id="notebook-name" type="text" placeholder="e.g., Science Notes"
+                    class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-purple-500 focus:border-purple-500">
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Subject</label>
+                <select id="notebook-subject"
+                    class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-purple-500">
+                    <option value="science">🔬 Science</option>
+                    <option value="maths">🔢 Maths</option>
+                    <option value="social">🌍 Social</option>
+                    <option value="english">📖 English</option>
+                    <option value="general">📚 General</option>
+                </select>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Choose a Color</label>
+                <div class="flex gap-3">
+                    <button onclick="selectColor('#4F46E5')"
+                        class="w-10 h-10 rounded-full bg-indigo-600 border-2 border-transparent hover:border-gray-400 transition"></button>
+                    <button onclick="selectColor('#10B981')"
+                        class="w-10 h-10 rounded-full bg-green-600 border-2 border-transparent hover:border-gray-400 transition"></button>
+                    <button onclick="selectColor('#F59E0B')"
+                        class="w-10 h-10 rounded-full bg-amber-500 border-2 border-transparent hover:border-gray-400 transition"></button>
+                    <button onclick="selectColor('#EF4444')"
+                        class="w-10 h-10 rounded-full bg-red-500 border-2 border-transparent hover:border-gray-400 transition"></button>
+                    <button onclick="selectColor('#8B5CF6')"
+                        class="w-10 h-10 rounded-full bg-violet-600 border-2 border-transparent hover:border-gray-400 transition"></button>
+                    <button onclick="selectColor('#EC4899')"
+                        class="w-10 h-10 rounded-full bg-pink-600 border-2 border-transparent hover:border-gray-400 transition"></button>
+                </div>
+                <input type="hidden" id="notebook-color" value="#4F46E5">
+            </div>
+        </div>
+
+        <div class="flex gap-3 mt-6">
+            <button onclick="createNotebook()"
+                class="flex-1 bg-gradient-to-r from-purple-500 to-pink-500 text-white py-3 rounded-lg font-semibold hover:shadow-lg transition">
+                Create
+            </button>
+            <button onclick="hideCreateNotebookModal()"
+                class="bg-gray-100 text-gray-700 px-6 py-3 rounded-lg font-semibold hover:bg-gray-200 transition">
+                Cancel
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // My Bag State
+    let currentNotebooks = [];
+    let currentItems = [];
+    let selectedColor = '#4F46E5';
+
+    // Open/Close
+    function openBag() {
+        document.getElementById('my-bag-overlay').classList.add('active');
+        document.getElementById('my-bag-sidebar').classList.add('active');
+        loadNotebooks();
+    }
+
+    function closeBag() {
+        document.getElementById('my-bag-overlay').classList.remove('active');
+        document.getElementById('my-bag-sidebar').classList.remove('active');
+    }
+
+    // Tabs
+    function showBagTab(tab) {
+        const notebooksTab = document.getElementById('notebooks-tab');
+        const savedTab = document.getElementById('saved-tab');
+        const notebooksView = document.getElementById('notebooks-view');
+        const savedView = document.getElementById('saved-view');
+
+        if (tab === 'notebooks') {
+            notebooksTab.classList.add('bg-white', 'text-purple-600', 'shadow-sm');
+            notebooksTab.classList.remove('text-gray-600');
+            savedTab.classList.remove('bg-white', 'text-purple-600', 'shadow-sm');
+            savedTab.classList.add('text-gray-600');
+            notebooksView.style.display = 'block';
+            savedView.style.display = 'none';
+            loadNotebooks();
+        } else {
+            savedTab.classList.add('bg-white', 'text-purple-600', 'shadow-sm');
+            savedTab.classList.remove('text-gray-600');
+            notebooksTab.classList.remove('bg-white', 'text-purple-600', 'shadow-sm');
+            notebooksTab.classList.add('text-gray-600');
+            savedView.style.display = 'block';
+            notebooksView.style.display = 'none';
+            loadItems();
+        }
+    }
+
+    // Notebook Creation
+    function showCreateNotebookModal() {
+        document.getElementById('create-notebook-modal').classList.remove('hidden');
+    }
+
+    function hideCreateNotebookModal() {
+        document.getElementById('create-notebook-modal').classList.add('hidden');
+    }
+
+    function selectColor(color) {
+        selectedColor = color;
+        document.getElementById('notebook-color').value = color;
+        // Update selected state visually
+        document.querySelectorAll('.w-10.h-10').forEach(btn => {
+            btn.classList.remove('ring-4', 'ring-gray-400');
+        });
+        event.target.classList.add('ring-4', 'ring-gray-400');
+    }
+
+    async function createNotebook() {
+        const name = document.getElementById('notebook-name').value.trim();
+        const subject = document.getElementById('notebook-subject').value;
+        const color = document.getElementById('notebook-color').value;
+
+        if (!name) {
+            alert('Please enter a notebook name!');
+            return;
+        }
+
+        if (!authManager.currentUser) {
+            alert('You must be logged in to create a notebook.');
+            return;
+        }
+        
+        const userToken = await authManager.currentUser.getIdToken();
+
+        try {
+            const response = await fetch('/api/bag/notebook/create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${userToken}`
+                },
+                body: JSON.stringify({
+                    uid: authManager.currentUser.uid,
+                    name: name,
+                    subject: subject,
+                    color: color
+                })
+            });
+
+            if (response.ok) {
+                hideCreateNotebookModal();
+                document.getElementById('notebook-name').value = '';
+                loadNotebooks();
+                showNotification('✅ Notebook created!');
+            } else {
+                const errorData = await response.json();
+                alert(`Failed to create notebook: ${errorData.detail || 'Unknown error'}`);
+            }
+        } catch (error) {
+            console.error('Error creating notebook:', error);
+            alert('Failed to create notebook');
+        }
+    }
+
+    // Load Notebooks
+    async function loadNotebooks() {
+        if (!authManager.currentUser) {
+            console.log("Not logged in, cannot load notebooks.");
+            document.getElementById('notebooks-grid').innerHTML = '<p class="text-gray-400 text-center py-8">Please log in to see your notebooks.</p>';
+            return;
+        }
+        const userToken = await authManager.currentUser.getIdToken();
+        try {
+            const response = await fetch(`/api/bag/notebooks?uid=${authManager.currentUser.uid}`, {
+                headers: { 'Authorization': `Bearer ${userToken}` }
+            });
+            const data = await response.json();
+            currentNotebooks = data.notebooks || [];
+            renderNotebooks();
+            updateNotebookFilter();
+        } catch (error) {
+            console.error('Error loading notebooks:', error);
+        }
+    }
+
+    function renderNotebooks() {
+        const grid = document.getElementById('notebooks-grid');
+        if (currentNotebooks.length === 0) {
+            grid.innerHTML = '<p class="text-gray-400 text-center py-8">Create your first notebook!</p>';
+            return;
+        }
+
+        grid.innerHTML = currentNotebooks.map(nb => `
+        <div class="notebook-card bg-white border-2 rounded-xl p-5 shadow-sm" style="border-color: ${nb.color}">
+            <div class="flex items-start justify-between mb-3">
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-lg flex items-center justify-center text-2xl" style="background-color: ${nb.color}20">
+                        ${getSubjectEmoji(nb.subject)}
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-gray-800">${nb.name}</h4>
+                        <p class="text-sm text-gray-500 capitalize">${nb.subject}</p>
+                    </div>
+                </div>
+                <button onclick="deleteNotebook('${nb.notebook_id}')" class="text-gray-400 hover:text-red-500 transition">
+                    🗑️
+                </button>
+            </div>
+            <div class="text-sm text-gray-600">
+                📝 ${nb.item_count || 0} items
+            </div>
+        </div>
+    `).join('');
+    }
+
+    // Load Items
+    async function loadItems() {
+        if (!authManager.currentUser) {
+            document.getElementById('items-list').innerHTML = '<p class="text-gray-400 text-center py-8">Please log in to see your items.</p>';
+            return;
+        }
+        const userToken = await authManager.currentUser.getIdToken();
+        const notebookId = document.getElementById('notebook-filter').value;
+        try {
+            const url = notebookId ?
+                `/api/bag/items?uid=${authManager.currentUser.uid}&notebook_id=${notebookId}` :
+                `/api/bag/items?uid=${authManager.currentUser.uid}`;
+
+            const response = await fetch(url, {
+                headers: { 'Authorization': `Bearer ${userToken}` }
+            });
+            const data = await response.json();
+            currentItems = data.items || [];
+            renderItems();
+        } catch (error) {
+            console.error('Error loading items:', error);
+        }
+    }
+
+    function renderItems() {
+        const list = document.getElementById('items-list');
+        if (currentItems.length === 0) {
+            list.innerHTML = '<p class="text-gray-400 text-center py-8">No items saved yet</p>';
+            return;
+        }
+
+        list.innerHTML = currentItems.map(item => `
+        <div class="bag-item bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition">
+            <div class="flex justify-between items-start mb-2">
+                <h4 class="font-semibold text-gray-800">${item.title || 'Untitled'}</h4>
+                <div class="flex gap-2">
+                    <button onclick="toggleFavorite('${item.item_id}')" class="text-lg">
+                        ${item.is_favorite ? '⭐' : '☆'}
+                    </button>
+                    <button onclick="deleteItem('${item.item_id}')" class="text-gray-400 hover:text-red-500">
+                        🗑️
+                    </button>
+                </div>
+            </div>
+            <p class="text-sm text-gray-600 mb-2 line-clamp-2">${item.content}</p>
+            ${item.source_query ? `<p class="text-xs text-gray-400 italic">From: "${item.source_query}"</p>` : ''}
+            ${item.chapter_name ? `<span class="inline-block text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded mt-2">${item.chapter_name}</span>` : ''}
+        </div>
+    `).join('');
+    }
+
+    function updateNotebookFilter() {
+        const filter = document.getElementById('notebook-filter');
+        filter.innerHTML = '<option value="">All Notebooks</option>' +
+            currentNotebooks.map(nb => `<option value="${nb.notebook_id}">${nb.name}</option>`).join('');
+    }
+
+    function filterItems() {
+        loadItems();
+    }
+
+    // Delete
+    async function deleteNotebook(notebookId) {
+        if (!confirm('Delete this notebook and all its contents?')) return;
+
+        if (!authManager.currentUser) {
+            alert('You must be logged in to delete a notebook.');
+            return;
+        }
+        const userToken = await authManager.currentUser.getIdToken();
+
+        try {
+            const response = await fetch('/api/bag/notebook/delete', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${userToken}`
+                },
+                body: JSON.stringify({
+                    uid: authManager.currentUser.uid,
+                    notebook_id: notebookId
+                })
+            });
+
+            if (response.ok) {
+                loadNotebooks();
+                showNotification('✅ Notebook deleted');
+            } else {
+                const errorData = await response.json();
+                alert(`Failed to delete notebook: ${errorData.detail || 'Unknown error'}`);
+            }
+        } catch (error) {
+            console.error('Error deleting notebook:', error);
+        }
+    }
+
+    async function deleteItem(itemId) {
+        if (!authManager.currentUser) {
+            alert('You must be logged in to delete an item.');
+            return;
+        }
+        const userToken = await authManager.currentUser.getIdToken();
+
+        try {
+            const response = await fetch('/api/bag/item/delete', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${userToken}`
+                },
+                body: JSON.stringify({
+                    uid: authManager.currentUser.uid,
+                    item_id: itemId
+                })
+            });
+
+            if (response.ok) {
+                loadItems();
+                loadNotebooks(); // Refresh count
+            } else {
+                const errorData = await response.json();
+                alert(`Failed to delete item: ${errorData.detail || 'Unknown error'}`);
+            }
+        } catch (error) {
+            console.error('Error deleting item:', error);
+        }
+    }
+
+    async function toggleFavorite(itemId) {
+        if (!authManager.currentUser) {
+            alert('You must be logged in to toggle favorite.');
+            return;
+        }
+        const userToken = await authManager.currentUser.getIdToken();
+        try {
+            const response = await fetch('/api/bag/item/toggle-favorite', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${userToken}`
+                },
+                body: JSON.stringify({
+                    uid: authManager.currentUser.uid,
+                    item_id: itemId
+                })
+            });
+
+            if (response.ok) {
+                loadItems();
+            } else {
+                const errorData = await response.json();
+                alert(`Failed to toggle favorite: ${errorData.detail || 'Unknown error'}`);
+            }
+        } catch (error) {
+            console.error('Error toggling favorite:', error);
+        }
+    }
+
+    // Helpers
+    function getSubjectEmoji(subject) {
+        const emojis = {
+            'science': '🔬',
+            'maths': '🔢',
+            'social': '🌍',
+            'english': '📖',
+            'general': '📚'
+        };
+        return emojis[subject.toLowerCase()] || '📚';
+    }
+
+    function showNotification(message) {
+        // Simple notification (you can enhance this)
+        const notification = document.createElement('div');
+        notification.className = 'fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-[1002]';
+        notification.textContent = message;
+        document.body.appendChild(notification);
+        setTimeout(() => notification.remove(), 3000);
+    }
+</script>

@@ -1,0 +1,146 @@
+/**
+ * Styles for Text Selection Save Feature
+ * Modern, animated UI for selecting and saving text to notebooks
+ */
+
+.selection-tooltip {
+    position: absolute;
+    z-index: 9998;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);
+    padding: 4px;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    animation: tooltipBounceIn 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.selection-tooltip.hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(0.8);
+}
+
+@keyframes tooltipBounceIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.3);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.save-selection-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 14px;
+    color: #667eea;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.save-selection-btn:hover {
+    background: #f8f9ff;
+    transform: scale(1.05);
+}
+
+.save-selection-btn:active {
+    transform: scale(0.95);
+}
+
+.save-selection-btn span {
+    font-size: 18px;
+}
+
+/* Notebook Selector Modal */
+#notebook-selector-modal {
+    animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.animate-scale-in {
+    animation: scaleIn 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+@keyframes scaleIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.7);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Notebook selector buttons */
+#notebook-selector-list button {
+    transform-origin: center;
+}
+
+#notebook-selector-list button:active {
+    transform: scale(0.98);
+}
+
+/* Success message animation */
+.animate-bounce-in {
+    animation: bounceIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+@keyframes bounceIn {
+    0% {
+        opacity: 0;
+        transform: translateX(100px);
+    }
+
+    50% {
+        transform: translateX(-10px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Prevent text selection on the tooltip itself */
+.selection-tooltip,
+.save-selection-btn {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+}
+
+/* Highlight selected text with a subtle glow */
+::selection {
+    background-color: rgba(102, 126, 234, 0.2);
+    color: inherit;
+}
+
+::-moz-selection {
+    background-color: rgba(102, 126, 234, 0.2);
+    color: inherit;
+}

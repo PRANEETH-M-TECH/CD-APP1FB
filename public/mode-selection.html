@@ -223,9 +223,12 @@
         }
 
         @keyframes iconBounce {
-            0%, 100% {
+
+            0%,
+            100% {
                 transform: translateY(0);
             }
+
             50% {
                 transform: translateY(-10px);
             }
@@ -443,14 +446,37 @@
         }
 
         @keyframes wave-animation {
-            0% { transform: rotate(0.0deg) }
-            10% { transform: rotate(14.0deg) }
-            20% { transform: rotate(-8.0deg) }
-            30% { transform: rotate(14.0deg) }
-            40% { transform: rotate(-4.0deg) }
-            50% { transform: rotate(10.0deg) }
-            60% { transform: rotate(0.0deg) }
-            100% { transform: rotate(0.0deg) }
+            0% {
+                transform: rotate(0.0deg)
+            }
+
+            10% {
+                transform: rotate(14.0deg)
+            }
+
+            20% {
+                transform: rotate(-8.0deg)
+            }
+
+            30% {
+                transform: rotate(14.0deg)
+            }
+
+            40% {
+                transform: rotate(-4.0deg)
+            }
+
+            50% {
+                transform: rotate(10.0deg)
+            }
+
+            60% {
+                transform: rotate(0.0deg)
+            }
+
+            100% {
+                transform: rotate(0.0deg)
+            }
         }
 
         .fade-in-seq {
@@ -459,8 +485,15 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .slide-out-left {
@@ -468,8 +501,15 @@
         }
 
         @keyframes slideOutLeft {
-            from { transform: translateX(0); opacity: 1; }
-            to { transform: translateX(-100px); opacity: 0; }
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+
+            to {
+                transform: translateX(-100px);
+                opacity: 0;
+            }
         }
     </style>
 </head>
@@ -477,6 +517,156 @@
 <body>
     <!-- Sidebar -->
     <div id="sidebar-container"></div>
+
+    <!-- My Bag Component -->
+    <link rel="stylesheet" href="/static/my-bag.css">
+
+    <!-- Bag Overlay -->
+    <div id="my-bag-overlay" class="my-bag-overlay" onclick="closeBag()"></div>
+
+    <!-- Bag Sidebar -->
+    <div id="my-bag-sidebar" class="my-bag-sidebar">
+        <!-- Header -->
+        <div class="bag-header">
+            <div class="bag-title">
+                <div class="bag-icon-wrapper">
+                    <span class="text-2xl">🎒</span>
+                </div>
+                <div>
+                    <h2 class="text-xl font-bold">My Bag</h2>
+                    <p class="text-xs opacity-80">Your Learning Collection</p>
+                </div>
+            </div>
+            <button onclick="closeBag()" class="bag-close-btn">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+            </button>
+        </div>
+
+        <!-- Content -->
+        <div class="bag-content">
+            <!-- Tabs -->
+            <div class="bag-tabs">
+                <button onclick="showBagTab('notebooks')" id="notebooks-tab" class="bag-tab active">
+                    <span>📚</span> Notebooks
+                </button>
+                <button onclick="showBagTab('saved')" id="saved-tab" class="bag-tab">
+                    <span>💾</span> Saved
+                </button>
+            </div>
+
+            <!-- Notebooks View -->
+            <div id="notebooks-view">
+                <button onclick="showCreateNotebookModal()" class="create-btn">
+                    <span>+</span> Create New Notebook
+                </button>
+                <div id="notebooks-grid" class="notebook-grid">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+
+            <!-- Saved Items View -->
+            <div id="saved-view" style="display: none;">
+                <button onclick="showCreateNoteModal()" class="create-btn">
+                    <span>+</span> Write a Note
+                </button>
+                <div class="form-group">
+                    <select id="notebook-filter" onchange="filterItems()" class="form-select">
+                        <option value="">All Notebooks</option>
+                    </select>
+                </div>
+                <div id="items-list" class="notebook-grid">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Notebook Modal -->
+    <div id="create-notebook-overlay" class="premium-modal-overlay">
+        <div id="create-notebook-modal" class="premium-modal">
+            <div class="modal-header">
+                <div class="modal-icon">📓</div>
+                <h3 class="modal-title">New Notebook</h3>
+                <p class="text-gray-500">Create a space for your notes</p>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Notebook Name</label>
+                <input id="notebook-name" type="text" class="form-input" placeholder="e.g., Science Notes">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Subject</label>
+                <select id="notebook-subject" class="form-select">
+                    <option value="science">🔬 Science</option>
+                    <option value="maths">🔢 Maths</option>
+                    <option value="social">🌍 Social</option>
+                    <option value="english">📖 English</option>
+                    <option value="general">📚 General</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Color Theme</label>
+                <div class="color-options">
+                    <button onclick="selectColor('#6366f1')" data-color="#6366f1" class="color-btn selected"
+                        style="background: #6366f1"></button>
+                    <button onclick="selectColor('#10b981')" data-color="#10b981" class="color-btn"
+                        style="background: #10b981"></button>
+                    <button onclick="selectColor('#f59e0b')" data-color="#f59e0b" class="color-btn"
+                        style="background: #f59e0b"></button>
+                    <button onclick="selectColor('#ef4444')" data-color="#ef4444" class="color-btn"
+                        style="background: #ef4444"></button>
+                    <button onclick="selectColor('#8b5cf6')" data-color="#8b5cf6" class="color-btn"
+                        style="background: #8b5cf6"></button>
+                    <button onclick="selectColor('#ec4899')" data-color="#ec4899" class="color-btn"
+                        style="background: #ec4899"></button>
+                </div>
+                <input type="hidden" id="notebook-color" value="#6366f1">
+            </div>
+
+            <div class="modal-actions">
+                <button onclick="hideCreateNotebookModal()" class="btn-secondary">Cancel</button>
+                <button onclick="createNotebook()" class="btn-primary">Create Notebook</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Note Modal -->
+    <div id="create-note-modal" style="display: none;"
+        class="fixed inset-0 bg-black/50 backdrop-blur-sm z-[1001] flex items-center justify-center">
+        <div class="bg-white rounded-2xl p-8 w-full max-w-md shadow-2xl animate-bounce-in m-4">
+            <h3 class="text-2xl font-bold mb-6 text-gray-800 flex items-center gap-2">
+                <span>📝</span> Create Note
+            </h3>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Notebook</label>
+                    <select id="note-notebook"
+                        class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-purple-500"></select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Title</label>
+                    <input id="note-title" type="text" placeholder="Note Title"
+                        class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-purple-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Content</label>
+                    <textarea id="note-content" rows="4" placeholder="Write your note here..."
+                        class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-purple-500"></textarea>
+                </div>
+            </div>
+            <div class="flex gap-3 mt-6">
+                <button onclick="saveNote()"
+                    class="flex-1 bg-gradient-to-r from-purple-500 to-pink-500 text-white py-3 rounded-lg font-semibold hover:shadow-lg transition">Save
+                    Note</button>
+                <button onclick="hideCreateNoteModal()"
+                    class="bg-gray-100 text-gray-700 px-6 py-3 rounded-lg font-semibold hover:bg-gray-200 transition">Cancel</button>
+            </div>
+        </div>
+    </div>
 
     <!-- Main Content -->
     <div class="mode-container">
@@ -619,6 +809,7 @@
 
     <!-- Sidebar -->
     <script src="/static/sidebar.js"></script>
+    <script src="/static/my-bag.js"></script>
 
     <script>
         let currentUser = null;
@@ -777,17 +968,17 @@
         }
     </script>
     <script>
-      document.addEventListener('DOMContentLoaded', () => {
-        const loadingState = document.getElementById('loading-state');
-        const mainContent = document.getElementById('main-content');
+        document.addEventListener('DOMContentLoaded', () => {
+            const loadingState = document.getElementById('loading-state');
+            const mainContent = document.getElementById('main-content');
 
-        firebase.auth().onAuthStateChanged(async (user) => {
-            if (user) {
-                loadingState.style.display = 'none';
-                mainContent.style.display = 'block';
-            }
+            firebase.auth().onAuthStateChanged(async (user) => {
+                if (user) {
+                    loadingState.style.display = 'none';
+                    mainContent.style.display = 'block';
+                }
+            });
         });
-      });
     </script>
 </body>
 

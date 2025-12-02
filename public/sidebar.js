@@ -15,12 +15,19 @@ function initializeSidebar(userData, options = {}) {
   const showProfile = !options.hideProfile;
   const showAchievements = !options.hideAchievements;
 
+  // Determine dashboard URL based on user role
+  const dashboardUrl = userData.role === 'admin' ? '/admin-dashboard' : '/enhanced-dashboard';
+
   const sidebarHTML = `
-    <!-- New Profile Toggle Button -->
-    <div class="profile-toggle" id="profile-toggle" onclick="toggleSidebar()">
-      <div class="profile-avatar" style="${isEmoji ? 'font-size: 2rem;' : ''}">${avatarDisplay}</div>
-      <div class="profile-name">${userData.name || 'Student'}</div>
-    </div>
+    <!-- Hamburger Menu Button -->
+    <button class="hamburger-menu" id="hamburger-menu" onclick="toggleSidebar()">
+      <div class="hamburger-icon">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <span class="menu-text">Menu</span>
+    </button>
 
     <!-- Overlay -->
     <div class="sidebar-overlay" onclick="closeSidebar()"></div>
@@ -39,6 +46,14 @@ function initializeSidebar(userData, options = {}) {
 
       <!-- Navigation -->
       <nav class="sidebar-nav">
+        <div class="nav-item" onclick="goToDashboard()">
+          <span class="nav-icon">📊</span>
+          <span class="nav-label">My Dashboard</span>
+        </div>
+        <div class="nav-item" onclick="window.openBag()">
+          <span class="nav-icon">🎒</span>
+          <span class="nav-label">My Bag</span>
+        </div>
         ${showSwitchMode ? `
         <div class="nav-item" onclick="goToModeSelection()">
           <span class="nav-icon">🔄</span>
@@ -67,25 +82,45 @@ function initializeSidebar(userData, options = {}) {
     </div>
   `;
 
+  // Store dashboard URL for navigation function
+  window.__dashboardUrl = dashboardUrl;
+
   container.innerHTML = sidebarHTML;
 }
 
 function toggleSidebar() {
   const sidebar = document.getElementById('sidebar');
   const overlay = document.querySelector('.sidebar-overlay');
-  
+  const hamburger = document.getElementById('hamburger-menu');
+
   const isVisible = sidebar.classList.toggle('visible');
   overlay.classList.toggle('visible', isVisible);
   document.body.classList.toggle('sidebar-open', isVisible);
+  if (hamburger) hamburger.classList.toggle('active', isVisible);
 }
 
 function closeSidebar() {
   const sidebar = document.getElementById('sidebar');
   const overlay = document.querySelector('.sidebar-overlay');
+  const hamburger = document.getElementById('hamburger-menu');
 
   sidebar.classList.remove('visible');
   overlay.classList.remove('visible');
   document.body.classList.remove('sidebar-open');
+  if (hamburger) hamburger.classList.remove('active');
+}
+
+// Make openBag globally accessible
+// Make openBag globally accessible if not already defined
+if (!window.openBag) {
+  window.openBag = function () {
+    console.warn('My Bag feature not loaded yet');
+    alert('My Bag is loading... Please try again in a moment.');
+  };
+}
+
+function goToDashboard() {
+  window.location.href = window.__dashboardUrl || '/enhanced-dashboard';
 }
 
 function goToModeSelection() {
@@ -93,13 +128,11 @@ function goToModeSelection() {
 }
 
 function goToProfile() {
-  alert('Profile page coming soon! 🚧');
-  // TODO: Create profile page
+  window.location.href = '/profile';
 }
 
 function showAchievements() {
-  alert('Achievements:\n🏆 First Login\n🔥 Study Streak Active\n\nMore badges coming soon!');
-  // TODO: Create achievements modal
+  window.location.href = '/achievements';
 }
 
 async function handleLogout() {

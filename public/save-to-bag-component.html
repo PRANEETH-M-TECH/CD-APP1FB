@@ -1,0 +1,212 @@
+<!-- Save to Bag Button Component -->
+<!-- Add this after each answer in the chat interface -->
+
+<style>
+    .save-to-bag-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        background: linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%);
+        color: white;
+        border-radius: 0.75rem;
+        font-weight: 600;
+        font-size: 0.875rem;
+        transition: all 0.3s ease;
+        border: none;
+        cursor: pointer;
+        box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);
+    }
+
+    .save-to-bag-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
+    }
+
+    .save-to-bag-btn:active {
+        transform: translateY(0);
+    }
+
+    .save-to-bag-btn .icon {
+        font-size: 1.25rem;
+    }
+
+    /* Quick Save Modal */
+    .quick-save-modal {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: white;
+        border-radius: 1rem;
+        padding: 2rem;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+        z-index: 1002;
+        max-width: 400px;
+        width: 90%;
+        animation: modal-pop 0.3s ease;
+    }
+
+    @keyframes modal-pop {
+        0% {
+            transform: translate(-50%, -50%) scale(0.8);
+            opacity: 0;
+        }
+
+        100% {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+        }
+    }
+
+    .quick-save-modal.active {
+        display: block;
+    }
+</style>
+
+<!-- Quick Save Modal -->
+<div id="quick-save-modal" class="quick-save-modal">
+    <h3 class="text-xl font-bold mb-4 text-gray-800">Save to Notebook 🎒</h3>
+
+    <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700 mb-2">Choose Notebook</label>
+        <select id="quick-save-notebook"
+            class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-purple-500">
+            <option value="">Select a notebook...</option>
+        </select>
+    </div>
+
+    <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700 mb-2">Title (optional)</label>
+        <input id="quick-save-title" type="text" placeholder="Auto-generated from content"
+            class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-purple-500">
+    </div>
+
+    <div class="flex gap-3">
+        <button onclick="performQuickSave()"
+            class="flex-1 bg-gradient-to-r from-purple-500 to-pink-500 text-white py-2 px-4 rounded-lg font-semibold hover:shadow-lg transition">
+            💾 Save
+        </button>
+        <button onclick="closeQuickSaveModal()"
+            class="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg font-semibold hover:bg-gray-200 transition">
+            Cancel
+        </button>
+    </div>
+
+    <button onclick="openBagToCreateNotebook()"
+        class="w-full mt-3 text-sm text-purple-600 hover:text-purple-700 font-medium">
+        + Create new notebook
+    </button>
+</div>
+
+<div id="quick-save-overlay" class="my-bag-overlay" onclick="closeQuickSaveModal()"></div>
+
+<script>
+    // Quick Save State
+    let pendingSaveContent = '';
+    let pendingSaveQuery = '';
+    let pendingSaveChapter = '';
+    let pendingSaveSubject = '';
+
+    // Generate Save Button HTML
+    function generateSaveToBagButton(answerId) {
+        return `
+        <button class="save-to-bag-btn" onclick="showQuickSave('${answerId}')">
+            <span class="icon">🎒</span>
+            <span>Save to Bag</span>
+        </button>
+    `;
+    }
+
+    // Show Quick Save
+    async function showQuickSave(answerId) {
+        // Get the answer content
+        const answerElement = document.getElementById(answerId);
+        if (!answerElement) return;
+
+        pendingSaveContent = answerElement.textContent || answerElement.innerText;
+        pendingSaveQuery = answerElement.getAttribute('data-query') || '';
+        pendingSaveChapter = answerElement.getAttribute('data-chapter') || '';
+        pendingSaveSubject = answerElement.getAttribute('data-subject') || '';
+
+        // Load notebooks for selection
+        await loadNotebooksForQuickSave();
+
+        // Show modal
+        document.getElementById('quick-save-modal').classList.add('active');
+        document.getElementById('quick-save-overlay').classList.add('active');
+    }
+
+    function closeQuickSaveModal() {
+        document.getElementById('quick-save-modal').classList.remove('active');
+        document.getElementById('quick-save-overlay').classList.remove('active');
+        document.getElementById('quick-save-title').value = '';
+    }
+
+    async function loadNotebooksForQuickSave() {
+        try {
+            const response = await fetch(`/api/bag/notebooks?uid=${currentUser.uid}`, {
+                headers: { 'Authorization': `Bearer ${userToken}` }
+            });
+            const data = await response.json();
+
+            const select = document.getElementById('quick-save-notebook');
+            if (data.notebooks.length === 0) {
+                select.innerHTML = '<option value="">No notebooks yet - create one!</option>';
+            } else {
+                select.innerHTML = '<option value="">Select a notebook...</option>' +
+                    data.notebooks.map(nb => `
+                    <option value="${nb.notebook_id}">${getSubjectEmoji(nb.subject)} ${nb.name}</option>
+                `).join('');
+            }
+        } catch (error) {
+            console.error('Error loading notebooks:', error);
+        }
+    }
+
+    async function performQuickSave() {
+        const notebookId = document.getElementById('quick-save-notebook').value;
+        const title = document.getElementById('quick-save-title').value;
+
+        if (!notebookId) {
+            alert('Please select a notebook!');
+            return;
+        }
+
+        try {
+            const response = await fetch('/api/bag/save', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${userToken}`
+                },
+                body: JSON.stringify({
+                    uid: currentUser.uid,
+                    notebook_id: notebookId,
+                    content: pendingSaveContent,
+                    title: title || null,
+                    source_query: pendingSaveQuery,
+                    chapter_name: pendingSaveChapter,
+                    subject: pendingSaveSubject
+                })
+            });
+
+            if (response.ok) {
+                closeQuickSaveModal();
+                showNotification('✅ Saved to bag!');
+            } else {
+                alert('Failed to save. Please try again.');
+            }
+        } catch (error) {
+            console.error('Error saving to bag:', error);
+            alert('Error saving to bag');
+        }
+    }
+
+    function openBagToCreateNotebook() {
+        closeQuickSaveModal();
+        openBag();
+        showCreateNotebookModal();
+    }
+</script>

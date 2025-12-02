@@ -8,8 +8,12 @@ from datetime import datetime
 from cachetools import TTLCache
 from fastapi import WebSocket
 import json
+import logging
 
 from . import qdrant  # NEW: Import qdrant module for generation_model and embedder
+from . import analytics_service # Import analytics service
+
+logger = logging.getLogger(__name__) # Initialize logger
 from .qdrant import (
     get_book_metadata,
     hybrid_search,
@@ -83,7 +87,22 @@ class ConversationManager:
             # 1. Get or create session
             session = session_manager.get_or_create_session(conv.book_uuid, conv.session_id)
             conv.session_id = session["session_id"]
+            
+            # Extract basic query metadata early
+            uid = conv.session_id # Use session_id as uid for WebSocket analytics
+            book_metadata = qdrant.get_book_metadata(conv.book_uuid)
+            class_name = book_metadata.get("class_name", "Unknown")
+            subject = book_metadata.get("subject", "Unknown")
+            
             active_context_window = session["active_context_window"]
+            
+            # Detect client mode
+            mode = "text"
+
+            # WebSocket mode detection
+            if session and session.get("transport") == "websocket":
+                if session.get("input_type") == "voice":
+                    mode = "voice"
             
             # Extract last action for context awareness (NEW)
             last_action = None
@@ -119,21 +138,26 @@ class ConversationManager:
             # 3. Execute action
             search_results = []
             context = ""
+            chapter_id = None
+            chapter_name = "Unknown"
+            reformulated_query = query # Initialize reformulated_query
             
             if action == "RETRIEVE_NEW_CONTEXT":
                 print(f"[PATH] New topic - Full retrieval\n")
                 new_topic_name = action_details.get("new_topic_name", "New Topic")
                 session_manager.start_new_topic(conv.session_id, new_topic_name)
                 
-                metadata = get_book_metadata(conv.book_uuid)
+                # Metadata already retrieved earlier
                 processed_query_data = reformulate_and_classify_query(
                     query=query,
-                    class_name=metadata.get("class_name"),
-                    subject=metadata.get("subject")
+                    class_name=class_name,
+                    subject=subject
                 )
+                reformulated_query = processed_query_data.get("reformulated_query", query)
+                
                 search_results, _, _ = hybrid_search(
                     book_uuid=conv.book_uuid,
-                    query=processed_query_data.get("reformulated_query", query),
+                    query=reformulated_query,
                     keywords=processed_query_data.get("keywords", []),
                     conceptual_score=processed_query_data.get("conceptual_score", 0.5)
                 )
@@ -142,6 +166,10 @@ class ConversationManager:
                 if search_results:
                     context = "\n\n---\n\n".join([payload['text'] for score, payload in search_results])
                     session_manager.update_topic_chunks(conv.session_id, search_results)
+                    # Extract chapter info from first retrieved chunk
+                    first_chunk = search_results[0][1] # (score, doc) format
+                    chapter_id = first_chunk.get("chapter_id")
+                    chapter_name = first_chunk.get("chapter_name", "Unknown")
 
             elif action == "USE_CACHED_CONTEXT":
                 print(f"[PATH] ⚡ Follow-up - Reusing cached context\n")
@@ -150,21 +178,32 @@ class ConversationManager:
                     search_results = cached_chunks
                     context = "\n\n---\n\n".join([doc["text"] for score, doc in search_results[:10]])
                     print(f"[REUSE] Using {len(search_results)} cached chunks.\n")
+                    
+                    if search_results: # Extract chapter info from first retrieved chunk
+                        first_chunk = search_results[0][1] # (score, doc) format
+                        chapter_id = first_chunk.get("chapter_id")
+                        chapter_name = first_chunk.get("chapter_name", "Unknown")
+                        
                 else:
                     print(f"[WARN] No cached chunks found, falling back to fresh search.\n")
                     # Fallback logic here mirrors RETRIEVE_NEW_CONTEXT
                     action = "RETRIEVE_NEW_CONTEXT" # Update action for logging
-                    metadata = get_book_metadata(conv.book_uuid)
-                    processed_query_data = reformulate_and_classify_query(query=query, class_name=metadata.get("class_name"), subject=metadata.get("subject"))
+                    processed_query_data = reformulate_and_classify_query(query=query, class_name=class_name, subject=subject)
+                    reformulated_query = processed_query_data.get("reformulated_query", query)
+                    
                     search_results, _, _ = hybrid_search(
                         book_uuid=conv.book_uuid,
-                        query=processed_query_data.get("reformulated_query", query),
+                        query=reformulated_query,
                         keywords=processed_query_data.get("keywords", []),
                         conceptual_score=processed_query_data.get("conceptual_score", 0.5)
                     )
                     if search_results:
                         context = "\n\n---\n\n".join([payload['text'] for score, payload in search_results])
                         session_manager.update_topic_chunks(conv.session_id, search_results)
+                        
+                        first_chunk = search_results[0][1] # (score, doc) format
+                        chapter_id = first_chunk.get("chapter_id")
+                        chapter_name = first_chunk.get("chapter_name", "Unknown")
 
             elif action == "ANSWER_FROM_HISTORY":
                  print(f"[PATH] 🗣️ Answering from history.\n")
@@ -215,6 +254,34 @@ class ConversationManager:
             traceback.print_exc()
             await self._safe_send(conv.websocket, {"type": "error", "message": str(e)})
         finally:
+            # Consolidate analytics logging for WebSocket
+            try:
+                analytics_service.log_query(
+                    uid=uid,
+                    class_name=class_name,
+                    subject=subject,
+                    chapter_id=chapter_id,
+                    chapter_name=chapter_name,
+                    query=query,
+                    reformulated_query=reformulated_query,
+                    mode=mode,
+                    llm_action=action,
+                    answer_length=len(full_answer)
+                )
+
+                analytics_service.update_user_stats(uid, subject, chapter_id, class_name)
+                analytics_service.update_chapter_stats(class_name, subject, chapter_id, chapter_name, uid)
+
+                # optional LLM metadata
+                analytics_service.update_mistake_patterns(uid, {
+                    "patterns": [],
+                    "confusion_topics": [],
+                    "recommended_tasks": []
+                })
+
+            except Exception as e:
+                logger.warning(f"[ANALYTICS] WebSocket analytics update failed: {e}")
+            
             conv.is_speaking = False
             await self._safe_send(conv.websocket, {"type": "done"})
 

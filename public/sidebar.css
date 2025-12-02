@@ -28,7 +28,6 @@ body {
     margin-left: 0 !important;
 }
 
-
 /* Mobile: Hidden by default */
 @media (max-width: 768px) {
     .sidebar {
@@ -36,55 +35,68 @@ body {
     }
 }
 
-/* New Profile Toggle Button */
-.profile-toggle {
+/* Hamburger Menu Button (Replaces Profile Toggle) */
+.hamburger-menu {
     position: fixed;
     left: 20px;
     top: 20px;
     z-index: 1001;
     cursor: pointer;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 12px;
+    padding: 12px 16px;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    background: #ffffff;
-    border-radius: 16px;
-    padding: 0.75rem;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    border: 1px solid #e5e7eb;
-    width: 90px;
-    opacity: 1;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border: none;
 }
 
-.profile-toggle.hidden {
+.hamburger-menu.hidden {
     opacity: 0;
     transform: scale(0.9);
     pointer-events: none;
 }
 
-.profile-toggle:hover {
-    transform: scale(1.05);
-    box-shadow: 0 6px 20px rgba(107, 92, 255, 0.2);
-    border-color: #c7d2fe;
+.hamburger-menu:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
 }
 
-.profile-toggle .profile-avatar {
-    width: 56px;
-    height: 56px;
-    background: linear-gradient(135deg, #818cf8, #a78bfa);
-    border-radius: 50%;
+.hamburger-icon {
+    width: 24px;
+    height: 20px;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 0.5rem;
-    box-shadow: 0 2px 8px rgba(107, 92, 255, 0.2);
+    flex-direction: column;
+    justify-content: space-between;
 }
 
-.profile-toggle .profile-name {
-    font-size: 0.8rem;
+.hamburger-icon span {
+    display: block;
+    width: 100%;
+    height: 3px;
+    background: white;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+}
+
+.hamburger-menu.active .hamburger-icon span:nth-child(1) {
+    transform: rotate(45deg) translateY(8px);
+}
+
+.hamburger-menu.active .hamburger-icon span:nth-child(2) {
+    opacity: 0;
+}
+
+.hamburger-menu.active .hamburger-icon span:nth-child(3) {
+    transform: rotate(-45deg) translateY(-8px);
+}
+
+.menu-text {
+    color: white;
     font-weight: 600;
-    color: #374151;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    font-size: 14px;
 }
 
 /* Profile Section (Inside Sidebar) */

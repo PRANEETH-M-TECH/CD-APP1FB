@@ -10,7 +10,8 @@
   <link rel="stylesheet" href="/static/conversation.css">
   <link rel="stylesheet" href="/static/voice-overlay.css">
   <link rel="stylesheet" href="/static/sidebar.css">
-  <link rel="stylesheet" href="/static/sidebar.css">
+  <link rel="stylesheet" href="/static/my-bag.css">
+  <link rel="stylesheet" href="/static/save-selection.css">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"
@@ -26,8 +27,9 @@
     body {
       font-family: 'Inter', sans-serif;
       background-color: #f8fafc;
-      margin-left: 280px;
-      transition: margin-left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      margin: 0;
+      height: 100vh;
+      overflow: hidden;
     }
 
     /* When left pane is collapsed */
@@ -185,15 +187,20 @@
 
     /* Chat pane */
     .right-pane {
-      flex: 1;
       display: flex;
       flex-direction: column;
       background: #ffffff;
       border-radius: 1rem;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-      padding: 1.5rem;
       margin: 1rem;
       margin-left: 0;
+    }
+
+    /* Ensure chat container doesn't overflow */
+    #chat-container {
+      flex: 1 1 0;
+      min-height: 0;
+      overflow-y: auto;
     }
 
     /* Chat input */
@@ -593,6 +600,50 @@
         opacity: 1;
       }
     }
+
+    /* Modern Page Navigation Styles */
+    .nav-icon-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+
+    .nav-icon-btn:hover {
+      transform: scale(1.1);
+    }
+
+    .nav-icon-btn:active {
+      transform: scale(0.95);
+    }
+
+    .nav-icon-btn:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    #page-input-user::-webkit-inner-spin-button,
+    #page-input-user::-webkit-outer-spin-button {
+      opacity: 1;
+    }
+
+    #pdf-viewer-header-user {
+      animation: fadeInDown 0.3s ease-out;
+    }
+
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
   </style>
 </head>
 
@@ -600,9 +651,9 @@
   <!-- Sidebar -->
   <div id="sidebar-container"></div>
 
-  <div class="user-app-container flex flex-col md:flex-row h-screen relative slide-in-right">
+  <div class="user-app-container flex flex-col md:flex-row h-screen relative">
     <!-- Left Pane (Book Viewer) -->
-    <div id="left-pane" class="left-pane w-1/2 flex flex-col transition-all duration-300 relative">
+    <div id="left-pane" class="left-pane w-1/2 flex flex-col transition-all duration-300 relative overflow-hidden">
 
       <!-- Compact Top Bar - Subject dropdown and toggle -->
       <div class="flex items-center justify-between px-4 py-2 bg-white border-b border-gray-200">
@@ -633,24 +684,36 @@
 
       <!-- PDF Viewer - Full Space -->
       <div id="book-viewer-container" class="flex-1 flex flex-col bg-gray-50">
-        <div id="pdf-viewer-header-user" class="flex justify-center items-center mb-2 hidden">
-          <div class="flex items-center bg-gray-100 rounded-full p-1">
-            <button id="prev-page-user" class="px-4 py-2 rounded-full hover:bg-gray-200 transition-colors">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M15 18l-6-6 6-6" />
-              </svg>
-            </button>
-            <span class="text-gray-600 text-sm font-medium px-4">
-              <span id="page-num-user"></span> / <span id="page-count-user"></span>
-            </span>
-            <button id="next-page-user" class="px-4 py-2 rounded-full hover:bg-gray-200 transition-colors">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M9 18l6-6-6-6" />
-              </svg>
-            </button>
+        <!-- Modern Page Navigation Header -->
+        <!-- PDF Page Navigation - Simplified -->
+        <div id="pdf-viewer-header-user"
+          class="flex items-center justify-center gap-3 px-4 py-3 bg-white/80 backdrop-blur-md rounded-2xl shadow-lg border border-gray-100">
+
+          <!-- Previous Page -->
+          <button id="prev-page-user"
+            class="nav-icon-btn flex items-center justify-center w-10 h-10 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-blue-500">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+
+          <!-- Page Number Input -->
+          <div class="flex items-center gap-2">
+            <span class="text-sm font-medium text-gray-600">Page</span>
+            <input id="page-input-user" type="number" min="1" value="1"
+              onkeypress="if(event.key==='Enter') jumpToPageInput()"
+              class="w-16 px-2 py-1.5 text-center border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
+            <span class="text-sm text-gray-500">/ <span id="page-count-user">0</span></span>
           </div>
+
+          <!-- Next Page -->
+          <button id="next-page-user"
+            class="nav-icon-btn flex items-center justify-center w-10 h-10 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-blue-500">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+
         </div>
         <div id="pdf-render-area-user">
           <canvas id="pdf-canvas-user"></canvas>
@@ -664,21 +727,24 @@
       </div>
     </div>
 
-    <!-- Right Pane (Chat Area) -->
-    <div id="right-pane" class="right-pane w-1/2 transition-all duration-300">
+    <!-- Right Pane (Chat Area) - Fixed Layout -->
+    <div id="right-pane" class="right-pane w-1/2 flex flex-col" style="height: 100vh; overflow: hidden;">
 
-      <!-- Chat History -->
-      <div id="chat-container" class="flex flex-col flex-1 p-5 overflow-y-auto">
-        <canvas id="voice-waveform" class="hidden w-full h-32"></canvas>
-        <div id="chat-history">
-          <div class="ai-card fade-in">
-            <div class="flex justify-between items-center mb-2">
-              <h2 class="font-semibold text-gray-700">🤖 Welcome</h2>
-              <button class="copy-btn" onclick="copyMessage(this)">📋</button>
-            </div>
-            <div class="markdown-content">
-              <p>Welcome! I am <strong>Chaduvu Guru</strong>, your personal AI study assistant. Please select a book on
-                the left to begin.</p>
+      <!-- Chat History (Scrollable) -->
+      <div id="chat-container" class="overflow-y-auto" style="flex: 0 1 auto; max-height: 75vh;">
+        <div class="p-4">
+          <canvas id="voice-waveform" class="hidden w-full h-32"></canvas>
+          <div id="chat-history">
+            <div class="ai-card fade-in">
+              <div class="flex justify-between items-center mb-2">
+                <h2 class="font-semibold text-gray-700">🤖 Welcome</h2>
+                <button class="copy-btn" onclick="copyMessage(this)">📋</button>
+              </div>
+              <div class="markdown-content">
+                <p>Welcome! I am <strong>Chaduvu Guru</strong>, your personal AI study assistant. Please select a book
+                  on
+                  the left to begin.</p>
+              </div>
             </div>
           </div>
         </div>
@@ -700,41 +766,34 @@
         </div>
       </div>
 
-      <!-- Quick Action Buttons -->
-      <div class="px-4 pb-2">
-        <div class="flex justify-center gap-3">
-          <button type="button" id="list-chapters-btn"
-            class="flex items-center gap-2 bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white px-5 py-2.5 rounded-xl shadow-md hover:shadow-lg transition-all transform hover:scale-105 font-medium">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M4 6h16M4 12h16M4 18h16"></path>
-            </svg>
-            <span>📚 List Chapters</span>
-          </button>
-          <button type="button" id="summarize-btn"
-            class="flex items-center gap-2 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white px-5 py-2.5 rounded-xl shadow-md hover:shadow-lg transition-all transform hover:scale-105 font-medium">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M12 20h9"></path>
-              <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
-            </svg>
-            <span>✨ Summarize</span>
-          </button>
+      <!-- Bottom Section - Fixed at bottom -->
+      <div class="flex-shrink-0 bg-white">
+        <!-- Quick Action Buttons -->
+        <div class="px-4 py-1.5 border-t border-gray-200">
+          <div class="flex justify-center gap-2">
+            <button type="button" id="list-chapters-btn"
+              class="flex items-center gap-2 bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white px-3 py-1.5 rounded-lg shadow-md transition-all font-medium text-xs">
+              <span>📚 Chapters</span>
+            </button>
+            <button type="button" id="summarize-btn"
+              class="flex items-center gap-2 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white px-3 py-1.5 rounded-lg shadow-md transition-all font-medium text-xs">
+              <span>✨ Summarize</span>
+            </button>
+          </div>
         </div>
-      </div>
 
-      <!-- Chat Input -->
-      <div id="chat-input-container" class="p-4 pt-2">
-        <div class="relative">
+        <!-- Chat Input (Always visible at bottom) -->
+        <div id="chat-input-container" class="p-3 border-gray-200 rounded-2xl shadow-lg">
           <form id="user-query-form"
-            class="flex items-center gap-2 bg-white rounded-2xl shadow-lg p-2 border-2 border-gray-100 hover:border-blue-200 transition-all">
-            <textarea id="query-text" placeholder="💬 Ask me anything about your book..." required disabled
-              class="flex-1 bg-transparent border-none rounded-2xl px-4 py-3 h-12 resize-none focus:ring-0 focus:outline-none text-gray-700 placeholder-gray-400"></textarea>
+            class="flex items-center gap-2 bg-white rounded-xl p-1.5 border-2 border-gray-200 focus-within:border-blue-400 transition-all">
+            <textarea id="query-text" placeholder="💬 Ask me anything..." required disabled
+              class="flex-1 bg-transparent border-none rounded-xl px-3 py-2 h-10 resize-none focus:ring-0 focus:outline-none text-gray-700 placeholder-gray-400 text-sm"
+              onkeydown="if(event.key==='Enter' && !event.shiftKey){event.preventDefault();document.getElementById('user-query-form').requestSubmit();}"></textarea>
 
-            <!-- Voice Button Inside Form -->
+            <!-- Voice Button -->
             <button type="button" id="voice-search-btn" title="Voice Search" disabled
-              class="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white rounded-xl p-3 shadow-md transition-all transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+              class="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white rounded-lg p-2 shadow-md transition-all disabled:opacity-50 disabled:cursor-not-allowed">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
                 stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
@@ -743,8 +802,8 @@
 
             <!-- Send Button -->
             <button type="submit" id="submit-query-btn" title="Send Message" disabled
-              class="bg-blue-600 hover:bg-blue-700 text-white rounded-xl p-3 transition-all shadow-md hover:shadow-lg transform hover:scale-105 disabled:bg-gray-300 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+              class="bg-blue-600 hover:bg-blue-700 text-white rounded-lg p-2 transition-all shadow-md disabled:bg-gray-300 disabled:cursor-not-allowed">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <line x1="22" y1="2" x2="11" y2="13"></line>
                 <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
@@ -781,6 +840,8 @@
   <!-- Main script -->
   <script src="/static/script.js"></script>
   <script src="/static/conversation.js"></script>
+  <script src="/static/my-bag.js"></script>
+  <script src="/static/save-selection.js"></script>
 
   <!-- Initialize Sidebar -->
   <script>
@@ -1112,16 +1173,19 @@
           showThinkingIndicator();
 
           try {
+            const requestBody = {
+              class_name: String(selectedClass), // Explicitly convert to string
+              subject: selectedSubject,
+              chapter_name: selectedChapter
+            };
+            console.log("Sending to /api/summarize:", JSON.stringify(requestBody, null, 2));
+
             const response = await fetch('/api/summarize', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json'
               },
-              body: JSON.stringify({
-                class_name: selectedClass,
-                subject: selectedSubject,
-                chapter_name: selectedChapter
-              })
+              body: JSON.stringify(requestBody)
             });
 
             if (!response.ok) {
@@ -1151,6 +1215,168 @@
       window.copyMessage = copyMessage;
     });
   </script>
+
+  <!-- My Bag Component -->
+  <link rel="stylesheet" href="/static/my-bag.css">
+
+  <!-- Bag Overlay -->
+  <div id="my-bag-overlay" class="my-bag-overlay" onclick="closeBag()"></div>
+
+  <!-- Bag Sidebar -->
+  <div id="my-bag-sidebar" class="my-bag-sidebar">
+    <!-- Header -->
+    <div class="bag-header">
+      <div class="bag-title">
+        <div class="bag-icon-wrapper">
+          <span class="text-2xl">🎒</span>
+        </div>
+        <div>
+          <h2 class="text-xl font-bold">My Bag</h2>
+          <p class="text-xs opacity-80">Your Learning Collection</p>
+        </div>
+      </div>
+      <button onclick="closeBag()" class="bag-close-btn">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Content -->
+    <div class="bag-content">
+      <!-- Tabs -->
+      <div class="bag-tabs">
+        <button onclick="showBagTab('notebooks')" id="notebooks-tab" class="bag-tab active">
+          <span>📚</span> Notebooks
+        </button>
+        <button onclick="showBagTab('saved')" id="saved-tab" class="bag-tab">
+          <span>💾</span> Saved
+        </button>
+      </div>
+
+      <!-- Notebooks View -->
+      <div id="notebooks-view">
+        <button onclick="showCreateNotebookModal()" class="create-btn">
+          <span>+</span> Create New Notebook
+        </button>
+        <div id="notebooks-grid" class="notebook-grid">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+      <!-- Saved Items View -->
+      <div id="saved-view" style="display: none;">
+        <button onclick="showCreateNoteModal()" class="create-btn">
+          <span>+</span> Write a Note
+        </button>
+        <div class="form-group">
+          <select id="notebook-filter" onchange="filterItems()" class="form-select">
+            <option value="">All Notebooks</option>
+          </select>
+        </div>
+        <div id="items-list" class="notebook-grid">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Create Notebook Modal -->
+  <div id="create-notebook-overlay" class="premium-modal-overlay">
+    <div id="create-notebook-modal" class="premium-modal">
+      <div class="modal-header">
+        <div class="modal-icon">📓</div>
+        <h3 class="modal-title">New Notebook</h3>
+        <p class="text-gray-500">Create a space for your notes</p>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Notebook Name</label>
+        <input id="notebook-name" type="text" class="form-input" placeholder="e.g., Science Notes">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Subject</label>
+        <select id="notebook-subject" class="form-select">
+          <option value="science">🔬 Science</option>
+          <option value="maths">🔢 Maths</option>
+          <option value="social">🌍 Social</option>
+          <option value="english">📖 English</option>
+          <option value="general">📚 General</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Color Theme</label>
+        <div class="color-options">
+          <button onclick="selectColor('#6366f1')" data-color="#6366f1" class="color-btn selected"
+            style="background: #6366f1"></button>
+          <button onclick="selectColor('#10b981')" data-color="#10b981" class="color-btn"
+            style="background: #10b981"></button>
+          <button onclick="selectColor('#f59e0b')" data-color="#f59e0b" class="color-btn"
+            style="background: #f59e0b"></button>
+          <button onclick="selectColor('#ef4444')" data-color="#ef4444" class="color-btn"
+            style="background: #ef4444"></button>
+          <button onclick="selectColor('#8b5cf6')" data-color="#8b5cf6" class="color-btn"
+            style="background: #8b5cf6"></button>
+          <button onclick="selectColor('#ec4899')" data-color="#ec4899" class="color-btn"
+            style="background: #ec4899"></button>
+        </div>
+        <input type="hidden" id="notebook-color" value="#6366f1">
+      </div>
+
+      <div class="modal-actions">
+        <button onclick="hideCreateNotebookModal()" class="btn-secondary">Cancel</button>
+        <button onclick="createNotebook()" class="btn-primary">Create Notebook</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Create Note Modal -->
+  <div id="create-note-overlay" class="premium-modal-overlay">
+    <div id="create-note-modal" class="premium-modal">
+      <div class="modal-header">
+        <div class="modal-icon">📝</div>
+        <h3 class="modal-title">Write a Note</h3>
+        <p class="text-gray-500">Capture your thoughts</p>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Select Notebook</label>
+        <select id="note-notebook" class="form-select"></select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Title</label>
+        <input id="note-title" type="text" class="form-input" placeholder="Note Title">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Content</label>
+        <textarea id="note-content" rows="4" class="form-textarea" placeholder="Write something..."></textarea>
+      </div>
+
+      <div class="modal-actions">
+        <button onclick="hideCreateNoteModal()" class="btn-secondary">Cancel</button>
+        <button onclick="saveNote()" class="btn-primary">Save Note</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/static/my-bag.js"></script>
+</body>
+
+</html>
+<!-- Save-to-Bag Component Integration -->
+<script>
+  fetch('/static/save-to-bag-component.html')
+    .then(r => r.text())
+    .then(html => {
+      const container = document.createElement('div');
+      container.innerHTML = html;
+      document.body.appendChild(container);
+    });
+</script>
 </body>
 
 </html>

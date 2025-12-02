@@ -1,0 +1,365 @@
+<!-- Admin Dashboard Sidebar Component -->
+<!-- Include this in admin.html -->
+
+<style>
+    .admin-sidebar {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 250px;
+        height: 100%;
+        background: linear-gradient(180deg, #1e40af 0%, #1e3a8a 100%);
+        color: white;
+        padding: 2rem 0;
+        box-shadow: 4px 0 10px rgba(0, 0, 0, 0.1);
+        z-index: 100;
+    }
+
+    .admin-content {
+        margin-left: 250px;
+        padding: 2rem;
+    }
+
+    .admin-nav-item {
+        display: block;
+        padding: 1rem 2rem;
+        color: white;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        border-left: 4px solid transparent;
+    }
+
+    .admin-nav-item:hover {
+        background: rgba(255, 255, 255, 0.1);
+        border-left-color: #fbbf24;
+    }
+
+    .admin-nav-item.active {
+        background: rgba(255, 255, 255, 0.2);
+        border-left-color: #fbbf24;
+        font-weight: 600;
+    }
+
+    .admin-stat-card {
+        background: white;
+        border-radius: 1rem;
+        padding: 1.5rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+    }
+
+    .admin-stat-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+</style>
+
+<div class="admin-sidebar">
+    <div class="px-6 mb-8">
+        <h1 class="text-2xl font-bold mb-1">🎓 Admin Panel</h1>
+        <p class="text-sm text-blue-200">Chaduvu Guru</p>
+    </div>
+
+    <nav>
+        <a href="#" onclick="showAdminView('overview')" id="nav-overview" class="admin-nav-item active">
+            📊 Overview
+        </a>
+        <a href="#" onclick="showAdminView('analytics')" id="nav-analytics" class="admin-nav-item">
+            📈 Analytics
+        </a>
+        <a href="#" onclick="showAdminView('students')" id="nav-students" class="admin-nav-item">
+            👥 Students
+        </a>
+        <a href="#" onclick="showAdminView('topics')" id="nav-topics" class="admin-nav-item">
+            📚 Hot Topics
+        </a>
+        <a href="/admin" class="admin-nav-item" style="margin-top: 2rem;">
+            🏠 Book Management
+        </a>
+    </nav>
+</div>
+
+<div class="admin-content">
+    <!-- Overview View -->
+    <div id="overview-view">
+        <h2 class="text-3xl font-bold mb-6 text-gray-800">Dashboard Overview</h2>
+
+        <!-- Stats Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="admin-stat-card">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-500 text-sm font-medium">Total Queries</p>
+                        <p id="admin-total-queries" class="text-3xl font-bold text-blue-600 mt-2">0</p>
+                    </div>
+                    <div class="text-5xl">💬</div>
+                </div>
+            </div>
+
+            <div class="admin-stat-card">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-500 text-sm font-medium">Active Students</p>
+                        <p id="admin-active-students" class="text-3xl font-bold text-green-600 mt-2">0</p>
+                    </div>
+                    <div class="text-5xl">👥</div>
+                </div>
+            </div>
+
+            <div class="admin-stat-card">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-500 text-sm font-medium">Popular Subject</p>
+                        <p id="admin-top-subject" class="text-2xl font-bold text-purple-600 mt-2">-</p>
+                    </div>
+                    <div class="text-5xl">📚</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Class Distribution -->
+        <div class="admin-stat-card mb-6">
+            <h3 class="text-xl font-bold mb-4 text-gray-800">Class Distribution</h3>
+            <div id="class-distribution" class="space-y-3">
+                <p class="text-gray-400">Loading...</p>
+            </div>
+        </div>
+
+        <!-- Subject Distribution Chart -->
+        <div class="admin-stat-card">
+            <h3 class="text-xl font-bold mb-4 text-gray-800">Subject Distribution</h3>
+            <canvas id="subject-chart" width="400" height="200"></canvas>
+        </div>
+    </div>
+
+    <!-- Analytics View -->
+    <div id="analytics-view" style="display: none;">
+        <h2 class="text-3xl font-bold mb-6 text-gray-800">Detailed Analytics</h2>
+
+        <div class="admin-stat-card mb-6">
+            <h3 class="text-xl font-bold mb-4">Select Class & Subject</h3>
+            <div class="flex gap-4">
+                <select id="analytics-class" class="flex-1 border rounded-lg px-4 py-2">
+                    <option value="8">Class 8</option>
+                    <option value="9">Class 9</option>
+                    <option value="10">Class 10</option>
+                </select>
+                <select id="analytics-subject" class="flex-1 border rounded-lg px-4 py-2">
+                    <option value="science">Science</option>
+                    <option value="maths">Maths</option>
+                    <option value="social">Social</option>
+                    <option value="english">English</option>
+                </select>
+                <button onclick="loadChapterHotspots()"
+                    class="bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold">
+                    Load
+                </button>
+            </div>
+        </div>
+
+        <div class="admin-stat-card">
+            <h3 class="text-xl font-bold mb-4">Most Queried Chapters</h3>
+            <div id="chapter-hotspots-admin" class="space-y-3">
+                <p class="text-gray-400">Select class and subject above</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Students View -->
+    <div id="students-view" style="display: none;">
+        <h2 class="text-3xl font-bold mb-6 text-gray-800">Student Performance</h2>
+
+        <div class="admin-stat-card mb-6">
+            <label class="block text-sm font-medium mb-2">Enter Student UID</label>
+            <div class="flex gap-4">
+                <input id="student-uid-input" type="text" placeholder="Student UID"
+                    class="flex-1 border rounded-lg px-4 py-2">
+                <button onclick="loadStudentPerformance()"
+                    class="bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold">
+                    Search
+                </button>
+            </div>
+        </div>
+
+        <div id="student-performance-data" class="admin-stat-card" style="display: none;">
+            <h3 class="text-xl font-bold mb-4">Performance Details</h3>
+            <div id="performance-content"></div>
+        </div>
+    </div>
+
+    <!-- Topics View -->
+    <div id="topics-view" style="display: none;">
+        <h2 class="text-3xl font-bold mb-6 text-gray-800">Hot Topics Across All Classes</h2>
+
+        <div class="admin-stat-card">
+            <div id="all-topics" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <p class="text-gray-400 col-span-2">Loading...</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+<script>
+    // Admin Panel State
+    let adminToken = null;
+
+    // Navigation
+    function showAdminView(view) {
+        // Hide all views
+        document.querySelectorAll('[id$="-view"]').forEach(v => v.style.display = 'none');
+        // Remove active class
+        document.querySelectorAll('.admin-nav-item').forEach(n => n.classList.remove('active'));
+
+        // Show selected view
+        document.getElementById(view + '-view').style.display = 'block';
+        document.getElementById('nav-' + view).classList.add('active');
+
+        // Load data for the view
+        if (view === 'overview') loadOverview();
+        else if (view === 'topics') loadAllTopics();
+    }
+
+    // Load Overview
+    async function loadOverview() {
+        try {
+            // Class overview
+            const classRes = await fetch('/api/admin/class-overview');
+            const classData = await classRes.json();
+
+            document.getElementById('admin-total-queries').textContent = classData.total_queries || 0;
+
+            // Render class distribution
+            const distEl = document.getElementById('class-distribution');
+            if (classData.class_distribution && classData.class_distribution.length > 0) {
+                distEl.innerHTML = classData.class_distribution.map(c => `
+                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    <span class="font-semibold">Class ${c.class}</span>
+                    <span class="text-2xl font-bold text-blue-600">${c.count}</span>
+                </div>
+            `).join('');
+            } else {
+                distEl.innerHTML = '<p class="text-gray-400">No data available</p>';
+            }
+
+            // Subject distribution
+            const subjectRes = await fetch('/api/admin/subject-distribution');
+            const subjectData = await subjectRes.json();
+
+            if (subjectData.subjects && subjectData.subjects.length > 0) {
+                document.getElementById('admin-top-subject').textContent = subjectData.subjects[0].charAt(0).toUpperCase() + subjectData.subjects[0].slice(1);
+
+                // Chart
+                const ctx = document.getElementById('subject-chart');
+                new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: subjectData.subjects.map(s => s.charAt(0).toUpperCase() + s.slice(1)),
+                        datasets: [{
+                            data: subjectData.counts,
+                            backgroundColor: ['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6']
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false
+                    }
+                });
+            }
+
+        } catch (error) {
+            console.error('Error loading overview:', error);
+        }
+    }
+
+    // Load Chapter Hotspots
+    async function loadChapterHotspots() {
+        const classVal = document.getElementById('analytics-class').value;
+        const subject = document.getElementById('analytics-subject').value;
+
+        try {
+            const response = await fetch(`/api/admin/chapter-hotspots?class_name=${classVal}&subject=${subject}&limit=10`);
+            const data = await response.json();
+
+            const container = document.getElementById('chapter-hotspots-admin');
+            if (data.hotspots && data.hotspots.length > 0) {
+                container.innerHTML = data.hotspots.map(h => `
+                <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                    <div>
+                        <p class="font-semibold">${h.chapter_name}</p>
+                        <p class="text-sm text-gray-500">${h.unique_students} students</p>
+                    </div>
+                    <div class="text-2xl font-bold text-purple-600">${h.total_queries}</div>
+                </div>
+            `).join('');
+            } else {
+                container.innerHTML = '<p class="text-gray-400">No data for this selection</p>';
+            }
+        } catch (error) {
+            console.error('Error loading hotspots:', error);
+        }
+    }
+
+    // Load Student Performance
+    async function loadStudentPerformance() {
+        const uid = document.getElementById('student-uid-input').value.trim();
+        if (!uid) {
+            alert('Please enter a student UID');
+            return;
+        }
+
+        try {
+            const response = await fetch(`/api/admin/student-performance?uid=${uid}`);
+            const data = await response.json();
+
+            const container = document.getElementById('performance-content');
+            container.innerHTML = `
+            <div class="grid grid-cols-2 gap-4 mb-4">
+                <div>
+                    <p class="text-sm text-gray-500">Total Queries</p>
+                    <p class="text-2xl font-bold">${data.total_queries || 0}</p>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-500">Streak</p>
+                    <p class="text-2xl font-bold">${data.streak || 0} days</p>
+                </div>
+            </div>
+            <h4 class="font-bold mb-2">Recent Questions:</h4>
+            <div class="space-y-2">
+                ${data.recent_queries && data.recent_queries.length > 0 ?
+                    data.recent_queries.map(q => `
+                        <div class="p-2 bg-gray-50 rounded">
+                            <p class="text-sm">${q.query}</p>
+                            <p class="text-xs text-gray-500">${q.subject}</p>
+                        </div>
+                    `).join('') :
+                    '<p class="text-gray-400">No questions asked</p>'
+                }
+            </div>
+        `;
+
+            document.getElementById('student-performance-data').style.display = 'block';
+        } catch (error) {
+            console.error('Error loading student performance:', error);
+            alert('Student not found or error loading data');
+        }
+    }
+
+    // Load All Topics
+    async function loadAllTopics() {
+        // This would aggregate hotspots across all classes - simplified version
+        const subjects = ['science', 'maths', 'social', 'english'];
+        const classes = [8, 9, 10];
+
+        const container = document.getElementById('all-topics');
+        container.innerHTML = '<p class="text-gray-400 col-span-2">Feature coming soon - will show most queried topics across all classes</p>';
+    }
+
+    // Initialize
+    firebase.auth().onAuthStateChanged(async (user) => {
+        if (user) {
+            adminToken = await user.getIdToken();
+            loadOverview();
+        }
+    });
+</script>

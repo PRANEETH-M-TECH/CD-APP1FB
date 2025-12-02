@@ -367,16 +367,27 @@ function setupUserPage() {
         handleQuerySubmit();
     });
     listChaptersBtn.addEventListener('click', () => handleListChapters());
+
+    // Page navigation buttons (Previous and Next only)
+    const pageInput = document.getElementById('page-input-user');
+
     prevPageBtn.addEventListener('click', () => {
         if (pageNum <= 1) return;
         pageNum--;
         queueRenderPage(pageNum);
     });
+
     nextPageBtn.addEventListener('click', () => {
         if (pdfDoc && pageNum >= pdfDoc.numPages) return;
         pageNum++;
         queueRenderPage(pageNum);
     });
+
+    // Page input - update on change or blur
+    if (pageInput) {
+        pageInput.addEventListener('change', () => jumpToPageInput());
+        pageInput.addEventListener('blur', () => jumpToPageInput());
+    }
     queryText.addEventListener('input', () => {
         queryText.style.height = 'auto';
         queryText.style.height = (queryText.scrollHeight) + 'px';
@@ -541,6 +552,7 @@ function setupUserPage() {
 
             queryText.disabled = false;
             submitButton.disabled = false;
+            voiceSearchBtn.disabled = false;  // Enable voice button
             listChaptersBtn.classList.remove('hidden');
             if (conversationalModeBtn) {
                 conversationalModeBtn.disabled = false;
@@ -601,8 +613,39 @@ function setupUserPage() {
             renderPage(pageNumPending);
             pageNumPending = null;
         }
-        pageNumEl.textContent = num;
+
+        // Update page number display and input
+        const pageInput = document.getElementById('page-input-user');
+        if (pageInput) {
+            pageInput.value = num;
+        }
     }
+
+    /**
+     * Jump to page entered in the input field
+     */
+    function jumpToPageInput() {
+        const pageInput = document.getElementById('page-input-user');
+        if (!pageInput || !pdfDoc) return;
+
+        const targetPage = parseInt(pageInput.value, 10);
+
+        // Validate page number
+        if (isNaN(targetPage) || targetPage < 1 || targetPage > pdfDoc.numPages) {
+            // Reset to current page if invalid
+            pageInput.value = pageNum;
+            return;
+        }
+
+        // Navigate to the page
+        if (targetPage !== pageNum) {
+            pageNum = targetPage;
+            queueRenderPage(pageNum);
+        }
+    }
+
+    // Make jumpToPageInput globally accessible for inline onkeypress
+    window.jumpToPageInput = jumpToPageInput;
 
     /**
      * If another page rendering in progress, waits until the rendering is
@@ -674,6 +717,17 @@ function setupUserPage() {
 
         if (currentSessionId) {
             params.append('session_id', currentSessionId);
+        }
+
+        // Add Auth Token for Analytics
+        const user = firebase.auth().currentUser;
+        if (user) {
+            try {
+                const token = await user.getIdToken();
+                params.append('token', token);
+            } catch (e) {
+                console.error("Error getting auth token:", e);
+            }
         }
 
         const source = new EventSource(`/api/smart_query?${params.toString()}`);
@@ -846,7 +900,7 @@ function setupUserPage() {
         });
 
         html += `</div>`;
-        
+
         // Removed custom input field as per user request (redundant with main chat)
 
         followupSection.innerHTML = html;
