@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Notebook - CHADUVU GURU</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Quill.js Rich Text Editor -->
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="/static/firebase-config.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Glassmorphism Container */
+        .notebook-container {
+            max-width: 1200px;
+            margin: 20px auto;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            animation: slideIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* Header */
+        .notebook-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateX(-4px);
+        }
+
+        .save-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.95);
+            color: #667eea;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 700;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .save-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .save-btn.saving {
+            background: #10b981;
+            color: white;
+        }
+
+        /* Editor Area */
+        .editor-section {
+            padding: 30px;
+            min-height: calc(100vh - 300px);
+        }
+
+        /* Quill Editor Customization */
+        .ql-container {
+            border: none !important;
+            font-size: 16px;
+            line-height: 1.8;
+            min-height: 400px;
+        }
+
+        .ql-editor {
+            padding: 20px;
+            min-height: 400px;
+        }
+
+        .ql-toolbar {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0 !important;
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 20px;
+        }
+
+        /* Page Navigation */
+        .page-nav {
+            background: linear-gradient(to right, #f8fafc, #e2e8f0);
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 2px solid #e2e8f0;
+        }
+
+        .page-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .page-btn {
+            background: white;
+            border: 2px solid #667eea;
+            color: #667eea;
+            padding: 8px 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .page-btn:hover:not(:disabled) {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .page-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .add-page-btn {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .add-page-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+        }
+
+        .delete-page-btn {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+
+        .delete-page-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
+        }
+
+        .page-number {
+            font-size: 16px;
+            font-weight: 700;
+            color: #667eea;
+            padding: 8px 16px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Loading State */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 400px;
+            font-size: 18px;
+            color: #64748b;
+        }
+
+        .spinner {
+            border: 3px solid #f3f4f6;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin-right: 15px;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Success Animation */
+        .success-msg {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 16px 24px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.4);
+            animation: slideInRight 0.3s ease;
+            z-index: 1000;
+            font-weight: 600;
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(100px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Highlight recently saved text */
+        .highlight-saved {
+            background: rgba(16, 185, 129, 0.2);
+            padding: 2px 4px;
+            border-radius: 4px;
+            animation: pulse 2s ease-in-out;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="notebook-container">
+        <!-- Header -->
+        <div class="notebook-header">
+            <button class="back-btn" onclick="goBack()">
+                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                </svg>
+                Back
+            </button>
+
+            <div style="text-align: center; flex: 1;">
+                <h1 id="notebook-title" style="font-size: 24px; font-weight: 800;">My Notebook</h1>
+                <p id="notebook-subject" style="font-size: 14px; opacity: 0.9; margin-top: 4px;">Subject</p>
+            </div>
+
+            <button class="save-btn" onclick="saveCurrentPage()">
+                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4">
+                    </path>
+                </svg>
+                <span id="save-text">Save</span>
+            </button>
+        </div>
+
+        <!-- Editor Section -->
+        <div id="editor-section" class="editor-section">
+            <div class="loading">
+                <div class="spinner"></div>
+                Loading notebook...
+            </div>
+        </div>
+
+        <!-- Page Navigation -->
+        <div class="page-nav">
+            <div class="page-info">
+                <button class="page-btn" id="prev-page-btn" onclick="previousPage()">
+                    ← Previous
+                </button>
+                <span class="page-number">
+                    Page <span id="current-page">1</span> of <span id="total-pages">1</span>
+                </span>
+                <button class="page-btn" id="next-page-btn" onclick="nextPage()">
+                    Next →
+                </button>
+                <button class="delete-page-btn" id="delete-page-btn" onclick="deletePage()">
+                    🗑️ Delete Page
+                </button>
+            </div>
+            <button class="add-page-btn" onclick="addNewPage()">
+                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                </svg>
+                Add Page
+            </button>
+        </div>
+    </div>
+
+    <script src="/static/auth.js"></script>
+    <script>
+        // Global State
+        let quill;
+        let currentNotebookId = null;
+        let currentNotebook = null;
+        let pages = [];
+        let currentPageIndex = 0;
+        let autoSaveTimer = null;
+        let highlightItemId = null; // For highlighting newly saved items
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Wait for auth
+            firebase.auth().onAuthStateChanged(async (user) => {
+                if (!user) {
+                    alert('Please login first');
+                    window.location.href = '/';
+                    return;
+                }
+
+                // Get notebook ID from URL
+                const urlParams = new URLSearchParams(window.location.search);
+                currentNotebookId = urlParams.get('id');
+                highlightItemId = urlParams.get('highlight'); // If redirected from text selection
+
+                if (!currentNotebookId) {
+                    alert('No notebook specified');
+                    window.location.href = '/static/user.html';
+                    return;
+                }
+
+                await loadNotebook();
+                initializeEditor();
+                await loadPages();
+            });
+        });
+
+        async function loadNotebook() {
+            try {
+                const user = firebase.auth().currentUser;
+                // Backend stores in notebooks collection at root with uid field
+                const doc = await firebase.firestore()
+                    .collection('notebooks')
+                    .doc(currentNotebookId)
+                    .get();
+
+                if (doc.exists) {
+                    const data = doc.data();
+                    // Verify this notebook belongs to current user
+                    if (data.uid !== user.uid) {
+                        alert('Unauthorized access');
+                        window.location.href = '/static/user.html';
+                        return;
+                    }
+                    currentNotebook = { id: doc.id, ...data };
+                    document.getElementById('notebook-title').textContent = currentNotebook.name || 'My Notebook';
+                    document.getElementById('notebook-subject').textContent = currentNotebook.subject || 'General';
+                } else {
+                    alert('Notebook not found');
+                    window.location.href = '/static/user.html';
+                }
+            } catch (error) {
+                console.error('Error loading notebook:', error);
+                alert('Failed to load notebook');
+            }
+        }
+
+        function initializeEditor() {
+            const editorSection = document.getElementById('editor-section');
+            editorSection.innerHTML = '<div id="editor"></div>';
+
+            quill = new Quill('#editor', {
+                theme: 'snow',
+                modules: {
+                    toolbar: [
+                        [{ 'header': [1, 2, 3, false] }],
+                        ['bold', 'italic', 'underline', 'strike'],
+                        [{ 'size': ['small', false, 'large', 'huge'] }],
+                        [{ 'color': [] }, { 'background': [] }],
+                        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                        [{ 'align': [] }],
+                        ['clean']
+                    ]
+                },
+                placeholder: 'Start writing your notes here...'
+            });
+
+            // Auto-save on changes
+            quill.on('text-change', () => {
+                clearTimeout(autoSaveTimer);
+                autoSaveTimer = setTimeout(() => {
+                    saveCurrentPage(true); // silent save
+                }, 2000);
+            });
+        }
+
+        async function loadPages() {
+            try {
+                const user = firebase.auth().currentUser;
+                const snapshot = await firebase.firestore()
+                    .collection('notebooks')
+                    .doc(currentNotebookId)
+                    .collection('pages')
+                    .orderBy('pageNumber', 'asc')
+                    .get();
+
+                pages = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+                // If no pages, create first page
+                if (pages.length === 0) {
+                    await createFirstPage();
+                } else {
+                    loadPage(0);
+                }
+
+                updatePageNavigation();
+            } catch (error) {
+                console.error('Error loading pages:', error);
+                alert('Failed to load pages');
+            }
+        }
+
+        async function createFirstPage() {
+            const user = firebase.auth().currentUser;
+            const newPage = {
+                pageNumber: 1,
+                content: '',
+                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            };
+
+            const docRef = await firebase.firestore()
+                .collection('notebooks')
+                .doc(currentNotebookId)
+                .collection('pages')
+                .add(newPage);
+
+            pages = [{ id: docRef.id, ...newPage }];
+            loadPage(0);
+        }
+
+        function loadPage(index) {
+            currentPageIndex = index;
+            const page = pages[index];
+
+            if (page && page.content) {
+                quill.setContents(JSON.parse(page.content));
+            } else {
+                quill.setText('');
+            }
+
+            // Highlight saved item if specified
+            if (highlightItemId) {
+                setTimeout(() => {
+                    highlightSavedItem();
+                }, 500);
+            }
+
+            updatePageNavigation();
+        }
+
+        function updatePageNavigation() {
+            document.getElementById('current-page').textContent = currentPageIndex + 1;
+            document.getElementById('total-pages').textContent = pages.length;
+
+            document.getElementById('prev-page-btn').disabled = currentPageIndex === 0;
+            document.getElementById('next-page-btn').disabled = currentPageIndex === pages.length - 1;
+            document.getElementById('delete-page-btn').disabled = pages.length === 1;
+        }
+
+        async function saveCurrentPage(silent = false) {
+            const user = firebase.auth().currentUser;
+            const page = pages[currentPageIndex];
+            const content = JSON.stringify(quill.getContents());
+
+            try {
+                await firebase.firestore()
+                    .collection('notebooks')
+                    .doc(currentNotebookId)
+                    .collection('pages')
+                    .doc(page.id)
+                    .update({
+                        content: content,
+                        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+
+                page.content = content;
+
+                if (!silent) {
+                    showSuccessMessage('✓ Saved successfully!');
+                    const btn = document.querySelector('.save-btn');
+                    btn.classList.add('saving');
+                    setTimeout(() => btn.classList.remove('saving'), 1000);
+                }
+            } catch (error) {
+                console.error('Error saving page:', error);
+                if (!silent) {
+                    alert('Failed to save page');
+                }
+            }
+        }
+
+        async function addNewPage() {
+            // Save current page first
+            await saveCurrentPage(true);
+
+            const user = firebase.auth().currentUser;
+            const newPageNumber = pages.length + 1;
+            const newPage = {
+                pageNumber: newPageNumber,
+                content: '',
+                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            };
+
+            try {
+                const docRef = await firebase.firestore()
+                    .collection('notebooks')
+                    .doc(currentNotebookId)
+                    .collection('pages')
+                    .add(newPage);
+
+                pages.push({ id: docRef.id, ...newPage });
+                loadPage(pages.length - 1);
+                showSuccessMessage('✓ New page added!');
+            } catch (error) {
+                console.error('Error adding page:', error);
+                alert('Failed to add new page');
+            }
+        }
+
+        async function deletePage() {
+            if (pages.length === 1) {
+                alert('Cannot delete the last page');
+                return;
+            }
+
+            if (!confirm('Are you sure you want to delete this page?')) {
+                return;
+            }
+
+            const user = firebase.auth().currentUser;
+            const page = pages[currentPageIndex];
+
+            try {
+                await firebase.firestore()
+                    .collection('notebooks')
+                    .doc(currentNotebookId)
+                    .collection('pages')
+                    .doc(page.id)
+                    .delete();
+
+                pages.splice(currentPageIndex, 1);
+
+                // Renumber pages
+                for (let i = 0; i < pages.length; i++) {
+                    await firebase.firestore()
+                        .collection('notebooks')
+                        .doc(currentNotebookId)
+                        .collection('pages')
+                        .doc(pages[i].id)
+                        .update({ pageNumber: i + 1 });
+                    pages[i].pageNumber = i + 1;
+                }
+
+                const newIndex = Math.min(currentPageIndex, pages.length - 1);
+                loadPage(newIndex);
+                showSuccessMessage('✓ Page deleted!');
+            } catch (error) {
+                console.error('Error deleting page:', error);
+                alert('Failed to delete page');
+            }
+        }
+
+        function previousPage() {
+            if (currentPageIndex > 0) {
+                saveCurrentPage(true);
+                loadPage(currentPageIndex - 1);
+            }
+        }
+
+        function nextPage() {
+            if (currentPageIndex < pages.length - 1) {
+                saveCurrentPage(true);
+                loadPage(currentPageIndex + 1);
+            }
+        }
+
+        function goBack() {
+            // Save before going back
+            saveCurrentPage(true);
+            setTimeout(() => {
+                window.location.href = '/static/user.html';
+            }, 300);
+        }
+
+        function showSuccessMessage(message) {
+            const msg = document.createElement('div');
+            msg.className = 'success-msg';
+            msg.textContent = message;
+            document.body.appendChild(msg);
+            setTimeout(() => msg.remove(), 3000);
+        }
+
+        function highlightSavedItem() {
+            // This would highlight the specific saved item on the page
+            // For now, just show a message
+            showSuccessMessage('✓ Your saved text is on this page!');
+            highlightItemId = null;
+        }
+    </script>
+</body>
+
+</html>

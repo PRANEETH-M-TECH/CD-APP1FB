@@ -1,0 +1,367 @@
+/* Inline Notebook Editor Styles */
+
+#inline-notebook-container {
+    display: none;
+    /* Hidden by default */
+    flex-direction: column;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 24px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    animation: fadeIn 0.3s ease;
+    position: relative;
+    z-index: 10;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Enhanced Header */
+.notebook-header-enhanced {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+/* Top Row - Main Navigation */
+.notebook-header-row-top {
+    padding: 12px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.back-to-book-btn-new {
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.3s ease;
+}
+
+.back-to-book-btn-new:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: translateX(-3px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.notebook-title-section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+    justify-content: center;
+}
+
+.notebook-emoji {
+    font-size: 24px;
+}
+
+.notebook-title-text {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0;
+    color: white;
+}
+
+.notebook-actions-top {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.my-bag-btn,
+.fullscreen-btn {
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 8px 14px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.3s ease;
+}
+
+.my-bag-btn:hover,
+.fullscreen-btn:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.fullscreen-btn {
+    padding: 8px 10px;
+}
+
+/* Bottom Row - Page Controls */
+.notebook-header-row-bottom {
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.08);
+    color: white;
+}
+
+.page-controls-left,
+.page-controls-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.page-nav-btn,
+.add-page-btn,
+.delete-page-btn {
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 6px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.page-nav-btn {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+}
+
+.add-page-btn {
+    gap: 4px;
+    padding: 6px 12px;
+}
+
+.delete-page-btn {
+    padding: 6px 10px;
+}
+
+.delete-page-btn:hover {
+    background: rgba(239, 68, 68, 0.3);
+    border-color: rgba(239, 68, 68, 0.5);
+}
+
+.page-nav-btn:hover:not(:disabled),
+.add-page-btn:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: translateY(-1px);
+}
+
+.page-nav-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.page-counter-display {
+    font-size: 13px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.95);
+    padding: 0 8px;
+}
+
+.page-num-current {
+    font-weight: 700;
+}
+
+.save-section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-left: 10px;
+    border-left: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.save-status-text {
+    font-size: 12px;
+    opacity: 0.85;
+}
+
+.save-inline-btn-new {
+    background: white;
+    color: #667eea;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.save-inline-btn-new:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+    background: #f8f9fa;
+}
+
+/* Fullscreen Mode */
+#inline-notebook-container.fullscreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    border-radius: 0;
+    z-index: 9999;
+    animation: expandToFullscreen 0.3s ease;
+}
+
+@keyframes expandToFullscreen {
+    from {
+        transform: scale(0.95);
+        opacity: 0.9;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Notebook Switcher */
+.notebook-switcher {
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: white;
+    padding: 6px 32px 6px 12px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-left: 10px;
+    transition: all 0.2s ease;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+}
+
+.notebook-switcher:hover {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+.notebook-switcher:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.2);
+}
+
+.notebook-switcher option {
+    background: #667eea;
+    color: white;
+    padding: 8px;
+}
+
+/* Editor Area */
+#inline-editor-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: white;
+}
+
+.ql-toolbar {
+    border: none !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+    background: #f8fafc;
+    padding: 12px !important;
+}
+
+.ql-container {
+    border: none !important;
+    flex: 1;
+    overflow-y: auto;
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+}
+
+.ql-editor {
+    padding: 30px 40px;
+    min-height: 100%;
+}
+
+/* Footer */
+.notebook-footer {
+    background: #f8fafc;
+    padding: 15px 25px;
+    border-top: 1px solid #e2e8f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+.nav-btn {
+    background: white;
+    border: 1px solid #cbd5e1;
+    color: #64748b;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.nav-btn:hover:not(:disabled) {
+    border-color: #667eea;
+    color: #667eea;
+    background: #f1f5f9;
+}
+
+.nav-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.page-indicator {
+    font-weight: 600;
+    color: #475569;
+    font-size: 14px;
+}
+
+/* Highlight Animation */
+.highlight-new {
+    background-color: rgba(16, 185, 129, 0.2);
+    transition: background-color 2s ease;
+}

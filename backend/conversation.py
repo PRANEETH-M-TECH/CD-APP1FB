@@ -29,6 +29,9 @@ class ConversationState:
     websocket: WebSocket
     last_query_time: datetime
     cached_context: Dict
+    uid: Optional[str] = None
+    class_name: Optional[str] = None
+    subject: Optional[str] = None
     is_speaking: bool = False
     should_stop: bool = False
     session_id: Optional[str] = None
@@ -38,14 +41,17 @@ class ConversationManager:
     def __init__(self):
         self.active_conversations: Dict[str, ConversationState] = {}
     
-    async def connect(self, websocket: WebSocket, conversation_id: str, book_uuid: str):
+    async def connect(self, websocket: WebSocket, conversation_id: str, book_uuid: str, uid: str = None, class_name: str = None, subject: str = None):
         await websocket.accept()
-        print(f"[ConversationManager] WebSocket accepted for conversation_id={conversation_id}, book_uuid={book_uuid}")
+        print(f"[ConversationManager] WebSocket accepted for conversation_id={conversation_id}, book_uuid={book_uuid}, uid={uid}, class_name={class_name}, subject={subject}")
         self.active_conversations[conversation_id] = ConversationState(
             book_uuid=book_uuid,
             websocket=websocket,
             last_query_time=datetime.now(),
-            cached_context={}
+            cached_context={},
+            uid=uid,
+            class_name=class_name,
+            subject=subject
         )
 
     async def _safe_send(self, websocket: WebSocket, payload: dict) -> bool:
@@ -83,16 +89,18 @@ class ConversationManager:
         conv.should_stop = False
         conv.is_speaking = True
         
+        # Use the correct UID from the conversation state
+        uid = conv.uid or conv.session_id # Fallback to session_id if uid is somehow not set
+        
         try:
             # 1. Get or create session
             session = session_manager.get_or_create_session(conv.book_uuid, conv.session_id)
             conv.session_id = session["session_id"]
             
             # Extract basic query metadata early
-            uid = conv.session_id # Use session_id as uid for WebSocket analytics
             book_metadata = qdrant.get_book_metadata(conv.book_uuid)
-            class_name = book_metadata.get("class_name", "Unknown")
-            subject = book_metadata.get("subject", "Unknown")
+            class_name = conv.class_name or book_metadata.get("class_name", "Unknown")
+            subject = conv.subject or book_metadata.get("subject", "Unknown")
             
             active_context_window = session["active_context_window"]
             
@@ -256,6 +264,7 @@ class ConversationManager:
         finally:
             # Consolidate analytics logging for WebSocket
             try:
+                logger.info(f"DEBUG: Analytics - uid={uid}, class_name={class_name}, subject={subject}, chapter_id={chapter_id}")
                 analytics_service.log_query(
                     uid=uid,
                     class_name=class_name,
@@ -272,12 +281,23 @@ class ConversationManager:
                 analytics_service.update_user_stats(uid, subject, chapter_id, class_name)
                 analytics_service.update_chapter_stats(class_name, subject, chapter_id, chapter_name, uid)
 
+                # Import enhanced analytics and log frequent questions
+                from . import enhanced_analytics
+                if chapter_name and chapter_name != "Unknown" and uid != conv.session_id:
+                    enhanced_analytics.update_frequent_questions(
+                        uid=uid,
+                        query=query,
+                        chapter_name=chapter_name,
+                        subject=subject
+                    )
+
                 # optional LLM metadata
-                analytics_service.update_mistake_patterns(uid, {
+                llm_metadata = {
                     "patterns": [],
                     "confusion_topics": [],
                     "recommended_tasks": []
-                })
+                }
+                analytics_service.update_mistake_patterns(uid, **llm_metadata)
 
             except Exception as e:
                 logger.warning(f"[ANALYTICS] WebSocket analytics update failed: {e}")

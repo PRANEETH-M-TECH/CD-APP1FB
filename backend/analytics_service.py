@@ -87,18 +87,22 @@ def log_query(
     logger.info(f"[ANALYTICS] Attempting to log query for user {uid} in subject {subject}.")
     try:
         # Parse class to integer
+        class_int = 0
         try:
-            class_int = int(class_name.replace("Class", "").replace("class", "").strip())
-        except:
-            class_int = 0
+            if class_name:
+                class_int = int(str(class_name).replace("Class", "").replace("class", "").strip())
+        except (ValueError, AttributeError):
             logger.warning(f"Could not parse class: {class_name}, defaulting to 0")
+
+        # Ensure subject is a string before calling .lower()
+        safe_subject = subject.lower().strip() if isinstance(subject, str) else "unknown"
         
         doc_ref = db.collection("user_queries").document()
         
         query_data = {
             "uid": uid,
             "class": class_int,
-            "subject": subject.lower().strip(),
+            "subject": safe_subject,
             "chapter_id": chapter_id if chapter_id is not None else 0,
             "chapter_name": chapter_name or "Unknown",
             "query": query,
@@ -139,10 +143,12 @@ def update_user_stats(
     """
     try:
         # Parse class to integer for consistent key generation
+        class_int = 0
         try:
-            class_int = int(class_name.replace("Class", "").replace("class", "").strip())
-        except:
-            class_int = 0
+            if class_name:
+                class_int = int(str(class_name).replace("Class", "").replace("class", "").strip())
+        except (ValueError, AttributeError):
+            pass # Keep default 0
 
         # STRICT ISOLATION: Use composite key {uid}_{class}
         # This ensures a user in Class 8 has separate stats from Class 9
@@ -151,8 +157,10 @@ def update_user_stats(
         doc = doc_ref.get()
 
         today_str = datetime.now().date().strftime("%Y-%m-%d")
-        subject_key = f"subjects_count.{subject.lower()}"
-        chapter_key = f"chapters_count.{subject.lower()}_{chapter_id}" if chapter_id else None
+        
+        safe_subject = subject.lower() if isinstance(subject, str) else "unknown"
+        subject_key = f"subjects_count.{safe_subject}"
+        chapter_key = f"chapters_count.{safe_subject}_{chapter_id}" if chapter_id and safe_subject != "unknown" else None
 
         if not doc.exists:
             # Document doesn't exist, create it
@@ -162,12 +170,12 @@ def update_user_stats(
                 "total_queries": 1,
                 "last_active": firestore.SERVER_TIMESTAMP,
                 "streak": 1,
-                "subjects_count": {subject.lower(): 1},
+                "subjects_count": {safe_subject: 1},
                 "weekly_activity": {today_str: 1},
                 "chapters_count": {}
             }
             if chapter_key:
-                new_data["chapters_count"] = {f"{subject.lower()}_{chapter_id}": 1}
+                new_data["chapters_count"] = {chapter_key: 1}
 
             doc_ref.set(new_data)
             logger.info(f"✅ Created new user stats for {uid} in Class {class_int}")
@@ -236,13 +244,17 @@ def update_chapter_stats(
     """
     try:
         # Parse class to integer
+        class_int = 0
         try:
-            class_int = int(class_name.replace("Class", "").replace("class", "").strip())
-        except:
-            class_int = 0
+            if class_name:
+                class_int = int(str(class_name).replace("Class", "").replace("class", "").strip())
+        except (ValueError, AttributeError):
+            pass
+
+        safe_subject = subject.lower() if isinstance(subject, str) else "unknown"
         
         # Document ID: {class}_{subject}_{chapter_id}
-        doc_id = f"{class_int}_{subject.lower()}_{chapter_id}"
+        doc_id = f"{class_int}_{safe_subject}_{chapter_id}"
         doc_ref = db.collection("chapter_stats").document(doc_id)
         
         # Check if document exists
@@ -252,7 +264,7 @@ def update_chapter_stats(
             # Create new document with initial data
             doc_ref.set({
                 "class": class_int,
-                "subject": subject.lower(),
+                "subject": safe_subject,
                 "chapter_id": chapter_id,
                 "chapter_name": chapter_name,
                 "total_queries": 1,

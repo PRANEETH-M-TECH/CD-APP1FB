@@ -2263,9 +2263,11 @@ async def chapters_page():
     return FileResponse('public/chapters.html')
 
 @app.websocket("/ws/conversation/{conversation_id}")
-async def websocket_conversation(websocket: WebSocket, conversation_id: str, book_uuid: str):
-    await conversation_manager.connect(websocket, conversation_id, book_uuid)
-    print(f"[App] WebSocket handler started for conversation_id={conversation_id}, book_uuid={book_uuid}")
+async def websocket_conversation(websocket: WebSocket, conversation_id: str, book_uuid: str, uid: str = Query(None), class_name: str = Query(None), subject: str = Query(None)):
+    # Here, you might want to use the uid for authentication/authorization
+    # For now, we'll pass it directly to the conversation manager
+    await conversation_manager.connect(websocket, conversation_id, book_uuid, uid, class_name, subject)
+    print(f"[App] WebSocket handler started for conversation_id={conversation_id}, book_uuid={book_uuid}, uid={uid}, class_name={class_name}, subject={subject}")
     try:
         while True:
             data = await websocket.receive_json()

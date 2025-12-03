@@ -105,11 +105,17 @@ function handleClickOutside(event) {
 
 window.showNotebookSelector = async function () {
     // Load notebooks if not already loaded
-    if (currentNotebooks.length === 0) {
-        await loadNotebooks();
+    // Fix: Ensure window.myBag exists
+    if (!window.myBag) {
+        console.error('MyBag not initialized');
+        return;
     }
 
-    if (currentNotebooks.length === 0) {
+    if (window.myBag.notebooks.length === 0) {
+        await window.myBag.loadNotebooks();
+    }
+
+    if (window.myBag.notebooks.length === 0) {
         alert('Please create a notebook first before saving selections.');
         hideSelectionTooltip();
         return;
@@ -127,19 +133,27 @@ window.showNotebookSelector = async function () {
             <div class="mb-4 p-3 bg-gray-50 rounded-lg border border-gray-200 max-h-32 overflow-y-auto">
                 <p class="text-sm text-gray-700 italic">"${truncateText(selectedTextContent, 150)}"</p>
             </div>
+            
+            <div class="mb-4">
+                <label class="flex items-center gap-2 text-sm font-medium text-gray-700 cursor-pointer select-none">
+                    <input type="checkbox" id="open-after-save" checked class="w-4 h-4 text-purple-600 rounded border-gray-300 focus:ring-purple-500">
+                    Open in editor after saving
+                </label>
+            </div>
+
             <div class="mb-4">
                 <label class="block text-sm font-medium text-gray-700 mb-2">Choose Notebook:</label>
                 <div class="space-y-2" id="notebook-selector-list">
-                    ${currentNotebooks.map(nb => `
-                        <button onclick="saveSelectionToNotebook('${nb.id}')" 
+                    ${window.myBag.notebooks.map(nb => `
+                        <button onclick="saveSelectionToNotebook('${nb.notebook_id}')" 
                                 class="w-full flex items-center gap-3 p-3 border-2 border-gray-200 rounded-lg hover:border-purple-500 hover:bg-purple-50 transition group">
                             <div class="w-10 h-10 rounded-lg flex items-center justify-center text-xl" 
-                                 style="background: ${nb.color}20; color: ${nb.color}">
-                                ${getSubjectIcon(nb.subject)}
+                                 style="background: ${nb.color || '#6366f1'}20; color: ${nb.color || '#6366f1'}">
+                                📓
                             </div>
                             <div class="flex-1 text-left">
                                 <div class="font-semibold text-gray-800">${nb.name}</div>
-                                <div class="text-xs text-gray-500">${nb.subject} • ${nb.itemCount || 0} items</div>
+                                <div class="text-xs text-gray-500">${nb.subject} • ${nb.item_count || 0} items</div>
                             </div>
                             <svg class="w-5 h-5 text-gray-400 group-hover:text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
@@ -167,38 +181,82 @@ window.saveSelectionToNotebook = async function (notebookId) {
     }
 
     try {
-        // Save to Firestore
-        await firebase.firestore()
-            .collection('users')
-            .doc(user.uid)
-            .collection('notebooks')
-            .doc(notebookId)
-            .collection('items')
-            .add({
-                type: 'selection',
-                content: selectedTextContent,
-                source: 'chat_response',
-                createdAt: firebase.firestore.FieldValue.serverTimestamp()
-            });
+        // Check if user wants to open editor
+        const shouldOpenEditor = document.getElementById('open-after-save')?.checked;
 
-        // Update item count
-        await firebase.firestore()
-            .collection('users')
-            .doc(user.uid)
+        // If opening editor, we can let the inline editor handle the saving/insertion!
+        // This is much cleaner than duplicating logic.
+        if (shouldOpenEditor && window.inlineNotebook) {
+            closeNotebookSelector();
+            window.inlineNotebook.open(notebookId, selectedTextContent);
+            return;
+        }
+
+        // Otherwise, save to Firestore manually (background save)
+        const pagesSnapshot = await firebase.firestore()
             .collection('notebooks')
             .doc(notebookId)
-            .update({
-                itemCount: firebase.firestore.FieldValue.increment(1)
-            });
+            .collection('pages')
+            .orderBy('pageNumber', 'asc')
+            .limit(1)
+            .get();
+
+        let pageId;
+
+        if (pagesSnapshot.empty) {
+            // Create first page
+            const newPage = {
+                pageNumber: 1,
+                content: JSON.stringify({
+                    ops: [{ insert: selectedTextContent + '\n' }]
+                }),
+                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            };
+            const pageRef = await firebase.firestore()
+                .collection('notebooks')
+                .doc(notebookId)
+                .collection('pages')
+                .add(newPage);
+            pageId = pageRef.id;
+        } else {
+            // Append to first page
+            const firstPage = pagesSnapshot.docs[0];
+            pageId = firstPage.id;
+            const existingContent = firstPage.data().content;
+
+            // Parse existing Quill Delta content
+            let delta;
+            try {
+                delta = JSON.parse(existingContent);
+            } catch (e) {
+                delta = { ops: [] };
+            }
+
+            // Append new content with highlighting
+            delta.ops.push({ insert: '\n\n' });
+            delta.ops.push({ insert: selectedTextContent, attributes: { background: '#d1fae5' } });
+            delta.ops.push({ insert: '\n' });
+
+            await firebase.firestore()
+                .collection('notebooks')
+                .doc(notebookId)
+                .collection('pages')
+                .doc(pageId)
+                .update({
+                    content: JSON.stringify(delta),
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+        }
+
+        // Update item count (optional, if backend doesn't do it)
+        // Note: Backend usually handles this via triggers, but we can do it optimistically if needed.
 
         // Close modal
         closeNotebookSelector();
 
         // Show success message
-        showSuccessMessage('✓ Saved to notebook!');
-
-        // Flying animation
-        showFlyingAnimation('📝', window.innerWidth / 2, window.innerHeight / 2);
+        showSuccessMessage('✓ Saved to notebook');
 
         // Clear selection
         window.getSelection().removeAllRanges();

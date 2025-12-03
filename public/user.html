@@ -6,6 +6,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ask a Query - CHADUVU GURU</title>
   <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+  <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+  <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+  <link href="/static/css/inline-notebook.css" rel="stylesheet">
   <link rel="stylesheet" href="/static/style.css">
   <link rel="stylesheet" href="/static/conversation.css">
   <link rel="stylesheet" href="/static/voice-overlay.css">
@@ -14,7 +17,6 @@
   <link rel="stylesheet" href="/static/save-selection.css">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-  <script src="/static/js/my-bag.js" defer></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"
     integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV" crossorigin="anonymous">
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"
@@ -634,7 +636,22 @@
       animation: fadeInDown 0.3s ease-out;
     }
 
-    @keyframes fadeInDown {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    }
+
+    .fade-in {
+      animation: fadeIn 0.3s ease-in;
+    }
+
+    @keyframes fadeIn {
       from {
         opacity: 0;
         transform: translateY(-10px);
@@ -646,6 +663,10 @@
       }
     }
   </style>
+  <!-- Quill Theme -->
+  <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+  <!-- Quill JS -->
+  <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 </head>
 
 <body class="flex text-gray-800 user-page-body">
@@ -725,6 +746,98 @@
         <div id="pdf-loading-user" class="text-gray-500 text-sm italic mt-2 hidden">
           <p>Loading Book...</p>
         </div>
+      </div>
+    </div>
+
+    <!-- Inline Notebook Editor (Hidden by default) -->
+    <div id="inline-notebook-container" style="display: none;" class="flex-1 flex flex-col bg-white">
+      <!-- Enhanced Header -->
+      <div class="notebook-header-enhanced">
+        <!-- Top Row: Main Navigation -->
+        <div class="notebook-header-row-top">
+          <button onclick="closeInlineNotebook()" class="back-to-book-btn-new">
+            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Back to Book
+          </button>
+
+          <div class="notebook-title-section">
+            <span class="notebook-emoji">📓</span>
+            <h3 id="inline-notebook-title" class="notebook-title-text">My Notebook</h3>
+          </div>
+
+          <div class="notebook-actions-top">
+            <button onclick="openInMyBag()" class="my-bag-btn" title="Open in My Bag">
+              <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+              </svg>
+              My Bag
+            </button>
+            <button onclick="toggleFullscreen()" id="fullscreen-toggle-btn" class="fullscreen-btn"
+              title="Expand notebook">
+              <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Bottom Row: Page Controls -->
+        <div class="notebook-header-row-bottom">
+          <div class="page-controls-left">
+            <button id="prev-page-btn-header" onclick="prevInlinePage()" class="page-nav-btn" title="Previous Page">
+              <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+
+            <span class="page-counter-display">
+              Page <span id="current-page-num-header" class="page-num-current">1</span> of <span
+                id="total-pages-num-header" class="page-num-total">1</span>
+            </span>
+
+            <button id="next-page-btn-header" onclick="nextInlinePage()" class="page-nav-btn" title="Next Page">
+              <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+          </div>
+
+          <div class="page-controls-right">
+            <button onclick="addInlinePage()" class="add-page-btn" title="Add New Page">
+              <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+              </svg>
+              Add Page
+            </button>
+
+            <button onclick="deleteInlinePage()" class="delete-page-btn" title="Delete Current Page">
+              <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
+            </button>
+
+            <div class="save-section">
+              <span id="save-status" class="save-status-text">Saved</span>
+              <button onclick="saveInlinePage()" class="save-inline-btn-new">
+                <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
+                </svg>
+                Save
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Editor -->
+      <div id="inline-editor-wrapper">
+        <div id="inline-editor"></div>
       </div>
     </div>
 
@@ -841,7 +954,6 @@
   <!-- Main script -->
   <script src="/static/script.js"></script>
   <script src="/static/conversation.js"></script>
-  <script src="/static/js/my-bag.js"></script>
   <script src="/static/save-selection.js"></script>
 
   <!-- Initialize Sidebar -->
@@ -1365,19 +1477,18 @@
   </div>
 
   <script src="/static/js/my-bag.js"></script>
-</body>
+  <script src="/static/js/inline-notebook.js"></script>
 
-</html>
-<!-- Save-to-Bag Component Integration -->
-<script>
-  fetch('/static/save-to-bag-component.html')
-    .then(r => r.text())
-    .then(html => {
-      const container = document.createElement('div');
-      container.innerHTML = html;
-      document.body.appendChild(container);
-    });
-</script>
+  <!-- Save-to-Bag Component Integration -->
+  <script>
+    fetch('/static/save-to-bag-component.html')
+      .then(r => r.text())
+      .then(html => {
+        const container = document.createElement('div');
+        container.innerHTML = html;
+        document.body.appendChild(container);
+      });
+  </script>
 </body>
 
 </html>

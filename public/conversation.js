@@ -40,7 +40,6 @@ class ConversationMode {
 
         this.initializeSpeechRecognition();
         this.bindEventHandlers();
-        this.initializeSetupForm();
     }
 
     setState(newState) {
@@ -252,8 +251,8 @@ class ConversationMode {
         this.setState('idle');
     }
 
-    async startConversationMode(bookUuid) {
-        console.log('[ConversationMode] Starting for book:', bookUuid);
+    async startConversationMode(bookUuid, uid = null, className = null, subject = null) {
+        console.log(`[ConversationMode] Starting for book: ${bookUuid}, UID: ${uid}, Class: ${className}, Subject: ${subject}`);
         const modal = document.getElementById('conversation-modal');
         if (!modal) return;
 
@@ -276,7 +275,16 @@ class ConversationMode {
         this.setState('idle');
 
         this.conversationId = 'conv_' + Date.now();
-        const wsUrl = `ws://${window.location.host}/ws/conversation/${this.conversationId}?book_uuid=${bookUuid}`;
+        let wsUrl = `ws://${window.location.host}/ws/conversation/${this.conversationId}?book_uuid=${bookUuid}`;
+        if (uid) {
+            wsUrl += `&uid=${uid}`;
+        }
+        if (className) {
+            wsUrl += `&class_name=${className}`;
+        }
+        if (subject) {
+            wsUrl += `&subject=${subject}`;
+        }
         this.ws = new WebSocket(wsUrl);
 
         this.ws.onopen = () => {
@@ -782,28 +790,54 @@ class ConversationMode {
         this.populateClassOptions();
         this.prepareSetupView();
 
-        if (this.classSelect) {
+        if (this.classSelect && !this.classSelect.dataset.listenerAttached) {
             this.classSelect.addEventListener('change', () => this.handleClassChange());
+            this.classSelect.dataset.listenerAttached = 'true';
         }
 
-        if (this.startButton) {
+        if (this.startButton && !this.startButton.dataset.listenerAttached) {
             this.startButton.addEventListener('click', () => this.handleConversationLaunch());
+            this.startButton.dataset.listenerAttached = 'true';
         }
     }
 
     populateClassOptions() {
         if (!this.classSelect) return;
-        const classes = ['6', '7', '8', '9', '10'];
-        const previousValue = this.classSelect.value;
-        this.classSelect.innerHTML = '<option value="" disabled selected>Select class...</option>';
-        classes.forEach(cls => {
-            const option = document.createElement('option');
-            option.value = cls;
-            option.textContent = cls;
-            this.classSelect.appendChild(option);
-        });
-        if (classes.includes(previousValue)) {
-            this.classSelect.value = previousValue;
+
+        // If user data is available, use it to set the class
+        if (window.userData && window.userData.class) {
+            const userClass = window.userData.class;
+            
+            const classField = this.classSelect.parentElement;
+            if (classField) {
+                classField.style.display = 'none'; // This will hide the dropdown's container
+            }
+
+            // Set the class dropdown value and trigger subject loading
+            this.classSelect.innerHTML = `<option value="${userClass}" selected>${userClass}</option>`;
+            this.classSelect.value = userClass;
+            
+            // Need to ensure the change handler is called to load subjects
+            this.handleClassChange();
+        } else {
+             // Show the dropdown if no user class is found
+            const classField = this.classSelect.parentElement;
+            if (classField) {
+                classField.style.display = 'flex';
+            }
+            // Original behavior
+            const classes = ['6', '7', '8', '9', '10'];
+            const previousValue = this.classSelect.value;
+            this.classSelect.innerHTML = '<option value="" disabled selected>Select class...</option>';
+            classes.forEach(cls => {
+                const option = document.createElement('option');
+                option.value = cls;
+                option.textContent = cls;
+                this.classSelect.appendChild(option);
+            });
+            if (classes.includes(previousValue)) {
+                this.classSelect.value = previousValue;
+            }
         }
     }
 
@@ -919,7 +953,8 @@ class ConversationMode {
         try {
             const book = await this.fetchBook(className, subject);
             window.selectedBook = book;
-            this.startConversationMode(book.id);
+            const uid = window.currentUser ? window.currentUser.uid : null;
+            this.startConversationMode(book.id, uid, className, subject);
         } catch (error) {
             console.error('[ConversationMode] Conversation launch failed:', error);
             this.setSetupStatus(error.message || 'Unable to start conversation. Please try again.', 'error');
@@ -951,7 +986,7 @@ class ConversationMode {
     openSetupModal() {
         const modal = document.getElementById('conversation-modal');
         if (!modal || !this.setupSection) return;
-        this.populateClassOptions();
+        this.initializeSetupForm();
         this.prepareSetupView();
         modal.style.display = 'flex';
         this.setState('idle');

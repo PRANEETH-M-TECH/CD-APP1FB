@@ -9,6 +9,7 @@
 
     <!-- Styles -->
     <link rel="stylesheet" href="/static/sidebar.css">
+    <link rel="stylesheet" href="/static/conversation.css">
 
     <style>
         * {
@@ -802,7 +803,7 @@
                     </div>
 
                     <button class="select-btn" onclick="selectMode('conversation', event)">
-                        Start Chatting
+                        Start Conversation
                     </button>
                 </div>
             </div>
@@ -820,6 +821,16 @@
     <!-- Sidebar -->
     <script src="/static/sidebar.js"></script>
     <script src="/static/js/my-bag.js" defer></script>
+    <script src="/static/conversation.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // conversation.js needs to be initialized if the modal is present
+            const modal = document.getElementById('conversation-modal');
+            if (modal) {
+                window.conversationMode = new ConversationMode();
+            }
+        });
+    </script>
 
     <script>
         let currentUser = null;
@@ -834,6 +845,7 @@
             }
 
             currentUser = user;
+            window.currentUser = user; // Make user object globally available
 
             try {
                 const userDoc = await db.collection('users').doc(user.uid).get();
@@ -842,6 +854,7 @@
                 }
 
                 userData = userDoc.data();
+                window.userData = userData; // Make it globally accessible
 
                 if (userData.role === 'admin') {
                     window.location.href = '/admin';
@@ -923,8 +936,11 @@
 
             console.log('[MODE SELECT] Selected:', mode);
 
-            document.querySelector('.mode-container').classList.add('slide-out-left');
-
+            // Apply slide-out-left only if navigating away (e.g., to ask-question)
+            if (mode === 'ask-question') {
+                document.querySelector('.mode-container').classList.add('slide-out-left');
+            }
+            
             setTimeout(async () => {
                 try {
                     await db.collection('users').doc(currentUser.uid).update({
@@ -941,7 +957,15 @@
                 if (mode === 'ask-question') {
                     window.location.href = '/user';
                 } else if (mode === 'conversation') {
-                    window.location.href = '/?openConversation=true';
+                    if (window.conversationMode) {
+                        window.conversationMode.openSetupModal();
+                        // No redirection needed, modal handles display
+                    } else {
+                        console.error("ConversationMode not initialized.");
+                        alert("Conversation mode is not available. Please try again later.");
+                        // In case of error, remove the class if it was added
+                        document.querySelector('.mode-container').classList.remove('slide-out-left');
+                    }
                 }
             }, 500);
         }
@@ -990,6 +1014,75 @@
             });
         });
     </script>
+  <!-- Conversation modal: re-used from original layout (keeps ids for conversation.js) -->
+  <div id="conversation-modal" class="conversation-modal" style="display: none;">
+    <div class="conversation-container">
+      <div class="conversation-header">
+        <h2 class="modal-title">AI Teacher Mode</h2>
+        <div class="header-actions">
+          <label for="show-ai-text-toggle" class="toggle-label">Show Text</label>
+          <input type="checkbox" id="show-ai-text-toggle" title="Toggle AI text display">
+          <button id="exit-conversation" class="exit-button" title="Close">&times;</button>
+        </div>
+      </div>
+
+      <div id="conversation-setup" class="conversation-setup">
+        <div class="field">
+          <label for="conversation-class-select">Class</label>
+          <select id="conversation-class-select">
+            <option value="" disabled selected>Select class.</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="conversation-subject-select">Subject</label>
+          <select id="conversation-subject-select" disabled>
+            <option value="" disabled selected>Select subject.</option>
+          </select>
+        </div>
+        <div class="setup-actions">
+          <button type="button" id="start-conversation-btn" class="start-conversation-btn">Start Conversation</button>
+        </div>
+        <p id="conversation-setup-status" class="setup-status" aria-live="polite"></p>
+      </div>
+
+      <div id="conversation-main" class="conversation-main" style="display:none;">
+        <!-- Tier & Cache Status Badge -->
+        <div id="conversation-session-status" class="conversation-session-status"></div>
+
+        <!-- Session Status Badge -->
+        <div id="voice-session-status" class="voice-session-status"></div>
+
+        <div class="waveform-area">
+          <canvas id="user-waveform" class="waveform-canvas"></canvas>
+          <canvas id="ai-waveform" class="waveform-canvas"></canvas>
+        </div>
+
+        <div id="conversation-body" class="conversation-body"></div>
+
+        <!-- Follow-up Suggestions Container -->
+        <div id="voice-followups-container" class="voice-followups-container" style="display: none;"></div>
+
+        <div class="conversation-controls">
+          <button id="mic-button" class="mic-button" aria-label="microphone">
+            <!-- conversation.js will set the inner icon -->
+          </button>
+          <div id="status-indicator" class="status-indicator">Click the mic to speak</div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="conversation-actions">
+          <button id="new-topic-btn" class="new-topic-btn" onclick="window.conversationMode?.handleNewTopic()">
+            🔄 New Topic
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 </body>
 
 </html>
