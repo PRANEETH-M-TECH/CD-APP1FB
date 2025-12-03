@@ -1356,7 +1356,12 @@ Answer the question based only on the history.
                     "confusion_topics": detected_confusions if 'detected_confusions' in locals() else [],
                     "recommended_tasks": recommended_tasks if 'recommended_tasks' in locals() else []
                 }
-                analytics_service.update_mistake_patterns(uid=uid, metadata=mistake_metadata)
+                analytics_service.update_mistake_patterns(
+                    uid=uid,
+                    patterns=mistake_metadata.get("patterns", []),
+                    confusion_topics=mistake_metadata.get("confusion_topics", []),
+                    recommended_tasks=mistake_metadata.get("recommended_tasks", [])
+                )
             except Exception as e:
                 logger.warning(f"[ANALYTICS] Mistake-pattern update skipped for {uid}: {e}")
 
@@ -1901,134 +1906,16 @@ from . import enhanced_dashboard_service
 from . import bag_service
 
 @app.get("/api/dashboard/enhanced")
-def enhanced_dashboard(uid: str):
+def enhanced_dashboard(uid: str, class_name: str = Query(None)):
     """
     Returns the full analytics dataset required by enhanced-dashboard.html.
-    This merges user_stats, user_queries, chapter_stats, and generates AI-friendly feedback.
-    The structure matches exactly what the frontend expects.
+    Delegates to enhanced_dashboard_service for logic and class isolation.
     """
-
-    # ------------------------------
-    # 1. Load Base Collections
-    # ------------------------------
-    user_stats_ref = db.collection("user_stats").document(uid).get()
-    if not user_stats_ref.exists:
-        return {
-            "summary": {
-                "total_queries": 0,
-                "streak": 0,
-                "total_subjects": 0,
-                "last_active": None
-            },
-            "weekly_activity": {"dates": [], "counts": []},
-            "chapter_hotspots": [],
-            "ai_feedback": {
-                "overall_feedback": "Start asking your first question!",
-                "motivation_message": "You're doing great!",
-                "weak_topics": [],
-                "suggestions": []
-            }
-        }
-
-    user_stats = user_stats_ref.to_dict()
-    total_queries = user_stats.get("total_queries", 0)
-    streak = user_stats.get("streak", 0)
-    subjects_count = user_stats.get("subjects_count", {})
-    last_active = user_stats.get("last_active")
-
-    # ------------------------------
-    # 2. Weekly Activity Format Cleanup
-    # Expected by frontend: { dates: [...], counts: [...] }
-    # ------------------------------
-    weekly_raw = user_stats.get("weekly_activity", {})
-    weekly_dates = []
-    weekly_counts = []
-
-    for day, count in weekly_raw.items():
-        weekly_dates.append(day)
-        weekly_counts.append(count)
-
-    weekly_activity = {
-        "dates": weekly_dates,
-        "counts": weekly_counts
-    }
-
-    # ------------------------------
-    # 3. Build Chapter Hotspots (Detailed breakdown)
-    # Expected by frontend: chapter_name, subject, query_count, last_asked, is_struggle_area
-    # ------------------------------
-    chapter_hotspots = []
-    user_query_docs = db.collection("user_queries").where("uid", "==", uid).stream()
-
-    chapter_map = {}  # (subject, chapter_name) → stats accumulator
-
-    for doc in user_query_docs:
-        d = doc.to_dict()
-        key = (d.get("subject"), d.get("chapter_name"))
-
-        if key not in chapter_map:
-            chapter_map[key] = {
-                "chapter_name": d.get("chapter_name"),
-                "subject": d.get("subject"),
-                "query_count": 0,
-                "last_asked": d.get("timestamp"),
-            }
-
-        chapter_map[key]["query_count"] += 1
-
-        # track the last asked timestamp
-        ts = d.get("timestamp")
-        if ts and (chapter_map[key]["last_asked"] is None or ts > chapter_map[key]["last_asked"]):
-            chapter_map[key]["last_asked"] = ts
-
-    # convert aggregated chapter stats
-    for key, data in chapter_map.items():
-        chapter_hotspots.append({
-            "chapter_name": data["chapter_name"],
-            "subject": data["subject"],
-            "query_count": data["query_count"],
-            "last_asked": str(data["last_asked"]),
-            "is_struggle_area": data["query_count"] >= 3
-        })
-
-    # ------------------------------
-    # 4. AI-style suggestions (simple logic)
-    # ------------------------------
-    if total_queries == 0:
-        overall_feedback = "Start exploring! Ask your first question!"
-        motivation_message = "Every question helps you understand better."
-        weak_topics = []
-        suggestions = ["Try asking questions from different subjects."]
-    else:
-        overall_feedback = "Great job! You're actively learning."
-        motivation_message = "Keep the streak alive!"
-        weak_topics = [h["chapter_name"] for h in chapter_hotspots if h["is_struggle_area"]]
-        suggestions = [
-            f"Practice more from {w}" for w in weak_topics
-        ] or ["You're doing great! No weak topics detected."]
-
-    # ------------------------------
-    # FINAL RESPONSE (Matches Frontend 100%)
-    # ------------------------------
-    return {
-        "summary": {
-            "total_queries": total_queries,
-            "streak": streak,
-            "total_subjects": len(subjects_count),
-            "last_active": str(last_active)
-        },
-
-        "weekly_activity": weekly_activity,
-
-        "chapter_hotspots": chapter_hotspots,
-
-        "ai_feedback": {
-            "overall_feedback": overall_feedback,
-            "motivation_message": motivation_message,
-            "weak_topics": weak_topics,
-            "suggestions": suggestions
-        }
-    }
+    try:
+        return enhanced_dashboard_service.get_enhanced_dashboard_data(uid, class_name)
+    except Exception as e:
+        logger.error(f"Error in enhanced_dashboard endpoint: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 # Import enhanced analytics module
@@ -2398,3 +2285,89 @@ async def websocket_conversation(websocket: WebSocket, conversation_id: str, boo
         print(f"[App] WebSocket error for {conversation_id}: {e}")
     finally:
         conversation_manager.disconnect(conversation_id)
+
+# ==========================================
+# MY BAG / NOTEBOOK ENDPOINTS
+# ==========================================
+
+class CreateNotebookRequest(BaseModel):
+    uid: str
+    name: str
+    subject: str = "General"
+    color: str = "#4F46E5"
+
+@app.post("/api/bag/notebooks", tags=["My Bag"])
+async def create_notebook_endpoint(request: CreateNotebookRequest):
+    """Create a new notebook."""
+    try:
+        notebook_id = bag_service.create_notebook(
+            uid=request.uid,
+            notebook_name=request.name,
+            subject=request.subject,
+            color=request.color
+        )
+        return {"notebook_id": notebook_id, "message": "Notebook created successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/api/bag/notebooks", tags=["My Bag"])
+async def get_notebooks_endpoint(uid: str):
+    """Get all notebooks for a user."""
+    try:
+        return bag_service.get_notebooks(uid)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.delete("/api/bag/notebooks/{notebook_id}", tags=["My Bag"])
+async def delete_notebook_endpoint(notebook_id: str, uid: str):
+    """Delete a notebook."""
+    try:
+        bag_service.delete_notebook(uid, notebook_id)
+        return {"message": "Notebook deleted successfully"}
+    except ValueError as e:
+        raise HTTPException(status_code=403, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+class SaveItemRequest(BaseModel):
+    uid: str
+    notebook_id: str
+    content: str
+    title: str = None
+    source_query: str = None
+    chapter_name: str = None
+    subject: str = None
+
+@app.post("/api/bag/items", tags=["My Bag"])
+async def save_bag_item_endpoint(request: SaveItemRequest):
+    """Save content to a notebook."""
+    try:
+        item_id = bag_service.save_to_bag(
+            uid=request.uid,
+            notebook_id=request.notebook_id,
+            content=request.content,
+            title=request.title,
+            source_query=request.source_query,
+            chapter_name=request.chapter_name,
+            subject=request.subject
+        )
+        return {"item_id": item_id, "message": "Saved to bag successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/api/bag/items", tags=["My Bag"])
+async def get_bag_items_endpoint(uid: str, notebook_id: str = None):
+    """Get items from bag."""
+    try:
+        return bag_service.get_bag_items(uid, notebook_id)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.delete("/api/bag/items/{item_id}", tags=["My Bag"])
+async def delete_bag_item_endpoint(item_id: str, uid: str):
+    """Delete an item from bag."""
+    try:
+        bag_service.delete_bag_item(uid, item_id)
+        return {"message": "Item deleted successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

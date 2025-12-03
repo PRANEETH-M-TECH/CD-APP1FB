@@ -16,9 +16,27 @@ logger = logging.getLogger(__name__)
 # STUDENT DASHBOARD DATA AGGREGATION
 # ==========================================
 
-def get_dashboard_summary(uid: str) -> Dict:
+def _get_stats_doc_ref(uid: str, class_name: str = None):
+    """Helper to get the correct user_stats document reference."""
+    if class_name:
+        try:
+            class_int = int(class_name.replace("Class", "").replace("class", "").strip())
+            return db.collection("user_stats").document(f"{uid}_{class_int}")
+        except:
+            pass
+    # Fallback to legacy UID-only document if class parsing fails or not provided
+    # However, for strict isolation, we should prefer the composite key if class is known.
+    # If class is NOT provided, we might be in a context where we don't know the class (e.g. admin view of a user).
+    # But for the student dashboard, we should always have the class.
+    return db.collection("user_stats").document(uid)
+
+def get_dashboard_summary(uid: str, class_name: str = None) -> Dict:
     """
     Get summary statistics for student dashboard.
+    
+    Args:
+        uid: User ID
+        class_name: Class name (optional, for strict isolation)
     
     Returns:
         {
@@ -30,17 +48,23 @@ def get_dashboard_summary(uid: str) -> Dict:
         }
     """
     try:
-        doc_ref = db.collection("user_stats").document(uid)
+        doc_ref = _get_stats_doc_ref(uid, class_name)
         doc = doc_ref.get()
         
         if not doc.exists:
-            return {
-                "total_queries": 0,
-                "streak": 0,
-                "last_active": None,
-                "top_subjects": [],
-                "total_subjects": 0
-            }
+            # Try fallback to legacy ID if composite not found (migration support)
+            if class_name:
+                doc_ref = db.collection("user_stats").document(uid)
+                doc = doc_ref.get()
+                
+            if not doc.exists:
+                return {
+                    "total_queries": 0,
+                    "streak": 0,
+                    "last_active": None,
+                    "top_subjects": [],
+                    "total_subjects": 0
+                }
         
         data = doc.to_dict()
         
@@ -72,13 +96,14 @@ def get_dashboard_summary(uid: str) -> Dict:
         raise
 
 
-def get_weekly_activity(uid: str, weeks: int = 4) -> Dict:
+def get_weekly_activity(uid: str, weeks: int = 4, class_name: str = None) -> Dict:
     """
     Get weekly activity data for charts.
     
     Args:
         uid: User ID
         weeks: Number of weeks to include (default 4)
+        class_name: Class name (optional)
     
     Returns:
         {
@@ -87,12 +112,17 @@ def get_weekly_activity(uid: str, weeks: int = 4) -> Dict:
         }
     """
     try:
-        doc_ref = db.collection("user_stats").document(uid)
+        doc_ref = _get_stats_doc_ref(uid, class_name)
         doc = doc_ref.get()
         
         if not doc.exists:
-            logger.warning(f"No user_stats document found for UID: {uid} in get_weekly_activity.")
-            return {"dates": [], "counts": []}
+            # Try fallback
+            if class_name:
+                doc = db.collection("user_stats").document(uid).get()
+            
+            if not doc.exists:
+                logger.warning(f"No user_stats document found for UID: {uid}")
+                return {"dates": [], "counts": []}
         
         data = doc.to_dict()
         weekly_activity = data.get("weekly_activity", {})
@@ -119,9 +149,13 @@ def get_weekly_activity(uid: str, weeks: int = 4) -> Dict:
         raise
 
 
-def get_strength_weakness(uid: str) -> Dict:
+def get_strength_weakness(uid: str, class_name: str = None) -> Dict:
     """
     Analyze user's strengths and weaknesses by subject.
+    
+    Args:
+        uid: User ID
+        class_name: Class name (optional)
     
     Returns:
         {
@@ -130,12 +164,17 @@ def get_strength_weakness(uid: str) -> Dict:
         }
     """
     try:
-        doc_ref = db.collection("user_stats").document(uid)
+        doc_ref = _get_stats_doc_ref(uid, class_name)
         doc = doc_ref.get()
         
         if not doc.exists:
-            logger.warning(f"No user_stats document found for UID: {uid} in get_strength_weakness.")
-            return {"strengths": [], "weaknesses": []}
+            # Try fallback
+            if class_name:
+                doc = db.collection("user_stats").document(uid).get()
+                
+            if not doc.exists:
+                logger.warning(f"No user_stats document found for UID: {uid}")
+                return {"strengths": [], "weaknesses": []}
         
         data = doc.to_dict()
         subjects_count = data.get("subjects_count", {})
@@ -375,21 +414,50 @@ def get_subject_distribution() -> Dict:
 def get_student_performance(uid: str) -> Dict:
     """
     Get detailed performance metrics for a specific student (admin view).
+    Aggregates data across all classes the student is enrolled in.
     
     Returns:
         Complete student stats with additional analytics
     """
     try:
-        # Get user stats
-        stats_doc = db.collection("user_stats").document(uid).get()
+        # Get all user_stats documents for this UID (handling composite keys)
+        stats_ref = db.collection("user_stats").where("uid", "==", uid)
+        docs = list(stats_ref.stream())
         
-        if not stats_doc.exists:
-            logger.warning(f"No user_stats document found for UID: {uid} in get_student_performance.")
-            return {
-                "error": "Student not found"
-            }
+        if not docs:
+            # Try legacy single document lookup
+            legacy_doc = db.collection("user_stats").document(uid).get()
+            if legacy_doc.exists:
+                docs = [legacy_doc]
+            else:
+                logger.warning(f"No user_stats documents found for UID: {uid}")
+                return {"error": "Student not found"}
         
-        stats_data = stats_doc.to_dict()
+        # Aggregate stats across all class-specific documents
+        aggregated_stats = {
+            "total_queries": 0,
+            "streak": 0,
+            "subjects_count": defaultdict(int),
+            "chapters_count": defaultdict(int),
+            "classes": []
+        }
+        
+        for doc in docs:
+            data = doc.to_dict()
+            aggregated_stats["total_queries"] += data.get("total_queries", 0)
+            # Take the max streak found (or sum? max makes more sense for "current streak")
+            aggregated_stats["streak"] = max(aggregated_stats["streak"], data.get("streak", 0))
+            
+            # Merge subject counts
+            for subj, count in data.get("subjects_count", {}).items():
+                aggregated_stats["subjects_count"][subj] += count
+                
+            # Merge chapter counts
+            for chap, count in data.get("chapters_count", {}).items():
+                aggregated_stats["chapters_count"][chap] += count
+                
+            if "class" in data:
+                aggregated_stats["classes"].append(data["class"])
         
         # Get recent queries
         queries_ref = db.collection("user_queries")\
@@ -409,7 +477,8 @@ def get_student_performance(uid: str) -> Dict:
             recent_queries.append({
                 "query": data.get("query", ""),
                 "subject": data.get("subject", ""),
-                "timestamp": timestamp_str
+                "timestamp": timestamp_str,
+                "class": data.get("class", "Unknown")
             })
         
         # Get mistakes
@@ -417,10 +486,11 @@ def get_student_performance(uid: str) -> Dict:
         mistakes_data = mistakes_doc.to_dict() if mistakes_doc.exists else {}
         
         return {
-            "total_queries": stats_data.get("total_queries", 0),
-            "streak": stats_data.get("streak", 0),
-            "subjects_count": stats_data.get("subjects_count", {}),
-            "chapters_count": stats_data.get("chapters_count", {}),
+            "total_queries": aggregated_stats["total_queries"],
+            "streak": aggregated_stats["streak"],
+            "subjects_count": dict(aggregated_stats["subjects_count"]),
+            "chapters_count": dict(aggregated_stats["chapters_count"]),
+            "enrolled_classes": list(set(aggregated_stats["classes"])),
             "recent_queries": recent_queries,
             "patterns": mistakes_data.get("patterns", []),
             "confusion_topics": mistakes_data.get("confusion_topics", [])

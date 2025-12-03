@@ -13,6 +13,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="/static/sidebar.css">
+    <link rel="stylesheet" href="/static/css/my-bag.css">
     <style>
         body {
             font-family: 'Poppins', sans-serif;
@@ -95,7 +96,6 @@
     <div id="sidebar-container"></div>
 
     <!-- My Bag Component -->
-    <link rel="stylesheet" href="/static/my-bag.css">
 
     <!-- Bag Overlay -->
     <div id="my-bag-overlay" class="my-bag-overlay" onclick="closeBag()"></div>
@@ -439,7 +439,7 @@
 
     <script src="/static/firebase-config.js"></script>
     <script src="/static/sidebar.js"></script>
-    <script src="/static/my-bag.js"></script>
+    <script src="/static/js/my-bag.js"></script>
     <script>
         let currentUser = null;
         let userToken = null;
@@ -474,7 +474,9 @@
         async function loadDashboard() {
             try {
                 // Fetch main dashboard data
-                const response = await fetch(`/api/dashboard/enhanced?uid=${currentUser.uid}`, {
+                // Pass class_name for strict isolation
+                const userClass = localStorage.getItem('userClass') || '8';
+                const response = await fetch(`/api/dashboard/enhanced?uid=${currentUser.uid}&class_name=Class ${userClass}`, {
                     headers: { 'Authorization': `Bearer ${userToken}` }
                 });
                 dashboardData = await response.json();

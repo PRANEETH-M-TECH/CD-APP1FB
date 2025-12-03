@@ -25,7 +25,7 @@ from .dashboard_service import (
 # AI-POWERED STUDENT FEEDBACK
 # ==========================================
 
-def generate_student_feedback(uid: str) -> Dict:
+def generate_student_feedback(uid: str, class_name: str = None) -> Dict:
     """
     Generate AI-powered, student-friendly feedback and remarks.
     
@@ -46,7 +46,21 @@ def generate_student_feedback(uid: str) -> Dict:
     """
     try:
         # Get user stats and history
-        stats_doc = db.collection("user_stats").document(uid).get()
+        # Use composite key if class provided
+        stats_doc_ref = db.collection("user_stats").document(uid)
+        if class_name:
+            try:
+                class_int = int(class_name.replace("Class", "").replace("class", "").strip())
+                stats_doc_ref = db.collection("user_stats").document(f"{uid}_{class_int}")
+            except:
+                pass
+
+        stats_doc = stats_doc_ref.get()
+        
+        # Fallback to legacy if composite not found
+        if not stats_doc.exists and class_name:
+             stats_doc = db.collection("user_stats").document(uid).get()
+
         if not stats_doc.exists:
             return {
                 "overall_feedback": "Hey! Start asking questions to get personalized feedback! 🌟",
@@ -92,8 +106,8 @@ STUDENT DATA:
 - Total questions asked: {total_queries}
 - Current streak: {streak} days
 - Subjects studied: {', '.join(subject_counts.keys())}
-- Most asked topics: {', '.join([t.split(':')[1] for t in chapter_frequency.most_common(5)])}
-- Topics asked repeatedly: {', '.join([t.split(':')[1] for t in weak_topics]) if weak_topics else 'None'}
+- Most asked topics: {', '.join([t[0].split(':')[1] if ':' in t[0] else t[0] for t in chapter_frequency.most_common(5)])}
+- Topics asked repeatedly: {', '.join([t.split(':')[1] if ':' in t else t for t in weak_topics]) if weak_topics else 'None'}
 
 TASK:
 Write a SHORT, friendly message (2-3 sentences) for this student that:
@@ -218,7 +232,7 @@ def get_chapter_hotspots_for_student(uid: str, limit: int = 5) -> List[Dict]:
         return []
 
 
-def get_enhanced_dashboard_data(uid: str) -> Dict:
+def get_enhanced_dashboard_data(uid: str, class_name: str = None) -> Dict:
     """
     Get complete enhanced dashboard data in one call.
     
@@ -231,12 +245,12 @@ def get_enhanced_dashboard_data(uid: str) -> Dict:
     """
     try:
         return {
-            "summary": get_dashboard_summary(uid),
-            "weekly_activity": get_weekly_activity(uid, weeks=2),
-            "ai_feedback": generate_student_feedback(uid),
+            "summary": get_dashboard_summary(uid, class_name),
+            "weekly_activity": get_weekly_activity(uid, weeks=2, class_name=class_name),
+            "ai_feedback": generate_student_feedback(uid, class_name),
             "chapter_hotspots": get_chapter_hotspots_for_student(uid, limit=5),
             "recent_questions": get_frequent_questions(uid, limit=5),
-            "strength_weakness": get_strength_weakness(uid)
+            "strength_weakness": get_strength_weakness(uid, class_name)
         }
     except Exception as e:
         logger.error(f"Failed to get enhanced dashboard data for {uid}: {e}", exc_info=True)

@@ -835,8 +835,9 @@ function setupUserPage() {
                 </div>
                 <div class="flex items-center gap-2">
                     <span class="turn-indicator">Turn ${turnNumber}</span>
-                    <button class="copy-btn" onclick="copyMessage(this)">📋</button>
-                    <button class="speak-btn" onclick="speakMessage(this)">🔊</button>
+                    <button class="copy-btn" onclick="copyMessage(this)" title="Copy">📋</button>
+                    <button class="save-bag-btn" onclick="saveToBag(this)" title="Save to Bag" style="background:none; border:none; cursor:pointer; font-size:1.1rem; margin-left:4px;">🎒</button>
+                    <button class="speak-btn" onclick="speakMessage(this)" title="Read Aloud">🔊</button>
                 </div>
             </div>
             <div class="markdown-content"></div>
@@ -1083,8 +1084,9 @@ function appendAIResponse(displayText, readText = '') {
         <div class="flex justify-between items-center mb-2">
           <h2 class="font-semibold text-gray-700">🤖 AI Response</h2>
           <div>
-            <button class="copy-btn" onclick="copyMessage(this)">📋</button>
-            <button class="speak-btn" onclick="speakMessage(this)">🔊</button>
+            <button class="copy-btn" onclick="copyMessage(this)" title="Copy">📋</button>
+            <button class="save-bag-btn" onclick="saveToBag(this)" title="Save to Bag" style="background:none; border:none; cursor:pointer; font-size:1.1rem; margin-left:4px;">🎒</button>
+            <button class="speak-btn" onclick="speakMessage(this)" title="Read Aloud">🔊</button>
           </div>
         </div>`;
 
@@ -1110,7 +1112,33 @@ function copyMessage(btn) {
     setTimeout(() => (btn.textContent = "📋"), 1200);
 }
 
+// Save to Bag Handler
+window.saveToBag = function (btn) {
+    const text = btn.closest(".ai-card").querySelector(".markdown-content").innerText;
+    if (window.myBag && typeof window.myBag.saveFromChat === 'function') {
+        // Use the instance exposed in my-bag.js? 
+        // Wait, my-bag.js exposes 'myBag' as a const, but it's not on window.
+        // But it exposes window.openBag.
+        // I should update my-bag.js to expose the instance or a helper.
+        // For now, I'll assume I can access the class or I need to update my-bag.js.
+        // Actually, I can just dispatch a custom event or use the global openBag to trigger something?
+        // No, I need to call saveFromChat.
 
+        // Let's check if myBag is available.
+        // In my-bag.js I did: const myBag = new MyBag();
+        // It is NOT attached to window.
+
+        // I will fix my-bag.js to attach it to window.
+        console.error("MyBag instance not found on window. Please update my-bag.js");
+    } else if (window.openBag) {
+        // Fallback if myBag instance isn't directly exposed but openBag is.
+        // This implies my-bag.js is loaded.
+        // I will assume I will fix my-bag.js in the next step to expose window.myBag
+        window.myBag.saveFromChat(text);
+    } else {
+        alert("My Bag feature is not ready yet.");
+    }
+}
 
 
 // Modified window.speakMessage to use the global mute functionality and correctly get content

@@ -129,6 +129,7 @@ def update_user_stats(
 ) -> None:
     """
     Updates aggregated user statistics with atomic operations.
+    Stats are strictly separated by class.
     
     Args:
         uid: User ID
@@ -137,7 +138,16 @@ def update_user_stats(
         class_name: Class name
     """
     try:
-        doc_ref = db.collection("user_stats").document(uid)
+        # Parse class to integer for consistent key generation
+        try:
+            class_int = int(class_name.replace("Class", "").replace("class", "").strip())
+        except:
+            class_int = 0
+
+        # STRICT ISOLATION: Use composite key {uid}_{class}
+        # This ensures a user in Class 8 has separate stats from Class 9
+        stats_doc_id = f"{uid}_{class_int}"
+        doc_ref = db.collection("user_stats").document(stats_doc_id)
         doc = doc_ref.get()
 
         today_str = datetime.now().date().strftime("%Y-%m-%d")
@@ -147,6 +157,8 @@ def update_user_stats(
         if not doc.exists:
             # Document doesn't exist, create it
             new_data = {
+                "uid": uid,
+                "class": class_int,
                 "total_queries": 1,
                 "last_active": firestore.SERVER_TIMESTAMP,
                 "streak": 1,
@@ -158,7 +170,7 @@ def update_user_stats(
                 new_data["chapters_count"] = {f"{subject.lower()}_{chapter_id}": 1}
 
             doc_ref.set(new_data)
-            logger.info(f"✅ Created new user stats for {uid}")
+            logger.info(f"✅ Created new user stats for {uid} in Class {class_int}")
 
         else:
             # Document exists, update it
@@ -198,7 +210,7 @@ def update_user_stats(
                 update_data[chapter_key] = firestore.Increment(1)
 
             doc_ref.update(update_data)
-            logger.info(f"✅ User stats updated for {uid}: streak={streak}")
+            logger.info(f"✅ User stats updated for {uid} (Class {class_int}): streak={streak}")
 
     except Exception as e:
         logger.error(f"❌ Failed to update user stats for {uid}: {e}", exc_info=True)

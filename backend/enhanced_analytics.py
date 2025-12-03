@@ -117,7 +117,7 @@ def update_frequent_questions(
                 "questions": [{
                     "query": query,
                     "count": 1,
-                    "last_asked": firestore.SERVER_TIMESTAMP,
+                    "last_asked": datetime.now(timezone.utc),  # Can't use SERVER_TIMESTAMP in arrays
                     "chapter": chapter_name,
                     "subject": subject
                 }],
