@@ -183,7 +183,7 @@ def get_chapter_hotspots_for_student(uid: str, limit: int = 5) -> List[Dict]:
     Get most queried chapters for this specific student.
     
     Returns:
-        List of {chapter_name, subject, query_count, last_asked}
+        List of {chapter_name, subject, chapter_id, query_count, last_asked}
     """
     try:
         # Get all queries for this user
@@ -194,23 +194,27 @@ def get_chapter_hotspots_for_student(uid: str, limit: int = 5) -> List[Dict]:
         
         queries = list(queries_ref.stream())
         
-        # Count by chapter
-        chapter_data = defaultdict(lambda: {"count": 0, "subject": "", "last_asked": None})
+        # Count by chapter (include chapter_id)
+        chapter_data = defaultdict(lambda: {"count": 0, "subject": "", "chapter_id": 0, "last_asked": None})
         
         for query_doc in queries:
             query = query_doc.to_dict()
             chapter = query.get("chapter_name", "Unknown")
             subject = query.get("subject", "unknown")
+            chapter_id = query.get("chapter_id", 0)
             timestamp = query.get("timestamp")
             
-            chapter_data[chapter]["count"] += 1
-            chapter_data[chapter]["subject"] = subject
-            if chapter_data[chapter]["last_asked"] is None or (timestamp and chapter_data[chapter]["last_asked"] and timestamp > chapter_data[chapter]["last_asked"]):
-                chapter_data[chapter]["last_asked"] = timestamp
+            chapter_key = f"{subject}:{chapter}"
+            chapter_data[chapter_key]["count"] += 1
+            chapter_data[chapter_key]["subject"] = subject
+            chapter_data[chapter_key]["chapter_id"] = chapter_id
+            chapter_data[chapter_key]["chapter_name"] = chapter
+            if chapter_data[chapter_key]["last_asked"] is None or (timestamp and chapter_data[chapter_key]["last_asked"] and timestamp > chapter_data[chapter_key]["last_asked"]):
+                chapter_data[chapter_key]["last_asked"] = timestamp
         
         # Sort and format
         hotspots = []
-        for chapter, data in sorted(chapter_data.items(), key=lambda x: x[1]["count"], reverse=True)[:limit]:
+        for chapter_key, data in sorted(chapter_data.items(), key=lambda x: x[1]["count"], reverse=True)[:limit]:
             last_asked = data["last_asked"]
             if last_asked and hasattr(last_asked, 'strftime'):
                 last_asked_str = last_asked.strftime("%Y-%m-%d")
@@ -218,8 +222,9 @@ def get_chapter_hotspots_for_student(uid: str, limit: int = 5) -> List[Dict]:
                 last_asked_str = "Recently"
             
             hotspots.append({
-                "chapter_name": chapter,
+                "chapter_name": data["chapter_name"],
                 "subject": data["subject"],
+                "chapter_id": data["chapter_id"],
                 "query_count": data["count"],
                 "last_asked": last_asked_str,
                 "is_struggle_area": data["count"] >= 5  # Flag if asked 5+ times

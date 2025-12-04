@@ -6,7 +6,7 @@ Handles all analytics logging and aggregation to Firestore.
 from google.cloud import firestore
 from .firebase.firebase_init import db
 import logging
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 import pytz
 from typing import Optional, Dict, List
 
@@ -66,7 +66,8 @@ def log_query(
     ai_difficulty_score: Optional[float] = None
 ) -> str:
     """
-    Logs a single user query to the user_queries collection.
+    Logs a single user query to the user_queries collection ONLY.
+    Does NOT modify user_stats to prevent daily_activity overwrite.
     
     Args:
         uid: User ID
@@ -84,7 +85,7 @@ def log_query(
     Returns:
         Document ID of the logged query
     """
-    logger.info(f"[ANALYTICS] Attempting to log query for user {uid} in subject {subject}.")
+    logger.info(f"[ANALYTICS] Logging query for user {uid} in subject {subject}")
     try:
         # Parse class to integer
         class_int = 0
@@ -94,7 +95,7 @@ def log_query(
         except (ValueError, AttributeError):
             logger.warning(f"Could not parse class: {class_name}, defaulting to 0")
 
-        # Ensure subject is a string before calling .lower()
+        # Ensure subject is a string
         safe_subject = subject.lower().strip() if isinstance(subject, str) else "unknown"
         
         doc_ref = db.collection("user_queries").document()
@@ -117,11 +118,189 @@ def log_query(
             query_data["ai_difficulty_score"] = ai_difficulty_score
         
         doc_ref.set(query_data)
-        logger.info(f"✅ Query logged: {doc_ref.id} for user {uid}")
+        logger.info(f"✅ Query logged to user_queries: {doc_ref.id}")
         return doc_ref.id
         
     except Exception as e:
-        logger.error(f"❌ Failed to log query for user {uid}: {e}")
+        logger.error(f"❌ Failed to log query: {e}")
+        raise
+
+
+def rebuild_user_analytics_from_queries(uid: str) -> Dict:
+    """
+    Rebuild complete user analytics from user_queries collection.
+    This is the single source of truth for dashboard statistics.
+    
+    Computes:
+    - total_queries: Total count of all queries
+    - subjects_count: Dict mapping subject -> count
+    - subjects_explored: Number of unique subjects
+    - chapters_count: Dict mapping chapter_key -> count
+    - daily_activity: Dict mapping "YYYY-MM-DD" -> count
+    - weekly_activity: Last 7 days ordered oldest→newest
+    - last_active: ISO timestamp string of most recent query
+    - streak: Consecutive days ending today
+    - longest_streak: Longest historical consecutive streak
+    
+    Args:
+        uid: User ID
+    
+    Returns:
+        Dictionary with aggregated analytics
+    """
+    logger.info(f"[REBUILD ANALYTICS] Starting for uid: {uid}")
+    try:
+        # Fetch all queries for this user
+        queries_ref = db.collection("user_queries").where("uid", "==", uid).stream()
+        
+        # Initialize aggregators
+        total_queries = 0
+        subjects_count = {}
+        chapters_count = {}
+        daily_activity = {}
+        timestamps = []
+        
+        for query_doc in queries_ref:
+            data = query_doc.to_dict()
+            total_queries += 1
+            
+            # Subject counting
+            subject = data.get("subject", "unknown")
+            subjects_count[subject] = subjects_count.get(subject, 0) + 1
+            
+            # Chapter counting  
+            class_val = data.get("class", 0)
+            chapter_id = data.get("chapter_id", 0)
+            chapter_key = f"{class_val}_{subject}_{chapter_id}"
+            chapters_count[chapter_key] = chapters_count.get(chapter_key, 0) + 1
+            
+            # Daily activity and timestamp tracking
+            timestamp = data.get("timestamp")
+            if timestamp:
+                # Convert to UTC datetime
+                if hasattr(timestamp, 'strftime'):
+                    ts_dt = timestamp
+                else:
+                    ts_dt = datetime.fromisoformat(str(timestamp))
+                
+                # Store for streak calculation
+                timestamps.append(ts_dt)
+                
+                # Daily activity in UTC
+                date_str = ts_dt.strftime("%Y-%m-%d")
+                daily_activity[date_str] = daily_activity.get(date_str, 0) + 1
+        
+        # Subjects explored
+        subjects_explored = len(subjects_count)
+        
+        # Last active
+        last_active = None
+        if timestamps:
+            timestamps.sort(reverse=True)
+            last_active = timestamps[0].isoformat()
+        
+        # Weekly activity - last 7 days
+        today = datetime.now(timezone.utc)
+        weekly_activity = {}
+        for i in range(6, -1, -1):  # 6 days ago to today
+            date = today - timedelta(days=i)
+            date_str = date.strftime("%Y-%m-%d")
+            weekly_activity[date_str] = daily_activity.get(date_str, 0)
+        
+        # Streak calculation
+        streak = 0
+        longest_streak = 0
+        
+        if timestamps:
+            # Get unique dates sorted descending
+            unique_dates = sorted(set(ts.date() for ts in timestamps), reverse=True)
+            today_date = datetime.now(timezone.utc).date()
+            
+            # Calculate current streak
+            temp_streak = 0
+            for i, date in enumerate(unique_dates):
+                if i == 0:
+                    # Check if most recent is today or yesterday
+                    diff = (today_date - date).days
+                    if diff <= 1:
+                        temp_streak = 1
+                    else:
+                        break  # No current streak
+                else:
+                    prev_date = unique_dates[i - 1]
+                    if (prev_date - date).days == 1:
+                        temp_streak += 1
+                    else:
+                        break
+            
+            streak = temp_streak
+            
+            # Calculate longest streak
+            current_run = 1
+            for i in range(1, len(unique_dates)):
+                if (unique_dates[i - 1] - unique_dates[i]).days == 1:
+                    current_run += 1
+                    longest_streak = max(longest_streak, current_run)
+                else:
+                    current_run = 1
+            
+            longest_streak = max(longest_streak, streak, 1)
+        
+        result = {
+            "total_queries": total_queries,
+            "subjects_count": subjects_count,
+            "subjects_explored": subjects_explored,
+            "chapters_count": chapters_count,
+            "daily_activity": daily_activity,
+            "weekly_activity": weekly_activity,
+            "last_active": last_active,
+            "streak": streak,
+            "longest_streak": longest_streak
+        }
+        
+        logger.info(f"✅ Rebuilt analytics for {uid}: {total_queries} queries, {subjects_explored} subjects, {streak}-day streak")
+        return result
+        
+    except Exception as e:
+        logger.error(f"❌ Failed to rebuild analytics for {uid}: {e}", exc_info=True)
+        # Return empty analytics on error
+        return {
+            "total_queries": 0,
+            "subjects_count": {},
+            "subjects_explored": 0,
+            "chapters_count": {},
+            "daily_activity": {},
+            "weekly_activity": {},
+            "last_active": None,
+            "streak": 0,
+            "longest_streak": 0
+        }
+
+
+def rebuild_and_cache_user(uid: str) -> Dict:
+    """
+    Rebuild analytics and write back to user_stats using merge=True.
+    This caches the computed results for faster access.
+    
+    Args:
+        uid: User ID
+    
+    Returns:
+        Rebuilt analytics dictionary
+    """
+    logger.info(f"[CACHE REBUILD] Rebuilding and caching for uid: {uid}")
+    try:
+        summary = rebuild_user_analytics_from_queries(uid)
+        
+        # Write to user_stats with merge
+        doc_ref = db.collection("user_stats").document(uid)
+        doc_ref.set(summary, merge=True)
+        
+        logger.info(f"✅ Cached analytics for {uid}")
+        return summary
+        
+    except Exception as e:
+        logger.error(f"❌ Failed to cache analytics for {uid}: {e}")
         raise
 
 
@@ -133,7 +312,7 @@ def update_user_stats(
 ) -> None:
     """
     Updates aggregated user statistics with atomic operations.
-    Stats are strictly separated by class.
+    NOW ONLY INCREMENTS total_queries - does NOT overwrite daily_activity.
     
     Args:
         uid: User ID
@@ -142,87 +321,29 @@ def update_user_stats(
         class_name: Class name
     """
     try:
-        # Parse class to integer for consistent key generation
+        # Parse class to integer
         class_int = 0
         try:
             if class_name:
                 class_int = int(str(class_name).replace("Class", "").replace("class", "").strip())
         except (ValueError, AttributeError):
-            pass # Keep default 0
+            pass
 
-        # STRICT ISOLATION: Use composite key {uid}_{class}
-        # This ensures a user in Class 8 has separate stats from Class 9
         stats_doc_id = f"{uid}_{class_int}"
         doc_ref = db.collection("user_stats").document(stats_doc_id)
-        doc = doc_ref.get()
-
-        today_str = datetime.now().date().strftime("%Y-%m-%d")
         
-        safe_subject = subject.lower() if isinstance(subject, str) else "unknown"
-        subject_key = f"subjects_count.{safe_subject}"
-        chapter_key = f"chapters_count.{safe_subject}_{chapter_id}" if chapter_id and safe_subject != "unknown" else None
-
-        if not doc.exists:
-            # Document doesn't exist, create it
-            new_data = {
-                "uid": uid,
-                "class": class_int,
-                "total_queries": 1,
-                "last_active": firestore.SERVER_TIMESTAMP,
-                "streak": 1,
-                "subjects_count": {safe_subject: 1},
-                "weekly_activity": {today_str: 1},
-                "chapters_count": {}
-            }
-            if chapter_key:
-                new_data["chapters_count"] = {chapter_key: 1}
-
-            doc_ref.set(new_data)
-            logger.info(f"✅ Created new user stats for {uid} in Class {class_int}")
-
-        else:
-            # Document exists, update it
-            current_data = doc.to_dict()
-            
-            # Calculate streak
-            now = datetime.now(timezone.utc)
-
-            # Default timezone fallback
-            user_timezone = current_data.get("timezone", "Asia/Kolkata")
-
-            # Get last active timestamp
-            last_active = current_data.get("last_active")
-
-            if last_active:
-                if same_local_day(last_active, now, user_timezone):
-                    # same day → streak unchanged
-                    streak = current_data.get("streak", 1)
-                else:
-                    # different day → streak increments by 1
-                    streak = current_data.get("streak", 0) + 1
-            else:
-                streak = 1  # first login
-            
-            # Prepare weekly activity key
-            weekly_key = f"weekly_activity.{today_str}"
-            
-            # Prepare update data
-            update_data = {
-                "total_queries": firestore.Increment(1),
-                "last_active": firestore.SERVER_TIMESTAMP,
-                "streak": streak,
-                subject_key: firestore.Increment(1),
-                weekly_key: firestore.Increment(1),
-            }
-            if chapter_key:
-                update_data[chapter_key] = firestore.Increment(1)
-
-            doc_ref.update(update_data)
-            logger.info(f"✅ User stats updated for {uid} (Class {class_int}): streak={streak}")
-
+        # ONLY increment total_queries, do NOT touch daily_activity
+        update_data = {
+            "total_queries": firestore.Increment(1),
+            "last_active": firestore.SERVER_TIMESTAMP
+        }
+        
+        doc_ref.set(update_data, merge=True)
+        logger.info(f"✅ Incremented total_queries for {uid}")
+        
     except Exception as e:
-        logger.error(f"❌ Failed to update user stats for {uid}: {e}", exc_info=True)
-        raise
+        logger.error(f"❌ Failed to update user stats: {e}", exc_info=True)
+        # Don't raise - analytics failure shouldn't break query flow
 
 
 def update_chapter_stats(

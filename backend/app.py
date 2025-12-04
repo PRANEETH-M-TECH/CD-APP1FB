@@ -62,6 +62,139 @@ app.middleware("http")(auth_middleware)
 
 from .firebase.firebase_init import db, bucket
 
+# --- CUMULATIVE ANALYTICS TRACKING ---
+def track_cumulative_analytics(uid: str, query: str, subject: str, chapter_name: str = "Unknown"):
+    """
+    Track cumulative analytics for persistent dashboard stats.
+    Updates user_analytics/{uid} document with:
+    - total_queries_all_time
+    - current_streak
+    - total_subjects_explored
+    - daily_stats
+    - weekly_stats
+    """
+    from datetime import datetime, timedelta
+    
+    try:
+        logger.info(f"[CUMULATIVE ANALYTICS] Starting tracking for uid: {uid}, subject: {subject}, chapter: {chapter_name}")
+        doc_ref = db.collection('user_analytics').document(uid)
+        doc = doc_ref.get()
+        
+        today = datetime.now().strftime('%Y-%m-%d')
+        week = datetime.now().strftime('%Y-W%W')
+        
+        if doc.exists:
+            data = doc.to_dict()
+        else:
+            # Initialize new analytics document
+            data = {
+                'total_queries_all_time': 0,
+                'total_subjects_explored': 0,
+                'current_streak': 0,
+                'longest_streak': 0,
+                'last_activity_date': None,
+                'daily_stats': {},
+                'weekly_stats': {},
+                'subjects_set': [],
+                'created_at': datetime.now().isoformat()
+            }
+        
+        # Update total queries
+        data['total_queries_all_time'] = data.get('total_queries_all_time', 0) + 1
+        
+        # Update subjects
+        if subject and subject.lower() not in [s.lower() for s in data.get('subjects_set', [])]:
+            if 'subjects_set' not in data:
+                data['subjects_set'] = []
+            data['subjects_set'].append(subject.lower())
+            data['total_subjects_explored'] = len(data['subjects_set'])
+        
+        # Update daily stats
+        if 'daily_stats' not in data:
+            data['daily_stats'] = {}
+        
+        if today not in data['daily_stats']:
+            data['daily_stats'][today] = {
+                'queries_count': 0,
+                'subjects': [],
+                'chapters': []
+            }
+        
+        data['daily_stats'][today]['queries_count'] += 1
+        
+        if subject and subject.lower() not in [s.lower() for s in data['daily_stats'][today].get('subjects', [])]:
+            if 'subjects' not in data['daily_stats'][today]:
+                data['daily_stats'][today]['subjects'] = []
+            data['daily_stats'][today]['subjects'].append(subject.lower())
+        
+        if chapter_name and chapter_name not in data['daily_stats'][today].get('chapters', []):
+            if 'chapters' not in data['daily_stats'][today]:
+                data['daily_stats'][today]['chapters'] = []
+            data['daily_stats'][today]['chapters'].append(chapter_name)
+        
+        # Update weekly stats
+        if 'weekly_stats' not in data:
+            data['weekly_stats'] = {}
+            
+        if week not in data['weekly_stats']:
+            data['weekly_stats'][week] = {
+                'queries_count': 0,
+                'subjects': [],
+                'active_days': []
+            }
+        
+        data['weekly_stats'][week]['queries_count'] += 1
+        
+        if subject and subject.lower() not in [s.lower() for s in data['weekly_stats'][week].get('subjects', [])]:
+            if 'subjects' not in data['weekly_stats'][week]:
+                data['weekly_stats'][week]['subjects'] = []
+            data['weekly_stats'][week]['subjects'].append(subject.lower())
+        
+        if today not in data['weekly_stats'][week].get('active_days', []):
+            if 'active_days' not in data['weekly_stats'][week]:
+                data['weekly_stats'][week]['active_days'] = []
+            data['weekly_stats'][week]['active_days'].append(today)
+        
+        # Update streak
+        last_date = data.get('last_activity_date')
+        if last_date:
+            try:
+                last = datetime.strptime(last_date, '%Y-%m-%d')
+                today_dt = datetime.strptime(today, '%Y-%m-%d')
+                diff = (today_dt - last).days
+                
+                if diff == 1:
+                    # Consecutive day - increment streak
+                    data['current_streak'] = data.get('current_streak', 0) + 1
+                elif diff == 0:
+                    # Same day - no change to streak
+                    pass
+                else:
+                    # Streak broken - reset to 1
+                    data['current_streak'] = 1
+            except Exception as e:
+                logger.warning(f"[ANALYTICS] Error calculating streak: {e}")
+                data['current_streak'] = 1
+        else:
+            # First activity
+            data['current_streak'] = 1
+        
+        # Update longest streak
+        if data.get('current_streak', 0) > data.get('longest_streak', 0):
+            data['longest_streak'] = data['current_streak']
+        
+        data['last_activity_date'] = today
+        data['last_updated'] = datetime.now().isoformat()
+        
+        # Save to Firestore
+        doc_ref.set(data)
+        
+        print(f"[CUMULATIVE ANALYTICS] ✓ Tracked for {uid}: Total={data['total_queries_all_time']}, Streak={data['current_streak']}, Subjects={data['total_subjects_explored']}")
+        
+    except Exception as e:
+        # Analytics failure should not break the query
+        logger.error(f"[CUMULATIVE ANALYTICS] ✗ Failed to track analytics for {uid}: {e}", exc_info=True)
+
 # --- DIRECTORY SETUP ---
 # Make the path absolute to avoid CWD issues
 APP_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -1345,6 +1478,14 @@ Answer the question based only on the history.
                 
                 print(f"[ANALYTICS] ✓ Query logged successfully for user {uid}")
                 
+                # Track cumulative analytics for dashboard
+                track_cumulative_analytics(
+                    uid=uid,
+                    query=query,
+                    subject=subject,
+                    chapter_name=chapter_name
+                )
+                
             except Exception as analytics_error:
                 # Analytics failure should not break the query
                 logger.error(f"[ANALYTICS] ✗ Analytics logging failed for user {uid}. Error: {analytics_error}", exc_info=True)
@@ -1763,19 +1904,37 @@ from . import dashboard_service
 
 # --- STUDENT DASHBOARD ENDPOINTS ---
 
+
 @app.get("/api/dashboard/summary", tags=["Dashboard"])
 async def get_dashboard_summary_endpoint(uid: str = Query(...)):
     """
     Get summary statistics for student dashboard.
+    Uses user_queries as single source of truth for all analytics.
     
-    Returns total queries, streak, last active date, and top subjects.
+    Returns lifetime total queries, subjects explored, weekly activity,
+    daily activity, streak, and last active date.
     """
     try:
-        summary = dashboard_service.get_dashboard_summary(uid)
-        return summary
+        logger.info(f"[DASHBOARD SUMMARY] Rebuilding analytics from user_queries for uid: {uid}")
+        
+        # Rebuild analytics from user_queries collection
+        summary = analytics_service.rebuild_user_analytics_from_queries(uid)
+        
+        # Return only the fields needed by frontend
+        return {
+            "total_queries": summary["total_queries"],
+            "subjects_explored": summary["subjects_explored"],
+            "subjects_count": summary["subjects_count"],
+            "weekly_activity": summary["weekly_activity"],
+            "daily_activity": summary["daily_activity"],
+            "last_active": summary["last_active"],
+            "streak": summary["streak"],
+            "longest_streak": summary["longest_streak"]
+        }
     except Exception as e:
-        logger.error(f"Failed to get dashboard summary: {e}")
+        logger.error(f"Failed to get dashboard summary: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail=str(e))
+
 
 
 @app.get("/api/dashboard/weekly", tags=["Dashboard"])
@@ -2017,6 +2176,392 @@ async def get_my_chapter_hotspots_endpoint(
         return {"hotspots": hotspots, "total": len(hotspots)}
     except Exception as e:
         logger.error(f"Failed to get chapter hotspots: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/api/dashboard/topic-clusters", tags=["Dashboard"])
+async def get_topic_clusters(
+    uid: str = Query(...),
+    subject: str = Query(...),
+    chapter_id: int = Query(...),
+    chapter_name: str = Query(None)  # Optional: for matching old queries
+):
+    """
+    Generate topic clusters from ALL user queries using LLM.
+    Saves clusters to Firestore and returns them with mastery/difficulty scores.
+    Accepts optional chapter_name to match old queries without chapter_id.
+    """
+    try:
+        logger.info(f"[TOPIC CLUSTERS] ========== STARTING ==========")
+        logger.info(f"[TOPIC CLUSTERS] Request: uid={uid}, subject={subject}, chapter_name={chapter_name}, chapter_id={chapter_id}")
+        
+        # STRATEGY: Use chapter_name as primary filter since chapter_id may not match or exist
+        # Fetch ALL queries for this subject first
+        logger.info(f"[TOPIC CLUSTERS] Fetching all queries for subject={subject}")
+        all_queries_ref = db.collection("user_queries")\
+            .where("uid", "==", uid)\
+            .where("subject", "==", subject.lower())\
+            .stream()
+        
+        # Filter by chapter_name manually (since chapter_name is reliable)
+        query_texts = []
+        actual_chapter_name = chapter_name or "Unknown Chapter"
+        
+        for doc in all_queries_ref:
+            data = doc.to_dict()
+            doc_chapter_name = data.get("chapter_name", "")
+            
+            # Match by chapter_name (case-insensitive)
+            if chapter_name and doc_chapter_name.lower() == chapter_name.lower():
+                query = data.get("query", "")
+                if query:
+                    query_texts.append(query)
+                if not actual_chapter_name or actual_chapter_name == "Unknown Chapter":
+                    actual_chapter_name = doc_chapter_name
+        
+        logger.info(f"[TOPIC CLUSTERS] Found {len(query_texts)} queries for chapter '{actual_chapter_name}'")
+        
+        if not query_texts:
+            logger.warning(f"[TOPIC CLUSTERS] No queries found for chapter_name='{chapter_name}'")
+            return {"chapter": actual_chapter_name, "topics": []}
+        
+        logger.info(f"[TOPIC CLUSTERS] Found {len(query_texts)} queries, calling LLM for clustering")
+        
+        # Call LLM to cluster queries into topics
+        model = genai.GenerativeModel('models/gemini-flash-latest')
+        
+        prompt = f"""You are an educational clustering engine. Group the following {len(query_texts)} student queries into 3-7 meaningful conceptual topics.
+
+Queries:
+{chr(10).join(f"{i+1}. {q}" for i, q in enumerate(query_texts[:50]))}
+
+For each topic return:
+- topic_name: Clean, human-readable topic name (e.g., "Photosynthesis Process", "Cell Structure")
+- query_count: Number of queries in this topic
+- example_queries: Array of 2 representative example queries
+- mastery_level: Estimated mastery from 0.0 to 1.0 (0.3=struggling, 0.7=developing, 0.9=mastered)
+- difficulty_score: Average difficulty of queries from 0.0 to 1.0 (0.3=basic, 0.6=intermediate, 0.9=advanced)
+
+Return ONLY valid JSON in this exact structure:
+{{
+  "topics": [
+    {{
+      "topic_name": "string",
+      "query_count": number,
+      "example_queries": ["string", "string"],
+      "mastery_level": number,
+      "difficulty_score": number
+    }}
+  ]
+}}"""
+
+        response = model.generate_content(prompt)
+        result_text = response.text.strip()
+        
+        # Extract JSON from response (remove markdown code fences if present)
+        if result_text.startswith("```"):
+            result_text = result_text.split("```")[1]
+            if result_text.startswith("json"):
+                result_text = result_text[4:]
+        result_text = result_text.strip()
+        
+        # Parse JSON
+        topics_data = json.loads(result_text)
+        
+        logger.info(f"[TOPIC CLUSTERS] Generated {len(topics_data.get('topics', []))} topics, saving to Firestore")
+        
+        # Save each topic to Firestore topic_analytics collection
+        for topic in topics_data.get('topics', []):
+            topic_name = topic.get('topic_name', 'Unknown Topic')
+            # Create slug for document ID
+            slug = re.sub(r'[^a-z0-9]+', '_', topic_name.lower()).strip('_')
+            doc_id = f"{uid}_{subject}_{chapter_id}_{slug}"
+            
+            topic_doc_ref = db.collection('topic_analytics').document(doc_id)
+            topic_doc_ref.set({
+                'uid': uid,
+                'subject': subject,
+                'chapter_id': chapter_id,
+                'chapter_name': chapter_name,
+                'topic': topic_name,
+                'query_count': topic.get('query_count', 0),
+                'mastery_level': topic.get('mastery_level', 0.0),
+                'difficulty_score': topic.get('difficulty_score', 0.0),
+                'example_queries': topic.get('example_queries', []),
+                'last_asked': firestore.SERVER_TIMESTAMP
+            }, merge=True)
+        
+        logger.info(f"[TOPIC CLUSTERS] Saved {len(topics_data.get('topics', []))} topics to Firestore")
+        
+        # Return formatted response
+        formatted_topics = []
+        for topic in topics_data.get('topics', []):
+            formatted_topics.append({
+                'topic': topic.get('topic_name', ''),
+                'query_count': topic.get('query_count', 0),
+                'mastery_level': topic.get('mastery_level', 0.0),
+                'difficulty': topic.get('difficulty_score', 0.0),
+                'example_queries': topic.get('example_queries', [])
+            })
+        
+        return {
+            "chapter": chapter_name,
+            "topics": formatted_topics
+        }
+        
+    except json.JSONDecodeError as e:
+        logger.error(f"[TOPIC CLUSTERS] Failed to parse LLM response: {e}")
+        logger.error(f"[TOPIC CLUSTERS] Raw response: {result_text[:500]}")
+        # Return empty topics on parse error
+        return {"chapter": "Unknown Chapter", "topics": []}
+        
+    except Exception as e:
+        logger.error(f"[TOPIC CLUSTERS] Error: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+
+
+@app.post("/api/analytics/initialize", tags=["Analytics"])
+async def initialize_user_analytics(uid: str = Query(...)):
+    """
+    Initialize or repair user analytics document.
+    Useful for existing users who have queries but no analytics tracking.
+    """
+    try:
+        from datetime import datetime
+        
+        logger.info(f"[ANALYTICS INIT] Initializing analytics for uid: {uid}")
+        
+        # Check if analytics document exists
+        doc_ref = db.collection('user_analytics').document(uid)
+        doc = doc_ref.get()
+        
+        if doc.exists:
+            logger.info(f"[ANALYTICS INIT] Document already exists for {uid}")
+            return {"message": "Analytics document already exists", "data": doc.to_dict()}
+        
+        # Fetch existing query history from user_query_details
+        logger.info(f"[ANALYTICS INIT] Fetching query history for {uid}")
+        queries_ref = db.collection('user_query_details')\
+            .where('uid', '==', uid)\
+            .order_by('timestamp', direction=firestore.Query.DESCENDING)\
+            .stream()
+        
+        queries = list(queries_ref)
+        query_count = len(queries)
+        
+        if query_count == 0:
+            # No queries yet - create empty analytics document
+            logger.info(f"[ANALYTICS INIT] No queries found, creating empty document")
+            initial_data = {
+                'total_queries_all_time': 0,
+                'total_subjects_explored': 0,
+                'current_streak': 0,
+                'longest_streak': 0,
+                'last_activity_date': None,
+                'daily_stats': {},
+                'weekly_stats': {},
+                'subjects_set': [],
+                'created_at': datetime.now().isoformat()
+            }
+            doc_ref.set(initial_data)
+            return {"message": "Empty analytics document created", "queries_found": 0}
+        
+        # Backfill analytics from existing queries
+        logger.info(f"[ANALYTICS INIT] Backfilling analytics from {query_count} queries")
+        
+        daily_stats = {}
+        weekly_stats = {}
+        subjects_set = set()
+        
+        for query_doc in queries:
+            query_data = query_doc.to_dict()
+            timestamp = query_data.get('timestamp')
+            subject = query_data.get('subject', '').lower()
+            chapter = query_data.get('chapter_name', 'Unknown')
+            
+            if not timestamp:
+                continue
+                
+            # Convert timestamp to datetime
+            if hasattr(timestamp, 'strftime'):
+                date_str = timestamp.strftime('%Y-%m-%d')
+                week_str = timestamp.strftime('%Y-W%W')
+            else:
+                continue
+            
+            # Track subjects
+            if subject:
+                subjects_set.add(subject)
+            
+            # Update daily stats
+            if date_str not in daily_stats:
+                daily_stats[date_str] = {
+                    'queries_count': 0,
+                    'subjects': [],
+                    'chapters': []
+                }
+            
+            daily_stats[date_str]['queries_count'] += 1
+            if subject and subject not in daily_stats[date_str]['subjects']:
+                daily_stats[date_str]['subjects'].append(subject)
+            if chapter and chapter not in daily_stats[date_str]['chapters']:
+                daily_stats[date_str]['chapters'].append(chapter)
+            
+            # Update weekly stats
+            if week_str not in weekly_stats:
+                weekly_stats[week_str] = {
+                    'queries_count': 0,
+                    'subjects': [],
+                    'active_days': []
+                }
+            
+            weekly_stats[week_str]['queries_count'] += 1
+            if subject and subject not in weekly_stats[week_str]['subjects']:
+                weekly_stats[week_str]['subjects'].append(subject)
+            if date_str not in weekly_stats[week_str]['active_days']:
+                weekly_stats[week_str]['active_days'].append(date_str)
+        
+        # Calculate streak
+        sorted_dates = sorted(daily_stats.keys(), reverse=True)
+        current_streak = 0
+        longest_streak = 0
+        temp_streak = 0
+        
+        if sorted_dates:
+            from datetime import datetime, timedelta
+            today = datetime.now().date()
+            
+            for i, date_str in enumerate(sorted_dates):
+                date = datetime.strptime(date_str, '%Y-%m-%d').date()
+                
+                if i == 0:
+                    # Check if most recent activity is today or yesterday
+                    diff = (today - date).days
+                    if diff <= 1:
+                        temp_streak = 1
+                        if i + 1 < len(sorted_dates):
+                            next_date = datetime.strptime(sorted_dates[i + 1], '%Y-%m-%d').date()
+                            if (date - next_date).days == 1:
+                                continue
+                    else:
+                        break
+                else:
+                    prev_date = datetime.strptime(sorted_dates[i - 1], '%Y-%m-%d').date()
+                    if (prev_date - date).days == 1:
+                        temp_streak += 1
+                    else:
+                        if temp_streak > longest_streak:
+                            longest_streak = temp_streak
+                        temp_streak = 0
+                        break
+            
+            current_streak = temp_streak
+            if temp_streak > longest_streak:
+                longest_streak = temp_streak
+        
+        # Create analytics document
+        analytics_data = {
+            'total_queries_all_time': query_count,
+            'total_subjects_explored': len(subjects_set),
+            'current_streak': current_streak,
+            'longest_streak': longest_streak,
+            'last_activity_date': sorted_dates[0] if sorted_dates else None,
+            'daily_stats': daily_stats,
+            'weekly_stats': weekly_stats,
+            'subjects_set': list(subjects_set),
+            'created_at': datetime.now().isoformat(),
+            'backfilled': True,
+            'backfill_date': datetime.now().isoformat()
+        }
+        
+        doc_ref.set(analytics_data)
+        
+        logger.info(f"[ANALYTICS INIT] ✓ Successfully backfilled analytics for {uid}: {query_count} queries, {len(subjects_set)} subjects, {current_streak} day streak")
+        
+        return {
+            "message": "Analytics successfully initialized from query history",
+            "queries_backfilled": query_count,
+            "subjects_found": len(subjects_set),
+            "current_streak": current_streak,
+            "longest_streak": longest_streak
+        }
+        
+    except Exception as e:
+        logger.error(f"[ANALYTICS INIT] Failed to initialize analytics: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# --- CUMULATIVE ANALYTICS ENDPOINTS ---
+
+@app.get("/api/analytics/summary", tags=["Analytics"])
+async def get_analytics_summary(uid: str = Query(...)):
+    """
+    Get cumulative analytics summary for dashboard main stats.
+    Returns total_queries_all_time, current_streak, total_subjects_explored, this_week_total.
+    """
+    try:
+        doc_ref = db.collection('user_analytics').document(uid)
+        doc = doc_ref.get()
+        
+        if not doc.exists:
+            return {
+                "total_queries_all_time": 0,
+                "current_streak": 0,
+                "total_subjects_explored": 0,
+                "this_week_total": 0,
+                "longest_streak": 0
+            }
+        
+        data = doc.to_dict()
+        
+        # Calculate this week's total
+        from datetime import datetime
+        current_week = datetime.now().strftime('%Y-W%W')
+        weekly_stats = data.get('weekly_stats', {})
+        this_week_total = weekly_stats.get(current_week, {}).get('queries_count', 0)
+        
+        return {
+            "total_queries_all_time": data.get('total_queries_all_time', 0),
+            "current_streak": data.get('current_streak', 0),
+            "longest_streak": data.get('longest_streak', 0),
+            "total_subjects_explored": data.get('total_subjects_explored', 0),
+            "this_week_total": this_week_total
+        }
+    except Exception as e:
+        logger.error(f"Failed to get analytics summary: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/api/analytics/details/{stat_type}", tags=["Analytics"])
+async def get_stat_details(stat_type: str, uid: str = Query(...)):
+    """
+    Get detailed breakdown for a specific stat card.
+    Uses user_queries collection as single source of truth via aggregator.
+    stat_type can be: total_questions, learning_streak, subjects_explored, this_week
+    """
+    try:
+        logger.info(f"[ANALYTICS DETAILS] Rebuilding {stat_type} from user_queries for uid: {uid}")
+        
+        # Use aggregator as single source of truth
+        summary = analytics_service.rebuild_user_analytics_from_queries(uid)
+        
+        # All modal types return the same complete dataset
+        # Frontend will extract what it needs for each modal
+        return {
+            "total_queries": summary["total_queries"],
+            "subjects_count": summary["subjects_count"],
+            "subjects_explored": summary["subjects_explored"],
+            "daily_activity": summary["daily_activity"],
+            "weekly_activity": summary["weekly_activity"],
+            "streak": summary["streak"],
+            "longest_streak": summary["longest_streak"],
+            "last_active": summary["last_active"]
+        }
+            
+    except Exception as e:
+        logger.error(f"Failed to get stat details for {stat_type}: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail=str(e))
 
 
