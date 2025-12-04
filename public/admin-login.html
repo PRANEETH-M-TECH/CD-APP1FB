@@ -64,7 +64,7 @@
             margin-bottom: 0.5rem;
             font-weight: 600;
             color: #374151;
-            f font-size: 0.9rem;
+            font-size: 0.9rem;
         }
 
         .form-group input {
@@ -214,7 +214,7 @@
                 const userDoc = await db.collection('users').doc(user.uid).get();
                 if (userDoc.exists && userDoc.data().role === 'admin') {
                     // Already logged in as admin - redirect
-                    window.location.href = '/admin';
+                    window.location.href = '/admin-dashboard';
                 } else if (userDoc.exists) {
                     // Logged in but not admin - show error and logout
                     showError('You are logged in as a student. Please logout first.');
@@ -256,9 +256,9 @@
                     throw new Error('Access denied. Only administrators can login here.');
                 }
 
-                // Success! Admin verified - redirect to admin page
+                // Success! Admin verified - redirect to admin dashboard
                 console.log('[ADMIN LOGIN] Success:', userData.email);
-                window.location.href = '/admin';
+                window.location.href = '/admin-dashboard';
 
             } catch (error) {
                 console.error('[ADMIN LOGIN] Error:', error);

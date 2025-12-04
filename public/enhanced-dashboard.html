@@ -88,10 +88,159 @@
                 opacity: 1;
             }
         }
+
+        /* Fullscreen Loading Overlay */
+        .loading-overlay {
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            background-size: 200% 200%;
+            animation: gradientShift 8s ease infinite;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.8s ease-out;
+        }
+
+        .loading-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        @keyframes gradientShift {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .loading-content {
+            text-align: center;
+            color: white;
+        }
+
+        .loading-icon {
+            font-size: 80px;
+            margin-bottom: 24px;
+            animation: bounce 1.5s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 6px solid rgba(255, 255, 255, 0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 24px auto;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .loading-message {
+            font-size: 14px;
+            opacity: 0.9;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 0.6;
+            }
+
+            50% {
+                opacity: 1;
+            }
+        }
+
+        .loading-dots {
+            display: inline-block;
+        }
+
+        .loading-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: white;
+            margin: 0 4px;
+            animation: dotPulse 1.4s ease-in-out infinite;
+        }
+
+        .loading-dot:nth-child(1) {
+            animation-delay: 0s;
+        }
+
+        .loading-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .loading-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes dotPulse {
+
+            0%,
+            100% {
+                opacity: 0.3;
+                transform: scale(0.8);
+            }
+
+            50% {
+                opacity: 1;
+                transform: scale(1.2);
+            }
+        }
     </style>
 </head>
 
 <body class="min-h-screen">
+    <!-- Fullscreen Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay">
+        <div class="loading-content">
+            <div class="loading-icon">📊</div>
+            <h2 class="text-3xl font-bold mb-4">Loading Your Analytics...</h2>
+            <div class="loading-spinner"></div>
+            <p class="loading-message text-lg">
+                Preparing your insights
+                <span class="loading-dots">
+                    <span class="loading-dot"></span>
+                    <span class="loading-dot"></span>
+                    <span class="loading-dot"></span>
+                </span>
+            </p>
+            <p class="text-sm mt-4 opacity-75">Just a moment! 🚀</p>
+        </div>
+    </div>
+
     <!-- Sidebar -->
     <div id="sidebar-container"></div>
 
@@ -465,6 +614,7 @@
     </div>
 
     <script src="/static/firebase-config.js"></script>
+    <script src="/static/auth.js"></script>
     <script src="/static/sidebar.js"></script>
     <script src="/static/js/my-bag.js"></script>
     <script>
@@ -522,9 +672,26 @@
                 // Check if analytics need initialization
                 checkAndInitializeAnalytics();
 
+                // Hide loading overlay after all core data is loaded
+                hideLoadingOverlay();
+
             } catch (error) {
                 console.error('Dashboard load error:', error);
+                // Hide overlay even on error
+                hideLoadingOverlay();
                 alert('Error loading dashboard. Please refresh the page.');
+            }
+        }
+
+        // Hide loading overlay with smooth fade
+        function hideLoadingOverlay() {
+            const overlay = document.getElementById('loading-overlay');
+            if (overlay) {
+                overlay.classList.add('hidden');
+                // Remove from DOM after transition
+                setTimeout(() => {
+                    overlay.style.display = 'none';
+                }, 800);
             }
         }
 

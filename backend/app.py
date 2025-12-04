@@ -2688,6 +2688,71 @@ async def toggle_favorite_endpoint(request: ToggleFavoriteRequest):
         raise HTTPException(status_code=500, detail=str(e))
 
 
+# --- ACHIEVEMENTS & GAMIFICATION ENDPOINTS ---
+from . import achievements_service
+# Initialize achievements service with db
+achievements_service.initialize_db(db)
+
+@app.get("/api/achievements/summary", tags=["Achievements"])
+async def get_achievements_summary(uid: str = Query(...)):
+    """
+    Get comprehensive achievements data for a user.
+    
+    Returns:
+        - All badges with unlock status and progress
+        - Total points and user tier
+        - Newly unlocked achievements
+        - Achievement statistics
+    """
+    try:
+        logger.info(f"[ACHIEVEMENTS] Fetching achievements for uid: {uid}")
+        achievements_data = achievements_service.get_user_achievements(uid)
+        return achievements_data
+    except Exception as e:
+        logger.error(f"Failed to get achievements for {uid}: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/api/achievements/tiers", tags=["Achievements"])
+async def get_achievement_tiers():
+    """Get information about all achievement tiers"""
+    try:
+        tiers = ["newcomer", "rising_star", "scholar", "master", "legend"]
+        tier_info = [achievements_service.get_tier_info(tier) for tier in tiers]
+        return {"tiers": tier_info}
+    except Exception as e:
+        logger.error(f"Failed to get tier info: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# --- PROFILE PAGE ENDPOINTS ---
+from . import profile_service
+# Initialize profile service with db
+profile_service.initialize_db(db)
+
+@app.get("/api/profile/stats", tags=["Profile"])
+async def get_profile_stats(uid: str = Query(...)):
+    """
+    Get comprehensive profile statistics for the enhanced profile page.
+    
+    Returns:
+        - Level and XP information
+        - Quick stats (streak, questions, points, rank)
+        - Top 6 achievements
+        - Subject distribution analytics
+        - 90-day activity heatmap
+        - Recent activities feed
+        - Class ranking
+    """
+    try:
+        logger.info(f"[PROFILE] Fetching profile stats for uid: {uid}")
+        profile_data = profile_service.get_profile_stats(uid)
+        return profile_data
+    except Exception as e:
+        logger.error(f"Failed to get profile stats for {uid}: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail=str(e))
+
+
 # --- ADMIN DASHBOARD ENDPOINTS ---
 
 @app.get("/api/admin/class-overview", tags=["Admin Dashboard"])
