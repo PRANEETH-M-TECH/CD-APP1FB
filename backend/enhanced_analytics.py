@@ -334,6 +334,9 @@ def generate_suggestions(uid: str) -> List[Dict]:
 # ADMIN-SPECIFIC ANALYTICS
 # ============================================
 
+# Import analytics_service to get accurate lifetime stats
+from . import analytics_service
+
 def get_student_detailed_report(uid: str) -> Dict:
     """
     Generate comprehensive student performance report for admin view.
@@ -358,12 +361,23 @@ def get_student_detailed_report(uid: str) -> Dict:
             "suggestions": []
         }
         
-        # Basic stats
-        user_stats_doc = db.collection("user_stats").document(uid).get()
-        if user_stats_doc.exists:
-            report["basic_stats"] = user_stats_doc.to_dict()
+        # Basic stats - Use the robust aggregator to ensure accuracy
+        # This fixes the issue where admin sees incomplete/stale data
+        try:
+            report["basic_stats"] = analytics_service.rebuild_user_analytics_from_queries(uid)
+            logger.info(f"✅ Rebuilt analytics for {uid} for admin report")
+        except Exception as e:
+            logger.error(f"⚠️ Failed to rebuild analytics, falling back to stored stats: {e}")
+            user_stats_doc = db.collection("user_stats").document(uid).get()
+            if user_stats_doc.exists:
+                report["basic_stats"] = user_stats_doc.to_dict()
         
         # Chapter breakdown
+        # We can reuse the data from basic_stats if available, or query if needed.
+        # But let's keep the existing query logic for chapter breakdown as it provides specific counts
+        # actually, let's stick to the existing logic for other parts to minimize risk, 
+        # but basic_stats was the main complaint.
+        
         queries = db.collection("user_queries").where("uid", "==", uid).stream()
         chapter_counts = Counter()
         subject_counts = Counter()
