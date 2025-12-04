@@ -475,7 +475,10 @@
         let chapterChart = null;
         let weeklyChart = null;
 
-        // Auth
+        // Enforce Auth
+        authManager.requireAuth();
+
+        // Auth Listener for Data Loading
         firebase.auth().onAuthStateChanged(async (user) => {
             if (user) {
                 currentUser = user;
@@ -492,9 +495,8 @@
                 initializeSidebar(userData);
 
                 loadDashboard();
-            } else {
-                window.location.href = '/';
             }
+            // No else needed, requireAuth handles redirection
         });
 
         // Load dashboard data

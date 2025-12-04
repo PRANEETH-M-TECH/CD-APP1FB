@@ -1488,6 +1488,13 @@
         container.innerHTML = html;
         document.body.appendChild(container);
       });
+
+    // Enforce Auth
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.authManager) {
+        authManager.requireAuth();
+      }
+    });
   </script>
 </body>
 

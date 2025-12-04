@@ -161,6 +161,42 @@ class AuthManager {
     needsClassSelection() {
         return this.needsProfileSetup();
     }
+
+    /**
+     * Enforce authentication on protected pages.
+     * If not logged in, saves current URL and redirects to login.
+     */
+    requireAuth() {
+        // Give Firebase a moment to restore session
+        const unsubscribe = firebase.auth().onAuthStateChanged(user => {
+            unsubscribe(); // Run once
+            if (!user) {
+                console.log('[AUTH] User not logged in, redirecting to login...');
+                // Save current URL to return after login
+                sessionStorage.setItem('redirect_after_login', window.location.href);
+                // Redirect to landing page with login trigger
+                window.location.href = '/?login=true';
+            } else {
+                console.log('[AUTH] User authenticated:', user.uid);
+            }
+        });
+    }
+
+    /**
+     * Handle successful login redirection.
+     * Checks for saved redirect URL, otherwise defaults to Dashboard.
+     */
+    handleLoginSuccess() {
+        const redirectUrl = sessionStorage.getItem('redirect_after_login');
+        if (redirectUrl) {
+            console.log('[AUTH] Restoring saved session URL:', redirectUrl);
+            sessionStorage.removeItem('redirect_after_login');
+            window.location.href = redirectUrl;
+        } else {
+            console.log('[AUTH] No saved URL, going to Dashboard');
+            window.location.href = '/enhanced-dashboard.html';
+        }
+    }
 }
 
 // Global auth manager instance

@@ -14,7 +14,7 @@ function showStudentLoginModal(redirectTo = null) {
     const hero = document.querySelector('.landing-main');
 
     hero.classList.add('hero-fade-out');
-    
+
     modal.style.display = 'flex';
     setTimeout(() => {
         modalContent.classList.add('modal-slide-in');
@@ -51,9 +51,9 @@ async function handleStudentLogin(event) {
             console.log('[AUTH] User needs profile setup');
             showClassSelectionModal();
         } else {
-            console.log('[AUTH] Profile complete, redirecting to mode selection');
-            // Redirect to mode selection page
-            window.location.href = '/mode-selection';
+            console.log('[AUTH] Profile complete, redirecting...');
+            // Use smart redirect
+            authManager.handleLoginSuccess();
         }
     } else {
         errorDiv.textContent = result.error;

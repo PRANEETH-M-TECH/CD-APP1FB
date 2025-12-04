@@ -680,7 +680,7 @@
             <!-- Welcome Section -->
             <div class="welcome-section">
                 <div style="position: absolute; top: 0; left: 0;">
-                    <a href="/enhanced-dashboard"
+                    <a href="/enhanced-dashboard.html"
                         style="color: white; text-decoration: none; opacity: 0.8; transition: opacity 0.2s; display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; background: rgba(255,255,255,0.1); border-radius: 50px; backdrop-filter: blur(10px);">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                             stroke-width="2">
@@ -940,7 +940,7 @@
             if (mode === 'ask-question') {
                 document.querySelector('.mode-container').classList.add('slide-out-left');
             }
-            
+
             setTimeout(async () => {
                 try {
                     await db.collection('users').doc(currentUser.uid).update({
@@ -1003,6 +1003,11 @@
     </script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // Enforce Auth
+            if (window.authManager) {
+                authManager.requireAuth();
+            }
+
             const loadingState = document.getElementById('loading-state');
             const mainContent = document.getElementById('main-content');
 
@@ -1010,79 +1015,87 @@
                 if (user) {
                     loadingState.style.display = 'none';
                     mainContent.style.display = 'block';
+
+                    // Update student name
+                    const nameEl = document.getElementById('student-name');
+                    if (nameEl && user.displayName) {
+                        nameEl.textContent = user.displayName.split(' ')[0];
+                    }
                 }
             });
         });
     </script>
-  <!-- Conversation modal: re-used from original layout (keeps ids for conversation.js) -->
-  <div id="conversation-modal" class="conversation-modal" style="display: none;">
-    <div class="conversation-container">
-      <div class="conversation-header">
-        <h2 class="modal-title">AI Teacher Mode</h2>
-        <div class="header-actions">
-          <label for="show-ai-text-toggle" class="toggle-label">Show Text</label>
-          <input type="checkbox" id="show-ai-text-toggle" title="Toggle AI text display">
-          <button id="exit-conversation" class="exit-button" title="Close">&times;</button>
+    <!-- Conversation modal: re-used from original layout (keeps ids for conversation.js) -->
+    <div id="conversation-modal" class="conversation-modal" style="display: none;">
+        <div class="conversation-container">
+            <div class="conversation-header">
+                <h2 class="modal-title">AI Teacher Mode</h2>
+                <div class="header-actions">
+                    <label for="show-ai-text-toggle" class="toggle-label">Show Text</label>
+                    <input type="checkbox" id="show-ai-text-toggle" title="Toggle AI text display">
+                    <button id="exit-conversation" class="exit-button" title="Close">&times;</button>
+                </div>
+            </div>
+
+            <div id="conversation-setup" class="conversation-setup">
+                <div class="field">
+                    <label for="conversation-class-select">Class</label>
+                    <select id="conversation-class-select">
+                        <option value="" disabled selected>Select class.</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label for="conversation-subject-select">Subject</label>
+                    <select id="conversation-subject-select" disabled>
+                        <option value="" disabled selected>Select subject.</option>
+                    </select>
+                </div>
+                <div class="setup-actions">
+                    <button type="button" id="start-conversation-btn" class="start-conversation-btn">Start
+                        Conversation</button>
+                </div>
+                <p id="conversation-setup-status" class="setup-status" aria-live="polite"></p>
+            </div>
+
+            <div id="conversation-main" class="conversation-main" style="display:none;">
+                <!-- Tier & Cache Status Badge -->
+                <div id="conversation-session-status" class="conversation-session-status"></div>
+
+                <!-- Session Status Badge -->
+                <div id="voice-session-status" class="voice-session-status"></div>
+
+                <div class="waveform-area">
+                    <canvas id="user-waveform" class="waveform-canvas"></canvas>
+                    <canvas id="ai-waveform" class="waveform-canvas"></canvas>
+                </div>
+
+                <div id="conversation-body" class="conversation-body"></div>
+
+                <!-- Follow-up Suggestions Container -->
+                <div id="voice-followups-container" class="voice-followups-container" style="display: none;"></div>
+
+                <div class="conversation-controls">
+                    <button id="mic-button" class="mic-button" aria-label="microphone">
+                        <!-- conversation.js will set the inner icon -->
+                    </button>
+                    <div id="status-indicator" class="status-indicator">Click the mic to speak</div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="conversation-actions">
+                    <button id="new-topic-btn" class="new-topic-btn"
+                        onclick="window.conversationMode?.handleNewTopic()">
+                        🔄 New Topic
+                    </button>
+                </div>
+            </div>
         </div>
-      </div>
-
-      <div id="conversation-setup" class="conversation-setup">
-        <div class="field">
-          <label for="conversation-class-select">Class</label>
-          <select id="conversation-class-select">
-            <option value="" disabled selected>Select class.</option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-            <option value="8">8</option>
-            <option value="9">9</option>
-            <option value="10">10</option>
-          </select>
-        </div>
-        <div class="field">
-          <label for="conversation-subject-select">Subject</label>
-          <select id="conversation-subject-select" disabled>
-            <option value="" disabled selected>Select subject.</option>
-          </select>
-        </div>
-        <div class="setup-actions">
-          <button type="button" id="start-conversation-btn" class="start-conversation-btn">Start Conversation</button>
-        </div>
-        <p id="conversation-setup-status" class="setup-status" aria-live="polite"></p>
-      </div>
-
-      <div id="conversation-main" class="conversation-main" style="display:none;">
-        <!-- Tier & Cache Status Badge -->
-        <div id="conversation-session-status" class="conversation-session-status"></div>
-
-        <!-- Session Status Badge -->
-        <div id="voice-session-status" class="voice-session-status"></div>
-
-        <div class="waveform-area">
-          <canvas id="user-waveform" class="waveform-canvas"></canvas>
-          <canvas id="ai-waveform" class="waveform-canvas"></canvas>
-        </div>
-
-        <div id="conversation-body" class="conversation-body"></div>
-
-        <!-- Follow-up Suggestions Container -->
-        <div id="voice-followups-container" class="voice-followups-container" style="display: none;"></div>
-
-        <div class="conversation-controls">
-          <button id="mic-button" class="mic-button" aria-label="microphone">
-            <!-- conversation.js will set the inner icon -->
-          </button>
-          <div id="status-indicator" class="status-indicator">Click the mic to speak</div>
-        </div>
-
-        <!-- Action Buttons -->
-        <div class="conversation-actions">
-          <button id="new-topic-btn" class="new-topic-btn" onclick="window.conversationMode?.handleNewTopic()">
-            🔄 New Topic
-          </button>
-        </div>
-      </div>
     </div>
-  </div>
 </body>
 
 </html>
