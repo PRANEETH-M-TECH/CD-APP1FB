@@ -325,10 +325,12 @@
             <div class="form-group">
                 <label class="form-label">Subject</label>
                 <select id="notebook-subject" class="form-select">
-                    <option value="science">🔬 Science</option>
-                    <option value="maths">🔢 Maths</option>
-                    <option value="social">🌍 Social</option>
                     <option value="english">📖 English</option>
+                    <option value="maths">🔢 Maths</option>
+                    <option value="science">🔬 Science</option>
+                    <option value="physics">⚛️ Physics</option>
+                    <option value="biology">🧬 Biology</option>
+                    <option value="social">🌍 Social</option>
                     <option value="general">📚 General</option>
                 </select>
             </div>
@@ -843,7 +845,7 @@
 
         function createSubjectFilters() {
             // Standard subjects that should always be available
-            const standardSubjects = ['science', 'maths', 'social', 'english', 'hindi', 'telugu'];
+            const standardSubjects = ['english', 'maths', 'science', 'physics', 'biology', 'social', 'hindi', 'telugu'];
 
             // Get subjects from data
             const dataSubjects = (dashboardData.summary?.top_subjects || []).map(s => s.subject.toLowerCase());
@@ -1260,11 +1262,13 @@
         // Helper functions
         function getSubjectEmoji(subject) {
             const emojis = {
-                'science': '🔬',
+                'english': '📖',
                 'maths': '🔢',
                 'mathematics': '🔢',
+                'science': '🔬',
+                'physics': '⚛️',
+                'biology': '🧬',
                 'social': '🌍',
-                'english': '📖',
                 'hindi': '📝',
                 'telugu': '📝'
             };

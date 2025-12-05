@@ -81,13 +81,23 @@
                 <h2 class="text-lg font-bold text-gray-800">🔥 Chapter Hotspots (Most Queried)</h2>
                 <div class="flex gap-2">
                     <select id="class-filter" class="border rounded px-3 py-1 text-sm">
-                        <option value="8">Class 8</option>
+                        <option value="1">Class 1</option>
+                        <option value="2">Class 2</option>
+                        <option value="3">Class 3</option>
+                        <option value="4">Class 4</option>
+                        <option value="5">Class 5</option>
+                        <option value="6">Class 6</option>
+                        <option value="7">Class 7</option>
+                        <option value="8" selected>Class 8</option>
                         <option value="9">Class 9</option>
                         <option value="10">Class 10</option>
                     </select>
                     <select id="subject-filter" class="border rounded px-3 py-1 text-sm">
-                        <option value="science">Science</option>
+                        <option value="english">English</option>
                         <option value="maths">Maths</option>
+                        <option value="science">Science (Classes 1-6)</option>
+                        <option value="physics" selected>Physics (Classes 7-10)</option>
+                        <option value="biology">Biology (Classes 7-10)</option>
                         <option value="social">Social</option>
                     </select>
                     <button onclick="loadHotspots()"

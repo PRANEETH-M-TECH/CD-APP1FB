@@ -1,4 +1,183 @@
 {
+  "8_physics": {
+    "pdf_offset": 12,
+    "chapters": [
+      {
+        "chapter_name": "Force",
+        "pdf_startpg": 13,
+        "pdf_endpg": 30,
+        "chpstpage": 1,
+        "chpendpage": 18
+      },
+      {
+        "chapter_name": "Friction",
+        "pdf_startpg": 31,
+        "pdf_endpg": 43,
+        "chpstpage": 19,
+        "chpendpage": 31
+      },
+      {
+        "chapter_name": "Synthetic fibres and plastics",
+        "pdf_startpg": 44,
+        "pdf_endpg": 63,
+        "chpstpage": 32,
+        "chpendpage": 51
+      },
+      {
+        "chapter_name": "Metals and non-metals",
+        "pdf_startpg": 64,
+        "pdf_endpg": 76,
+        "chpstpage": 52,
+        "chpendpage": 64
+      },
+      {
+        "chapter_name": "Reflection of light at plane surfaces",
+        "pdf_startpg": 77,
+        "pdf_endpg": 94,
+        "chpstpage": 65,
+        "chpendpage": 82
+      },
+      {
+        "chapter_name": "Coal and petroleum",
+        "pdf_startpg": 95,
+        "pdf_endpg": 104,
+        "chpstpage": 83,
+        "chpendpage": 92
+      },
+      {
+        "chapter_name": "Combustion, fuels and flame",
+        "pdf_startpg": 105,
+        "pdf_endpg": 118,
+        "chpstpage": 93,
+        "chpendpage": 106
+      },
+      {
+        "chapter_name": "Electric conductivity of liquids",
+        "pdf_startpg": 119,
+        "pdf_endpg": 130,
+        "chpstpage": 107,
+        "chpendpage": 118
+      },
+      {
+        "chapter_name": "Some natural phenomena",
+        "pdf_startpg": 131,
+        "pdf_endpg": 142,
+        "chpstpage": 119,
+        "chpendpage": 130
+      },
+      {
+        "chapter_name": "Sound",
+        "pdf_startpg": 143,
+        "pdf_endpg": 158,
+        "chpstpage": 131,
+        "chpendpage": 146
+      },
+      {
+        "chapter_name": "Stars and solar system",
+        "pdf_startpg": 159,
+        "pdf_endpg": 182,
+        "chpstpage": 147,
+        "chpendpage": 170
+      },
+      {
+        "chapter_name": "Graphs of motion",
+        "pdf_startpg": 183,
+        "pdf_endpg": 194,
+        "chpstpage": 171,
+        "chpendpage": 182
+      }
+    ],
+    "book_uuid": "28dc76d5bb1a66296982d97ea88b0bb61adeeb11e4b577c2b146ca468fb670cc",
+    "filename": "8 physics em 2020-21.pdf",
+    "class_name": "8",
+    "subject": "physics"
+  },
+  "8_biology": {
+    "pdf_offset": 12,
+    "chapters": [
+      {
+        "chapter_name": "What is Science?",
+        "pdf_startpg": 13,
+        "pdf_endpg": 26,
+        "chpstpage": 1,
+        "chpendpage": 14
+      },
+      {
+        "chapter_name": "Cell - The Basic Unit of Life",
+        "pdf_startpg": 27,
+        "pdf_endpg": 39,
+        "chpstpage": 15,
+        "chpendpage": 27
+      },
+      {
+        "chapter_name": "The World of Microorganisms Part I&II",
+        "pdf_startpg": 40,
+        "pdf_endpg": 64,
+        "chpstpage": 28,
+        "chpendpage": 52
+      },
+      {
+        "chapter_name": "Reproduction in Animals",
+        "pdf_startpg": 65,
+        "pdf_endpg": 81,
+        "chpstpage": 53,
+        "chpendpage": 69
+      },
+      {
+        "chapter_name": "Production of Food from Plants",
+        "pdf_startpg": 82,
+        "pdf_endpg": 95,
+        "chpstpage": 70,
+        "chpendpage": 83
+      },
+      {
+        "chapter_name": "The Age of Adolescence",
+        "pdf_startpg": 96,
+        "pdf_endpg": 114,
+        "chpstpage": 84,
+        "chpendpage": 102
+      },
+      {
+        "chapter_name": "Biodiversity and its Conservation",
+        "pdf_startpg": 115,
+        "pdf_endpg": 125,
+        "chpstpage": 103,
+        "chpendpage": 113
+      },
+      {
+        "chapter_name": "Different Ecosystems",
+        "pdf_startpg": 126,
+        "pdf_endpg": 152,
+        "chpstpage": 114,
+        "chpendpage": 140
+      },
+      {
+        "chapter_name": "Not for Breathing Not for Drinking",
+        "pdf_startpg": 153,
+        "pdf_endpg": 168,
+        "chpstpage": 141,
+        "chpendpage": 156
+      },
+      {
+        "chapter_name": "Production of Food from Animals",
+        "pdf_startpg": 169,
+        "pdf_endpg": 186,
+        "chpstpage": 157,
+        "chpendpage": 174
+      },
+      {
+        "chapter_name": "Why do we fall ill?",
+        "pdf_startpg": 187,
+        "pdf_endpg": 202,
+        "chpstpage": 175,
+        "chpendpage": 190
+      }
+    ],
+    "book_uuid": "9e3196f483e35b8754d561045aa618d4a208cfab40fbfa7ffee757800a0b40f2",
+    "filename": "8 bio sci em 2020-21.pdf",
+    "class_name": "8",
+    "subject": "biology"
+  },
   "8_social": {
     "pdf_offset": 10,
     "chapters": [
@@ -182,212 +361,5 @@
     "filename": "8th social em.pdf",
     "class_name": "8",
     "subject": "social"
-  },
-  "8_science": {
-    "pdf_offset": 12,
-    "chapters": [
-      {
-        "chapter_name": "What is Science?",
-        "pdf_startpg": 13,
-        "pdf_endpg": 26,
-        "chpstpage": 1,
-        "chpendpage": 14
-      },
-      {
-        "chapter_name": "Cell - The Basic Unit of Life",
-        "pdf_startpg": 27,
-        "pdf_endpg": 39,
-        "chpstpage": 15,
-        "chpendpage": 27
-      },
-      {
-        "chapter_name": "The World of Microorganisms Part I&II",
-        "pdf_startpg": 40,
-        "pdf_endpg": 64,
-        "chpstpage": 28,
-        "chpendpage": 52
-      },
-      {
-        "chapter_name": "Reproduction in Animals",
-        "pdf_startpg": 65,
-        "pdf_endpg": 81,
-        "chpstpage": 53,
-        "chpendpage": 69
-      },
-      {
-        "chapter_name": "Production of Food from Plants",
-        "pdf_startpg": 82,
-        "pdf_endpg": 95,
-        "chpstpage": 70,
-        "chpendpage": 83
-      },
-      {
-        "chapter_name": "Why do we fall ill?",
-        "pdf_startpg": 96,
-        "pdf_endpg": 114,
-        "chpstpage": 84,
-        "chpendpage": 102
-      },
-      {
-        "chapter_name": "Biodiversity and its Conservation",
-        "pdf_startpg": 115,
-        "pdf_endpg": 125,
-        "chpstpage": 103,
-        "chpendpage": 113
-      },
-      {
-        "chapter_name": "The Age of Adolescence",
-        "pdf_startpg": 126,
-        "pdf_endpg": 152,
-        "chpstpage": 114,
-        "chpendpage": 140
-      },
-      {
-        "chapter_name": "Different Ecosystems",
-        "pdf_startpg": 153,
-        "pdf_endpg": 168,
-        "chpstpage": 141,
-        "chpendpage": 156
-      },
-      {
-        "chapter_name": "Not for Breathing Not for Drinking",
-        "pdf_startpg": 169,
-        "pdf_endpg": 186,
-        "chpstpage": 157,
-        "chpendpage": 174
-      },
-      {
-        "chapter_name": "Production of Food from Animals",
-        "pdf_startpg": 187,
-        "pdf_endpg": 202,
-        "chpstpage": 175,
-        "chpendpage": 190
-      }
-    ],
-    "book_uuid": "9e3196f483e35b8754d561045aa618d4a208cfab40fbfa7ffee757800a0b40f2",
-    "filename": "8 bio sci em 2020-21.pdf",
-    "class_name": "8",
-    "subject": "science"
-  },
-  "6_science": {
-    "pdf_offset": 14,
-    "chapters": [
-      {
-        "chapter_name": "OUR FOOD",
-        "pdf_startpg": 15,
-        "pdf_endpg": 25,
-        "chpstpage": 1,
-        "chpendpage": 11
-      },
-      {
-        "chapter_name": "PLAYING WITH MAGNETS",
-        "pdf_startpg": 26,
-        "pdf_endpg": 35,
-        "chpstpage": 12,
-        "chpendpage": 21
-      },
-      {
-        "chapter_name": "RAIN: WHERE DOES IT COME FROM?",
-        "pdf_startpg": 36,
-        "pdf_endpg": 43,
-        "chpstpage": 22,
-        "chpendpage": 29
-      },
-      {
-        "chapter_name": "WHAT DO ANIMALS EAT?",
-        "pdf_startpg": 44,
-        "pdf_endpg": 56,
-        "chpstpage": 30,
-        "chpendpage": 42
-      },
-      {
-        "chapter_name": "MATERIALS AND THINGS",
-        "pdf_startpg": 57,
-        "pdf_endpg": 66,
-        "chpstpage": 43,
-        "chpendpage": 52
-      },
-      {
-        "chapter_name": "HABITAT",
-        "pdf_startpg": 67,
-        "pdf_endpg": 77,
-        "chpstpage": 53,
-        "chpendpage": 63
-      },
-      {
-        "chapter_name": "SEPARATION OF SUBSTANCES",
-        "pdf_startpg": 78,
-        "pdf_endpg": 87,
-        "chpstpage": 64,
-        "chpendpage": 73
-      },
-      {
-        "chapter_name": "FIBRE TO FABRIC",
-        "pdf_startpg": 88,
-        "pdf_endpg": 96,
-        "chpstpage": 74,
-        "chpendpage": 82
-      },
-      {
-        "chapter_name": "PLANTS: PARTS AND FUNCTIONS",
-        "pdf_startpg": 97,
-        "pdf_endpg": 106,
-        "chpstpage": 83,
-        "chpendpage": 92
-      },
-      {
-        "chapter_name": "CHANGES AROUND US",
-        "pdf_startpg": 107,
-        "pdf_endpg": 118,
-        "chpstpage": 93,
-        "chpendpage": 104
-      },
-      {
-        "chapter_name": "WATER IN OUR LIFE",
-        "pdf_startpg": 119,
-        "pdf_endpg": 126,
-        "chpstpage": 105,
-        "chpendpage": 112
-      },
-      {
-        "chapter_name": "SIMPLE ELECTRIC CIRCUITS",
-        "pdf_startpg": 127,
-        "pdf_endpg": 136,
-        "chpstpage": 113,
-        "chpendpage": 122
-      },
-      {
-        "chapter_name": "LEARNING HOW TO MEASURE",
-        "pdf_startpg": 137,
-        "pdf_endpg": 151,
-        "chpstpage": 123,
-        "chpendpage": 137
-      },
-      {
-        "chapter_name": "MOVEMENTS IN ANIMALS",
-        "pdf_startpg": 152,
-        "pdf_endpg": 165,
-        "chpstpage": 138,
-        "chpendpage": 151
-      },
-      {
-        "chapter_name": "LIGHT, SHADOWS AND IMAGES",
-        "pdf_startpg": 166,
-        "pdf_endpg": 177,
-        "chpstpage": 152,
-        "chpendpage": 163
-      },
-      {
-        "chapter_name": "LIVING AND NON LIVING",
-        "pdf_startpg": 178,
-        "pdf_endpg": 190,
-        "chpstpage": 164,
-        "chpendpage": 176
-      }
-    ],
-    "book_uuid": "61446c29b127ce1c8f232ec11c5836bf494b59346f5b0c21f31fd6404c7cc5c7",
-    "filename": "6 science em 2021.pdf",
-    "class_name": "6",
-    "subject": "science"
   }
 }

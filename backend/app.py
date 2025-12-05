@@ -476,6 +476,39 @@ async def list_books(class_name: Optional[str] = None, subject: Optional[str] = 
     """
     return local_chap_service.get_books(class_name=class_name, subject=subject)
 
+@app.get("/api/subjects")
+async def get_subjects_for_class(class_name: str):
+    """
+    Returns the list of subjects available for a given class.
+    Uses centralized subject configuration from subject_config.py
+    """
+    from .subject_config import get_subjects_for_class, get_subject_icon, get_subject_color
+    
+    try:
+        class_num = int(class_name)
+        subjects = get_subjects_for_class(class_num)
+        
+        # Build response with icons and colors
+        response = []
+        for subject in subjects:
+            response.append({
+                "name": subject,
+                "display_name": subject.capitalize(),
+                "icon": get_subject_icon(subject, class_num),
+                "color": get_subject_color(subject, class_num)
+            })
+        
+        return {"subjects": response}
+    except Exception as e:
+        logger.error(f"Error getting subjects for class {class_name}: {e}")
+        # Fallback to basic subjects
+        return {"subjects": [
+            {"name": "english", "display_name": "English", "icon": "📖", "color": "#8b5cf6"},
+            {"name": "maths", "display_name": "Maths", "icon": "🔢", "color": "#f59e0b"},
+            {"name": "science", "display_name": "Science", "icon": "🔬", "color": "#3b82f6"},
+            {"name": "social", "display_name": "Social", "icon": "🌍", "color": "#10b981"}
+        ]}
+
 import time
 from google.cloud import firestore
 

@@ -56,12 +56,8 @@
                             </div>
                             <div class="form-group">
                                 <label for="subject">Subject</label>
-                                <select id="subject" name="subject" required>
-                                    <option value="" disabled selected>Select Subject</option>
-                                    <option value="english">English</option>
-                                    <option value="maths">Maths</option>
-                                    <option value="science">Science</option>
-                                    <option value="social">Social</option>
+                                <select id="subject" name="subject" required disabled>
+                                    <option value="" disabled selected>First select a class</option>
                                 </select>
                             </div>
                         </div>
@@ -80,6 +76,53 @@
     </div>
 
     <script src="/static/script.js"></script>
+    <script>
+        // Subject configuration based on class
+        const SUBJECT_CONFIG = {
+            '1-6': [
+                { value: 'english', label: '📖 English' },
+                { value: 'maths', label: '🔢 Maths' },
+                { value: 'science', label: '🔬 Science' },
+                { value: 'social', label: '🌍 Social' }
+            ],
+            '7-10': [
+                { value: 'english', label: '📖 English' },
+                { value: 'maths', label: '🔢 Maths' },
+                { value: 'physics', label: '⚛️ Physics' },
+                { value: 'biology', label: '🧬 Biology' },
+                { value: 'social', label: '🌍 Social' }
+            ]
+        };
+
+        // Update subject dropdown when class changes
+        document.getElementById('class').addEventListener('change', function () {
+            const classNum = parseInt(this.value);
+            const subjectSelect = document.getElementById('subject');
+
+            // Determine which subject set to use
+            const configKey = classNum <= 6 ? '1-6' : '7-10';
+            const subjects = SUBJECT_CONFIG[configKey];
+
+            // Clear existing options except the first placeholder
+            subjectSelect.innerHTML = '<option value="" disabled selected>Select Subject</option>';
+
+            // Add appropriate subjects
+            subjects.forEach(subject => {
+                const option = document.createElement('option');
+                option.value = subject.value;
+                option.textContent = subject.label;
+                subjectSelect.appendChild(option);
+            });
+
+            // Enable subject dropdown
+            subjectSelect.disabled = false;
+
+            console.log(`[ADMIN] Updated subjects for class ${classNum}: ${subjects.map(s => s.value).join(', ')}`);
+        });
+
+        // Initialize subject dropdown as disabled
+        document.getElementById('subject').disabled = true;
+    </script>
 </body>
 
 </html>

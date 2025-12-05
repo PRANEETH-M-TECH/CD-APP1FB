@@ -52,8 +52,11 @@ ACHIEVEMENTS = [
     Achievement("space_cadet", "Space Cadet", "🚀", "30-day streak - To infinity!", "streak", 600, "diamond", "streak", 30),
     Achievement("sun_never_sets", "Sun Never Sets", "☀️", "60-day streak - Unstoppable!", "streak", 1200, "legendary", "streak", 60),
     
-    # Subject Mastery Badges (Student-friendly)
+    
+    # Subject Mastery Badges (Student-friendly) - Updated for Physics & Biology
     Achievement("lab_rat", "Lab Rat", "🔬", "Mastered 30+ Science questions - Lab expert!", "subject", 300, "gold", "subject_queries_science", 30),
+    Achievement("physics_wizard", "Physics Wizard", "⚛️", "Mastered 30+ Physics questions - Einstein level!", "subject", 300, "gold", "subject_queries_physics", 30),
+    Achievement("bio_master", "Bio Master", "🧬", "Mastered 30+ Biology questions - Life science pro!", "subject", 300, "gold", "subject_queries_biology", 30),
     Achievement("maths_ninja", "Maths Ninja", "🥷🔢", "Mastered 30+ Maths questions - Ninja level!", "subject", 300, "gold", "subject_queries_maths", 30),
     Achievement("time_traveler", "Time Traveler", "⏰🌍", "Mastered 30+ Social Studies - History expert!", "subject", 300, "gold", "subject_queries_social", 30),
     Achievement("word_wizard", "Word Wizard", "📖✨", "Mastered 30+ Language questions - Magic with words!", "subject", 300, "gold", "subject_queries_english", 30),
@@ -186,12 +189,27 @@ def check_achievement_condition(achievement: Achievement, user_stats: Dict, uid:
             progress = min(current / condition_value, 1.0)
             return (current >= condition_value, progress)
         
+        
         elif condition_type == "all_subjects_week":
-            # Check if user queried all 4 major subjects in last 7 days
+            # Check if user queried all major subjects in last 7 days
+            # Accept either: science OR (physics AND biology) for flexibility
             subjects_count = user_stats.get("subjects_count", {})
-            required_subjects = ["science", "maths", "social", "english"]
-            has_all = all(subjects_count.get(subj, 0) > 0 for subj in required_subjects)
-            progress = sum(1 for subj in required_subjects if subjects_count.get(subj, 0) > 0) / len(required_subjects)
+            
+            # Core subjects everyone needs
+            core_subjects = ["maths", "social", "english"]
+            has_core = all(subjects_count.get(subj, 0) > 0 for subj in core_subjects)
+            
+            # Science subjects - accept either combined science OR both physics & biology
+            has_science = (subjects_count.get("science", 0) > 0) or \
+                         (subjects_count.get("physics", 0) > 0 and subjects_count.get("biology", 0) > 0)
+            
+            has_all = has_core and has_science
+            
+            # Calculate progress
+            core_progress = sum(1 for subj in core_subjects if subjects_count.get(subj, 0) > 0) / 3.0
+            science_progress = 1.0 if has_science else 0.0
+            progress = (core_progress * 0.75) + (science_progress * 0.25)
+            
             return (has_all, progress)
         
         elif condition_type == "early_morning":

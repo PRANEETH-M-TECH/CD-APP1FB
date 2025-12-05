@@ -496,20 +496,37 @@ function setupUserPage() {
     // --- Core Functions ---
     async function populateSubjects(className) {
         try {
-            const response = await fetch(`/api/books?class_name=${className}`);
+            console.log('[PopulateSubjects] Fetching subjects for class:', className);
+
+            // Use new centralized subject configuration API
+            const response = await fetch(`/api/subjects?class_name=${className}`);
             if (!response.ok) throw new Error('Failed to fetch subjects');
-            const books = await response.json();
-            const subjects = [...new Set(books.map(book => book.subject))];
+
+            const data = await response.json();
+            const subjects = data.subjects || [];
+
+            console.log('[PopulateSubjects] Received subjects:', subjects);
+
+            // Clear and repopulate subject dropdown
             subjectSelect.innerHTML = '<option value="">Select Subject</option>';
-            subjects.forEach(subject => {
+
+            subjects.forEach(subjectData => {
                 const option = document.createElement('option');
-                option.value = subject;
-                option.textContent = subject;
+                option.value = subjectData.name;
+                option.textContent = `${subjectData.icon} ${subjectData.display_name}`;
                 subjectSelect.appendChild(option);
             });
+
             subjectSelect.disabled = false;
+            console.log('[PopulateSubjects] ✓ Subject dropdown populated successfully');
         } catch (error) {
             console.error('Error fetching subjects:', error);
+            // Fallback to basic subjects
+            subjectSelect.innerHTML = '<option value="">Select Subject</option>' +
+                '<option value="english">📖 English</option>' +
+                '<option value="maths">🔢 Maths</option>' +
+                '<option value="science">🔬 Science</option>' +
+                '<option value="social">🌍 Social</option>';
         }
     }
     window.populateSubjectsForUser = populateSubjects;

@@ -1,22 +1,86 @@
+# ==============================================================================
+# CHADUVU-GURU .gitignore
+# ==============================================================================
 
-
-# Ignore virtual environment
+# ============ SECRETS & CREDENTIALS ============
 .env
+serviceAccountKey.json
+firebase-credentials.json
+*.pem
+*.key
+
+# ============ PYTHON ============
+# Virtual environments
 venv/
 env/
+ENV/
+.venv
 
-# Ignore python cache
+# Python cache & compiled files
 __pycache__/
-*.pyc
+*.py[cod]
+*$py.class
+*.so
+.Python
 
-# Ignore system files
-.DS_Store
+# Distribution / packaging
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
 
-# Ignore secrets
-serviceAccountKey.json
-
-# Ignore user uploads and logs
+# ============ USER DATA & UPLOADS ============
 uploads/
+*.pdf
+chapterdata/chap_extraction.json
+temp/
+tmp/
+
+# ============ SYSTEM FILES ============
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# ============ LOGS & TEMP FILES ============
+*.log
 ans.txt
+*.tmp
+logs/
 
+# ============ BACKUPS ============
+Backups/
+*.backup
+*.bak
 
+# ============ AI ASSISTANT FILES ============
+.gemini/
+
+# ============ NODE (if using) ============
+node_modules/
+package-lock.json
+yarn.lock
+
+# ============ DATABASE ============
+*.db
+*.sqlite
+*.sqlite3
+
+# ============ KEEP THESE COMMITTED ============
+!chapterdata/chapters_cache.json
+!.gitignore
+!README.md

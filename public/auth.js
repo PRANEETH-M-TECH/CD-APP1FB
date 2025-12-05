@@ -194,7 +194,7 @@ class AuthManager {
             window.location.href = redirectUrl;
         } else {
             console.log('[AUTH] No saved URL, going to Dashboard');
-            window.location.href = '/enhanced-dashboard.html';
+            window.location.href = '/enhanced-dashboard';
         }
     }
 }

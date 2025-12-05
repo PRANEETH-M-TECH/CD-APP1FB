@@ -153,10 +153,12 @@
                 <label class="block text-sm font-medium text-gray-700 mb-2">Subject</label>
                 <select id="notebook-subject"
                     class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-purple-500">
-                    <option value="science">🔬 Science</option>
-                    <option value="maths">🔢 Maths</option>
-                    <option value="social">🌍 Social</option>
                     <option value="english">📖 English</option>
+                    <option value="maths">🔢 Maths</option>
+                    <option value="science">🔬 Science</option>
+                    <option value="physics">⚛️ Physics</option>
+                    <option value="biology">🧬 Biology</option>
+                    <option value="social">🌍 Social</option>
                     <option value="general">📚 General</option>
                 </select>
             </div>
@@ -523,6 +525,8 @@
     function getSubjectEmoji(subject) {
         const emojis = {
             'science': '🔬',
+            'physics': '⚛️',
+            'biology': '🧬',
             'maths': '🔢',
             'social': '🌍',
             'english': '📖',

@@ -145,10 +145,12 @@
                     <option value="10">Class 10</option>
                 </select>
                 <select id="analytics-subject" class="flex-1 border rounded-lg px-4 py-2">
-                    <option value="science">Science</option>
-                    <option value="maths">Maths</option>
-                    <option value="social">Social</option>
                     <option value="english">English</option>
+                    <option value="maths">Maths</option>
+                    <option value="science">Science (Classes 1-6)</option>
+                    <option value="physics">Physics (Classes 7-10)</option>
+                    <option value="biology">Biology (Classes 7-10)</option>
+                    <option value="social">Social</option>
                 </select>
                 <button onclick="loadChapterHotspots()"
                     class="bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold">
@@ -348,7 +350,7 @@
     // Load All Topics
     async function loadAllTopics() {
         // This would aggregate hotspots across all classes - simplified version
-        const subjects = ['science', 'maths', 'social', 'english'];
+        const subjects = ['english', 'maths', 'science', 'physics', 'biology', 'social'];
         const classes = [8, 9, 10];
 
         const container = document.getElementById('all-topics');
