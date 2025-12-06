@@ -1257,7 +1257,8 @@ async def smart_query_engine(
                 last_action = active_context_window[-1].get("intent_type")
             
             print(f"[CONTEXT] Last action: {last_action}")
-            print(f"[CONTEXT] Is clicked follow-up: {is_clicked_followup}\n")
+            print(f"[CONTEXT] Is clicked follow-up: {is_clicked_followup}")
+            print(f"[CONTEXT] History length: {len(session.get('full_history', []))} turns\n")
             
             # 2. Determine the next action using 5-tier routing (UPDATED)
             action_details = determine_next_action(
@@ -2931,73 +2932,7 @@ async def websocket_conversation(websocket: WebSocket, conversation_id: str, boo
     finally:
         conversation_manager.disconnect(conversation_id)
 
-# ==========================================
-# MY BAG / NOTEBOOK ENDPOINTS
-# ==========================================
 
-class CreateNotebookRequest(BaseModel):
-    uid: str
-    name: str
-    subject: str = "General"
-    color: str = "#4F46E5"
-
-@app.post("/api/bag/notebooks", tags=["My Bag"])
-async def create_notebook_endpoint(request: CreateNotebookRequest):
-    """Create a new notebook."""
-    try:
-        notebook_id = bag_service.create_notebook(
-            uid=request.uid,
-            notebook_name=request.name,
-            subject=request.subject,
-            color=request.color
-        )
-        return {"notebook_id": notebook_id, "message": "Notebook created successfully"}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
-@app.get("/api/bag/notebooks", tags=["My Bag"])
-async def get_notebooks_endpoint(uid: str):
-    """Get all notebooks for a user."""
-    try:
-        return bag_service.get_notebooks(uid)
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
-@app.delete("/api/bag/notebooks/{notebook_id}", tags=["My Bag"])
-async def delete_notebook_endpoint(notebook_id: str, uid: str):
-    """Delete a notebook."""
-    try:
-        bag_service.delete_notebook(uid, notebook_id)
-        return {"message": "Notebook deleted successfully"}
-    except ValueError as e:
-        raise HTTPException(status_code=403, detail=str(e))
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
-class SaveItemRequest(BaseModel):
-    uid: str
-    notebook_id: str
-    content: str
-    title: str = None
-    source_query: str = None
-    chapter_name: str = None
-    subject: str = None
-
-@app.post("/api/bag/items", tags=["My Bag"])
-async def save_bag_item_endpoint(request: SaveItemRequest):
-    """Save content to a notebook."""
-    try:
-        item_id = bag_service.save_to_bag(
-            uid=request.uid,
-            notebook_id=request.notebook_id,
-            content=request.content,
-            title=request.title,
-            source_query=request.source_query,
-            chapter_name=request.chapter_name,
-            subject=request.subject
-        )
-        return {"item_id": item_id, "message": "Saved to bag successfully"}
-    except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.get("/api/bag/items", tags=["My Bag"])
