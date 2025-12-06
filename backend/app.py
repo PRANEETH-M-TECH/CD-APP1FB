@@ -2655,6 +2655,11 @@ async def get_notebooks_endpoint(uid: str = Query(...)):
         logger.error(f"Failed to get notebooks: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
+@app.post("/api/bag/notebooks", tags=["My Bag"])
+async def create_notebook_alias(request: NotebookCreateRequest):
+    """Alias for creating a notebook (frontend compatibility)."""
+    return await create_notebook_endpoint(request)
+
 
 @app.delete("/api/bag/notebook/delete", tags=["My Bag"])
 async def delete_notebook_endpoint(request: NotebookDeleteRequest):
