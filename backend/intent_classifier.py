@@ -46,7 +46,8 @@ def calculate_query_similarity(
 def determine_next_action(
     current_query: str,
     conversation_window: List[dict],
-    generation_model,
+    gemini_client,
+    generation_model_name: str,
     embedder=None,
     is_clicked_followup: bool = False,  # NEW: Flag for pre-generated follow-up clicks
     last_action: str = None  # NEW: Previous action for context awareness
@@ -63,7 +64,8 @@ def determine_next_action(
     Args:
         current_query: User's current query
         conversation_window: List of recent conversation turns
-        generation_model: LLM for classification
+        gemini_client: Gemini client for classification
+        generation_model_name: Model name to use for generation
         embedder: Sentence transformer for similarity
         is_clicked_followup: True if user clicked a pre-generated follow-up
         last_action: Previous action taken (for context)
@@ -224,7 +226,10 @@ Analyze the user's intent and respond in the following JSON format. Choose ONLY 
 """
 
     try:
-        response = generation_model.generate_content(prompt)
+        response = gemini_client.models.generate_content(
+            model=generation_model_name,
+            contents=prompt
+        )
 
         # Safety check: Ensure the response has content.
         if not response.parts:

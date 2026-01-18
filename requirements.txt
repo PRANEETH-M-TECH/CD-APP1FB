@@ -2,7 +2,7 @@ fastapi
 uvicorn
 pydantic
 qdrant-client
-google-generativeai
+google-genai
 google-cloud-firestore
 firebase-admin
 pypdf

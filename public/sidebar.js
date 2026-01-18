@@ -74,11 +74,13 @@ function initializeSidebar(userData, options = {}) {
         ` : ''}
       </nav>
 
-      <!-- Logout Button -->
-      <button class="logout-btn" onclick="handleLogout()">
-        <span>🚪</span>
-        <span>Logout</span>
-      </button>
+      <!-- Home Button at bottom -->
+      <div class="sidebar-footer">
+        <div class="nav-item" onclick="goToHome()">
+          <span class="nav-icon">🏠</span>
+          <span class="nav-label">Home</span>
+        </div>
+      </div>
     </div>
   `;
 
@@ -86,6 +88,14 @@ function initializeSidebar(userData, options = {}) {
   window.__dashboardUrl = dashboardUrl;
 
   container.innerHTML = sidebarHTML;
+
+  // Also initialize the profile dropdown in the top-right corner
+  // Check if the profile dropdown function exists
+  if (typeof initializeProfileDropdown === 'function') {
+    initializeProfileDropdown(userData);
+  } else {
+    console.warn('[SIDEBAR] Profile dropdown component not loaded. Include profile-dropdown.js');
+  }
 }
 
 function toggleSidebar() {
@@ -133,6 +143,10 @@ function goToProfile() {
 
 function showAchievements() {
   window.location.href = '/achievements';
+}
+
+function goToHome() {
+  window.location.href = '/';
 }
 
 async function handleLogout() {

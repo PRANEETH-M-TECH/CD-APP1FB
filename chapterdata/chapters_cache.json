@@ -489,5 +489,168 @@
     "filename": "class6-science.pdf",
     "class_name": "6",
     "subject": "science"
+  },
+  "7_social": {
+    "pdf_offset": 10,
+    "chapters": [
+      {
+        "chapter_name": "Reading Maps of Different kinds",
+        "pdf_startpg": 11,
+        "pdf_endpg": 16,
+        "chpstpage": 1,
+        "chpendpage": 6
+      },
+      {
+        "chapter_name": "Rain and Rivers",
+        "pdf_startpg": 17,
+        "pdf_endpg": 31,
+        "chpstpage": 7,
+        "chpendpage": 21
+      },
+      {
+        "chapter_name": "Tanks and Ground Water",
+        "pdf_startpg": 32,
+        "pdf_endpg": 42,
+        "chpstpage": 22,
+        "chpendpage": 32
+      },
+      {
+        "chapter_name": "Oceans and Fishing",
+        "pdf_startpg": 43,
+        "pdf_endpg": 51,
+        "chpstpage": 33,
+        "chpendpage": 41
+      },
+      {
+        "chapter_name": "Europe",
+        "pdf_startpg": 52,
+        "pdf_endpg": 67,
+        "chpstpage": 42,
+        "chpendpage": 57
+      },
+      {
+        "chapter_name": "Africa",
+        "pdf_startpg": 68,
+        "pdf_endpg": 78,
+        "chpstpage": 58,
+        "chpendpage": 68
+      },
+      {
+        "chapter_name": "Handicrafts and Handlooms",
+        "pdf_startpg": 79,
+        "pdf_endpg": 87,
+        "chpstpage": 69,
+        "chpendpage": 77
+      },
+      {
+        "chapter_name": "Industrial Revolution",
+        "pdf_startpg": 88,
+        "pdf_endpg": 95,
+        "chpstpage": 78,
+        "chpendpage": 85
+      },
+      {
+        "chapter_name": "Production in a Factory - A Paper Mill",
+        "pdf_startpg": 96,
+        "pdf_endpg": 104,
+        "chpstpage": 86,
+        "chpendpage": 94
+      },
+      {
+        "chapter_name": "Importance of Transport System",
+        "pdf_startpg": 105,
+        "pdf_endpg": 110,
+        "chpstpage": 95,
+        "chpendpage": 100
+      },
+      {
+        "chapter_name": "New Kings and Kingdoms",
+        "pdf_startpg": 111,
+        "pdf_endpg": 119,
+        "chpstpage": 101,
+        "chpendpage": 109
+      },
+      {
+        "chapter_name": "The Kakatiyas - Emergence of a Regional Kingdom",
+        "pdf_startpg": 120,
+        "pdf_endpg": 126,
+        "chpstpage": 110,
+        "chpendpage": 116
+      },
+      {
+        "chapter_name": "The Kings of Vijayanagara",
+        "pdf_startpg": 127,
+        "pdf_endpg": 135,
+        "chpstpage": 117,
+        "chpendpage": 125
+      },
+      {
+        "chapter_name": "Mughal Empire",
+        "pdf_startpg": 136,
+        "pdf_endpg": 144,
+        "chpstpage": 126,
+        "chpendpage": 134
+      },
+      {
+        "chapter_name": "Establishment of the British Empire in India",
+        "pdf_startpg": 145,
+        "pdf_endpg": 156,
+        "chpstpage": 135,
+        "chpendpage": 146
+      },
+      {
+        "chapter_name": "Making of Laws in the State Assembly",
+        "pdf_startpg": 157,
+        "pdf_endpg": 167,
+        "chpstpage": 147,
+        "chpendpage": 157
+      },
+      {
+        "chapter_name": "Implementation of Laws in the District",
+        "pdf_startpg": 168,
+        "pdf_endpg": 174,
+        "chpstpage": 158,
+        "chpendpage": 164
+      },
+      {
+        "chapter_name": "Caste Discrimination and the Struggle for Equalities",
+        "pdf_startpg": 175,
+        "pdf_endpg": 181,
+        "chpstpage": 165,
+        "chpendpage": 171
+      },
+      {
+        "chapter_name": "Livelihood and Struggles of Urban Workers",
+        "pdf_startpg": 182,
+        "pdf_endpg": 190,
+        "chpstpage": 172,
+        "chpendpage": 180
+      },
+      {
+        "chapter_name": "Folk - Religion",
+        "pdf_startpg": 191,
+        "pdf_endpg": 197,
+        "chpstpage": 181,
+        "chpendpage": 187
+      },
+      {
+        "chapter_name": "Devotional Paths to the Divine",
+        "pdf_startpg": 198,
+        "pdf_endpg": 206,
+        "chpstpage": 188,
+        "chpendpage": 196
+      },
+      {
+        "chapter_name": "Rulers and Buildings",
+        "pdf_startpg": 207,
+        "pdf_endpg": 217,
+        "chpstpage": 197,
+        "chpendpage": 207
+      }
+    ],
+    "book_uuid": "b250da676f2f0c2a2b1423a27ae133c1a32829112733470fc683ceab06193ba0",
+    "filename": "social.pdf",
+    "class_name": "7",
+    "subject": "social"
   }
 }

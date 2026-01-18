@@ -9,7 +9,7 @@ import logging
 from datetime import datetime, timedelta
 from typing import Optional, Dict, List
 from collections import defaultdict, Counter
-import google.generativeai as genai
+from google import genai  # NEW SDK!
 
 logger = logging.getLogger(__name__)
 
@@ -124,10 +124,13 @@ Response format (JSON):
 }}
 """
         
-        # Call LLM
+        # Call LLM using qdrant's shared client
         try:
-            model = genai.GenerativeModel('gemini-1.5-flash')
-            response = model.generate_content(prompt)
+            from . import qdrant
+            response = qdrant.gemini_client.models.generate_content(
+                model=qdrant.generation_model_name,
+                contents=prompt
+            )
             
             # Parse JSON from response
             import json

@@ -52,15 +52,44 @@ class AuthManager {
         if (!navCta) return;
 
         if (this.currentUser && this.userData) {
-            // Show user profile
+            // Create profile dropdown directly inside navbar instead of using floating component
+            const avatarDisplay = this.userData.avatar || (this.userData.name || 'S').charAt(0).toUpperCase();
+            const isEmoji = this.userData.avatar && this.userData.avatar.length <= 2;
+
             navCta.innerHTML = `
-                <div class="user-profile">
-                    <div class="user-info">
-                        <span class="user-icon">👤</span>
-                        <span class="user-name">${this.userData.name}</span>
-                        ${this.userData.class ? `<span class="user-class">(Class ${this.userData.class})</span>` : ''}
+                <div class="navbar-profile-dropdown" style="position: relative;">
+                    <button class="navbar-profile-trigger" id="navbar-profile-trigger" onclick="toggleNavbarProfileDropdown(event)">
+                        <div class="navbar-profile-avatar" style="${isEmoji ? 'font-size: 1.25rem;' : ''}">${avatarDisplay}</div>
+                        <div class="navbar-profile-info">
+                            <div class="navbar-profile-name">${this.userData.name || 'Student'}</div>
+                            <div class="navbar-profile-class">Class ${this.userData.class || '-'}</div>
+                        </div>
+                        <svg class="navbar-profile-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+
+                    <div class="navbar-profile-menu" id="navbar-profile-menu">
+                        <div class="navbar-profile-menu-header">
+                            <div class="navbar-profile-menu-avatar" style="${isEmoji ? 'font-size: 2.5rem;' : ''}">${avatarDisplay}</div>
+                            <div class="navbar-profile-menu-info">
+                                <div class="navbar-profile-menu-name">${this.userData.name || 'Student'}</div>
+                                <div class="navbar-profile-menu-class">Class ${this.userData.class || '-'}</div>
+                                ${this.userData.email ? `<div class="navbar-profile-menu-email">${this.userData.email}</div>` : ''}
+                            </div>
+                        </div>
+                        <div class="navbar-profile-menu-divider"></div>
+                        <div class="navbar-profile-menu-items">
+                            <div class="navbar-profile-menu-item" onclick="goToProfile(); closeNavbarProfileDropdown();">
+                                <span class="navbar-profile-menu-icon">👤</span>
+                                <span>My Profile</span>
+                            </div>
+                            <div class="navbar-profile-menu-item logout-item" onclick="authManager.logout(); closeNavbarProfileDropdown();">
+                                <span class="navbar-profile-menu-icon">🚪</span>
+                                <span>Logout</span>
+                            </div>
+                        </div>
                     </div>
-                    <button class="btn small outline" onclick="authManager.logout()">Logout</button>
                 </div>
             `;
         } else {
@@ -97,14 +126,20 @@ class AuthManager {
     }
 
     async logout() {
+        const confirm = window.confirm('Are you sure you want to logout?');
+        if (!confirm) return;
+
         try {
             await firebase.auth().signOut();
+            this.currentUser = null;
+            this.userData = null;
             localStorage.clear();
+            sessionStorage.clear();
+            this.updateUI();
             window.location.href = '/';
-            return { success: true };
         } catch (error) {
             console.error('[AUTH] Logout error:', error);
-            return { success: false, error: error.message };
+            alert('Error logging out. Please try again.');
         }
     }
 
@@ -193,8 +228,8 @@ class AuthManager {
             sessionStorage.removeItem('redirect_after_login');
             window.location.href = redirectUrl;
         } else {
-            console.log('[AUTH] No saved URL, going to Dashboard');
-            window.location.href = '/enhanced-dashboard';
+            console.log('[AUTH] No saved URL, going to Mode Selection');
+            window.location.href = '/mode-selection';
         }
     }
 }
@@ -243,3 +278,60 @@ if (!document.querySelector('#user-profile-styles')) {
 }
 
 console.log('[AUTH] Auth manager initialized');
+
+// Global helper functions for profile dropdown
+function goToProfile() {
+    window.location.href = '/profile';
+}
+
+function handleLogout() {
+    if (typeof authManager !== 'undefined' && authManager) {
+        authManager.logout();
+    } else {
+        // Fallback
+        const confirmLogout = window.confirm('Are you sure you want to logout?');
+        if (confirmLogout) {
+            firebase.auth().signOut().then(() => {
+                localStorage.clear();
+                window.location.href = '/';
+            });
+        }
+    }
+}
+
+// Navbar-specific profile dropdown toggle functions
+let navbarProfileDropdownVisible = false;
+
+function toggleNavbarProfileDropdown(event) {
+    event.stopPropagation();
+    const menu = document.getElementById('navbar-profile-menu');
+    const trigger = document.getElementById('navbar-profile-trigger');
+
+    navbarProfileDropdownVisible = !navbarProfileDropdownVisible;
+
+    if (navbarProfileDropdownVisible) {
+        menu.classList.add('visible');
+        trigger.classList.add('active');
+    } else {
+        menu.classList.remove('visible');
+        trigger.classList.remove('active');
+    }
+}
+
+function closeNavbarProfileDropdown() {
+    navbarProfileDropdownVisible = false;
+    const menu = document.getElementById('navbar-profile-menu');
+    const trigger = document.getElementById('navbar-profile-trigger');
+
+    if (menu) menu.classList.remove('visible');
+    if (trigger) trigger.classList.remove('active');
+}
+
+// Close navbar dropdown when clicking outside
+document.addEventListener('click', function (event) {
+    const dropdown = document.querySelector('.navbar-profile-dropdown');
+    if (dropdown && !dropdown.contains(event.target) && navbarProfileDropdownVisible) {
+        closeNavbarProfileDropdown();
+    }
+});
+

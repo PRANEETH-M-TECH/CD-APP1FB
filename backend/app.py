@@ -6,8 +6,8 @@ import datetime
 from contextlib import asynccontextmanager
 from dotenv import load_dotenv
 
-# Load environment variables FIRST
-load_dotenv()
+# Load environment variables FIRST with override to prioritize .env file over system env vars
+load_dotenv(override=True)
 
 from fastapi import FastAPI, File, UploadFile, Form, HTTPException, Query, BackgroundTasks, WebSocket, WebSocketDisconnect, Request
 from fastapi.staticfiles import StaticFiles
@@ -22,17 +22,14 @@ import logging
 logger = logging.getLogger(__name__)
 
 # --- Configure Gemini ---
-import google.generativeai as genai
+# Gemini configuration is now handled in qdrant.py via genai.Client()
+# No need to configure here since all calls go through qdrant module
+api_key = os.getenv("GOOGLE_API_KEY")
+if api_key:
+    print("✅ GOOGLE_API_KEY found in environment (used by qdrant module).")
+else:
+    print("⚠️  No GOOGLE_API_KEY found in .env file")
 
-api_key = os.getenv("GOOGLE_API_KEY") or os.getenv("GEMINI_API_KEY")
-if not api_key:
-    raise RuntimeError(
-        "❌ No Gemini API key found in environment (.env). "
-        "Please check GOOGLE_API_KEY or GEMINI_API_KEY."
-    )
-
-genai.configure(api_key=api_key)
-print("✅ Google Gemini configured successfully.")
 from . import qdrant
 from . import local_chap_service
 from . import firestore_service
@@ -614,7 +611,10 @@ Return ONLY the JSON response.
 
     # LLM Call
     try:
-        response = qdrant.generation_model.generate_content(prompt)
+        response = qdrant.gemini_client.models.generate_content(
+            model=qdrant.generation_model_name,
+            contents=prompt
+        )
         raw = response.text.strip()
     except Exception as e:
         print("[LLM ERROR]", e)
@@ -745,7 +745,10 @@ Return only the JSON object:
 """
     
     try:
-        response = qdrant.generation_model.generate_content(prompt)
+        response = qdrant.gemini_client.models.generate_content(
+            model=qdrant.generation_model_name,
+            contents=prompt
+        )
         raw = response.text.strip()
         
         # Extract JSON from response
@@ -884,7 +887,10 @@ Return ONLY JSON (no markdown, no code blocks):
 Generate 3 follow-up questions NOW:
 """
         
-        response = qdrant.generation_model.generate_content(prompt)
+        response = qdrant.gemini_client.models.generate_content(
+            model=qdrant.generation_model_name,
+            contents=prompt
+        )
         
         if not response.parts:
             finish_reason = response.candidates[0].finish_reason if response.candidates else "Unknown"
@@ -1116,9 +1122,12 @@ Return only the answer.
         
         full_answer = ""
         try:
-            response = qdrant.generation_model.generate_content(final_prompt, stream=True)
+            response_stream = qdrant.gemini_client.models.generate_content_stream(
+                model=qdrant.generation_model_name,
+                contents=final_prompt
+            )
             
-            for chunk in response:
+            for chunk in response_stream:
                 try:
                     if chunk.text:
                         full_answer += chunk.text
@@ -1264,7 +1273,8 @@ async def smart_query_engine(
             action_details = determine_next_action(
                 current_query=query,
                 conversation_window=active_context_window,
-                generation_model=qdrant.generation_model,
+                gemini_client=qdrant.gemini_client,
+                generation_model_name=qdrant.generation_model_name,
                 embedder=qdrant.local_embedder,  # Pass embedder for similarity analysis
                 is_clicked_followup=is_clicked_followup,  # NEW: Flag for clicked follow-ups
                 last_action=last_action  # NEW: Previous action for context
@@ -1393,17 +1403,17 @@ Answer the question based only on the history.
 """
 
             print(f"[LLM] Streaming answer for action: {action}...\n")
-            response_stream = qdrant.generation_model.generate_content(final_prompt, stream=True)
+            # Use new Gemini client wrapper
+            response_stream = qdrant.gemini_client.models.generate_content_stream(
+                model=qdrant.generation_model_name,
+                contents=final_prompt
+            )
+            
             for chunk in response_stream:
-                try:
-                    if chunk.text:
-                        full_answer += chunk.text
-                        yield f"data: {json.dumps({'display_text': chunk.text})}\n\n"
-                        await asyncio.sleep(0.01)
-                except ValueError:
-                    # This can happen if the chunk has no 'parts' but a finish_reason.
-                    # We can safely ignore it and continue to the next chunk.
-                    pass
+                if chunk.text:
+                    full_answer += chunk.text
+                    yield f"data: {json.dumps({'display_text': chunk.text})}\n\n"
+                    await asyncio.sleep(0)
             print(f"[LLM] ✓ Answer generated ({len(full_answer)} chars)\n")
 
             # 5. Generate and send follow-ups (if not answering from history)
@@ -2262,7 +2272,7 @@ async def get_topic_clusters(
         logger.info(f"[TOPIC CLUSTERS] Found {len(query_texts)} queries, calling LLM for clustering")
         
         # Call LLM to cluster queries into topics
-        model = genai.GenerativeModel('models/gemini-flash-latest')
+        logger.info(f"[TOPIC CLUSTERS] Calling LLM with {len(query_texts)} queries")
         
         prompt = f"""You are an educational clustering engine. Group the following {len(query_texts)} student queries into 3-7 meaningful conceptual topics.
 
@@ -2289,7 +2299,10 @@ Return ONLY valid JSON in this exact structure:
   ]
 }}"""
 
-        response = model.generate_content(prompt)
+        response = qdrant.gemini_client.models.generate_content(
+            model=qdrant.generation_model_name,
+            contents=prompt
+        )
         result_text = response.text.strip()
         
         # Extract JSON from response (remove markdown code fences if present)

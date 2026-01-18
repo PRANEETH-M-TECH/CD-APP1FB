@@ -6,7 +6,8 @@ import json
 from typing import List, Dict, Optional
 
 from qdrant_client import QdrantClient as QC, models
-import google.generativeai as genai
+from google import genai
+from google.genai import types
 from pypdf import PdfReader
 from sentence_transformers import SentenceTransformer
 from langchain_text_splitters import RecursiveCharacterTextSplitter
@@ -20,7 +21,8 @@ EMBEDDING_MODEL = "all-MiniLM-L6-v2"
 # --- GLOBALS (initialized by initialize()) ---
 client: Optional[QC] = None
 local_embedder: Optional[SentenceTransformer] = None
-generation_model: Optional[genai.GenerativeModel] = None
+gemini_client: Optional[genai.Client] = None
+generation_model_name: str = "gemini-2.5-flash"
 bm25_indices: Dict[str, BM25Okapi] = {}
 book_corpus: Dict[str, List[Dict]] = {}
 
@@ -28,18 +30,20 @@ book_corpus: Dict[str, List[Dict]] = {}
 def initialize():
     """
     Initialize models and Qdrant client. Called once at application startup.
-    DEVELOPMENT MODE: Deletes and recreates collection on every startup.
+    PRODUCTION MODE: Preserves existing data.
     """
-    global client, local_embedder, generation_model
+    global client, local_embedder, gemini_client, generation_model_name
 
     local_embedder = SentenceTransformer(EMBEDDING_MODEL)
 
-    # Initialize Gemini / generative model (if API key/config available)
-    GENERATION_MODEL_NAME = "models/gemini-flash-latest"
+    # Initialize Gemini client with new SDK (API key from environment)
+    api_key = os.getenv("GOOGLE_API_KEY")
     try:
-        generation_model = genai.GenerativeModel(GENERATION_MODEL_NAME)
+        gemini_client = genai.Client(api_key=api_key)
+        print(f"[QDRANT] ✅ Initialized Gemini Client with model: {generation_model_name}")
     except Exception as e:
-        generation_model = None  # type: ignore
+        print(f"[QDRANT] ⚠️  Could not initialize Gemini client: {e}")
+        gemini_client = None  # type: ignore
 
     client = QC(
         url=os.environ.get("QDRANT_URL", "http://localhost:6333"),
@@ -727,7 +731,7 @@ def reformulate_and_classify_query(query: str, class_name: Optional[str] = None,
             '{"reformulated_query":"Detailed...","keywords":[{"keyword":"photosynthesis","importance":0.95}],"conceptual_score":0.85}\n'
         )
 
-    if not generation_model:
+    if not gemini_client:
         # Fallback: simple deterministic extraction if no model available
         result = {
             "reformulated_query": raw_query,
@@ -740,7 +744,10 @@ def reformulate_and_classify_query(query: str, class_name: Optional[str] = None,
         return result
 
     try:
-        response = generation_model.generate_content(base_prompt)
+        response = gemini_client.models.generate_content(
+            model=generation_model_name,
+            contents=base_prompt
+        )
         json_text = response.text.strip()
         json_start = json_text.find("{")
         json_end = json_text.rfind("}") + 1
@@ -778,8 +785,8 @@ def generate_answer(raw_query: str, book_details: Dict, context: str):
     Use the generative model (Gemini) with a teacher-system prompt to answer the query.
     This function is a generator that yields chunks of the response (both for display and TTS).
     """
-    if not generation_model:
-        raise RuntimeError("Generation model not initialized.")
+    if not gemini_client:
+        raise RuntimeError("Gemini client not initialized.")
 
     system_prompt = (
         "You are CHADUVU-GURU, an intelligent and patient AI teacher assistant.\n"
@@ -814,7 +821,13 @@ def generate_answer(raw_query: str, book_details: Dict, context: str):
         f"**Textbook Context:**\n{context}\n"
     )
 
-    response = generation_model.generate_content([system_prompt, user_prompt], stream=True)
+    # Combine system and user prompts
+    combined_prompt = f"{system_prompt}\n\n{user_prompt}"
+    
+    response = gemini_client.models.generate_content_stream(
+        model=generation_model_name,
+        contents=combined_prompt
+    )
     for chunk in response:
         yield chunk.text
 
@@ -824,8 +837,8 @@ def generate_conversational_answer(raw_query: str, book_details: Dict, context: 
     Use the generative model (Gemini) with a conversational system prompt to answer the query.
     This is designed for the real-time conversational mode.
     """
-    if not generation_model:
-        raise RuntimeError("Generation model not initialized.")
+    if not gemini_client:
+        raise RuntimeError("Gemini client not initialized.")
 
     system_prompt = (
         "You are CHADUVU-GURU in CONVERSATIONAL MODE.\n"
@@ -852,7 +865,13 @@ def generate_conversational_answer(raw_query: str, book_details: Dict, context: 
         "Now, answer the student's question as their AI Teacher."
     )
 
-    response = generation_model.generate_content([system_prompt, user_prompt], stream=True)
+    # Combine system and user prompts
+    combined_prompt = f"{system_prompt}\n\n{user_prompt}"
+    
+    response = gemini_client.models.generate_content_stream(
+        model=generation_model_name,
+        contents=combined_prompt
+    )
     for chunk in response:
         yield chunk.text
 
@@ -892,8 +911,8 @@ def generate_teacher_explanation(class_name: str, subject: str, chapter_name: st
     """
     Uses the generative model to create a teacher-like explanation from a chapter summary.
     """
-    if not generation_model:
-        raise RuntimeError("Generation model not initialized.")
+    if not gemini_client:
+        raise RuntimeError("Gemini client not initialized.")
 
     system_prompt = (
         "You are an expert AI teacher, skilled at explaining complex topics in a simple, "
@@ -923,7 +942,13 @@ def generate_teacher_explanation(class_name: str, subject: str, chapter_name: st
     Begin the explanation now.
     '''
 
-    response = generation_model.generate_content([system_prompt, user_prompt])
+    # Combine system and user prompts
+    combined_prompt = f"{system_prompt}\n\n{user_prompt}"
+    
+    response = gemini_client.models.generate_content(
+        model=generation_model_name,
+        contents=combined_prompt
+    )
     return response.text
 
 
@@ -931,8 +956,8 @@ def generate_chapter_summary(class_name: str, subject_name: str, chapter_name: s
     """
     Generates a summary for a single chapter using the generative model.
     """
-    if not generation_model:
-        raise RuntimeError("Generation model not initialized.")
+    if not gemini_client:
+        raise RuntimeError("Gemini client not initialized.")
 
     # Combine chunks into a single text
     full_chapter_text = "\n\n".join(chapter_chunks)
@@ -983,7 +1008,10 @@ Chapter Chunks:
 """
 
     try:
-        response = generation_model.generate_content(prompt)
+        response = gemini_client.models.generate_content(
+            model=generation_model_name,
+            contents=prompt
+        )
         # Extract the JSON part from the response
         json_text = response.text.strip()
         json_start = json_text.find("{")
@@ -1040,7 +1068,7 @@ def generate_chapters_from_text(json_path: str) -> str:
     Read the page JSON file (json_path), construct prompt and ask the generative model to extract chapters.
     Returns a JSON-string representation of the parsed LLM output or a safe default.
     """
-    if not generation_model:
+    if not gemini_client:
         return json.dumps({"pdf_offset": 0, "chapters": []})
 
     with open(json_path, "r", encoding="utf-8") as f:
@@ -1049,7 +1077,10 @@ def generate_chapters_from_text(json_path: str) -> str:
     prompt = generate_chapters_from_json(pdf_pages_data)
 
     try:
-        response = generation_model.generate_content(prompt)
+        response = gemini_client.models.generate_content(
+            model=generation_model_name,
+            contents=prompt
+        )
         text = response.text.strip()
         
         # DEBUG: Log the raw LLM response

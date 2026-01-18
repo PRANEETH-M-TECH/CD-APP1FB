@@ -40,18 +40,37 @@
     }
 
     @keyframes fadeOut {
-      from { opacity: 1; transform: translateY(0); }
-      to { opacity: 0; transform: translateY(-20px); }
+      from {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      to {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
     }
 
     @keyframes slideInUp {
-      from { transform: translateY(50px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
+      from {
+        transform: translateY(50px);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
     }
 
     @keyframes drop-shadow-animation {
-      from { box-shadow: 0 0 0 rgba(0, 0, 0, 0); }
-      to { box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3); }
+      from {
+        box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+      }
+
+      to {
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+      }
     }
   </style>
 </head>
@@ -65,9 +84,12 @@
       </a>
       <div class="navbar-actions">
         <button class="settings-btn" aria-label="Settings">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="12" cy="12" r="3"></circle>
-            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+            <path
+              d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
+            </path>
           </svg>
         </button>
       </div>
@@ -223,7 +245,8 @@
           <div class="form-group">
             <label>Password</label>
             <input type="password" id="student-password" required placeholder="Enter your password">
-            <p style="font-size: 0.85rem; color: #6b7280; margin-top: 0.5rem;">Your credentials are provided by your school</p>
+            <p style="font-size: 0.85rem; color: #6b7280; margin-top: 0.5rem;">Your credentials are provided by your
+              school</p>
           </div>
           <button type="submit" class="btn primary full-width">🚀 Login</button>
           <p class="auth-note">Forgot password? Contact your teacher</p>
@@ -305,23 +328,28 @@
   <script src="/static/avatar-selection.js"></script>
   <script src="/static/auth-modal.js"></script>
 
+  <!-- Profile Dropdown -->
+  <link rel="stylesheet" href="/static/profile-dropdown.css">
+  <link rel="stylesheet" href="/static/navbar-profile.css">
+  <script src="/static/profile-dropdown.js"></script>
+
   <!-- load existing scripts last -->
   <script src="/static/script.js?v=1.4"></script>
 
 
-          <!-- optional small helper for hero parallax (non-intrusive) -->
-          <script>
-            (function () {
-              const wrap = document.getElementById('hero-mascot-wrap');
-              if (!wrap) return;
-              window.addEventListener('mousemove', (e) => {
-                const w = window.innerWidth, h = window.innerHeight;
-                const nx = (e.clientX - w / 2) / (w / 2);
-                const ny = (e.clientY - h / 2) / (h / 2);
-                wrap.style.transform = `translate(${nx * 8}px, ${ny * 6}px)`;
-              });
-            })();
-          </script>
+  <!-- optional small helper for hero parallax (non-intrusive) -->
+  <script>
+    (function () {
+      const wrap = document.getElementById('hero-mascot-wrap');
+      if (!wrap) return;
+      window.addEventListener('mousemove', (e) => {
+        const w = window.innerWidth, h = window.innerHeight;
+        const nx = (e.clientX - w / 2) / (w / 2);
+        const ny = (e.clientY - h / 2) / (h / 2);
+        wrap.style.transform = `translate(${nx * 8}px, ${ny * 6}px)`;
+      });
+    })();
+  </script>
 </body>
 
 </html>

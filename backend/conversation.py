@@ -121,7 +121,8 @@ class ConversationManager:
             action_details = determine_next_action(
                 current_query=query,
                 conversation_window=active_context_window,
-                generation_model=qdrant.generation_model,
+                gemini_client=qdrant.gemini_client,
+                generation_model_name=qdrant.generation_model_name,
                 embedder=qdrant.local_embedder,  # Pass embedder for similarity analysis
                 is_clicked_followup=False,  # WebSocket queries are always typed (not clicked)
                 last_action=last_action  # NEW: Previous action for context
@@ -309,7 +310,10 @@ class ConversationManager:
         """Stream the answer with interrupt checking."""
         print(f"[ConversationManager] Starting to stream answer for book {conv.book_uuid}")
         
-        response_stream = qdrant.generation_model.generate_content(prompt, stream=True)
+        response_stream = qdrant.gemini_client.models.generate_content_stream(
+            model=qdrant.generation_model_name,
+            contents=prompt
+        )
         
         for chunk in response_stream:
             if conv.should_stop:
