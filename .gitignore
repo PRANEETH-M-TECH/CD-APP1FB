@@ -28,6 +28,13 @@ build/
 develop-eggs/
 dist/
 downloads/
+
+# Test files (temporary scripts for debugging)
+check_models.py
+test_quota.py
+find_working_model.py
+simple_test.py
+test_*.py
 eggs/
 .eggs/
 lib/

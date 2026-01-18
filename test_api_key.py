@@ -1,15 +1,20 @@
 #!/usr/bin/env python3
 """
 Simple script to test if your Google Gemini API key is valid and working.
-Just replace YOUR_API_KEY_HERE with your actual key and run this script.
+This script now loads the API key from your .env file for security.
 """
 
 from google import genai
+import os
+from pathlib import Path
+from dotenv import load_dotenv
 
 # ========================================
-# PASTE YOUR API KEY HERE:
+# Load API key from .env file
 # ========================================
-API_KEY = "AIzaSyCKIKiSqPGDN8RkIRA12L-VNhBWGJNqCds"  # Replace with your actual key
+env_path = Path(__file__).parent / '.env'
+load_dotenv(dotenv_path=env_path, override=True)
+API_KEY = os.getenv("GOOGLE_API_KEY")
 
 def test_api_key():
     """Test if the API key is valid and working."""
@@ -19,8 +24,10 @@ def test_api_key():
     print("=" * 60)
     
     # Check if key is provided
-    if not API_KEY or API_KEY == "AIzaSyCKIKiSqPGDN8RkIRA12L-VNhBWGJNqCds":
-        print("❌ ERROR: Please paste your API key in the script first!")
+    if not API_KEY:
+        print("❌ ERROR: No GOOGLE_API_KEY found in .env file!")
+        print(f"📍 Looking for .env at: {env_path}")
+        print(f"📄 .env exists: {env_path.exists()}")
         return False
     
     print(f"\n📋 API Key: {API_KEY[:10]}...{API_KEY[-8:]}")

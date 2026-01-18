@@ -1076,10 +1076,18 @@ async def query_engine(
         
         print(f"[RETRIEVAL] 🎯 Restricting search to top {len(top_chapter_names)} chapters")
         
+        # Clean keywords to ensure they are dictionaries of {'keyword': str, 'importance': float}
+        cleaned_keywords = []
+        for kw in keywords:
+            if isinstance(kw, dict):
+                cleaned_keywords.append({"keyword": kw.get("keyword", ""), "importance": kw.get("importance", 0.5)})
+            else:
+                cleaned_keywords.append({"keyword": str(kw), "importance": 0.5})
+
         hybrid_results, semantic_results, bm25_results = qdrant.hybrid_search(
             book_uuid=book_uuid,
             query=reformulated_query,
-            keywords=keywords,
+            keywords=cleaned_keywords,
             conceptual_score=conceptual_score,
             metadata_filters={"chapter_names": top_chapter_names}
         )
@@ -1319,11 +1327,19 @@ async def smart_query_engine(
                 print(f"[REFORM] Reformulated for retrieval: {reformulated_query}\n")
 
                 # Perform hybrid search
+                # Clean keywords to ensured they are dictionaries of {'keyword': str, 'importance': float}
+                cleaned_keywords = []
+                for kw in keywords:
+                    if isinstance(kw, dict):
+                        cleaned_keywords.append({"keyword": kw.get("keyword", ""), "importance": kw.get("importance", 0.5)})
+                    else:
+                        cleaned_keywords.append({"keyword": str(kw), "importance": 0.5})
+
                 top_chapter_names = [ch["chapter_name"] for ch in chapter_ranking[:5]] if chapter_ranking else []
                 hybrid_results, _, _ = qdrant.hybrid_search(
                     book_uuid=book_uuid,
                     query=reformulated_query,
-                    keywords=[{"keyword": kw, "importance": 0.5} for kw in keywords],
+                    keywords=cleaned_keywords,
                     conceptual_score=conceptual_score, # Pass conceptual_score
                     metadata_filters={"chapter_names": top_chapter_names} if top_chapter_names else {}
                 )
@@ -1352,9 +1368,17 @@ async def smart_query_engine(
                     reformulated_query = reform.get("reformulated_query", query)
                     keywords = reform.get("keywords", [])
                     chapter_ranking = reform.get("chapter_ranking", [])
+                    # Clean keywords
+                    cleaned_keywords = []
+                    for kw in keywords:
+                        if isinstance(kw, dict):
+                            cleaned_keywords.append({"keyword": kw.get("keyword", ""), "importance": kw.get("importance", 0.5)})
+                        else:
+                            cleaned_keywords.append({"keyword": str(kw), "importance": 0.5})
+
                     top_chapter_names = [ch["chapter_name"] for ch in chapter_ranking[:5]] if chapter_ranking else []
                     hybrid_results, _, _ = qdrant.hybrid_search(
-                        book_uuid=book_uuid, query=reformulated_query, keywords=[{"keyword": kw, "importance": 0.5} for kw in keywords],
+                        book_uuid=book_uuid, query=reformulated_query, keywords=cleaned_keywords,
                         metadata_filters={"chapter_names": top_chapter_names} if top_chapter_names else {}
                     )
                     context = "\n\n---\n\n".join([doc["text"] for score, doc in hybrid_results[:10]])

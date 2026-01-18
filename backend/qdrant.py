@@ -22,6 +22,7 @@ EMBEDDING_MODEL = "all-MiniLM-L6-v2"
 client: Optional[QC] = None
 local_embedder: Optional[SentenceTransformer] = None
 gemini_client: Optional[genai.Client] = None
+# Using gemini-2.5-flash (User requested: DO NOT use 1.5 Flash)
 generation_model_name: str = "gemini-2.5-flash"
 bm25_indices: Dict[str, BM25Okapi] = {}
 book_corpus: Dict[str, List[Dict]] = {}
@@ -455,7 +456,20 @@ def hybrid_search(book_uuid: str, query: str, keywords: List[Dict], conceptual_s
         raise RuntimeError("Local embedder not initialized.")
 
     alpha = 0.4 + (conceptual_score * 0.2)
-    keyword_query_str = " ".join([item["keyword"] for item in keywords])
+    
+    # Robustly handle keywords that might be dictionaries or strings
+    keyword_list = []
+    for item in keywords:
+        if isinstance(item, dict):
+            kw = item.get("keyword")
+            if isinstance(kw, dict): # Handle nested dict case
+                kw = kw.get("keyword")
+            if kw:
+                keyword_list.append(str(kw))
+        elif isinstance(item, str):
+            keyword_list.append(item)
+            
+    keyword_query_str = " ".join(keyword_list)
 
     # Semantic search
     must_conditions = [models.FieldCondition(key="book_uuid", match=models.MatchValue(value=book_uuid))]
