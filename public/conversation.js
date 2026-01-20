@@ -672,23 +672,51 @@ class ConversationMode {
         const drawFrame = () => {
             if (!shouldContinue) return;
 
-            const time = Date.now() / 200;
+            const time = Date.now() / 150; // Slightly faster
             ctx.clearRect(0, 0, width, height);
+
+            // Layer 1: Main Wave
             ctx.beginPath();
             ctx.strokeStyle = color;
-            ctx.lineWidth = 2;
+            ctx.lineWidth = 3;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
 
             for (let x = 0; x < width; x++) {
                 const y = height / 2 +
-                    Math.sin(x / 50 + time) * 15 * Math.sin(time / 3) +
-                    Math.sin(x / 30 + time * 2) * 10 * Math.cos(time / 2) +
-                    Math.sin(x / 20 + time * 1.5) * 5 * Math.sin(time / 5);
+                    Math.sin(x / 40 + time) * 30 * Math.sin(time / 2) +
+                    Math.sin(x / 20 + time * 1.5) * 15 * Math.cos(time / 4);
 
                 if (x === 0) ctx.moveTo(x, y);
                 else ctx.lineTo(x, y);
             }
-
             ctx.stroke();
+
+            // Layer 2: Subtle secondary wave
+            ctx.beginPath();
+            ctx.strokeStyle = color + '66'; // 40% opacity
+            ctx.lineWidth = 1.5;
+
+            for (let x = 0; x < width; x++) {
+                const y = height / 2 +
+                    Math.cos(x / 30 + time * 1.2) * 20 * Math.sin(time / 3) +
+                    Math.sin(x / 15 + time * 0.8) * 10;
+
+                if (x === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            }
+            ctx.stroke();
+
+            // Layer 3: Particles (subtle dots on peaks)
+            if (Math.sin(time) > 0.8) {
+                const x = (time * 100) % width;
+                const y = height / 2 + Math.sin(x / 40 + time) * 30;
+                ctx.fillStyle = color;
+                ctx.beginPath();
+                ctx.arc(x, y, 2, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
             this.animationFrameId = requestAnimationFrame(drawFrame);
         };
 
@@ -807,7 +835,7 @@ class ConversationMode {
         // If user data is available, use it to set the class
         if (window.userData && window.userData.class) {
             const userClass = window.userData.class;
-            
+
             const classField = this.classSelect.parentElement;
             if (classField) {
                 classField.style.display = 'none'; // This will hide the dropdown's container
@@ -816,11 +844,11 @@ class ConversationMode {
             // Set the class dropdown value and trigger subject loading
             this.classSelect.innerHTML = `<option value="${userClass}" selected>${userClass}</option>`;
             this.classSelect.value = userClass;
-            
+
             // Need to ensure the change handler is called to load subjects
             this.handleClassChange();
         } else {
-             // Show the dropdown if no user class is found
+            // Show the dropdown if no user class is found
             const classField = this.classSelect.parentElement;
             if (classField) {
                 classField.style.display = 'flex';

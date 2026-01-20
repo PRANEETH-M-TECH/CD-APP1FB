@@ -2962,20 +2962,18 @@ async def websocket_conversation(websocket: WebSocket, conversation_id: str, boo
             if data.get("type") == "query":
                 # Log that query processing is starting
                 print(f"[App] Dispatching 'query' to ConversationManager for {conversation_id}")
-                await conversation_manager.process_query(conversation_id, data.get("query", ""))
+                # Use create_task to handle it non-blocking
+                asyncio.create_task(conversation_manager.process_query(conversation_id, data.get("query", "")))
             elif data.get("type") == "interrupt":
                 print(f"[App] Received 'interrupt' for {conversation_id}")
                 await conversation_manager.interrupt(conversation_id)
     
     except WebSocketDisconnect:
         print(f"[App] WebSocket disconnected for conversation_id={conversation_id}")
-    except Exception as e:
-        print(f"[App] WebSocket error for {conversation_id}: {e}")
+    except Exception as exc: # Use 'exc' to avoid confusion
+        print(f"[App] WebSocket error for {conversation_id}: {exc}")
     finally:
         conversation_manager.disconnect(conversation_id)
-
-
-        raise HTTPException(status_code=500, detail=str(e))
 
 @app.get("/api/bag/items", tags=["My Bag"])
 async def get_bag_items_endpoint(uid: str, notebook_id: str = None):

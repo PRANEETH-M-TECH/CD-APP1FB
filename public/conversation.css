@@ -19,16 +19,31 @@
 
 /* Main Container - DARK GRADIENT THEME */
 .conversation-container {
-    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-    border-radius: 20px;
-    width: 90%;
-    max-width: 900px;
-    height: 100%;
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    border-radius: 24px;
+    width: 95%;
+    max-width: 1000px;
+    height: 90vh;
+    /* Fixed height for better control */
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
     border: 1px solid rgba(255, 255, 255, 0.1);
+    position: relative;
+    animation: modalEntrance 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes modalEntrance {
+    from {
+        opacity: 0;
+        transform: scale(0.9) translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
 }
 
 /* Header - Glassy Effect */
@@ -189,6 +204,8 @@
     gap: 1rem;
     overflow-y: auto;
     padding-bottom: 12px;
+    position: relative;
+    /* Anchor for absolute follow-ups */
 }
 
 /* Session Status Badge - TOP */
@@ -234,17 +251,24 @@
 /* Waveform Area */
 .waveform-area {
     width: 100%;
-    height: 100px;
+    height: 140px;
+    /* Increased height */
     position: relative;
-    background: rgba(255, 255, 255, 0.03);
-    border-radius: 12px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 16px;
     border: 1px solid rgba(255, 255, 255, 0.1);
     overflow: hidden;
+    margin-bottom: 0.5rem;
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
 }
 
 .waveform-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
+    transition: opacity 0.5s ease;
 }
 
 /* Conversation Body - Messages */
@@ -296,22 +320,29 @@
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
-/* FOLLOW-UPS CONTAINER - STUNNING DESIGN */
+/* FOLLOW-UPS CONTAINER - REDESIGNED FOR VISIBILITY */
 .voice-followups-container {
-    margin: 0.75rem 0;
-    padding: 1.25rem;
-    background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(139, 92, 246, 0.15));
-    border: 1px solid rgba(96, 165, 250, 0.3);
-    border-radius: 14px;
-    max-height: 250px;
+    position: absolute;
+    bottom: 150px;
+    /* Float above the controls */
+    left: 1.5rem;
+    right: 1.5rem;
+    padding: 1rem;
+    background: rgba(15, 23, 42, 0.95);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(96, 165, 250, 0.4);
+    border-radius: 16px;
+    max-height: 200px;
     overflow-y: auto;
-    animation: slideInScale 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    z-index: 100;
+    box-shadow: 0 -10px 25px rgba(0, 0, 0, 0.3);
+    animation: slideUpFade 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-@keyframes slideInScale {
+@keyframes slideUpFade {
     from {
         opacity: 0;
-        transform: translateY(15px) scale(0.95);
+        transform: translateY(30px) scale(0.95);
     }
 
     to {
@@ -432,40 +463,63 @@
 
 /* Mic Button - STUNNING */
 .mic-button {
-    width: 72px;
-    height: 72px;
+    width: 84px;
+    height: 84px;
     border-radius: 50%;
-    border: 3px solid rgba(96, 165, 250, 0.3);
-    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    border: 4px solid rgba(255, 255, 255, 0.1);
+    background: linear-gradient(135deg, #6366f1, #4f46e5);
     color: white;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.3s ease;
-    box-shadow: 0 8px 24px rgba(59, 130, 246, 0.4);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 10px 25px rgba(79, 70, 229, 0.4);
     position: relative;
+    z-index: 5;
 }
 
-.mic-button::before {
-    content: '';
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(96, 165, 250, 0.4), transparent);
-    animation: ripple 2s infinite;
+.mic-button:hover {
+    transform: scale(1.1) rotate(5deg);
+    box-shadow: 0 15px 35px rgba(79, 70, 229, 0.6);
 }
 
-@keyframes ripple {
+.mic-button.listening {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    border-color: rgba(255, 255, 255, 0.3);
+    animation: pulseGlowBlue 2s infinite;
+}
+
+.mic-button.speaking {
+    background: linear-gradient(135deg, #10b981, #059669);
+    animation: pulseGlowGreen 2s infinite;
+}
+
+@keyframes pulseGlowBlue {
     0% {
-        transform: scale(1);
-        opacity: 1;
+        box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7);
+    }
+
+    70% {
+        box-shadow: 0 0 0 20px rgba(59, 130, 246, 0);
     }
 
     100% {
-        transform: scale(1.5);
-        opacity: 0;
+        box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+    }
+}
+
+@keyframes pulseGlowGreen {
+    0% {
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+    }
+
+    70% {
+        box-shadow: 0 0 0 20px rgba(16, 185, 129, 0);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
     }
 }
 
@@ -617,6 +671,7 @@
         opacity: 0;
         transform: translateY(-10px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -726,5 +781,34 @@
     40% {
         transform: scale(1);
         opacity: 1;
+    }
+}
+
+/* New Engagement Animations */
+.mic-button.processing svg {
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.modal-title {
+    animation: titleGlow 3s ease-in-out infinite alternate;
+}
+
+@keyframes titleGlow {
+    from {
+        text-shadow: 0 0 5px rgba(96, 165, 250, 0.3);
+    }
+
+    to {
+        text-shadow: 0 0 15px rgba(167, 139, 250, 0.6);
     }
 }

@@ -34,6 +34,7 @@ class ConversationState:
     subject: Optional[str] = None
     is_speaking: bool = False
     should_stop: bool = False
+    current_task: Optional[asyncio.Task] = None # Track the active generation task
     session_id: Optional[str] = None
     turn_count: int = 0
 
@@ -70,6 +71,16 @@ class ConversationManager:
         if conversation_id in self.active_conversations:
             conv = self.active_conversations[conversation_id]
             conv.should_stop = True
+            
+            # Cancel the active task if it exists
+            if conv.current_task and not conv.current_task.done():
+                print(f"[ConversationManager] Cancelling active task for {conversation_id}")
+                conv.current_task.cancel()
+                try:
+                    await conv.current_task
+                except asyncio.CancelledError:
+                    print(f"[ConversationManager] Task for {conversation_id} successfully cancelled")
+            
             if conv.is_speaking:
                 await conv.websocket.send_json({
                     "type": "interrupt_acknowledged",
@@ -81,6 +92,19 @@ class ConversationManager:
             return
         
         conv = self.active_conversations[conversation_id]
+        
+        # 0. Handle interruption of existing task
+        if conv.current_task and not conv.current_task.done():
+            print(f"[ConversationManager] Interrupting existing task for {conversation_id} before new query")
+            conv.current_task.cancel()
+            try:
+                await conv.current_task
+            except asyncio.CancelledError:
+                pass
+
+        # Set the current task
+        conv.current_task = asyncio.current_task()
+        
         print(f"\n{'='*60}")
         print(f"[CONVERSATION] New message from user")
         print(f"  ID: {conversation_id} | Query: {query}")
