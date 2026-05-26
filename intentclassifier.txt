@@ -1,0 +1,32 @@
+# Smart Intent Classifier Logic
+
+The Smart Intent Classifier uses a 5-tier intelligent routing system to decide between reusing existing context (preutilized chunks) or performing a new retrieval. 
+
+Here is how the logic breaks down:
+
+### Tier 1: Clicked Follow-Ups (Absolute Priority)
+- **Logic:** The system first checks if the user's query came from clicking a pre-generated follow-up suggestion.
+- **Decision:** If the user clicked a follow-up, the system guarantees or strongly prefers reusing the cached context (`USE_CACHED_CONTEXT`). It assumes that since the system suggested the question based on the current context, the existing retrieved chunks are already perfectly suited to answer it.
+
+### Tier 2: Empty Conversation (Cold Start)
+- **Logic:** Checks if this is the very first message in the conversation window.
+- **Decision:** If there is no history, there is no context to reuse. It immediately triggers a new search (`RETRIEVE_NEW_CONTEXT`).
+
+### Tier 3: Meta-Conversational Queries (Self-Awareness)
+- **Logic:** The system scans the user's query for specific meta-patterns, such as "what was", "remind me", "summarize", "previous", or "last".
+- **Decision:** If the user is asking about the conversation itself rather than the knowledge base, it skips retrieval entirely and instructs the system to answer using the chat history (`ANSWER_FROM_HISTORY`).
+
+### Tier 4: Semantic Similarity Analysis (Smart Caching)
+- **Logic:** If the query doesn't hit the first three tiers, the system uses a sentence transformer model to convert the user's current query and the last 3 queries into vector embeddings. It then calculates the cosine similarity (a score from 0.0 to 1.0) between them.
+- **Decision:**
+  - High Similarity (>= 0.75): The new query is very similar to recent ones. The system confidently reuses the cached context (`USE_CACHED_CONTEXT`).
+  - Low Similarity (< 0.50): The query is vastly different from recent topics. The system assumes a topic change and triggers a new search (`RETRIEVE_NEW_CONTEXT`).
+
+### Tier 5: LLM Fallback (Edge Cases & Ambiguity)
+- **Logic:** If the similarity score falls in the middle (0.50 - 0.74), or if the semantic analysis is inconclusive, the system falls back to a Large Language Model (Gemini).
+- **Decision:** It bundles the recent conversation history, the similarity score, and the new query into a prompt and asks the LLM to analyze the user's intent. The LLM then makes the final intelligent decision to either `USE_CACHED_CONTEXT`, `RETRIEVE_NEW_CONTEXT`, or `ANSWER_FROM_HISTORY`.
+
+---
+
+### Summary for Presentation
+"Our smart intent classifier doesn't just guess. It cascades through 5 tiers. First, it honors UI clicks and handles cold starts. Then, it uses keyword matching for conversation-related questions. If it's a standard question, it uses lightning-fast vector similarity to see if we can reuse the data we just pulled. And for the really tricky, ambiguous questions, it relies on an LLM to read the subtext of the conversation and make the right call."

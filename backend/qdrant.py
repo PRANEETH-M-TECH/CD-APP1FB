@@ -49,7 +49,7 @@ def initialize():
     client = QC(
         url=os.environ.get("QDRANT_URL", "http://localhost:6333"),
         api_key=os.environ.get("QDRANT_API_KEY"),
-        timeout=120,  # 120 second timeout for slow cloud connections
+        timeout=5,  # Reduced from 120 to 5 seconds to prevent server startup hang if unreachable
         prefer_grpc=False,  # Use HTTP/REST instead of gRPC for better compatibility
         verify=False,  # Disable SSL certificate verification for self-signed certificates
     )
@@ -551,6 +551,13 @@ def hybrid_search(book_uuid: str, query: str, keywords: List[Dict], conceptual_s
         ranked_list.append((hybrid_score, scores["doc"]))
 
     ranked_list.sort(key=lambda x: x[0], reverse=True)
+
+    # Print the top 5 chunks with their scores
+    print("\n[HYBRID_SEARCH] Top 5 Hybrid Chunks:")
+    for score, doc in ranked_list[:5]:
+        print(f"  - Score: {score:.4f} | Chunk: {doc.get('text', '')[:100]}...")
+    print()
+
     return ranked_list[:10], semantic_results, normalized_bm25_results
 
 

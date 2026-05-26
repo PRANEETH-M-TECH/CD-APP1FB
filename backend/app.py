@@ -797,11 +797,22 @@ def generate_smart_followups(query: str, answer: str, top_chunks: List) -> List[
         class_level = None
         subject = None
         
-        for item in top_chunks[:3]:
+        print(f"\n{'='*80}")
+        print(f"[FOLLOWUPS] 🧠 GENERATING FOLLOW-UPS USING {len(top_chunks)} CHUNKS")
+        for idx, item in enumerate(top_chunks, 1):
             if isinstance(item, tuple) and len(item) >= 2:
                 # Format: (score, payload)
                 payload = item[1]
                 chapter_name = payload.get("chapter_name", "Unknown")
+                chunk_text = payload.get("text", "")
+                
+                print(f"[FOLLOWUPS]   --- Chunk {idx} (Chapter: {chapter_name}) ---")
+                clean_text = chunk_text.replace('\n', ' ').strip()
+                if len(clean_text) > 300:
+                    print(f"[FOLLOWUPS]   {clean_text[:300]}...\n")
+                else:
+                    print(f"[FOLLOWUPS]   {clean_text}\n")
+                
                 if chapter_name not in chapter_names and chapter_name != "Unknown":
                     chapter_names.append(chapter_name)
                 
@@ -810,6 +821,7 @@ def generate_smart_followups(query: str, answer: str, top_chunks: List) -> List[
                     class_level = payload.get("class_name", None)
                 if not subject:
                     subject = payload.get("subject", None)
+        print(f"{'='*80}\n")
         
         # Determine age-appropriate language level
         if class_level:
@@ -985,10 +997,17 @@ async def query_engine(
             classification = reform.get("classification", "general")
             chapter_ranking = reform.get("chapter_ranking", [])
             
-            print(f"[REFORMULATE] ✓ Original query: {query}")
-            print(f"[REFORMULATE] ✓ Reformulated: {reformulated_query}")
-            print(f"[REFORMULATE] ✓ Classification: {classification}")
-            print(f"[REFORMULATE] ✓ Top chapters identified: {len(chapter_ranking)}\n")
+            print("\n" + "🔴"*40)
+            print("🛑 RAW USER QUESTION:")
+            print(f"   \"{query}\"")
+            print("🔴"*40 + "\n")
+            
+            print("🟢"*40)
+            print("✅ REFORMULATED QUERY:")
+            print(f"   \"{reformulated_query}\"")
+            print(f"📊 CLASSIFICATION          : {classification}")
+            print(f"📚 TOP CHAPTERS IDENTIFIED : {len(chapter_ranking)}")
+            print("🟢"*40 + "\n")
             
         except Exception as e:
             print(f"[REFORMULATE] ✗ Error: {e}")
@@ -1257,11 +1276,9 @@ async def smart_query_engine(
         logger.info(f"[DEBUG] Query params: {dict(request.query_params)}")
         
         start_time = time.time()
-        print(f"\n{'='*80}")
-        print(f"[SMART QUERY] New query at {datetime.datetime.now().strftime('%H:%M:%S')}")
-        print(f"  Query: {query} | Book: {class_name} - {subject} | Session: {session_id}")
-        print(f"  UID: {uid}")  # Show UID in console
-        print(f"{'='*80}\n")
+        print(f"\n============================================================")
+        print(f"👤 USER QUESTION: '{query}'")
+        print(f"============================================================")
 
         try:
             # 1. Get or create session
@@ -1273,9 +1290,7 @@ async def smart_query_engine(
             if active_context_window:
                 last_action = active_context_window[-1].get("intent_type")
             
-            print(f"[CONTEXT] Last action: {last_action}")
-            print(f"[CONTEXT] Is clicked follow-up: {is_clicked_followup}")
-            print(f"[CONTEXT] History length: {len(session.get('full_history', []))} turns\n")
+            # 2. Determine the next action using 5-tier routing (UPDATED)
             
             # 2. Determine the next action using 5-tier routing (UPDATED)
             action_details = determine_next_action(
@@ -1292,10 +1307,13 @@ async def smart_query_engine(
             similarity_score = action_details.get("similarity_score", 0.0)
             tier = action_details.get("tier", "UNKNOWN")
             
-            print(f"[ACTION] Determined Action: {action}")
-            print(f"[ACTION] Tier: {tier}")
-            print(f"[ACTION] Reason: {reason}")
-            print(f"[ACTION] Similarity Score: {similarity_score:.3f}\n")
+            print(f"\n🧠 INTENT CLASSIFIER DECISION:")
+            print(f"   Tier: {tier}")
+            print(f"   Action: {action}")
+            print(f"   Reason: {reason}")
+            if similarity_score > 0:
+                print(f"   Semantic Score: {similarity_score:.3f}")
+            print(f"============================================================\n")
             
             # Send action info to the frontend for debugging/display
             yield f"data: {json.dumps({'type': 'intent', 'intent': action})}\n\n"
@@ -1309,7 +1327,6 @@ async def smart_query_engine(
 
             # 3. Execute the determined action
             if action == "RETRIEVE_NEW_CONTEXT":
-                print("[PATH] 🔍 New topic detected. Starting full retrieval pipeline...\n")
                 # If it's a new topic, start a new topic in the session manager
                 new_topic_name = action_details.get("new_topic_name", "New Topic")
                 session_manager.start_new_topic(session['session_id'], new_topic_name)
@@ -1324,9 +1341,8 @@ async def smart_query_engine(
                 keywords = reform.get("keywords", [])
                 chapter_ranking = reform.get("chapter_ranking", [])
                 conceptual_score = reform.get("conceptual_score", 0.5) # Extract conceptual_score
-                print(f"[REFORM] Reformulated for retrieval: {reformulated_query}\n")
-
-                # Perform hybrid search
+                
+                # Prepare cleaned keywords for search
                 # Clean keywords to ensured they are dictionaries of {'keyword': str, 'importance': float}
                 cleaned_keywords = []
                 for kw in keywords:
@@ -1350,15 +1366,12 @@ async def smart_query_engine(
                 session_manager.update_topic_chunks(session['session_id'], hybrid_results)
 
             elif action == "USE_CACHED_CONTEXT":
-                print("[PATH] ⚡ Follow-up detected. Using cached context...\n")
                 cached_chunks = session_manager.get_current_topic_chunks(session['session_id'])
                 if cached_chunks:
                     hybrid_results = cached_chunks
                     context = "\n\n---\n\n".join([doc["text"] for score, doc in hybrid_results[:10]])
-                    print(f"[REUSE] Successfully reused {len(hybrid_results)} cached chunks.\n")
                 else:
                     # Fallback if cache is somehow empty
-                    print("[WARN] 'USE_CACHED_CONTEXT' chosen, but cache was empty. Falling back to full retrieval.\n")
                     action = "RETRIEVE_NEW_CONTEXT" # Force retrieval
                     # This will re-run the logic in the next step, might need a refactor later
                     # For now, we will just re-do the retrieval logic here.
@@ -1368,6 +1381,8 @@ async def smart_query_engine(
                     reformulated_query = reform.get("reformulated_query", query)
                     keywords = reform.get("keywords", [])
                     chapter_ranking = reform.get("chapter_ranking", [])
+                    chapter_ranking = reform.get("chapter_ranking", [])
+                    
                     # Clean keywords
                     cleaned_keywords = []
                     for kw in keywords:
@@ -1387,7 +1402,7 @@ async def smart_query_engine(
                 # For follow-ups, we still want to reformulate the query for clarity in the prompt
                 reform = context_aware_reformulate(query, active_context_window)
                 reformulated_query = reform.get("reformulated_query", query)
-                print(f"[REFORM] Context-aware reformulation for follow-up: {reformulated_query}\n")
+                reformulated_query = reform.get("reformulated_query", query)
 
             # 4. Generate Answer
             if action in ["RETRIEVE_NEW_CONTEXT", "USE_CACHED_CONTEXT"]:
@@ -1407,7 +1422,6 @@ RETRIEVED INFORMATION:
 Answer the current question clearly and educationally.
 """
             else: # ANSWER_FROM_HISTORY
-                print("[PATH] 🗣️ Answering directly from history...\n")
                 context_summary = ""
                 for turn in session.get("full_history", []):
                     answer_preview = turn.get('answer', '')[:200]
@@ -1426,7 +1440,6 @@ QUESTION:
 Answer the question based only on the history.
 """
 
-            print(f"[LLM] Streaming answer for action: {action}...\n")
             # Use new Gemini client wrapper
             response_stream = qdrant.gemini_client.models.generate_content_stream(
                 model=qdrant.generation_model_name,
@@ -1438,12 +1451,10 @@ Answer the question based only on the history.
                     full_answer += chunk.text
                     yield f"data: {json.dumps({'display_text': chunk.text})}\n\n"
                     await asyncio.sleep(0)
-            print(f"[LLM] ✓ Answer generated ({len(full_answer)} chars)\n")
 
             # 5. Generate and send follow-ups (if not answering from history)
             follow_ups = []
             if action != "ANSWER_FROM_HISTORY":
-                print("[FOLLOWUPS] Generating answer-specific follow-ups...\n")
                 follow_ups = generate_smart_followups(reformulated_query, full_answer, hybrid_results[:5])
             
             yield f"data: {json.dumps({'type': 'followups', 'followups': follow_ups})}\n\n"
@@ -1614,10 +1625,10 @@ Answer the question based only on the history.
             yield f"data: {json.dumps(metadata)}\n\n"
             
             elapsed = time.time() - start_time
-            print(f"{'='*80}")
-            print(f"[COMPLETE] Smart query processed in {elapsed:.2f}s")
-            print(f"[COMPLETE] Action: {action} | Turn: {current_turn_number}")
-            print(f"{'='*80}\n")
+            print(f"\n{'='*60}")
+            print(f"✅ DEMO COMPLETE: Query processed in {elapsed:.2f}s")
+            print(f"   Final Action Taken: {action} | Turn: {current_turn_number}")
+            print(f"{'='*60}\n")
             
             yield "data: [DONE]\n\n"
 

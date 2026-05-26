@@ -84,7 +84,7 @@ def determine_next_action(
     if is_clicked_followup:
         # If parent query used cache, follow-up definitely can too
         if last_action == "USE_CACHED_CONTEXT":
-            print(f"[TIER 1] ⚡ Clicked follow-up + cached parent → Guaranteed cache reuse")
+            # print(f"[TIER 1] ⚡ Clicked follow-up + cached parent → Guaranteed cache reuse")
             return {
                 "action": "USE_CACHED_CONTEXT",
                 "reason": "Pre-generated follow-up with cached parent context",
@@ -94,7 +94,7 @@ def determine_next_action(
             }
         
         # Even if parent did retrieval, follow-ups are generated from those chunks
-        print(f"[TIER 1] ✓ Clicked follow-up → Strong cache preference")
+        # print(f"[TIER 1] ✓ Clicked follow-up → Strong cache preference")
         return {
             "action": "USE_CACHED_CONTEXT",
             "reason": "Pre-generated follow-ups are contextually guaranteed to be related",
@@ -109,7 +109,7 @@ def determine_next_action(
     
     # === TIER 2: EMPTY CONVERSATION ===
     if not conversation_window:
-        print(f"[TIER 2] 🆕 First query → Retrieval required")
+        # print(f"[TIER 2] 🆕 First query → Retrieval required")
         return {
             "action": "RETRIEVE_NEW_CONTEXT",
             "new_topic_name": current_query[:50],  # Use query as initial topic name
@@ -126,7 +126,7 @@ def determine_next_action(
     ]
     query_lower = current_query.lower()
     if any(pattern in query_lower for pattern in meta_patterns):
-        print(f"[TIER 3] 💬 Meta-conversational query detected → Answer from history")
+        # print(f"[TIER 3] 💬 Meta-conversational query detected → Answer from history")
         return {
             "action": "ANSWER_FROM_HISTORY",
             "new_topic_name": None,
@@ -146,21 +146,22 @@ def determine_next_action(
             similarity_scores = calculate_query_similarity(current_query, recent_queries, embedder)
             max_similarity = max(similarity_scores) if similarity_scores else 0.0
             
-            print(f"[TIER 4] 🔍 Semantic similarity analysis:")
-            print(f"[TIER 4]   Current query: '{current_query[:50]}...'")
-            print(f"[TIER 4]   Comparing with {len(recent_queries)} recent queries")
-            for i, (prev_q, score) in enumerate(zip(recent_queries, similarity_scores)):
-                print(f"[TIER 4]     {i+1}. '{prev_q[:40]}...' → {score:.3f}")
-            print(f"[TIER 4]   Max similarity: {max_similarity:.3f}")
+            # print(f"[TIER 4] 🔍 Semantic similarity analysis:")
+            # print(f"[TIER 4]   Current query: '{current_query[:50]}...'")
+            # print(f"[TIER 4]   Comparing with {len(recent_queries)} recent queries")
+            # for i, (prev_q, score) in enumerate(zip(recent_queries, similarity_scores)):
+            #     print(f"[TIER 4]     {i+1}. '{prev_q[:40]}...' → {score:.3f}")
+            # print(f"[TIER 4]   Max similarity: {max_similarity:.3f}")
         except Exception as e:
             print(f"[TIER 4] ⚠️ Error during similarity calculation: {e}")
             max_similarity = 0.0
     else:
-        print(f"[TIER 4] ⚠️ No embedder provided, skipping similarity check")
+        # print(f"[TIER 4] ⚠️ No embedder provided, skipping similarity check")
+        pass
     
     # High similarity → Cache reuse
     if max_similarity >= HIGH_SIMILARITY_THRESHOLD:
-        print(f"[TIER 4] ⚡ High similarity ({max_similarity:.3f}) → Cache reuse")
+        # print(f"[TIER 4] ⚡ High similarity ({max_similarity:.3f}) → Cache reuse")
         return {
             "action": "USE_CACHED_CONTEXT",
             "new_topic_name": None,
@@ -173,7 +174,7 @@ def determine_next_action(
     # But double-check it's not a meta-query first
     if max_similarity < MEDIUM_SIMILARITY_THRESHOLD and len(conversation_window) >= 2:
         if not any(p in query_lower for p in meta_patterns):
-            print(f"[TIER 4] 🔍 Low similarity ({max_similarity:.3f}) → New retrieval")
+            # print(f"[TIER 4] 🔍 Low similarity ({max_similarity:.3f}) → New retrieval")
             return {
                 "action": "RETRIEVE_NEW_CONTEXT",
                 "new_topic_name": current_query[:50],
@@ -185,7 +186,7 @@ def determine_next_action(
 
     # === TIER 5: LLM FALLBACK FOR EDGE CASES ===
     # Medium similarity (0.50-0.75) or uncertain cases
-    print(f"[TIER 5] 🤖 LLM classifier for edge case (similarity: {max_similarity:.3f})")
+    # print(f"[TIER 5] 🤖 LLM classifier for edge case (similarity: {max_similarity:.3f})")
     
     # Build a summary of the last few turns for the LLM prompt.
     context_summary = ""
@@ -266,7 +267,7 @@ Analyze the user's intent and respond in the following JSON format. Choose ONLY 
         if "action" not in result or result["action"] not in ["USE_CACHED_CONTEXT", "RETRIEVE_NEW_CONTEXT", "ANSWER_FROM_HISTORY"]:
              raise ValueError("LLM response missing or has invalid 'action'.")
 
-        print(f"[LLM CLASSIFIER] ✓ Action determined: {result['action']}")
+        # print(f"[LLM CLASSIFIER] ✓ Action determined: {result['action']}")
         
         return {
             "action": result["action"],
