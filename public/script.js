@@ -8,11 +8,15 @@ document.addEventListener('DOMContentLoaded', () => {
         setupUserPage();
     }
 
-    // Global visibility change handler to stop TTS
+    // Global visibility change handler to stop TTS (cloud + browser)
     document.addEventListener('visibilitychange', () => {
-        if (document.hidden && window.speechSynthesis) {
+        if (document.hidden) {
             console.log('[Global] Tab hidden, stopping TTS.');
-            window.speechSynthesis.cancel();
+            if (window.ttsManager) {
+                window.ttsManager.stop();
+            } else if (window.speechSynthesis) {
+                window.speechSynthesis.cancel();
+            }
             // Reset all speak buttons
             document.querySelectorAll('.speak-btn').forEach(btn => btn.textContent = '🔊');
         }
@@ -715,6 +719,7 @@ function setupUserPage() {
         // Create AI message card with loading state
         let intentType = 'independent';
         let followups = [];
+        let bufferedFollowups = null;
         let fullResponse = "";
         let fullReadText = "";
 
@@ -747,6 +752,37 @@ function setupUserPage() {
             }
         }
 
+        // ── Answer Preference: start streaming pipeline for audio-output modes ──
+        const _isAudioOutputMode = window.answerPreferenceManager &&
+            window.answerPreferenceManager.isAudioOutputMode();
+        if (_isAudioOutputMode && window.ttsPipeline) {
+            // Wire display callback: appends text to the contentDiv as chunks arrive
+            window.ttsPipeline.onDisplayChunk = function(textChunk, chunkId) {
+                fullResponse += textChunk;
+                contentDiv.innerHTML = marked.parse(fullResponse);
+                const isNearBottom = (chatHistory.scrollHeight - chatHistory.scrollTop - chatHistory.clientHeight) < 100;
+                if (isNearBottom) chatHistory.scrollTop = chatHistory.scrollHeight;
+            };
+            window.ttsPipeline.onComplete = function() {
+                console.log('[PLAYBACK] All chunks complete for this query.');
+                const btn = window.ttsPipeline._activeBtn || window.ttsPipeline._findActiveButton();
+                if (btn) {
+                    btn.textContent = '🔊';
+                    btn.title = 'Read Aloud';
+                }
+                // Reset Voice Panel State if AI Voice Mode
+                if (window.answerPreferenceManager && window.answerPreferenceManager.currentMode === 'audio_audio') {
+                    window.answerPreferenceManager.setVoicePanelState('idle');
+                }
+                // Render follow-ups now that audio is finished!
+                if (bufferedFollowups) {
+                    addFollowUpsUI(thinkingCard, bufferedFollowups);
+                }
+            };
+            window.ttsPipeline.start();
+            console.log('[STREAM] Gemini Stream Started (audio-output mode: ' + window.answerPreferenceManager.currentMode + ')');
+        }
+
         const source = new EventSource(`/api/smart_query?${params.toString()}`);
 
         source.onmessage = function (event) {
@@ -765,12 +801,18 @@ function setupUserPage() {
                     }
                 }
 
-                // Speak the response
-                if (fullReadText) {
-                    const utterance = new SpeechSynthesisUtterance(fullReadText);
-                    speechSynthesis.cancel();
-                    speechSynthesis.speak(utterance);
+                // ── Answer Preference: flush streaming pipeline on stream end ──
+                if (_isAudioOutputMode && window.ttsPipeline) {
+                    window.ttsPipeline.flush();
+                } else {
+                    // For non-audio modes, render follow-ups immediately upon completed answer text stream
+                    if (bufferedFollowups) {
+                        addFollowUpsUI(thinkingCard, bufferedFollowups);
+                    }
                 }
+
+                // Speak the response via ttsManager (on-demand via 🔊 button — no auto-play here)
+                // Auto-play is intentionally disabled; user clicks 🔊 on each card to listen.
 
                 chatHistory.scrollTop = chatHistory.scrollHeight;
                 return;
@@ -785,10 +827,9 @@ function setupUserPage() {
                 }
 
                 if (data.type === 'followups') {
-                    followups = data.followups || [];
-                    currentFollowUps = followups;
-                    // Add follow-up UI to sticky panel (NO auto-scroll)
-                    addFollowUpsUI(thinkingCard, followups);
+                    bufferedFollowups = data.followups || [];
+                    currentFollowUps = bufferedFollowups;
+                    // Do NOT render follow-up suggestions yet! They will be rendered post-learning.
                 }
 
                 if (data.type === 'metadata') {
@@ -801,14 +842,23 @@ function setupUserPage() {
                 }
 
                 if (data.display_text) {
-                    fullResponse += data.display_text;
-                    contentDiv.innerHTML = marked.parse(fullResponse);
+                    // ── Answer Preference: audio-output modes delegate text display
+                    //    to the StreamingAudioPipeline (which syncs text with audio).
+                    //    Text-output modes continue to render directly as before.
+                    if (_isAudioOutputMode && window.ttsPipeline) {
+                        // Pipeline onDisplayChunk callback handles the DOM update
+                        window.ttsPipeline.pushToken(data.display_text);
+                    } else {
+                        // Existing behavior — unchanged for text_text and audio_text
+                        fullResponse += data.display_text;
+                        contentDiv.innerHTML = marked.parse(fullResponse);
 
-                    // Only scroll if displaying content (NOT for follow-ups)
-                    // Check if user is near bottom before scrolling
-                    const isNearBottom = (chatHistory.scrollHeight - chatHistory.scrollTop - chatHistory.clientHeight) < 100;
-                    if (isNearBottom) {
-                        chatHistory.scrollTop = chatHistory.scrollHeight;
+                        // Only scroll if displaying content (NOT for follow-ups)
+                        // Check if user is near bottom before scrolling
+                        const isNearBottom = (chatHistory.scrollHeight - chatHistory.scrollTop - chatHistory.clientHeight) < 100;
+                        if (isNearBottom) {
+                            chatHistory.scrollTop = chatHistory.scrollHeight;
+                        }
                     }
                 }
 
@@ -818,6 +868,10 @@ function setupUserPage() {
 
                 if (data.error) {
                     contentDiv.innerHTML = `<p class="error-message">Error: ${data.error}</p>`;
+                    // Stop pipeline if running
+                    if (_isAudioOutputMode && window.ttsPipeline) {
+                        window.ttsPipeline.stop();
+                    }
                     source.close();
                     submitButton.removeAttribute('disabled');
                     listChaptersBtn.classList.remove('hidden');
@@ -831,6 +885,9 @@ function setupUserPage() {
         source.onerror = function (error) {
             console.error('EventSource failed:', error);
             contentDiv.innerHTML = `<p class="error-message">Connection error. Please try again.</p>`;
+            if (window.answerPreferenceManager && window.answerPreferenceManager.currentMode === 'audio_audio') {
+                window.answerPreferenceManager.setVoicePanelState('idle');
+            }
             source.close();
             submitButton.removeAttribute('disabled');
             listChaptersBtn.classList.remove('hidden');
@@ -844,6 +901,13 @@ function setupUserPage() {
         const messageDiv = document.createElement("div");
         messageDiv.className = "ai-card fade-in";
 
+        const isHiddenMode = window.answerPreferenceManager && 
+            (window.answerPreferenceManager.currentMode === 'text_text' || 
+             window.answerPreferenceManager.currentMode === 'text_audio' || 
+             window.answerPreferenceManager.currentMode === 'audio_text' ||
+             window.answerPreferenceManager.currentMode === 'audio_audio');
+        const speakBtnStyle = isHiddenMode ? 'display: none;' : '';
+
         const header = `
             <div class="ai-card-header">
                 <div class="flex items-center gap-2">
@@ -854,7 +918,7 @@ function setupUserPage() {
                     <span class="turn-indicator">Turn ${turnNumber}</span>
                     <button class="copy-btn" onclick="copyMessage(this)" title="Copy">📋</button>
                     <button class="save-bag-btn" onclick="saveToBag(this)" title="Save to Bag" style="background:none; border:none; cursor:pointer; font-size:1.1rem; margin-left:4px;">🎒</button>
-                    <button class="speak-btn" onclick="speakMessage(this)" title="Read Aloud">🔊</button>
+                    <button class="speak-btn" onclick="speakMessage(this)" title="Read Aloud" style="${speakBtnStyle}">🔊</button>
                 </div>
             </div>
             <div class="markdown-content"></div>
@@ -1001,21 +1065,41 @@ function setupUserPage() {
 
             const formatted = marked.parse(tableMd);
             thinkingMessage.querySelector('.markdown-content').innerHTML = formatted;
-            // Always speak the chapters list
-            speechSynthesis.cancel();
-            speechSynthesis.speak(new SpeechSynthesisUtterance("Here are the chapters."));
+            // Speak a short confirmation via ttsManager
+            if (window.ttsManager) {
+                window.ttsManager.speak('Here are the chapters.');
+            } else {
+                speechSynthesis.cancel();
+                speechSynthesis.speak(new SpeechSynthesisUtterance('Here are the chapters.'));
+            }
 
         } catch (error) {
             thinkingMessage.querySelector('.markdown-content').innerHTML = `<p style="color: red;"><strong>Error:</strong> ${error.message}</p>`;
-            // Always speak the error message
-            speechSynthesis.cancel();
-            speechSynthesis.speak(new SpeechSynthesisUtterance(`Sorry, an error occurred: ${error.message}`));
+            if (window.ttsManager) {
+                window.ttsManager.speak(`Sorry, an error occurred: ${error.message}`);
+            } else {
+                speechSynthesis.cancel();
+                speechSynthesis.speak(new SpeechSynthesisUtterance(`Sorry, an error occurred: ${error.message}`));
+            }
         } finally {
             submitButton.removeAttribute('disabled');
             listChaptersBtn.classList.remove('hidden');
             chatHistory.scrollTop = chatHistory.scrollHeight;
         }
     }
+
+    // ── Answer Preference: global mic-query bridge ────────────────────────────
+    // Called by AnswerPreferenceManager when the preference mic finishes
+    // transcribing. Places the transcript into the query pipeline exactly as
+    // if the user had typed it and clicked Send.
+    window.submitSmartQueryFromMic = function(transcript) {
+        console.log('[MODE] submitSmartQueryFromMic called with:', transcript);
+        if (!selectedBook) {
+            console.warn('[MODE] No book selected — mic query ignored.');
+            return;
+        }
+        submitSmartQuery(transcript, false);
+    };
 }
 
 /**
@@ -1097,13 +1181,20 @@ function appendAIResponse(displayText, readText = '') {
     const messageDiv = document.createElement("div");
     messageDiv.className = "ai-card fade-in";
 
+    const isHiddenMode = window.answerPreferenceManager && 
+        (window.answerPreferenceManager.currentMode === 'text_text' || 
+         window.answerPreferenceManager.currentMode === 'text_audio' || 
+         window.answerPreferenceManager.currentMode === 'audio_text' ||
+         window.answerPreferenceManager.currentMode === 'audio_audio');
+    const speakBtnStyle = isHiddenMode ? 'display: none;' : '';
+
     const header = `
         <div class="flex justify-between items-center mb-2">
           <h2 class="font-semibold text-gray-700">🤖 AI Response</h2>
           <div>
             <button class="copy-btn" onclick="copyMessage(this)" title="Copy">📋</button>
             <button class="save-bag-btn" onclick="saveToBag(this)" title="Save to Bag" style="background:none; border:none; cursor:pointer; font-size:1.1rem; margin-left:4px;">🎒</button>
-            <button class="speak-btn" onclick="speakMessage(this)" title="Read Aloud">🔊</button>
+            <button class="speak-btn" onclick="speakMessage(this)" title="Read Aloud" style="${speakBtnStyle}">🔊</button>
           </div>
         </div>`;
 
@@ -1112,13 +1203,7 @@ function appendAIResponse(displayText, readText = '') {
     chatHistory.appendChild(messageDiv);
     chatHistory.scrollTop = chatHistory.scrollHeight;
 
-    // Auto-read by default
-    if (readText) {
-        speechSynthesis.cancel(); // Stop any previous speech
-        const utterance = new SpeechSynthesisUtterance(readText);
-        speechSynthesis.speak(utterance);
-    }
-
+    // On-demand only — user clicks 🔊. No auto-play.
     return messageDiv; // Return the element
 }
 
@@ -1158,21 +1243,42 @@ window.saveToBag = function (btn) {
 }
 
 
-// Modified window.speakMessage to use the global mute functionality and correctly get content
+// speakMessage — called by the 🔊 button on every AI card
+// Toggles: click to speak → click again to stop → click again to repeat
 window.speakMessage = function (button) {
-    // Determine the content to speak. If this is a re-read, get the display text.
-    const card = button.closest('.ai-card');
-    const content = card ? card.querySelector('.markdown-content').innerText : ''; // Fallback for auto-read
+    // Intercept in Tutor Mode when the streaming pipeline is active
+    if (window.answerPreferenceManager && window.answerPreferenceManager.currentMode === 'text_audio' && window.ttsPipeline && window.ttsPipeline.isActive) {
+        window.ttsPipeline.togglePlayPause(button);
+        return;
+    }
 
-    if (speechSynthesis.speaking) {
-        speechSynthesis.cancel();
-        // Reset all speak buttons to '🔊'
+    const card    = button.closest('.ai-card');
+    const content = card ? card.querySelector('.markdown-content').innerText : '';
+
+    if (!window.ttsManager) {
+        // Graceful fallback if ttsManager hasn't loaded yet
+        if (speechSynthesis.speaking) {
+            speechSynthesis.cancel();
+            document.querySelectorAll('.speak-btn').forEach(btn => btn.textContent = '🔊');
+        } else {
+            const utterance = new SpeechSynthesisUtterance(content);
+            utterance.onstart = () => { if (button) button.textContent = '⏹'; };
+            utterance.onend   = () => { if (button) button.textContent = '🔊'; };
+            speechSynthesis.speak(utterance);
+        }
+        return;
+    }
+
+    if (window.ttsManager.isSpeaking) {
+        // Currently speaking → stop
+        window.ttsManager.stop();
+        // Reset all other speak buttons too
         document.querySelectorAll('.speak-btn').forEach(btn => btn.textContent = '🔊');
     } else {
-        const utterance = new SpeechSynthesisUtterance(content);
-        utterance.onstart = () => { if (button) button.textContent = '🔇'; };
-        utterance.onend = () => { if (button) button.textContent = '🔊'; };
-        speechSynthesis.speak(utterance);
+        // Not speaking → start (or repeat if same card)
+        // Reset other buttons first
+        document.querySelectorAll('.speak-btn').forEach(btn => btn.textContent = '🔊');
+        window.ttsManager.speak(content, button);
     }
 }
 

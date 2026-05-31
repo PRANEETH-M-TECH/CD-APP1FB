@@ -1,0 +1,10 @@
+**Student's Details:**
+Class: {class_name}
+Subject: {subject}
+
+**Student's Question:** "{raw_query}"
+
+**Relevant Textbook Context:**
+{context}
+
+Now, answer the student's question as their AI Teacher.

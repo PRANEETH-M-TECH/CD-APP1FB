@@ -322,11 +322,8 @@
 
 /* FOLLOW-UPS CONTAINER - REDESIGNED FOR VISIBILITY */
 .voice-followups-container {
-    position: absolute;
-    bottom: 150px;
-    /* Float above the controls */
-    left: 1.5rem;
-    right: 1.5rem;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
     padding: 1rem;
     background: rgba(15, 23, 42, 0.95);
     backdrop-filter: blur(15px);
@@ -335,8 +332,9 @@
     max-height: 200px;
     overflow-y: auto;
     z-index: 100;
-    box-shadow: 0 -10px 25px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
     animation: slideUpFade 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    flex-shrink: 0;
 }
 
 @keyframes slideUpFade {
@@ -811,4 +809,692 @@
     to {
         text-shadow: 0 0 15px rgba(167, 139, 250, 0.6);
     }
+}
+
+/* =====================================================================
+   ANSWER PREFERENCE MODE — STYLES
+   ===================================================================== */
+
+/* ── Answer Preference Bar ─────────────────────────────────────────── */
+.answer-preference-bar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* ── Answer Preference Dropdown ────────────────────────────────────── */
+.answer-preference-select {
+    font-size: 12px;
+    font-weight: 600;
+    color: #4338ca;
+    border: 1px solid #c7d2fe;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #f8faff 0%, #eef2ff 100%);
+    padding: 4px 24px 4px 10px;
+    cursor: pointer;
+    outline: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236366f1' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    box-shadow: 0 2px 8px rgba(99, 102, 241, 0.12);
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.answer-preference-select:focus {
+    border-color: #6366f1;
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+}
+
+.answer-preference-select:hover {
+    border-color: #818cf8;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.18);
+}
+
+/* ── Active Mode Badge ─────────────────────────────────────────────── */
+.answer-pref-badge {
+    display: inline-flex;
+    align-items: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: #4f46e5;
+    background: rgba(99, 102, 241, 0.08);
+    border: 1px solid rgba(99, 102, 241, 0.2);
+    border-radius: 999px;
+    padding: 2px 8px;
+    white-space: nowrap;
+    letter-spacing: 0.2px;
+    animation: badgeFadeIn 0.3s ease;
+    transition: all 0.3s ease;
+}
+
+@keyframes badgeFadeIn {
+    from { opacity: 0; transform: scale(0.9); }
+    to   { opacity: 1; transform: scale(1); }
+}
+
+/* ── Preference Mic Button ─────────────────────────────────────────── */
+.pref-mic-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 18px;
+    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+    color: white;
+    border: none;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35);
+    white-space: nowrap;
+    position: relative;
+    overflow: hidden;
+}
+
+.pref-mic-btn:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(99, 102, 241, 0.45);
+}
+
+.pref-mic-btn:active:not(:disabled) {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+}
+
+/* Idle state — default gradient already set above */
+
+/* Listening state */
+.pref-mic-btn.pref-mic-listening {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    box-shadow: 0 4px 14px rgba(239, 68, 68, 0.4);
+    animation: prefMicPulse 1.4s ease-in-out infinite;
+}
+
+@keyframes prefMicPulse {
+    0%, 100% {
+        box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.5);
+    }
+    50% {
+        box-shadow: 0 0 0 10px rgba(239, 68, 68, 0);
+    }
+}
+
+/* Processing state */
+.pref-mic-btn.pref-mic-processing {
+    background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+    box-shadow: 0 4px 14px rgba(249, 115, 22, 0.4);
+    cursor: not-allowed;
+}
+
+/* Disabled state */
+.pref-mic-btn:disabled {
+    background: linear-gradient(135deg, #94a3b8 0%, #64748b 100%);
+    box-shadow: none;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.pref-mic-icon {
+    font-size: 16px;
+    line-height: 1;
+}
+
+.pref-mic-label {
+    font-size: 13px;
+}
+
+/* ── Pref Mic Status Text ──────────────────────────────────────────── */
+.pref-mic-status-text {
+    font-size: 12px;
+    font-style: italic;
+    color: #6366f1;
+    max-width: 260px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    transition: opacity 0.2s;
+}
+
+/* ── Pref Mic Warning Message ─────────────────────────────────────── */
+.pref-mic-warning-msg {
+    margin-top: 6px;
+    padding: 6px 12px;
+    background: rgba(251, 191, 36, 0.1);
+    border: 1px solid rgba(251, 191, 36, 0.4);
+    border-radius: 8px;
+    font-size: 12px;
+    color: #92400e;
+    font-weight: 500;
+}
+
+/* ── Stream Chunk Display ─────────────────────────────────────────── */
+.stream-chunk {
+    display: inline;
+    transition: background-color 0.25s ease;
+    border-radius: 3px;
+    padding: 0 1px;
+}
+
+.stream-chunk.playing {
+    background-color: rgba(99, 102, 241, 0.12);
+    box-shadow: 0 0 0 1px rgba(99, 102, 241, 0.2);
+}
+
+/* ── Pref-mic wrapper in audio-input modes ────────────────────────── */
+#pref-mic-wrapper {
+    align-items: center;
+    gap: 10px;
+    padding: 4px 0;
+    animation: slideUpFadeIn 0.25s ease;
+}
+
+@keyframes slideUpFadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Responsive: compact the dropdown on narrow screens ───────────── */
+@media (max-width: 900px) {
+    .answer-preference-select {
+        font-size: 11px;
+        padding: 3px 20px 3px 8px;
+    }
+
+    .answer-pref-badge {
+        display: none;
+    }
+}
+
+/* =====================================================================
+   UNIFIED AI CONTROL HEADER
+   ===================================================================== */
+
+.ai-control-header {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    background: #ffffff;
+    border-bottom: 1px solid #e5e7eb;
+    box-shadow: 0 2px 8px -3px rgba(99, 102, 241, 0.12);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+/* Row layout shared */
+.ai-ctrl-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 16px;
+}
+
+/* Top row: identity + utility buttons */
+.ai-ctrl-row--top {
+    border-bottom: 1px solid #f1f5f9;
+    padding: 9px 16px;
+}
+
+/* Controls row: Mode + Engine + Voice */
+.ai-ctrl-row--controls {
+    padding: 6px 16px;
+    gap: 8px;
+    justify-content: flex-start;
+    background: #fafaff;
+}
+
+/* ── Utility Buttons (Chapters, Summarize) ─────────────────────────── */
+.ai-util-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 10px;
+    border: none;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    letter-spacing: 0.2px;
+}
+
+.ai-util-btn--indigo {
+    background: linear-gradient(135deg, #6366f1, #4f46e5);
+    color: white;
+    box-shadow: 0 2px 6px rgba(99, 102, 241, 0.3);
+}
+
+.ai-util-btn--indigo:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(99, 102, 241, 0.4);
+}
+
+.ai-util-btn--emerald {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: white;
+    box-shadow: 0 2px 6px rgba(16, 185, 129, 0.3);
+}
+
+.ai-util-btn--emerald:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(16, 185, 129, 0.4);
+}
+
+/* ── Control Groups (Mode / Engine / Voice) ────────────────────────── */
+.ai-ctrl-group {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.ai-ctrl-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+    user-select: none;
+}
+
+.ai-ctrl-select {
+    font-size: 12px;
+    font-weight: 600;
+    color: #374151;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    background: #ffffff;
+    padding: 3px 22px 3px 8px;
+    cursor: pointer;
+    outline: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%236366f1' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 6px center;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    max-width: 130px;
+}
+
+.ai-ctrl-select:focus {
+    border-color: #6366f1;
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.15);
+}
+
+.ai-ctrl-select:hover {
+    border-color: #a5b4fc;
+}
+
+.ai-ctrl-divider {
+    width: 1px;
+    height: 18px;
+    background: #e2e8f0;
+    border-radius: 1px;
+    flex-shrink: 0;
+}
+
+/* =====================================================================
+   CLEAN EMBEDDED CHAT INPUT
+   ===================================================================== */
+
+.chat-input-container {
+    padding: 10px 12px 12px;
+    background: #ffffff;
+    border-top: 1px solid #e5e7eb;
+}
+
+.chat-input-form {
+    display: flex;
+    align-items: flex-end;
+    gap: 0;
+    background: #f8fafc;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 8px 8px 8px 14px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.chat-input-form:focus-within {
+    border-color: #6366f1;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    background: #ffffff;
+}
+
+.chat-input-textarea {
+    flex: 1;
+    background: transparent;
+    border: none;
+    resize: none;
+    outline: none;
+    font-size: 13.5px;
+    color: #374151;
+    min-height: 36px;
+    max-height: 120px;
+    line-height: 1.5;
+    padding: 0;
+    font-family: inherit;
+}
+
+.chat-input-textarea::placeholder {
+    color: #9ca3af;
+}
+
+.chat-input-textarea:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Inline action buttons row */
+.chat-input-actions {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-shrink: 0;
+    padding-left: 6px;
+}
+
+.chat-action-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.chat-action-btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+.chat-action-btn--mic {
+    background: linear-gradient(135deg, #8b5cf6, #ec4899);
+    color: white;
+}
+
+.chat-action-btn--mic:hover:not(:disabled) {
+    transform: scale(1.08);
+    box-shadow: 0 3px 8px rgba(139, 92, 246, 0.4);
+}
+
+.chat-action-btn--send {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    color: white;
+}
+
+.chat-action-btn--send:hover:not(:disabled) {
+    transform: scale(1.08);
+    box-shadow: 0 3px 8px rgba(59, 130, 246, 0.4);
+}
+
+.chat-action-btn--send:disabled {
+    background: #cbd5e1;
+}
+
+/* Inline Preference Mic Action Button */
+.chat-action-btn--pref-mic {
+    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+    color: white;
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    flex-shrink: 0;
+    box-shadow: 0 2px 6px rgba(99, 102, 241, 0.2);
+}
+
+.chat-action-btn--pref-mic:hover:not(:disabled) {
+    transform: scale(1.08);
+    box-shadow: 0 4px 10px rgba(99, 102, 241, 0.35);
+}
+
+.chat-action-btn--pref-mic:active:not(:disabled) {
+    transform: scale(0.95);
+}
+
+.chat-action-btn--pref-mic.pref-mic-listening {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
+    box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.3) !important;
+    animation: prefMicPulse 1.4s ease-in-out infinite !important;
+}
+
+.chat-action-btn--pref-mic.pref-mic-processing {
+    background: linear-gradient(135deg, #f97316 0%, #ea580c 100%) !important;
+    box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.3) !important;
+    cursor: not-allowed;
+}
+
+/* ── Modern Card-Style Preference Controls ────────────────────────── */
+.learning-preferences-card {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.learning-preferences-card:hover {
+    border-color: #cbd5e1;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+
+.modern-card-select {
+    font-size: 11px;
+    font-weight: 600;
+    color: #475569;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    background: #f8fafc;
+    padding: 5px 20px 5px 8px;
+    cursor: pointer;
+    outline: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%23475569' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 6px center;
+    transition: all 0.2s ease;
+    width: 100%;
+}
+
+.modern-card-select:focus {
+    border-color: #6366f1;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
+    background: #ffffff;
+}
+
+.modern-card-select:hover {
+    border-color: #cbd5e1;
+    background: #ffffff;
+}
+
+/* ── Secondary Helper Buttons ─────────────────────────────────────────── */
+.modern-util-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 8px;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    font-size: 10px;
+    font-weight: 600;
+    color: #475569;
+    background: #ffffff;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.modern-util-btn:hover {
+    background: #f8fafc;
+    border-color: #cbd5e1;
+    color: #1e293b;
+    transform: translateY(-0.5px);
+}
+
+.pref-mic-status-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    animation: slideUpFadeIn 0.2s ease;
+}
+
+/* ── Glassmorphic Learning Mode Overlay ────────────────────────────── */
+#learning-mode-overlay {
+    backdrop-filter: blur(12px) saturate(180%);
+    -webkit-backdrop-filter: blur(12px) saturate(180%);
+    transition: opacity 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#learning-mode-overlay:not(.opacity-0) {
+    pointer-events: auto !important;
+}
+
+.learning-mode-modal {
+    transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.learning-mode-card {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.learning-mode-card:hover {
+    transform: translateY(-2px);
+    border-color: #6366f1 !important;
+    box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.18);
+}
+
+.learning-mode-card:active {
+    transform: translateY(0) scale(0.98);
+}
+
+.card-radio-circle {
+    transition: all 0.2s ease;
+}
+
+/* Learning Mode Trigger Styling */
+#learning-mode-trigger {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#learning-mode-trigger:hover {
+    transform: translateY(-0.5px);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.16);
+    background-color: #e0e7ff !important;
+    border-color: #c7d2fe !important;
+}
+
+#learning-mode-trigger:active {
+    transform: scale(0.96);
+}
+
+/* Compact Dropdown Selectors inside header Row 2 */
+.modern-card-select-compact {
+    font-size: 10.5px;
+    font-weight: 700;
+    color: #475569;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    background: #ffffff;
+    padding: 3px 18px 3px 6px;
+    cursor: pointer;
+    outline: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8' viewBox='0 0 24 24' fill='none' stroke='%236366f1' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 5px center;
+    transition: all 0.2s ease;
+    max-width: 100px;
+}
+
+.modern-card-select-compact:hover {
+    border-color: #cbd5e1;
+    background: #f8fafc;
+}
+
+.modern-card-select-compact:focus {
+    border-color: #6366f1;
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.12);
+}
+
+/* ── Inline Settings Action Button ──────────────────────────────────── */
+.chat-action-btn--settings {
+    background: transparent !important;
+    color: #94a3b8 !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.chat-action-btn--settings:hover:not(:disabled) {
+    background: #f1f5f9 !important;
+    color: #475569 !important;
+    transform: scale(1.05);
+    box-shadow: none !important;
+}
+
+.chat-action-btn--settings:active:not(:disabled) {
+    transform: scale(0.95);
+}
+
+.settings-icon {
+    font-size: 13.5px;
+    line-height: 1;
+}
+
+/* ── Glassmorphic Learning Settings Overlay ─────────────────────────── */
+#learning-settings-overlay {
+    backdrop-filter: blur(12px) saturate(180%);
+    -webkit-backdrop-filter: blur(12px) saturate(180%);
+    transition: opacity 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#learning-settings-overlay:not(.opacity-0) {
+    pointer-events: auto !important;
+}
+
+.learning-settings-modal {
+    transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Settings Tool Buttons inside Section 3 */
+.modern-settings-tool-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    padding: 8px 14px;
+    border: none;
+    border-radius: 8px;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    width: 100%;
+}
+
+.modern-settings-tool-btn--indigo {
+    background: linear-gradient(135deg, #6366f1, #4f46e5);
+    color: white;
+    box-shadow: 0 2px 6px rgba(99, 102, 241, 0.2);
+}
+
+.modern-settings-tool-btn--indigo:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(99, 102, 241, 0.3);
+}
+
+.modern-settings-tool-btn--emerald {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: white;
+    box-shadow: 0 2px 6px rgba(16, 185, 129, 0.2);
+}
+
+.modern-settings-tool-btn--emerald:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);
 }

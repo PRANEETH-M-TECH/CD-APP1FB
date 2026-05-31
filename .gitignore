@@ -76,6 +76,7 @@ Backups/
 
 # ============ AI ASSISTANT FILES ============
 .gemini/
+docs/
 
 # ============ NODE (if using) ============
 node_modules/

@@ -29,6 +29,8 @@ class ConversationMode {
         this.startButton = document.getElementById('start-conversation-btn');
         this.classSelect = document.getElementById('conversation-class-select');
         this.subjectSelect = document.getElementById('conversation-subject-select');
+        this.ttsModelSelect = document.getElementById('conversation-tts-model');
+        this.ttsVoiceSelect = document.getElementById('conversation-tts-voice');
         this.isLaunching = false;
 
         this.icons = {
@@ -215,6 +217,9 @@ class ConversationMode {
         }
         if (window.speechSynthesis) {
             window.speechSynthesis.cancel();
+        }
+        if (window.ttsManager) {
+            window.ttsManager.stop();
         }
         if (this.state === 'speaking') {
             this.setState('idle');
@@ -640,27 +645,34 @@ class ConversationMode {
     }
 
     speakText(text) {
-        if (!window.speechSynthesis || !text) return;
+        if (!text || !text.trim()) return;
 
-        const utterance = new SpeechSynthesisUtterance(text);
-        if (this.ttsVoice) utterance.voice = this.ttsVoice;
+        if (window.ttsManager) {
+            // Use the central TTS manager (Sarvam or whichever model is active)
+            window.ttsManager.speak(text);
+        } else {
+            // Fallback: direct browser TTS (should rarely happen)
+            if (!window.speechSynthesis) return;
+            const utterance = new SpeechSynthesisUtterance(text);
+            if (this.ttsVoice) utterance.voice = this.ttsVoice;
 
-        utterance.onend = () => {
-            // Only set to idle if queue is empty and buffer is empty
-            if (this.state === 'speaking' && !window.speechSynthesis.pending && !window.speechSynthesis.speaking && !this.ttsBuffer) {
-                this.setState('idle');
-            }
-        };
+            utterance.onend = () => {
+                if (this.state === 'speaking' && !window.speechSynthesis.pending && !window.speechSynthesis.speaking && !this.ttsBuffer) {
+                    this.setState('idle');
+                }
+            };
 
-        utterance.onerror = (e) => {
-            console.error('[TTS] Error:', e);
-            if (this.state === 'speaking' && !window.speechSynthesis.pending && !window.speechSynthesis.speaking) {
-                this.setState('idle');
-            }
-        };
+            utterance.onerror = (e) => {
+                console.error('[TTS] Error:', e);
+                if (this.state === 'speaking' && !window.speechSynthesis.pending && !window.speechSynthesis.speaking) {
+                    this.setState('idle');
+                }
+            };
 
-        speechSynthesis.speak(utterance);
+            speechSynthesis.speak(utterance);
+        }
     }
+
 
     animateWaveform(ctx, color) {
         if (!ctx) return;
@@ -981,6 +993,14 @@ class ConversationMode {
         try {
             const book = await this.fetchBook(className, subject);
             window.selectedBook = book;
+            
+            if (window.ttsManager) {
+                const selectedModel = this.ttsModelSelect ? this.ttsModelSelect.value : 'sarvam';
+                const selectedVoice = this.ttsVoiceSelect ? this.ttsVoiceSelect.value : 'meera';
+                window.ttsManager.setModel(selectedModel);
+                window.ttsManager.setVoice(selectedVoice);
+            }
+            
             const uid = window.currentUser ? window.currentUser.uid : null;
             this.startConversationMode(book.id, uid, className, subject);
         } catch (error) {

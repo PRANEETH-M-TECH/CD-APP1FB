@@ -1,0 +1,49 @@
+You are generating follow-up questions for an Indian student in Class {class_level} studying {subject}.
+
+ORIGINAL QUESTION: {query}
+
+ANSWER GIVEN:
+{answer_preview}
+
+RELEVANT CHAPTERS: {chapter_names}
+
+CRITICAL REQUIREMENTS:
+1. **Student Age**: Class {class_level} Indian student ({class_num}-{class_num_plus_2} years old)
+2. **Language Level**: Use {language_level}
+3. **English Style**: 
+   - How Indian students actually speak/write English
+   - Simple, clear words (avoid: "elaborate", "elucidate", "comprehend", "utilize")
+   - Use common words (like: "explain more", "understand", "use", "what about")
+4. **Question Style**: How an Indian kid would naturally ask
+   - NOT: "Could you elaborate on the mechanism of..."
+   - YES: "How does this work?" or "What happens when..."
+5. **Context Boundary**: Questions MUST be:
+   - About topics in the answer or mentioned chapters
+   - {complexity}
+   - Never introduce completely new advanced topics
+6. **Variety**: Mix of question types:
+   - "What happens if..." (consequence)
+   - "How is X different from Y?" (comparison)
+   - "Can you give an example of..." (application)
+   - "Why does..." (reason)
+
+BAD Examples (TOO COMPLEX for Class {class_level}):
+- "Could you elaborate on the intricacies of the biochemical pathway?"
+- "What are the ramifications of this phenomenon?"
+- "How does this mechanism correlate with contemporary scenarios?"
+
+GOOD Examples (RIGHT for Class {class_level}):
+- "What happens inside a plant when it makes food?"
+- "Why do plants need sunlight to grow?"
+- "How is this different from what animals do?"
+
+Return ONLY JSON (no markdown, no code blocks):
+{{
+  "followups": [
+    "question 1 in simple Indian student English",
+    "question 2 in simple Indian student English", 
+    "question 3 in simple Indian student English"
+  ]
+}}
+
+Generate 3 follow-up questions NOW:

@@ -1,0 +1,839 @@
+=== START FILE: backend/app/services/chat/intent_classifier.py ===
+"""
+Intelligent conversation action classifier.
+Determines the next best action for the system to take based on conversational context.
+Enhanced with semantic similarity scoring for intelligent cache reuse.
+"""
+from typing import List, Dict, Optional
+import json
+from backend.app.prompts import templates
+
+
+def calculate_query_similarity(
+    current_query: str,
+    previous_queries: List[str],
+    embedder
+) -> List[float]:
+    """
+    Calculate cosine similarity between current and previous queries.
+    
+    Args:
+        current_query: The user's current query
+        previous_queries: List of previous queries to compare against
+        embedder: Sentence transformer model for encoding
+    
+    Returns:
+        List of similarity scores (0.0 to 1.0) for each previous query
+    """
+    try:
+        from sentence_transformers import util
+        
+        if not previous_queries:
+            return []
+        
+        current_embedding = embedder.encode(current_query, convert_to_tensor=True)
+        scores = []
+        
+        for prev_query in previous_queries:
+            prev_embedding = embedder.encode(prev_query, convert_to_tensor=True)
+            similarity = util.cos_sim(current_embedding, prev_embedding)[0][0].item()
+            scores.append(similarity)
+        
+        return scores
+    except Exception as e:
+        print(f"[SIMILARITY] Error calculating similarity: {e}")
+        return []
+
+
+def determine_next_action(
+    current_query: str,
+    conversation_window: List[dict],
+    gemini_client,
+    generation_model_name: str,
+    embedder=None,
+    is_clicked_followup: bool = False,  # NEW: Flag for pre-generated follow-up clicks
+    last_action: str = None  # NEW: Previous action for context awareness
+) -> dict:
+    """
+    Determine the next action using 5-TIER intelligent routing:
+    
+    TIER 1: Clicked follow-ups (absolute priority - always use cache)
+    TIER 2: Empty conversation (must retrieve)
+    TIER 3: Meta-conversational queries (answer from history)
+    TIER 4: Semantic similarity analysis (smart cache/retrieval)
+    TIER 5: LLM fallback for edge cases
+    
+    Args:
+        current_query: User's current query
+        conversation_window: List of recent conversation turns
+        gemini_client: Gemini client for classification
+        generation_model_name: Model name to use for generation
+        embedder: Sentence transformer for similarity
+        is_clicked_followup: True if user clicked a pre-generated follow-up
+        last_action: Previous action taken (for context)
+    
+    Returns:
+        {
+            "action": "USE_CACHED_CONTEXT" | "RETRIEVE_NEW_CONTEXT" | "ANSWER_FROM_HISTORY",
+            "reason": str,
+            "similarity_score": float,
+            "tier": str,
+            "new_topic_name": str (optional)
+        }
+    """
+    
+    # === TIER 1: ABSOLUTE PRIORITY FOR CLICKED FOLLOW-UPS ===
+    if is_clicked_followup:
+        # If parent query used cache, follow-up definitely can too
+        if last_action == "USE_CACHED_CONTEXT":
+            # print(f"[TIER 1] ⚡ Clicked follow-up + cached parent → Guaranteed cache reuse")
+            return {
+                "action": "USE_CACHED_CONTEXT",
+                "reason": "Pre-generated follow-up with cached parent context",
+                "similarity_score": 1.0,
+                "tier": "ABSOLUTE_PRIORITY",
+                "confidence": "GUARANTEED"
+            }
+        
+        # Even if parent did retrieval, follow-ups are generated from those chunks
+        # print(f"[TIER 1] ✓ Clicked follow-up → Strong cache preference")
+        return {
+            "action": "USE_CACHED_CONTEXT",
+            "reason": "Pre-generated follow-ups are contextually guaranteed to be related",
+            "similarity_score": 0.95,
+            "tier": "STRONG_PREFERENCE",
+            "confidence": "HIGH"
+        }
+    
+    # Similarity thresholds for cache decisions
+    HIGH_SIMILARITY_THRESHOLD = 0.75  # Very similar → use cache
+    MEDIUM_SIMILARITY_THRESHOLD = 0.50  # Somewhat similar → ask LLM
+    
+    # === TIER 2: EMPTY CONVERSATION ===
+    if not conversation_window:
+        # print(f"[TIER 2] 🆕 First query → Retrieval required")
+        return {
+            "action": "RETRIEVE_NEW_CONTEXT",
+            "new_topic_name": current_query[:50],  # Use query as initial topic name
+            "reason": "First query in conversation - no context available",
+            "similarity_score": 0.0,
+            "tier": "INITIAL_QUERY"
+        }
+
+    # === TIER 3: META-CONVERSATIONAL QUERIES ===
+    # Queries about the conversation itself, not about the topic
+    meta_patterns = [
+        "what was", "what did", "earlier", "previous", "before",
+        "remind me", "first question", "last", "summarize", "review"
+    ]
+    query_lower = current_query.lower()
+    if any(pattern in query_lower for pattern in meta_patterns):
+        # print(f"[TIER 3] 💬 Meta-conversational query detected → Answer from history")
+        return {
+            "action": "ANSWER_FROM_HISTORY",
+            "new_topic_name": None,
+            "reason": "User asking about previous conversation content",
+            "similarity_score": 0.0,
+            "tier": "META_QUERY"
+        }
+
+    # === TIER 4: SEMANTIC SIMILARITY ANALYSIS ===
+    max_similarity = 0.0
+    similarity_scores = []
+    
+    if embedder is not None:
+        try:
+            # Get recent queries for comparison
+            recent_queries = [turn['query'] for turn in conversation_window[-3:]]
+            similarity_scores = calculate_query_similarity(current_query, recent_queries, embedder)
+            max_similarity = max(similarity_scores) if similarity_scores else 0.0
+            
+            # print(f"[TIER 4] 🔍 Semantic similarity analysis:")
+            # print(f"[TIER 4]   Current query: '{current_query[:50]}...'")
+            # print(f"[TIER 4]   Comparing with {len(recent_queries)} recent queries")
+            # for i, (prev_q, score) in enumerate(zip(recent_queries, similarity_scores)):
+            #     print(f"[TIER 4]     {i+1}. '{prev_q[:40]}...' → {score:.3f}")
+            # print(f"[TIER 4]   Max similarity: {max_similarity:.3f}")
+        except Exception as e:
+            print(f"[TIER 4] Warning: Error during similarity calculation: {e}")
+            max_similarity = 0.0
+    else:
+        # print(f"[TIER 4] ⚠️ No embedder provided, skipping similarity check")
+        pass
+    
+    # High similarity → Cache reuse
+    if max_similarity >= HIGH_SIMILARITY_THRESHOLD:
+        # print(f"[TIER 4] ⚡ High similarity ({max_similarity:.3f}) → Cache reuse")
+        return {
+            "action": "USE_CACHED_CONTEXT",
+            "new_topic_name": None,
+            "reason": f"High semantic similarity ({max_similarity:.2f}) with recent queries - using cached context for speed",
+            "similarity_score": max_similarity,
+            "tier": "HIGH_SIMILARITY"
+        }
+    
+    # Low similarity + substantial history → Likely new topic
+    # But double-check it's not a meta-query first
+    if max_similarity < MEDIUM_SIMILARITY_THRESHOLD and len(conversation_window) >= 2:
+        if not any(p in query_lower for p in meta_patterns):
+            # print(f"[TIER 4] 🔍 Low similarity ({max_similarity:.3f}) → New retrieval")
+            return {
+                "action": "RETRIEVE_NEW_CONTEXT",
+                "new_topic_name": current_query[:50],
+                "reason": f"Low similarity ({max_similarity:.2f}) suggests topic change",
+                "similarity_score": max_similarity,
+                "tier": "LOW_SIMILARITY"
+            }
+
+
+    # === TIER 5: LLM FALLBACK FOR EDGE CASES ===
+    # Medium similarity (0.50-0.75) or uncertain cases
+    # print(f"[TIER 5] 🤖 LLM classifier for edge case (similarity: {max_similarity:.3f})")
+    
+    # Build a summary of the last few turns for the LLM prompt.
+    context_summary = ""
+    for turn in conversation_window[-3:]: # Use last 3 turns
+        answer_preview = turn.get('answer', 'No answer was given.')[:200]
+        if len(turn.get('answer', '')) > 200:
+            answer_preview += "..."
+        context_summary += f"Q: {turn['query']}\nA: {answer_preview}\n\n"
+
+    # Include similarity score in the prompt for better LLM decision-making
+    similarity_context = ""
+    if max_similarity > 0:
+        similarity_context = f"\n## Semantic Similarity Analysis:\nThe current query has a semantic similarity score of {max_similarity:.2f} with recent queries (0.0 = completely different, 1.0 = identical).\n"
+
+    prompt = templates.DETERMINE_NEXT_ACTION_PROMPT.format(
+        context_summary=context_summary,
+        similarity_context=similarity_context,
+        current_query=current_query
+    )
+
+
+    try:
+        response = gemini_client.models.generate_content(
+            model=generation_model_name,
+            contents=prompt
+        )
+
+        # Safety check: Ensure the response has content.
+        if not response.parts:
+            finish_reason = response.candidates[0].finish_reason if response.candidates else "Unknown"
+            print(f"[ACTION_CLASSIFIER] LLM returned an empty response. Finish Reason: {finish_reason}. Defaulting to new retrieval.")
+            return {
+                "action": "RETRIEVE_NEW_CONTEXT",
+                "new_topic_name": current_query[:50],
+                "reason": f"LLM response was empty or blocked (finish reason: {finish_reason}).",
+                "similarity_score": max_similarity
+            }
+
+        response_text = response.text.strip()
+        
+        # --- ROBUST JSON EXTRACTION ---
+        try:
+            # Find the start and end of the JSON object
+            start_index = response_text.find('{')
+            end_index = response_text.rfind('}') + 1
+            
+            if start_index == -1 or end_index == 0:
+                raise ValueError("No JSON object found in the response.")
+            
+            # Extract and parse the JSON
+            json_text = response_text[start_index:end_index]
+            result = json.loads(json_text)
+        except (ValueError, json.JSONDecodeError) as json_e:
+             # If parsing fails, it's a critical error with the LLM's output.
+             print(f"[ACTION_CLASSIFIER] JSON parsing failed: {json_e}")
+             print(f"[ACTION_CLASSIFIER] Raw LLM response:\n---\n{response_text}\n---")
+             raise ValueError(f"Failed to parse JSON from LLM: {json_e}")
+
+        # Validate the response from the LLM
+        if "action" not in result or result["action"] not in ["USE_CACHED_CONTEXT", "RETRIEVE_NEW_CONTEXT", "ANSWER_FROM_HISTORY"]:
+             raise ValueError("LLM response missing or has invalid 'action'.")
+
+        # print(f"[LLM CLASSIFIER] ✓ Action determined: {result['action']}")
+        
+        return {
+            "action": result["action"],
+            "new_topic_name": result.get("new_topic_name"),
+            "reason": result.get("analysis", "LLM-based action determination."),
+            "similarity_score": max_similarity,
+            "tier": "LLM_FALLBACK"
+        }
+
+    except Exception as e:
+        print(f"[TIER 5] Error: LLM classification error: {e}")
+        # Safe fallback: default to safe retrieval
+        return {
+            "action": "RETRIEVE_NEW_CONTEXT",
+            "new_topic_name": current_query[:50],
+            "reason": f"Classification error - defaulting to safe retrieval (error: {str(e)[:100]})",
+            "similarity_score": max_similarity,
+            "tier": "ERROR_FALLBACK"
+        }
+=== END FILE ===
+
+=== START FILE: backend/app/prompts/styler.py ===
+"""
+Centralized Prompt Styling Engine for CHADUVU-GURU.
+Defines tone, sentence complexity, vocabulary, and analogies based on student class levels.
+Permanently eliminates repetitive/childish fillers and ensures a professional academic standard.
+"""
+
+from typing import Dict, Optional
+
+def parse_class_num(class_name) -> int:
+    if not class_name:
+        return 8
+    try:
+        clean = "".join(c for c in str(class_name) if c.isdigit())
+        return int(clean) if clean else 8
+    except:
+        return 8
+
+def get_style_config(class_num: int) -> dict:
+    if class_num <= 5:
+        return {
+            "band": "Primary School (Classes 1-5)",
+            "age_approx": "6 to 10 years old",
+            "language_level": "very simple words, extremely short and clear sentences",
+            "sentence_length": "under 10-12 words per sentence, using single-clause structures",
+            "tone": "Warm, encouraging, simple, patient, and highly accessible. Never speak down to the child.",
+            "analogy_guideline": "Use very simple playground, family, or home examples (like sharing crayons, simple fruits, or domestic pets).",
+            "read_aloud_guideline": "Extremely clear, rhythmic, and slow pronunciation. Avoid any scientific terms or abbreviations; describe them simply (e.g. say 'body\\'s building blocks\\' instead of 'cells\\' if appropriate, or explain it step-by-step)."
+        }
+    elif class_num <= 8:
+        return {
+            "band": "Middle School (Classes 6-8)",
+            "age_approx": "11 to 13 years old",
+            "language_level": "simple, clear, natural English that is easy to understand",
+            "sentence_length": "under 15 words per sentence, breaking down concepts step-by-step",
+            "tone": "Supportive, active, engaging, and friendly, but respectful. Strictly avoid childish language.",
+            "analogy_guideline": "Use standard Indian school and community examples (like playing a cricket match, school assemblies, vegetable sellers, auto-rickshaws, or making tea).",
+            "read_aloud_guideline": "Natural, steady pace. Ensure any formulas or symbols are spelled out in words (e.g. say 'carbon dioxide plus water\\' instead of 'CO2 plus H2O\\')."
+        }
+    else:
+        return {
+            "band": "High School (Classes 9-10)",
+            "age_approx": "14 to 16 years old",
+            "language_level": "clear, mature, professional, and board-exam oriented English",
+            "sentence_length": "precise, well-structured sentences. Avoid overly long compound clauses but maintain professional density.",
+            "tone": "Professional, academic, authoritative, and motivating. Treat the student as a mature learner preparing for board exams.",
+            "analogy_guideline": "Use realistic, practical, and industrial examples (like dams, city transport networks, electric power lines, economic markets, or lab experiments).",
+            "read_aloud_guideline": "Polished, clear, and steady academic pace. Read out complex terms clearly. Spell out mathematical or physical symbols in clear spoken words for natural listening."
+        }
+
+def get_answer_prompt(class_name, subject, query, context, conversation_context=None, action=None) -> str:
+    class_num = parse_class_num(class_name)
+    style = get_style_config(class_num)
+    
+    prompt = f"""You are CHADUVU-GURU, an intelligent, patient AI teacher in an Indian school explaining concepts to a Class {class_name} student studying {subject}.
+
+CORE TEACHING METHODOLOGY:
+1. **Target Student Profile**: Class {class_name} ({style['band']}), age approx {style['age_approx']}.
+2. **Language Complexity**: Use {style['language_level']}.
+3. **Sentence Structure**: Keep sentences {style['sentence_length']}. Avoid overly complex, compound Americanized phrasing.
+4. **Tone & Attitude**: {style['tone']}
+5. **Relatable Indian Analogies**: {style['analogy_guideline']}
+6. **Read-Aloud & Vocal Friendliness**:
+   - Ensure a highly natural, smooth, and engaging cadence when spoken by the browser's Web Speech API.
+   - Describe all complex mathematical symbols, formulas, and abbreviations in clear words (e.g., say "carbon dioxide plus water" instead of "CO2 + H2O") so the audio engine pronounces it perfectly.
+7. **Strict Constraint - NO Conversational Fillers**:
+   - DO NOT use repetitive, childish, or colloquial Indian fillers (such as "beta", "achha", "dear student", "hello", "Namaste", "accha").
+   - START the answer directly or with a mature, brief, and highly professional academic transition.
+8. **Textbook Context Constraint**:
+   - Rely strictly on the retrieved context below. Do not add external facts or cross the boundary.
+   - Use clear markdown formatting (short paragraphs, bold text for key terms, bold lists) to ensure the text is highly readable on screen.
+"""
+
+    if action == "ANSWER_FROM_HISTORY":
+        prompt += f"""
+CONVERSATION HISTORY:
+{conversation_context}
+
+CURRENT QUESTION:
+"{query}"
+
+Answer the current question based ONLY on the conversation history provided above. Return only the formatted answer.
+"""
+    else:
+        if conversation_context:
+            prompt += f"""
+{conversation_context}
+"""
+        prompt += f"""
+RETRIEVED INFORMATION FROM TEXTBOOK:
+{context}
+
+CURRENT QUESTION:
+{query}
+
+Return only the formatted answer. Start directly with the explanation.
+"""
+    return prompt
+
+def get_teacher_explanation_prompt(class_name, subject, chapter_name, summary_text) -> str:
+    class_num = parse_class_num(class_name)
+    style = get_style_config(class_num)
+    
+    prompt = f"""You are CHADUVU-GURU, an intelligent, patient AI teacher in an Indian school. Your goal is to create a detailed, highly readable chapter explanation for a Class {class_name} student studying {subject}.
+
+CORE TEACHING METHODOLOGY:
+1. **Target Student Profile**: Class {class_name} ({style['band']}), age approx {style['age_approx']}.
+2. **Language Complexity**: Use {style['language_level']}.
+3. **Sentence Structure**: Keep sentences {style['sentence_length']}. Avoid overly complex, compound Americanized phrasing.
+4. **Tone & Attitude**: {style['tone']}
+5. **Relatable Indian Analogies**: {style['analogy_guideline']}
+6. **Read-Aloud & Vocal Friendliness**:
+   - Ensure a natural, smooth, and engaging cadence when read aloud.
+   - Describe all complex mathematical symbols, formulas, and abbreviations in clear words so the audio engine pronounces it perfectly.
+7. **Strict Constraint - NO Conversational Fillers**:
+   - DO NOT use repetitive, childish, or colloquial Indian fillers (such as "beta", "achha", "dear student", "hello", "Namaste", "accha").
+   - Address the student in a supportive, professional, and mature way (e.g. "Let's learn about...", "In this chapter, we explore...").
+8. **Content Constraint**:
+   - Based strictly on the chapter summary below. Do not introduce new advanced topics.
+   - Organize the explanation with clear markdown headings, bullet points, or numbered lists.
+
+CHAPTER NAME: {chapter_name}
+
+CHAPTER SUMMARY TO EXPLAIN:
+---
+{summary_text}
+---
+
+Begin the explanation now.
+"""
+    return prompt
+=== END FILE ===
+
+=== START FILE: backend/app/prompts/prompt_templates.py ===
+"""
+Centralized Prompt Templates for CHADUVU-GURU.
+Dynamically loads prompt templates from individual text files in prompts/templates/ and prompts/system/
+with built-in hardcoded fallback strings to guarantee zero service interruptions.
+"""
+import os
+
+PROMPTS_DIR = os.path.dirname(os.path.abspath(__file__))
+TEMPLATES_DIR = os.path.join(PROMPTS_DIR, "templates")
+SYSTEM_DIR = os.path.join(PROMPTS_DIR, "system")
+
+def load_prompt(folder: str, filename: str, fallback: str) -> str:
+    path = os.path.join(folder, filename)
+    if os.path.exists(path):
+        try:
+            with open(path, "r", encoding="utf-8") as f:
+                return f.read().strip()
+        except Exception as e:
+            print(f"[PROMPT ERROR] Failed to load {path}: {e}")
+    return fallback.strip()
+
+# ==============================================================================
+# 1. QUERY REFORMULATION & ROUTING PROMPTS
+# ==============================================================================
+
+REFORMULATE_WITH_LLM_PROMPT = load_prompt(
+    TEMPLATES_DIR,
+    "reformulate_with_llm_prompt.txt",
+    """
+You are an expert ASR-correction and curriculum-aware query processor.
+
+Your tasks:
+
+1) Correct ASR mistakes in the raw query. Only correct errors clearly wrong based on the summaries.
+
+2) Reformulate the corrected query into a descriptive, retrieval-ready form (8–30 words).
+
+3) Extract important keywords (importance >= 0.3).
+
+4) Return conceptual_score (0-1) and classification:
+   - "conceptual" if >0.5
+   - "factual" otherwise
+
+5) Rank the most relevant chapters using ONLY the provided summaries.
+   Return:
+   [
+     {
+       "chapter_id": str,
+       "chapter_name": str,
+       "start_page": int,
+       "end_page": int,
+       "score": float
+     }
+   ]
+
+6) STRICT JSON OUTPUT ONLY:
+{
+  "reformulated_query": str,
+  "normalized_query": str,
+  "keywords": [...],
+  "conceptual_score": float,
+  "classification": str,
+  "chapter_ranking": [...]
+}
+
+--------------------------------------
+
+CLASS = "{class_name}"
+SUBJECT = "{subject}"
+RAW_QUERY = "{raw_query}"
+
+# CHAPTER SUMMARIES:
+{chapters_json}
+
+--------------------------------------
+Return ONLY the JSON response.
+"""
+)
+
+REFORMULATE_AND_CLASSIFY_QUERY_BASE = load_prompt(
+    TEMPLATES_DIR,
+    "reformulate_and_classify_query_base.txt",
+    """You are a search query processing expert. For the given user query, perform the following tasks:
+
+1. Reformulate the Query: Make it more descriptive and contextually complete for use in a semantic vector search.
+
+2. Extract Important Keywords: Identify the most relevant keywords or short key phrases from the query. For each keyword, assign a relevance score between 0 and 1. Include only keywords with importance >= 0.3.
+
+3. Classify Query Type: Determine whether the query is more conceptual or factual. Provide a 'conceptual_score' between 0 and 1.
+"""
+)
+
+REFORMULATE_AND_CLASSIFY_QUERY_SUMMARY = load_prompt(
+    TEMPLATES_DIR,
+    "reformulate_and_classify_query_summary.txt",
+    """4. Classify Chapter: Based on the provided chapter summaries, identify which chapter the user's query is most likely related to. If the query does not clearly relate to any specific chapter, state 'None'.
+
+Chapter Summaries:
+{summary_context}
+
+Return a single valid JSON object with keys: reformulated_query, keywords (array of {keyword, importance}), conceptual_score, classified_chapter.
+
+User Query: "{raw_query}"
+
+Example output:
+{"reformulated_query":"Detailed...","keywords":[ {"keyword":"photosynthesis","importance":0.95} ],"conceptual_score":0.85, "classified_chapter": "PLANTS: PARTS AND FUNCTIONS"}
+"""
+)
+
+REFORMULATE_AND_CLASSIFY_QUERY_NO_SUMMARY = load_prompt(
+    TEMPLATES_DIR,
+    "reformulate_and_classify_query_no_summary.txt",
+    """Return a single valid JSON object with keys: reformulated_query, keywords (array of {keyword, importance}), conceptual_score.
+
+User Query: "{raw_query}"
+
+Example output:
+{"reformulated_query":"Detailed...","keywords":[ {"keyword":"photosynthesis","importance":0.95} ],"conceptual_score":0.85}
+"""
+)
+
+CONTEXT_AWARE_REFORMULATE_PROMPT = load_prompt(
+    TEMPLATES_DIR,
+    "context_aware_reformulate_prompt.txt",
+    """You are reformulating a follow-up query that references previous conversation.
+
+PREVIOUS CONVERSATION:
+{context_summary}
+
+CURRENT USER QUERY (may be vague): "{query}"
+
+Your tasks:
+1. Expand vague references ("that", "it", "more", "this") using previous context
+2. Make the query self-contained and specific
+3. Extract keywords relevant to the EXPANDED query
+4. Keep the query focused on the user's intent
+
+Return ONLY JSON (no markdown, no code blocks):
+{
+  "reformulated_query": "expanded, self-contained query",
+  "keywords": ["keyword1", "keyword2", ...]
+}
+
+Example:
+Previous: Q: "What is photosynthesis?" A: "Photosynthesis is a process..."
+Current: "explain more about that"
+Result: {"reformulated_query": "Provide more detailed explanation of the photosynthesis process, including light-dependent and light-independent reactions", "keywords": ["photosynthesis", "light reactions", "calvin cycle"]}
+
+Return only the JSON object:
+"""
+)
+
+# ==============================================================================
+# 2. RETRIEVAL & CONTEXT EXTRACTION PROMPTS
+# ==============================================================================
+
+GENERATE_CHAPTERS_FROM_JSON_PROMPT = load_prompt(
+    TEMPLATES_DIR,
+    "generate_chapters_from_json_prompt.txt",
+    """You are an expert assistant tasked with analyzing a textbook to identify its chapters.
+
+The book content is provided as a JSON array, each element representing a PDF page:
+
+[{"pdf_page": <integer>, "text": "<page text>"}]
+
+When identifying chapters and their page numbers, prioritize information found in an 'INDEX' or 'Table of Contents' section if available within the provided text.
+
+Return a single valid JSON object following this schema:
+
+{
+  "pdf_offset": <integer>,
+  "chapters": [
+    {"chapter_name": "Full name of the chapter", "pdf_startpg": <integer>, "pdf_endpg": <integer>}
+  ]
+}
+
+- pdf_startpg/pdf_endpg are the real PDF page numbers (including front matter).
+- Calculate `pdf_offset` as the number of pages of front matter. This is typically (first_chapter_start_page - 1).
+- If an index is available, infer the front matter by comparing the index’s chapter start page with the actual PDF page number.
+- Do not include any text outside the JSON object.
+
+Here is the book content in JSON format:
+
+{json_text}
+"""
+)
+
+GENERATE_CHAPTER_SUMMARY_PROMPT = load_prompt(
+    TEMPLATES_DIR,
+    "generate_chapter_summary_prompt.txt",
+    """You are an expert educational content summarizer.
+Your task is to read the raw textbook chunks from a single chapter and produce a clear, accurate, and well-structured chapter summary.
+
+---
+
+### Input:
+You will receive a list of raw text chunks extracted from a chapter of a textbook.
+These chunks may be fragmented, repetitive, or discontinuous — your job is to combine them logically.
+
+---
+
+### Your Goal:
+Summarize all the given chunks into a **coherent chapter summary** that:
+- Covers **all key topics, definitions, and formulas**.
+- Explains each major concept in simple and understandable language.
+- **Removes redundant or repeated text**.
+- Maintains the **natural chapter flow** (introduction → concepts → examples → conclusion).
+- Is **concise but complete** enough for a student to study directly from it.
+
+---
+
+### Output Format (JSON):
+Return the summarized output in valid JSON format like this:
+
+{
+  "class_name": "{class_name}",
+  "subject_name": "{subject_name}",
+  "chapter_name": "{chapter_name}",
+  "summary": "<clean summarized text covering the full chapter>"
+}
+
+Make sure:
+- The JSON is valid and properly formatted.
+- Do NOT include the raw chunks or extra commentary.
+- Only include the clean summarized text inside the "summary" field.
+
+---
+
+Now read the provided chapter chunks and generate the summarized JSON output as per the format above.
+
+Chapter Chunks:
+{full_chapter_text}
+"""
+)
+
+# ==============================================================================
+# 3. INTERACTIVE CHAT & ANSWER GENERATION PROMPTS
+# ==============================================================================
+
+GENERATE_ANSWER_SYSTEM = load_prompt(
+    SYSTEM_DIR,
+    "generate_answer_system.txt",
+    """You are CHADUVU-GURU, an intelligent, extremely warm, and patient AI teacher assistant in an Indian school.
+Your job is to explain academic concepts clearly in writing and read aloud.
+
+When you answer, you must ALWAYS produce two distinct parts in the SAME response:
+
+[TEXT_RESPONSE_START]
+Write a clear, well-structured, and visually appealing explanation suitable for the screen.
+- Use **markdown formatting**.
+- Include headings, bullet points, numbered lists, short paragraphs, and simple relatable Indian examples (e.g. cricket, sharing mangoes, local markets).
+- Keep the tone warm, friendly, and easy for students to follow.
+- Strictly avoid complicated academic jargon (like elucidate, comprehend, utilize, subsequently).
+[TEXT_RESPONSE_END]
+
+[VOICE_SCRIPT_START]
+Now rewrite the SAME content as if you are speaking directly to an Indian child.
+- Use very simple, warm, friendly, conversational language.
+- Remove markdown, symbols, and equations.
+- Replace math signs and formulas with simple words (say 'plus', 'minus', 'equals', 'carbon dioxide plus water').
+- Speak warm and slowly, like a kind teacher explaining.
+- Keep it around 4-6 short, simple sentences.
+[VOICE_SCRIPT_END]
+
+Always include both sections with their markers so the system can separate them."""
+)
+
+GENERATE_ANSWER_USER = load_prompt(
+    TEMPLATES_DIR,
+    "generate_answer_user.txt",
+    """**Class:** {class_name}
+**Subject:** {subject}
+
+**Student Query:** "{raw_query}"
+
+**Textbook Context:**
+{context}
+"""
+)
+
+GENERATE_CONVERSATIONAL_ANSWER_SYSTEM = load_prompt(
+    SYSTEM_DIR,
+    "generate_conversational_answer_system.txt",
+    """You are CHADUVU-GURU in CONVERSATIONAL MODE.
+Act like a friendly live Indian school teacher speaking directly to a student.
+Your goal is to explain the concept clearly and naturally, as if you’re talking aloud.
+
+Guidelines:
+- Use 2–5 short, simple sentences maximum.
+- Keep tone warm, patient, and extremely encouraging.
+- Never use markdown, bullet points, or symbols.
+- Describe equations and symbols verbally (say 'carbon dioxide plus water gives glucose and oxygen').
+- Use short, simple Indian English words that sound natural when spoken (avoid complicated academic terms).
+- Imagine you are guiding a 10-year-old student—make it sound real, caring, and kind.
+
+Respond only with the spoken explanation—no formatting or extra markers."""
+)
+
+GENERATE_CONVERSATIONAL_ANSWER_USER = load_prompt(
+    TEMPLATES_DIR,
+    "generate_conversational_answer_user.txt",
+    """**Student's Details:**
+Class: {class_name}
+Subject: {subject}
+
+**Student's Question:** "{raw_query}"
+
+**Relevant Textbook Context:**
+{context}
+
+Now, answer the student's question as their AI Teacher."""
+)
+
+GENERATE_SMART_FOLLOWUPS_PROMPT = load_prompt(
+    TEMPLATES_DIR,
+    "generate_smart_followups_prompt.txt",
+    """You are generating follow-up questions for an Indian student in Class {class_level} studying {subject}.
+
+ORIGINAL QUESTION: {query}
+
+ANSWER GIVEN:
+{answer_preview}
+
+RELEVANT CHAPTERS: {chapter_names}
+
+CRITICAL REQUIREMENTS:
+1. **Student Age**: Class {class_level} Indian student ({class_num}-{class_num_plus_2} years old)
+2. **Language Level**: Use {language_level}
+3. **English Style**: 
+   - How Indian students actually speak/write English
+   - Simple, clear words (avoid: "elaborate", "elucidate", "comprehend", "utilize")
+   - Use common words (like: "explain more", "understand", "use", "what about")
+4. **Question Style**: How an Indian kid would naturally ask
+   - NOT: "Could you elaborate on the mechanism of..."
+   - YES: "How does this work?" or "What happens when..."
+5. **Context Boundary**: Questions MUST be:
+   - About topics in the answer or mentioned chapters
+   - {complexity}
+   - Never introduce completely new advanced topics
+6. **Variety**: Mix of question types:
+   - "What happens if..." (consequence)
+   - "How is X different from Y?" (comparison)
+   - "Can you give an example of..." (application)
+   - "Why does..." (reason)
+
+BAD Examples (TOO COMPLEX for Class {class_level}):
+- "Could you elaborate on the intricacies of the biochemical pathway?"
+- "What are the ramifications of this phenomenon?"
+- "How does this mechanism correlate with contemporary scenarios?"
+
+GOOD Examples (RIGHT for Class {class_level}):
+- "What happens inside a plant when it makes food?"
+- "Why do plants need sunlight to grow?"
+- "How is this different from what animals do?"
+
+Return ONLY JSON (no markdown, no code blocks):
+{
+  "followups": [
+    "question 1 in simple Indian student English",
+    "question 2 in simple Indian student English", 
+    "question 3 in simple Indian student English"
+  ]
+}
+
+Generate 3 follow-up questions NOW:
+"""
+)
+
+# ==============================================================================
+# 4. INTENT & CLASSIFICATION / DASHBOARD PROMPTS
+# ==============================================================================
+
+DETERMINE_NEXT_ACTION_PROMPT = load_prompt(
+    TEMPLATES_DIR,
+    "determine_next_action_prompt.txt",
+    """You are an AI assistant that analyzes a user's query within an ongoing conversation to decide the next best action.
+
+## Conversation History:
+{context_summary}
+{similarity_context}
+## User's New Query:
+"{current_query}"
+
+## Available Actions:
+1.  `USE_CACHED_CONTEXT`: Choose this if the user's query is a direct follow-up that can be answered using the same information retrieved for the previous question. Examples: "explain that in more detail," "give me an example," "what does that mean?"
+
+2.  `RETRIEVE_NEW_CONTEXT`: Choose this if the user is asking about a completely new topic, or a related but distinctly different topic that requires searching the textbook for new information. Examples: "Okay, now tell me about photosynthesis," "What about the French Revolution?," "How are magnets different from electricity?"
+
+3.  `ANSWER_FROM_HISTORY`: Choose this if the query can be answered directly from the `Conversation History` provided above, without needing the textbook. Examples: "What was the first question I asked?," "Summarize what we just talked about."
+
+## Your Task:
+Analyze the user's intent and respond in the following JSON format. Choose ONLY ONE action.
+
+{
+  "analysis": "A brief analysis of the user's intent.",
+  "action": "The single best action to take from the list above.",
+  "new_topic_name": "If the action is 'RETRIEVE_NEW_CONTEXT', provide a short name for the new topic (e.g., 'Photosynthesis'). Otherwise, null."
+}
+"""
+)
+
+GET_TOPIC_CLUSTERS_PROMPT = load_prompt(
+    TEMPLATES_DIR,
+    "get_topic_clusters_prompt.txt",
+    """You are an educational clustering engine. Group the following {query_count} student queries into 3-7 meaningful conceptual topics.
+
+Queries:
+{queries_bullet_list}
+
+For each topic return:
+- topic_name: Clean, human-readable topic name (e.g., "Photosynthesis Process", "Cell Structure")
+- query_count: Number of queries in this topic
+- example_queries: Array of 2 representative example queries
+- mastery_level: Estimated mastery from 0.0 to 1.0 (0.3=struggling, 0.7=developing, 0.9=mastered)
+- difficulty_score: Average difficulty of queries from 0.0 to 1.0 (0.3=basic, 0.6=intermediate, 0.9=advanced)
+
+Return ONLY valid JSON in this exact structure:
+{
+  "topics": [
+    {
+      "topic_name": "string",
+      "query_count": number,
+      "example_queries": ["string", "string"],
+      "mastery_level": number,
+      "difficulty_score": number
+    }
+  ]
+}"""
+)
+=== END FILE ===

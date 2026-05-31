@@ -17,3 +17,4 @@ langchain-text-splitters
 numpy<2.0
 requests
 pytz
+httpx

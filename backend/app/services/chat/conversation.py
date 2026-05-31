@@ -10,19 +10,23 @@ from fastapi import WebSocket
 import json
 import logging
 
-from . import qdrant  # NEW: Import qdrant module for generation_model and embedder
-from . import prompt_styler
-from . import analytics_service # Import analytics service
+from backend.app.services.retrieval import qdrant_service as qdrant
+from backend.app.prompts import styler as prompt_styler
+from backend.app.services.analytics import analytics_service
 
 logger = logging.getLogger(__name__) # Initialize logger
-from .qdrant import (
+from backend.app.services.retrieval.qdrant_service import (
     get_book_metadata,
     hybrid_search,
-    reformulate_and_classify_query,
-    generate_conversational_answer
+    embed_query
 )
-from .session_service import session_manager
-from .intent_classifier import determine_next_action
+from backend.app.services.chat.answer_service import (
+    reformulate_and_classify_query,
+    generate_conversational_answer,
+    generate_smart_followups
+)
+from backend.app.services.chat.session_service import session_manager
+from backend.app.services.chat.intent_classifier import determine_next_action
 
 @dataclass
 class ConversationState:
@@ -245,7 +249,7 @@ class ConversationManager:
 
             # 4. Stream the answer
             full_answer = ""
-            if context:
+            if context or action == "ANSWER_FROM_HISTORY":
                 conversation_context = "\n\nPREVIOUS CONVERSATION HISTORY:\n"
                 for turn in active_context_window[-3:]:
                     conversation_context += f"Q: {turn['query']}\nA: {turn.get('answer', 'N/A')[:200]}...\n\n"
@@ -279,7 +283,6 @@ class ConversationManager:
                 
                 if not conv.should_stop:
                     # 5. Generate and send follow-ups
-                    from backend.app.services.chat.answer_service import generate_smart_followups
                     followups = generate_smart_followups(query, full_answer, search_results[:5])
                     await self._safe_send(conv.websocket, {"type": "followups", "followups": followups})
                     
@@ -322,7 +325,7 @@ class ConversationManager:
                 analytics_service.update_chapter_stats(class_name, subject, chapter_id, chapter_name, uid)
 
                 # Import enhanced analytics and log frequent questions
-                from . import enhanced_analytics
+                from backend.app.services.analytics import enhanced_analytics
                 if chapter_name and chapter_name != "Unknown" and uid != conv.session_id:
                     enhanced_analytics.update_frequent_questions(
                         uid=uid,

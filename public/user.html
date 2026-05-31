@@ -146,6 +146,75 @@
       color: #2563eb;
     }
 
+    /* ── TTS Selector Panel ───────────────────────────────────── */
+    #tts-selector-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      background: linear-gradient(135deg, #f8faff 0%, #eef2ff 100%);
+      border: 1px solid #c7d2fe;
+      border-radius: 999px;
+      font-size: 12px;
+      color: #4338ca;
+      font-weight: 500;
+      flex-wrap: wrap;
+      box-shadow: 0 2px 8px rgba(99,102,241,0.12);
+      transition: box-shadow 0.2s;
+    }
+    #tts-selector-bar:hover {
+      box-shadow: 0 4px 16px rgba(99,102,241,0.2);
+    }
+    #tts-selector-bar label {
+      font-size: 11px;
+      color: #6366f1;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      white-space: nowrap;
+    }
+    .tts-select {
+      border: 1px solid #c7d2fe;
+      border-radius: 999px;
+      background: #fff;
+      color: #4338ca;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 3px 10px 3px 8px;
+      cursor: pointer;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236366f1' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 6px center;
+      padding-right: 22px;
+    }
+    .tts-select:focus {
+      border-color: #6366f1;
+      box-shadow: 0 0 0 2px rgba(99,102,241,0.2);
+    }
+    .tts-divider {
+      width: 1px;
+      height: 16px;
+      background: #c7d2fe;
+      border-radius: 1px;
+    }
+    #tts-status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #10b981;
+      display: inline-block;
+      flex-shrink: 0;
+      animation: tts-pulse 2s infinite;
+    }
+    @keyframes tts-pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: 0.6; transform: scale(1.2); }
+    }
+    #tts-status-dot.offline { background: #94a3b8; animation: none; }
+    /* ── End TTS Selector Panel ───────────────────────────────── */
+
     /* Gradient header */
     .gradient-header {
       background: linear-gradient(135deg, #3b82f6, #6366f1);
@@ -662,6 +731,87 @@
         transform: translateY(0);
       }
     }
+
+    /* AI Voice Mode Flagship UI styles */
+    #voice-interaction-panel {
+      transition: all 0.3s ease;
+    }
+    
+    .voice-panel-mic-btn-compact {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      border: 1px solid #cbd5e1;
+      background: #f8fafc;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
+      margin: 0 auto;
+    }
+
+    .voice-panel-mic-btn-compact:hover {
+      transform: scale(1.08);
+      background: #f1f5f9;
+      border-color: #94a3b8;
+    }
+
+    .voice-panel-mic-btn-compact:active {
+      transform: scale(0.95);
+    }
+
+    /* States & Animations */
+    .voice-panel-mic-btn-compact.listening {
+      background: #ef4444 !important;
+      color: white !important;
+      border-color: #fca5a5 !important;
+      animation: voiceCompactPulse 1.2s infinite alternate;
+    }
+
+    .voice-panel-mic-btn-compact.processing {
+      background: #f59e0b !important;
+      color: white !important;
+      border-color: #fcd34d !important;
+      animation: voiceCompactSpin 2s linear infinite;
+    }
+
+    .voice-panel-mic-btn-compact.speaking {
+      background: #10b981 !important;
+      color: white !important;
+      border-color: #6ee7b7 !important;
+      animation: voiceCompactPulse 1.5s infinite alternate;
+    }
+
+    .voice-panel-mic-btn-compact.paused {
+      background: #6b7280 !important;
+      color: white !important;
+      border-color: #9ca3af !important;
+    }
+
+    @keyframes voiceCompactPulse {
+      0% {
+        box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4);
+      }
+      100% {
+        box-shadow: 0 0 0 10px rgba(99, 102, 241, 0);
+      }
+    }
+
+    @keyframes voiceCompactSpin {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* Live Transcription Overlay styles */
+    #live-transcript-overlay {
+      transition: opacity 0.3s ease;
+    }
   </style>
   <!-- Quill Theme -->
   <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
@@ -691,7 +841,7 @@
 
         <!-- Collapse/Expand Toggle Button -->
         <button id="toggle-left-pane-btn" title="Hide/Show PDF Viewer"
-          class="bg-blue-600 hover:bg-blue-700 text-white shadow-md p-2 rounded-lg transition-all duration-300">
+          class="bg-blue-600 hover:bg-blue-700 text-white shadow-md p-2 rounded-lg transition-all duration-300 flex-shrink-0">
           <svg id="left-pane-toggle-icon" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
             viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
@@ -837,10 +987,56 @@
     </div>
 
     <!-- Right Pane (Chat Area) - Fixed Layout -->
-    <div id="right-pane" class="right-pane w-1/2 flex flex-col" style="height: calc(100vh - 5rem); overflow: hidden;">
+    <div id="right-pane" class="right-pane w-1/2 flex flex-col" style="height: calc(100vh - 5rem); overflow: hidden; background-color: #fcfcfc;">
 
-      <!-- Chat History (Scrollable) -->
-      <div id="chat-container" class="overflow-y-auto" style="flex: 0 1 auto; max-height: 75vh;">
+      <!-- ═══ Unified AI Control Header ═══════════════════════════════════ -->
+      <div class="ai-control-header border-b border-gray-200 bg-white">
+        
+        <!-- Row 1: Visual Inverted Premium Header (Mode is Hero on left, Brand is Secondary on right) -->
+        <div class="ai-ctrl-row ai-ctrl-row--top flex items-center justify-between py-3 px-4">
+          
+          <!-- Left: Hero Mode Selector -->
+          <div class="flex flex-col gap-1">
+            <span class="text-[9px] font-bold text-gray-400 uppercase tracking-wider leading-none">Learning Mode</span>
+            <button type="button" id="learning-mode-trigger" class="flex items-center gap-1.5 px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 text-indigo-700 text-xs font-bold rounded-xl shadow-sm transition-all cursor-pointer">
+              <span id="trigger-mode-icon">📖</span>
+              <span id="trigger-mode-text">Reading Mode</span>
+              <span class="text-[8px] opacity-60 font-normal ml-0.5">▼</span>
+            </button>
+          </div>
+
+          <!-- Right: Secondary Brand and Connection Status -->
+          <div class="flex items-center gap-3">
+            <div class="text-right flex flex-col justify-center">
+              <span class="text-[10px] font-bold text-slate-500 tracking-tight leading-none">AI Study Companion</span>
+              <span class="text-[9px] text-slate-400 font-medium leading-normal mt-0.5">Personalized Learning</span>
+            </div>
+
+            <div class="w-px h-6 bg-gray-200 flex-shrink-0"></div>
+
+            <!-- TTS live status dot (kept for JS compatibility) -->
+            <div class="flex items-center gap-1" title="TTS Connection Status">
+              <div class="relative flex h-1.5 w-1.5">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" id="tts-ping-dot"></span>
+                <span id="tts-status-dot" class="relative inline-flex rounded-full h-1.5 w-1.5 bg-green-500"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hidden selector and badge kept for JS state tracking compatibility -->
+        <select id="answer-preference-select" style="display:none;" title="Hidden Answer Preference select element">
+          <option value="text_text">📖 Reading</option>
+          <option value="text_audio">🎧 Tutor</option>
+          <option value="audio_text">🎙️ Voice Query</option>
+          <option value="audio_audio">🧑🏫 AI Voice</option>
+        </select>
+        <span id="active-mode-badge" style="display:none;"></span>
+      </div>
+      <!-- ════════════════════════════════════════════════════════════════ -->
+
+      <!-- Chat History (Scrollable - Flex-1 to consume empty space) -->
+      <div id="chat-container" class="flex-1 overflow-y-auto">
         <div class="p-4">
           <canvas id="voice-waveform" class="hidden w-full h-32"></canvas>
           <div id="chat-history">
@@ -877,48 +1073,65 @@
 
       <!-- Bottom Section - Fixed at bottom -->
       <div class="flex-shrink-0 bg-white">
-        <!-- Quick Action Buttons -->
-        <div class="px-4 py-1.5 border-t border-gray-200">
-          <div class="flex justify-center gap-2">
-            <button type="button" id="list-chapters-btn"
-              class="flex items-center gap-2 bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white px-3 py-1.5 rounded-lg shadow-md transition-all font-medium text-xs">
-              <span>📚 Chapters</span>
+
+        <!-- Voice Interaction Panel (AI Voice Mode Flagship UI) -->
+        <div id="voice-interaction-panel" style="display: none; padding: 1rem;" class="border-t border-gray-100 bg-white">
+          <div class="flex flex-col items-center justify-center text-center gap-2">
+            <button type="button" id="voice-panel-mic" class="voice-panel-mic-btn-compact" title="Ask by Voice">
+              <span id="voice-panel-icon" class="text-xl">🎤</span>
             </button>
-            <button type="button" id="summarize-btn"
-              class="flex items-center gap-2 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white px-3 py-1.5 rounded-lg shadow-md transition-all font-medium text-xs">
-              <span>✨ Summarize</span>
-            </button>
+            <div class="flex flex-col gap-0.5">
+              <span id="voice-panel-status" class="text-xs font-bold text-slate-700">Ask by Voice</span>
+              <span id="voice-panel-subtitle" class="text-[10px] text-slate-500 font-medium">Ask anything from this textbook</span>
+            </div>
           </div>
         </div>
 
         <!-- Chat Input (Always visible at bottom) -->
-        <div id="chat-input-container" class="p-3 border-gray-200 rounded-2xl shadow-lg">
-          <form id="user-query-form"
-            class="flex items-center gap-2 bg-white rounded-xl p-1.5 border-2 border-gray-200 focus-within:border-blue-400 transition-all">
-            <textarea id="query-text" placeholder="💬 Ask me anything..." required disabled
-              class="flex-1 bg-transparent border-none rounded-xl px-3 py-2 h-10 resize-none focus:ring-0 focus:outline-none text-gray-700 placeholder-gray-400 text-sm"
+        <div id="chat-input-container" class="chat-input-container">
+          <!-- Text input row -->
+          <form id="user-query-form" class="chat-input-form">
+            <textarea id="query-text"
+              placeholder="Ask a question about the selected book..."
+              required disabled
+              class="chat-input-textarea"
               onkeydown="if(event.key==='Enter' && !event.shiftKey){event.preventDefault();document.getElementById('user-query-form').requestSubmit();}"></textarea>
 
-            <!-- Voice Button -->
-            <button type="button" id="voice-search-btn" title="Voice Search" disabled
-              class="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white rounded-lg p-2 shadow-md transition-all disabled:opacity-50 disabled:cursor-not-allowed">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-                stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
-              </svg>
-            </button>
+            <!-- Inline action buttons (All input controls embedded inside container, no floating buttons) -->
+            <div class="chat-input-actions">
+              <!-- Settings overlay trigger -->
+              <button type="button" id="settings-overlay-trigger" title="Voice & Learning Settings" class="chat-action-btn chat-action-btn--settings">
+                <span class="settings-icon">⚙️</span>
+              </button>
 
-            <!-- Send Button -->
-            <button type="submit" id="submit-query-btn" title="Send Message" disabled
-              class="bg-blue-600 hover:bg-blue-700 text-white rounded-lg p-2 transition-all shadow-md disabled:bg-gray-300 disabled:cursor-not-allowed">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="22" y1="2" x2="11" y2="13"></line>
-                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-              </svg>
-            </button>
+              <!-- Voice search (text-input modes) -->
+              <button type="button" id="voice-search-btn" title="Voice Input" disabled class="chat-action-btn chat-action-btn--mic">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+                </svg>
+              </button>
+
+              <!-- Preference voice search (audio-input modes) -->
+              <button type="button" id="pref-mic-btn" title="Speak your question" class="chat-action-btn chat-action-btn--pref-mic" style="display: none;">
+                <span class="pref-mic-icon">🎙️</span>
+              </button>
+
+              <!-- Send -->
+              <button type="submit" id="submit-query-btn" title="Send" disabled class="chat-action-btn chat-action-btn--send">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="22" y1="2" x2="11" y2="13"></line>
+                  <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                </svg>
+              </button>
+            </div>
           </form>
+
+          <!-- Preference mic status wrapper (integrated inline status) -->
+          <div id="pref-mic-wrapper" style="display:none; padding: 6px 12px 0;" class="pref-mic-status-wrapper">
+            <span id="pref-mic-status" class="text-xs text-indigo-600 font-semibold animate-pulse"></span>
+          </div>
         </div>
       </div>
     </div>
@@ -951,10 +1164,85 @@
   <link rel="stylesheet" href="/static/profile-dropdown.css">
   <script src="/static/profile-dropdown.js"></script>
 
+  <!-- TTS Manager (load FIRST so it's ready when script.js runs) -->
+  <script src="/static/js/tts-manager.js?v=2"></script>
+
+  <!-- Answer Preference: Streaming TTS Pipeline (load before script.js) -->
+  <script src="/static/js/tts-streaming-manager.js?v=1"></script>
+
   <!-- Main script -->
-  <script src="/static/script.js"></script>
-  <script src="/static/conversation.js"></script>
+  <script src="/static/script.js?v=2"></script>
+  <script src="/static/conversation.js?v=2"></script>
   <script src="/static/save-selection.js"></script>
+
+  <!-- Answer Preference Manager (load after script.js so submitSmartQueryFromMic is defined first) -->
+  <script src="/static/js/answer-preference-manager.js?v=1"></script>
+
+  <!-- TTS Selector Wiring -->
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const modelSelect = document.getElementById('tts-model-select');
+      const voiceSelect = document.getElementById('tts-voice-select');
+      const statusDot   = document.getElementById('tts-status-dot');
+
+      if (!modelSelect || !voiceSelect) return;
+
+      // ── Restore saved preferences into dropdowns ──────────────────
+      if (window.ttsManager) {
+        modelSelect.value = window.ttsManager.model || 'sarvam';
+        // Voices loaded asynchronously below
+      }
+
+      // ── Populate voice dropdown from backend ──────────────────────
+      async function loadVoices(model) {
+        voiceSelect.innerHTML = '<option value="">Loading…</option>';
+        voiceSelect.disabled  = true;
+
+        if (model === 'browser') {
+          voiceSelect.innerHTML = '<option value="default">Default</option>';
+          voiceSelect.disabled  = false;
+          return;
+        }
+
+        try {
+          const voices = await window.ttsManager.fetchVoices(model);
+          voiceSelect.innerHTML = voices.map(v =>
+            `<option value="${v.id}">${v.name} ${v.gender === 'Female' ? '♀' : '♂'}</option>`
+          ).join('');
+
+          // Restore saved voice
+          const savedVoice = window.ttsManager.voice;
+          if (savedVoice && voiceSelect.querySelector(`option[value="${savedVoice}"]`)) {
+            voiceSelect.value = savedVoice;
+          }
+
+          voiceSelect.disabled = false;
+          if (statusDot) statusDot.classList.remove('offline');
+        } catch (e) {
+          voiceSelect.innerHTML = '<option value="anushka">Anushka ♀</option>';
+          voiceSelect.disabled  = false;
+          if (statusDot) statusDot.classList.add('offline');
+        }
+      }
+
+      // Initial load
+      await loadVoices(modelSelect.value);
+
+      // ── Model change ──────────────────────────────────────────────
+      modelSelect.addEventListener('change', async () => {
+        const newModel = modelSelect.value;
+        if (window.ttsManager) window.ttsManager.setModel(newModel);
+        await loadVoices(newModel);
+        // Update voice in ttsManager to the newly selected default
+        if (window.ttsManager) window.ttsManager.setVoice(voiceSelect.value);
+      });
+
+      // ── Voice change ──────────────────────────────────────────────
+      voiceSelect.addEventListener('change', () => {
+        if (window.ttsManager) window.ttsManager.setVoice(voiceSelect.value);
+      });
+    });
+  </script>
 
   <!-- Initialize Sidebar -->
   <script>
@@ -1077,21 +1365,7 @@
       });
     }
 
-    function speakMessage(button) {
-      const card = button.closest('.ai-card');
-      const content = card.querySelector('.markdown-content').innerText;
-
-      if (speechSynthesis.speaking) {
-        speechSynthesis.cancel();
-        button.textContent = '🔊'; // Reset icon
-      } else {
-        const utterance = new SpeechSynthesisUtterance(content);
-        utterance.onstart = () => { button.textContent = '🔇'; }; // Change icon to mute
-        utterance.onend = () => { button.textContent = '🔊'; }; // Reset icon when done
-        speechSynthesis.speak(utterance);
-      }
-    }
-
+    // The speakMessage function is now correctly handled globally by script.js and tts-manager.js
     function showThinkingIndicator() {
       const chatHistory = document.getElementById('chat-history');
       const thinkingElement = document.createElement('div');
@@ -1498,6 +1772,280 @@
       }
     });
   </script>
+
+  <!-- Glassmorphic Learning Mode Overlay -->
+  <div id="learning-mode-overlay" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-md opacity-0 pointer-events-none transition-opacity duration-200">
+    <div class="learning-mode-modal bg-white/90 border border-white/20 rounded-2xl p-6 shadow-2xl max-w-xl w-full max-h-[90vh] overflow-y-auto transform scale-95 transition-transform duration-200">
+      
+      <div class="flex items-center justify-between pb-3 border-b border-gray-200/60 mb-5">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">🎓</span>
+          <h3 class="font-bold text-gray-800 text-base">Select Your Learning Mode</h3>
+        </div>
+        <button type="button" id="close-overlay-btn" class="text-gray-400 hover:text-gray-600 transition-colors text-lg font-semibold">✕</button>
+      </div>
+
+      <p class="text-gray-600 text-sm font-semibold text-center mb-6">How would you like Chaduvu Guru to help you today?</p>
+
+      <!-- The 4 Mode Cards Grid -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        
+        <!-- Card 1: Reading Mode -->
+        <div class="learning-mode-card border-2 border-gray-200 hover:border-indigo-400 rounded-xl p-4 bg-white shadow-sm cursor-pointer transition-all flex flex-col gap-1.5" data-mode="text_text">
+          <div class="flex items-center justify-between">
+            <span class="text-2xl font-bold">📖</span>
+            <span class="card-radio-circle w-4 h-4 rounded-full border border-gray-300 flex items-center justify-center">
+              <span class="card-radio-dot w-2 h-2 rounded-full bg-indigo-600 hidden"></span>
+            </span>
+          </div>
+          <h4 class="font-bold text-gray-800 text-sm">Reading Mode</h4>
+          <p class="text-[11px] text-gray-500 leading-tight">Read answers in text format.</p>
+        </div>
+
+        <!-- Card 2: Tutor Mode -->
+        <div class="learning-mode-card border-2 border-gray-200 hover:border-indigo-400 rounded-xl p-4 bg-white shadow-sm cursor-pointer transition-all flex flex-col gap-1.5" data-mode="text_audio">
+          <div class="flex items-center justify-between">
+            <span class="text-2xl font-bold">🎧</span>
+            <span class="card-radio-circle w-4 h-4 rounded-full border border-gray-300 flex items-center justify-center">
+              <span class="card-radio-dot w-2 h-2 rounded-full bg-indigo-600 hidden"></span>
+            </span>
+          </div>
+          <h4 class="font-bold text-gray-800 text-sm">Tutor Mode</h4>
+          <p class="text-[11px] text-gray-500 leading-tight">Read and listen simultaneously.</p>
+        </div>
+
+        <!-- Card 3: Voice Query -->
+        <div class="learning-mode-card border-2 border-gray-200 hover:border-indigo-400 rounded-xl p-4 bg-white shadow-sm cursor-pointer transition-all flex flex-col gap-1.5" data-mode="audio_text">
+          <div class="flex items-center justify-between">
+            <span class="text-2xl font-bold">🎙️</span>
+            <span class="card-radio-circle w-4 h-4 rounded-full border border-gray-300 flex items-center justify-center">
+              <span class="card-radio-dot w-2 h-2 rounded-full bg-indigo-600 hidden"></span>
+            </span>
+          </div>
+          <h4 class="font-bold text-gray-800 text-sm">Voice Query</h4>
+          <p class="text-[11px] text-gray-500 leading-tight">Speak your question and receive text answers.</p>
+        </div>
+
+        <!-- Card 4: AI Voice Mode -->
+        <div class="learning-mode-card border-2 border-gray-200 hover:border-indigo-400 rounded-xl p-4 bg-white shadow-sm cursor-pointer transition-all flex flex-col gap-1.5" data-mode="audio_audio">
+          <div class="flex items-center justify-between">
+            <span class="text-2xl font-bold">🧑🏫</span>
+            <span class="card-radio-circle w-4 h-4 rounded-full border border-gray-300 flex items-center justify-center">
+              <span class="card-radio-dot w-2 h-2 rounded-full bg-indigo-600 hidden"></span>
+            </span>
+          </div>
+          <h4 class="font-bold text-gray-800 text-sm">AI Voice Mode</h4>
+          <p class="text-[11px] text-gray-500 leading-tight">Speak and receive voice explanations.</p>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const trigger = document.getElementById('learning-mode-trigger');
+      const overlay = document.getElementById('learning-mode-overlay');
+      const modal = overlay?.querySelector('.learning-mode-modal');
+      const closeBtn = document.getElementById('close-overlay-btn');
+      const cards = document.querySelectorAll('.learning-mode-card');
+      const selectEl = document.getElementById('answer-preference-select');
+      const triggerIcon = document.getElementById('trigger-mode-icon');
+      const triggerText = document.getElementById('trigger-mode-text');
+
+      const modeDetails = {
+        text_text:   { label: 'Reading Mode', icon: '📖' },
+        text_audio:  { label: 'Tutor Mode', icon: '🎧' },
+        audio_text:  { label: 'Voice Query', icon: '🎙️' },
+        audio_audio: { label: 'AI Voice Mode', icon: '🧑🏫' }
+      };
+
+      function updateActiveUI(mode) {
+        const details = modeDetails[mode] || { label: mode, icon: '🎓' };
+        if (triggerIcon) triggerIcon.textContent = details.icon;
+        if (triggerText) triggerText.textContent = details.label;
+
+        cards.forEach(card => {
+          const cardMode = card.getAttribute('data-mode');
+          const dot = card.querySelector('.card-radio-dot');
+          if (cardMode === mode) {
+            card.classList.add('border-indigo-500', 'bg-indigo-50/20');
+            card.classList.remove('border-gray-200');
+            if (dot) dot.classList.remove('hidden');
+          } else {
+            card.classList.remove('border-indigo-500', 'bg-indigo-50/20');
+            card.classList.add('border-gray-200');
+            if (dot) dot.classList.add('hidden');
+          }
+        });
+      }
+
+      // Sync UI on load after the state manager initializes
+      setTimeout(() => {
+        if (selectEl) {
+          updateActiveUI(selectEl.value || 'text_text');
+        }
+      }, 150);
+
+      // Sync UI when select element undergoes standard changes
+      if (selectEl) {
+        selectEl.addEventListener('change', (e) => {
+          updateActiveUI(e.target.value);
+        });
+      }
+
+      // Open overlay
+      if (trigger) {
+        trigger.addEventListener('click', () => {
+          if (overlay && modal) {
+            overlay.classList.remove('opacity-0', 'pointer-events-none');
+            modal.classList.remove('scale-95');
+            modal.classList.add('scale-100');
+            if (selectEl) {
+              updateActiveUI(selectEl.value);
+            }
+          }
+        });
+      }
+
+      // Close overlay
+      function closeOverlay() {
+        if (overlay && modal) {
+          overlay.classList.add('opacity-0', 'pointer-events-none');
+          modal.classList.remove('scale-100');
+          modal.classList.add('scale-95');
+        }
+      }
+
+      if (closeBtn) {
+        closeBtn.addEventListener('click', closeOverlay);
+      }
+
+      overlay?.addEventListener('click', (e) => {
+        if (e.target === overlay) {
+          closeOverlay();
+        }
+      });
+
+      // Select Card and dispatch change trigger
+      cards.forEach(card => {
+        card.addEventListener('click', () => {
+          const selectedMode = card.getAttribute('data-mode');
+          if (selectEl) {
+            selectEl.value = selectedMode;
+            selectEl.dispatchEvent(new Event('change'));
+          }
+          closeOverlay();
+        });
+      });
+
+      // ── Settings Overlay Controller (Task 2B) ──────────────────────
+      const settingsTrigger = document.getElementById('settings-overlay-trigger');
+      const settingsOverlay = document.getElementById('learning-settings-overlay');
+      const settingsModal   = settingsOverlay?.querySelector('.learning-settings-modal');
+      const closeSettingsBtn = document.getElementById('close-settings-btn');
+      
+      function closeSettings() {
+        if (settingsOverlay && settingsModal) {
+          settingsOverlay.classList.add('opacity-0', 'pointer-events-none');
+          settingsModal.classList.remove('scale-100');
+          settingsModal.classList.add('scale-95');
+        }
+      }
+
+      if (settingsTrigger) {
+        settingsTrigger.addEventListener('click', () => {
+          if (settingsOverlay && settingsModal) {
+            settingsOverlay.classList.remove('opacity-0', 'pointer-events-none');
+            settingsModal.classList.remove('scale-95');
+            settingsModal.classList.add('scale-100');
+          }
+        });
+      }
+
+      if (closeSettingsBtn) {
+        closeSettingsBtn.addEventListener('click', closeSettings);
+      }
+
+      settingsOverlay?.addEventListener('click', (e) => {
+        if (e.target === settingsOverlay) {
+          closeSettings();
+        }
+      });
+
+      // Automatically close settings modal when secondary utility actions are fired
+      document.getElementById('list-chapters-btn')?.addEventListener('click', closeSettings);
+      document.getElementById('summarize-btn')?.addEventListener('click', closeSettings);
+    });
+  </script>
+
+  <!-- Glassmorphic Settings Overlay -->
+  <div id="learning-settings-overlay" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-md opacity-0 pointer-events-none transition-opacity duration-200">
+    <div class="learning-settings-modal bg-white/95 border border-white/20 rounded-2xl p-6 shadow-2xl max-w-sm w-full transform scale-95 transition-transform duration-200">
+      
+      <div class="flex items-center justify-between pb-3 border-b border-gray-200 mb-4">
+        <div class="flex items-center gap-2 text-gray-850 font-bold text-sm">
+          <span>⚙️</span>
+          <h3 class="text-xs uppercase tracking-wider text-gray-700">Learning Settings</h3>
+        </div>
+        <button type="button" id="close-settings-btn" class="text-gray-400 hover:text-gray-600 transition-colors text-lg font-semibold">✕</button>
+      </div>
+
+      <div class="flex flex-col gap-4">
+        <!-- Section 1 & 2: Voice & Engine -->
+        <div class="bg-slate-50 border border-gray-150 rounded-xl p-3 flex flex-col gap-3">
+          <!-- Voice Settings -->
+          <div class="flex flex-col gap-1">
+            <span class="text-[9px] font-bold text-gray-400 uppercase tracking-wider">Voice Assistant</span>
+            <div class="flex items-center justify-between bg-white border border-gray-250 rounded-lg p-2">
+              <span class="text-[11px] text-gray-600 font-semibold">Assistant Voice</span>
+              <select id="tts-voice-select" class="modern-card-select-compact" title="Speaker Voice">
+                <option value="ritu">Ritu ♀</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Engine Settings -->
+          <div class="flex flex-col gap-1">
+            <span class="text-[9px] font-bold text-gray-400 uppercase tracking-wider">Speech Engine</span>
+            <div class="flex items-center justify-between bg-white border border-gray-250 rounded-lg p-2">
+              <span class="text-[11px] text-gray-600 font-semibold">Synthesis Engine</span>
+              <select id="tts-model-select" class="modern-card-select-compact" title="Voice Engine">
+                <option value="sarvam">Sarvam AI</option>
+                <option value="azure">Azure TTS</option>
+                <option value="browser">Browser</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 3: Helper Tools -->
+        <div class="bg-slate-50 border border-gray-150 rounded-xl p-3 flex flex-col gap-2">
+          <span class="text-[9px] font-bold text-gray-400 uppercase tracking-wider">Learning Helper Tools</span>
+          <div class="grid grid-cols-2 gap-2 mt-0.5">
+            <button type="button" id="list-chapters-btn" class="modern-settings-tool-btn modern-settings-tool-btn--indigo">
+              <span>📚</span> Chapters
+            </button>
+            <button type="button" id="summarize-btn" class="modern-settings-tool-btn modern-settings-tool-btn--emerald">
+              <span>✨</span> Summarize
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  <!-- Live Transcription Overlay -->
+  <div id="live-transcript-overlay" class="fixed inset-0 z-50 flex items-center justify-center pointer-events-none opacity-0 transition-opacity duration-300">
+    <div class="bg-slate-900/90 text-white px-6 py-5 rounded-2xl shadow-2xl flex flex-col items-center gap-3 max-w-md text-center pointer-events-auto border border-slate-700 backdrop-blur-md">
+      <div class="flex items-center gap-2">
+        <span class="text-lg animate-pulse">🎤</span>
+        <span class="text-xs uppercase tracking-wider text-slate-400 font-bold">Listening...</span>
+      </div>
+      <p id="live-transcript-text" class="text-sm font-medium text-slate-200">Start speaking to ask a question...</p>
+      <span class="text-[10px] text-slate-500 mt-1">Tap microphone button again to stop and submit</span>
+    </div>
+  </div>
 </body>
 
 </html>

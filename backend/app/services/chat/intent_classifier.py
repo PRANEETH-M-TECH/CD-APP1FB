@@ -5,6 +5,7 @@ Enhanced with semantic similarity scoring for intelligent cache reuse.
 """
 from typing import List, Dict, Optional
 import json
+from backend.app.prompts import templates
 
 
 def calculate_query_similarity(
@@ -201,30 +202,12 @@ def determine_next_action(
     if max_similarity > 0:
         similarity_context = f"\n## Semantic Similarity Analysis:\nThe current query has a semantic similarity score of {max_similarity:.2f} with recent queries (0.0 = completely different, 1.0 = identical).\n"
 
-    prompt = f"""You are an AI assistant that analyzes a user's query within an ongoing conversation to decide the next best action.
+    prompt = templates.DETERMINE_NEXT_ACTION_PROMPT.format(
+        context_summary=context_summary,
+        similarity_context=similarity_context,
+        current_query=current_query
+    )
 
-## Conversation History:
-{context_summary}
-{similarity_context}
-## User's New Query:
-"{current_query}"
-
-## Available Actions:
-1.  `USE_CACHED_CONTEXT`: Choose this if the user's query is a direct follow-up that can be answered using the same information retrieved for the previous question. Examples: "explain that in more detail," "give me an example," "what does that mean?"
-
-2.  `RETRIEVE_NEW_CONTEXT`: Choose this if the user is asking about a completely new topic, or a related but distinctly different topic that requires searching the textbook for new information. Examples: "Okay, now tell me about photosynthesis," "What about the French Revolution?," "How are magnets different from electricity?"
-
-3.  `ANSWER_FROM_HISTORY`: Choose this if the query can be answered directly from the `Conversation History` provided above, without needing the textbook. Examples: "What was the first question I asked?," "Summarize what we just talked about."
-
-## Your Task:
-Analyze the user's intent and respond in the following JSON format. Choose ONLY ONE action.
-
-{{
-  "analysis": "A brief analysis of the user's intent.",
-  "action": "The single best action to take from the list above.",
-  "new_topic_name": "If the action is 'RETRIEVE_NEW_CONTEXT', provide a short name for the new topic (e.g., 'Photosynthesis'). Otherwise, null."
-}}
-"""
 
     try:
         response = gemini_client.models.generate_content(

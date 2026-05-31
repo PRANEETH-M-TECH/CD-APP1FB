@@ -7,7 +7,7 @@ from typing import Dict, List, Optional
 import time
 import uuid
 
-from backend.redis_service import redis_service
+from backend.app.core.redis_service import redis_service
 
 
 class SmartSessionManager:
