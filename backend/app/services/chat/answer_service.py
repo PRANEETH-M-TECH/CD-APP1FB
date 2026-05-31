@@ -336,14 +336,15 @@ def extract_json_block(text: str):
 def reformulate_with_llm(raw_query: str, class_name: str, subject: str, chapters):
     gemini_client = qdrant.gemini_client
     generation_model_name = qdrant.generation_model_name
-    # Convert chapters to JSON string
-    chapters_json = json.dumps(chapters, ensure_ascii=False, indent=2)
+    # Extract only chapter names
+    chapter_names = [chapter.get("chapter_name") for chapter in chapters if chapter.get("chapter_name")]
+    chapter_names_str = json.dumps(chapter_names, ensure_ascii=False, indent=2)
 
     prompt = templates.REFORMULATE_WITH_LLM_PROMPT.format(
         class_name=class_name,
         subject=subject,
         raw_query=raw_query,
-        chapters_json=chapters_json
+        chapter_names=chapter_names_str
     )
 
     # LLM Call

@@ -165,6 +165,8 @@ async def query_engine(
     Streams the answer in real-time using Server-Sent Events (SSE).
     """
     async def event_generator():
+        from backend.app.utils.gemini_tracker import request_stats
+        request_stats.set({"calls": [], "start_time": time.time(), "query": query})
         start = time.time()
         print(f"\n{'='*80}")
         print(f"[QUERY] New query received at {datetime.datetime.now().strftime('%H:%M:%S')}")
@@ -340,6 +342,9 @@ async def query_engine(
         except Exception as e:
             print(f"[LOG] ✗ Error writing to ans.txt: {e}\n")
             
+        from backend.app.utils.gemini_tracker import print_query_performance_report
+        print_query_performance_report()
+            
     return StreamingResponse(event_generator(), media_type="text/event-stream")
 
 
@@ -357,6 +362,8 @@ async def smart_query_engine(
     Smart query endpoint with conversational context, using an action-based routing model.
     """
     async def event_generator():
+        from backend.app.utils.gemini_tracker import request_stats
+        request_stats.set({"calls": [], "start_time": time.time(), "query": query})
         uid = get_user_id_or_default(request)
         start_time = time.time()
         print(f"\n============================================================")
@@ -592,9 +599,13 @@ async def smart_query_engine(
             }
             yield f"data: {json.dumps(metadata)}\n\n"
             yield "data: [DONE]\n\n"
+            from backend.app.utils.gemini_tracker import print_query_performance_report
+            print_query_performance_report()
             
         except Exception as e:
             yield f"data: {json.dumps({'error': str(e)})}\n\n"
+            from backend.app.utils.gemini_tracker import print_query_performance_report
+            print_query_performance_report()
     
     return StreamingResponse(event_generator(), media_type="text/event-stream")
 
