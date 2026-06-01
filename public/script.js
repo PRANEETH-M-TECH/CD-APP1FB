@@ -12,13 +12,16 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('visibilitychange', () => {
         if (document.hidden) {
             console.log('[Global] Tab hidden, stopping TTS.');
-            if (window.ttsManager) {
-                window.ttsManager.stop();
-            } else if (window.speechSynthesis) {
-                window.speechSynthesis.cancel();
+            if (window.playbackController) {
+                window.playbackController.stopAll();
+            } else {
+                if (window.ttsManager) {
+                    window.ttsManager.stop();
+                } else if (window.speechSynthesis) {
+                    window.speechSynthesis.cancel();
+                }
+                document.querySelectorAll('.speak-btn').forEach(btn => btn.textContent = '🔊');
             }
-            // Reset all speak buttons
-            document.querySelectorAll('.speak-btn').forEach(btn => btn.textContent = '🔊');
         }
     });
 });
@@ -771,17 +774,23 @@ function setupUserPage() {
             };
             window.ttsPipeline.onComplete = function() {
                 console.log('[PLAYBACK] All chunks complete for this query.');
-                const btn = window.ttsPipeline._activeBtn || window.ttsPipeline._findActiveButton();
-                if (btn) {
-                    btn.textContent = '🔊';
-                    btn.title = 'Read Aloud';
-                }
-                // Reset Voice Panel State if AI Voice Mode
-                if (window.answerPreferenceManager && window.answerPreferenceManager.currentMode === 'audio_audio') {
-                    window.answerPreferenceManager.setVoicePanelState('idle');
+                if (window.playbackController && window.playbackController.currentEngine === 'pipeline') {
+                    window.playbackController.setState({
+                        isPlaying: false,
+                        isPaused: false,
+                        isStopped: true,
+                        currentNarrationId: null,
+                        currentEngine: null,
+                        playbackStatus: 'idle'
+                    });
                 }
             };
-            window.ttsPipeline.start();
+            const speakBtn = thinkingCard.querySelector('.speak-btn');
+            if (window.playbackController) {
+                window.playbackController.startPipeline(speakBtn);
+            } else {
+                window.ttsPipeline.start();
+            }
             console.log('[STREAM] Gemini Stream Started (audio-output mode: ' + window.answerPreferenceManager.currentMode + ')');
         }
 
@@ -1245,39 +1254,47 @@ window.saveToBag = function (btn) {
 // speakMessage — called by the 🔊 button on every AI card
 // Toggles: click to speak → click again to stop → click again to repeat
 window.speakMessage = function (button) {
-    // Intercept in Tutor Mode when the streaming pipeline is active
-    if (window.answerPreferenceManager && window.answerPreferenceManager.currentMode === 'text_audio' && window.ttsPipeline && window.ttsPipeline.isActive) {
-        window.ttsPipeline.togglePlayPause(button);
-        return;
-    }
-
     const card    = button.closest('.ai-card');
     const content = card ? card.querySelector('.markdown-content').innerText : '';
 
-    if (!window.ttsManager) {
-        // Graceful fallback if ttsManager hasn't loaded yet
-        if (speechSynthesis.speaking) {
-            speechSynthesis.cancel();
-            document.querySelectorAll('.speak-btn').forEach(btn => btn.textContent = '🔊');
-        } else {
-            const utterance = new SpeechSynthesisUtterance(content);
-            utterance.onstart = () => { if (button) button.textContent = '⏹'; };
-            utterance.onend   = () => { if (button) button.textContent = '🔊'; };
-            speechSynthesis.speak(utterance);
+    // Intercept in Tutor Mode or AI Voice Mode when the streaming pipeline is active
+    const isStreamActive = window.ttsPipeline && window.ttsPipeline.isActive;
+    if (window.answerPreferenceManager && 
+        (window.answerPreferenceManager.currentMode === 'text_audio' || window.answerPreferenceManager.currentMode === 'audio_audio') && 
+        isStreamActive) {
+        if (window.playbackController) {
+            if (window.playbackController.isPaused) {
+                window.playbackController.resumePipeline();
+            } else {
+                window.playbackController.pausePipeline();
+            }
         }
         return;
     }
 
-    if (window.ttsManager.isSpeaking) {
-        // Currently speaking → stop
-        window.ttsManager.stop();
-        // Reset all other speak buttons too
-        document.querySelectorAll('.speak-btn').forEach(btn => btn.textContent = '🔊');
+    if (!window.playbackController) {
+        // Safe fallback if playbackController hasn't loaded yet
+        if (window.ttsManager) {
+            if (window.ttsManager.isSpeaking) {
+                window.ttsManager.stop();
+                document.querySelectorAll('.speak-btn').forEach(btn => btn.textContent = '🔊');
+            } else {
+                document.querySelectorAll('.speak-btn').forEach(btn => btn.textContent = '🔊');
+                window.ttsManager.speak(content, button);
+            }
+        }
+        return;
+    }
+
+    if (window.playbackController.currentEngine === 'manager' && window.playbackController.currentNarrationId === button) {
+        if (window.playbackController.isPaused) {
+            window.playbackController.resumeManager();
+        } else {
+            window.playbackController.pauseManager();
+        }
     } else {
-        // Not speaking → start (or repeat if same card)
-        // Reset other buttons first
-        document.querySelectorAll('.speak-btn').forEach(btn => btn.textContent = '🔊');
-        window.ttsManager.speak(content, button);
+        // Different button clicked or not speaking -> start
+        window.playbackController.startManager(content, button);
     }
 }
 
@@ -1493,3 +1510,35 @@ function closeFollowupVoiceOverlay() {
         overlay.classList.remove('active');
     }
 }
+
+// Central Playback Controller Subscriber to synchronize AI Card button icons
+document.addEventListener('DOMContentLoaded', () => {
+    if (window.playbackController) {
+        window.playbackController.subscribe((state) => {
+            const activeBtn = state.currentNarrationId;
+            
+            // Query all speak buttons in the DOM
+            const allSpeakBtns = document.querySelectorAll('.speak-btn');
+            
+            allSpeakBtns.forEach(btn => {
+                if (activeBtn && btn === activeBtn) {
+                    btn.style.display = ''; // Ensure active button is visible
+                    if (state.playbackStatus === 'speaking') {
+                        btn.textContent = '⏸';
+                        btn.title = 'Pause Narration';
+                    } else if (state.playbackStatus === 'paused') {
+                        btn.textContent = '▶';
+                        btn.title = 'Resume Narration';
+                    } else {
+                        btn.textContent = '🔊';
+                        btn.title = 'Read Aloud';
+                    }
+                } else {
+                    // All other buttons return to speaker icon
+                    btn.textContent = '🔊';
+                    btn.title = 'Read Aloud';
+                }
+            });
+        });
+    }
+});

@@ -107,6 +107,26 @@ class AnswerPreferenceManager {
             voicePanelMic.dataset.prefListenerAttached = 'true';
         }
 
+        // Subscribe voice panel state to PlaybackController
+        if (window.playbackController) {
+            window.playbackController.subscribe((state) => {
+                if (this.currentMode === 'audio_audio') {
+                    // Check if we are currently recording/processing to avoid visual conflicts
+                    if (state.playbackStatus === 'speaking') {
+                        this.setVoicePanelState('speaking');
+                    } else if (state.playbackStatus === 'paused') {
+                        this.setVoicePanelState('paused');
+                    } else if (state.playbackStatus === 'idle' || state.playbackStatus === 'stopped') {
+                        const activeStatus = document.getElementById('voice-panel-status');
+                        const isInteracting = activeStatus && (activeStatus.textContent.includes('Listening') || activeStatus.textContent.includes('Understanding'));
+                        if (!isInteracting) {
+                            this.setVoicePanelState('idle');
+                        }
+                    }
+                }
+            });
+        }
+
         console.log(`[MODE] AnswerPreferenceManager initialized | active mode: ${this.currentMode}`);
     }
 
@@ -124,8 +144,8 @@ class AnswerPreferenceManager {
         }
 
         // Stop any running audio pipeline
-        if (window.ttsPipeline && this.MODES[this.currentMode].output === 'audio') {
-            window.ttsPipeline.stop();
+        if (window.playbackController && this.MODES[this.currentMode].output === 'audio') {
+            window.playbackController.stopAll();
         }
 
         this.currentMode = newMode;

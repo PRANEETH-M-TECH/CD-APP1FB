@@ -23,6 +23,216 @@
  * ─────────────────────────────────────────────────────────────────────────────
  */
 
+class PlaybackController {
+    constructor() {
+        this.isPlaying = false;
+        this.isPaused = false;
+        this.isStopped = true;
+        this.currentNarrationId = null; // AI card button element
+        this.currentEngine = null; // 'pipeline' | 'manager'
+        this.playbackStatus = 'idle'; // 'idle' | 'speaking' | 'paused' | 'stopped'
+        this.subscribers = [];
+    }
+
+    subscribe(callback) {
+        if (typeof callback === 'function') {
+            this.subscribers.push(callback);
+        }
+    }
+
+    unsubscribe(callback) {
+        this.subscribers = this.subscribers.filter(sub => sub !== callback);
+    }
+
+    notify() {
+        const state = {
+            isPlaying: this.isPlaying,
+            isPaused: this.isPaused,
+            isStopped: this.isStopped,
+            currentNarrationId: this.currentNarrationId,
+            currentEngine: this.currentEngine,
+            playbackStatus: this.playbackStatus
+        };
+        console.log('[PLAYBACK CONTROLLER] State changed:', state);
+        this.subscribers.forEach(sub => {
+            try {
+                sub(state);
+            } catch (err) {
+                console.error('[PLAYBACK CONTROLLER] Error notifying subscriber:', err);
+            }
+        });
+    }
+
+    setState(newState) {
+        let changed = false;
+        for (let key in newState) {
+            if (this[key] !== newState[key]) {
+                this[key] = newState[key];
+                changed = true;
+            }
+        }
+        if (changed) {
+            this.notify();
+        }
+    }
+
+    stopAll() {
+        console.log('[PLAYBACK CONTROLLER] stopAll triggered');
+        
+        // Stop Streaming Pipeline if active
+        if (window.ttsPipeline && window.ttsPipeline.isActive) {
+            window.ttsPipeline._stopCurrentAudio();
+            window.ttsPipeline.isActive = false;
+            window.ttsPipeline.isPaused = false;
+            window.ttsPipeline.hasStartedAudio = false;
+            window.ttsPipeline.fetchQueue = [];
+            window.ttsPipeline.deliveryQueue = [];
+            window.ttsPipeline.renderQueue = [];
+            window.ttsPipeline.textBuffer = '';
+            window.ttsPipeline.isProcessingPlayback = false;
+            window.ttsPipeline.isProcessingRender = false;
+            window.ttsPipeline.isFetchingTTS = false;
+        }
+
+        // Stop Static TTS Manager if active
+        if (window.ttsManager) {
+            window.ttsManager.fetchQueue = [];
+            window.ttsManager.playbackQueue = [];
+            window.ttsManager.isFetching = false;
+            window.ttsManager.isPlayingQueue = false;
+            if (window.ttsManager.currentAudio) {
+                window.ttsManager.currentAudio.pause();
+                window.ttsManager.currentAudio.currentTime = 0;
+                window.ttsManager.currentAudio = null;
+            }
+            window.ttsManager.isSpeaking = false;
+        }
+
+        // Direct SpeechSynthesis cancellation
+        if (window.speechSynthesis && window.speechSynthesis.speaking) {
+            window.speechSynthesis.cancel();
+        }
+
+        this.isPlaying = false;
+        this.isPaused = false;
+        this.isStopped = true;
+        this.currentNarrationId = null;
+        this.currentEngine = null;
+        this.playbackStatus = 'idle';
+    }
+
+    startPipeline(button = null) {
+        this.stopAll();
+        this.setState({
+            isPlaying: true,
+            isPaused: false,
+            isStopped: false,
+            currentNarrationId: button,
+            currentEngine: 'pipeline',
+            playbackStatus: 'speaking'
+        });
+        if (window.ttsPipeline) {
+            window.ttsPipeline._activeBtn = button;
+            window.ttsPipeline.start();
+        }
+    }
+
+    pausePipeline() {
+        if (this.currentEngine !== 'pipeline' || this.isPaused) return;
+        this.setState({
+            isPaused: true,
+            playbackStatus: 'paused'
+        });
+        if (window.ttsPipeline) {
+            window.ttsPipeline.pause();
+        }
+    }
+
+    resumePipeline() {
+        if (this.currentEngine !== 'pipeline' || !this.isPaused) return;
+        this.setState({
+            isPaused: false,
+            playbackStatus: 'speaking'
+        });
+        if (window.ttsPipeline) {
+            window.ttsPipeline.resume();
+        }
+    }
+
+    stopPipeline() {
+        if (this.currentEngine !== 'pipeline') return;
+        if (window.ttsPipeline) {
+            window.ttsPipeline.stop();
+        }
+        this.setState({
+            isPlaying: false,
+            isPaused: false,
+            isStopped: true,
+            currentNarrationId: null,
+            currentEngine: null,
+            playbackStatus: 'idle'
+        });
+    }
+
+    startManager(text, button) {
+        this.stopAll();
+        this.setState({
+            isPlaying: true,
+            isPaused: false,
+            isStopped: false,
+            currentNarrationId: button,
+            currentEngine: 'manager',
+            playbackStatus: 'speaking'
+        });
+        if (window.ttsManager) {
+            window.ttsManager.speak(text, button);
+        }
+    }
+
+    stopManager() {
+        if (this.currentEngine !== 'manager') return;
+        if (window.ttsManager) {
+            window.ttsManager.stop();
+        }
+        this.setState({
+            isPlaying: false,
+            isPaused: false,
+            isStopped: true,
+            currentNarrationId: null,
+            currentEngine: null,
+            playbackStatus: 'idle'
+        });
+    }
+
+    pauseManager() {
+        if (this.currentEngine !== 'manager' || this.isPaused) return;
+        this.setState({
+            isPaused: true,
+            playbackStatus: 'paused'
+        });
+        if (window.ttsManager && window.ttsManager.currentAudio) {
+            window.ttsManager.currentAudio.pause();
+        } else if (window.speechSynthesis && window.speechSynthesis.speaking) {
+            window.speechSynthesis.pause();
+        }
+    }
+
+    resumeManager() {
+        if (this.currentEngine !== 'manager' || !this.isPaused) return;
+        this.setState({
+            isPaused: false,
+            playbackStatus: 'speaking'
+        });
+        if (window.ttsManager && window.ttsManager.currentAudio) {
+            window.ttsManager.currentAudio.play().catch(err => {
+                console.error('[PLAYBACK CONTROLLER] Error resuming static audio:', err);
+            });
+        } else if (window.speechSynthesis && window.speechSynthesis.paused) {
+            window.speechSynthesis.resume();
+        }
+    }
+}
+
 class StreamingAudioPipeline {
     constructor(options = {}) {
         // ── Configuration ────────────────────────────────────────────────────
@@ -161,17 +371,6 @@ class StreamingAudioPipeline {
         this.isFetchingTTS = false;
         this.streamCompleted = true;
         this._stopCurrentAudio();
-        
-        // Reset the speak button icon to 🔊
-        const btn = this._activeBtn || this._findActiveButton();
-        if (btn) {
-            btn.textContent = '🔊';
-            btn.title = 'Read Aloud';
-        }
-        
-        if (window.answerPreferenceManager && window.answerPreferenceManager.currentMode === 'audio_audio') {
-            window.answerPreferenceManager.setVoicePanelState('idle');
-        }
 
         // Trigger render-completion callback instantly
         if (typeof this.onRenderComplete === 'function') {
@@ -196,18 +395,6 @@ class StreamingAudioPipeline {
 
         // Trigger rendering loop so it immediately flushes any queued chunks when paused
         this._processRenderQueue();
-
-        // Update button icon to Play (▶)
-        const btn = this._activeBtn || this._findActiveButton();
-        if (btn) {
-            btn.textContent = '▶';
-            btn.title = 'Resume narration';
-            this._activeBtn = btn;
-        }
-
-        if (window.answerPreferenceManager && window.answerPreferenceManager.currentMode === 'audio_audio') {
-            window.answerPreferenceManager.setVoicePanelState('paused');
-        }
         console.log('[STREAM] Audio playback paused');
     }
 
@@ -222,18 +409,6 @@ class StreamingAudioPipeline {
             });
         } else if (window.speechSynthesis && window.speechSynthesis.paused) {
             window.speechSynthesis.resume();
-        }
-
-        // Update button icon to Pause (⏸)
-        const btn = this._activeBtn || this._findActiveButton();
-        if (btn) {
-            btn.textContent = '⏸';
-            btn.title = 'Pause narration';
-            this._activeBtn = btn;
-        }
-
-        if (window.answerPreferenceManager && window.answerPreferenceManager.currentMode === 'audio_audio') {
-            window.answerPreferenceManager.setVoicePanelState('speaking');
         }
         console.log('[STREAM] Audio playback resumed');
     }
@@ -637,20 +812,8 @@ class StreamingAudioPipeline {
 
         // 2. Play audio (if available)
         if (audio_blob_url || chunk.isBrowserTTS) {
-            // Once first audio chunk starts, show the play/pause button and set to pause icon (⏸)
             if (!this.hasStartedAudio) {
                 this.hasStartedAudio = true;
-                const btn = this._activeBtn || this._findActiveButton();
-                if (btn) {
-                    btn.style.display = '';
-                    btn.textContent = '⏸';
-                    btn.title = 'Pause narration';
-                    this._activeBtn = btn;
-                }
-            }
-
-            if (window.answerPreferenceManager && window.answerPreferenceManager.currentMode === 'audio_audio') {
-                window.answerPreferenceManager.setVoicePanelState('speaking');
             }
 
             if (this.isPaused) {
@@ -713,10 +876,12 @@ class StreamingAudioPipeline {
 
 // ── Auto-initialize on DOMContentLoaded ──────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
+    window.playbackController = new PlaybackController();
+
     window.ttsPipeline = new StreamingAudioPipeline({
         sentenceThreshold: 2,
         charThreshold: 300,
         dryRun: false
     });
-    console.log('[STREAM] window.ttsPipeline ready.');
+    console.log('[STREAM] window.ttsPipeline and window.playbackController ready.');
 });
