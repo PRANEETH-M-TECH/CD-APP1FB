@@ -763,6 +763,12 @@ function setupUserPage() {
                 const isNearBottom = (chatHistory.scrollHeight - chatHistory.scrollTop - chatHistory.clientHeight) < 100;
                 if (isNearBottom) chatHistory.scrollTop = chatHistory.scrollHeight;
             };
+            window.ttsPipeline.onRenderComplete = function() {
+                console.log('[RENDER] Text rendering complete.');
+                if (bufferedFollowups) {
+                    addFollowUpsUI(thinkingCard, bufferedFollowups);
+                }
+            };
             window.ttsPipeline.onComplete = function() {
                 console.log('[PLAYBACK] All chunks complete for this query.');
                 const btn = window.ttsPipeline._activeBtn || window.ttsPipeline._findActiveButton();
@@ -773,10 +779,6 @@ function setupUserPage() {
                 // Reset Voice Panel State if AI Voice Mode
                 if (window.answerPreferenceManager && window.answerPreferenceManager.currentMode === 'audio_audio') {
                     window.answerPreferenceManager.setVoicePanelState('idle');
-                }
-                // Render follow-ups now that audio is finished!
-                if (bufferedFollowups) {
-                    addFollowUpsUI(thinkingCard, bufferedFollowups);
                 }
             };
             window.ttsPipeline.start();
@@ -810,9 +812,6 @@ function setupUserPage() {
                         addFollowUpsUI(thinkingCard, bufferedFollowups);
                     }
                 }
-
-                // Speak the response via ttsManager (on-demand via 🔊 button — no auto-play here)
-                // Auto-play is intentionally disabled; user clicks 🔊 on each card to listen.
 
                 chatHistory.scrollTop = chatHistory.scrollHeight;
                 return;

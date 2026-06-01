@@ -37,12 +37,15 @@ class StreamingAudioPipeline {
         this.chunkIdCounter = 0;
         this.textBuffer = '';
         this.deliveryQueue = [];       // { chunk_id, text_chunk, audio_blob_url, status }
+        this.renderQueue = [];         // text chunks waiting to be rendered
         this.fetchQueue = [];          // chunks waiting for TTS fetch
         this.isProcessingPlayback = false;
+        this.isProcessingRender = false;
         this.isFetchingTTS = false;
         this.isActive = false;
         this.currentAudio = null;
         this.abortController = null;
+        this.streamCompleted = false;
 
         // ── Play/Pause Control & State ───────────────────────────────────────
         this.isPaused = false;
@@ -52,6 +55,8 @@ class StreamingAudioPipeline {
         // ── Display callback (set by external code) ──────────────────────────
         // Called with (text_chunk, chunk_id) when a chunk is ready to display
         this.onDisplayChunk = options.onDisplayChunk || null;
+        // Called when all text rendering is complete
+        this.onRenderComplete = options.onRenderComplete || null;
         // Called when all chunks are done
         this.onComplete = options.onComplete || null;
 
@@ -70,12 +75,15 @@ class StreamingAudioPipeline {
         this.chunkIdCounter = 0;
         this.textBuffer = '';
         this.deliveryQueue = [];
+        this.renderQueue = [];
         this.fetchQueue = [];
         this.isProcessingPlayback = false;
+        this.isProcessingRender = false;
         this.isFetchingTTS = false;
         this.isActive = true;
         this.isPaused = false;
         this.hasStartedAudio = false;
+        this.streamCompleted = false;
         this._activeBtn = null;
         this._stopCurrentAudio();
         console.log('[STREAM] Gemini Stream Started');
@@ -102,25 +110,74 @@ class StreamingAudioPipeline {
             this._createChunk(remaining);
             this.textBuffer = '';
         }
+        this.streamCompleted = true;
         console.log('[STREAM] Gemini Stream Ended — final flush complete');
+        
+        // Trigger render queue process just in case
+        this._processRenderQueue();
     }
 
-    /**
-     * Abort all queued chunks and stop current audio.
-     */
     stop() {
+        // If there are any chunks in renderQueue that haven't been displayed,
+        // render them immediately so the full text is not lost!
+        while (this.renderQueue && this.renderQueue.length > 0) {
+            const chunk = this.renderQueue.shift();
+            if (chunk && !chunk.text_displayed) {
+                if (typeof this.onDisplayChunk === 'function') {
+                    this.onDisplayChunk(chunk.text_chunk, chunk.chunk_id);
+                }
+                chunk.text_displayed = true;
+            }
+        }
+        // If there are any chunks in deliveryQueue that haven't been displayed,
+        // render them immediately so the full text is not lost!
+        while (this.deliveryQueue && this.deliveryQueue.length > 0) {
+            const chunk = this.deliveryQueue.shift();
+            if (chunk && !chunk.text_displayed) {
+                if (typeof this.onDisplayChunk === 'function') {
+                    this.onDisplayChunk(chunk.text_chunk, chunk.chunk_id);
+                }
+                chunk.text_displayed = true;
+            }
+        }
+        // If there is any remaining text in textBuffer, render it too
+        const remaining = this.textBuffer.trim();
+        if (remaining) {
+            if (typeof this.onDisplayChunk === 'function') {
+                this.onDisplayChunk(remaining, this.chunkIdCounter + 1);
+            }
+            this.textBuffer = '';
+        }
+
         this.isActive = false;
         this.isPaused = false;
         this.hasStartedAudio = false;
         this.fetchQueue = [];
         this.deliveryQueue = [];
+        this.renderQueue = [];
         this.textBuffer = '';
         this.isProcessingPlayback = false;
+        this.isProcessingRender = false;
         this.isFetchingTTS = false;
+        this.streamCompleted = true;
         this._stopCurrentAudio();
+        
+        // Reset the speak button icon to 🔊
+        const btn = this._activeBtn || this._findActiveButton();
+        if (btn) {
+            btn.textContent = '🔊';
+            btn.title = 'Read Aloud';
+        }
+        
         if (window.answerPreferenceManager && window.answerPreferenceManager.currentMode === 'audio_audio') {
             window.answerPreferenceManager.setVoicePanelState('idle');
         }
+
+        // Trigger render-completion callback instantly
+        if (typeof this.onRenderComplete === 'function') {
+            this.onRenderComplete();
+        }
+
         console.log('[STREAM] Pipeline stopped (abort)');
     }
 
@@ -136,6 +193,9 @@ class StreamingAudioPipeline {
         } else if (window.speechSynthesis && window.speechSynthesis.speaking) {
             window.speechSynthesis.pause();
         }
+
+        // Trigger rendering loop so it immediately flushes any queued chunks when paused
+        this._processRenderQueue();
 
         // Update button icon to Play (▶)
         const btn = this._activeBtn || this._findActiveButton();
@@ -343,18 +403,18 @@ class StreamingAudioPipeline {
             sanitized_text: sanitized,
             audio_blob_url: null,
             status: 'pending',        // pending → fetching → ready → playing → done
+            text_displayed: false,
+            display_allowed: false,
             _createTime: performance.now()
         };
         this.fetchQueue.push(chunk);
         this.deliveryQueue.push(chunk);
+        this.renderQueue.push(chunk);
 
         console.log(`[BUFFER] Chunk #${chunk_id} Created | "${text.slice(0, 60)}..."`);
 
-        // Display the chunk in the UI immediately as it is created, so text
-        // streams without being blocked by play/pause states.
-        if (typeof this.onDisplayChunk === 'function') {
-            this.onDisplayChunk(text, chunk_id);
-        }
+        // Kick off independent rendering loop
+        this._processRenderQueue();
 
         // Kick off TTS fetch if not already running
         if (!this.isFetchingTTS) {
@@ -472,6 +532,38 @@ class StreamingAudioPipeline {
         }
     }
 
+    async _processRenderQueue() {
+        if (this.isProcessingRender) return;
+        this.isProcessingRender = true;
+
+        while (this.isActive && this.renderQueue.length > 0) {
+            const chunk = this.renderQueue[0];
+            
+            // Render immediately if paused, or wait until audio playback sets display_allowed
+            if (this.isPaused || chunk.display_allowed) {
+                this.renderQueue.shift();
+                if (!chunk.text_displayed) {
+                    if (typeof this.onDisplayChunk === 'function') {
+                        this.onDisplayChunk(chunk.text_chunk, chunk.chunk_id);
+                    }
+                    chunk.text_displayed = true;
+                }
+            } else {
+                // Wait a short bit and check again
+                await new Promise(resolve => setTimeout(resolve, 30));
+            }
+        }
+
+        this.isProcessingRender = false;
+
+        // Check if rendering is completely finished and stream is completed
+        if (this.isActive && this.streamCompleted && this.renderQueue.length === 0 && this.textBuffer.length === 0) {
+            if (typeof this.onRenderComplete === 'function') {
+                this.onRenderComplete();
+            }
+        }
+    }
+
     // ── Internal: Playback Queue (Strict Ordering) ────────────────────────────
 
     /**
@@ -524,10 +616,6 @@ class StreamingAudioPipeline {
         });
     }
 
-    /**
-     * Display text chunk, then play audio for that chunk.
-     * @param {Object} chunk
-     */
     async _playChunk(chunk) {
         const { chunk_id, text_chunk, audio_blob_url } = chunk;
 
@@ -541,8 +629,11 @@ class StreamingAudioPipeline {
 
         console.log(`[PLAYBACK] Playing Chunk #${chunk_id}`);
 
-        // 1. Display of text chunk was already handled immediately in _createChunk
-        // to prevent display block when audio is paused.
+        // Allow independent text rendering loop to display this chunk
+        chunk.display_allowed = true;
+        
+        // Trigger rendering process in case it is waiting
+        this._processRenderQueue();
 
         // 2. Play audio (if available)
         if (audio_blob_url || chunk.isBrowserTTS) {
@@ -575,7 +666,6 @@ class StreamingAudioPipeline {
             // Silence simulation
             await new Promise(r => setTimeout(r, 300));
         }
-        // If no audio_blob_url and not dryRun, text was already displayed — just continue
 
         const elapsed = Math.round(performance.now() - playStart);
         console.log(`[PLAYBACK] Chunk #${chunk_id} finished in ${elapsed}ms`);
