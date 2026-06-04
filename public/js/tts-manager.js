@@ -134,13 +134,22 @@ class TTSManager {
         if (this.playbackQueue.length === 0) {
             this.isPlayingQueue = false;
             this.isSpeaking = false;
-            this._setButtonState('idle');
+            // Notify PlaybackController that static narration is done
+            if (window.playbackController && window.playbackController.currentEngine === 'manager') {
+                window.playbackController.setState({
+                    isPlaying: false,
+                    isPaused: false,
+                    isStopped: true,
+                    currentNarrationId: null,
+                    currentEngine: null,
+                    playbackStatus: 'idle'
+                });
+            }
             return;
         }
 
         this.isPlayingQueue = true;
         this.isSpeaking = true;
-        this._setButtonState('speaking');
 
         const item = this.playbackQueue.shift();
 
@@ -278,14 +287,7 @@ class TTSManager {
     // ── Internal: Button State ────────────────────────────────────────────
 
     _setButtonState(state) {
-        if (!this._activeBtn) return;
-        if (state === 'speaking') {
-            this._activeBtn.textContent = '⏹';
-            this._activeBtn.title = 'Stop speaking';
-        } else {
-            this._activeBtn.textContent = '🔊';
-            this._activeBtn.title = 'Read aloud';
-        }
+        // No-op: all button visuals are controlled by PlaybackController subscribers
     }
 
     // ── Fetch voices from backend ─────────────────────────────────────────

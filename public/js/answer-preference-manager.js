@@ -107,6 +107,24 @@ class AnswerPreferenceManager {
             voicePanelMic.dataset.prefListenerAttached = 'true';
         }
 
+        // Subscribe voice panel to PlaybackController state changes
+        if (window.playbackController) {
+            window.playbackController.subscribe((state) => {
+                if (this.currentMode !== 'audio_audio') return;
+                switch (state.playbackStatus) {
+                    case 'speaking':
+                        this.setVoicePanelState('speaking');
+                        break;
+                    case 'paused':
+                        this.setVoicePanelState('paused');
+                        break;
+                    case 'idle':
+                        this.setVoicePanelState('idle');
+                        break;
+                }
+            });
+        }
+
         console.log(`[MODE] AnswerPreferenceManager initialized | active mode: ${this.currentMode}`);
     }
 
@@ -123,9 +141,9 @@ class AnswerPreferenceManager {
             this._stopMic();
         }
 
-        // Stop any running audio pipeline
-        if (window.ttsPipeline && this.MODES[this.currentMode].output === 'audio') {
-            window.ttsPipeline.stop();
+        // Stop any running audio playback via centralized controller
+        if (window.playbackController && this.MODES[this.currentMode].output === 'audio') {
+            window.playbackController.stopAll();
         }
 
         this.currentMode = newMode;
@@ -361,6 +379,11 @@ class AnswerPreferenceManager {
 
     _startMic() {
         if (!this.recognition || this.isListening) return;
+
+        // Immediately stop active narration to prevent self-capture/feedback
+        if (window.playbackController) {
+            window.playbackController.stopAll();
+        }
 
         try {
             this.recognition.start();

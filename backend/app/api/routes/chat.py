@@ -598,6 +598,15 @@ async def smart_query_engine(
     
     return StreamingResponse(event_generator(), media_type="text/event-stream")
 
+class DebugLogRequest(BaseModel):
+    type: str
+    msg: str
+
+@router.post("/api/debug/log")
+async def debug_log(request: DebugLogRequest):
+    print(f"   [BROWSER {request.type.upper()}] {request.msg}")
+    return {"status": "ok"}
+
 
 @router.get("/api/session/history", tags=["Session"])
 async def get_session_history(session_id: str = Query(...)):

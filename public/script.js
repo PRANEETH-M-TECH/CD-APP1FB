@@ -6,19 +6,47 @@ document.addEventListener('DOMContentLoaded', () => {
         setupChaptersPage();
     } else if (document.getElementById('user-query-form')) {
         setupUserPage();
+
+        // Central PlaybackController subscriber to synchronize speak buttons
+        if (window.playbackController) {
+            window.playbackController.subscribe((state) => {
+                const buttons = document.querySelectorAll('.speak-btn');
+                buttons.forEach(btn => {
+                    if (state.currentNarrationId === btn) {
+                        if (state.playbackStatus === 'speaking') {
+                            btn.textContent = '⏸';
+                            btn.title = 'Pause';
+                        } else if (state.playbackStatus === 'paused') {
+                            btn.textContent = '▶';
+                            btn.title = 'Resume';
+                        } else {
+                            btn.textContent = '🔊';
+                            btn.title = 'Read Aloud';
+                        }
+                    } else {
+                        btn.textContent = '🔊';
+                        btn.title = 'Read Aloud';
+                    }
+                });
+            });
+        }
     }
 
     // Global visibility change handler to stop TTS (cloud + browser)
     document.addEventListener('visibilitychange', () => {
         if (document.hidden) {
             console.log('[Global] Tab hidden, stopping TTS.');
-            if (window.ttsManager) {
-                window.ttsManager.stop();
-            } else if (window.speechSynthesis) {
-                window.speechSynthesis.cancel();
+            if (window.playbackController) {
+                window.playbackController.stopAll();
+            } else {
+                if (window.ttsManager) {
+                    window.ttsManager.stop();
+                } else if (window.speechSynthesis) {
+                    window.speechSynthesis.cancel();
+                }
+                // Reset all speak buttons
+                document.querySelectorAll('.speak-btn').forEach(btn => btn.textContent = '🔊');
             }
-            // Reset all speak buttons
-            document.querySelectorAll('.speak-btn').forEach(btn => btn.textContent = '🔊');
         }
     });
 });
@@ -487,6 +515,10 @@ function setupUserPage() {
                     return;
                 }
                 try {
+                    // Immediately stop active narration to prevent self-capture/feedback
+                    if (window.playbackController) {
+                        window.playbackController.stopAll();
+                    }
                     simpleRecognition.start();
                 } catch (e) {
                     console.error("Could not start recognition:", e);
@@ -756,6 +788,7 @@ function setupUserPage() {
         const _isAudioOutputMode = window.answerPreferenceManager &&
             window.answerPreferenceManager.isAudioOutputMode();
         if (_isAudioOutputMode && window.ttsPipeline) {
+            const speakBtn = thinkingCard.querySelector('.speak-btn');
             // Wire display callback: appends text to the contentDiv as chunks arrive
             window.ttsPipeline.onDisplayChunk = function(textChunk, chunkId) {
                 fullResponse += textChunk;
@@ -765,21 +798,28 @@ function setupUserPage() {
             };
             window.ttsPipeline.onComplete = function() {
                 console.log('[PLAYBACK] All chunks complete for this query.');
-                const btn = window.ttsPipeline._activeBtn || window.ttsPipeline._findActiveButton();
-                if (btn) {
-                    btn.textContent = '🔊';
-                    btn.title = 'Read Aloud';
+                if (window.playbackController) {
+                    window.playbackController.setState({
+                        isPlaying: false,
+                        isPaused: false,
+                        isStopped: true,
+                        currentNarrationId: null,
+                        currentEngine: null,
+                        playbackStatus: 'idle'
+                    });
                 }
-                // Reset Voice Panel State if AI Voice Mode
-                if (window.answerPreferenceManager && window.answerPreferenceManager.currentMode === 'audio_audio') {
-                    window.answerPreferenceManager.setVoicePanelState('idle');
-                }
-                // Render follow-ups now that audio is finished!
+            };
+            window.ttsPipeline.onRenderComplete = function() {
+                console.log('[STREAM] Rendering complete. Adding follow-ups.');
                 if (bufferedFollowups) {
                     addFollowUpsUI(thinkingCard, bufferedFollowups);
                 }
             };
-            window.ttsPipeline.start();
+            if (window.playbackController) {
+                window.playbackController.startPipeline(speakBtn);
+            } else {
+                window.ttsPipeline.start();
+            }
             console.log('[STREAM] Gemini Stream Started (audio-output mode: ' + window.answerPreferenceManager.currentMode + ')');
         }
 
@@ -868,8 +908,9 @@ function setupUserPage() {
 
                 if (data.error) {
                     contentDiv.innerHTML = `<p class="error-message">Error: ${data.error}</p>`;
-                    // Stop pipeline if running
-                    if (_isAudioOutputMode && window.ttsPipeline) {
+                    if (window.playbackController) {
+                        window.playbackController.stopAll();
+                    } else if (_isAudioOutputMode && window.ttsPipeline) {
                         window.ttsPipeline.stop();
                     }
                     source.close();
@@ -885,7 +926,9 @@ function setupUserPage() {
         source.onerror = function (error) {
             console.error('EventSource failed:', error);
             contentDiv.innerHTML = `<p class="error-message">Connection error. Please try again.</p>`;
-            if (window.answerPreferenceManager && window.answerPreferenceManager.currentMode === 'audio_audio') {
+            if (window.playbackController) {
+                window.playbackController.stopAll();
+            } else if (window.answerPreferenceManager && window.answerPreferenceManager.currentMode === 'audio_audio') {
                 window.answerPreferenceManager.setVoicePanelState('idle');
             }
             source.close();
@@ -903,9 +946,7 @@ function setupUserPage() {
 
         const isHiddenMode = window.answerPreferenceManager && 
             (window.answerPreferenceManager.currentMode === 'text_text' || 
-             window.answerPreferenceManager.currentMode === 'text_audio' || 
-             window.answerPreferenceManager.currentMode === 'audio_text' ||
-             window.answerPreferenceManager.currentMode === 'audio_audio');
+             window.answerPreferenceManager.currentMode === 'audio_text');
         const speakBtnStyle = isHiddenMode ? 'display: none;' : '';
 
         const header = `
@@ -1183,9 +1224,7 @@ function appendAIResponse(displayText, readText = '') {
 
     const isHiddenMode = window.answerPreferenceManager && 
         (window.answerPreferenceManager.currentMode === 'text_text' || 
-         window.answerPreferenceManager.currentMode === 'text_audio' || 
-         window.answerPreferenceManager.currentMode === 'audio_text' ||
-         window.answerPreferenceManager.currentMode === 'audio_audio');
+         window.answerPreferenceManager.currentMode === 'audio_text');
     const speakBtnStyle = isHiddenMode ? 'display: none;' : '';
 
     const header = `
@@ -1244,43 +1283,67 @@ window.saveToBag = function (btn) {
 
 
 // speakMessage — called by the 🔊 button on every AI card
-// Toggles: click to speak → click again to stop → click again to repeat
+// Toggles: click to speak → click again to pause → click again to resume
 window.speakMessage = function (button) {
-    // Intercept in Tutor Mode when the streaming pipeline is active
-    if (window.answerPreferenceManager && window.answerPreferenceManager.currentMode === 'text_audio' && window.ttsPipeline && window.ttsPipeline.isActive) {
-        window.ttsPipeline.togglePlayPause(button);
-        return;
-    }
-
     const card    = button.closest('.ai-card');
     const content = card ? card.querySelector('.markdown-content').innerText : '';
 
-    if (!window.ttsManager) {
-        // Graceful fallback if ttsManager hasn't loaded yet
+    if (!window.playbackController) {
+        // Graceful fallback if playbackController hasn't loaded yet
         if (speechSynthesis.speaking) {
             speechSynthesis.cancel();
             document.querySelectorAll('.speak-btn').forEach(btn => btn.textContent = '🔊');
         } else {
             const utterance = new SpeechSynthesisUtterance(content);
-            utterance.onstart = () => { if (button) button.textContent = '⏹'; };
+            utterance.onstart = () => { if (button) button.textContent = '⏸'; };
             utterance.onend   = () => { if (button) button.textContent = '🔊'; };
             speechSynthesis.speak(utterance);
         }
         return;
     }
 
-    if (window.ttsManager.isSpeaking) {
-        // Currently speaking → stop
-        window.ttsManager.stop();
-        // Reset all other speak buttons too
-        document.querySelectorAll('.speak-btn').forEach(btn => btn.textContent = '🔊');
-    } else {
-        // Not speaking → start (or repeat if same card)
-        // Reset other buttons first
-        document.querySelectorAll('.speak-btn').forEach(btn => btn.textContent = '🔊');
-        window.ttsManager.speak(content, button);
+    const controller = window.playbackController;
+
+    // Case 1: The clicked card is the one currently controlled by PlaybackController
+    if (controller.currentNarrationId === button) {
+        if (controller.currentEngine === 'pipeline') {
+            if (controller.isPaused) {
+                controller.resumePipeline();
+            } else {
+                controller.pausePipeline();
+            }
+        } else if (controller.currentEngine === 'manager') {
+            if (controller.isPaused) {
+                controller.resumeManager();
+            } else {
+                controller.pauseManager();
+            }
+        }
+        return;
     }
-}
+
+    // Case 2: Clicked button is not currently registered but streaming pipeline is active on this card
+    const isCurrentStreaming = window.ttsPipeline && window.ttsPipeline.isActive &&
+        window.answerPreferenceManager && window.answerPreferenceManager.isAudioOutputMode();
+
+    if (isCurrentStreaming) {
+        const activeBtn = window.ttsPipeline._activeBtn || window.ttsPipeline._findActiveButton();
+        const chatHistoryEl = document.getElementById('chat-history');
+        if (activeBtn === button || (!activeBtn && chatHistoryEl && button.closest('.ai-card') === chatHistoryEl.lastElementChild)) {
+            controller.setState({ currentNarrationId: button, currentEngine: 'pipeline' });
+            if (controller.isPaused) {
+                controller.resumePipeline();
+            } else {
+                controller.pausePipeline();
+            }
+            return;
+        }
+    }
+
+    // Case 3: Stop anything else and start static playback on this card
+    controller.stopAll();
+    controller.startManager(content, button);
+};
 
 /**
  * =====================================================

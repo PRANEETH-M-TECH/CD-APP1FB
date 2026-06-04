@@ -1,58 +1,278 @@
 /**
  * tts-streaming-manager.js
  * ─────────────────────────────────────────────────────────────────────────────
+ * PlaybackController + StreamingAudioPipeline
+ *
+ * PlaybackController — Single source of truth for all playback state.
+ *   No other component may independently change button icons or voice panel.
+ *
  * StreamingAudioPipeline — Chunked streaming audio delivery for Tutor Mode
- * and AI Voice Mode.
+ *   and AI Voice Mode.
  *
- * Responsibilities:
- *   - Accumulate Gemini SSE tokens into delivery chunks
- *   - Send each chunk to Sarvam TTS (/api/tts)
- *   - Maintain a strictly ordered playback queue (Chunk N+1 never plays before N)
- *   - Track and log [LATENCY] for every chunk
- *   - Synchronize text display with audio playback
+ * Architecture:
+ *   Gemini SSE tokens → textBuffer → _createChunk() →
+ *     renderQueue (gated by display_allowed / isPaused)
+ *     fetchQueue  (TTS fetch)
+ *     deliveryQueue (strict-order playback)
  *
- * Separated from answer-preference-manager.js so TTS providers (Sarvam, Azure,
- * EdgeTTS, Teacher Mode) can be swapped without touching UI / mic logic.
- *
- * Usage:
- *   window.ttsPipeline = new StreamingAudioPipeline();
- *   window.ttsPipeline.start();
- *   window.ttsPipeline.pushToken("some text ");
- *   window.ttsPipeline.flush();   // called when stream ends
- *   window.ttsPipeline.stop();    // abort mid-stream
+ *   Text renders IN SYNC with audio (live teacher experience).
+ *   Pause only pauses audio — text continues rendering, follow-ups appear.
  * ─────────────────────────────────────────────────────────────────────────────
  */
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// PlaybackController — SINGLE SOURCE OF TRUTH
+// ═══════════════════════════════════════════════════════════════════════════════
+
+class PlaybackController {
+    constructor() {
+        this.isPlaying = false;
+        this.isPaused = false;
+        this.isStopped = true;
+        this.currentNarrationId = null; // AI card button element
+        this.currentEngine = null;      // 'pipeline' | 'manager'
+        this.playbackStatus = 'idle';   // 'idle' | 'speaking' | 'paused'
+        this.subscribers = [];
+    }
+
+    subscribe(callback) {
+        if (typeof callback === 'function') {
+            this.subscribers.push(callback);
+        }
+    }
+
+    unsubscribe(callback) {
+        this.subscribers = this.subscribers.filter(sub => sub !== callback);
+    }
+
+    notify() {
+        const state = {
+            isPlaying: this.isPlaying,
+            isPaused: this.isPaused,
+            isStopped: this.isStopped,
+            currentNarrationId: this.currentNarrationId,
+            currentEngine: this.currentEngine,
+            playbackStatus: this.playbackStatus
+        };
+        console.log('[PLAYBACK CONTROLLER] State changed:', state.playbackStatus);
+        this.subscribers.forEach(sub => {
+            try {
+                sub(state);
+            } catch (err) {
+                console.error('[PLAYBACK CONTROLLER] Subscriber error:', err);
+            }
+        });
+    }
+
+    setState(newState) {
+        let changed = false;
+        for (let key in newState) {
+            if (this[key] !== newState[key]) {
+                this[key] = newState[key];
+                changed = true;
+            }
+        }
+        if (changed) {
+            this.notify();
+        }
+    }
+
+    // ── Stop everything ──────────────────────────────────────────────────────
+
+    stopAll() {
+        console.log('[PLAYBACK CONTROLLER] stopAll triggered');
+
+        // Stop Streaming Pipeline if active
+        if (window.ttsPipeline && window.ttsPipeline.isActive) {
+            window.ttsPipeline._stopCurrentAudio();
+            window.ttsPipeline.isActive = false;
+            window.ttsPipeline.isPaused = false;
+            window.ttsPipeline.hasStartedAudio = false;
+            window.ttsPipeline.fetchQueue = [];
+            window.ttsPipeline.deliveryQueue = [];
+            window.ttsPipeline.renderQueue = [];
+            window.ttsPipeline.textBuffer = '';
+            window.ttsPipeline.isProcessingPlayback = false;
+            window.ttsPipeline.isProcessingRender = false;
+            window.ttsPipeline.isFetchingTTS = false;
+        }
+
+        // Stop Static TTS Manager if active
+        if (window.ttsManager) {
+            window.ttsManager.fetchQueue = [];
+            window.ttsManager.playbackQueue = [];
+            window.ttsManager.isFetching = false;
+            window.ttsManager.isPlayingQueue = false;
+            if (window.ttsManager.currentAudio) {
+                window.ttsManager.currentAudio.pause();
+                window.ttsManager.currentAudio.currentTime = 0;
+                window.ttsManager.currentAudio = null;
+            }
+            window.ttsManager.isSpeaking = false;
+        }
+
+        // Direct SpeechSynthesis cancellation
+        if (window.speechSynthesis && window.speechSynthesis.speaking) {
+            window.speechSynthesis.cancel();
+        }
+
+        this.isPlaying = false;
+        this.isPaused = false;
+        this.isStopped = true;
+        this.currentNarrationId = null;
+        this.currentEngine = null;
+        this.playbackStatus = 'idle';
+        this.notify();
+    }
+
+    // ── Pipeline (streaming) controls ────────────────────────────────────────
+
+    startPipeline(button = null) {
+        this.stopAll();
+        this.setState({
+            isPlaying: true,
+            isPaused: false,
+            isStopped: false,
+            currentNarrationId: button,
+            currentEngine: 'pipeline',
+            playbackStatus: 'speaking'
+        });
+        if (window.ttsPipeline) {
+            window.ttsPipeline._activeBtn = button;
+            window.ttsPipeline.start();
+        }
+    }
+
+    pausePipeline() {
+        if (this.currentEngine !== 'pipeline' || this.isPaused) return;
+        this.setState({
+            isPaused: true,
+            playbackStatus: 'paused'
+        });
+        if (window.ttsPipeline) {
+            window.ttsPipeline.pause();
+        }
+    }
+
+    resumePipeline() {
+        if (this.currentEngine !== 'pipeline' || !this.isPaused) return;
+        this.setState({
+            isPaused: false,
+            playbackStatus: 'speaking'
+        });
+        if (window.ttsPipeline) {
+            window.ttsPipeline.resume();
+        }
+    }
+
+    stopPipeline() {
+        if (this.currentEngine !== 'pipeline') return;
+        if (window.ttsPipeline) {
+            window.ttsPipeline.stop();
+        }
+        this.setState({
+            isPlaying: false,
+            isPaused: false,
+            isStopped: true,
+            currentNarrationId: null,
+            currentEngine: null,
+            playbackStatus: 'idle'
+        });
+    }
+
+    // ── Manager (static card read-aloud) controls ────────────────────────────
+
+    startManager(text, button) {
+        this.stopAll();
+        this.setState({
+            isPlaying: true,
+            isPaused: false,
+            isStopped: false,
+            currentNarrationId: button,
+            currentEngine: 'manager',
+            playbackStatus: 'speaking'
+        });
+        if (window.ttsManager) {
+            window.ttsManager.speak(text, button);
+        }
+    }
+
+    pauseManager() {
+        if (this.currentEngine !== 'manager' || this.isPaused) return;
+        this.setState({
+            isPaused: true,
+            playbackStatus: 'paused'
+        });
+        if (window.ttsManager && window.ttsManager.currentAudio) {
+            window.ttsManager.currentAudio.pause();
+        } else if (window.speechSynthesis && window.speechSynthesis.speaking) {
+            window.speechSynthesis.pause();
+        }
+    }
+
+    resumeManager() {
+        if (this.currentEngine !== 'manager' || !this.isPaused) return;
+        this.setState({
+            isPaused: false,
+            playbackStatus: 'speaking'
+        });
+        if (window.ttsManager && window.ttsManager.currentAudio) {
+            window.ttsManager.currentAudio.play().catch(err => {
+                console.error('[PLAYBACK CONTROLLER] Resume error:', err);
+            });
+        } else if (window.speechSynthesis && window.speechSynthesis.paused) {
+            window.speechSynthesis.resume();
+        }
+    }
+
+    stopManager() {
+        if (this.currentEngine !== 'manager') return;
+        if (window.ttsManager) {
+            window.ttsManager.stop();
+        }
+        this.setState({
+            isPlaying: false,
+            isPaused: false,
+            isStopped: true,
+            currentNarrationId: null,
+            currentEngine: null,
+            playbackStatus: 'idle'
+        });
+    }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// StreamingAudioPipeline — Live Teacher Experience
+// ═══════════════════════════════════════════════════════════════════════════════
 
 class StreamingAudioPipeline {
     constructor(options = {}) {
         // ── Configuration ────────────────────────────────────────────────────
-        // Flush when this many complete sentences are buffered
         this.sentenceThreshold = options.sentenceThreshold || 2;
-        // Flush when buffer reaches this many characters (Adjustment 2)
         this.charThreshold = options.charThreshold || 300;
-        // If true, skip real Sarvam calls (credit protection during testing)
         this.dryRun = options.dryRun || false;
 
         // ── Internal State ───────────────────────────────────────────────────
         this.chunkIdCounter = 0;
         this.textBuffer = '';
         this.deliveryQueue = [];       // { chunk_id, text_chunk, audio_blob_url, status }
+        this.renderQueue = [];         // text chunks waiting to be rendered
         this.fetchQueue = [];          // chunks waiting for TTS fetch
         this.isProcessingPlayback = false;
+        this.isProcessingRender = false;
         this.isFetchingTTS = false;
         this.isActive = false;
         this.currentAudio = null;
-        this.abortController = null;
+        this.streamCompleted = false;
 
         // ── Play/Pause Control & State ───────────────────────────────────────
         this.isPaused = false;
         this.hasStartedAudio = false;
         this._activeBtn = null;
 
-        // ── Display callback (set by external code) ──────────────────────────
-        // Called with (text_chunk, chunk_id) when a chunk is ready to display
+        // ── Display callbacks (set by external code) ─────────────────────────
         this.onDisplayChunk = options.onDisplayChunk || null;
-        // Called when all chunks are done
+        this.onRenderComplete = options.onRenderComplete || null;
         this.onComplete = options.onComplete || null;
 
         // ── Regex for sentence detection ─────────────────────────────────────
@@ -63,38 +283,30 @@ class StreamingAudioPipeline {
 
     // ── Public API ────────────────────────────────────────────────────────────
 
-    /**
-     * Reset state and begin accepting tokens.
-     */
     start() {
         this.chunkIdCounter = 0;
         this.textBuffer = '';
         this.deliveryQueue = [];
+        this.renderQueue = [];
         this.fetchQueue = [];
         this.isProcessingPlayback = false;
+        this.isProcessingRender = false;
         this.isFetchingTTS = false;
         this.isActive = true;
         this.isPaused = false;
         this.hasStartedAudio = false;
+        this.streamCompleted = false;
         this._activeBtn = null;
         this._stopCurrentAudio();
-        console.log('[STREAM] Gemini Stream Started');
+        console.log('[STREAM] Pipeline started');
     }
 
-    /**
-     * Push a raw token from the Gemini SSE stream.
-     * @param {string} token
-     */
     pushToken(token) {
         if (!this.isActive) return;
         this.textBuffer += token;
         this._tryFlush();
     }
 
-    /**
-     * Force-flush remaining buffer as the final chunk.
-     * Call when the Gemini stream emits [DONE].
-     */
     flush() {
         if (!this.isActive) return;
         const remaining = this.textBuffer.trim();
@@ -102,25 +314,59 @@ class StreamingAudioPipeline {
             this._createChunk(remaining);
             this.textBuffer = '';
         }
-        console.log('[STREAM] Gemini Stream Ended — final flush complete');
+        this.streamCompleted = true;
+        console.log('[STREAM] Final flush — stream complete');
+
+        // Trigger render queue in case it needs to check completion
+        this._processRenderQueue();
     }
 
-    /**
-     * Abort all queued chunks and stop current audio.
-     */
     stop() {
+        // Flush all unrendered text to screen so the answer is never lost
+        while (this.renderQueue && this.renderQueue.length > 0) {
+            const chunk = this.renderQueue.shift();
+            if (chunk && !chunk.text_displayed) {
+                if (typeof this.onDisplayChunk === 'function') {
+                    this.onDisplayChunk(chunk.text_chunk, chunk.chunk_id);
+                }
+                chunk.text_displayed = true;
+            }
+        }
+        while (this.deliveryQueue && this.deliveryQueue.length > 0) {
+            const chunk = this.deliveryQueue.shift();
+            if (chunk && !chunk.text_displayed) {
+                if (typeof this.onDisplayChunk === 'function') {
+                    this.onDisplayChunk(chunk.text_chunk, chunk.chunk_id);
+                }
+                chunk.text_displayed = true;
+            }
+        }
+        const remaining = this.textBuffer.trim();
+        if (remaining) {
+            if (typeof this.onDisplayChunk === 'function') {
+                this.onDisplayChunk(remaining, this.chunkIdCounter + 1);
+            }
+            this.textBuffer = '';
+        }
+
         this.isActive = false;
         this.isPaused = false;
         this.hasStartedAudio = false;
         this.fetchQueue = [];
         this.deliveryQueue = [];
+        this.renderQueue = [];
         this.textBuffer = '';
         this.isProcessingPlayback = false;
+        this.isProcessingRender = false;
         this.isFetchingTTS = false;
+        this.streamCompleted = true;
         this._stopCurrentAudio();
-        if (window.answerPreferenceManager && window.answerPreferenceManager.currentMode === 'audio_audio') {
-            window.answerPreferenceManager.setVoicePanelState('idle');
+
+        // Trigger render-completion callback instantly
+        if (typeof this.onRenderComplete === 'function') {
+            this.onRenderComplete();
         }
+
         console.log('[STREAM] Pipeline stopped (abort)');
     }
 
@@ -129,26 +375,17 @@ class StreamingAudioPipeline {
     pause() {
         if (!this.isActive || this.isPaused) return;
         this.isPaused = true;
-        
-        // Pause active audio engine
+
+        // Pause active audio engine only
         if (this.currentAudio) {
             this.currentAudio.pause();
         } else if (window.speechSynthesis && window.speechSynthesis.speaking) {
             window.speechSynthesis.pause();
         }
 
-        // Update button icon to Play (▶)
-        const btn = this._activeBtn || this._findActiveButton();
-        if (btn) {
-            btn.textContent = '▶';
-            btn.title = 'Resume narration';
-            this._activeBtn = btn;
-        }
-
-        if (window.answerPreferenceManager && window.answerPreferenceManager.currentMode === 'audio_audio') {
-            window.answerPreferenceManager.setVoicePanelState('paused');
-        }
-        console.log('[STREAM] Audio playback paused');
+        // Trigger rendering loop so it immediately flushes queued chunks when paused
+        this._processRenderQueue();
+        console.log('[STREAM] Audio paused');
     }
 
     resume() {
@@ -158,34 +395,12 @@ class StreamingAudioPipeline {
         // Resume active audio engine
         if (this.currentAudio) {
             this.currentAudio.play().catch(err => {
-                console.error('[STREAM] Error resuming cloud audio:', err);
+                console.error('[STREAM] Error resuming audio:', err);
             });
         } else if (window.speechSynthesis && window.speechSynthesis.paused) {
             window.speechSynthesis.resume();
         }
-
-        // Update button icon to Pause (⏸)
-        const btn = this._activeBtn || this._findActiveButton();
-        if (btn) {
-            btn.textContent = '⏸';
-            btn.title = 'Pause narration';
-            this._activeBtn = btn;
-        }
-
-        if (window.answerPreferenceManager && window.answerPreferenceManager.currentMode === 'audio_audio') {
-            window.answerPreferenceManager.setVoicePanelState('speaking');
-        }
-        console.log('[STREAM] Audio playback resumed');
-    }
-
-    togglePlayPause(button) {
-        if (!this.isActive) return;
-        this._activeBtn = button;
-        if (this.isPaused) {
-            this.resume();
-        } else {
-            this.pause();
-        }
+        console.log('[STREAM] Audio resumed');
     }
 
     _waitForResume() {
@@ -217,20 +432,32 @@ class StreamingAudioPipeline {
             }
 
             const utterance = new SpeechSynthesisUtterance(text);
-            
-            // Set language if available from ttsManager
+
             if (window.ttsManager && window.ttsManager.language) {
                 utterance.lang = window.ttsManager.language;
             }
 
-            utterance.onend = () => {
-                resolve();
+            let resolved = false;
+            const safeResolve = () => {
+                if (!resolved) {
+                    resolved = true;
+                    clearTimeout(timeoutId);
+                    resolve();
+                }
             };
 
+            utterance.onend = () => { safeResolve(); };
             utterance.onerror = (e) => {
                 console.error('[STREAM] Browser TTS error:', e);
-                resolve();
+                safeResolve();
             };
+
+            // Safety timeout: 80ms per character safety limit, minimum 5 seconds
+            const duration = Math.max(5000, text.length * 80);
+            const timeoutId = setTimeout(() => {
+                console.warn('[STREAM] Browser TTS safety timeout triggered for chunk');
+                safeResolve();
+            }, duration);
 
             window.speechSynthesis.speak(utterance);
         });
@@ -238,18 +465,9 @@ class StreamingAudioPipeline {
 
     // ── Internal: Buffer Management ───────────────────────────────────────────
 
-    /**
-     * Check flush conditions (Adjustment 2):
-     *   A. Complete sentences >= sentenceThreshold
-     *   OR
-     *   B. Buffer length >= charThreshold
-     *
-     * Splits cleanly at sentence boundary when condition A fires.
-     */
     _tryFlush() {
         // Condition B: character count threshold
         if (this.textBuffer.length >= this.charThreshold) {
-            // Try to split at last sentence boundary within the buffer
             const lastBoundary = this._findLastSentenceBoundary(this.textBuffer);
             if (lastBoundary > 0) {
                 const chunk = this.textBuffer.slice(0, lastBoundary).trim();
@@ -308,28 +526,16 @@ class StreamingAudioPipeline {
 
     _sanitizeForTTS(text) {
         if (!text) return '';
-        
         let clean = text;
-        
-        // Remove bold/italic markers
         clean = clean.replace(/\*\*/g, '');
         clean = clean.replace(/\*/g, '');
         clean = clean.replace(/__/g, '');
         clean = clean.replace(/_/g, '');
-        
-        // Remove headers
         clean = clean.replace(/^\s*#+\s+/gm, '');
-        
-        // Remove markdown bullets (e.g., * list item, - list item) at start of lines
         clean = clean.replace(/^\s*[\*\-\•]\s+/gm, '');
-        
-        // Convert trailing colons or colons inside header-like structures to periods
         clean = clean.replace(/:\s*$/gm, '.');
         clean = clean.replace(/(\w+):\s/g, '$1. ');
-
-        // Normalize multiple spaces
         clean = clean.replace(/\s+/g, ' ').trim();
-        
         return clean;
     }
 
@@ -343,22 +549,57 @@ class StreamingAudioPipeline {
             sanitized_text: sanitized,
             audio_blob_url: null,
             status: 'pending',        // pending → fetching → ready → playing → done
+            text_displayed: false,
+            display_allowed: false,
             _createTime: performance.now()
         };
         this.fetchQueue.push(chunk);
         this.deliveryQueue.push(chunk);
+        this.renderQueue.push(chunk);
 
         console.log(`[BUFFER] Chunk #${chunk_id} Created | "${text.slice(0, 60)}..."`);
 
-        // Display the chunk in the UI immediately as it is created, so text
-        // streams without being blocked by play/pause states.
-        if (typeof this.onDisplayChunk === 'function') {
-            this.onDisplayChunk(text, chunk_id);
-        }
+        // Kick off independent rendering loop
+        this._processRenderQueue();
 
         // Kick off TTS fetch if not already running
         if (!this.isFetchingTTS) {
             this._processFetchQueue();
+        }
+    }
+
+    // ── Internal: Render Queue (Gated Text Display) ──────────────────────────
+
+    async _processRenderQueue() {
+        if (this.isProcessingRender) return;
+        this.isProcessingRender = true;
+
+        while (this.isActive && this.renderQueue.length > 0) {
+            const chunk = this.renderQueue[0];
+
+            // Render immediately if paused (text must keep flowing),
+            // or wait until audio playback sets display_allowed
+            if (this.isPaused || chunk.display_allowed) {
+                this.renderQueue.shift();
+                if (!chunk.text_displayed) {
+                    if (typeof this.onDisplayChunk === 'function') {
+                        this.onDisplayChunk(chunk.text_chunk, chunk.chunk_id);
+                    }
+                    chunk.text_displayed = true;
+                }
+            } else {
+                // Wait a short bit and check again
+                await new Promise(resolve => setTimeout(resolve, 30));
+            }
+        }
+
+        this.isProcessingRender = false;
+
+        // Check if rendering is completely finished and stream is completed
+        if (this.isActive && this.streamCompleted && this.renderQueue.length === 0 && this.textBuffer.length === 0) {
+            if (typeof this.onRenderComplete === 'function') {
+                this.onRenderComplete();
+            }
         }
     }
 
@@ -367,7 +608,6 @@ class StreamingAudioPipeline {
     async _processFetchQueue() {
         if (this.fetchQueue.length === 0) {
             this.isFetchingTTS = false;
-            // All fetches done — kick off playback if not started
             if (!this.isProcessingPlayback) {
                 this._processPlaybackQueue();
             }
@@ -385,10 +625,9 @@ class StreamingAudioPipeline {
     }
 
     async _fetchTTS(chunk) {
-        const { chunk_id, text_chunk } = chunk;
+        const { chunk_id } = chunk;
         const fetchStart = performance.now();
 
-        // Get current TTS settings from ttsManager if available
         const model = (window.ttsManager && window.ttsManager.model) || 'sarvam';
 
         if (model === 'browser') {
@@ -401,18 +640,23 @@ class StreamingAudioPipeline {
         }
 
         if (this.dryRun) {
-            console.log(`[TTS] DRY RUN — skipping Sarvam call for Chunk #${chunk_id}`);
-            // Simulate a short delay to mimic network latency
+            console.log(`[TTS] DRY RUN — skipping Sarvam for Chunk #${chunk_id}`);
             await new Promise(r => setTimeout(r, 200));
             chunk.audio_blob_url = null;
             chunk.status = 'ready';
             const elapsed = Math.round(performance.now() - fetchStart);
-            console.log(`[LATENCY] Chunk #${chunk_id} TTS Generation (dry run): ${elapsed}ms`);
+            console.log(`[LATENCY] Chunk #${chunk_id} TTS (dry run): ${elapsed}ms`);
             this._onChunkReady(chunk);
             return;
         }
 
-        console.log(`[TTS] Sending Chunk #${chunk_id} To Sarvam | ${chunk.sanitized_text.length} chars (sanitized)`);
+        console.log(`[TTS] Sending Chunk #${chunk_id} To Sarvam | ${chunk.sanitized_text.length} chars`);
+
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => {
+            console.warn(`[TTS] Fetch timeout triggered for Chunk #${chunk_id}`);
+            controller.abort();
+        }, 6000); // 6 seconds timeout
 
         try {
             const speaker = (window.ttsManager && window.ttsManager.voice) || 'anushka';
@@ -426,8 +670,11 @@ class StreamingAudioPipeline {
                     model: model,
                     language: language,
                     speaker: speaker
-                })
+                }),
+                signal: controller.signal
             });
+
+            clearTimeout(timeoutId);
 
             if (!response.ok) {
                 const errData = await response.json().catch(() => ({}));
@@ -437,9 +684,8 @@ class StreamingAudioPipeline {
             const data = await response.json();
             const elapsed = Math.round(performance.now() - fetchStart);
             console.log(`[TTS] Audio Received For Chunk #${chunk_id}`);
-            console.log(`[LATENCY] Chunk #${chunk_id} TTS Generation: ${elapsed}ms`);
+            console.log(`[LATENCY] Chunk #${chunk_id} TTS: ${elapsed}ms`);
 
-            // Decode base64 → Blob → Object URL
             const { audio_base64, format } = data;
             if (audio_base64) {
                 const byteChars = atob(audio_base64);
@@ -457,16 +703,16 @@ class StreamingAudioPipeline {
             this._onChunkReady(chunk);
 
         } catch (err) {
+            clearTimeout(timeoutId);
             console.error(`[ERROR] TTS fetch failed for Chunk #${chunk_id}:`, err);
-            chunk.status = 'ready';   // continue without audio for this chunk
+            chunk.status = 'ready';
             chunk.audio_blob_url = null;
             this._onChunkReady(chunk);
         }
     }
 
     _onChunkReady(chunk) {
-        console.log(`[QUEUE] Chunk #${chunk.chunk_id} Added`);
-        // Kick off playback if not already running
+        console.log(`[QUEUE] Chunk #${chunk.chunk_id} Ready`);
         if (!this.isProcessingPlayback) {
             this._processPlaybackQueue();
         }
@@ -474,10 +720,6 @@ class StreamingAudioPipeline {
 
     // ── Internal: Playback Queue (Strict Ordering) ────────────────────────────
 
-    /**
-     * Process the deliveryQueue in strict chunk_id order.
-     * Chunk N+1 NEVER starts before Chunk N completes.
-     */
     async _processPlaybackQueue() {
         if (this.isProcessingPlayback) return;
         this.isProcessingPlayback = true;
@@ -485,34 +727,27 @@ class StreamingAudioPipeline {
         while (this.deliveryQueue.length > 0) {
             const chunk = this.deliveryQueue[0];
 
-            // Wait until this chunk is ready (TTS might still be fetching)
             if (chunk.status !== 'ready' && chunk.status !== 'done') {
                 const queueWaitStart = performance.now();
                 await this._waitForChunkReady(chunk);
                 const queueWait = Math.round(performance.now() - queueWaitStart);
                 if (queueWait > 10) {
                     console.log(`[LATENCY] Chunk #${chunk.chunk_id} Queue Wait: ${queueWait}ms`);
-                    const total = (chunk._ttsTime || 0) + queueWait;
-                    console.log(`[LATENCY] Total Audio Delay (Chunk #${chunk.chunk_id}): ${total}ms`);
                 }
             }
 
-            // Dequeue and play
             this.deliveryQueue.shift();
             await this._playChunk(chunk);
         }
 
         this.isProcessingPlayback = false;
 
-        // Notify caller that all chunks are done
+        // Notify caller that all audio chunks are done
         if (typeof this.onComplete === 'function') {
             this.onComplete();
         }
     }
 
-    /**
-     * Poll until chunk.status === 'ready' (TTS arrived) or pipeline stopped.
-     */
     _waitForChunkReady(chunk) {
         return new Promise((resolve) => {
             const check = () => {
@@ -524,14 +759,10 @@ class StreamingAudioPipeline {
         });
     }
 
-    /**
-     * Display text chunk, then play audio for that chunk.
-     * @param {Object} chunk
-     */
     async _playChunk(chunk) {
-        const { chunk_id, text_chunk, audio_blob_url } = chunk;
+        const { chunk_id, audio_blob_url } = chunk;
 
-        // Wait if playback is paused before playing audio
+        // Wait if playback is paused before playing this chunk's audio
         if (this.isPaused) {
             await this._waitForResume();
         }
@@ -541,25 +772,16 @@ class StreamingAudioPipeline {
 
         console.log(`[PLAYBACK] Playing Chunk #${chunk_id}`);
 
-        // 1. Display of text chunk was already handled immediately in _createChunk
-        // to prevent display block when audio is paused.
+        // Allow the render queue to display this chunk's text
+        chunk.display_allowed = true;
 
-        // 2. Play audio (if available)
+        // Trigger rendering process in case it is waiting
+        this._processRenderQueue();
+
+        // Play audio (if available)
         if (audio_blob_url || chunk.isBrowserTTS) {
-            // Once first audio chunk starts, show the play/pause button and set to pause icon (⏸)
             if (!this.hasStartedAudio) {
                 this.hasStartedAudio = true;
-                const btn = this._activeBtn || this._findActiveButton();
-                if (btn) {
-                    btn.style.display = '';
-                    btn.textContent = '⏸';
-                    btn.title = 'Pause narration';
-                    this._activeBtn = btn;
-                }
-            }
-
-            if (window.answerPreferenceManager && window.answerPreferenceManager.currentMode === 'audio_audio') {
-                window.answerPreferenceManager.setVoicePanelState('speaking');
             }
 
             if (this.isPaused) {
@@ -572,10 +794,8 @@ class StreamingAudioPipeline {
                 await this._speakBrowser(chunk.sanitized_text);
             }
         } else if (this.dryRun) {
-            // Silence simulation
             await new Promise(r => setTimeout(r, 300));
         }
-        // If no audio_blob_url and not dryRun, text was already displayed — just continue
 
         const elapsed = Math.round(performance.now() - playStart);
         console.log(`[PLAYBACK] Chunk #${chunk_id} finished in ${elapsed}ms`);
@@ -588,22 +808,35 @@ class StreamingAudioPipeline {
             const audio = new Audio(url);
             this.currentAudio = audio;
 
+            let resolved = false;
+            const safeResolve = () => {
+                if (!resolved) {
+                    resolved = true;
+                    clearTimeout(timeoutId);
+                    URL.revokeObjectURL(url);
+                    this.currentAudio = null;
+                    resolve();
+                }
+            };
+
             audio.onended = () => {
-                URL.revokeObjectURL(url);
-                this.currentAudio = null;
-                resolve();
+                safeResolve();
             };
 
             audio.onerror = (e) => {
                 console.error('[ERROR] Audio playback error:', e);
-                URL.revokeObjectURL(url);
-                this.currentAudio = null;
-                resolve();
+                safeResolve();
             };
+
+            // Safety timeout: 30 seconds
+            const timeoutId = setTimeout(() => {
+                console.warn('[STREAM] Audio play safety timeout triggered');
+                safeResolve();
+            }, 30000);
 
             audio.play().catch((err) => {
                 console.error('[ERROR] Audio play() rejected:', err);
-                resolve();
+                safeResolve();
             });
         });
     }
@@ -623,10 +856,12 @@ class StreamingAudioPipeline {
 
 // ── Auto-initialize on DOMContentLoaded ──────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
+    window.playbackController = new PlaybackController();
+
     window.ttsPipeline = new StreamingAudioPipeline({
         sentenceThreshold: 2,
         charThreshold: 300,
         dryRun: false
     });
-    console.log('[STREAM] window.ttsPipeline ready.');
+    console.log('[STREAM] window.ttsPipeline and window.playbackController ready.');
 });
