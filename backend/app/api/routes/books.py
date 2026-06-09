@@ -270,7 +270,7 @@ async def create_book_and_process(
                 chapter['pdf_startpg'] = chapter['chpstpage'] + pdf_offset
                 chapter['pdf_endpg'] = chapter['chpendpage'] + pdf_offset
                 logger.info(f"Calculated PDF pages for {chapter.get('chapter_name')}: "
-                           f"chp {chapter['chpstpage']}-{chapter['chpendpage']} → "
+                           f"chp {chapter['chpstpage']}-{chapter['chpendpage']} -> "
                            f"pdf {chapter['pdf_startpg']}-{chapter['pdf_endpg']}")
         
         # Start the background processing task

@@ -907,7 +907,7 @@
                 if (hoursSinceVisit < 24) {
                     lastModeValue = lastMode;
                     document.getElementById('last-mode-name').textContent =
-                        `You were in ${lastMode === 'ask-question' ? 'Ask a Question' : 'Conversation Mode'}`;
+                        `You were in ${lastMode === 'ask-question' ? 'Ask a Question' : lastMode === 'visual_learning' ? 'Visual Learning' : 'Conversation Mode'}`;
                     document.getElementById('continue-banner').style.display = 'flex';
                 }
             }

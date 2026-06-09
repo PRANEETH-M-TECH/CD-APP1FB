@@ -250,8 +250,8 @@ async function saveClassAndAvatar() {
         console.log('[AUTH] ✅ Profile updated successfully!');
         closeClassSelectionModal();
 
-        // Go to mode selection page
-        window.location.href = '/mode-selection';
+        // Go to user page
+        window.location.href = '/user';
     } else {
         alert('Error saving profile: ' + result.error);
     }
@@ -260,8 +260,8 @@ async function saveClassAndAvatar() {
 // Check auth before accessing features
 function checkAuthAndProceed() {
     if (authManager.isAuthenticated()) {
-        // Already logged in - go to mode selection
-        window.location.href = '/mode-selection';
+        // Already logged in - go to user page
+        window.location.href = '/user';
     } else {
         // Not logged in - show login modal
         showStudentLoginModal();

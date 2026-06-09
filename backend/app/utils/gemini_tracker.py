@@ -221,6 +221,7 @@ def instrument_client(client):
         def generator_wrapper():
             full_output = []
             try:
+                print(f"\n[STREAM START] Streaming response for {caller}...", flush=True)
                 for chunk in response_stream:
                     try:
                         if chunk.text:
@@ -229,6 +230,8 @@ def instrument_client(client):
                         pass
                     yield chunk
             finally:
+                total_chars = len("".join(full_output))
+                print(f"\n[STREAM END] Stream completed for {caller} (total chars: {total_chars})\n", flush=True)
                 # On stream completion/close
                 end_time = time.time()
                 duration_ms = round((end_time - start_time) * 1000)

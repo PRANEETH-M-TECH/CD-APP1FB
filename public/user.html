@@ -15,6 +15,7 @@
   <link rel="stylesheet" href="/static/sidebar.css">
   <link rel="stylesheet" href="/static/css/my-bag.css">
   <link rel="stylesheet" href="/static/save-selection.css">
+  <link rel="stylesheet" href="/static/css/visual-learning.css">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"
@@ -1030,10 +1031,119 @@
           <option value="text_audio">🎧 Tutor</option>
           <option value="audio_text">🎙️ Voice Query</option>
           <option value="audio_audio">🧑🏫 AI Voice</option>
+          <option value="visual_learning">🎬 Visual Learning</option>
         </select>
         <span id="active-mode-badge" style="display:none;"></span>
       </div>
       <!-- ════════════════════════════════════════════════════════════════ -->
+
+      <!-- Visual Learning Player (replaces chat area when active) -->
+      <div id="visual-learning-container" style="display: none; flex-direction: column; flex: 1; overflow: hidden;">
+        <!-- Landing View -->
+        <div id="vl-landing-view" class="flex flex-col items-center justify-center h-full p-8 text-center" style="background: radial-gradient(circle at center, #1e1b4b 0%, #0f172a 100%);">
+          <div class="text-6xl mb-4 animate-bounce">🎬</div>
+          <h3 class="text-xl font-bold text-indigo-300 mb-2">Visual Learning Mode</h3>
+          <p class="text-xs text-slate-400 max-w-sm leading-relaxed mb-4">
+            Type a query at the bottom to watch an interactive, AI-generated visual lesson with slides and teacher voice narration.
+          </p>
+          <div class="px-4 py-2 bg-indigo-950/50 border border-indigo-800/40 rounded-xl text-[11px] text-indigo-300/80 max-w-xs leading-normal">
+            💡 "Explain the Water Cycle" or "How do magnets work?" make great lessons!
+          </div>
+        </div>
+
+        <!-- Loading Screen -->
+        <div id="vl-loading-screen" style="display: none;">
+          <h2 class="text-xl font-bold mb-6 text-indigo-300 text-center" id="vl-loading-title">🎬 Creating Visual Lesson...</h2>
+          <div class="vl-loader-animation" id="vl-loading-spinner">
+            <div class="vl-loader-ring"></div>
+            <div class="vl-loader-ring"></div>
+            <div class="vl-loader-ring"></div>
+          </div>
+          <div class="vl-loading-steps" id="vl-loading-steps-container">
+            <div class="vl-loading-step" id="vl-step-understanding_topic">
+              <span class="vl-step-check">1</span>
+              <span>Understanding Topic</span>
+            </div>
+            <div class="vl-loading-step" id="vl-step-designing_lesson">
+              <span class="vl-step-check">2</span>
+              <span>Designing Lesson Plan</span>
+            </div>
+            <div class="vl-loading-step" id="vl-step-generating_visuals">
+              <span class="vl-step-check">3</span>
+              <span>Generating Slide Illustrations</span>
+            </div>
+            <div class="vl-loading-step" id="vl-step-creating_narration">
+              <span class="vl-step-check">4</span>
+              <span>Synthesizing Voice Narration</span>
+            </div>
+            <div class="vl-loading-step" id="vl-step-launching_lesson">
+              <span class="vl-step-check">5</span>
+              <span>Launching Media Player</span>
+            </div>
+          </div>
+
+          <!-- Error Alert UI inside loading screen -->
+          <div id="vl-error-container" class="hidden mt-6 p-5 bg-red-950/40 border border-red-800/40 rounded-2xl text-center max-w-sm flex flex-col items-center justify-center">
+             <div class="text-red-400 font-bold text-base mb-2">⚠️ Something went wrong</div>
+             <p id="vl-error-message" class="text-[11px] text-red-300/80 mb-4 leading-relaxed"></p>
+             <button id="vl-error-exit-btn" class="px-4 py-2 bg-red-800/60 hover:bg-red-700 text-white rounded-xl text-xs font-bold transition-all cursor-pointer">Go Back</button>
+          </div>
+        </div>
+
+        <!-- Lesson Player -->
+        <div id="vl-player" style="display: none; position: relative;">
+          <!-- Floating Close Button -->
+          <button id="vl-exit-btn" class="vl-floating-close-btn" title="Close Player">✕</button>
+
+          <!-- Progress Bar -->
+          <div class="vl-progress-bar-container">
+            <div id="vl-progress-bar-fill" class="vl-progress-bar-fill"></div>
+          </div>
+          
+          <div class="vl-player-body">
+            <!-- Main Content -->
+            <div id="vl-main">
+              <div class="vl-slide-wrapper">
+                <img id="vl-slide-image" src="" alt="Slide illustration">
+              </div>
+            </div>
+            
+            <!-- Notes Overlay -->
+            <div id="vl-notes-overlay">
+              <div class="vl-notes-header">
+                <div class="vl-drawer-tabs flex gap-2">
+                  <button type="button" id="vl-tab-script" class="vl-drawer-tab active">📖 Script</button>
+                  <button type="button" id="vl-tab-outline" class="vl-drawer-tab">📋 Outline</button>
+                </div>
+                <button id="vl-close-notes-btn" class="text-white opacity-60 hover:opacity-100 font-bold text-lg">&times;</button>
+              </div>
+              <div id="vl-drawer-script-content" class="vl-drawer-content active">
+                <div id="vl-notes-body" class="vl-notes-body"></div>
+              </div>
+              <div id="vl-drawer-outline-content" class="vl-drawer-content" style="display: none;">
+                <div id="vl-slides-list" class="vl-outline-list"></div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Controls -->
+          <div id="vl-controls">
+            <div class="vl-control-group">
+              <span id="vl-progress-text" class="vl-progress-text">Slide 1 / 4</span>
+            </div>
+            
+            <div class="vl-control-group">
+              <button id="vl-prev-btn" class="vl-btn vl-btn-secondary">◀ Prev</button>
+              <button id="vl-play-pause-btn" class="vl-btn vl-btn-primary">⏸ Pause</button>
+              <button id="vl-next-btn" class="vl-btn vl-btn-secondary">Next ▶</button>
+            </div>
+            
+            <div class="vl-control-group">
+              <button id="vl-notes-btn" class="vl-btn vl-btn-secondary">📖 Details</button>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <!-- Chat History (Scrollable - Flex-1 to consume empty space) -->
       <div id="chat-container" class="flex-1 overflow-y-auto">
@@ -1165,18 +1275,21 @@
   <script src="/static/profile-dropdown.js"></script>
 
   <!-- TTS Manager (load FIRST so it's ready when script.js runs) -->
-  <script src="/static/js/tts-manager.js?v=2"></script>
+  <script src="/static/js/tts-manager.js?v=102"></script>
 
   <!-- Answer Preference: Streaming TTS Pipeline (load before script.js) -->
-  <script src="/static/js/tts-streaming-manager.js?v=1"></script>
+  <script src="/static/js/tts-streaming-manager.js?v=102"></script>
 
   <!-- Main script -->
-  <script src="/static/script.js?v=2"></script>
-  <script src="/static/conversation.js?v=2"></script>
+  <script src="/static/script.js?v=102"></script>
+  <script src="/static/conversation.js?v=102"></script>
   <script src="/static/save-selection.js"></script>
 
   <!-- Answer Preference Manager (load after script.js so submitSmartQueryFromMic is defined first) -->
-  <script src="/static/js/answer-preference-manager.js?v=1"></script>
+  <script src="/static/js/answer-preference-manager.js?v=102"></script>
+  
+  <!-- Visual Learning Player script -->
+  <script src="/static/js/visual-learning.js"></script>
 
   <!-- TTS Selector Wiring -->
   <script>
@@ -1219,7 +1332,7 @@
           voiceSelect.disabled = false;
           if (statusDot) statusDot.classList.remove('offline');
         } catch (e) {
-          voiceSelect.innerHTML = '<option value="anushka">Anushka ♀</option>';
+          voiceSelect.innerHTML = '<option value="ritu">Ritu ♀</option>';
           voiceSelect.disabled  = false;
           if (statusDot) statusDot.classList.add('offline');
         }
@@ -1838,6 +1951,18 @@
           <p class="text-[11px] text-gray-500 leading-tight">Speak and receive voice explanations.</p>
         </div>
 
+        <!-- Card 5: Visual Learning Mode -->
+        <div class="learning-mode-card border-2 border-gray-200 hover:border-indigo-400 rounded-xl p-4 bg-white shadow-sm cursor-pointer transition-all flex flex-col gap-1.5" data-mode="visual_learning">
+          <div class="flex items-center justify-between">
+            <span class="text-2xl font-bold">🎬</span>
+            <span class="card-radio-circle w-4 h-4 rounded-full border border-gray-300 flex items-center justify-center">
+              <span class="card-radio-dot w-2 h-2 rounded-full bg-indigo-600 hidden"></span>
+            </span>
+          </div>
+          <h4 class="font-bold text-gray-800 text-sm">Visual Learning</h4>
+          <p class="text-[11px] text-gray-500 leading-tight">Watch AI-generated visual slide lessons with voice narration.</p>
+        </div>
+
       </div>
 
     </div>
@@ -1858,7 +1983,8 @@
         text_text:   { label: 'Reading Mode', icon: '📖' },
         text_audio:  { label: 'Tutor Mode', icon: '🎧' },
         audio_text:  { label: 'Voice Query', icon: '🎙️' },
-        audio_audio: { label: 'AI Voice Mode', icon: '🧑🏫' }
+        audio_audio: { label: 'AI Voice Mode', icon: '🧑🏫' },
+        visual_learning: { label: 'Visual Learning Mode', icon: '🎬' }
       };
 
       function updateActiveUI(mode) {

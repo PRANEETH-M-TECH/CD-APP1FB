@@ -18,7 +18,8 @@ from backend.app.api.routes import (
     dashboard_router,
     bag_router,
     profile_router,
-    tts_router
+    tts_router,
+    visual_learning_router
 )
 
 # --- Lifespan Management ---
@@ -56,6 +57,7 @@ app.include_router(dashboard_router)
 app.include_router(bag_router)
 app.include_router(profile_router)
 app.include_router(tts_router)
+app.include_router(visual_learning_router)
 
 # --- STATIC FILE SERVING ---
 # backend/app/main.py is 3 levels deep:

@@ -9,8 +9,19 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Global visibility change handler to stop TTS (cloud + browser)
+    // IMPORTANT: Do NOT stop if an SSE stream is actively running.
+    // In AI Voice Mode, Chrome briefly fires visibilitychange when the mic
+    // grabs focus — without this guard, stopAll() kills the pipeline right
+    // before SSE tokens arrive, causing the "..." stall.
     document.addEventListener('visibilitychange', () => {
         if (document.hidden) {
+            const streamIsLive = window.ttsPipeline &&
+                window.ttsPipeline.isActive &&
+                !window.ttsPipeline.streamCompleted;
+            if (streamIsLive) {
+                console.log('[Global] Tab hidden during active stream — TTS pipeline protected.');
+                return; // Never kill the pipeline mid-stream
+            }
             console.log('[Global] Tab hidden, stopping TTS.');
             if (window.playbackController) {
                 window.playbackController.stopAll();
@@ -795,6 +806,14 @@ function setupUserPage() {
         }
 
         const source = new EventSource(`/api/smart_query?${params.toString()}`);
+
+        source.onopen = function () {
+            console.log('[EventSource] Connection opened.');
+            if (_isAudioOutputMode && window.ttsPipeline && !window.ttsPipeline.isActive) {
+                console.warn('[EventSource] open: Pipeline was inactive, forcing isActive=true to resume.');
+                window.ttsPipeline.isActive = true;
+            }
+        };
 
         source.onmessage = function (event) {
             if (event.data === "[DONE]") {

@@ -320,7 +320,7 @@ def load_summary_from_firestore(class_name: str, subject: str):
     data = doc.to_dict()
     SUMMARY_CACHE[key] = data  # cache it
 
-    print(f"[CACHE] Loaded summary → summaries/{key}")
+    print(f"[CACHE] Loaded summary -> summaries/{key}")
 
     return data
 

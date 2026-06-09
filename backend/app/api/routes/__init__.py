@@ -4,3 +4,5 @@ from .dashboard import router as dashboard_router
 from .bag import router as bag_router
 from .profile import router as profile_router
 from .tts import router as tts_router
+from .visual_learning import router as visual_learning_router
+

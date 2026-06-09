@@ -228,8 +228,8 @@ class AuthManager {
             sessionStorage.removeItem('redirect_after_login');
             window.location.href = redirectUrl;
         } else {
-            console.log('[AUTH] No saved URL, going to Mode Selection');
-            window.location.href = '/mode-selection';
+            console.log('[AUTH] No saved URL, going to User page');
+            window.location.href = '/user';
         }
     }
 }
