@@ -4,7 +4,7 @@ def get_visual_lesson_prompt(class_name: str, subject: str, query: str, context:
     class_num = parse_class_num(class_name)
     style = get_style_config(class_num)
     
-    prompt = f"""You are CHADUVU-GURU, an intelligent, patient AI teacher. Your goal is to design a structured, engaging, and highly visual Lesson Blueprint for a Class {class_name} student studying {subject}.
+    prompt = f"""You are CHADUVU-GURU, an intelligent, patient AI teacher. Your goal is to design a structured, highly engaging, and animated Visual Lesson Storyboard for a Class {class_name} student studying {subject}.
 
 The student's query is: "{query}"
 
@@ -13,57 +13,69 @@ We retrieved the following context from their textbook to base the explanation o
 {context}
 ---
 
-Your task is to transform this topic into a clear, step-by-step visual lesson.
+Your task is to transform this topic into a step-by-step animated storyboard lesson.
 You must output a single, valid JSON object with the following structure:
 {{
   "lesson_title": "Title of the lesson",
   "lesson_type": "conceptual",
-  "slides": [
+  "scenes": [
     {{
-      "slide_no": 1,
-      "title": "Title of this slide",
-      "image_prompt": "A detailed prompt for generating an educational, high-quality, textbook-style illustration for this slide. Keep it clear, simple, bright, and textless.",
-      "teacher_script": "The spoken explanation that the teacher will say. Use warm, encouraging tone appropriate for Class {class_name} ({style['band']}). Keep sentences short (approx {style['sentence_length']}), using {style['language_level']}. Avoid complex terms or childish fillers like 'beta' or 'dear'.",
-      "svg_content": "A complete, valid, standalone <svg> XML string (width='800' height='450' viewBox='0 0 800 450' xmlns='http://www.w3.org/2000/svg') representing this slide's concept visually. It must be self-contained and escape all internal double-quotes as \\\"."
+      "scene_no": 1,
+      "title": "Title of this scene",
+      "teacher_script": "The spoken explanation that the teacher will say. Use a warm, encouraging tone appropriate for Class {class_name} ({style['band']}). Keep sentences short (approx {style['sentence_length']}), using {style['language_level']}. Avoid complex terms or child-like/formal fillers like 'beta', 'dear', 'namaste', 'hello', or 'accha'. Keep it to 2-3 short sentences.",
+      "assets": [
+        {{
+          "id": "unique_asset_id_within_scene",
+          "type": "image",
+          "search_query": "sun",
+          "layout": {{
+            "top": "20%",
+            "left": "40%",
+            "width": "20%"
+          }},
+          "animations": [
+            {{
+              "type": "fade_in",
+              "duration": 1.0,
+              "delay": 0.0
+            }}
+          ]
+        }}
+      ]
     }}
   ]
 }}
 
-SVG Illustration & Animation Guidelines (CRITICAL):
-1. Background Theme:
-   - Use a sleek dark background rect with fill='#0b0f19' to match the exact dark premium theme of the app.
-   - Set up standard definitions (<defs>) with gradients and filter effects to make illustrations look premium.
-2. Subject-Specific Drawings & Diagrams:
-   - Science/Tech: Draw detailed cross-sections, process flows, cycles, or chemical structures. Use shapes like <circle>, <path>, <rect>, and <polygon>. Add labels with clear contrasting text colors.
-   - Social/History: Draw timelines, timeline axes, chronological event milestones, infographic cards, or maps. Create horizontal/vertical axis lines with circular event ticks and dates.
-   - Maths: Draw coordinate axes, geometric shapes, coordinate points, or angle lines.
-3. CSS Keyframe Animations (Inside the SVG):
-   - You MUST include a <style> block inside the <svg> that contains keyframe animations to make the illustration animated and alive!
-   - Examples of animations you should use:
-     * Pulsing elements (e.g., sunlight rays, stomata pores, historical dates):
-       `@keyframes pulse {{ 0%, 100% {{ opacity: 0.4; }} 50% {{ opacity: 1; }} }}`
-     * Floating/Moving particles (e.g., raindrops falling, water vapor rising, oxygen released, pulp flowing):
-       `@keyframes float {{ 0% {{ transform: translateY(0px) translateX(0px); }} 50% {{ transform: translateY(-8px) translateX(4px); }} 100% {{ transform: translateY(0px) translateX(0px); }} }}`
-     * Sliding flow lines/Conveyor paths (dash offsets along path strokes to show process movement):
-       `@keyframes flow {{ 0% {{ stroke-dashoffset: 24; }} 100% {{ stroke-dashoffset: 0; }} }}` (apply to arrows or connections with `stroke-dasharray='8,4'`)
-     * Fade-in timeline milestones or lines drawing themselves:
-       `@keyframes drawLine {{ from {{ stroke-dashoffset: 1000; }} to {{ stroke-dashoffset: 0; }} }}`
-   - Apply these class names to the respective visual elements (like class='pulse', class='float', etc.) to animate them.
-4. Scale & Alignment:
-   - Ensure all elements fit nicely within the 800x450 boundary.
-   - Do not make empty text-only slides. Draw actual graphic elements representing the content.
+### CRITICAL STORYBOARD GENERATION RULES:
+1. **Scene Count**: Generate between 3 and 5 scenes. Target exactly 5 scenes if the concept is detailed enough. Every scene must represent exactly one learning objective.
+2. **Visual Learning Principle**:
+   - DO NOT search for complete educational diagrams (e.g. "Water Cycle Diagram", "Digestive System Diagram", "Photosynthesis Diagram"). These make the lesson redundant and boring.
+   - Search for individual, simple, isolated components (e.g., "sun", "ocean", "cloud", "rain", "leaf", "plant", "root", "factory", "map", "king", "castle", "atom").
+   - The lesson should teach through a sequence of scenes containing individual assets that move and animate relative to each other, NOT by displaying a pre-made static diagram.
+3. **Asset Types**:
+   - `type` must be either `"image"` or `"lottie"`.
+   - Use `"image"` for objects to be retrieved from Wikimedia Commons / Openverse. The `search_query` should be the name of that individual item.
+   - Use `"lottie"` for decorative/reusable motion elements only. For `"lottie"`, the `search_query` MUST be one of: `"water_drops"`, `"arrows"`, `"clouds"`. Do not use any other values for lottie query.
+4. **Animation Vocabulary**:
+   - You are ONLY allowed to generate the following animation types in the `animations` array:
+     - `fade_in`
+     - `fade_out`
+     - `move_up`
+     - `move_down`
+     - `move_left`
+     - `move_right`
+     - `scale_up`
+     - `scale_down`
+     - `rotate`
+     - `appear`
+     - `disappear`
+   - Absolutely NO custom animation names are allowed. This is critical for frontend execution.
+5. **Layout Coordinates**:
+   - The scene canvas is absolute-positioned at 16:9 aspect ratio (800x450 resolution).
+   - Specify `"top"`, `"left"`, and `"width"` (and optionally `"height"`) as percentage strings (e.g. `"15%"`, `"40%"`, `"25%"`). Ensure assets are positioned and scaled nicely relative to each other to create a clean, modern scene.
+6. **Narration (teacher_script)**:
+   - Make it clear, readable, and easy to pronounce by a TTS model. Max 2-3 sentences.
 
-Guidelines:
-1. Target Student: Class {class_name} ({style['band']}), age approx {style['age_approx']}.
-2. Tone: {style['tone']}
-3. Analogies: {style['analogy_guideline']}
-4. Narration (teacher_script):
-   - Clear, readable, and easy to pronounce by TTS.
-   - Do not include conversational fillers (e.g. "Namaste", "Hello", "beta", "dear student", "accha").
-   - Maximum 2-3 short sentences per slide.
-5. Number of slides: Generate exactly 4 to 6 slides to fully explain the concept in a bite-sized format.
-
-Output only the JSON code block. Ensure it is valid JSON and all double-quotes inside the svg_content string are properly escaped.
+Output ONLY the raw JSON block without markdown formatting wrapper, or wrapped in a standard ```json ... ``` codeblock. Ensure the output is valid JSON.
 """
     return prompt
-

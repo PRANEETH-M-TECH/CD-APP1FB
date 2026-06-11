@@ -4,6 +4,7 @@ import uuid
 import hashlib
 import json
 import logging
+import pickle
 from typing import List, Dict, Optional
 
 from qdrant_client import QdrantClient as QC, models
@@ -55,10 +56,18 @@ def initialize():
         raise ValueError("QDRANT_URL not found in environment variables.")
 
     try:
+        url_clean = qdrant_url
+        client_kwargs = {"timeout": 60}
         if qdrant_api_key:
-            client = QC(url=qdrant_url, api_key=qdrant_api_key)
-        else:
-            client = QC(url=qdrant_url)
+            client_kwargs["api_key"] = qdrant_api_key
+            
+        if "qdrant.io" in qdrant_url or "cloud" in qdrant_url:
+            url_clean = qdrant_url.replace(":6333", "").replace(":6334", "")
+            client_kwargs["port"] = 443
+            client_kwargs["prefer_grpc"] = False
+            print(f"[Qdrant] Detected cloud URL. Connecting using REST over HTTPS (port 443) to: {url_clean} with timeout=60")
+            
+        client = QC(url=url_clean, **client_kwargs)
         print("[Qdrant] Qdrant client initialized successfully.")
     except Exception as e:
         print(f"[Qdrant ERROR] Failed to connect to Qdrant: {e}")
@@ -95,11 +104,41 @@ def initialize():
 def get_or_build_bm25_index(book_uuid: str) -> Optional[BM25Okapi]:
     """
     Get cached BM25 index or build one from Qdrant chunks for this book.
+    Saves and loads from local disk to prevent 70-second retrieval latency.
     """
     global bm25_indices, book_corpus
     if book_uuid in bm25_indices:
         return bm25_indices[book_uuid]
 
+    # Generate a cache file name based on book_uuid hash
+    hashed_name = hashlib.sha256(book_uuid.encode("utf-8")).hexdigest()
+    cache_dir = "bm25_indices"
+    os.makedirs(cache_dir, exist_ok=True)
+    cache_path = os.path.join(cache_dir, f"{hashed_name}.pkl")
+
+    # Try loading from local file cache first
+    if os.path.exists(cache_path):
+        try:
+            print(f"[BM25] Loading cached index from disk: {cache_path}")
+            with open(cache_path, "rb") as f:
+                cached_data = pickle.load(f)
+            if isinstance(cached_data, dict) and "bm25" in cached_data and "corpus_docs" in cached_data:
+                bm25 = cached_data["bm25"]
+                corpus_docs = cached_data["corpus_docs"]
+                
+                # Cache in memory
+                bm25_indices[book_uuid] = bm25
+                book_corpus[book_uuid] = corpus_docs
+                print(f"[BM25] Loaded index for book {book_uuid} from disk ({len(corpus_docs)} chunks).")
+                return bm25
+            else:
+                # If it's a legacy pickle file format (contains only BM25 index directly), we must rebuild.
+                print(f"[BM25] Cache file {cache_path} is in legacy format. Rebuilding...")
+        except Exception as e:
+            print(f"[BM25] Error loading cache from disk: {e}")
+
+    # Build it fresh
+    print(f"[BM25] Fetching chunks from Qdrant to build index for book {book_uuid}...")
     corpus_docs = _get_all_chunks_for_book(book_uuid)
     if not corpus_docs:
         print(f"[BM25] Warning: No chunks found in Qdrant for book {book_uuid} to build index.")
@@ -109,10 +148,23 @@ def get_or_build_bm25_index(book_uuid: str) -> Optional[BM25Okapi]:
     tokenized_corpus = [doc.get("text", "").split(" ") for doc in corpus_docs]
     bm25 = BM25Okapi(tokenized_corpus)
 
-    # Cache both index and corpus
+    # Cache both index and corpus in memory
     bm25_indices[book_uuid] = bm25
     book_corpus[book_uuid] = corpus_docs
     print(f"[BM25] Built and cached BM25 index for book {book_uuid} ({len(corpus_docs)} chunks).")
+
+    # Save to disk cache for next time
+    try:
+        cache_data = {
+            "bm25": bm25,
+            "corpus_docs": corpus_docs
+        }
+        with open(cache_path, "wb") as f:
+            pickle.dump(cache_data, f)
+        print(f"[BM25] Saved index and corpus to disk cache: {cache_path}")
+    except Exception as e:
+        print(f"[BM25] Warning: Failed to save cache to disk: {e}")
+
     return bm25
 
 

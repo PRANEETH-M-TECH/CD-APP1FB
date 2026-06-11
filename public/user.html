@@ -1044,7 +1044,7 @@
           <div class="text-6xl mb-4 animate-bounce">🎬</div>
           <h3 class="text-xl font-bold text-indigo-300 mb-2">Visual Learning Mode</h3>
           <p class="text-xs text-slate-400 max-w-sm leading-relaxed mb-4">
-            Type a query at the bottom to watch an interactive, AI-generated visual lesson with slides and teacher voice narration.
+            Type a query at the bottom to watch an interactive, AI-generated animated lesson with scenes and teacher voice narration.
           </p>
           <div class="px-4 py-2 bg-indigo-950/50 border border-indigo-800/40 rounded-xl text-[11px] text-indigo-300/80 max-w-xs leading-normal">
             💡 "Explain the Water Cycle" or "How do magnets work?" make great lessons!
@@ -1053,11 +1053,11 @@
 
         <!-- Loading Screen -->
         <div id="vl-loading-screen" style="display: none;">
-          <h2 class="text-xl font-bold mb-6 text-indigo-300 text-center" id="vl-loading-title">🎬 Creating Visual Lesson...</h2>
+          <h2 class="text-xl font-bold mb-6 text-indigo-300 text-center" id="vl-loading-title">🎬 Creating Animated Lesson...</h2>
           <div class="vl-loader-animation" id="vl-loading-spinner">
-            <div class="vl-loader-ring"></div>
-            <div class="vl-loader-ring"></div>
-            <div class="vl-loader-ring"></div>
+            <div class="vl-loader-ring outer"></div>
+            <div class="vl-loader-ring middle"></div>
+            <div class="vl-loader-ring inner"></div>
           </div>
           <div class="vl-loading-steps" id="vl-loading-steps-container">
             <div class="vl-loading-step" id="vl-step-understanding_topic">
@@ -1066,11 +1066,11 @@
             </div>
             <div class="vl-loading-step" id="vl-step-designing_lesson">
               <span class="vl-step-check">2</span>
-              <span>Designing Lesson Plan</span>
+              <span>Designing Storyboard Scenes</span>
             </div>
             <div class="vl-loading-step" id="vl-step-generating_visuals">
               <span class="vl-step-check">3</span>
-              <span>Generating Slide Illustrations</span>
+              <span>Retrieving Animated Scene Assets</span>
             </div>
             <div class="vl-loading-step" id="vl-step-creating_narration">
               <span class="vl-step-check">4</span>
@@ -1101,10 +1101,10 @@
           </div>
           
           <div class="vl-player-body">
-            <!-- Main Content -->
+            <!-- Main Content (Responsive 16:9 Canvas Container) -->
             <div id="vl-main">
-              <div class="vl-slide-wrapper">
-                <img id="vl-slide-image" src="" alt="Slide illustration">
+              <div id="vl-canvas">
+                <!-- Scene assets will be rendered here dynamically -->
               </div>
             </div>
             
@@ -1129,7 +1129,7 @@
           <!-- Controls -->
           <div id="vl-controls">
             <div class="vl-control-group">
-              <span id="vl-progress-text" class="vl-progress-text">Slide 1 / 4</span>
+              <span id="vl-progress-text" class="vl-progress-text">Scene 1 / 4</span>
             </div>
             
             <div class="vl-control-group">
@@ -1288,6 +1288,10 @@
   <!-- Answer Preference Manager (load after script.js so submitSmartQueryFromMic is defined first) -->
   <script src="/static/js/answer-preference-manager.js?v=102"></script>
   
+  <!-- GSAP & Lottie libraries for Visual Learning V1 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
+
   <!-- Visual Learning Player script -->
   <script src="/static/js/visual-learning.js"></script>
 
@@ -1960,7 +1964,7 @@
             </span>
           </div>
           <h4 class="font-bold text-gray-800 text-sm">Visual Learning</h4>
-          <p class="text-[11px] text-gray-500 leading-tight">Watch AI-generated visual slide lessons with voice narration.</p>
+          <p class="text-[11px] text-gray-500 leading-tight">Watch interactive, AI-generated animated lessons with teacher voice narration.</p>
         </div>
 
       </div>

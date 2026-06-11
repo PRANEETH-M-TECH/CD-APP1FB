@@ -706,8 +706,17 @@ function setupUserPage() {
         const query = queryText.value.trim();
         if (!query || !selectedBook) return;
 
-        // Use the new smart query system
-        await submitSmartQuery(query, false);
+        const currentMode = window.answerPreferenceManager ? window.answerPreferenceManager.currentMode : 'text_text';
+        if (currentMode === 'visual_learning') {
+            if (window.VisualLearningRenderer) {
+                await window.VisualLearningRenderer.startLesson(query);
+            } else {
+                console.error('[MODE] VisualLearningRenderer not found');
+            }
+        } else {
+            // Use the new smart query system
+            await submitSmartQuery(query, false);
+        }
 
         queryText.value = '';
         queryText.style.height = 'auto'; // Reset height
@@ -1125,7 +1134,16 @@ function setupUserPage() {
             console.warn('[MODE] No book selected — mic query ignored.');
             return;
         }
-        submitSmartQuery(transcript, false);
+        const currentMode = window.answerPreferenceManager ? window.answerPreferenceManager.currentMode : 'text_text';
+        if (currentMode === 'visual_learning') {
+            if (window.VisualLearningRenderer) {
+                window.VisualLearningRenderer.startLesson(transcript);
+            } else {
+                console.error('[MODE] VisualLearningRenderer not found');
+            }
+        } else {
+            submitSmartQuery(transcript, false);
+        }
     };
 }
 

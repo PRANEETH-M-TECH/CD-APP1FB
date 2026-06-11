@@ -26,28 +26,48 @@
 }
 
 .vl-loader-animation {
-    width: 80px;
-    height: 80px;
-    margin-bottom: 2rem;
+    width: 120px;
+    height: 120px;
+    margin-bottom: 2.5rem;
     position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .vl-loader-ring {
     box-sizing: border-box;
     display: block;
     position: absolute;
-    width: 64px;
-    height: 64px;
-    margin: 8px;
-    border: 6px solid #6366f1;
     border-radius: 50%;
-    animation: vl-spin 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-    border-color: #6366f1 transparent transparent transparent;
+    border: 4px solid transparent;
+    animation: vl-spin infinite linear;
 }
 
-.vl-loader-ring:nth-child(1) { animation-delay: -0.45s; }
-.vl-loader-ring:nth-child(2) { animation-delay: -0.3s; }
-.vl-loader-ring:nth-child(3) { animation-delay: -0.15s; }
+.vl-loader-ring.outer {
+    width: 100px;
+    height: 100px;
+    border-top-color: #6366f1;
+    border-right-color: #a56bff;
+    animation-duration: 2s;
+}
+
+.vl-loader-ring.middle {
+    width: 76px;
+    height: 76px;
+    border-bottom-color: #3b82f6;
+    border-left-color: #10b981;
+    animation-duration: 1.5s;
+    animation-direction: reverse;
+}
+
+.vl-loader-ring.inner {
+    width: 52px;
+    height: 52px;
+    border-top-color: #f59e0b;
+    border-bottom-color: #ef4444;
+    animation-duration: 1s;
+}
 
 @keyframes vl-spin {
     0% { transform: rotate(0deg); }
@@ -111,6 +131,13 @@
     border-color: #34d399;
     background-color: #34d399;
     color: #0f172a;
+    animation: vl-spring-pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes vl-spring-pop {
+    0% { transform: scale(0.5); opacity: 0; }
+    70% { transform: scale(1.3); }
+    100% { transform: scale(1); opacity: 1; }
 }
 
 /* Player UI Layout */
@@ -229,26 +256,82 @@
     justify-content: center;
     background-color: #0b0f19; /* Darkest slate, matches unified background */
     position: relative;
-    padding: 0; /* Remove padding for full bleed */
-}
-
-.vl-slide-wrapper {
-    width: 100%;
-    height: 100%;
-    max-height: none; /* Occupy 100% of player window height */
-    max-width: none;  /* Occupy 100% of player window width */
-    position: relative;
-    border-radius: 0; /* Remove border-radius for clean full-bleed video display */
+    padding: 1.5rem;
     overflow: hidden;
-    box-shadow: none; /* Shadow unnecessary as it fills the frame */
-    background: #0b0f19; /* Unified background */
 }
 
-#vl-slide-image {
+#vl-canvas {
+    position: relative;
+    width: 800px;
+    height: 450px;
+    background: radial-gradient(circle at center, #1b153f 0%, #0b0c16 100%);
+    border-radius: 1.25rem;
+    border: 2px solid rgba(99, 102, 241, 0.35);
+    box-shadow: 0 0 25px rgba(99, 102, 241, 0.15), 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+    overflow: hidden;
+    transition: background 1.2s ease, border-color 0.8s ease, box-shadow 0.8s ease;
+}
+
+/* Cosmic Dynamic Neon Glow classes */
+#vl-canvas.glow-indigo {
+    border-color: rgba(99, 102, 241, 0.5);
+    box-shadow: 0 0 30px rgba(99, 102, 241, 0.25), 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+}
+
+#vl-canvas.glow-gold {
+    border-color: rgba(245, 158, 11, 0.5);
+    box-shadow: 0 0 30px rgba(245, 158, 11, 0.25), 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+}
+
+#vl-canvas.glow-emerald {
+    border-color: rgba(16, 185, 129, 0.5);
+    box-shadow: 0 0 30px rgba(16, 185, 129, 0.25), 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+}
+
+#vl-canvas.glow-rose {
+    border-color: rgba(244, 63, 94, 0.5);
+    box-shadow: 0 0 30px rgba(244, 63, 94, 0.25), 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+}
+
+/* Scene Assets styling */
+.vl-asset {
+    position: absolute;
+    transform-origin: center center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@keyframes vl-float-asset {
+    0% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-8px) rotate(0.6deg); }
+    100% { transform: translateY(0px) rotate(0deg); }
+}
+
+.vl-asset-content.idle-floating {
+    animation: vl-float-asset 6s ease-in-out infinite alternate;
+}
+
+.vl-asset:nth-child(2n) .vl-asset-content.idle-floating {
+    animation-delay: -1.8s;
+    animation-duration: 7.5s;
+}
+
+.vl-asset:nth-child(3n) .vl-asset-content.idle-floating {
+    animation-delay: -3.5s;
+    animation-duration: 9s;
+}
+
+.vl-asset img {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* Zooms to cover the entire player container, no black bars */
-    transition: opacity 0.3s ease-in-out;
+    object-fit: contain;
+    border-radius: 0.5rem;
+}
+
+.vl-asset-lottie {
+    position: absolute;
+    transform-origin: center center;
 }
 
 /* Control Bar (Glassmorphic) */
