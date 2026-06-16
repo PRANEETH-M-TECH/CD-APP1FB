@@ -251,46 +251,37 @@
 /* Main slide display area */
 #vl-main {
     flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     background-color: #0b0f19; /* Darkest slate, matches unified background */
     position: relative;
-    padding: 1.5rem;
     overflow: hidden;
 }
 
 #vl-canvas {
-    position: relative;
-    width: 800px;
-    height: 450px;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
     background: radial-gradient(circle at center, #1b153f 0%, #0b0c16 100%);
-    border-radius: 1.25rem;
-    border: 2px solid rgba(99, 102, 241, 0.35);
-    box-shadow: 0 0 25px rgba(99, 102, 241, 0.15), 0 25px 50px -12px rgba(0, 0, 0, 0.6);
     overflow: hidden;
-    transition: background 1.2s ease, border-color 0.8s ease, box-shadow 0.8s ease;
+    transition: background 1.2s ease;
 }
 
-/* Cosmic Dynamic Neon Glow classes */
+/* Cosmic Dynamic Neon Glow classes (applied to background radial gradient) */
 #vl-canvas.glow-indigo {
-    border-color: rgba(99, 102, 241, 0.5);
-    box-shadow: 0 0 30px rgba(99, 102, 241, 0.25), 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+    background: radial-gradient(circle at center, #1b153f 0%, #0b0c16 100%);
 }
 
 #vl-canvas.glow-gold {
-    border-color: rgba(245, 158, 11, 0.5);
-    box-shadow: 0 0 30px rgba(245, 158, 11, 0.25), 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+    background: radial-gradient(circle at center, #2e1e05 0%, #0c0802 100%);
 }
 
 #vl-canvas.glow-emerald {
-    border-color: rgba(16, 185, 129, 0.5);
-    box-shadow: 0 0 30px rgba(16, 185, 129, 0.25), 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+    background: radial-gradient(circle at center, #072517 0%, #020b07 100%);
 }
 
 #vl-canvas.glow-rose {
-    border-color: rgba(244, 63, 94, 0.5);
-    box-shadow: 0 0 30px rgba(244, 63, 94, 0.25), 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+    background: radial-gradient(circle at center, #2b0b14 0%, #0e0306 100%);
 }
 
 /* Scene Assets styling */
@@ -552,5 +543,56 @@
     flex-direction: column;
     gap: 0.5rem;
     padding: 0.5rem 0;
+}
+
+/* Fallback Card for Empty/Failed Image Search */
+.vl-fallback-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 0.75rem;
+    padding: 0.75rem 1rem;
+    color: #e2e8f0;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    height: 100%;
+}
+
+.vl-fallback-card .icon {
+    font-size: 1.5rem;
+    margin-bottom: 0.25rem;
+}
+
+.vl-fallback-card .label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+/* Glassmorphic Text Asset Labels */
+.vl-asset-text {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #f8fafc;
+    text-shadow: 0 1.5px 3px rgba(0, 0, 0, 0.8);
+    background: rgba(15, 23, 42, 0.7);
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 0.4rem 0.6rem;
+    border-radius: 0.5rem;
+    text-align: center;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    overflow: hidden;
+    word-break: break-word;
 }
 

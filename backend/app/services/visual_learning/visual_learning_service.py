@@ -73,35 +73,50 @@ async def generate_visual_lesson_stream(query: str, book_uuid: str, class_name: 
                 json_str = response_text
                 
             blueprint = json.loads(json_str)
-            scenes = blueprint.get("scenes", [])
-            logger.info(f"[VisualLearning] Parsed storyboard successfully with {len(scenes)} scenes.")
+            clips = blueprint.get("clips", blueprint.get("scenes", []))
+            global_assets = blueprint.get("global_assets", [])
+            connections = blueprint.get("connections", [])
+            layout_mode = blueprint.get("layout_mode", "timeline")
+            theme = blueprint.get("theme", "indigo")
+            
+            logger.info(f"[VisualLearning] Parsed storyboard successfully with {len(clips)} clips.")
         except Exception as e:
             logger.error(f"[VisualLearning] Failed to parse storyboard JSON. Raw response:\n{response_text}\nError: {e}", exc_info=True)
             raise ValueError(f"Failed to parse storyboard JSON from Gemini response: {e}")
         
-        if not scenes:
-            raise ValueError("Gemini storyboard does not contain any scenes.")
+        if not clips:
+            raise ValueError("Gemini storyboard does not contain any clips.")
             
-        yield f"data: {json.dumps({'type': 'progress', 'step': 'designing_lesson', 'status': 'complete', 'message': f'Designed storyboard with {len(scenes)} scenes.'})}\n\n"
+        yield f"data: {json.dumps({'type': 'progress', 'step': 'designing_lesson', 'status': 'complete', 'message': f'Designed storyboard with {len(clips)} clips.'})}\n\n"
         
-        # Step 3: Retrieve visual assets for scenes
+        # Step 3: Retrieve visual assets for scenes (both global and local clip assets)
         yield f"data: {json.dumps({'type': 'progress', 'step': 'generating_visuals', 'status': 'in_progress', 'message': 'Retrieving educational visual assets...'})}\n\n"
         await asyncio.sleep(0.4)
         
-        # Resolve search queries using Wikimedia / Openverse Asset Retrieval Engine
-        for scene in scenes:
-            scene_no = scene.get("scene_no", 1)
-            assets = scene.get("assets", [])
-            for asset in assets:
+        # Resolve global assets
+        for asset in global_assets:
+            asset_type = asset.get("type", "image")
+            if asset_type in ("image", "icon"):
+                query_str = asset.get("search_query", "")
+                logger.info(f"[VisualLearning] Searching global asset: '{query_str}' (type: {asset_type})")
+                asset_url = await retrieve_asset_url(query_str, asset_type=asset_type, theme=theme)
+                asset["asset_url"] = asset_url
+            else:
+                asset["asset_url"] = ""
+
+        # Resolve local clip image and icon assets
+        for clip in clips:
+            clip_no = clip.get("clip_no", clip.get("scene_no", 1))
+            local_assets = clip.get("local_assets", clip.get("assets", []))
+            for asset in local_assets:
                 asset_type = asset.get("type", "image")
                 query_str = asset.get("search_query", "")
                 
-                if asset_type == "image":
-                    logger.info(f"[VisualLearning] Searching asset for scene {scene_no}: '{query_str}'")
-                    asset_url = await retrieve_asset_url(query_str)
+                if asset_type in ("image", "icon"):
+                    logger.info(f"[VisualLearning] Searching asset for clip {clip_no}: '{query_str}' (type: {asset_type})")
+                    asset_url = await retrieve_asset_url(query_str, asset_type=asset_type, theme=theme)
                     asset["asset_url"] = asset_url
                 else:
-                    # Lottie preset elements will be resolved in the client player
                     asset["asset_url"] = ""
         
         yield f"data: {json.dumps({'type': 'progress', 'step': 'generating_visuals', 'status': 'complete', 'message': 'Visual assets loaded successfully.'})}\n\n"
@@ -110,11 +125,18 @@ async def generate_visual_lesson_stream(query: str, book_uuid: str, class_name: 
         yield f"data: {json.dumps({'type': 'progress', 'step': 'creating_narration', 'status': 'in_progress', 'message': 'Synthesizing teacher audio narration...'})}\n\n"
         await asyncio.sleep(0.4)
         
-        audio_urls = await generate_slide_audio(scenes, lesson_id)
+        # Ensure slide generator compatibility
+        for clip in clips:
+            if "scene_no" not in clip:
+                clip["scene_no"] = clip.get("clip_no", 1)
+            if "teacher_script" not in clip:
+                clip["teacher_script"] = clip.get("teacher_script", "")
+
+        audio_urls = await generate_slide_audio(clips, lesson_id)
         
-        # Map generated audio URLs to the scenes
-        for idx, scene in enumerate(scenes):
-            scene["audio_url"] = audio_urls[idx] if idx < len(audio_urls) else ""
+        # Map generated audio URLs to the clips
+        for idx, clip in enumerate(clips):
+            clip["audio_url"] = audio_urls[idx] if idx < len(audio_urls) else ""
             
         yield f"data: {json.dumps({'type': 'progress', 'step': 'creating_narration', 'status': 'complete', 'message': 'Teacher narration synthesized.'})}\n\n"
         
@@ -124,9 +146,12 @@ async def generate_visual_lesson_stream(query: str, book_uuid: str, class_name: 
         
         lesson_package = {
             "lesson_title": blueprint.get("lesson_title", "Visual Lesson"),
-            "lesson_type": blueprint.get("lesson_type", "conceptual"),
+            "layout_mode": layout_mode,
+            "theme": theme,
+            "global_assets": global_assets,
+            "connections": connections,
             "lesson_id": lesson_id,
-            "scenes": scenes
+            "scenes": clips
         }
         
         # Save the lesson package JSON to disk

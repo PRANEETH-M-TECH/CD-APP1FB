@@ -1,7 +1,8 @@
 /**
- * Visual Learning Mode Controller for CHADUVU-GURU (V1 Scene-Based)
+ * Visual Learning Mode Controller for CHADUVU-GURU (V2 Continuous Canvas-Driven Engine)
  * Orchestrates storyboard creation, scene asset rendering (GSAP + Lottie),
- * audio playback synchronization, aspect ratio scaling, and player states.
+ * audio playback synchronization, aspect ratio scaling, player states,
+ * virtual camera pans/zooms, and dynamic SVG connectors drawing.
  * Enriched with detailed debug logging.
  */
 
@@ -69,14 +70,18 @@ class VisualLearningController {
         this.isPlaying = false;
         this.audio = null;
         this.timeline = null;
-        this.lottieInstances = [];
+        this.lottieInstancesMap = {};
+        this.renderedAssets = {};
         
         // Sync flags
         this.timelineFinished = false;
         this.audioFinished = false;
+        this.isSeeking = false;
         
         this.preloadedImages = {};
         this.preloadedAudios = {};
+        this.clipStartTimes = [];
+        this.totalDuration = 0;
         
         this.activeProgressSteps = [
             'understanding_topic',
@@ -160,6 +165,13 @@ class VisualLearningController {
                 outlineContent.style.display = 'block';
             };
         }
+
+        // Wire seek bar container click
+        const progressBarContainer = document.querySelector('.vl-progress-bar-container');
+        if (progressBarContainer) {
+            progressBarContainer.onclick = (e) => this.handleProgressBarClick(e);
+            progressBarContainer.style.cursor = 'pointer';
+        }
     }
 
     resizeCanvas() {
@@ -169,22 +181,21 @@ class VisualLearningController {
             return;
         }
         
-        const cw = container.clientWidth;
-        const ch = container.clientHeight;
-        const ratio = 800 / 450;
+        this.canvas.style.width = '800px';
+        this.canvas.style.height = '450px';
         
-        let scale = 1;
-        if (cw / ch > ratio) {
-            scale = ch / 450;
+        // If a lesson is active, re-focus camera to the current scene's camera coordinates
+        if (this.lessonPackage && this.lessonPackage.scenes) {
+            const scene = this.lessonPackage.scenes[this.currentSlideIndex];
+            if (scene) {
+                const cam = scene.camera || { focus_x: 50, focus_y: 50, zoom: 1.0 };
+                this.focusCamera(cam.focus_x, cam.focus_y, cam.zoom, 0); // instant update
+            }
         } else {
-            scale = cw / 800;
+            // Default center
+            this.focusCamera(50, 50, 1.0, 0);
         }
-        
-        scale *= 0.95; // Breathing room
-        
-        this.canvas.style.transform = `scale(${scale})`;
-        this.canvas.style.transformOrigin = 'center center';
-        console.log(`[VisualLearning LOG] Rescaled 16:9 Canvas to factor: ${scale.toFixed(4)}`);
+        console.log("[VisualLearning LOG] Canvas resized and refocused.");
     }
 
     async startLesson(query) {
@@ -349,45 +360,68 @@ class VisualLearningController {
         this.preloadedImages = {};
         this.preloadedAudios = {};
 
-        const imagePromises = [];
+        // 1. Preload global assets
+        const globalAssets = this.lessonPackage.global_assets || [];
+        const globalImagePromises = globalAssets.map(asset => {
+            if (asset.type === 'image' && asset.asset_url) {
+                console.log(`[VisualLearning LOG] Preload global image asset: id="${asset.id}" | URL: ${asset.asset_url}`);
+                return new Promise((resolve) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        this.preloadedImages[asset.id] = img;
+                        resolve();
+                    };
+                    img.onerror = () => {
+                        console.error(`[VisualLearning ERROR] Preload global image failed: id="${asset.id}"`);
+                        resolve();
+                    };
+                    img.src = asset.asset_url;
+                });
+            }
+            return Promise.resolve();
+        });
+
+        // 2. Preload local clip assets
+        const localImagePromises = [];
         scenes.forEach(scene => {
-            const assets = scene.assets || [];
+            const assets = scene.local_assets || scene.assets || [];
             assets.forEach(asset => {
                 if (asset.type === 'image' && asset.asset_url) {
-                    console.log(`[VisualLearning LOG] Preload image asset: id="${asset.id}" | URL: ${asset.asset_url}`);
+                    console.log(`[VisualLearning LOG] Preload local image asset: id="${asset.id}" | URL: ${asset.asset_url}`);
                     const promise = new Promise((resolve) => {
                         const img = new Image();
                         img.onload = () => {
                             this.preloadedImages[asset.id] = img;
-                            console.log(`[VisualLearning LOG] Image preloaded successfully: id="${asset.id}"`);
                             resolve();
                         };
-                        img.onerror = (e) => {
-                            console.error(`[VisualLearning ERROR] Preload image failed: id="${asset.id}" | URL: ${asset.asset_url}`, e);
-                            resolve(); // resolve to avoid blocking UI loader loop
+                        img.onerror = () => {
+                            console.error(`[VisualLearning ERROR] Preload local image failed: id="${asset.id}"`);
+                            resolve();
                         };
                         img.src = asset.asset_url;
                     });
-                    imagePromises.push(promise);
+                    localImagePromises.push(promise);
                 }
             });
         });
 
-        const audioPromises = scenes.map(scene => {
-            console.log(`[VisualLearning LOG] Preload audio asset: scene_no=${scene.scene_no} | URL: ${scene.audio_url}`);
+        // 3. Preload narration audio and extract durations
+        const audioPromises = scenes.map((scene, index) => {
+            const sceneNo = scene.scene_no || scene.clip_no || (index + 1);
+            console.log(`[VisualLearning LOG] Preload audio asset: scene_no=${sceneNo} | URL: ${scene.audio_url}`);
             return new Promise((resolve) => {
                 const aud = new Audio();
                 aud.src = scene.audio_url;
                 
                 const onCanPlay = () => {
-                    this.preloadedAudios[scene.scene_no] = aud;
-                    console.log(`[VisualLearning LOG] Audio preloaded successfully: scene_no=${scene.scene_no}`);
+                    this.preloadedAudios[sceneNo] = aud;
+                    console.log(`[VisualLearning LOG] Audio preloaded successfully: scene_no=${sceneNo}, duration=${aud.duration}`);
                     cleanup();
                     resolve();
                 };
 
                 const onError = (e) => {
-                    console.error(`[VisualLearning ERROR] Preload narration audio failed: scene_no=${scene.scene_no} | URL: ${scene.audio_url}`, e);
+                    console.error(`[VisualLearning ERROR] Preload narration audio failed: scene_no=${sceneNo} | URL: ${scene.audio_url}`, e);
                     cleanup();
                     resolve();
                 };
@@ -402,15 +436,47 @@ class VisualLearningController {
                 
                 // Safety timeout
                 setTimeout(() => {
-                    console.warn(`[VisualLearning WARNING] Preload timeout triggered for audio of scene ${scene.scene_no}`);
+                    console.warn(`[VisualLearning WARNING] Preload timeout triggered for audio of scene ${sceneNo}`);
                     cleanup();
                     resolve();
                 }, 8000);
             });
         });
 
-        await Promise.all([...imagePromises, ...audioPromises]);
-        console.log("[VisualLearning LOG] Media preloading phase completed.");
+        await Promise.all([...globalImagePromises, ...localImagePromises, ...audioPromises]);
+
+        // 4. Calculate cumulative durations and start times
+        this.clipStartTimes = [];
+        let cumulativeTime = 0;
+        scenes.forEach((scene, index) => {
+            const sceneNo = scene.scene_no || scene.clip_no || (index + 1);
+            const aud = this.preloadedAudios[sceneNo];
+            let duration = 0;
+            if (aud && !isNaN(aud.duration) && aud.duration > 0) {
+                duration = aud.duration;
+            } else {
+                // Fallback duration calculation
+                const script = scene.teacher_script || "";
+                duration = Math.max(5, Math.ceil(script.length * 0.08));
+                console.warn(`[VisualLearning WARNING] Scene #${sceneNo} audio duration unavailable. Using estimated duration: ${duration}s`);
+                
+                // Create mock audio element to prevent downstream player crashes
+                if (!this.preloadedAudios[sceneNo]) {
+                    this.preloadedAudios[sceneNo] = {
+                        duration: duration,
+                        currentTime: 0,
+                        play: async () => {},
+                        pause: () => {},
+                        addEventListener: () => {},
+                        removeEventListener: () => {}
+                    };
+                }
+            }
+            this.clipStartTimes.push(cumulativeTime);
+            cumulativeTime += duration;
+        });
+        this.totalDuration = cumulativeTime;
+        console.log(`[VisualLearning LOG] Total continuous lesson duration: ${this.totalDuration.toFixed(2)}s. Start times:`, this.clipStartTimes);
     }
 
     launchPlayer() {
@@ -427,19 +493,21 @@ class VisualLearningController {
 
     renderSidebar() {
         this.slidesList.innerHTML = '';
-        this.lessonPackage.scenes.forEach((scene) => {
+        this.lessonPackage.scenes.forEach((scene, index) => {
+            const sceneNo = scene.scene_no || scene.clip_no || (index + 1);
             const item = document.createElement('div');
-            item.id = `vl-slide-item-${scene.scene_no}`;
+            item.id = `vl-slide-item-${sceneNo}`;
             item.className = 'vl-slide-item upcoming';
             item.onclick = () => {
-                console.log(`[VisualLearning LOG] User clicked sidebar item: Scene ${scene.scene_no}`);
-                this.jumpToSlide(scene.scene_no);
+                console.log(`[VisualLearning LOG] User clicked sidebar item: Scene ${sceneNo}`);
+                const startTime = this.clipStartTimes[sceneNo - 1] || 0;
+                this.seekTo(startTime);
             };
 
             item.innerHTML = `
-                <div class="vl-slide-status-icon">${scene.scene_no}</div>
+                <div class="vl-slide-status-icon">${sceneNo}</div>
                 <div class="vl-slide-details">
-                    <span class="vl-slide-title">${scene.title}</span>
+                    <span class="vl-slide-title">${scene.title || `Scene ${sceneNo}`}</span>
                 </div>
             `;
             this.slidesList.appendChild(item);
@@ -447,33 +515,35 @@ class VisualLearningController {
     }
 
     updateSidebarStates() {
-        this.lessonPackage.scenes.forEach((scene) => {
-            const item = document.getElementById(`vl-slide-item-${scene.scene_no}`);
+        this.lessonPackage.scenes.forEach((scene, index) => {
+            const sceneNo = scene.scene_no || scene.clip_no || (index + 1);
+            const item = document.getElementById(`vl-slide-item-${sceneNo}`);
             if (!item) return;
 
             const icon = item.querySelector('.vl-slide-status-icon');
             
-            if (scene.scene_no < this.currentSlideIndex + 1) {
+            if (sceneNo < this.currentSlideIndex + 1) {
                 item.className = 'vl-slide-item completed';
                 if (icon) icon.textContent = '✓';
-            } else if (scene.scene_no === this.currentSlideIndex + 1) {
+            } else if (sceneNo === this.currentSlideIndex + 1) {
                 item.className = 'vl-slide-item current';
-                if (icon) icon.textContent = scene.scene_no;
+                if (icon) icon.textContent = sceneNo;
             } else {
                 item.className = 'vl-slide-item upcoming';
-                if (icon) icon.textContent = scene.scene_no;
+                if (icon) icon.textContent = sceneNo;
             }
         });
     }
 
     updateCanvasTheme(scene) {
-        if (!this.canvas) return;
+        const mainContainer = document.getElementById('vl-main');
+        if (!mainContainer) return;
         
         // Reset active glow classes
-        this.canvas.classList.remove('glow-indigo', 'glow-gold', 'glow-emerald', 'glow-rose');
+        mainContainer.classList.remove('glow-indigo', 'glow-gold', 'glow-emerald', 'glow-rose');
         
         const titleLower = (scene.title || "").toLowerCase();
-        const assetsKeywords = (scene.assets || []).map(a => (a.search_query || "").toLowerCase()).join(" ");
+        const assetsKeywords = (scene.local_assets || scene.assets || []).map(a => (a.search_query || "").toLowerCase()).join(" ");
         const merged = `${titleLower} ${assetsKeywords}`;
         
         let theme = 'indigo';
@@ -490,15 +560,23 @@ class VisualLearningController {
             radialGradient = 'radial-gradient(circle at center, #2b0b14 0%, #0e0306 100%)';
         }
         
-        this.canvas.classList.add(`glow-${theme}`);
-        this.canvas.style.background = radialGradient;
-        console.log(`[VisualLearning LOG] Applied Canvas Theme: "${theme}"`);
+        mainContainer.classList.add(`glow-${theme}`);
+        mainContainer.style.background = radialGradient;
+        
+        if (this.canvas) {
+            this.canvas.style.background = 'transparent';
+        }
+        console.log(`[VisualLearning LOG] Applied Canvas theme to main wrapper: "${theme}"`);
     }
 
-    playSlide(sceneNo) {
-        console.log(`[VisualLearning LOG] PlaySlide initiated for Scene #${sceneNo}`);
+    playSlide(sceneNo, startOffset = 0) {
+        console.log(`[VisualLearning LOG] playSlide initiated for Scene #${sceneNo} | startOffset = ${startOffset}s`);
 
-        // Stop active audio
+        const sceneIndex = sceneNo - 1;
+        this.currentSlideIndex = sceneIndex;
+        const scene = this.lessonPackage.scenes[sceneIndex];
+
+        // 1. Stop active audio
         if (this.audio) {
             console.log("[VisualLearning LOG] Pausing and resetting active audio.");
             this.audio.pause();
@@ -507,33 +585,12 @@ class VisualLearningController {
             this.audio.ontimeupdate = null;
         }
 
-        // Kill active GSAP timeline
+        // 2. Kill current GSAP timeline
         if (this.timeline) {
             console.log("[VisualLearning LOG] Killing active GSAP timeline.");
             this.timeline.kill();
             this.timeline = null;
         }
-
-        // Destroy active Lottie animations
-        if (this.lottieInstances) {
-            console.log(`[VisualLearning LOG] Cleaning up ${this.lottieInstances.length} Lottie instances.`);
-            this.lottieInstances.forEach(instance => {
-                if (instance && typeof instance.destroy === 'function') {
-                    instance.destroy();
-                }
-            });
-        }
-        this.lottieInstances = [];
-
-        // Clear Canvas elements
-        if (this.canvas) {
-            this.canvas.innerHTML = '';
-            console.log("[VisualLearning LOG] Canvas cleared.");
-        }
-
-        const sceneIndex = sceneNo - 1;
-        this.currentSlideIndex = sceneIndex;
-        const scene = this.lessonPackage.scenes[sceneIndex];
 
         // Apply theme color & gradients dynamically based on scene content
         this.updateCanvasTheme(scene);
@@ -542,88 +599,156 @@ class VisualLearningController {
         this.timelineFinished = false;
         this.audioFinished = false;
 
-        // Render Scene Title Overlay
-        const titleCard = document.createElement('div');
-        titleCard.style.cssText = `
-            position: absolute;
-            bottom: 20px;
-            left: 20px;
-            background: rgba(15, 23, 42, 0.75);
-            backdrop-filter: blur(8px);
-            padding: 8px 16px;
-            border-radius: 8px;
-            border: 1px solid rgba(255,255,255,0.1);
-            color: #e2e8f0;
-            font-size: 14px;
-            font-weight: 600;
-            z-index: 10;
-        `;
-        titleCard.textContent = scene.title;
-        this.canvas.appendChild(titleCard);
+        // Ensure canvas has the overlay container (SVG)
+        let svgOverlay = document.getElementById('vl-connections-svg');
+        if (!svgOverlay) {
+            svgOverlay = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+            svgOverlay.setAttribute('id', 'vl-connections-svg');
+            svgOverlay.style.position = 'absolute';
+            svgOverlay.style.top = '0';
+            svgOverlay.style.left = '0';
+            svgOverlay.style.width = '100%';
+            svgOverlay.style.height = '100%';
+            svgOverlay.style.pointerEvents = 'none';
+            svgOverlay.style.zIndex = '1';
+            this.canvas.appendChild(svgOverlay);
+        }
 
-        // Render Assets onto 16:9 Canvas
-        const assets = scene.assets || [];
-        console.log(`[VisualLearning LOG] Scene #${sceneNo} has ${assets.length} assets. Rendering...`);
-        
-        assets.forEach(asset => {
-            const el = document.createElement('div');
-            el.id = `asset-${asset.id}`;
-            el.className = 'vl-asset';
-            
-            const layout = asset.layout || {};
-            el.style.top = layout.top || '0%';
-            el.style.left = layout.left || '0%';
-            el.style.width = layout.width || 'auto';
-            if (layout.height) el.style.height = layout.height;
-            
-            // Nested content wrapper to apply floating animation separate from GSAP
-            const contentWrapper = document.createElement('div');
-            contentWrapper.className = 'vl-asset-content idle-floating';
-            contentWrapper.style.width = '100%';
-            contentWrapper.style.height = '100%';
-            contentWrapper.style.position = 'relative';
-            el.appendChild(contentWrapper);
-            
-            console.log(`[VisualLearning LOG] Render asset: "${asset.id}" | Type: ${asset.type} | Top: ${layout.top}, Left: ${layout.left}, Width: ${layout.width}`);
-            
-            if (asset.type === 'image') {
-                const img = document.createElement('img');
-                img.src = asset.asset_url || '/static/favicon.svg';
-                img.alt = asset.id;
-                contentWrapper.appendChild(img);
-            } else if (asset.type === 'lottie') {
-                const lottieWrapper = document.createElement('div');
-                lottieWrapper.className = 'vl-asset-lottie';
-                lottieWrapper.style.width = '100%';
-                lottieWrapper.style.height = '100%';
-                contentWrapper.appendChild(lottieWrapper);
-                
-                const instance = loadLottieAsset(lottieWrapper, asset.search_query);
-                if (instance) {
-                    this.lottieInstances.push(instance);
+        // Render/Diff Assets
+        const globalAssets = this.lessonPackage.global_assets || [];
+        const localAssets = scene.local_assets || scene.assets || [];
+        const activeAssets = [...globalAssets, ...localAssets];
+        const activeAssetIds = activeAssets.map(a => a.id);
+
+        if (!this.renderedAssets) {
+            this.renderedAssets = {};
+        }
+
+        // Remove assets not in active list
+        Object.keys(this.renderedAssets).forEach(assetId => {
+            if (!activeAssetIds.includes(assetId)) {
+                const el = document.getElementById(`asset-${assetId}`);
+                if (el) {
+                    console.log(`[VisualLearning LOG] Fading out and removing asset: "${assetId}"`);
+                    gsap.to(el, {
+                        opacity: 0,
+                        duration: 0.5,
+                        onComplete: () => {
+                            el.remove();
+                            // Destroy Lottie if any
+                            if (this.lottieInstancesMap[assetId]) {
+                                try {
+                                    this.lottieInstancesMap[assetId].destroy();
+                                } catch (e) {
+                                    console.error(e);
+                                }
+                                delete this.lottieInstancesMap[assetId];
+                            }
+                        }
+                    });
                 }
+                delete this.renderedAssets[assetId];
             }
-            this.canvas.appendChild(el);
         });
 
-        // Initialize GSAP Scene Timeline
+        // Add/update active assets
+        activeAssets.forEach(asset => {
+            let el = document.getElementById(`asset-${asset.id}`);
+            if (!el) {
+                console.log(`[VisualLearning LOG] Creating new asset: "${asset.id}"`);
+                el = document.createElement('div');
+                el.id = `asset-${asset.id}`;
+                el.className = 'vl-asset';
+                el.style.zIndex = '2'; // render above SVG lines
+
+                const layout = asset.layout || {};
+                el.style.top = `${layout.top}%`;
+                el.style.left = `${layout.left}%`;
+                el.style.width = `${layout.width}%`;
+                if (layout.height) {
+                    el.style.height = `${layout.height}%`;
+                }
+
+                const contentWrapper = document.createElement('div');
+                contentWrapper.className = 'vl-asset-content idle-floating';
+                contentWrapper.style.width = '100%';
+                contentWrapper.style.height = '100%';
+                contentWrapper.style.position = 'relative';
+                el.appendChild(contentWrapper);
+
+                if (asset.type === 'image' || asset.type === 'icon') {
+                    if (asset.asset_url) {
+                        const img = document.createElement('img');
+                        img.src = asset.asset_url;
+                        img.alt = asset.id;
+                        img.onerror = () => {
+                            console.warn(`[VisualLearning WARNING] Image failed to load: ${img.src}. Rendering fallback card.`);
+                            contentWrapper.innerHTML = '';
+                            const fallback = document.createElement('div');
+                            fallback.className = 'vl-fallback-card';
+                            fallback.innerHTML = `
+                                <div class="icon">✨</div>
+                                <div class="label">${asset.search_query || asset.id}</div>
+                            `;
+                            contentWrapper.appendChild(fallback);
+                        };
+                        contentWrapper.appendChild(img);
+                    } else {
+                        // Image search failed - show glassmorphic fallback card
+                        const fallback = document.createElement('div');
+                        fallback.className = 'vl-fallback-card';
+                        fallback.innerHTML = `
+                            <div class="icon">✨</div>
+                            <div class="label">${asset.search_query || asset.id}</div>
+                        `;
+                        contentWrapper.appendChild(fallback);
+                    }
+                } else if (asset.type === 'text') {
+                    const textDiv = document.createElement('div');
+                    textDiv.className = 'vl-asset-text';
+                    textDiv.textContent = asset.text_content || asset.id || '';
+                    contentWrapper.appendChild(textDiv);
+                } else if (asset.type === 'lottie') {
+                    const lottieWrapper = document.createElement('div');
+                    lottieWrapper.className = 'vl-asset-lottie';
+                    lottieWrapper.style.width = '100%';
+                    lottieWrapper.style.height = '100%';
+                    contentWrapper.appendChild(lottieWrapper);
+
+                    const instance = loadLottieAsset(lottieWrapper, asset.search_query);
+                    if (instance) {
+                        this.lottieInstancesMap[asset.id] = instance;
+                    }
+                }
+
+                // Initial state for entrance animation
+                el.style.opacity = '0';
+                this.canvas.appendChild(el);
+                this.renderedAssets[asset.id] = true;
+            } else {
+                // Asset is already on canvas, make sure it is visible
+                el.style.opacity = '1';
+            }
+        });
+
+        // 4. Initialize GSAP Scene Timeline
         console.log("[VisualLearning LOG] Instantiating new GSAP Timeline.");
         this.timeline = gsap.timeline({ paused: true });
-        
+
         let hasTimelineAnimations = false;
-        
-        assets.forEach(asset => {
+
+        localAssets.forEach(asset => {
             const el = document.getElementById(`asset-${asset.id}`);
             if (!el) return;
-            
+
             const anims = asset.animations || [];
             anims.forEach(anim => {
                 const type = anim.type;
                 const duration = anim.duration || 1.0;
-                const delay = anim.delay || 0.0;
-                
+                const delay = anim.start_time || anim.delay || 0.0;
+
                 console.log(`[VisualLearning LOG] Animation Config for "${asset.id}": Type="${type}", Duration=${duration}s, Delay=${delay}s`);
-                
+
                 if (type === 'rotate' && duration >= 4.0) {
                     console.log(`[VisualLearning LOG] Spinning asset "${asset.id}" continuously (repeat: -1) using independent GSAP tween.`);
                     gsap.to(el, { rotation: 360, duration: duration, repeat: -1, ease: "none" });
@@ -637,23 +762,28 @@ class VisualLearningController {
                             this.timeline.to(el, { opacity: 0, duration, ease: "power1.in" }, delay);
                             break;
                         case 'move_up':
-                            this.timeline.fromTo(el, { y: 150 }, { y: 0, duration, ease: "power2.out" }, delay);
+                        case 'slide_in_bottom':
+                            this.timeline.fromTo(el, { y: 150, opacity: 0 }, { y: 0, opacity: 1, duration, ease: "power2.out" }, delay);
                             break;
                         case 'move_down':
-                            this.timeline.fromTo(el, { y: -150 }, { y: 0, duration, ease: "power2.out" }, delay);
+                        case 'slide_in_top':
+                            this.timeline.fromTo(el, { y: -150, opacity: 0 }, { y: 0, opacity: 1, duration, ease: "power2.out" }, delay);
                             break;
                         case 'move_left':
-                            this.timeline.fromTo(el, { x: 150 }, { x: 0, duration, ease: "power2.out" }, delay);
+                        case 'slide_in_right':
+                            this.timeline.fromTo(el, { x: 150, opacity: 0 }, { x: 0, opacity: 1, duration, ease: "power2.out" }, delay);
                             break;
                         case 'move_right':
-                            this.timeline.fromTo(el, { x: -150 }, { x: 0, duration, ease: "power2.out" }, delay);
+                        case 'slide_in_left':
+                            this.timeline.fromTo(el, { x: -150, opacity: 0 }, { x: 0, opacity: 1, duration, ease: "power2.out" }, delay);
                             break;
                         case 'scale_up':
-                            this.timeline.fromTo(el, { scale: 0 }, { scale: 1, duration, ease: "back.out(1.5)" }, delay);
+                            this.timeline.fromTo(el, { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration, ease: "back.out(1.5)" }, delay);
                             break;
                         case 'scale_down':
-                            this.timeline.to(el, { scale: 0, duration, ease: "power2.in" }, delay);
+                            this.timeline.to(el, { scale: 0, opacity: 0, duration, ease: "power2.in" }, delay);
                             break;
+                        case 'spin':
                         case 'rotate':
                             this.timeline.to(el, { rotation: 360, duration, ease: "none" }, delay);
                             break;
@@ -664,7 +794,7 @@ class VisualLearningController {
                             this.timeline.set(el, { opacity: 0, visibility: 'hidden' }, delay);
                             break;
                         default:
-                            console.error(`[VisualLearning ERROR] Unsupported animation token bypassed: "${type}"`);
+                            this.timeline.fromTo(el, { opacity: 0 }, { opacity: 1, duration, ease: "power1.out" }, delay);
                     }
                 }
             });
@@ -682,30 +812,36 @@ class VisualLearningController {
             this.timelineFinished = true;
         }
 
+        // 5. Draw connections
+        this.drawSVGConnections(scene);
+
+        // 6. Camera Glides and Focus
+        const cam = scene.camera || { focus_x: 50, focus_y: 50, zoom: 1.0, transition_duration: 1.5 };
+        const cameraDuration = this.isSeeking ? 0.2 : (cam.transition_duration || 1.5);
+        this.focusCamera(cam.focus_x, cam.focus_y, cam.zoom, cameraDuration);
+
         // Update script notes
         if (this.notesBody) {
             this.notesBody.innerHTML = `<p>${scene.teacher_script}</p>`;
         }
 
         // Navigation state updates
-        if (this.progressText) {
-            this.progressText.textContent = `Scene ${sceneNo} / ${this.lessonPackage.scenes.length}`;
-        }
-        if (this.prevBtn) this.prevBtn.disabled = (sceneNo === 1);
-        if (this.nextBtn) this.nextBtn.disabled = (sceneNo === this.lessonPackage.scenes.length);
         this.updateSidebarStates();
-        
-        if (this.progressBarFill) this.progressBarFill.style.width = '0%';
 
         // Setup Narration audio
         const cachedAudio = this.preloadedAudios[sceneNo];
         if (cachedAudio) {
             console.log(`[VisualLearning LOG] Playing preloaded audio for Scene #${sceneNo}`);
             this.audio = cachedAudio;
-            this.audio.currentTime = 0;
         } else {
             console.warn(`[VisualLearning WARNING] Audio for Scene #${sceneNo} was not cached. Initiating raw load.`);
             this.audio = new Audio(scene.audio_url);
+        }
+
+        // Set playback offset if seeking
+        this.audio.currentTime = startOffset;
+        if (this.timeline && hasTimelineAnimations) {
+            this.timeline.seek(startOffset);
         }
 
         this.audio.onended = () => {
@@ -715,9 +851,16 @@ class VisualLearningController {
         };
 
         this.audio.ontimeupdate = () => {
-            if (this.audio && this.audio.duration && this.progressBarFill) {
-                const pct = (this.audio.currentTime / this.audio.duration) * 100;
-                this.progressBarFill.style.width = `${pct}%`;
+            if (this.audio && this.audio.duration && !this.isSeeking) {
+                const currentSceneTime = this.audio.currentTime;
+                const globalCurrentTime = this.clipStartTimes[sceneIndex] + currentSceneTime;
+                
+                if (this.progressBarFill && this.totalDuration > 0) {
+                    const pct = (globalCurrentTime / this.totalDuration) * 100;
+                    this.progressBarFill.style.width = `${pct}%`;
+                }
+
+                this.updateProgressTimeDisplay(globalCurrentTime);
             }
         };
 
@@ -729,13 +872,227 @@ class VisualLearningController {
                 this.pause();
             });
             this.timeline.play();
-            this.lottieInstances.forEach(inst => inst.play());
+            Object.values(this.lottieInstancesMap).forEach(inst => {
+                try { inst.play(); } catch(e) {}
+            });
         } else {
             console.log("[VisualLearning LOG] Launching first play triggered.");
             this.play();
         }
         
         this.resizeCanvas();
+    }
+
+    focusCamera(x, y, zoom, duration) {
+        console.log(`[VisualLearning LOG] focusCamera: x=${x}, y=${y}, zoom=${zoom}, duration=${duration}`);
+        if (!this.canvas) return;
+
+        const container = document.getElementById('vl-main');
+        if (!container) return;
+
+        const W = container.clientWidth;
+        const H = container.clientHeight;
+        const C_w = 800;
+        const C_h = 450;
+
+        // Calculate base scale to fit container (contain mode)
+        const baseScale = Math.min(W / C_w, H / C_h);
+        const totalScale = baseScale * zoom;
+
+        // Calculate translation in pixels to center the coordinate (x%, y%) in the container
+        const tx = W / 2 - totalScale * (x / 100) * C_w;
+        const ty = H / 2 - totalScale * (y / 100) * C_h;
+
+        console.log(`[VisualLearning LOG] Camera Glide: coord=(${x}%, ${y}%), zoom=${zoom}, baseScale=${baseScale.toFixed(4)}, totalScale=${totalScale.toFixed(4)}, tx=${tx.toFixed(1)}px, ty=${ty.toFixed(1)}px`);
+
+        gsap.to(this.canvas, {
+            transform: `translate(${tx}px, ${ty}px) scale(${totalScale})`,
+            transformOrigin: "0 0",
+            duration: duration,
+            ease: "power2.out"
+        });
+    }
+
+    drawSVGConnections(scene) {
+        const svgOverlay = document.getElementById('vl-connections-svg');
+        if (!svgOverlay) return;
+
+        svgOverlay.innerHTML = '';
+        
+        const mainContainer = document.getElementById('vl-main');
+        const themeClass = Array.from(mainContainer.classList).find(c => c.startsWith('glow-')) || 'glow-indigo';
+        const theme = themeClass.replace('glow-', '');
+        
+        const strokeColors = {
+            indigo: '#6366f1',
+            gold: '#f59e0b',
+            emerald: '#10b981',
+            rose: '#ef4444'
+        };
+        const strokeColor = strokeColors[theme] || '#6366f1';
+
+        svgOverlay.innerHTML = `
+          <defs>
+            <marker id="vl-arrow-indigo" viewBox="0 0 10 10" refX="22" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 1 L 10 5 L 0 9 z" fill="${strokeColors.indigo}" />
+            </marker>
+            <marker id="vl-arrow-gold" viewBox="0 0 10 10" refX="22" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 1 L 10 5 L 0 9 z" fill="${strokeColors.gold}" />
+            </marker>
+            <marker id="vl-arrow-emerald" viewBox="0 0 10 10" refX="22" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 1 L 10 5 L 0 9 z" fill="${strokeColors.emerald}" />
+            </marker>
+            <marker id="vl-arrow-rose" viewBox="0 0 10 10" refX="22" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 1 L 10 5 L 0 9 z" fill="${strokeColors.rose}" />
+            </marker>
+          </defs>
+        `;
+
+        const connections = this.lessonPackage.connections || [];
+        console.log(`[VisualLearning LOG] Drawing ${connections.length} connection paths.`);
+
+        connections.forEach(conn => {
+            const fromId = conn.from;
+            const toId = conn.to;
+
+            const fromEl = document.getElementById(`asset-${fromId}`);
+            const toEl = document.getElementById(`asset-${toId}`);
+
+            if (fromEl && toEl) {
+                const fromLayout = this.getAssetLayout(fromId);
+                const toLayout = this.getAssetLayout(toId);
+
+                if (fromLayout && toLayout) {
+                    const x1 = fromLayout.left + fromLayout.width / 2;
+                    const y1 = fromLayout.top + fromLayout.height / 2;
+                    const x2 = toLayout.left + toLayout.width / 2;
+                    const y2 = toLayout.top + toLayout.height / 2;
+
+                    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                    line.setAttribute('x1', `${x1}%`);
+                    line.setAttribute('y1', `${y1}%`);
+                    line.setAttribute('x2', `${x1}%`);
+                    line.setAttribute('y2', `${y1}%`);
+                    line.setAttribute('stroke', strokeColor);
+                    line.setAttribute('stroke-width', '3');
+                    line.setAttribute('stroke-linecap', 'round');
+                    
+                    if (conn.style === 'dashed') {
+                        line.setAttribute('stroke-dasharray', '6,6');
+                    } else {
+                        line.setAttribute('stroke-dasharray', 'none');
+                    }
+
+                    if (conn.type === 'arrow' || conn.type === 'connector') {
+                        line.setAttribute('marker-end', `url(#vl-arrow-${theme})`);
+                    }
+
+                    svgOverlay.appendChild(line);
+
+                    const transitionDuration = this.isSeeking ? 0.2 : 1.2;
+                    gsap.to(line, {
+                        attr: { x2: `${x2}%`, y2: `${y2}%` },
+                        duration: transitionDuration,
+                        ease: "power1.inOut"
+                    });
+                }
+            }
+        });
+    }
+
+    getAssetLayout(assetId) {
+        if (!this.lessonPackage) return null;
+        if (this.lessonPackage.global_assets) {
+            const ga = this.lessonPackage.global_assets.find(a => a.id === assetId);
+            if (ga) return ga.layout;
+        }
+        for (const scene of this.lessonPackage.scenes) {
+            const la = (scene.local_assets || scene.assets || []).find(a => a.id === assetId);
+            if (la) return la.layout;
+        }
+        return null;
+    }
+
+    updateProgressTimeDisplay(globalTime) {
+        if (!this.progressText) return;
+        const formatTime = (time) => {
+            const mins = Math.floor(time / 60);
+            const secs = Math.floor(time % 60);
+            return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        };
+        const currentScene = this.currentSlideIndex + 1;
+        const totalScenes = this.lessonPackage.scenes.length;
+        const currentStr = formatTime(globalTime);
+        const totalStr = formatTime(this.totalDuration);
+        this.progressText.textContent = `Scene ${currentScene} / ${totalScenes} | ${currentStr} / ${totalStr}`;
+    }
+
+    handleProgressBarClick(e) {
+        const progressBarContainer = document.querySelector('.vl-progress-bar-container');
+        if (!progressBarContainer || !this.lessonPackage || this.totalDuration <= 0) return;
+
+        const rect = progressBarContainer.getBoundingClientRect();
+        const offsetX = e.clientX - rect.left;
+        const pct = Math.max(0, Math.min(1, offsetX / rect.width));
+        const targetTime = pct * this.totalDuration;
+        
+        console.log(`[VisualLearning LOG] User seek bar click: pct=${(pct*100).toFixed(1)}%, targetTime=${targetTime.toFixed(2)}s`);
+        this.seekTo(targetTime);
+    }
+
+    seekTo(targetTime) {
+        if (!this.lessonPackage || this.totalDuration <= 0) return;
+
+        this.isSeeking = true;
+
+        // Find active scene index
+        let targetSceneIndex = 0;
+        for (let i = 0; i < this.lessonPackage.scenes.length; i++) {
+            const startTime = this.clipStartTimes[i];
+            const endTime = this.clipStartTimes[i + 1] || Infinity;
+            if (targetTime >= startTime && targetTime < endTime) {
+                targetSceneIndex = i;
+                break;
+            }
+        }
+
+        const sceneNo = targetSceneIndex + 1;
+        const startOffset = targetTime - this.clipStartTimes[targetSceneIndex];
+
+        console.log(`[VisualLearning LOG] Seek targetTime maps to Scene #${sceneNo} at offset ${startOffset.toFixed(2)}s`);
+
+        if (this.currentSlideIndex === targetSceneIndex && this.audio) {
+            // Same scene, jump audio and timeline offset
+            this.audio.currentTime = startOffset;
+            if (this.timeline) {
+                this.timeline.seek(startOffset);
+            }
+            if (this.isPlaying) {
+                this.audio.play().catch(e => console.error(e));
+                this.timeline.play();
+                Object.values(this.lottieInstancesMap).forEach(inst => {
+                    try { inst.play(); } catch(e) {}
+                });
+            } else {
+                this.audio.pause();
+                this.timeline.pause();
+                Object.values(this.lottieInstancesMap).forEach(inst => {
+                    try { inst.pause(); } catch(e) {}
+                });
+            }
+            
+            // Force GUI updates
+            if (this.progressBarFill) {
+                const pct = (targetTime / this.totalDuration) * 100;
+                this.progressBarFill.style.width = `${pct}%`;
+            }
+            this.updateProgressTimeDisplay(targetTime);
+        } else {
+            // Scene changed, perform slide transition jump
+            this.playSlide(sceneNo, startOffset);
+        }
+
+        this.isSeeking = false;
     }
 
     checkAutoAdvance() {
@@ -769,7 +1126,9 @@ class VisualLearningController {
             this.pause();
         });
         if (this.timeline) this.timeline.play();
-        this.lottieInstances.forEach(inst => inst.play());
+        Object.values(this.lottieInstancesMap).forEach(inst => {
+            try { inst.play(); } catch(e) {}
+        });
     }
 
     pause() {
@@ -785,7 +1144,9 @@ class VisualLearningController {
         }
         this.audio.pause();
         if (this.timeline) this.timeline.pause();
-        this.lottieInstances.forEach(inst => inst.pause());
+        Object.values(this.lottieInstancesMap).forEach(inst => {
+            try { inst.pause(); } catch(e) {}
+        });
     }
 
     togglePlay() {
@@ -800,20 +1161,25 @@ class VisualLearningController {
     nextSlide() {
         if (this.currentSlideIndex < this.lessonPackage.scenes.length - 1) {
             console.log(`[VisualLearning LOG] Next button clicked. Scene index shifting up.`);
-            this.playSlide(this.currentSlideIndex + 2);
+            const nextSceneIndex = this.currentSlideIndex + 1;
+            const startTime = this.clipStartTimes[nextSceneIndex] || 0;
+            this.seekTo(startTime);
         }
     }
 
     previousSlide() {
         if (this.currentSlideIndex > 0) {
             console.log(`[VisualLearning LOG] Prev button clicked. Scene index shifting down.`);
-            this.playSlide(this.currentSlideIndex);
+            const prevSceneIndex = this.currentSlideIndex - 1;
+            const startTime = this.clipStartTimes[prevSceneIndex] || 0;
+            this.seekTo(startTime);
         }
     }
 
     jumpToSlide(sceneNo) {
         console.log(`[VisualLearning LOG] JumpToSlide called for scene #${sceneNo}`);
-        this.playSlide(sceneNo);
+        const startTime = this.clipStartTimes[sceneNo - 1] || 0;
+        this.seekTo(startTime);
     }
 
     toggleNotes(forceOpen) {
@@ -851,19 +1217,26 @@ class VisualLearningController {
             this.timeline = null;
         }
 
-        if (this.lottieInstances) {
-            this.lottieInstances.forEach(instance => {
+        if (this.lottieInstancesMap) {
+            Object.values(this.lottieInstancesMap).forEach(instance => {
                 if (instance && typeof instance.destroy === 'function') {
                     instance.destroy();
                 }
             });
         }
-        this.lottieInstances = [];
+        this.lottieInstancesMap = {};
+        this.renderedAssets = {};
         
         this.lessonPackage = null;
         this.preloadedImages = {};
         this.preloadedAudios = {};
+        this.clipStartTimes = [];
+        this.totalDuration = 0;
         this.isPlaying = false;
+        
+        if (this.canvas) {
+            this.canvas.innerHTML = '';
+        }
         
         if (this.container) this.container.style.display = 'none';
         if (this.notesOverlay) this.notesOverlay.classList.remove('open');

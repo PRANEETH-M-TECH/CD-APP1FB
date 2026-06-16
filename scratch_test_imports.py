@@ -27,17 +27,13 @@ try:
     from backend.app.services.visual_learning import visual_lesson_prompt
     print("[OK] visual_lesson_prompt imported.")
     
-    print("Testing visual_image_generator...")
-    from backend.app.services.visual_learning import visual_image_generator
-    print("[OK] visual_image_generator imported.")
+    print("Testing asset_retrieval_service...")
+    from backend.app.services.visual_learning import asset_retrieval_service
+    print("[OK] asset_retrieval_service imported.")
     
     print("Testing visual_audio_generator...")
     from backend.app.services.visual_learning import visual_audio_generator
     print("[OK] visual_audio_generator imported.")
-    
-    print("Testing visual_lesson_builder...")
-    from backend.app.services.visual_learning import visual_lesson_builder
-    print("[OK] visual_lesson_builder imported.")
     
     # 3. Test service orchestrator
     print("Testing visual_learning_service...")
