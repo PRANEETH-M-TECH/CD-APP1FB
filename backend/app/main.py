@@ -3,7 +3,11 @@ from contextlib import asynccontextmanager
 from dotenv import load_dotenv
 
 # Load environment variables FIRST with override to prioritize .env file over system env vars
-load_dotenv(override=True)
+# Resolve root .env path relative to main.py
+MAIN_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJECT_ROOT = os.path.abspath(os.path.join(MAIN_DIR, "..", ".."))
+env_path = os.path.join(PROJECT_ROOT, ".env")
+load_dotenv(dotenv_path=env_path, override=True)
 
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles

@@ -39,10 +39,20 @@ def initialize():
 
     local_embedder = SentenceTransformer(EMBEDDING_MODEL)
 
-    # Initialize Gemini client with new SDK (API key from environment)
     api_key = os.getenv("GOOGLE_API_KEY")
+    print(f"[DEBUG KEY] Loaded API key: {api_key[:10] if api_key else 'None'}... (len: {len(api_key) if api_key else 0})")
     try:
-        gemini_client = genai.Client(api_key=api_key)
+        # Check if the API key is using the new Google AI Studio 'AQ.' prefix.
+        # If so, force standard API key header mode to bypass the SDK bearer token bug.
+        if api_key and api_key.startswith("AQ."):
+            print("[DEBUG KEY] Detected AQ key. Forcing standard API key header workaround.")
+            gemini_client = genai.Client(
+                api_key="AIza_DummyForceAPIKeyMode",
+                http_options={"headers": {"x-goog-api-key": api_key}}
+            )
+        else:
+            gemini_client = genai.Client(api_key=api_key)
+            
         from backend.app.utils.gemini_tracker import instrument_client
         gemini_client = instrument_client(gemini_client)
         print("[Qdrant] Gemini client initialized and instrumented successfully in qdrant_service.")
