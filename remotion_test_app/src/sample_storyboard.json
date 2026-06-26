@@ -1,0 +1,94 @@
+{
+  "lesson_title": "Introduction to the Nervous System",
+  "layout_mode": "process",
+  "theme": "indigo",
+  "global_assets": [],
+  "connections": [
+    {
+      "from": "stimulus_1",
+      "to": "receptor_2",
+      "type": "arrow"
+    }
+  ],
+  "lesson_id": "test_nervous_system",
+  "scenes": [
+    {
+      "scene_no": 1,
+      "camera": {
+        "focus_x": 50,
+        "focus_y": 50,
+        "zoom": 1.0,
+        "transition_duration": 1.0
+      },
+      "teacher_script": "Welcome! Today we will learn about the nervous system and how it processes information.",
+      "local_assets": [
+        {
+          "id": "title_card",
+          "type": "text",
+          "text_content": "The Nervous System",
+          "layout": {
+            "top": 30,
+            "left": 10,
+            "width": 80,
+            "height": 20
+          },
+          "animations": [
+            {
+              "type": "fade_in",
+              "start_time": 0.5,
+              "duration": 1.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "scene_no": 2,
+      "camera": {
+        "focus_x": 50,
+        "focus_y": 50,
+        "zoom": 1.1,
+        "transition_duration": 1.2
+      },
+      "teacher_script": "First, a stimulus triggers a receptor. This starts an electrical impulse in our sensory neurons.",
+      "local_assets": [
+        {
+          "id": "stimulus_1",
+          "type": "icon",
+          "search_query": "bell",
+          "layout": {
+            "top": 40,
+            "left": 20,
+            "width": 15,
+            "height": 15
+          },
+          "animations": [
+            {
+              "type": "scale_up",
+              "start_time": 0.2,
+              "duration": 0.8
+            }
+          ]
+        },
+        {
+          "id": "receptor_2",
+          "type": "icon",
+          "search_query": "info",
+          "layout": {
+            "top": 40,
+            "left": 65,
+            "width": 15,
+            "height": 15
+          },
+          "animations": [
+            {
+              "type": "slide_in_left",
+              "start_time": 1.0,
+              "duration": 0.8
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

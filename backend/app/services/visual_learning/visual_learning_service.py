@@ -164,6 +164,19 @@ async def generate_visual_lesson_stream(query: str, book_uuid: str, class_name: 
             with open(json_path, "w", encoding="utf-8") as f:
                 json.dump(lesson_package, f, indent=2, ensure_ascii=False)
             logger.info(f"[VisualLearning] Saved scene lesson blueprint JSON to {json_path}")
+            
+            # Copy hook to standalone Remotion test app
+            try:
+                import shutil
+                remotion_dest_dir = os.path.join(PROJECT_ROOT, "remotion_test_app", "public", "uploads", "visual_lessons", lesson_id)
+                os.makedirs(os.path.dirname(remotion_dest_dir), exist_ok=True)
+                if os.path.exists(remotion_dest_dir):
+                    shutil.rmtree(remotion_dest_dir)
+                shutil.copytree(lesson_dir, remotion_dest_dir)
+                logger.info(f"[VisualLearning] Successfully copied storyboard and audio files to Remotion public uploads: {remotion_dest_dir}")
+            except Exception as copy_err:
+                logger.error(f"[VisualLearning] Failed to copy lesson files to Remotion app: {copy_err}")
+                
         except Exception as json_err:
             logger.error(f"[VisualLearning] Failed to save lesson.json: {json_err}")
         
