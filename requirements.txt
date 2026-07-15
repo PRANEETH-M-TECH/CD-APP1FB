@@ -14,7 +14,8 @@ cachetools
 redis
 sentence-transformers
 langchain-text-splitters
-numpy<2.0
+numpy
 requests
 pytz
 httpx
+nodeenv

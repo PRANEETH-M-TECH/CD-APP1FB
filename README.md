@@ -30,46 +30,103 @@ CHADUVU-GURU is an AI-powered study assistant that helps students understand the
 
 ## Setup and Installation
 
-1.  **Clone the repository:**
-    ```bash
-    git clone <repository-url>
-    cd <repository-name>
-    ```
+### Git and Environment Credentials
+> [!IMPORTANT]
+> **Do not commit your real `.env` file to GitHub.** It contains sensitive API keys. The `.env` file is excluded from git in `.gitignore`. Instead:
+> 1. You will find `.env.example` in the root folder, which contains blank configuration variables.
+> 2. Copy `.env.example` to `.env` and fill in your actual credentials locally.
 
-2.  **Create a virtual environment and install dependencies:**
-    ```bash
-    python -m venv .venv
-    source .venv/bin/activate  # On Windows use `.venv\Scripts\activate`
-    pip install -r requirements.txt
-    ```
+You can set up and run the application using either the **Automated Bootstrapper** (recommended for quick setup) or **Manually**.
 
-3.  **Set up environment variables:**
-    Create a `.env` file in the root of the project and add the following variables. See `.env.example` for a template.
+---
 
-    ```
-    # Qdrant configuration
-    QDRANT_URL="http://localhost:6333"
-    QDRANT_API_KEY=""
+### Method A: Automated Setup (Recommended)
 
-    # Google Gemini API Key
-    GOOGLE_API_KEY="your-google-api-key"
-    ```
+A unified bootstrapper `bootstrap.py` is provided to fully automate the process. It will:
+- Check for or create a Python virtual environment (`.venv`).
+- Upgrade pip and install all Python dependencies from `requirements.txt`.
+- Check if Node.js/npm is installed on the machine. If not, it automatically installs a local version of Node.js inside the `.venv` using `nodeenv`.
+- Run `npm install` to sync packages in the root and in the `remotion_test_app/` folder.
+- Copy `.env.example` to `.env` if `.env` does not exist.
+- Start the FastAPI application.
 
-    You will also need to have a Qdrant instance running. You can use the official Docker image to run it locally:
-    ```bash
-    docker run -p 6333:6333 qdrant/qdrant
-    ```
+**Commands to run:**
+1. Clone the repository:
+   ```bash
+   git clone <repository-url>
+   cd <repository-name>
+   ```
+2. Run the bootstrapper:
+   ```bash
+   python bootstrap.py
+   ```
 
-## Running the Application
+---
 
-To run the backend server, use the following command:
+### Method B: Manual Setup
+
+If you prefer to configure your environment manually without using the bootstrap script:
+
+1. **Activate Python Virtual Environment:**
+   ```bash
+   python -m venv .venv
+   # Activate on Windows:
+   .venv\Scripts\activate
+   # Activate on macOS/Linux:
+   source .venv/bin/activate
+   ```
+2. **Install Python Packages:**
+   ```bash
+   pip install -r requirements.txt
+   ```
+3. **Install Node.js & npm dependencies:**
+   Make sure you have Node.js (v18+) installed globally, then run:
+   ```bash
+   # Sync root packages
+   npm install
+   
+   # Sync Remotion app packages
+   cd remotion_test_app
+   npm install
+   cd ..
+   ```
+4. **Configure Credentials:**
+   Copy the example environment file and edit the keys:
+   ```bash
+   cp .env.example .env   # On macOS/Linux
+   copy .env.example .env # On Windows CMD/PowerShell
+   ```
+   Open `.env` and insert your `GOOGLE_API_KEY`, `SARVAM_API_KEY`, etc.
+5. **Run the Server:**
+   ```bash
+   uvicorn backend.app.main:app --reload
+   ```
+
+---
+
+## Running Standalone Remotion Storyboard Tests
+
+If you want to test storyboard generation, audio synthesis, and video rendering/previewing **without starting the full application server**, you can run the standalone test runner:
 
 ```bash
-uvicorn backend.app:app --reload
+python run_visual_learning_test.py
 ```
 
-The application will be available at `http://localhost:8000`.
+### What this test script does:
+1. Prompts you to enter a query (e.g. *"explain structure of neuron"*).
+2. Contacts Gemini to generate a video storyboard sequence.
+3. Automatically retrieves and downloads relevant educational images and icons.
+4. Synthesizes voice narration using Sarvam AI and saves the audio files.
+5. Launches a prompt selection where you can choose:
+   - **Option [1] (Preview)**: Launches the local web player preview.
+   - **Option [2] (Render)**: Compiles the storyboard directly into a standalone MP4 video in `remotion_test_app/outputs/output_videos/`.
 
-You can access the main user interface at `http://localhost:8000/user`.
-The admin interface is at `http://localhost:8000/admin`.
+---
+
+## Application Entry Points
+
+When the main server is running:
+- **Main User Interface**: [http://localhost:8000/user](http://localhost:8000/user)
+- **Admin Dashboard**: [http://localhost:8000/admin](http://localhost:8000/admin)
+- **Enhanced Dashboard**: [http://localhost:8000/enhanced-dashboard](http://localhost:8000/enhanced-dashboard)
 
