@@ -1,0 +1,281 @@
+{
+  "lesson_title": "Probability of Coin Tosses",
+  "theme": "Math",
+  "scenes": [
+    {
+      "scene_no": 1,
+      "purpose": "Introduce the lesson topic: Probability of Coin Tosses.",
+      "visual_strategy": "intro",
+      "template_id": "title_slide",
+      "teacher_script": "Today, we're going to explore the exciting world of probability using coin tosses. We'll learn how to figure out the chances of different outcomes when flipping coins.",
+      "template_data": {
+        "title": "Probability of Coin Tosses",
+        "subtitle": "Understanding outcomes with multiple coins",
+        "icon_name": "coin"
+      }
+    },
+    {
+      "scene_no": 2,
+      "purpose": "Explain the basic probability of a single coin toss.",
+      "visual_strategy": "overview",
+      "template_id": "concept_diagram",
+      "teacher_script": "When you toss a single coin, there are only two possible outcomes: Heads or Tails. Each outcome has an equal chance of happening, which is 1 out of 2.",
+      "template_data": {
+        "central_node": "Single Coin Toss",
+        "leaf_nodes": [
+          "Heads (H) - P = 1/2",
+          "Tails (T) - P = 1/2"
+        ]
+      }
+    },
+    {
+      "scene_no": 3,
+      "purpose": "Illustrate how to determine the total number of possible outcomes for multiple coin tosses.",
+      "visual_strategy": "process",
+      "template_id": null,
+      "teacher_script": "Now, let's consider tossing four coins. For each coin, there are 2 possibilities. So, for four coins, the total number of outcomes is 2 multiplied by itself four times, which equals 16.",
+      "visual_steps": [
+        {
+          "step_no": 1,
+          "visual_type": "diagram",
+          "duration_seconds": 2.5,
+          "content": {
+            "svg_elements": [
+              {
+                "type": "rect",
+                "x": 100,
+                "y": 100,
+                "width": 150,
+                "height": 50,
+                "fill": "#ADD8E6",
+                "stroke": "#00008B",
+                "stroke_width": 2,
+                "label": "Coin 1: H, T"
+              }
+            ]
+          },
+          "animation": {
+            "transition": "fade",
+            "camera_motion": "none"
+          }
+        },
+        {
+          "step_no": 2,
+          "visual_type": "diagram",
+          "duration_seconds": 2.5,
+          "content": {
+            "svg_elements": [
+              {
+                "type": "rect",
+                "x": 100,
+                "y": 100,
+                "width": 150,
+                "height": 50,
+                "fill": "#ADD8E6",
+                "stroke": "#00008B",
+                "stroke_width": 2,
+                "label": "Coin 1: H, T"
+              },
+              {
+                "type": "rect",
+                "x": 300,
+                "y": 100,
+                "width": 150,
+                "height": 50,
+                "fill": "#ADD8E6",
+                "stroke": "#00008B",
+                "stroke_width": 2,
+                "label": "Coin 2: H, T"
+              }
+            ]
+          },
+          "animation": {
+            "transition": "slide",
+            "camera_motion": "none"
+          }
+        },
+        {
+          "step_no": 3,
+          "visual_type": "diagram",
+          "duration_seconds": 2.5,
+          "content": {
+            "svg_elements": [
+              {
+                "type": "rect",
+                "x": 100,
+                "y": 100,
+                "width": 150,
+                "height": 50,
+                "fill": "#ADD8E6",
+                "stroke": "#00008B",
+                "stroke_width": 2,
+                "label": "Coin 1: H, T"
+              },
+              {
+                "type": "rect",
+                "x": 300,
+                "y": 100,
+                "width": 150,
+                "height": 50,
+                "fill": "#ADD8E6",
+                "stroke": "#00008B",
+                "stroke_width": 2,
+                "label": "Coin 2: H, T"
+              },
+              {
+                "type": "rect",
+                "x": 500,
+                "y": 100,
+                "width": 150,
+                "height": 50,
+                "fill": "#ADD8E6",
+                "stroke": "#00008B",
+                "stroke_width": 2,
+                "label": "Coin 3: H, T"
+              }
+            ]
+          },
+          "animation": {
+            "transition": "slide",
+            "camera_motion": "none"
+          }
+        },
+        {
+          "step_no": 4,
+          "visual_type": "diagram",
+          "duration_seconds": 2.5,
+          "content": {
+            "svg_elements": [
+              {
+                "type": "rect",
+                "x": 100,
+                "y": 100,
+                "width": 150,
+                "height": 50,
+                "fill": "#ADD8E6",
+                "stroke": "#00008B",
+                "stroke_width": 2,
+                "label": "Coin 1: H, T"
+              },
+              {
+                "type": "rect",
+                "x": 300,
+                "y": 100,
+                "width": 150,
+                "height": 50,
+                "fill": "#ADD8E6",
+                "stroke": "#00008B",
+                "stroke_width": 2,
+                "label": "Coin 2: H, T"
+              },
+              {
+                "type": "rect",
+                "x": 500,
+                "y": 100,
+                "width": 150,
+                "height": 50,
+                "fill": "#ADD8E6",
+                "stroke": "#00008B",
+                "stroke_width": 2,
+                "label": "Coin 3: H, T"
+              },
+              {
+                "type": "rect",
+                "x": 700,
+                "y": 100,
+                "width": 150,
+                "height": 50,
+                "fill": "#ADD8E6",
+                "stroke": "#00008B",
+                "stroke_width": 2,
+                "label": "Coin 4: H, T"
+              }
+            ]
+          },
+          "animation": {
+            "transition": "slide",
+            "camera_motion": "none"
+          }
+        },
+        {
+          "step_no": 5,
+          "visual_type": "equation",
+          "duration_seconds": 3.0,
+          "content": {
+            "text_content": "Total Outcomes = 2 \\times 2 \\times 2 \\times 2 = 2^4 = 16"
+          },
+          "animation": {
+            "transition": "fade",
+            "camera_motion": "zoom_in"
+          }
+        }
+      ]
+    },
+    {
+      "scene_no": 4,
+      "purpose": "Calculate the probability of getting all tails when tossing 4 coins.",
+      "visual_strategy": "math_derivation",
+      "template_id": "math_derivation",
+      "teacher_script": "If we want to find the probability of getting all tails, we multiply the probability of getting a tail for each coin. This means 1/2 multiplied four times, resulting in 1/16.",
+      "visual_steps": [
+        {
+          "step_no": 1,
+          "visual_type": "equation",
+          "duration_seconds": 3.0,
+          "content": {
+            "text_content": "P(Tail on 1st coin) = \\frac{1}{2}"
+          },
+          "animation": {
+            "transition": "fade",
+            "camera_motion": "none"
+          }
+        },
+        {
+          "step_no": 2,
+          "visual_type": "equation",
+          "duration_seconds": 3.0,
+          "content": {
+            "text_content": "P(All Tails) = P(T) \\times P(T) \\times P(T) \\times P(T)"
+          },
+          "animation": {
+            "transition": "fade",
+            "camera_motion": "none"
+          }
+        },
+        {
+          "step_no": 3,
+          "visual_type": "equation",
+          "duration_seconds": 4.0,
+          "content": {
+            "text_content": "P(All Tails) = \\frac{1}{2} \\times \\frac{1}{2} \\times \\frac{1}{2} \\times \\frac{1}{2} = \\frac{1}{16}"
+          },
+          "animation": {
+            "transition": "fade",
+            "camera_motion": "zoom_in"
+          }
+        }
+      ]
+    },
+    {
+      "scene_no": 5,
+      "purpose": "Summarize the key concept of total outcomes for multiple coin tosses.",
+      "visual_strategy": "summary",
+      "template_id": "quiz_checkpoint",
+      "teacher_script": "Let's quickly recap! How many total possible outcomes are there when you toss four coins? Think about how many choices each coin has.",
+      "template_data": {
+        "title": "Quiz Checkpoint!",
+        "left_title": "Question:",
+        "left_bullets": [
+          "What is the total number of outcomes when 4 coins are tossed?"
+        ],
+        "right_column": {
+          "header": "Answer:",
+          "bullets": [
+            "16 outcomes (2^4)"
+          ]
+        }
+      }
+    }
+  ],
+  "question": "what is the probability of tails when 4 coins are tossed?"
+}

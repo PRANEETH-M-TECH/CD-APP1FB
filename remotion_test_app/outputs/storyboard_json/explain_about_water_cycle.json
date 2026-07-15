@@ -1,0 +1,408 @@
+{
+  "lesson_title": "The Water Cycle",
+  "theme": "Science",
+  "scenes": [
+    {
+      "scene_no": 1,
+      "purpose": "Introduce the topic of the Water Cycle",
+      "visual_strategy": "intro",
+      "template_id": "title_slide",
+      "teacher_script": "Hello, students! Today, we will learn about the amazing Water Cycle. This cycle describes how water continuously moves on, above, and below the surface of the Earth.",
+      "visual_steps": null,
+      "template_data": {
+        "title": "The Water Cycle",
+        "subtitle": "Understanding Earth's Continuous Water Movement",
+        "icon_name": "cloudRain"
+      }
+    },
+    {
+      "scene_no": 2,
+      "purpose": "Provide an overview of the main stages of the water cycle",
+      "visual_strategy": "overview",
+      "template_id": "cycle_template",
+      "teacher_script": "The water cycle involves several key stages: evaporation, condensation, precipitation, and collection. These stages work together to keep water moving around our planet.",
+      "visual_steps": null,
+      "template_data": {
+        "timeline_title": "Stages of the Water Cycle",
+        "stages": [
+          {
+            "step_no": 1,
+            "label": "Evaporation",
+            "icon_name": "sun"
+          },
+          {
+            "step_no": 2,
+            "label": "Condensation",
+            "icon_name": "cloud"
+          },
+          {
+            "step_no": 3,
+            "label": "Precipitation",
+            "icon_name": "cloudRain"
+          },
+          {
+            "step_no": 4,
+            "label": "Collection",
+            "icon_name": "droplets"
+          }
+        ]
+      }
+    },
+    {
+      "scene_no": 3,
+      "purpose": "Explain the process of evaporation",
+      "visual_strategy": "process",
+      "template_id": "concept_diagram",
+      "teacher_script": "Evaporation is when the sun's heat turns liquid water into water vapor, which is a gas. This vapor then rises into the atmosphere from oceans, lakes, and rivers.",
+      "visual_steps": [
+        {
+          "step_no": 1,
+          "visual_type": "diagram",
+          "focus": "water_body",
+          "duration_seconds": 4,
+          "content": {
+            "svg_elements": [
+              {
+                "type": "rect",
+                "x": 100,
+                "y": 400,
+                "width": 800,
+                "height": 100,
+                "fill": "#ADD8E6",
+                "stroke": "#4682B4",
+                "stroke_width": 2,
+                "label": "Ocean/Lake"
+              },
+              {
+                "type": "circle",
+                "cx": 500,
+                "cy": 100,
+                "r": 50,
+                "fill": "#FFD700",
+                "label": "Sun"
+              },
+              {
+                "type": "path",
+                "d": "M450 350 Q500 300 550 350",
+                "stroke": "#FFD700",
+                "stroke_width": 3,
+                "label": "Heat"
+              },
+              {
+                "type": "path",
+                "d": "M400 400 L400 300 L420 300 L420 400 M450 400 L450 280 L470 280 L470 400 M500 400 L500 250 L520 250 L520 400 M550 400 L550 280 L570 280 L570 400 M600 400 L600 300 L620 300 L620 400",
+                "stroke": "#87CEEB",
+                "stroke_width": 2,
+                "animate": true,
+                "label": "Water Vapor Rising"
+              }
+            ]
+          },
+          "animation": {
+            "transition": "fade",
+            "camera_motion": "zoom_in"
+          }
+        }
+      ],
+      "template_data": {
+        "central_node": "Evaporation",
+        "leaf_nodes": [
+          "Sun's Heat",
+          "Liquid Water to Gas",
+          "Rises to Atmosphere"
+        ]
+      }
+    },
+    {
+      "scene_no": 4,
+      "purpose": "Explain the process of condensation and cloud formation",
+      "visual_strategy": "process",
+      "template_id": "concept_diagram",
+      "teacher_script": "As water vapor rises, it cools down and changes back into tiny liquid water droplets or ice crystals. These tiny droplets gather together to form clouds in the sky.",
+      "visual_steps": [
+        {
+          "step_no": 1,
+          "visual_type": "diagram",
+          "focus": "clouds",
+          "duration_seconds": 4,
+          "content": {
+            "svg_elements": [
+              {
+                "type": "path",
+                "d": "M200 200 Q250 150 300 200 T400 200 T500 200 T600 200 T700 200 Q750 150 800 200",
+                "fill": "#F0F8FF",
+                "stroke": "#D3D3D3",
+                "stroke_width": 2,
+                "label": "Clouds"
+              },
+              {
+                "type": "circle",
+                "cx": 300,
+                "cy": 250,
+                "r": 5,
+                "fill": "#87CEEB",
+                "animate": true,
+                "label": "Water Droplets"
+              },
+              {
+                "type": "circle",
+                "cx": 350,
+                "cy": 230,
+                "r": 5,
+                "fill": "#87CEEB",
+                "animate": true
+              },
+              {
+                "type": "circle",
+                "cx": 400,
+                "cy": 260,
+                "r": 5,
+                "fill": "#87CEEB",
+                "animate": true
+              },
+              {
+                "type": "circle",
+                "cx": 450,
+                "cy": 240,
+                "r": 5,
+                "fill": "#87CEEB",
+                "animate": true
+              },
+              {
+                "type": "circle",
+                "cx": 500,
+                "cy": 270,
+                "r": 5,
+                "fill": "#87CEEB",
+                "animate": true
+              },
+              {
+                "type": "circle",
+                "cx": 550,
+                "cy": 250,
+                "r": 5,
+                "fill": "#87CEEB",
+                "animate": true
+              }
+            ]
+          },
+          "animation": {
+            "transition": "fade",
+            "camera_motion": "zoom_in"
+          }
+        }
+      ],
+      "template_data": {
+        "central_node": "Condensation",
+        "leaf_nodes": [
+          "Water Vapor Cools",
+          "Forms Liquid Droplets",
+          "Creates Clouds"
+        ]
+      }
+    },
+    {
+      "scene_no": 5,
+      "purpose": "Explain the process of precipitation",
+      "visual_strategy": "process",
+      "template_id": "concept_diagram",
+      "teacher_script": "When clouds become too heavy with water droplets or ice crystals, they release the water back to Earth. This is called precipitation, which can be rain, snow, sleet, or hail.",
+      "visual_steps": [
+        {
+          "step_no": 1,
+          "visual_type": "diagram",
+          "focus": "rain",
+          "duration_seconds": 4,
+          "content": {
+            "svg_elements": [
+              {
+                "type": "path",
+                "d": "M200 200 Q250 150 300 200 T400 200 T500 200 T600 200 T700 200 Q750 150 800 200",
+                "fill": "#F0F8FF",
+                "stroke": "#D3D3D3",
+                "stroke_width": 2,
+                "label": "Clouds"
+              },
+              {
+                "type": "line",
+                "x1": 300,
+                "y1": 250,
+                "x2": 300,
+                "y2": 350,
+                "stroke": "#4682B4",
+                "stroke_width": 3,
+                "animate": true,
+                "label": "Rain"
+              },
+              {
+                "type": "line",
+                "x1": 350,
+                "y1": 230,
+                "x2": 350,
+                "y2": 330,
+                "stroke": "#4682B4",
+                "stroke_width": 3,
+                "animate": true
+              },
+              {
+                "type": "line",
+                "x1": 400,
+                "y1": 260,
+                "x2": 400,
+                "y2": 360,
+                "stroke": "#4682B4",
+                "stroke_width": 3,
+                "animate": true
+              },
+              {
+                "type": "line",
+                "x1": 450,
+                "y1": 240,
+                "x2": 450,
+                "y2": 340,
+                "stroke": "#4682B4",
+                "stroke_width": 3,
+                "animate": true
+              },
+              {
+                "type": "line",
+                "x1": 500,
+                "y1": 270,
+                "x2": 500,
+                "y2": 370,
+                "stroke": "#4682B4",
+                "stroke_width": 3,
+                "animate": true
+              },
+              {
+                "type": "rect",
+                "x": 100,
+                "y": 400,
+                "width": 800,
+                "height": 100,
+                "fill": "#A0D6B4",
+                "stroke": "#228B22",
+                "stroke_width": 2,
+                "label": "Land"
+              }
+            ]
+          },
+          "animation": {
+            "transition": "fade",
+            "camera_motion": "zoom_in"
+          }
+        }
+      ],
+      "template_data": {
+        "central_node": "Precipitation",
+        "leaf_nodes": [
+          "Clouds Get Heavy",
+          "Water Falls to Earth",
+          "Rain, Snow, Sleet, Hail"
+        ]
+      }
+    },
+    {
+      "scene_no": 6,
+      "purpose": "Explain the collection and runoff of water",
+      "visual_strategy": "process",
+      "template_id": "concept_diagram",
+      "teacher_script": "Once water falls to Earth, it collects in oceans, lakes, and rivers, or it can soak into the ground. Some water also flows over the land as runoff, eventually returning to larger water bodies.",
+      "visual_steps": [
+        {
+          "step_no": 1,
+          "visual_type": "diagram",
+          "focus": "collection",
+          "duration_seconds": 4,
+          "content": {
+            "svg_elements": [
+              {
+                "type": "rect",
+                "x": 100,
+                "y": 400,
+                "width": 800,
+                "height": 100,
+                "fill": "#A0D6B4",
+                "stroke": "#228B22",
+                "stroke_width": 2,
+                "label": "Land"
+              },
+              {
+                "type": "rect",
+                "x": 500,
+                "y": 450,
+                "width": 400,
+                "height": 50,
+                "fill": "#ADD8E6",
+                "stroke": "#4682B4",
+                "stroke_width": 2,
+                "label": "Ocean/Lake"
+              },
+              {
+                "type": "path",
+                "d": "M200 400 C250 420 350 420 400 400 L400 450 C350 430 250 430 200 450 Z",
+                "fill": "#ADD8E6",
+                "stroke": "#4682B4",
+                "stroke_width": 2,
+                "label": "River"
+              },
+              {
+                "type": "path",
+                "d": "M250 350 L300 380 L350 350 L400 380 L450 350 L500 380",
+                "stroke": "#4682B4",
+                "stroke_width": 3,
+                "animate": true,
+                "label": "Runoff"
+              },
+              {
+                "type": "path",
+                "d": "M150 400 L150 450 M180 400 L180 450 M210 400 L210 450",
+                "stroke": "#87CEEB",
+                "stroke_width": 2,
+                "animate": true,
+                "label": "Groundwater"
+              }
+            ]
+          },
+          "animation": {
+            "transition": "fade",
+            "camera_motion": "zoom_in"
+          }
+        }
+      ],
+      "template_data": {
+        "central_node": "Collection",
+        "leaf_nodes": [
+          "Forms Rivers/Lakes",
+          "Soaks into Ground",
+          "Flows as Runoff"
+        ]
+      }
+    },
+    {
+      "scene_no": 7,
+      "purpose": "Assess understanding of the water cycle stages",
+      "visual_strategy": "summary",
+      "template_id": "quiz_checkpoint",
+      "teacher_script": "Can you recall the four main stages of the water cycle? Think about how water moves from the Earth's surface to the sky and back again.",
+      "visual_steps": null,
+      "template_data": {
+        "title": "Quick Check!",
+        "left_title": "Question:",
+        "left_bullets": [
+          "What are the four main stages of the water cycle?"
+        ],
+        "right_column": {
+          "header": "Answer:",
+          "bullets": [
+            "Evaporation",
+            "Condensation",
+            "Precipitation",
+            "Collection"
+          ]
+        }
+      }
+    }
+  ],
+  "question": "Explain about water cycle?"
+}

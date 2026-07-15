@@ -1,0 +1,1129 @@
+{
+  "lesson_title": "Methods of Separation",
+  "theme": "Science",
+  "scenes": [
+    {
+      "scene_no": 1,
+      "purpose": "Introduce the main lesson topic.",
+      "visual_strategy": "intro",
+      "template_id": "title_slide",
+      "teacher_script": "Today, we will learn about various methods used to separate different substances from mixtures. These techniques are essential in daily life and in industries.",
+      "template_data": {
+        "title": "Methods of Separation",
+        "subtitle": "Understanding how to separate different substances from mixtures.",
+        "icon_name": "split"
+      }
+    },
+    {
+      "scene_no": 2,
+      "purpose": "Define mixtures and the need for separation.",
+      "visual_strategy": "overview",
+      "template_id": "concept_diagram",
+      "teacher_script": "A mixture contains two or more substances that are physically combined but not chemically bonded. We often need to separate these components for various reasons, like purification or obtaining useful substances.",
+      "template_data": {
+        "central_node": "Mixture",
+        "leaf_nodes": [
+          "Two or more substances",
+          "Physically combined",
+          "Can be separated"
+        ]
+      }
+    },
+    {
+      "scene_no": 3,
+      "purpose": "Explain the handpicking method.",
+      "visual_strategy": "diagram",
+      "template_id": null,
+      "teacher_script": "Handpicking is a simple method used to separate slightly larger, visible impurities like stones from rice or pulses. It's often done manually.",
+      "visual_steps": [
+        {
+          "step_no": 1,
+          "visual_type": "diagram",
+          "focus": "mixture",
+          "duration_seconds": 3,
+          "content": {
+            "svg_elements": [
+              {
+                "type": "rect",
+                "x": 20,
+                "y": 60,
+                "width": 60,
+                "height": 20,
+                "fill": "#D3D3D3",
+                "label": "Rice"
+              },
+              {
+                "type": "circle",
+                "cx": 30,
+                "cy": 65,
+                "r": 3,
+                "fill": "#8B4513",
+                "label": "Stone"
+              },
+              {
+                "type": "circle",
+                "cx": 50,
+                "cy": 70,
+                "r": 3,
+                "fill": "#8B4513"
+              },
+              {
+                "type": "circle",
+                "cx": 70,
+                "cy": 75,
+                "r": 3,
+                "fill": "#8B4513"
+              }
+            ]
+          },
+          "animation": {
+            "transition": "fade",
+            "camera_motion": "none"
+          }
+        },
+        {
+          "step_no": 2,
+          "visual_type": "diagram",
+          "focus": "handpicking action",
+          "duration_seconds": 4,
+          "content": {
+            "svg_elements": [
+              {
+                "type": "rect",
+                "x": 20,
+                "y": 60,
+                "width": 60,
+                "height": 20,
+                "fill": "#D3D3D3",
+                "label": "Rice"
+              },
+              {
+                "type": "path",
+                "d": "M40 40 L45 30 L55 30 L60 40 L55 50 L45 50 Z",
+                "fill": "#FFDAB9",
+                "stroke": "#A0522D",
+                "stroke_width": 2,
+                "label": "Hand"
+              },
+              {
+                "type": "circle",
+                "cx": 50,
+                "cy": 70,
+                "r": 3,
+                "fill": "#8B4513",
+                "animate": true
+              },
+              {
+                "type": "circle",
+                "cx": 30,
+                "cy": 65,
+                "r": 3,
+                "fill": "#8B4513"
+              },
+              {
+                "type": "circle",
+                "cx": 70,
+                "cy": 75,
+                "r": 3,
+                "fill": "#8B4513"
+              }
+            ]
+          },
+          "animation": {
+            "transition": "slide",
+            "camera_motion": "zoom_in"
+          }
+        }
+      ]
+    },
+    {
+      "scene_no": 4,
+      "purpose": "Explain the threshing method.",
+      "visual_strategy": "diagram",
+      "template_id": null,
+      "teacher_script": "Threshing is used to separate grain from the stalks after harvesting. Farmers beat the stalks or use machines to loosen the grains.",
+      "visual_steps": [
+        {
+          "step_no": 1,
+          "visual_type": "diagram",
+          "focus": "stalks",
+          "duration_seconds": 3,
+          "content": {
+            "svg_elements": [
+              {
+                "type": "line",
+                "x1": 30,
+                "y1": 80,
+                "x2": 35,
+                "y2": 40,
+                "stroke": "#228B22",
+                "stroke_width": 3,
+                "label": "Stalks"
+              },
+              {
+                "type": "line",
+                "x1": 40,
+                "y1": 80,
+                "x2": 45,
+                "y2": 35,
+                "stroke": "#228B22",
+                "stroke_width": 3
+              },
+              {
+                "type": "line",
+                "x1": 50,
+                "y1": 80,
+                "x2": 55,
+                "y2": 40,
+                "stroke": "#228B22",
+                "stroke_width": 3
+              },
+              {
+                "type": "circle",
+                "cx": 35,
+                "cy": 35,
+                "r": 2,
+                "fill": "#FFD700",
+                "label": "Grain"
+              },
+              {
+                "type": "circle",
+                "cx": 45,
+                "cy": 30,
+                "r": 2,
+                "fill": "#FFD700"
+              },
+              {
+                "type": "circle",
+                "cx": 55,
+                "cy": 35,
+                "r": 2,
+                "fill": "#FFD700"
+              }
+            ]
+          },
+          "animation": {
+            "transition": "fade",
+            "camera_motion": "none"
+          }
+        },
+        {
+          "step_no": 2,
+          "visual_type": "diagram",
+          "focus": "threshing action",
+          "duration_seconds": 4,
+          "content": {
+            "svg_elements": [
+              {
+                "type": "rect",
+                "x": 20,
+                "y": 75,
+                "width": 60,
+                "height": 10,
+                "fill": "#8B4513",
+                "label": "Hard Surface"
+              },
+              {
+                "type": "line",
+                "x1": 30,
+                "y1": 80,
+                "x2": 35,
+                "y2": 40,
+                "stroke": "#228B22",
+                "stroke_width": 3,
+                "animate": true
+              },
+              {
+                "type": "line",
+                "x1": 40,
+                "y1": 80,
+                "x2": 45,
+                "y2": 35,
+                "stroke": "#228B22",
+                "stroke_width": 3,
+                "animate": true
+              },
+              {
+                "type": "line",
+                "x1": 50,
+                "y1": 80,
+                "x2": 55,
+                "y2": 40,
+                "stroke": "#228B22",
+                "stroke_width": 3,
+                "animate": true
+              },
+              {
+                "type": "circle",
+                "cx": 35,
+                "cy": 35,
+                "r": 2,
+                "fill": "#FFD700",
+                "animate": true
+              },
+              {
+                "type": "circle",
+                "cx": 45,
+                "cy": 30,
+                "r": 2,
+                "fill": "#FFD700",
+                "animate": true
+              },
+              {
+                "type": "circle",
+                "cx": 55,
+                "cy": 35,
+                "r": 2,
+                "fill": "#FFD700",
+                "animate": true
+              },
+              {
+                "type": "circle",
+                "cx": 40,
+                "cy": 70,
+                "r": 2,
+                "fill": "#FFD700",
+                "label": "Separated Grain"
+              },
+              {
+                "type": "circle",
+                "cx": 50,
+                "cy": 70,
+                "r": 2,
+                "fill": "#FFD700"
+              }
+            ]
+          },
+          "animation": {
+            "transition": "slide",
+            "camera_motion": "zoom_in"
+          }
+        }
+      ]
+    },
+    {
+      "scene_no": 5,
+      "purpose": "Explain the winnowing method.",
+      "visual_strategy": "diagram",
+      "template_id": null,
+      "teacher_script": "Winnowing uses wind or blowing air to separate lighter impurities like husk from heavier grains. The lighter particles are carried away by the wind.",
+      "visual_steps": [
+        {
+          "step_no": 1,
+          "visual_type": "diagram",
+          "focus": "mixture",
+          "duration_seconds": 3,
+          "content": {
+            "svg_elements": [
+              {
+                "type": "rect",
+                "x": 40,
+                "y": 20,
+                "width": 20,
+                "height": 10,
+                "fill": "#8B4513",
+                "label": "Tray"
+              },
+              {
+                "type": "circle",
+                "cx": 45,
+                "cy": 25,
+                "r": 2,
+                "fill": "#FFD700",
+                "label": "Grain"
+              },
+              {
+                "type": "circle",
+                "cx": 55,
+                "cy": 25,
+                "r": 2,
+                "fill": "#FFD700"
+              },
+              {
+                "type": "rect",
+                "x": 42,
+                "y": 23,
+                "width": 3,
+                "height": 3,
+                "fill": "#D2B48C",
+                "label": "Husk"
+              },
+              {
+                "type": "rect",
+                "x": 52,
+                "y": 27,
+                "width": 3,
+                "height": 3,
+                "fill": "#D2B48C"
+              }
+            ]
+          },
+          "animation": {
+            "transition": "fade",
+            "camera_motion": "none"
+          }
+        },
+        {
+          "step_no": 2,
+          "visual_type": "diagram",
+          "focus": "winnowing action",
+          "duration_seconds": 4,
+          "content": {
+            "svg_elements": [
+              {
+                "type": "rect",
+                "x": 40,
+                "y": 20,
+                "width": 20,
+                "height": 10,
+                "fill": "#8B4513",
+                "label": "Tray"
+              },
+              {
+                "type": "circle",
+                "cx": 45,
+                "cy": 70,
+                "r": 2,
+                "fill": "#FFD700",
+                "label": "Heavier Grain"
+              },
+              {
+                "type": "circle",
+                "cx": 55,
+                "cy": 70,
+                "r": 2,
+                "fill": "#FFD700"
+              },
+              {
+                "type": "rect",
+                "x": 20,
+                "y": 60,
+                "width": 3,
+                "height": 3,
+                "fill": "#D2B48C",
+                "label": "Lighter Husk"
+              },
+              {
+                "type": "rect",
+                "x": 25,
+                "y": 55,
+                "width": 3,
+                "height": 3,
+                "fill": "#D2B48C"
+              },
+              {
+                "type": "path",
+                "d": "M70 50 Q60 40 50 50 Q40 60 30 50",
+                "stroke": "#ADD8E6",
+                "stroke_width": 3,
+                "animate": true,
+                "label": "Wind"
+              }
+            ]
+          },
+          "animation": {
+            "transition": "slide",
+            "camera_motion": "pan_right"
+          }
+        }
+      ]
+    },
+    {
+      "scene_no": 6,
+      "purpose": "Explain the sieving method.",
+      "visual_strategy": "diagram",
+      "template_id": null,
+      "teacher_script": "Sieving is used to separate components of a mixture that have different sizes. A sieve allows smaller particles to pass through while retaining larger ones.",
+      "visual_steps": [
+        {
+          "step_no": 1,
+          "visual_type": "diagram",
+          "focus": "mixture on sieve",
+          "duration_seconds": 3,
+          "content": {
+            "svg_elements": [
+              {
+                "type": "rect",
+                "x": 30,
+                "y": 40,
+                "width": 40,
+                "height": 5,
+                "fill": "#A9A9A9",
+                "label": "Sieve"
+              },
+              {
+                "type": "line",
+                "x1": 30,
+                "y1": 45,
+                "x2": 30,
+                "y2": 60,
+                "stroke": "#A9A9A9",
+                "stroke_width": 2
+              },
+              {
+                "type": "line",
+                "x1": 70,
+                "y1": 45,
+                "x2": 70,
+                "y2": 60,
+                "stroke": "#A9A9A9",
+                "stroke_width": 2
+              },
+              {
+                "type": "line",
+                "x1": 30,
+                "y1": 60,
+                "x2": 70,
+                "y2": 60,
+                "stroke": "#A9A9A9",
+                "stroke_width": 2
+              },
+              {
+                "type": "circle",
+                "cx": 40,
+                "cy": 35,
+                "r": 4,
+                "fill": "#8B4513",
+                "label": "Larger Particle"
+              },
+              {
+                "type": "circle",
+                "cx": 60,
+                "cy": 38,
+                "r": 4,
+                "fill": "#8B4513"
+              },
+              {
+                "type": "circle",
+                "cx": 45,
+                "cy": 50,
+                "r": 2,
+                "fill": "#D3D3D3",
+                "label": "Smaller Particle"
+              },
+              {
+                "type": "circle",
+                "cx": 55,
+                "cy": 55,
+                "r": 2,
+                "fill": "#D3D3D3"
+              }
+            ]
+          },
+          "animation": {
+            "transition": "fade",
+            "camera_motion": "none"
+          }
+        },
+        {
+          "step_no": 2,
+          "visual_type": "diagram",
+          "focus": "separation",
+          "duration_seconds": 4,
+          "content": {
+            "svg_elements": [
+              {
+                "type": "rect",
+                "x": 30,
+                "y": 40,
+                "width": 40,
+                "height": 5,
+                "fill": "#A9A9A9",
+                "label": "Sieve"
+              },
+              {
+                "type": "line",
+                "x1": 30,
+                "y1": 45,
+                "x2": 30,
+                "y2": 60,
+                "stroke": "#A9A9A9",
+                "stroke_width": 2
+              },
+              {
+                "type": "line",
+                "x1": 70,
+                "y1": 45,
+                "x2": 70,
+                "y2": 60,
+                "stroke": "#A9A9A9",
+                "stroke_width": 2
+              },
+              {
+                "type": "line",
+                "x1": 30,
+                "y1": 60,
+                "x2": 70,
+                "y2": 60,
+                "stroke": "#A9A9A9",
+                "stroke_width": 2
+              },
+              {
+                "type": "circle",
+                "cx": 40,
+                "cy": 35,
+                "r": 4,
+                "fill": "#8B4513",
+                "label": "Larger Particle"
+              },
+              {
+                "type": "circle",
+                "cx": 60,
+                "cy": 38,
+                "r": 4,
+                "fill": "#8B4513"
+              },
+              {
+                "type": "circle",
+                "cx": 45,
+                "cy": 70,
+                "r": 2,
+                "fill": "#D3D3D3",
+                "label": "Smaller Particle"
+              },
+              {
+                "type": "circle",
+                "cx": 55,
+                "cy": 75,
+                "r": 2,
+                "fill": "#D3D3D3"
+              },
+              {
+                "type": "path",
+                "d": "M50 30 L50 70",
+                "stroke": "#000000",
+                "stroke_width": 1,
+                "animate": true
+              }
+            ]
+          },
+          "animation": {
+            "transition": "slide",
+            "camera_motion": "zoom_out"
+          }
+        }
+      ]
+    },
+    {
+      "scene_no": 7,
+      "purpose": "Explain sedimentation, decantation, and filtration for insoluble solids in liquids.",
+      "visual_strategy": "process",
+      "template_id": "cycle_template",
+      "teacher_script": "For insoluble solids in liquids, we can use sedimentation, where heavier particles settle down. Then, decantation carefully pours out the liquid. Filtration uses a filter paper to separate even finer insoluble particles.",
+      "template_data": {
+        "timeline_title": "Separating Insoluble Solids from Liquids",
+        "stages": [
+          {
+            "step_no": 1,
+            "label": "Sedimentation",
+            "icon_name": "arrow-down-to-line"
+          },
+          {
+            "step_no": 2,
+            "label": "Decantation",
+            "icon_name": "droplet"
+          },
+          {
+            "step_no": 3,
+            "label": "Filtration",
+            "icon_name": "filter"
+          }
+        ]
+      }
+    },
+    {
+      "scene_no": 8,
+      "purpose": "Explain the evaporation method.",
+      "visual_strategy": "diagram",
+      "template_id": null,
+      "teacher_script": "Evaporation is used to separate a soluble solid from its liquid solvent. When the liquid evaporates, the solid is left behind.",
+      "visual_steps": [
+        {
+          "step_no": 1,
+          "visual_type": "diagram",
+          "focus": "salt water",
+          "duration_seconds": 3,
+          "content": {
+            "svg_elements": [
+              {
+                "type": "rect",
+                "x": 35,
+                "y": 50,
+                "width": 30,
+                "height": 30,
+                "fill": "#ADD8E6",
+                "label": "Water"
+              },
+              {
+                "type": "circle",
+                "cx": 40,
+                "cy": 70,
+                "r": 2,
+                "fill": "#FFFFFF",
+                "label": "Dissolved Salt"
+              },
+              {
+                "type": "circle",
+                "cx": 50,
+                "cy": 60,
+                "r": 2,
+                "fill": "#FFFFFF"
+              },
+              {
+                "type": "circle",
+                "cx": 60,
+                "cy": 75,
+                "r": 2,
+                "fill": "#FFFFFF"
+              }
+            ]
+          },
+          "animation": {
+            "transition": "fade",
+            "camera_motion": "none"
+          }
+        },
+        {
+          "step_no": 2,
+          "visual_type": "diagram",
+          "focus": "heating and evaporation",
+          "duration_seconds": 4,
+          "content": {
+            "svg_elements": [
+              {
+                "type": "rect",
+                "x": 35,
+                "y": 60,
+                "width": 30,
+                "height": 20,
+                "fill": "#ADD8E6",
+                "label": "Evaporating Water"
+              },
+              {
+                "type": "circle",
+                "cx": 40,
+                "cy": 70,
+                "r": 2,
+                "fill": "#FFFFFF",
+                "label": "Salt"
+              },
+              {
+                "type": "circle",
+                "cx": 50,
+                "cy": 60,
+                "r": 2,
+                "fill": "#FFFFFF"
+              },
+              {
+                "type": "circle",
+                "cx": 60,
+                "cy": 75,
+                "r": 2,
+                "fill": "#FFFFFF"
+              },
+              {
+                "type": "path",
+                "d": "M40 55 Q45 45 50 55 Q55 45 60 55",
+                "stroke": "#FF4500",
+                "stroke_width": 2,
+                "animate": true,
+                "label": "Heat"
+              },
+              {
+                "type": "path",
+                "d": "M40 50 L40 30 M50 50 L50 25 M60 50 L60 30",
+                "stroke": "#ADD8E6",
+                "stroke_width": 2,
+                "animate": true,
+                "label": "Vapor"
+              }
+            ]
+          },
+          "animation": {
+            "transition": "slide",
+            "camera_motion": "zoom_in"
+          }
+        },
+        {
+          "step_no": 3,
+          "visual_type": "diagram",
+          "focus": "remaining solid",
+          "duration_seconds": 3,
+          "content": {
+            "svg_elements": [
+              {
+                "type": "rect",
+                "x": 35,
+                "y": 75,
+                "width": 30,
+                "height": 5,
+                "fill": "#FFFFFF",
+                "label": "Remaining Salt"
+              }
+            ]
+          },
+          "animation": {
+            "transition": "fade",
+            "camera_motion": "none"
+          }
+        }
+      ]
+    },
+    {
+      "scene_no": 9,
+      "purpose": "Explain condensation as part of recovering liquid.",
+      "visual_strategy": "diagram",
+      "template_id": null,
+      "teacher_script": "Condensation is the process where vapor turns back into liquid. When combined with evaporation, this forms distillation, allowing us to recover both the pure liquid and the solid.",
+      "visual_steps": [
+        {
+          "step_no": 1,
+          "visual_type": "diagram",
+          "focus": "vapor",
+          "duration_seconds": 3,
+          "content": {
+            "svg_elements": [
+              {
+                "type": "path",
+                "d": "M40 70 L40 50 M50 70 L50 45 M60 70 L60 50",
+                "stroke": "#ADD8E6",
+                "stroke_width": 2,
+                "label": "Water Vapor"
+              }
+            ]
+          },
+          "animation": {
+            "transition": "fade",
+            "camera_motion": "none"
+          }
+        },
+        {
+          "step_no": 2,
+          "visual_type": "diagram",
+          "focus": "condensation",
+          "duration_seconds": 4,
+          "content": {
+            "svg_elements": [
+              {
+                "type": "rect",
+                "x": 30,
+                "y": 30,
+                "width": 40,
+                "height": 5,
+                "fill": "#A9A9A9",
+                "label": "Cool Surface"
+              },
+              {
+                "type": "path",
+                "d": "M40 70 L40 35 M50 70 L50 35 M60 70 L60 35",
+                "stroke": "#ADD8E6",
+                "stroke_width": 2,
+                "animate": true,
+                "label": "Vapor Rising"
+              },
+              {
+                "type": "circle",
+                "cx": 40,
+                "cy": 40,
+                "r": 2,
+                "fill": "#ADD8E6",
+                "label": "Liquid Droplets"
+              },
+              {
+                "type": "circle",
+                "cx": 50,
+                "cy": 40,
+                "r": 2,
+                "fill": "#ADD8E6"
+              },
+              {
+                "type": "circle",
+                "cx": 60,
+                "cy": 40,
+                "r": 2,
+                "fill": "#ADD8E6"
+              }
+            ]
+          },
+          "animation": {
+            "transition": "slide",
+            "camera_motion": "zoom_in"
+          }
+        }
+      ]
+    },
+    {
+      "scene_no": 10,
+      "purpose": "Explain distillation for separating miscible liquids.",
+      "visual_strategy": "diagram",
+      "template_id": null,
+      "teacher_script": "Distillation is used to separate two miscible liquids with different boiling points. One liquid evaporates, then condenses and is collected, leaving the other behind.",
+      "visual_steps": [
+        {
+          "step_no": 1,
+          "visual_type": "diagram",
+          "focus": "distillation setup",
+          "duration_seconds": 5,
+          "content": {
+            "svg_elements": [
+              {
+                "type": "rect",
+                "x": 20,
+                "y": 70,
+                "width": 10,
+                "height": 10,
+                "fill": "#FF4500",
+                "label": "Heat Source"
+              },
+              {
+                "type": "path",
+                "d": "M25 70 L25 50 Q25 40 35 40 L65 40 Q75 40 75 50 L75 70",
+                "stroke": "#000000",
+                "stroke_width": 2,
+                "label": "Distillation Flask"
+              },
+              {
+                "type": "rect",
+                "x": 30,
+                "y": 55,
+                "width": 40,
+                "height": 15,
+                "fill": "#ADD8E6",
+                "label": "Liquid Mixture"
+              },
+              {
+                "type": "line",
+                "x1": 75,
+                "y1": 45,
+                "x2": 90,
+                "y2": 45,
+                "stroke": "#000000",
+                "stroke_width": 2,
+                "label": "Condenser"
+              },
+              {
+                "type": "path",
+                "d": "M85 45 L85 60 L95 60 L95 45 Z",
+                "stroke": "#000000",
+                "stroke_width": 2,
+                "label": "Receiver"
+              }
+            ]
+          },
+          "animation": {
+            "transition": "fade",
+            "camera_motion": "none"
+          }
+        },
+        {
+          "step_no": 2,
+          "visual_type": "diagram",
+          "focus": "process",
+          "duration_seconds": 5,
+          "content": {
+            "svg_elements": [
+              {
+                "type": "rect",
+                "x": 20,
+                "y": 70,
+                "width": 10,
+                "height": 10,
+                "fill": "#FF4500",
+                "label": "Heat Source"
+              },
+              {
+                "type": "path",
+                "d": "M25 70 L25 50 Q25 40 35 40 L65 40 Q75 40 75 50 L75 70",
+                "stroke": "#000000",
+                "stroke_width": 2,
+                "label": "Distillation Flask"
+              },
+              {
+                "type": "rect",
+                "x": 30,
+                "y": 65,
+                "width": 40,
+                "height": 5,
+                "fill": "#ADD8E6",
+                "label": "Remaining Liquid"
+              },
+              {
+                "type": "line",
+                "x1": 75,
+                "y1": 45,
+                "x2": 90,
+                "y2": 45,
+                "stroke": "#000000",
+                "stroke_width": 2,
+                "label": "Condenser"
+              },
+              {
+                "type": "path",
+                "d": "M85 45 L85 60 L95 60 L95 45 Z",
+                "stroke": "#000000",
+                "stroke_width": 2,
+                "label": "Receiver"
+              },
+              {
+                "type": "path",
+                "d": "M50 60 L50 40 L80 40 L80 50",
+                "stroke": "#ADD8E6",
+                "stroke_width": 2,
+                "animate": true,
+                "label": "Vapor/Liquid"
+              },
+              {
+                "type": "rect",
+                "x": 87,
+                "y": 50,
+                "width": 6,
+                "height": 8,
+                "fill": "#ADD8E6",
+                "label": "Collected Liquid"
+              }
+            ]
+          },
+          "animation": {
+            "transition": "slide",
+            "camera_motion": "pan_right"
+          }
+        }
+      ]
+    },
+    {
+      "scene_no": 11,
+      "purpose": "Explain the magnetic separation method.",
+      "visual_strategy": "diagram",
+      "template_id": null,
+      "teacher_script": "Magnetic separation is a useful method when one component of a mixture is magnetic and the others are not. A magnet is used to attract and separate the magnetic substance.",
+      "visual_steps": [
+        {
+          "step_no": 1,
+          "visual_type": "diagram",
+          "focus": "mixture",
+          "duration_seconds": 3,
+          "content": {
+            "svg_elements": [
+              {
+                "type": "rect",
+                "x": 20,
+                "y": 70,
+                "width": 60,
+                "height": 10,
+                "fill": "#D3D3D3",
+                "label": "Sand"
+              },
+              {
+                "type": "rect",
+                "x": 30,
+                "y": 72,
+                "width": 5,
+                "height": 5,
+                "fill": "#696969",
+                "label": "Iron Filings"
+              },
+              {
+                "type": "rect",
+                "x": 50,
+                "y": 75,
+                "width": 5,
+                "height": 5,
+                "fill": "#696969"
+              },
+              {
+                "type": "rect",
+                "x": 70,
+                "y": 73,
+                "width": 5,
+                "height": 5,
+                "fill": "#696969"
+              }
+            ]
+          },
+          "animation": {
+            "transition": "fade",
+            "camera_motion": "none"
+          }
+        },
+        {
+          "step_no": 2,
+          "visual_type": "diagram",
+          "focus": "magnetic action",
+          "duration_seconds": 4,
+          "content": {
+            "svg_elements": [
+              {
+                "type": "rect",
+                "x": 20,
+                "y": 70,
+                "width": 60,
+                "height": 10,
+                "fill": "#D3D3D3",
+                "label": "Sand"
+              },
+              {
+                "type": "rect",
+                "x": 40,
+                "y": 30,
+                "width": 20,
+                "height": 10,
+                "fill": "#FF0000",
+                "label": "Magnet"
+              },
+              {
+                "type": "rect",
+                "x": 30,
+                "y": 50,
+                "width": 5,
+                "height": 5,
+                "fill": "#696969",
+                "animate": true,
+                "label": "Iron Filings"
+              },
+              {
+                "type": "rect",
+                "x": 50,
+                "y": 45,
+                "width": 5,
+                "height": 5,
+                "fill": "#696969",
+                "animate": true
+              },
+              {
+                "type": "rect",
+                "x": 70,
+                "y": 50,
+                "width": 5,
+                "height": 5,
+                "fill": "#696969",
+                "animate": true
+              }
+            ]
+          },
+          "animation": {
+            "transition": "slide",
+            "camera_motion": "zoom_in"
+          }
+        }
+      ]
+    },
+    {
+      "scene_no": 12,
+      "purpose": "Assess understanding of separation methods.",
+      "visual_strategy": "summary",
+      "template_id": "quiz_checkpoint",
+      "teacher_script": "Can you recall which method is best for separating sand from water? Think about whether sand dissolves or not.",
+      "template_data": {
+        "title": "Quick Check!",
+        "left_title": "Which method would you use to separate sand from water?",
+        "left_bullets": [
+          "A. Evaporation",
+          "B. Filtration",
+          "C. Winnowing",
+          "D. Handpicking"
+        ]
+      }
+    }
+  ],
+  "question": "Explain about methods of seperation used to sepearte substances?"
+}

@@ -1,19 +1,6 @@
 import React from 'react';
-import { useCurrentFrame, useVideoConfig, interpolate, Easing } from 'remotion';
-
-const THEME_ACCENTS = {
-  indigo: '#6366f1',
-  gold: '#fbbf24',
-  emerald: '#10b981',
-  rose: '#f43f5e',
-};
-
-const THEME_ACCENT_RGBS = {
-  indigo: '99, 102, 241',
-  gold: '251, 191, 36',
-  emerald: '16, 185, 129',
-  rose: '244, 63, 94',
-};
+import { useCurrentFrame, useVideoConfig, interpolate, spring } from 'remotion';
+import { getTheme } from '../themeHelper';
 
 interface ColumnData {
   header: string;
@@ -23,7 +10,7 @@ interface ColumnData {
 interface ColumnComparisonProps {
   left_column: ColumnData;
   right_column: ColumnData;
-  theme: 'indigo' | 'gold' | 'emerald' | 'rose';
+  theme: string;
 }
 
 export const ColumnComparison: React.FC<ColumnComparisonProps> = ({
@@ -32,65 +19,61 @@ export const ColumnComparison: React.FC<ColumnComparisonProps> = ({
   theme,
 }) => {
   const frame = useCurrentFrame();
-  const { durationInFrames } = useVideoConfig();
+  const { fps } = useVideoConfig();
+  const activeTheme = getTheme(theme);
 
-  const accentColor = THEME_ACCENTS[theme] || THEME_ACCENTS.indigo;
-  const accentRgb = THEME_ACCENT_RGBS[theme] || THEME_ACCENT_RGBS.indigo;
-
-  // --- Animation Timing Configuration ---
-  const leftSlideStart = 0;
-  const leftSlideEnd = 20;
-
-  const rightSlideStart = 10;
-  const rightSlideEnd = 30;
-
-  // Card slide-ins
-  const leftX = interpolate(frame, [leftSlideStart, leftSlideEnd], [-120, 0], {
-    extrapolateLeft: 'clamp',
-    extrapolateRight: 'clamp',
-    easing: Easing.bezier(0.16, 1, 0.3, 1),
+  // Left column slide-in spring
+  const leftSpring = spring({
+    frame,
+    fps,
+    config: {
+      stiffness: activeTheme.stiffness,
+      damping: activeTheme.damping,
+      mass: activeTheme.mass
+    }
   });
+  const leftX = interpolate(leftSpring, [0, 1], [-150, 0]);
+  const leftOpacity = leftSpring;
 
-  const leftOpacity = interpolate(frame, [leftSlideStart, leftSlideEnd], [0, 1], {
-    extrapolateLeft: 'clamp',
-    extrapolateRight: 'clamp',
+  // Right column slide-in spring (staggered slightly)
+  const rightSpring = spring({
+    frame: frame - 6,
+    fps,
+    config: {
+      stiffness: activeTheme.stiffness,
+      damping: activeTheme.damping,
+      mass: activeTheme.mass
+    }
   });
+  const rightX = interpolate(rightSpring, [0, 1], [150, 0]);
+  const rightOpacity = rightSpring;
 
-  const rightX = interpolate(frame, [rightSlideStart, rightSlideEnd], [120, 0], {
-    extrapolateLeft: 'clamp',
-    extrapolateRight: 'clamp',
-    easing: Easing.bezier(0.16, 1, 0.3, 1),
-  });
+  // Divider expansion
+  const dividerHeight = interpolate(
+    spring({
+      frame: frame - 12,
+      fps,
+      config: { stiffness: 90, damping: 15 }
+    }),
+    [0, 1],
+    [0, 80] // height percentage
+  );
 
-  const rightOpacity = interpolate(frame, [rightSlideStart, rightSlideEnd], [0, 1], {
-    extrapolateLeft: 'clamp',
-    extrapolateRight: 'clamp',
-  });
-
-  // Vertical separator growth
-  const dividerStart = 15;
-  const dividerEnd = 35;
-  const dividerProgress = interpolate(frame, [dividerStart, dividerEnd], [0, 1], {
-    extrapolateLeft: 'clamp',
-    extrapolateRight: 'clamp',
-  });
-
-  // Staggered bullet points reveal
-  const bulletsLeftOpacity = (left_column.bullets || []).map((_, idx) => {
-    const start = leftSlideEnd + 5 + idx * 12;
-    const end = start + 10;
-    return interpolate(frame, [start, end], [0, 1], {
-      extrapolateLeft: 'clamp',
-      extrapolateRight: 'clamp',
+  // Left side staggered bullets
+  const leftBulletSprings = (left_column.bullets || []).map((_, idx) => {
+    return spring({
+      frame: frame - (15 + idx * 8),
+      fps,
+      config: { stiffness: 120, damping: 14 }
     });
   });
 
-  const bulletsRightOpacity = (right_column.bullets || []).map((_, idx) => {
-    const start = rightSlideEnd + 5 + idx * 12;
-    const end = start + 10;
-    return interpolate(frame, [start, end], [0, 1], {
-      extrapolateLeft: 'clamp',
-      extrapolateRight: 'clamp',
+  // Right side staggered bullets
+  const rightBulletSprings = (right_column.bullets || []).map((_, idx) => {
+    return spring({
+      frame: frame - (21 + idx * 8),
+      fps,
+      config: { stiffness: 120, damping: 14 }
     });
   });
 
@@ -100,126 +83,160 @@ export const ColumnComparison: React.FC<ColumnComparisonProps> = ({
         width: '100%',
         height: '100%',
         display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
         padding: '50px 60px',
         boxSizing: 'border-box',
-        alignItems: 'center',
-        position: 'relative',
+        fontFamily: activeTheme.fontFamily,
+        color: activeTheme.textColor,
       }}
     >
-      {/* Left Column Card */}
       <div
         style={{
-          width: '46%',
-          height: '80%',
-          opacity: leftOpacity,
-          transform: `translateX(${leftX}px)`,
-          background: 'rgba(255, 255, 255, 0.02)',
-          border: '1px solid rgba(255, 255, 255, 0.05)',
-          borderRadius: '16px',
-          padding: '30px 40px',
-          boxSizing: 'border-box',
+          width: '100%',
           display: 'flex',
-          flexDirection: 'column',
-          boxShadow: '0 8px 32px rgba(0,0,0,0.3)',
+          justifyContent: 'space-between',
+          alignItems: 'stretch',
+          position: 'relative',
         }}
       >
-        <h3
+        {/* Left Column Card */}
+        <div
           style={{
-            fontSize: '28px',
-            fontWeight: 800,
-            color: accentColor,
-            margin: '0 0 24px 0',
-            textTransform: 'uppercase',
-            letterSpacing: '0.5px',
-            borderBottom: `2px solid rgba(${accentRgb}, 0.25)`,
-            paddingBottom: '12px',
+            width: '46%',
+            background: activeTheme.cardBackground,
+            border: activeTheme.cardBorder,
+            borderRadius: '24px',
+            padding: '30px 24px',
+            boxSizing: 'border-box',
+            boxShadow: '0 12px 32px rgba(0, 0, 0, 0.25)',
+            transform: `translateX(${leftX}px)`,
+            opacity: leftOpacity,
+            display: 'flex',
+            flexDirection: 'column',
           }}
         >
-          {left_column.header}
-        </h3>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-          {(left_column.bullets || []).map((bullet, idx) => (
-            <div
-              key={`left-bullet-${idx}`}
-              style={{
-                display: 'flex',
-                alignItems: 'flex-start',
-                gap: '12px',
-                opacity: bulletsLeftOpacity[idx] ?? 0,
-              }}
-            >
-              <span style={{ color: accentColor, fontSize: '18px', lineHeight: '1.2' }}>•</span>
-              <p style={{ fontSize: '16px', lineHeight: '1.5', color: '#e2e8f0', margin: 0, fontWeight: 500 }}>
-                {bullet}
-              </p>
-            </div>
-          ))}
+          <h3
+            style={{
+              fontSize: '26px',
+              fontWeight: 800,
+              margin: '0 0 20px 0',
+              color: activeTheme.accentColor,
+              borderBottom: `2px solid rgba(${activeTheme.accentColorRgb}, 0.2)`,
+              paddingBottom: '12px',
+            }}
+          >
+            {left_column.header}
+          </h3>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            {(left_column.bullets || []).map((bullet, idx) => {
+              const scale = leftBulletSprings[idx];
+              return (
+                <div
+                  key={`l-bullet-${idx}`}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    fontSize: '16px',
+                    lineHeight: '1.4',
+                    fontWeight: 500,
+                    opacity: scale,
+                    transform: `scale(${scale})`,
+                    transformOrigin: 'left center',
+                  }}
+                >
+                  <div
+                    style={{
+                      width: '8px',
+                      height: '8px',
+                      borderRadius: '50%',
+                      background: activeTheme.accentColor,
+                      marginTop: '7px',
+                      marginRight: '12px',
+                      flexShrink: 0,
+                    }}
+                  />
+                  <span>{bullet}</span>
+                </div>
+              );
+            })}
+          </div>
         </div>
-      </div>
 
-      {/* Center Divider Line */}
-      <div
-        style={{
-          position: 'absolute',
-          left: '50%',
-          top: '50%',
-          transform: 'translate(-50%, -50%)',
-          width: '2px',
-          height: `${70 * dividerProgress}%`,
-          borderLeft: `2.5px dashed rgba(${accentRgb}, 0.3)`,
-          pointerEvents: 'none',
-        }}
-      />
-
-      {/* Right Column Card */}
-      <div
-        style={{
-          width: '46%',
-          marginLeft: '8%', // Shift past left column + spacing
-          height: '80%',
-          opacity: rightOpacity,
-          transform: `translateX(${rightX}px)`,
-          background: 'rgba(255, 255, 255, 0.02)',
-          border: '1px solid rgba(255, 255, 255, 0.05)',
-          borderRadius: '16px',
-          padding: '30px 40px',
-          boxSizing: 'border-box',
-          display: 'flex',
-          flexDirection: 'column',
-          boxShadow: '0 8px 32px rgba(0,0,0,0.3)',
-        }}
-      >
-        <h3
+        {/* Vertical Divider line */}
+        <div
           style={{
-            fontSize: '28px',
-            fontWeight: 800,
-            color: accentColor,
-            margin: '0 0 24px 0',
-            textTransform: 'uppercase',
-            letterSpacing: '0.5px',
-            borderBottom: `2px solid rgba(${accentRgb}, 0.25)`,
-            paddingBottom: '12px',
+            position: 'absolute',
+            left: '50%',
+            top: `calc(50% - ${dividerHeight / 2}%)`,
+            width: '2px',
+            height: `${dividerHeight}%`,
+            background: `linear-gradient(to bottom, rgba(${activeTheme.accentColorRgb}, 0), ${activeTheme.accentColor}, rgba(${activeTheme.accentColorRgb}, 0))`,
+            opacity: dividerHeight > 0 ? 0.5 : 0,
+          }}
+        />
+
+        {/* Right Column Card */}
+        <div
+          style={{
+            width: '46%',
+            background: activeTheme.cardBackground,
+            border: activeTheme.cardBorder,
+            borderRadius: '24px',
+            padding: '30px 24px',
+            boxSizing: 'border-box',
+            boxShadow: '0 12px 32px rgba(0, 0, 0, 0.25)',
+            transform: `translateX(${rightX}px)`,
+            opacity: rightOpacity,
+            display: 'flex',
+            flexDirection: 'column',
           }}
         >
-          {right_column.header}
-        </h3>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-          {(right_column.bullets || []).map((bullet, idx) => (
-            <div
-              key={`right-bullet-${idx}`}
-              style={{
-                display: 'flex',
-                alignItems: 'flex-start',
-                gap: '12px',
-                opacity: bulletsRightOpacity[idx] ?? 0,
-              }}
-            >
-              <span style={{ color: accentColor, fontSize: '18px', lineHeight: '1.2' }}>•</span>
-              <p style={{ fontSize: '16px', lineHeight: '1.5', color: '#e2e8f0', margin: 0, fontWeight: 500 }}>
-                {bullet}
-              </p>
-            </div>
-          ))}
+          <h3
+            style={{
+              fontSize: '26px',
+              fontWeight: 800,
+              margin: '0 0 20px 0',
+              color: activeTheme.accentColor,
+              borderBottom: `2px solid rgba(${activeTheme.accentColorRgb}, 0.2)`,
+              paddingBottom: '12px',
+            }}
+          >
+            {right_column.header}
+          </h3>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            {(right_column.bullets || []).map((bullet, idx) => {
+              const scale = rightBulletSprings[idx];
+              return (
+                <div
+                  key={`r-bullet-${idx}`}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    fontSize: '16px',
+                    lineHeight: '1.4',
+                    fontWeight: 500,
+                    opacity: scale,
+                    transform: `scale(${scale})`,
+                    transformOrigin: 'left center',
+                  }}
+                >
+                  <div
+                    style={{
+                      width: '8px',
+                      height: '8px',
+                      borderRadius: '50%',
+                      background: activeTheme.accentColor,
+                      marginTop: '7px',
+                      marginRight: '12px',
+                      flexShrink: 0,
+                    }}
+                  />
+                  <span>{bullet}</span>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
     </div>

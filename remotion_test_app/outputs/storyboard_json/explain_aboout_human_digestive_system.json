@@ -1,0 +1,283 @@
+{
+  "lesson_title": "The Human Digestive System",
+  "theme": "emerald",
+  "scenes": [
+    {
+      "scene_no": 1,
+      "purpose": "Introduce the topic of the human digestive system.",
+      "visual_strategy": "intro",
+      "template_id": "title_slide",
+      "teacher_script": "Hello, students! Today, we're going to explore the amazing journey food takes inside our bodies. We'll learn about the human digestive system and how it helps us get energy from what we eat.",
+      "visual_steps": [
+        {
+          "step_no": 1,
+          "visual_type": "illustration",
+          "focus": "digestive system",
+          "duration_seconds": 8.0,
+          "content": {
+            "image_prompt": "A friendly, cartoon-style illustration of a human body with the digestive system organs highlighted, showing a happy child eating an apple, clean educational illustration style, no text, no labels, no annotations, no watermarks, no overlays"
+          },
+          "animation": {
+            "transition": "fade",
+            "camera_motion": "zoom_in"
+          }
+        }
+      ]
+    },
+    {
+      "scene_no": 2,
+      "purpose": "Provide an overview of the main organs in the digestive system.",
+      "visual_strategy": "overview",
+      "template_id": "concept_diagram",
+      "teacher_script": "The digestive system is like a long tube with several important organs. It starts from the mouth and ends at the anus, processing food along the way. Let's look at the main parts involved in this incredible process.",
+      "visual_steps": [
+        {
+          "step_no": 1,
+          "visual_type": "illustration",
+          "focus": "entire digestive system",
+          "duration_seconds": 8.0,
+          "content": {
+            "image_prompt": "A clear, simplified diagram of the human digestive system, showing the mouth, esophagus, stomach, small intestine, large intestine, and anus. Each organ is distinct but not labeled, clean educational illustration style, no text, no labels, no annotations, no watermarks, no overlays"
+          },
+          "animation": {
+            "transition": "fade",
+            "camera_motion": "none"
+          }
+        }
+      ]
+    },
+    {
+      "scene_no": 3,
+      "purpose": "Explain the role of the mouth in digestion.",
+      "visual_strategy": "process",
+      "template_id": "illustrated_scene",
+      "teacher_script": "Digestion begins in your mouth! Your teeth chew food into smaller pieces, and saliva, produced by salivary glands, starts breaking down carbohydrates. This makes food easier to swallow.",
+      "visual_steps": [
+        {
+          "step_no": 1,
+          "visual_type": "illustration",
+          "focus": "mouth and teeth",
+          "duration_seconds": 4.0,
+          "content": {
+            "image_prompt": "Close-up illustration of a human mouth with teeth chewing food, showing saliva glands, clean educational illustration style, no text, no labels, no annotations, no watermarks, no overlays"
+          },
+          "animation": {
+            "transition": "fade",
+            "camera_motion": "zoom_in"
+          }
+        },
+        {
+          "step_no": 2,
+          "visual_type": "illustration",
+          "focus": "saliva",
+          "duration_seconds": 4.0,
+          "content": {
+            "image_prompt": "Illustration showing food being mixed with saliva in the mouth, with tiny enzyme particles starting to break down food, clean educational illustration style, no text, no labels, no annotations, no watermarks, no overlays"
+          },
+          "animation": {
+            "transition": "fade",
+            "camera_motion": "pan_right"
+          }
+        }
+      ]
+    },
+    {
+      "scene_no": 4,
+      "purpose": "Describe the function of the esophagus and peristalsis.",
+      "visual_strategy": "process",
+      "template_id": "illustrated_scene",
+      "teacher_script": "Once chewed, food travels down a tube called the esophagus, or food pipe. Muscles in the esophagus push the food down to your stomach through a wave-like motion called peristalsis. This ensures food moves in one direction.",
+      "visual_steps": [
+        {
+          "step_no": 1,
+          "visual_type": "illustration",
+          "focus": "esophagus",
+          "duration_seconds": 4.0,
+          "content": {
+            "image_prompt": "Illustration of the human esophagus, showing a bolus of food entering the tube from the mouth area, clean educational illustration style, no text, no labels, no annotations, no watermarks, no overlays"
+          },
+          "animation": {
+            "transition": "slide",
+            "camera_motion": "zoom_in"
+          }
+        },
+        {
+          "step_no": 2,
+          "visual_type": "illustration",
+          "focus": "peristalsis",
+          "duration_seconds": 4.0,
+          "content": {
+            "image_prompt": "Diagram illustrating peristalsis in the esophagus, showing muscle contractions pushing food downwards in a wave-like motion, clean educational illustration style, no text, no labels, no annotations, no watermarks, no overlays"
+          },
+          "animation": {
+            "transition": "slide",
+            "camera_motion": "pan_right"
+          }
+        }
+      ]
+    },
+    {
+      "scene_no": 5,
+      "purpose": "Explain the role of the stomach in digestion.",
+      "visual_strategy": "process",
+      "template_id": "illustrated_scene",
+      "teacher_script": "The stomach is a muscular bag that churns food and mixes it with strong digestive juices, including hydrochloric acid. This process breaks down proteins and kills harmful bacteria. Food stays here for several hours.",
+      "visual_steps": [
+        {
+          "step_no": 1,
+          "visual_type": "illustration",
+          "focus": "stomach",
+          "duration_seconds": 4.0,
+          "content": {
+            "image_prompt": "Illustration of the human stomach, showing food entering from the esophagus, clean educational illustration style, no text, no labels, no annotations, no watermarks, no overlays"
+          },
+          "animation": {
+            "transition": "fade",
+            "camera_motion": "zoom_in"
+          }
+        },
+        {
+          "step_no": 2,
+          "visual_type": "illustration",
+          "focus": "churning and acid",
+          "duration_seconds": 4.0,
+          "content": {
+            "image_prompt": "Cross-section illustration of the stomach showing churning action and digestive acids breaking down food particles, clean educational illustration style, no text, no labels, no annotations, no watermarks, no overlays"
+          },
+          "animation": {
+            "transition": "fade",
+            "camera_motion": "pan_right"
+          }
+        }
+      ]
+    },
+    {
+      "scene_no": 6,
+      "purpose": "Describe the function of the small intestine in nutrient absorption.",
+      "visual_strategy": "process",
+      "template_id": "illustrated_scene",
+      "teacher_script": "From the stomach, food moves into the small intestine, a long, coiled tube. Here, most of the digestion and absorption of nutrients takes place. Tiny finger-like structures called villi increase the surface area for absorption.",
+      "visual_steps": [
+        {
+          "step_no": 1,
+          "visual_type": "illustration",
+          "focus": "small intestine",
+          "duration_seconds": 4.0,
+          "content": {
+            "image_prompt": "Illustration of the small intestine, showing its coiled structure and partially digested food entering it, clean educational illustration style, no text, no labels, no annotations, no watermarks, no overlays"
+          },
+          "animation": {
+            "transition": "fade",
+            "camera_motion": "zoom_in"
+          }
+        },
+        {
+          "step_no": 2,
+          "visual_type": "illustration",
+          "focus": "villi and absorption",
+          "duration_seconds": 4.0,
+          "content": {
+            "image_prompt": "Microscopic view illustration of villi lining the small intestine, showing nutrients being absorbed into blood vessels, clean educational illustration style, no text, no labels, no annotations, no watermarks, no overlays"
+          },
+          "animation": {
+            "transition": "fade",
+            "camera_motion": "zoom_in"
+          }
+        }
+      ]
+    },
+    {
+      "scene_no": 7,
+      "purpose": "Explain the role of the large intestine in water absorption.",
+      "visual_strategy": "process",
+      "template_id": "illustrated_scene",
+      "teacher_script": "After the small intestine, undigested food and water enter the large intestine. Its main job is to absorb water from the remaining waste material. This helps form solid waste.",
+      "visual_steps": [
+        {
+          "step_no": 1,
+          "visual_type": "illustration",
+          "focus": "large intestine",
+          "duration_seconds": 4.0,
+          "content": {
+            "image_prompt": "Illustration of the large intestine, showing undigested material entering from the small intestine, clean educational illustration style, no text, no labels, no annotations, no watermarks, no overlays"
+          },
+          "animation": {
+            "transition": "fade",
+            "camera_motion": "zoom_in"
+          }
+        },
+        {
+          "step_no": 2,
+          "visual_type": "illustration",
+          "focus": "water absorption",
+          "duration_seconds": 4.0,
+          "content": {
+            "image_prompt": "Cross-section illustration of the large intestine showing water molecules being absorbed from the waste material, making it more solid, clean educational illustration style, no text, no labels, no annotations, no watermarks, no overlays"
+          },
+          "animation": {
+            "transition": "fade",
+            "camera_motion": "pan_right"
+          }
+        }
+      ]
+    },
+    {
+      "scene_no": 8,
+      "purpose": "Describe the final stage of waste elimination.",
+      "visual_strategy": "process",
+      "template_id": "illustrated_scene",
+      "teacher_script": "Finally, the solid waste, called faeces, is stored in the rectum. When your body is ready, it is eliminated from the body through the anus. This completes the entire digestive process.",
+      "visual_steps": [
+        {
+          "step_no": 1,
+          "visual_type": "illustration",
+          "focus": "rectum and anus",
+          "duration_seconds": 4.0,
+          "content": {
+            "image_prompt": "Illustration of the rectum and anus, showing solid waste being stored and prepared for elimination, clean educational illustration style, no text, no labels, no annotations, no watermarks, no overlays"
+          },
+          "animation": {
+            "transition": "fade",
+            "camera_motion": "zoom_in"
+          }
+        },
+        {
+          "step_no": 2,
+          "visual_type": "illustration",
+          "focus": "elimination",
+          "duration_seconds": 4.0,
+          "content": {
+            "image_prompt": "Simplified illustration showing the final stage of waste elimination from the human body, clean educational illustration style, no text, no labels, no annotations, no watermarks, no overlays"
+          },
+          "animation": {
+            "transition": "fade",
+            "camera_motion": "pan_right"
+          }
+        }
+      ]
+    },
+    {
+      "scene_no": 9,
+      "purpose": "Summarize the entire digestive process.",
+      "visual_strategy": "summary",
+      "template_id": "horizontal_timeline",
+      "teacher_script": "So, from the moment you take a bite, your digestive system works tirelessly. It breaks down food, absorbs nutrients, and removes waste, keeping your body healthy and energized. What an amazing system!",
+      "visual_steps": [
+        {
+          "step_no": 1,
+          "visual_type": "illustration",
+          "focus": "digestive journey",
+          "duration_seconds": 8.0,
+          "content": {
+            "image_prompt": "A simplified, sequential diagram showing the entire path of food through the human digestive system: mouth, esophagus, stomach, small intestine, large intestine, and anus, with arrows indicating flow, clean educational illustration style, no text, no labels, no annotations, no watermarks, no overlays"
+          },
+          "animation": {
+            "transition": "fade",
+            "camera_motion": "zoom_out"
+          }
+        }
+      ]
+    }
+  ],
+  "question": "Explain aboout human digestive system?"
+}

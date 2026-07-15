@@ -1,0 +1,284 @@
+{
+  "lesson_title": "The Human Digestive System",
+  "theme": "Science",
+  "scenes": [
+    {
+      "scene_no": 1,
+      "purpose": "Introduce the main lesson topic.",
+      "visual_strategy": "intro",
+      "template_id": "title_slide",
+      "teacher_script": "Hello students! Today, we're going to explore the amazing journey food takes inside our bodies. We'll learn about the human digestive system.",
+      "template_data": {
+        "title": "The Human Digestive System",
+        "subtitle": "How Our Body Processes Food",
+        "icon_name": "chef-hat"
+      }
+    },
+    {
+      "scene_no": 2,
+      "purpose": "Provide an overview of the main organs involved in digestion.",
+      "visual_strategy": "overview",
+      "template_id": "concept_diagram",
+      "teacher_script": "The digestive system is a long tube with many organs working together. It starts from the mouth and ends at the anus, processing food along the way.",
+      "template_data": {
+        "central_node": "Digestive System",
+        "leaf_nodes": [
+          "Mouth",
+          "Esophagus",
+          "Stomach",
+          "Small Intestine",
+          "Large Intestine",
+          "Anus"
+        ],
+        "svg_elements": [
+          {
+            "type": "path",
+            "d": "M 200 100 Q 250 50, 300 100 L 300 200 Q 350 250, 300 300 L 250 350 Q 200 400, 250 450 L 300 500 Q 350 550, 300 600",
+            "stroke": "#4CAF50",
+            "stroke_width": 8,
+            "label": "Digestive Tract"
+          },
+          {
+            "type": "circle",
+            "cx": 250,
+            "cy": 100,
+            "r": 20,
+            "fill": "#FFC107",
+            "label": "Mouth"
+          },
+          {
+            "type": "rect",
+            "x": 280,
+            "y": 150,
+            "width": 40,
+            "height": 80,
+            "fill": "#FF9800",
+            "label": "Esophagus"
+          },
+          {
+            "type": "path",
+            "d": "M 250 250 C 200 280, 200 350, 250 380 C 300 410, 350 380, 350 300 C 350 220, 300 220, 250 250 Z",
+            "fill": "#F44336",
+            "label": "Stomach"
+          },
+          {
+            "type": "path",
+            "d": "M 270 400 Q 200 450, 270 500 Q 340 550, 270 600 Q 200 650, 270 700",
+            "stroke": "#2196F3",
+            "stroke_width": 6,
+            "label": "Small Intestine"
+          },
+          {
+            "type": "path",
+            "d": "M 180 450 Q 150 550, 180 650 Q 210 750, 320 750 Q 350 650, 320 550 Q 290 450, 180 450",
+            "stroke": "#8BC34A",
+            "stroke_width": 10,
+            "label": "Large Intestine"
+          }
+        ]
+      }
+    },
+    {
+      "scene_no": 3,
+      "purpose": "Explain the initial stages of digestion in the mouth and the passage through the esophagus.",
+      "visual_strategy": "process",
+      "template_id": "concept_diagram",
+      "teacher_script": "Digestion begins in the mouth, where teeth chew food into smaller pieces and saliva starts breaking down carbohydrates. The chewed food then travels down the esophagus to the stomach.",
+      "template_data": {
+        "central_node": "Mouth & Esophagus",
+        "leaf_nodes": [
+          "Chewing (Teeth)",
+          "Saliva (Enzymes)",
+          "Swallowing",
+          "Peristalsis"
+        ],
+        "svg_elements": [
+          {
+            "type": "path",
+            "d": "M 200 100 C 150 150, 150 250, 200 300 L 250 350 L 250 450 C 250 500, 200 550, 200 600",
+            "stroke": "#FFC107",
+            "stroke_width": 8,
+            "label": "Food Pathway"
+          },
+          {
+            "type": "rect",
+            "x": 180,
+            "y": 80,
+            "width": 100,
+            "height": 60,
+            "fill": "#FFEB3B",
+            "label": "Mouth"
+          },
+          {
+            "type": "line",
+            "x1": 230,
+            "y1": 140,
+            "x2": 230,
+            "y2": 300,
+            "stroke": "#FF9800",
+            "stroke_width": 10,
+            "label": "Esophagus"
+          },
+          {
+            "type": "circle",
+            "cx": 230,
+            "cy": 220,
+            "r": 15,
+            "fill": "#E91E63",
+            "animate": true,
+            "label": "Food Bolus"
+          }
+        ]
+      }
+    },
+    {
+      "scene_no": 4,
+      "purpose": "Explain the role of the stomach in chemical and mechanical digestion.",
+      "visual_strategy": "process",
+      "template_id": "concept_diagram",
+      "teacher_script": "In the stomach, food mixes with strong digestive juices, including hydrochloric acid and enzymes. The stomach muscles churn the food, turning it into a semi-liquid paste called chyme.",
+      "template_data": {
+        "central_node": "Stomach",
+        "leaf_nodes": [
+          "Gastric Juices",
+          "Hydrochloric Acid",
+          "Enzymes (Pepsin)",
+          "Churning Muscles"
+        ],
+        "svg_elements": [
+          {
+            "type": "path",
+            "d": "M 250 250 C 200 280, 200 350, 250 380 C 300 410, 350 380, 350 300 C 350 220, 300 220, 250 250 Z",
+            "fill": "#F44336",
+            "label": "Stomach"
+          },
+          {
+            "type": "circle",
+            "cx": 270,
+            "cy": 300,
+            "r": 10,
+            "fill": "#8BC34A",
+            "animate": true,
+            "label": "Food"
+          },
+          {
+            "type": "path",
+            "d": "M 280 280 Q 290 270, 300 280 Q 310 290, 300 300 Q 290 310, 280 300 Q 270 290, 280 280",
+            "fill": "#2196F3",
+            "animate": true,
+            "label": "Acid/Enzymes"
+          }
+        ]
+      }
+    },
+    {
+      "scene_no": 5,
+      "purpose": "Explain the small intestine's role in nutrient absorption.",
+      "visual_strategy": "process",
+      "template_id": "concept_diagram",
+      "teacher_script": "Next, the chyme moves into the small intestine, a long coiled tube. Here, most nutrients are absorbed into the bloodstream through tiny finger-like projections called villi, with help from the liver and pancreas.",
+      "template_data": {
+        "central_node": "Small Intestine",
+        "leaf_nodes": [
+          "Nutrient Absorption",
+          "Villi",
+          "Pancreatic Juices",
+          "Bile (from Liver)"
+        ],
+        "svg_elements": [
+          {
+            "type": "path",
+            "d": "M 270 400 Q 200 450, 270 500 Q 340 550, 270 600 Q 200 650, 270 700",
+            "stroke": "#2196F3",
+            "stroke_width": 6,
+            "label": "Small Intestine"
+          },
+          {
+            "type": "circle",
+            "cx": 270,
+            "cy": 500,
+            "r": 10,
+            "fill": "#FFC107",
+            "animate": true,
+            "label": "Nutrients"
+          },
+          {
+            "type": "line",
+            "x1": 270,
+            "y1": 500,
+            "x2": 350,
+            "y2": 500,
+            "stroke": "#E91E63",
+            "stroke_width": 3,
+            "label": "Bloodstream"
+          }
+        ]
+      }
+    },
+    {
+      "scene_no": 6,
+      "purpose": "Explain the large intestine's role in water absorption and waste formation.",
+      "visual_strategy": "process",
+      "template_id": "concept_diagram",
+      "teacher_script": "The remaining undigested food and water enter the large intestine. Its main job is to absorb water, forming solid waste, which is then stored in the rectum before being expelled from the body.",
+      "template_data": {
+        "central_node": "Large Intestine",
+        "leaf_nodes": [
+          "Water Absorption",
+          "Waste Formation",
+          "Rectum",
+          "Anus"
+        ],
+        "svg_elements": [
+          {
+            "type": "path",
+            "d": "M 180 450 Q 150 550, 180 650 Q 210 750, 320 750 Q 350 650, 320 550 Q 290 450, 180 450",
+            "stroke": "#8BC34A",
+            "stroke_width": 10,
+            "label": "Large Intestine"
+          },
+          {
+            "type": "circle",
+            "cx": 250,
+            "cy": 600,
+            "r": 10,
+            "fill": "#795548",
+            "animate": true,
+            "label": "Waste"
+          },
+          {
+            "type": "line",
+            "x1": 250,
+            "y1": 600,
+            "x2": 250,
+            "y2": 700,
+            "stroke": "#607D8B",
+            "stroke_width": 3,
+            "label": "Water Absorption"
+          }
+        ]
+      }
+    },
+    {
+      "scene_no": 7,
+      "purpose": "Summarize the key functions of the digestive system and check understanding.",
+      "visual_strategy": "summary",
+      "template_id": "quiz_checkpoint",
+      "teacher_script": "So, the digestive system breaks down food, absorbs nutrients, and removes waste. Can you recall where most nutrient absorption happens?",
+      "template_data": {
+        "title": "Quick Check!",
+        "left_title": "Question:",
+        "left_bullets": [
+          "Where does most nutrient absorption occur?"
+        ],
+        "right_column": {
+          "header": "Answer:",
+          "bullets": [
+            "The Small Intestine"
+          ]
+        }
+      }
+    }
+  ],
+  "question": "Explain about the digestive system"
+}

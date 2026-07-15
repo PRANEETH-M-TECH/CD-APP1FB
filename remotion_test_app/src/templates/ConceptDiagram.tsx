@@ -1,94 +1,108 @@
 import React from 'react';
-import { useCurrentFrame, useVideoConfig, interpolate, Easing } from 'remotion';
-
-const THEME_ACCENTS = {
-  indigo: '#6366f1',
-  gold: '#fbbf24',
-  emerald: '#10b981',
-  rose: '#f43f5e',
-};
-
-const THEME_ACCENT_RGBS = {
-  indigo: '99, 102, 241',
-  gold: '251, 191, 36',
-  emerald: '16, 185, 129',
-  rose: '244, 63, 94',
-};
+import { useCurrentFrame, useVideoConfig, interpolate, spring } from 'remotion';
+import { getTheme } from '../themeHelper';
 
 interface ConceptDiagramProps {
-  left_title: string;
-  left_bullets: string[];
+  left_title?: string;
+  left_bullets?: string[];
   central_node: string;
   leaf_nodes: string[];
-  theme: 'indigo' | 'gold' | 'emerald' | 'rose';
+  theme: string;
 }
 
 export const ConceptDiagram: React.FC<ConceptDiagramProps> = ({
-  left_title,
+  left_title = '',
   left_bullets = [],
   central_node,
   leaf_nodes = [],
   theme,
 }) => {
   const frame = useCurrentFrame();
-  const { durationInFrames } = useVideoConfig();
+  const { fps } = useVideoConfig();
+  const activeTheme = getTheme(theme);
 
-  const accentColor = THEME_ACCENTS[theme] || THEME_ACCENTS.indigo;
-  const accentRgb = THEME_ACCENT_RGBS[theme] || THEME_ACCENT_RGBS.indigo;
-
-  // Total bullets and leaves counts
-  const N_bullets = left_bullets.length;
+  const hasBullets = left_bullets && left_bullets.length > 0;
   const N_leaves = leaf_nodes.length;
 
-  // --- Animation Timing Configuration ---
-  const leftColStart = 0;
-  const leftColDuration = 15;
+  // Coordinate geometry based on layout mode
+  const centerX = hasBullets ? 900 : 640;
+  const centerY = 360;
+  const radius = hasBullets ? 190 : 270;
 
-  // Title/bullets fade in
-  const titleOpacity = interpolate(frame, [leftColStart, leftColStart + leftColDuration], [0, 1], {
-    extrapolateLeft: 'clamp',
-    extrapolateRight: 'clamp',
-  });
+  // Helper to calculate exact branch angles
+  const getLeafAngle = (idx: number, total: number) => {
+    if (hasBullets) {
+      // Keep original distribution (spread over a 120-degree arc on the right)
+      return -Math.PI / 3 + (idx * (2 * Math.PI / 3)) / Math.max(1, total - 1);
+    } else {
+      // Centered layout: split left and right sides symmetrically
+      const leftNodes: number[] = [];
+      const rightNodes: number[] = [];
+      for (let i = 0; i < total; i++) {
+        if (i % 2 === 0) {
+          rightNodes.push(i);
+        } else {
+          leftNodes.push(i);
+        }
+      }
 
-  const bulletsOpacity = left_bullets.map((_, idx) => {
-    // Stagger bullet point appearance
-    const start = leftColStart + 10 + idx * 15;
-    const end = start + 12;
-    return interpolate(frame, [start, end], [0, 1], {
-      extrapolateLeft: 'clamp',
-      extrapolateRight: 'clamp',
+      if (idx % 2 === 0) {
+        // Right side node (spread between -40 and 40 degrees)
+        const k = rightNodes.indexOf(idx);
+        const M = rightNodes.length;
+        return -Math.PI / 4.5 + (k * (2 * Math.PI / 4.5)) / Math.max(1, M - 1);
+      } else {
+        // Left side node (spread between 140 and 220 degrees)
+        const k = leftNodes.indexOf(idx);
+        const L = leftNodes.length;
+        return Math.PI - Math.PI / 4.5 + (k * (2 * Math.PI / 4.5)) / Math.max(1, L - 1);
+      }
+    }
+  };
+
+  // --- Animation Timing & Springs ---
+  
+  // Left Column title fade-in (if bullets exist)
+  const titleOpacity = interpolate(frame, [0, 12], [0, 1], { extrapolateRight: 'clamp' });
+  const titleTranslateX = interpolate(frame, [0, 12], [-20, 0], { extrapolateRight: 'clamp' });
+
+  // Staggered list items
+  const bulletSprings = left_bullets.map((_, idx) => {
+    return spring({
+      frame: frame - (10 + idx * 8),
+      fps,
+      config: { stiffness: 120, damping: 14 }
     });
   });
 
-  // Central Node appears (starts after left title shows up)
-  const centerNodeStart = 15;
-  const centerNodeEnd = 30;
-  const centerScale = interpolate(frame, [centerNodeStart, centerNodeEnd], [0, 1], {
-    extrapolateLeft: 'clamp',
-    extrapolateRight: 'clamp',
-    easing: Easing.bezier(0.16, 1, 0.3, 1),
+  // Central Node scale-up
+  const centerScale = spring({
+    frame: frame - 10,
+    fps,
+    config: {
+      stiffness: activeTheme.stiffness,
+      damping: activeTheme.damping,
+      mass: activeTheme.mass
+    }
   });
 
-  // SVG lines draw outward from center to outer leaf nodes
-  const linesStart = 30;
-  const linesEnd = 50;
-  const lineProgress = interpolate(frame, [linesStart, linesEnd], [0, 1], {
-    extrapolateLeft: 'clamp',
-    extrapolateRight: 'clamp',
+  // SVG lines draw outward
+  const lineProgress = spring({
+    frame: frame - 20,
+    fps,
+    config: { stiffness: 90, damping: 15 }
   });
 
-  // Outer Leaf Nodes fade-in and scale-up (triggered after lines reach them)
-  const leafNodesOpacity = leaf_nodes.map((_, idx) => {
-    // Slightly stagger the leaf nodes
-    const start = linesEnd + idx * 6;
-    const end = start + 12;
-    return interpolate(frame, [start, end], [0, 1], {
-      extrapolateLeft: 'clamp',
-      extrapolateRight: 'clamp',
+  // Outer Leaf Nodes pop-in
+  const leafSprings = leaf_nodes.map((_, idx) => {
+    return spring({
+      frame: frame - (35 + idx * 6),
+      fps,
+      config: { stiffness: 120, damping: 14 }
     });
   });
 
-  // Float effect for the nodes to keep the diagram feeling alive
+  // Idle floating effect
   const floatY = Math.sin((frame / 45) * Math.PI) * 4;
 
   return (
@@ -97,180 +111,186 @@ export const ConceptDiagram: React.FC<ConceptDiagramProps> = ({
         width: '100%',
         height: '100%',
         display: 'flex',
-        padding: '50px 60px',
+        padding: '60px 80px',
         boxSizing: 'border-box',
+        fontFamily: activeTheme.fontFamily,
         alignItems: 'center',
+        justifyContent: 'space-between',
+        color: activeTheme.textColor,
+        position: 'relative',
       }}
     >
-      {/* Left Column: Text Summary */}
-      <div
-        style={{
-          width: '40%',
-          height: '100%',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          paddingRight: '30px',
-          boxSizing: 'border-box',
-        }}
-      >
-        <h2
+      {/* Left Column: Conceptual definitions (only shown if bullets are present) */}
+      {hasBullets && (
+        <div
           style={{
-            fontSize: '36px',
-            fontWeight: 800,
-            color: accentColor,
-            margin: '0 0 20px 0',
-            opacity: titleOpacity,
-            textShadow: '0 2px 4px rgba(0,0,0,0.5)',
-            textTransform: 'uppercase',
-            letterSpacing: '-0.5px',
+            width: '40%',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            zIndex: 5,
           }}
         >
-          {left_title}
-        </h2>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-          {left_bullets.map((bullet, idx) => (
-            <div
-              key={idx}
-              style={{
-                display: 'flex',
-                alignItems: 'flex-start',
-                gap: '12px',
-                opacity: bulletsOpacity[idx] ?? 0,
-                transform: `translateX(${interpolate(frame, [10 + idx * 15, 10 + idx * 15 + 12], [-20, 0], { extrapolateRight: 'clamp' })}px)`,
-              }}
-            >
-              <div
-                style={{
-                  width: '8px',
-                  height: '8px',
-                  borderRadius: '50%',
-                  backgroundColor: accentColor,
-                  marginTop: '10px',
-                  boxShadow: `0 0 8px ${accentColor}`,
-                  flexShrink: 0,
-                }}
-              />
-              <p
-                style={{
-                  fontSize: '18px',
-                  lineHeight: '1.5',
-                  color: '#e2e8f0',
-                  margin: 0,
-                  fontWeight: 500,
-                }}
-              >
-                {bullet}
-              </p>
-            </div>
-          ))}
+          <h2
+            style={{
+              fontSize: '38px',
+              fontWeight: 800,
+              margin: '0 0 24px 0',
+              opacity: titleOpacity,
+              transform: `translateX(${titleTranslateX}px)`,
+              letterSpacing: '-1px',
+              color: activeTheme.accentColor,
+            }}
+          >
+            {left_title}
+          </h2>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            {left_bullets.map((bullet, idx) => {
+              const opacity = bulletSprings[idx];
+              const translateY = interpolate(bulletSprings[idx], [0, 1], [15, 0]);
+              
+              return (
+                <div
+                  key={`bullet-${idx}`}
+                  style={{
+                    padding: '16px 20px',
+                    background: activeTheme.cardBackground,
+                    border: activeTheme.cardBorder,
+                    borderRadius: '16px',
+                    boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                    fontSize: '18px',
+                    lineHeight: '1.4',
+                    fontWeight: 500,
+                    opacity,
+                    transform: `translateY(${translateY}px)`,
+                  }}
+                >
+                  {bullet}
+                </div>
+              );
+            })}
+          </div>
         </div>
-      </div>
+      )}
 
-      {/* Right Column: Node Diagram */}
+      {/* Mind Map Canvas (Takes full screen if no bullets, else takes right half) */}
       <div
         style={{
-          width: '60%',
+          position: hasBullets ? 'relative' : 'absolute',
+          width: hasBullets ? '55%' : '100%',
           height: '100%',
-          position: 'relative',
+          top: 0,
+          left: hasBullets ? 'auto' : 0,
+          right: 0,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          boxSizing: 'border-box',
         }}
       >
-        {/* Draw Connection Lines in the background */}
+        {/* SVG Drawing Canvas (1280x720 absolute workspace coordinates) */}
         <svg
+          viewBox="0 0 1280 720"
           style={{
             position: 'absolute',
+            width: '1280px',
+            height: '720px',
             top: 0,
             left: 0,
-            width: '100%',
-            height: '100%',
+            zIndex: 10,
             pointerEvents: 'none',
-            zIndex: 1,
           }}
         >
           {leaf_nodes.map((_, idx) => {
-            const angle = (idx * 2 * Math.PI) / N_leaves - Math.PI / 2; // Start at top
-            const radius = 170; // Node radius from center
-            const x = Math.cos(angle) * radius;
-            const y = Math.sin(angle) * radius;
+            const angle = getLeafAngle(idx, N_leaves);
+            const x1 = centerX;
+            const y1 = centerY;
+            const x2 = centerX + radius * Math.cos(angle);
+            const y2 = centerY + radius * Math.sin(angle);
 
-            // Animate lines drawing outwards from (50%, 50%)
+            // Animate lines drawing outwards
+            const currentX = interpolate(lineProgress, [0, 1], [x1, x2]);
+            const currentY = interpolate(lineProgress, [0, 1], [y1, y2]);
+
             return (
               <line
                 key={`line-${idx}`}
-                x1="50%"
-                y1="50%"
-                x2={`calc(50% + ${x * lineProgress}px)`}
-                y2={`calc(50% + ${y * (lineProgress + floatY * 0.002)}px)`}
-                stroke={accentColor}
-                strokeWidth="2.5"
-                strokeDasharray="6,6"
-                opacity={frame >= linesStart ? 0.6 : 0}
+                x1={x1}
+                y1={y1}
+                x2={currentX}
+                y2={currentY}
+                stroke={activeTheme.accentColor}
+                strokeWidth="3.5"
+                strokeLinecap="round"
+                opacity={lineProgress > 0 ? 0.75 : 0}
+                style={{
+                  filter: `drop-shadow(0 0 4px ${activeTheme.accentColor})`,
+                }}
               />
             );
           })}
         </svg>
 
-        {/* Central Node (Entity) */}
+        {/* Central Node */}
         <div
           style={{
-            transform: `scale(${centerScale}) translateY(${floatY}px)`,
-            background: `linear-gradient(135deg, #1e1b4b 0%, #0f0e26 100%)`,
-            border: `3px solid ${accentColor}`,
-            boxShadow: `0 8px 32px rgba(${accentRgb}, 0.25), 0 0 16px rgba(${accentRgb}, 0.1)`,
-            borderRadius: '12px',
-            padding: '22px 36px',
-            color: '#ffffff',
-            fontWeight: 800,
-            fontSize: '24px',
-            zIndex: 10,
+            position: 'absolute',
+            width: '150px',
+            height: '150px',
+            left: `${centerX}px`,
+            top: `${centerY}px`,
+            background: activeTheme.accentColor,
+            color: '#090d16',
+            borderRadius: '50%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
             textAlign: 'center',
-            minWidth: '150px',
-            textTransform: 'uppercase',
-            letterSpacing: '1px',
-            textShadow: '0 2px 4px rgba(0,0,0,0.5)',
+            fontWeight: 800,
+            fontSize: '20px',
+            boxShadow: `0 12px 36px rgba(${activeTheme.accentColorRgb}, 0.5)`,
+            transform: `translate(-50%, -50%) scale(${centerScale}) translateY(${floatY}px)`,
+            zIndex: 20,
+            padding: '18px',
+            boxSizing: 'border-box',
+            lineHeight: '1.2',
           }}
         >
           {central_node}
         </div>
 
-        {/* Leaf Nodes (Attributes) */}
-        {leaf_nodes.map((label, idx) => {
-          const angle = (idx * 2 * Math.PI) / N_leaves - Math.PI / 2;
-          const radius = 170;
-          const x = Math.cos(angle) * radius;
-          const y = Math.sin(angle) * radius;
+        {/* Leaf Nodes */}
+        {leaf_nodes.map((node, idx) => {
+          const angle = getLeafAngle(idx, N_leaves);
+          const x = centerX + radius * Math.cos(angle);
+          const y = centerY + radius * Math.sin(angle);
 
-          const scaleVal = leafNodesOpacity[idx] ?? 0;
+          const scale = leafSprings[idx];
+          const opacity = leafSprings[idx];
 
           return (
             <div
               key={`leaf-${idx}`}
               style={{
                 position: 'absolute',
-                transform: `translate(calc(-50% + ${x}px), calc(-50% + ${y + floatY}px)) scale(${scaleVal})`,
-                transformOrigin: 'center center',
-                left: '50%',
-                top: '50%',
-                background: '#090d16',
-                border: `2px solid rgba(255, 255, 255, 0.15)`,
-                boxShadow: '0 4px 16px rgba(0,0,0,0.4)',
-                borderRadius: '24px',
-                padding: '10px 20px',
-                color: '#e2e8f0',
-                fontSize: '14px',
+                left: `${x}px`,
+                top: `${y}px`,
+                padding: '14px 22px',
+                background: 'rgba(15, 23, 42, 0.9)',
+                border: `2px solid ${activeTheme.accentColor}`,
+                borderRadius: '16px',
+                color: '#ffffff',
                 fontWeight: 700,
-                zIndex: 12,
+                fontSize: '16px',
+                textAlign: 'center',
+                boxShadow: '0 12px 28px rgba(0,0,0,0.3)',
+                transform: `translate(-50%, -50%) scale(${scale})`,
+                opacity,
+                zIndex: 30,
                 whiteSpace: 'nowrap',
-                letterSpacing: '0.5px',
-                textTransform: 'uppercase',
-                transition: 'border-color 0.2s',
+                transition: 'border 0.3s ease',
               }}
             >
-              {label}
+              {node}
             </div>
           );
         })}

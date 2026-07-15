@@ -1,0 +1,64 @@
+{
+  "themes": {
+    "Science": {
+      "background": "linear-gradient(135deg, #021a14 0%, #0a3526 100%)",
+      "accentColor": "#10b981",
+      "accentColorRgb": "16, 185, 129",
+      "textColor": "#f8fafc",
+      "cardBackground": "rgba(16, 185, 129, 0.06)",
+      "cardBorder": "1px solid rgba(16, 185, 129, 0.2)",
+      "fontFamily": "'Outfit', system-ui, sans-serif",
+      "stiffness": 100,
+      "damping": 15,
+      "mass": 1.0
+    },
+    "Math": {
+      "background": "linear-gradient(135deg, #0f172a 0%, #1e293b 100%)",
+      "accentColor": "#38bdf8",
+      "accentColorRgb": "56, 189, 248",
+      "textColor": "#f8fafc",
+      "cardBackground": "rgba(56, 189, 248, 0.05)",
+      "cardBorder": "1px solid rgba(56, 189, 248, 0.2)",
+      "fontFamily": "'Space Grotesk', system-ui, sans-serif",
+      "stiffness": 140,
+      "damping": 12,
+      "mass": 0.8
+    },
+    "History": {
+      "background": "linear-gradient(135deg, #180c05 0%, #2b180a 100%)",
+      "accentColor": "#f59e0b",
+      "accentColorRgb": "245, 158, 11",
+      "textColor": "#fef3c7",
+      "cardBackground": "rgba(245, 158, 11, 0.06)",
+      "cardBorder": "1px solid rgba(245, 158, 11, 0.2)",
+      "fontFamily": "'Cinzel', 'Playfair Display', serif",
+      "stiffness": 80,
+      "damping": 18,
+      "mass": 1.2
+    },
+    "Civics": {
+      "background": "linear-gradient(135deg, #090d16 0%, #151030 100%)",
+      "accentColor": "#6366f1",
+      "accentColorRgb": "99, 102, 241",
+      "textColor": "#f8fafc",
+      "cardBackground": "rgba(99, 102, 241, 0.06)",
+      "cardBorder": "1px solid rgba(99, 102, 241, 0.2)",
+      "fontFamily": "'Inter', system-ui, sans-serif",
+      "stiffness": 110,
+      "damping": 14,
+      "mass": 1.0
+    },
+    "General": {
+      "background": "linear-gradient(135deg, #090d16 0%, #151030 100%)",
+      "accentColor": "#6366f1",
+      "accentColorRgb": "99, 102, 241",
+      "textColor": "#f8fafc",
+      "cardBackground": "rgba(99, 102, 241, 0.06)",
+      "cardBorder": "1px solid rgba(99, 102, 241, 0.2)",
+      "fontFamily": "'Inter', system-ui, sans-serif",
+      "stiffness": 110,
+      "damping": 14,
+      "mass": 1.0
+    }
+  }
+}

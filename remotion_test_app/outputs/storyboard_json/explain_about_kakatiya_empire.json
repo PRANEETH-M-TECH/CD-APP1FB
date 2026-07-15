@@ -1,0 +1,212 @@
+{
+  "lesson_title": "The Kakatiya Empire: A Regional Kingdom",
+  "theme": "gold",
+  "scenes": [
+    {
+      "scene_no": 1,
+      "teacher_script": "Today, we will learn about the Kakatiya Empire, a powerful regional kingdom that emerged in South India. We'll explore its rise, key features, and eventual decline.",
+      "template_id": "title_slide",
+      "template_data": {
+        "title": "The Kakatiya Empire",
+        "subtitle": "Emergence of a Regional Kingdom",
+        "icon_name": "crown"
+      }
+    },
+    {
+      "scene_no": 2,
+      "teacher_script": "The Kakatiya period was a very important time in our history, spanning from around 1000 CE to 1350 CE. This era saw the rise of many new ruling families.",
+      "template_id": "horizontal_timeline",
+      "template_data": {
+        "timeline_title": "Kakatiya Period",
+        "stages": [
+          {
+            "step_no": 1,
+            "label": "Emergence (1000 CE)",
+            "icon_name": "sunrise"
+          },
+          {
+            "step_no": 2,
+            "label": "Flourishing Kingdom",
+            "icon_name": "building-2"
+          },
+          {
+            "step_no": 3,
+            "label": "Decline (1350 CE)",
+            "icon_name": "sunset"
+          }
+        ]
+      }
+    },
+    {
+      "scene_no": 3,
+      "teacher_script": "The Kakatiya kingdom arose in Warangal, a strategically important region. This was a time of constant conflict among ambitious warriors and kings.",
+      "template_id": "concept_diagram",
+      "template_data": {
+        "central_node": "Kakatiya Kingdom",
+        "leaf_nodes": [
+          "Warangal (Location)",
+          "1000-1350 CE (Period)",
+          "Amidst Conflicts (Context)"
+        ],
+        "left_column": null,
+        "right_column": null,
+        "table_title": null,
+        "headers": null,
+        "rows": null,
+        "highlight_row_idx": null,
+        "highlight_col_idx": null,
+        "svg_elements": null,
+        "animation_action": null,
+        "canvas_color": null,
+        "image_prompt": null,
+        "image_url": null,
+        "zoom_targets": null,
+        "annotations": null,
+        "motion_path": null,
+        "spotlight": null,
+        "animation_style": null
+      }
+    },
+    {
+      "scene_no": 4,
+      "teacher_script": "The Kakatiyas were known for their impressive architecture, like the Kirti Torana at the Svayambhu Siva Temple. Their capital, Orugallu (Warangal), featured a unique fort design with outer and inner walls.",
+      "template_id": "illustrated_scene",
+      "template_data": {
+        "svg_elements": [
+          {
+            "type": "rect",
+            "x": 0,
+            "y": 350,
+            "width": 500,
+            "height": 50,
+            "fill": "#22c55e",
+            "label": "Ground"
+          },
+          {
+            "type": "path",
+            "d": "M 100 350 L 120 250 L 180 250 L 200 350 Z",
+            "fill": "#d97706",
+            "stroke": "#a16207",
+            "stroke_width": 2,
+            "label": "Outer Wall Section 1"
+          },
+          {
+            "type": "path",
+            "d": "M 300 350 L 320 250 L 380 250 L 400 350 Z",
+            "fill": "#d97706",
+            "stroke": "#a16207",
+            "stroke_width": 2,
+            "label": "Outer Wall Section 2"
+          },
+          {
+            "type": "rect",
+            "x": 150,
+            "y": 200,
+            "width": 200,
+            "height": 100,
+            "fill": "#a16207",
+            "stroke": "#78350f",
+            "stroke_width": 2,
+            "animate": true,
+            "label": "Inner Mud Fort"
+          },
+          {
+            "type": "path",
+            "d": "M 250 100 L 200 200 L 300 200 L 250 100 M 250 100 Q 220 50 200 100 M 250 100 Q 280 50 300 100",
+            "fill": "#eab308",
+            "stroke": "#b45309",
+            "stroke_width": 3,
+            "animate": true,
+            "label": "Kirti Torana"
+          },
+          {
+            "type": "circle",
+            "cx": 100,
+            "cy": 300,
+            "r": 20,
+            "fill": "#3b82f6",
+            "stroke": "#1d4ed8",
+            "stroke_width": 1,
+            "label": "Water Tank"
+          },
+          {
+            "type": "rect",
+            "x": 50,
+            "y": 320,
+            "width": 50,
+            "height": 20,
+            "fill": "#84cc16",
+            "label": "Agriculture"
+          },
+          {
+            "type": "rect",
+            "x": 400,
+            "y": 320,
+            "width": 50,
+            "height": 20,
+            "fill": "#84cc16",
+            "label": "Agriculture"
+          }
+        ],
+        "animation_action": "scale_up",
+        "canvas_color": "#f0f9ff"
+      }
+    },
+    {
+      "scene_no": 5,
+      "teacher_script": "The Kakatiyas played a crucial role in promoting Telugu language and culture. They adopted Telugu as the court language and called themselves 'Andhra Rajas', aiming to unite all Telugu-speaking regions.",
+      "template_id": "concept_diagram",
+      "template_data": {
+        "central_node": "Kakatiya Identity",
+        "leaf_nodes": [
+          "Telugu (Court Language)",
+          "Andhra Rajas (Self-designation)",
+          "Uniting Telugu Regions (Goal)"
+        ],
+        "left_column": null,
+        "right_column": null,
+        "table_title": null,
+        "headers": null,
+        "rows": null,
+        "highlight_row_idx": null,
+        "highlight_col_idx": null,
+        "svg_elements": null,
+        "animation_action": null,
+        "canvas_color": null,
+        "image_prompt": null,
+        "image_url": null,
+        "zoom_targets": null,
+        "annotations": null,
+        "motion_path": null,
+        "spotlight": null,
+        "animation_style": null
+      }
+    },
+    {
+      "scene_no": 6,
+      "teacher_script": "The Kakatiya dynasty eventually came to an end in 1323 CE. Sultan Mohammad bin Tughluq defeated Kakatiya Prataparudra, marking the end of this powerful regional kingdom.",
+      "template_id": "horizontal_timeline",
+      "template_data": {
+        "timeline_title": "End of Kakatiya Rule",
+        "stages": [
+          {
+            "step_no": 1,
+            "label": "Prataparudra's Reign",
+            "icon_name": "user-check"
+          },
+          {
+            "step_no": 2,
+            "label": "Defeat by Tughluq (1323 CE)",
+            "icon_name": "sword"
+          },
+          {
+            "step_no": 3,
+            "label": "Dynasty Ends",
+            "icon_name": "flag-off"
+          }
+        ]
+      }
+    }
+  ],
+  "question": "Explain about Kakatiya empire ?"
+}

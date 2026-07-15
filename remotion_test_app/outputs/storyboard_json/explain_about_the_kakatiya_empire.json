@@ -1,0 +1,108 @@
+{
+  "lesson_title": "The Kakatiya Empire: Rise and Fall",
+  "theme": "gold",
+  "scenes": [
+    {
+      "scene_no": 1,
+      "teacher_script": "Hello students! Today, we will explore the fascinating history of the Kakatiya Empire, a significant regional kingdom that emerged in South India.",
+      "template_id": "title_slide",
+      "template_data": {
+        "title": "The Kakatiya Empire",
+        "subtitle": "Emergence, Legacy, and Decline",
+        "icon_name": "shield"
+      }
+    },
+    {
+      "scene_no": 2,
+      "teacher_script": "The Kakatiya kingdom arose in Warangal between 1000 and 1350 CE. This period was crucial for the development of regional kingdoms and the first Telugu books.",
+      "template_id": "concept_diagram",
+      "template_data": {
+        "central_node": "Kakatiya Empire",
+        "leaf_nodes": [
+          "Emergence of a Regional Kingdom",
+          "Period: 1000-1350 CE",
+          "Capital: Warangal",
+          "First Telugu Books"
+        ],
+        "left_column": null,
+        "right_column": null,
+        "table_title": null,
+        "headers": null,
+        "rows": null,
+        "highlight_row_idx": null,
+        "highlight_col_idx": null,
+        "svg_elements": null,
+        "animation_action": null,
+        "canvas_color": null,
+        "image_prompt": null,
+        "image_url": null,
+        "zoom_targets": null,
+        "annotations": null,
+        "motion_path": null,
+        "spotlight": null,
+        "animation_style": null
+      }
+    },
+    {
+      "scene_no": 3,
+      "teacher_script": "The Kakatiya kings were great builders, as seen in the magnificent Kirti Torana, the entrance to the Svayambhu Siva Temple in Warangal.",
+      "template_id": "image_scene",
+      "template_data": {
+        "image_prompt": "High-quality realistic photograph of the Kirti Torana entrance of Svayambhu Siva Temple in Warangal, India, showcasing intricate carvings and historical architecture. Sunny day, clear sky, 16:9 ratio, educational diagram style.",
+        "animation_style": "zoom_and_annotate"
+      }
+    },
+    {
+      "scene_no": 4,
+      "teacher_script": "They also issued their own currency, like the 'Sri Ahita gaja kesari' gold coin, which provides valuable insights into their rule and symbols.",
+      "template_id": "image_scene",
+      "template_data": {
+        "image_prompt": "High-quality realistic photograph of a historical gold coin issued by the Kakatiya dynasty, specifically the 'Sri Ahita gaja kesari' coin, showing detailed ancient script and an elephant emblem. Macro shot, clean white background, 16:9 ratio, educational diagram style.",
+        "animation_style": "zoom_and_annotate"
+      }
+    },
+    {
+      "scene_no": 5,
+      "teacher_script": "The Kakatiya dynasty eventually came to an end in 1323 CE. Sultan Mohammad bin Tugluq defeated Kakatiya Prataparudra, marking the end of their rule.",
+      "template_id": "horizontal_timeline",
+      "template_data": {
+        "timeline_title": "End of the Kakatiya Dynasty",
+        "stages": [
+          {
+            "step_no": 1,
+            "label": "Kakatiya Prataparudra",
+            "icon_name": "crown"
+          },
+          {
+            "step_no": 2,
+            "label": "Defeated by Sultan Mohammad bin Tugluq",
+            "icon_name": "swords"
+          },
+          {
+            "step_no": 3,
+            "label": "1323 CE: Dynasty Ends",
+            "icon_name": "flag-off"
+          }
+        ],
+        "left_column": null,
+        "right_column": null,
+        "table_title": null,
+        "headers": null,
+        "rows": null,
+        "highlight_row_idx": null,
+        "highlight_col_idx": null,
+        "svg_elements": null,
+        "animation_action": null,
+        "canvas_color": null,
+        "image_prompt": null,
+        "image_url": null,
+        "zoom_targets": null,
+        "annotations": null,
+        "motion_path": null,
+        "spotlight": null,
+        "animation_style": null
+      }
+    }
+  ],
+  "question": "Explain about the Kakatiya empire?"
+}

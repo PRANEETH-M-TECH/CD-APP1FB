@@ -63,7 +63,7 @@ const THEME_ACCENT_RGBS = {
 
 interface Stage {
   step_no: number;
-  label: str;
+  label: string;
   icon_name: string;
 }
 

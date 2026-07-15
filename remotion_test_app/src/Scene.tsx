@@ -11,10 +11,20 @@ import { HorizontalTimeline } from './templates/HorizontalTimeline';
 import { ColumnComparison } from './templates/ColumnComparison';
 import { DatabaseGrid } from './templates/DatabaseGrid';
 import { DynamicIllustration } from './templates/DynamicIllustration';
+import { ImageScene } from './templates/ImageScene';
+import { ProcessImageScene } from './templates/ProcessImageScene';
+import { CycleTemplate } from './templates/CycleTemplate';
+import { MathDerivation } from './templates/MathDerivation';
+import { VennDiagram } from './templates/VennDiagram';
+import { TaxonomyTree } from './templates/TaxonomyTree';
+import { CartesianGrid } from './templates/CartesianGrid';
+import { GeoMarker } from './templates/GeoMarker';
+import { BeforeAfterSlider } from './templates/BeforeAfterSlider';
+import { QuizCheckpoint } from './templates/QuizCheckpoint';
 
 interface SceneViewProps {
   scene: Scene;
-  theme: 'indigo' | 'gold' | 'emerald' | 'rose';
+  theme: string;
   layoutMode: string;
   globalConnections: Connection[];
   globalAssets: Asset[];
@@ -77,6 +87,46 @@ export const SceneView: React.FC<SceneViewProps> = ({
     resolvedAudioUrl = scene.audio_url.startsWith('/') ? scene.audio_url : `/${scene.audio_url}`;
   }
 
+  // --- RENDER ROUTER: SEQUENTIAL PROCESS VS TEMPLATE VS LEGACY ---
+  if (scene.visual_steps && scene.visual_steps.length > 0) {
+    return (
+      <div style={{ width: '100%', height: '100%', position: 'relative' }}>
+        {/* Background narration audio */}
+        {resolvedAudioUrl && (
+          <Audio src={staticFile(resolvedAudioUrl)} />
+        )}
+
+        <ProcessImageScene
+          visual_steps={scene.visual_steps}
+          theme={theme as any}
+          durationInFrames={scene.durationInFrames}
+        />
+
+        {/* Teacher Narration Subtitles */}
+        {scene.teacher_script && (
+          <div
+            style={{
+              position: 'absolute',
+              bottom: 45,
+              left: '8%',
+              right: '8%',
+              textAlign: 'center',
+              fontSize: '22px',
+              fontWeight: 700,
+              lineHeight: '1.4',
+              color: '#ffffff',
+              zIndex: 90,
+              textShadow: '0 2px 4px rgba(0,0,0,0.9), 0 0 10px rgba(0,0,0,0.9), 1px 1px 0px #000, -1px -1px 0px #000, 1px -1px 0px #000, -1px 1px 0px #000',
+              fontFamily: 'Inter, system-ui, sans-serif',
+            }}
+          >
+            {scene.teacher_script}
+          </div>
+        )}
+      </div>
+    );
+  }
+
   // --- RENDER ROUTER: TEMPLATE VS LEGACY ---
   if (scene.template_id) {
     const data = scene.template_data || {};
@@ -108,11 +158,59 @@ export const SceneView: React.FC<SceneViewProps> = ({
           />
         )}
 
+        {scene.template_id === 'cycle_template' && (
+          <CycleTemplate
+            title={data.title || ''}
+            stages={data.stages || []}
+            theme={theme}
+          />
+        )}
+
+        {scene.template_id === 'math_derivation' && (
+          <MathDerivation
+            title={data.title || ''}
+            formula={data.formula || ''}
+            steps={data.steps || []}
+            theme={theme}
+          />
+        )}
+
+        {scene.template_id === 'venn_diagram' && (
+          <VennDiagram
+            left={data.left || []}
+            right={data.right || []}
+            intersection={data.intersection || []}
+            left_title={data.left_title}
+            right_title={data.right_title}
+            theme={theme}
+          />
+        )}
+
+        {scene.template_id === 'taxonomy_tree' && (
+          <TaxonomyTree
+            title={data.title || ''}
+            root_label={data.root_label || ''}
+            branches={data.branches || []}
+            theme={theme}
+          />
+        )}
+
+        {scene.template_id === 'cartesian_grid' && (
+          <CartesianGrid
+            title={data.title || ''}
+            points={data.points || []}
+            lines={data.lines || []}
+            equation_label={data.equation_label}
+            theme={theme}
+            svg_elements={data.svg_elements || []}
+          />
+        )}
+
         {scene.template_id === 'horizontal_timeline' && (
           <HorizontalTimeline
             timeline_title={data.timeline_title || ''}
             stages={data.stages || []}
-            theme={theme}
+            theme={theme as any}
           />
         )}
 
@@ -120,6 +218,15 @@ export const SceneView: React.FC<SceneViewProps> = ({
           <ColumnComparison
             left_column={data.left_column || { header: '', bullets: [] }}
             right_column={data.right_column || { header: '', bullets: [] }}
+            theme={theme}
+          />
+        )}
+
+        {scene.template_id === 'geo_marker' && (
+          <GeoMarker
+            title={data.title || ''}
+            map_name={data.map_name}
+            markers={data.markers || []}
             theme={theme}
           />
         )}
@@ -135,13 +242,50 @@ export const SceneView: React.FC<SceneViewProps> = ({
           />
         )}
 
+        {scene.template_id === 'before_after_slider' && (
+          <BeforeAfterSlider
+            title={data.title || ''}
+            before_label={data.before_label}
+            after_label={data.after_label}
+            before_text={data.before_text}
+            after_text={data.after_text}
+            theme={theme}
+          />
+        )}
+
+        {scene.template_id === 'quiz_checkpoint' && (
+          <QuizCheckpoint
+            question={data.question}
+            options={data.options}
+            correct_idx={data.correct_idx}
+            theme={theme}
+            left_title={data.left_title}
+            left_bullets={data.left_bullets}
+            right_column={data.right_column}
+          />
+        )}
+
         {scene.template_id === 'illustrated_scene' && (
           <DynamicIllustration
             title={data.title || ''}
             svg_elements={data.svg_elements || []}
             animation_action={data.animation_action || 'none'}
-            theme={theme}
+            theme={theme as any}
             canvas_color={data.canvas_color}
+          />
+        )}
+
+        {scene.template_id === 'image_scene' && (
+          <ImageScene
+            title={data.title || ''}
+            teacher_script={scene.teacher_script || ''}
+            image_url={data.image_url || ''}
+            zoom_targets={data.zoom_targets || []}
+            annotations={data.annotations || []}
+            motion_path={data.motion_path}
+            spotlight={data.spotlight}
+            animation_style={data.animation_style || 'simple_zoom'}
+            theme={theme as any}
           />
         )}
       </div>
@@ -168,52 +312,33 @@ export const SceneView: React.FC<SceneViewProps> = ({
         }}
       >
         {/* Connection arrows / lines in background */}
-        <ConnectionsView connections={sceneConnections} assets={allAssets} theme={theme} />
+        <ConnectionsView connections={sceneConnections} assets={allAssets} theme={theme as any} />
 
         {/* Global and Local Assets */}
         {allAssets.map((asset) => (
-          <AssetView key={asset.id} asset={asset} theme={theme} />
+          <AssetView key={asset.id} asset={asset} theme={theme as any} />
         ))}
       </div>
 
-      {/* Teacher Narration Subtitles Card */}
+      {/* Teacher Narration Subtitles */}
       {scene.teacher_script && (
         <div
           style={{
             position: 'absolute',
-            bottom: 40,
-            left: '10%',
-            right: '10%',
-            padding: '18px 28px',
-            background: 'rgba(10, 15, 30, 0.7)',
-            backdropFilter: 'blur(16px)',
-            borderRadius: '20px',
-            border: '1px solid rgba(255, 255, 255, 0.08)',
+            bottom: 45,
+            left: '8%',
+            right: '8%',
             textAlign: 'center',
-            fontSize: '18px',
-            lineHeight: '1.6',
-            color: '#e2e8f0',
-            boxShadow: '0 20px 40px rgba(0, 0, 0, 0.4)',
+            fontSize: '22px',
+            fontWeight: 700,
+            lineHeight: '1.4',
+            color: '#ffffff',
             zIndex: 90,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '12px',
+            textShadow: '0 2px 4px rgba(0,0,0,0.9), 0 0 10px rgba(0,0,0,0.9), 1px 1px 0px #000, -1px -1px 0px #000, 1px -1px 0px #000, -1px 1px 0px #000',
+            fontFamily: 'Inter, system-ui, sans-serif',
           }}
         >
-          <div
-            style={{
-              fontSize: '24px',
-              opacity: 0.8,
-              alignSelf: 'flex-start',
-              marginTop: '-4px',
-            }}
-          >
-            💬
-          </div>
-          <div style={{ fontWeight: 500, letterSpacing: '-0.2px' }}>
-            {scene.teacher_script}
-          </div>
+          {scene.teacher_script}
         </div>
       )}
     </div>

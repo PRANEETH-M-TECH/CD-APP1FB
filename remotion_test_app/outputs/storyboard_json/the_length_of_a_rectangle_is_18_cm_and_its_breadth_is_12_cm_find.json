@@ -1,0 +1,264 @@
+{
+  "lesson_title": "Rectangle: Perimeter and Area",
+  "theme": "Math",
+  "scenes": [
+    {
+      "scene_no": 1,
+      "purpose": "Introduce the lesson topic and problem statement.",
+      "visual_strategy": "intro",
+      "template_id": "title_slide",
+      "teacher_script": "Today, we'll learn how to find the perimeter and area of a rectangle. We'll use a specific example to understand these important concepts.",
+      "template_data": {
+        "title": "Rectangle: Perimeter and Area",
+        "subtitle": "Given Length = 18 cm, Breadth = 12 cm",
+        "icon_name": "rectangle"
+      }
+    },
+    {
+      "scene_no": 2,
+      "purpose": "Visualize the rectangle with its given dimensions.",
+      "visual_strategy": "overview",
+      "template_id": null,
+      "teacher_script": "Imagine a rectangle with a length of 18 cm and a breadth of 12 cm. The length is typically the longer side, and the breadth is the shorter side.",
+      "visual_steps": [
+        {
+          "step_no": 1,
+          "visual_type": "diagram",
+          "focus": "rectangle",
+          "duration_seconds": 3,
+          "content": {
+            "svg_elements": [
+              {
+                "type": "rect",
+                "x": 200,
+                "y": 200,
+                "width": 400,
+                "height": 266.67,
+                "fill": "#E0F2F7",
+                "stroke": "#2196F3",
+                "stroke_width": 4,
+                "label": "Rectangle"
+              }
+            ]
+          },
+          "animation": {
+            "transition": "fade",
+            "camera_motion": "none"
+          }
+        },
+        {
+          "step_no": 2,
+          "visual_type": "diagram",
+          "focus": "length",
+          "duration_seconds": 3,
+          "content": {
+            "svg_elements": [
+              {
+                "type": "rect",
+                "x": 200,
+                "y": 200,
+                "width": 400,
+                "height": 266.67,
+                "fill": "#E0F2F7",
+                "stroke": "#2196F3",
+                "stroke_width": 4
+              },
+              {
+                "type": "line",
+                "x1": 200,
+                "y1": 466.67,
+                "x2": 600,
+                "y2": 466.67,
+                "stroke": "#FF5722",
+                "stroke_width": 3,
+                "animate": true,
+                "label": "Length = 18 cm"
+              }
+            ]
+          },
+          "animation": {
+            "transition": "none",
+            "camera_motion": "none"
+          }
+        },
+        {
+          "step_no": 3,
+          "visual_type": "diagram",
+          "focus": "breadth",
+          "duration_seconds": 3,
+          "content": {
+            "svg_elements": [
+              {
+                "type": "rect",
+                "x": 200,
+                "y": 200,
+                "width": 400,
+                "height": 266.67,
+                "fill": "#E0F2F7",
+                "stroke": "#2196F3",
+                "stroke_width": 4
+              },
+              {
+                "type": "line",
+                "x1": 200,
+                "y1": 466.67,
+                "x2": 600,
+                "y2": 466.67,
+                "stroke": "#FF5722",
+                "stroke_width": 3,
+                "label": "Length = 18 cm"
+              },
+              {
+                "type": "line",
+                "x1": 200,
+                "y1": 200,
+                "x2": 200,
+                "y2": 466.67,
+                "stroke": "#4CAF50",
+                "stroke_width": 3,
+                "animate": true,
+                "label": "Breadth = 12 cm"
+              }
+            ]
+          },
+          "animation": {
+            "transition": "none",
+            "camera_motion": "none"
+          }
+        }
+      ]
+    },
+    {
+      "scene_no": 3,
+      "purpose": "Calculate the perimeter of the rectangle.",
+      "visual_strategy": "process",
+      "template_id": "math_derivation",
+      "teacher_script": "The perimeter is the total distance around the boundary of the rectangle. We can find it by adding up all four sides, or by using the formula: 2 times (length + breadth).",
+      "visual_steps": [
+        {
+          "step_no": 1,
+          "visual_type": "equation",
+          "focus": "formula",
+          "duration_seconds": 3,
+          "content": {
+            "text_content": "P = 2 \\times (L + B)"
+          },
+          "animation": {
+            "transition": "fade",
+            "camera_motion": "none"
+          }
+        },
+        {
+          "step_no": 2,
+          "visual_type": "equation",
+          "focus": "substitution",
+          "duration_seconds": 3,
+          "content": {
+            "text_content": "P = 2 \\times (18 \\text{ cm} + 12 \\text{ cm})"
+          },
+          "animation": {
+            "transition": "slide",
+            "camera_motion": "none"
+          }
+        },
+        {
+          "step_no": 3,
+          "visual_type": "equation",
+          "focus": "sum",
+          "duration_seconds": 3,
+          "content": {
+            "text_content": "P = 2 \\times (30 \\text{ cm})"
+          },
+          "animation": {
+            "transition": "slide",
+            "camera_motion": "none"
+          }
+        },
+        {
+          "step_no": 4,
+          "visual_type": "equation",
+          "focus": "result",
+          "duration_seconds": 3,
+          "content": {
+            "text_content": "P = 60 \\text{ cm}"
+          },
+          "animation": {
+            "transition": "slide",
+            "camera_motion": "none"
+          }
+        }
+      ]
+    },
+    {
+      "scene_no": 4,
+      "purpose": "Calculate the area of the rectangle.",
+      "visual_strategy": "process",
+      "template_id": "math_derivation",
+      "teacher_script": "The area is the amount of surface covered by the rectangle. We calculate it by simply multiplying its length by its breadth.",
+      "visual_steps": [
+        {
+          "step_no": 1,
+          "visual_type": "equation",
+          "focus": "formula",
+          "duration_seconds": 3,
+          "content": {
+            "text_content": "A = L \\times B"
+          },
+          "animation": {
+            "transition": "fade",
+            "camera_motion": "none"
+          }
+        },
+        {
+          "step_no": 2,
+          "visual_type": "equation",
+          "focus": "substitution",
+          "duration_seconds": 3,
+          "content": {
+            "text_content": "A = 18 \\text{ cm} \\times 12 \\text{ cm}"
+          },
+          "animation": {
+            "transition": "slide",
+            "camera_motion": "none"
+          }
+        },
+        {
+          "step_no": 3,
+          "visual_type": "equation",
+          "focus": "result",
+          "duration_seconds": 3,
+          "content": {
+            "text_content": "A = 216 \\text{ cm}^2"
+          },
+          "animation": {
+            "transition": "slide",
+            "camera_motion": "none"
+          }
+        }
+      ]
+    },
+    {
+      "scene_no": 5,
+      "purpose": "Summarize the calculated perimeter and area.",
+      "visual_strategy": "summary",
+      "template_id": "quiz_checkpoint",
+      "teacher_script": "So, for a rectangle with length 18 cm and breadth 12 cm, we found its perimeter to be 60 cm and its area to be 216 cm². Remember these formulas for future problems!",
+      "template_data": {
+        "title": "Quick Check!",
+        "left_title": "Perimeter",
+        "left_bullets": [
+          "P = 2(L + B)",
+          "P = 60 cm"
+        ],
+        "right_column": {
+          "header": "Area",
+          "bullets": [
+            "A = L × B",
+            "A = 216 cm²"
+          ]
+        }
+      }
+    }
+  ],
+  "question": "The length of a rectangle is 18 cm and its breadth is 12 cm. Find:"
+}

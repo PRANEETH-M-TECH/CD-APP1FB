@@ -1,0 +1,135 @@
+{
+  "lesson_title": "Understanding Elections in India",
+  "theme": "Civics",
+  "scenes": [
+    {
+      "scene_no": 1,
+      "purpose": "Introduce the main topic of elections in India.",
+      "visual_strategy": "intro",
+      "template_id": "title_slide",
+      "teacher_script": "Today, we will explore the process of elections in India, a fundamental aspect of our democratic system. We'll learn how representatives are chosen to govern our states.",
+      "visual_steps": null,
+      "template_data": {
+        "title": "Elections in India",
+        "subtitle": "The Democratic Process",
+        "icon_name": "vote"
+      }
+    },
+    {
+      "scene_no": 2,
+      "purpose": "Explain the role of the Election Commission and the frequency of elections.",
+      "visual_strategy": "overview",
+      "template_id": "concept_diagram",
+      "teacher_script": "The Election Commission of India is responsible for conducting fair elections for all state assemblies. These elections are typically held once every five years.",
+      "visual_steps": null,
+      "template_data": {
+        "central_node": "Election Commission of India",
+        "leaf_nodes": [
+          "Conducts Elections",
+          "Ensures Fairness",
+          "For State Assemblies",
+          "Every 5 Years"
+        ]
+      }
+    },
+    {
+      "scene_no": 3,
+      "purpose": "Describe who can vote and the concept of constituencies.",
+      "visual_strategy": "diagram",
+      "template_id": "concept_diagram",
+      "teacher_script": "Citizens must register as voters in their local constituency to participate. All voters in one constituency elect a single member to the Assembly.",
+      "visual_steps": null,
+      "template_data": {
+        "central_node": "Voters",
+        "leaf_nodes": [
+          "Indian Citizens",
+          "Registered in Area",
+          "Vote for One MLA",
+          "Part of a Constituency"
+        ]
+      }
+    },
+    {
+      "scene_no": 4,
+      "purpose": "Detail the eligibility criteria for candidates and types of candidates.",
+      "visual_strategy": "comparison",
+      "template_id": "column_comparison",
+      "teacher_script": "To contest elections, a person must be an Indian citizen and at least twenty-five years old. Candidates can represent political parties or stand as 'Independents'.",
+      "visual_steps": null,
+      "template_data": {
+        "left_title": "Candidate Eligibility",
+        "left_bullets": [
+          "Citizen of India",
+          "25+ Years Old"
+        ],
+        "left_column": {
+          "header": "Political Party Candidates",
+          "bullets": [
+            "Represent a political party",
+            "Adhere to party's ideology"
+          ]
+        },
+        "right_column": {
+          "header": "Independent Candidates",
+          "bullets": [
+            "Do not belong to any party",
+            "Contest individually"
+          ]
+        }
+      }
+    },
+    {
+      "scene_no": 5,
+      "purpose": "Explain the system of reservation in constituencies.",
+      "visual_strategy": "overview",
+      "template_id": "database_grid",
+      "teacher_script": "To ensure adequate representation for weaker sections, the Indian Constitution reserves certain constituencies. These are specifically for Scheduled Castes and Scheduled Tribes.",
+      "visual_steps": null,
+      "template_data": {
+        "table_title": "Reserved Constituencies (Telangana Example)",
+        "headers": [
+          "Category",
+          "Number of Constituencies"
+        ],
+        "rows": [
+          [
+            "Total Number",
+            "119"
+          ],
+          [
+            "Reserved for SCs",
+            "19"
+          ],
+          [
+            "Reserved for STs",
+            "12"
+          ]
+        ],
+        "highlight_row_idx": -1,
+        "highlight_col_idx": -1
+      }
+    },
+    {
+      "scene_no": 6,
+      "purpose": "Recap key information about candidate eligibility.",
+      "visual_strategy": "summary",
+      "template_id": "quiz_checkpoint",
+      "teacher_script": "Let's quickly check your understanding. What is the minimum age required for a person to contest an MLA election in India?",
+      "visual_steps": null,
+      "template_data": {
+        "title": "Quick Check!",
+        "left_title": "Question",
+        "left_bullets": [
+          "What is the minimum age to contest an MLA election in India?"
+        ],
+        "right_column": {
+          "header": "Answer",
+          "bullets": [
+            "25 years"
+          ]
+        }
+      }
+    }
+  ],
+  "question": "Explain about process of elections in india?"
+}

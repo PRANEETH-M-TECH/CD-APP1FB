@@ -1,0 +1,241 @@
+{
+  "lesson_title": "Acids, Bases, and Salts: An Introduction",
+  "theme": "Science",
+  "scenes": [
+    {
+      "scene_no": 1,
+      "purpose": "Introduce the main topic of the lesson.",
+      "visual_strategy": "intro",
+      "template_id": "title_slide",
+      "teacher_script": "Hello students! Today, we will explore the fascinating world of acids, bases, and salts, which are fundamental concepts in chemistry.",
+      "template_data": {
+        "title": "Acids, Bases, and Salts",
+        "subtitle": "Understanding their properties and reactions",
+        "icon_name": "flask"
+      }
+    },
+    {
+      "scene_no": 2,
+      "purpose": "Define acids and list their key properties.",
+      "visual_strategy": "overview",
+      "template_id": "concept_diagram",
+      "teacher_script": "Acids are substances that typically taste sour, turn blue litmus paper red, and release hydrogen ions when dissolved in water. They have a pH value less than 7.",
+      "template_data": {
+        "central_node": "Acids",
+        "leaf_nodes": [
+          "Sour Taste",
+          "Turn Blue Litmus Red",
+          "Release H+ Ions",
+          "pH < 7",
+          "Corrosive"
+        ]
+      }
+    },
+    {
+      "scene_no": 3,
+      "purpose": "Define bases and list their key properties.",
+      "visual_strategy": "overview",
+      "template_id": "concept_diagram",
+      "teacher_script": "Bases, on the other hand, taste bitter, feel soapy to the touch, and turn red litmus paper blue. They release hydroxide ions in water and have a pH value greater than 7.",
+      "template_data": {
+        "central_node": "Bases",
+        "leaf_nodes": [
+          "Bitter Taste",
+          "Soapy Feel",
+          "Turn Red Litmus Blue",
+          "Release OH- Ions",
+          "Caustic"
+        ]
+      }
+    },
+    {
+      "scene_no": 4,
+      "purpose": "Explain the pH scale for measuring acidity and basicity.",
+      "visual_strategy": "diagram",
+      "template_id": "concept_diagram",
+      "teacher_script": "The pH scale is a numerical scale from 0 to 14 that indicates how acidic or basic a substance is. A pH of 7 is neutral, values below 7 are acidic, and values above 7 are basic.",
+      "visual_steps": [
+        {
+          "step_no": 1,
+          "visual_type": "diagram",
+          "duration_seconds": 5,
+          "content": {
+            "svg_elements": [
+              {
+                "type": "rect",
+                "x": 100,
+                "y": 200,
+                "width": 600,
+                "height": 50,
+                "fill": "url(#pHGradient)",
+                "stroke": "#333",
+                "stroke_width": 2
+              },
+              {
+                "type": "line",
+                "x1": 100,
+                "y1": 250,
+                "x2": 100,
+                "y2": 270,
+                "stroke": "#333",
+                "stroke_width": 2,
+                "label": "0"
+              },
+              {
+                "type": "line",
+                "x1": 400,
+                "y1": 250,
+                "x2": 400,
+                "y2": 270,
+                "stroke": "#333",
+                "stroke_width": 2,
+                "label": "7"
+              },
+              {
+                "type": "line",
+                "x1": 700,
+                "y1": 250,
+                "x2": 700,
+                "y2": 270,
+                "stroke": "#333",
+                "stroke_width": 2,
+                "label": "14"
+              },
+              {
+                "type": "rect",
+                "x": 100,
+                "y": 150,
+                "width": 298,
+                "height": 40,
+                "fill": "#FFCCCC",
+                "label": "Acidic"
+              },
+              {
+                "type": "rect",
+                "x": 398,
+                "y": 150,
+                "width": 4,
+                "height": 40,
+                "fill": "#CCFFCC",
+                "label": "Neutral"
+              },
+              {
+                "type": "rect",
+                "x": 402,
+                "y": 150,
+                "width": 298,
+                "height": 40,
+                "fill": "#CCCCFF",
+                "label": "Basic"
+              }
+            ]
+          },
+          "animation": {
+            "transition": "fade",
+            "camera_motion": "none"
+          }
+        }
+      ],
+      "template_data": {
+        "central_node": "pH Scale",
+        "leaf_nodes": [
+          "0-6.9: Acidic",
+          "7: Neutral",
+          "7.1-14: Basic"
+        ]
+      }
+    },
+    {
+      "scene_no": 5,
+      "purpose": "Illustrate the neutralization reaction between acids and bases.",
+      "visual_strategy": "process",
+      "template_id": "math_derivation",
+      "teacher_script": "When an acid and a base react, they undergo a neutralization reaction, producing a salt and water. This reaction balances out their acidic and basic properties.",
+      "visual_steps": [
+        {
+          "step_no": 1,
+          "visual_type": "equation",
+          "duration_seconds": 3,
+          "content": {
+            "text_content": "\\text{Acid} + \\text{Base} \\rightarrow \\text{Salt} + \\text{Water}"
+          },
+          "animation": {
+            "transition": "slide",
+            "camera_motion": "none"
+          }
+        },
+        {
+          "step_no": 2,
+          "visual_type": "equation",
+          "duration_seconds": 4,
+          "content": {
+            "text_content": "\\text{HCl (Hydrochloric Acid)} + \\text{NaOH (Sodium Hydroxide)} \\rightarrow \\text{NaCl (Sodium Chloride)} + \\text{H}_2\\text{O (Water)}"
+          },
+          "animation": {
+            "transition": "slide",
+            "camera_motion": "none"
+          }
+        }
+      ]
+    },
+    {
+      "scene_no": 6,
+      "purpose": "Define salts and provide examples.",
+      "visual_strategy": "overview",
+      "template_id": "concept_diagram",
+      "teacher_script": "Salts are ionic compounds formed when an acid and a base react. Common table salt, sodium chloride, is a well-known example, but many other types of salts exist.",
+      "template_data": {
+        "central_node": "Salts",
+        "leaf_nodes": [
+          "Ionic Compounds",
+          "Formed from Neutralization",
+          "Examples: NaCl, KCl, CaSO4",
+          "Can be neutral, acidic, or basic"
+        ]
+      }
+    },
+    {
+      "scene_no": 7,
+      "purpose": "Summarize and compare acids and bases.",
+      "visual_strategy": "comparison",
+      "template_id": "column_comparison",
+      "teacher_script": "In summary, acids and bases have contrasting properties. Acids are proton donors with a low pH, while bases are proton acceptors with a high pH.",
+      "template_data": {
+        "left_column": {
+          "header": "Acids",
+          "bullets": [
+            "pH < 7",
+            "Sour taste",
+            "Turns blue litmus red"
+          ]
+        },
+        "right_column": {
+          "header": "Bases",
+          "bullets": [
+            "pH > 7",
+            "Bitter taste, soapy feel",
+            "Turns red litmus blue"
+          ]
+        }
+      }
+    },
+    {
+      "scene_no": 8,
+      "purpose": "Assess student understanding of acid properties.",
+      "visual_strategy": "summary",
+      "template_id": "quiz_checkpoint",
+      "teacher_script": "Let's test your knowledge! Which of the following is a characteristic property of an acid?",
+      "template_data": {
+        "title": "Quiz Time!",
+        "subtitle": "Which of the following describes an acid?",
+        "left_bullets": [
+          "A. Feels soapy",
+          "B. Tastes bitter",
+          "C. Turns blue litmus red"
+        ],
+        "central_node": "Answer: C. Turns blue litmus red"
+      }
+    }
+  ],
+  "question": "Explain about acids bases and salts"
+}

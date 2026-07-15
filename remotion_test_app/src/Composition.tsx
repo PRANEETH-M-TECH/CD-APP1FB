@@ -3,19 +3,7 @@ import { Sequence, AbsoluteFill } from 'remotion';
 import { Storyboard, Scene } from './types';
 import { SceneView } from './Scene';
 
-const THEME_GRADIENTS = {
-  indigo: 'linear-gradient(135deg, #090d16 0%, #151030 100%)',
-  gold: 'linear-gradient(135deg, #120d04 0%, #291c03 100%)',
-  emerald: 'linear-gradient(135deg, #021a14 0%, #0a3526 100%)',
-  rose: 'linear-gradient(135deg, #1c020b 0%, #3b051b 100%)',
-};
-
-const THEME_ACCENTS = {
-  indigo: '#6366f1',
-  gold: '#fbbf24',
-  emerald: '#10b981',
-  rose: '#f43f5e',
-};
+import { getTheme } from './themeHelper';
 
 export const ConveyorComposition: React.FC<Storyboard> = ({
   lesson_title,
@@ -25,8 +13,9 @@ export const ConveyorComposition: React.FC<Storyboard> = ({
   connections = [],
   scenes = [],
 }) => {
-  const gradient = THEME_GRADIENTS[theme] || THEME_GRADIENTS.indigo;
-  const accentColor = THEME_ACCENTS[theme] || THEME_ACCENTS.indigo;
+  const activeTheme = getTheme(theme);
+  const gradient = activeTheme.background;
+  const accentColor = activeTheme.accentColor;
 
   let currentFrameOffset = 0;
 
@@ -34,12 +23,12 @@ export const ConveyorComposition: React.FC<Storyboard> = ({
     <AbsoluteFill
       style={{
         background: gradient,
-        fontFamily: 'Inter, system-ui, -apple-system, sans-serif',
-        color: '#f8fafc',
+        fontFamily: activeTheme.fontFamily,
+        color: activeTheme.textColor,
         overflow: 'hidden',
       }}
     >
-      {/* Header bar with glassmorphism */}
+      {/* Header bar overlay (clean, no-blur floating text) */}
       <div
         style={{
           position: 'absolute',
@@ -51,10 +40,6 @@ export const ConveyorComposition: React.FC<Storyboard> = ({
           justifyContent: 'space-between',
           alignItems: 'center',
           padding: '0 24px',
-          background: 'rgba(255, 255, 255, 0.03)',
-          backdropFilter: 'blur(12px)',
-          borderRadius: '16px',
-          border: '1px solid rgba(255, 255, 255, 0.08)',
           zIndex: 100,
         }}
       >

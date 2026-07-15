@@ -1,0 +1,326 @@
+{
+  "lesson_title": "The Human Digestive System",
+  "theme": "emerald",
+  "scenes": [
+    {
+      "scene_no": 1,
+      "purpose": "Introduce the topic of the digestive system",
+      "visual_strategy": "intro",
+      "template_id": "title_slide",
+      "teacher_script": "Hello, students! Today, we're going to explore one of the most important systems in our body: the digestive system. It's responsible for breaking down the food we eat and absorbing nutrients.",
+      "template_data": {
+        "title": "The Human Digestive System",
+        "subtitle": "How Our Body Processes Food",
+        "icon_name": "apple"
+      }
+    },
+    {
+      "scene_no": 2,
+      "purpose": "Provide an overview of the main organs in the digestive system",
+      "visual_strategy": "overview",
+      "template_id": "illustrated_scene",
+      "teacher_script": "The digestive system is like a long tube with several important organs along the way. Let's take a quick look at the main parts involved in this amazing journey.",
+      "visual_steps": [
+        {
+          "step_no": 1,
+          "visual_type": "illustration",
+          "focus": "entire digestive system",
+          "duration_seconds": 4.0,
+          "content": {
+            "image_prompt": "A full body diagram of the human digestive system, showing all major organs from mouth to anus, clean educational illustration style, no text, no labels, no annotations, no watermarks, no overlays"
+          },
+          "animation": {
+            "transition": "fade",
+            "camera_motion": "none"
+          }
+        },
+        {
+          "step_no": 2,
+          "visual_type": "illustration",
+          "focus": "mouth, esophagus, stomach",
+          "duration_seconds": 3.0,
+          "content": {
+            "image_prompt": "A human torso showing the mouth, esophagus, and stomach highlighted, clean educational illustration style, no text, no labels, no annotations, no watermarks, no overlays"
+          },
+          "animation": {
+            "transition": "fade",
+            "camera_motion": "zoom_in"
+          }
+        },
+        {
+          "step_no": 3,
+          "visual_type": "illustration",
+          "focus": "small intestine, large intestine",
+          "duration_seconds": 3.0,
+          "content": {
+            "image_prompt": "A human torso showing the small intestine and large intestine highlighted, clean educational illustration style, no text, no labels, no annotations, no watermarks, no overlays"
+          },
+          "animation": {
+            "transition": "fade",
+            "camera_motion": "pan_right"
+          }
+        },
+        {
+          "step_no": 4,
+          "visual_type": "illustration",
+          "focus": "liver, pancreas, gallbladder",
+          "duration_seconds": 3.0,
+          "content": {
+            "image_prompt": "A human torso showing the liver, pancreas, and gallbladder highlighted, clean educational illustration style, no text, no labels, no annotations, no watermarks, no overlays"
+          },
+          "animation": {
+            "transition": "fade",
+            "camera_motion": "zoom_in"
+          }
+        }
+      ]
+    },
+    {
+      "scene_no": 3,
+      "purpose": "Explain the initial stages of digestion in the mouth and esophagus",
+      "visual_strategy": "process",
+      "template_id": "illustrated_scene",
+      "teacher_script": "Digestion begins even before food enters your stomach! It starts right in your mouth, where food is chewed and mixed with saliva. Then, it travels down a tube called the esophagus.",
+      "visual_steps": [
+        {
+          "step_no": 1,
+          "visual_type": "illustration",
+          "focus": "mouth with food",
+          "duration_seconds": 4.0,
+          "content": {
+            "image_prompt": "A cross-section illustration of a human mouth with food being chewed by teeth, showing saliva glands, clean educational illustration style, no text, no labels, no annotations, no watermarks, no overlays"
+          },
+          "animation": {
+            "transition": "fade",
+            "camera_motion": "zoom_in"
+          }
+        },
+        {
+          "step_no": 2,
+          "visual_type": "illustration",
+          "focus": "food bolus in esophagus",
+          "duration_seconds": 4.0,
+          "content": {
+            "image_prompt": "A cross-section illustration of the human esophagus showing a bolus of food moving down through peristalsis, clean educational illustration style, no text, no labels, no annotations, no watermarks, no overlays"
+          },
+          "animation": {
+            "transition": "slide",
+            "camera_motion": "pan_right"
+          }
+        }
+      ]
+    },
+    {
+      "scene_no": 4,
+      "purpose": "Describe the role of the stomach in digestion",
+      "visual_strategy": "process",
+      "template_id": "illustrated_scene",
+      "teacher_script": "Next, the food reaches your stomach, a muscular bag that churns and mixes food with strong digestive juices. These juices, including hydrochloric acid, help break down proteins.",
+      "visual_steps": [
+        {
+          "step_no": 1,
+          "visual_type": "illustration",
+          "focus": "stomach organ",
+          "duration_seconds": 4.0,
+          "content": {
+            "image_prompt": "An illustration of the human stomach, showing its muscular walls and entry/exit points, clean educational illustration style, no text, no labels, no annotations, no watermarks, no overlays"
+          },
+          "animation": {
+            "transition": "fade",
+            "camera_motion": "zoom_in"
+          }
+        },
+        {
+          "step_no": 2,
+          "visual_type": "illustration",
+          "focus": "churning food in stomach",
+          "duration_seconds": 4.0,
+          "content": {
+            "image_prompt": "An illustration showing the inside of a stomach with food being churned and mixed with digestive fluids, clean educational illustration style, no text, no labels, no annotations, no watermarks, no overlays"
+          },
+          "animation": {
+            "transition": "fade",
+            "camera_motion": "zoom_in"
+          }
+        }
+      ]
+    },
+    {
+      "scene_no": 5,
+      "purpose": "Explain the process of nutrient absorption in the small intestine",
+      "visual_strategy": "process",
+      "template_id": "illustrated_scene",
+      "teacher_script": "After the stomach, food moves into the small intestine, a long, coiled tube. Here, most of the digestion and absorption of nutrients into the bloodstream takes place.",
+      "visual_steps": [
+        {
+          "step_no": 1,
+          "visual_type": "illustration",
+          "focus": "small intestine",
+          "duration_seconds": 4.0,
+          "content": {
+            "image_prompt": "An illustration of the human small intestine, showing its coiled structure within the abdomen, clean educational illustration style, no text, no labels, no annotations, no watermarks, no overlays"
+          },
+          "animation": {
+            "transition": "fade",
+            "camera_motion": "pan_right"
+          }
+        },
+        {
+          "step_no": 2,
+          "visual_type": "illustration",
+          "focus": "villi in small intestine",
+          "duration_seconds": 4.0,
+          "content": {
+            "image_prompt": "A magnified cross-section illustration of the inner lining of the small intestine, showing villi absorbing nutrients into blood vessels, clean educational illustration style, no text, no labels, no annotations, no watermarks, no overlays"
+          },
+          "animation": {
+            "transition": "fade",
+            "camera_motion": "zoom_in"
+          }
+        }
+      ]
+    },
+    {
+      "scene_no": 6,
+      "purpose": "Describe the function of the large intestine in water absorption and waste formation",
+      "visual_strategy": "process",
+      "template_id": "illustrated_scene",
+      "teacher_script": "The remaining undigested food then enters the large intestine. Its main job is to absorb water from the waste material, forming solid stool.",
+      "visual_steps": [
+        {
+          "step_no": 1,
+          "visual_type": "illustration",
+          "focus": "large intestine",
+          "duration_seconds": 4.0,
+          "content": {
+            "image_prompt": "An illustration of the human large intestine, showing its wider structure surrounding the small intestine, clean educational illustration style, no text, no labels, no annotations, no watermarks, no overlays"
+          },
+          "animation": {
+            "transition": "fade",
+            "camera_motion": "pan_left"
+          }
+        },
+        {
+          "step_no": 2,
+          "visual_type": "illustration",
+          "focus": "water absorption in large intestine",
+          "duration_seconds": 4.0,
+          "content": {
+            "image_prompt": "A cross-section illustration of the large intestine showing water being absorbed from waste material, making it more solid, clean educational illustration style, no text, no labels, no annotations, no watermarks, no overlays"
+          },
+          "animation": {
+            "transition": "fade",
+            "camera_motion": "zoom_in"
+          }
+        }
+      ]
+    },
+    {
+      "scene_no": 7,
+      "purpose": "Introduce the accessory organs and their contributions to digestion",
+      "visual_strategy": "diagram",
+      "template_id": "concept_diagram",
+      "teacher_script": "Besides the main digestive tract, some accessory organs play crucial roles. The liver produces bile, the gallbladder stores it, and the pancreas produces digestive enzymes and hormones.",
+      "template_data": {
+        "central_node": "Accessory Organs",
+        "leaf_nodes": [
+          "Liver (Bile Production)",
+          "Gallbladder (Bile Storage)",
+          "Pancreas (Enzymes & Hormones)"
+        ],
+        "svg_elements": [
+          {
+            "type": "rect",
+            "x": 200,
+            "y": 150,
+            "width": 100,
+            "height": 50,
+            "fill": "#A7F3D0",
+            "stroke": "#047857",
+            "stroke_width": 2,
+            "label": "Liver"
+          },
+          {
+            "type": "circle",
+            "cx": 250,
+            "cy": 230,
+            "r": 20,
+            "fill": "#6EE7B7",
+            "stroke": "#047857",
+            "stroke_width": 2,
+            "label": "Gallbladder"
+          },
+          {
+            "type": "rect",
+            "x": 180,
+            "y": 280,
+            "width": 140,
+            "height": 40,
+            "rx": 10,
+            "ry": 10,
+            "fill": "#D1FAE5",
+            "stroke": "#047857",
+            "stroke_width": 2,
+            "label": "Pancreas"
+          },
+          {
+            "type": "line",
+            "x1": 250,
+            "y1": 200,
+            "x2": 250,
+            "y2": 210,
+            "stroke": "#047857",
+            "stroke_width": 2
+          },
+          {
+            "type": "line",
+            "x1": 250,
+            "y1": 250,
+            "x2": 250,
+            "y2": 280,
+            "stroke": "#047857",
+            "stroke_width": 2
+          }
+        ]
+      }
+    },
+    {
+      "scene_no": 8,
+      "purpose": "Summarize the entire digestive process",
+      "visual_strategy": "summary",
+      "template_id": "horizontal_timeline",
+      "teacher_script": "In summary, digestion is a complex process where food is broken down, nutrients are absorbed, and waste is eliminated. Each organ plays a vital role in keeping us healthy and energized.",
+      "template_data": {
+        "timeline_title": "Food's Journey Through Digestion",
+        "stages": [
+          {
+            "step_no": 1,
+            "label": "Mouth & Esophagus",
+            "icon_name": "utensils"
+          },
+          {
+            "step_no": 2,
+            "label": "Stomach",
+            "icon_name": "stomach"
+          },
+          {
+            "step_no": 3,
+            "label": "Small Intestine",
+            "icon_name": "nutrient"
+          },
+          {
+            "step_no": 4,
+            "label": "Large Intestine",
+            "icon_name": "droplet"
+          },
+          {
+            "step_no": 5,
+            "label": "Elimination",
+            "icon_name": "trash2"
+          }
+        ]
+      }
+    }
+  ],
+  "question": "Explain about digestive system?"
+}

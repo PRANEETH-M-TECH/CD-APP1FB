@@ -1,0 +1,111 @@
+{
+  "lesson_title": "Understanding a Balanced Diet",
+  "theme": "General",
+  "scenes": [
+    {
+      "scene_no": 1,
+      "purpose": "Introduce the main lesson topic",
+      "visual_strategy": "intro",
+      "template_id": "title_slide",
+      "teacher_script": "Today, we'll learn about what a balanced diet is and why it's so important for our health.",
+      "template_data": {
+        "title": "What is a Balanced Diet?",
+        "subtitle": "Fueling Your Body for Health and Growth",
+        "icon_name": "salad"
+      }
+    },
+    {
+      "scene_no": 2,
+      "purpose": "Define a balanced diet and its key components",
+      "visual_strategy": "overview",
+      "template_id": "concept_diagram",
+      "teacher_script": "A balanced diet provides all the essential nutrients our body needs in the right amounts. It includes carbohydrates, proteins, fats, vitamins, minerals, and water.",
+      "template_data": {
+        "central_node": "Balanced Diet",
+        "leaf_nodes": [
+          "Carbohydrates",
+          "Proteins",
+          "Fats",
+          "Vitamins",
+          "Minerals",
+          "Water"
+        ]
+      }
+    },
+    {
+      "scene_no": 3,
+      "purpose": "Explain the immediate benefits of a balanced diet",
+      "visual_strategy": "diagram",
+      "template_id": "concept_diagram",
+      "teacher_script": "Following a balanced diet gives us energy for daily activities and helps our body grow and repair itself.",
+      "template_data": {
+        "central_node": "Benefits of Balanced Diet",
+        "leaf_nodes": [
+          "Provides Energy",
+          "Supports Growth & Repair"
+        ]
+      }
+    },
+    {
+      "scene_no": 4,
+      "purpose": "Explain the long-term benefits of a balanced diet",
+      "visual_strategy": "diagram",
+      "template_id": "concept_diagram",
+      "teacher_script": "It also strengthens our immune system, helping us fight off illnesses. Moreover, it protects us from many diseases like obesity and heart problems.",
+      "template_data": {
+        "central_node": "Benefits of Balanced Diet",
+        "leaf_nodes": [
+          "Boosts Immunity",
+          "Prevents Diseases"
+        ]
+      }
+    },
+    {
+      "scene_no": 5,
+      "purpose": "Compare a balanced diet with an unbalanced diet",
+      "visual_strategy": "comparison",
+      "template_id": "column_comparison",
+      "teacher_script": "An unbalanced diet, lacking essential nutrients, can lead to fatigue and health issues. A balanced diet, however, keeps us healthy and active.",
+      "template_data": {
+        "left_column": {
+          "header": "Balanced Diet",
+          "bullets": [
+            "Provides all essential nutrients",
+            "Leads to good health and energy",
+            "Supports proper body function"
+          ]
+        },
+        "right_column": {
+          "header": "Unbalanced Diet",
+          "bullets": [
+            "Lacks vital nutrients",
+            "Causes fatigue and health problems",
+            "Impairs body's functions"
+          ]
+        }
+      }
+    },
+    {
+      "scene_no": 6,
+      "purpose": "Summarize and check understanding",
+      "visual_strategy": "summary",
+      "template_id": "quiz_checkpoint",
+      "teacher_script": "Can you recall why a balanced diet is important? Think about the key benefits we discussed.",
+      "template_data": {
+        "title": "Quick Check!",
+        "left_title": "Question:",
+        "left_bullets": [
+          "Why is it useful to follow a balanced diet?"
+        ],
+        "right_column": {
+          "header": "Answer:",
+          "bullets": [
+            "Provides energy for daily activities.",
+            "Supports growth, boosts immunity, and prevents diseases."
+          ]
+        }
+      }
+    }
+  ],
+  "question": "explain about the balance diet and why is it useful to follow?"
+}

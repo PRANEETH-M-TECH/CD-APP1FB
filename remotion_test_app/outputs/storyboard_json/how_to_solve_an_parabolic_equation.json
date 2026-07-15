@@ -1,0 +1,210 @@
+{
+  "lesson_title": "Solving Parabolic Equations",
+  "theme": "Math",
+  "scenes": [
+    {
+      "scene_no": 1,
+      "purpose": "Introduce the lesson topic.",
+      "visual_strategy": "intro",
+      "template_id": "title_slide",
+      "teacher_script": "Welcome to our lesson on solving parabolic equations! Today, we'll learn how to find the solutions to these special equations.",
+      "template_data": {
+        "title": "Solving Parabolic Equations",
+        "subtitle": "Understanding Quadratic Equations and Their Solutions",
+        "icon_name": "calculator"
+      }
+    },
+    {
+      "scene_no": 2,
+      "purpose": "Define parabolic equations and their visual representation.",
+      "visual_strategy": "overview",
+      "template_id": "concept_diagram",
+      "teacher_script": "A parabolic equation is essentially a quadratic equation, which is an equation of degree two. When graphed, it forms a U-shaped curve called a parabola.",
+      "template_data": {
+        "central_node": "Parabolic Equation",
+        "leaf_nodes": [
+          "Quadratic Equation",
+          "Degree Two",
+          "Forms a Parabola",
+          "Finds 'x' intercepts"
+        ]
+      }
+    },
+    {
+      "scene_no": 3,
+      "purpose": "Introduce the standard form of a quadratic equation.",
+      "visual_strategy": "concept",
+      "template_id": "math_derivation",
+      "teacher_script": "The standard form of a parabolic or quadratic equation is ax² + bx + c = 0. Here, 'a', 'b', and 'c' are numbers, and 'a' cannot be zero.",
+      "visual_steps": [
+        {
+          "step_no": 1,
+          "visual_type": "equation",
+          "duration_seconds": 3,
+          "content": {
+            "text_content": "ax^2 + bx + c = 0"
+          },
+          "animation": {
+            "transition": "fade",
+            "camera_motion": "none"
+          }
+        },
+        {
+          "step_no": 2,
+          "visual_type": "equation",
+          "duration_seconds": 3,
+          "content": {
+            "text_content": "ax^2 + bx + c = 0 \\text{ (where a, b, c are coefficients, a \\neq 0)}"
+          },
+          "animation": {
+            "transition": "fade",
+            "camera_motion": "none"
+          }
+        }
+      ]
+    },
+    {
+      "scene_no": 4,
+      "purpose": "Briefly mention different methods and highlight the quadratic formula.",
+      "visual_strategy": "comparison",
+      "template_id": "column_comparison",
+      "teacher_script": "There are a few ways to solve these equations, like factoring or using the quadratic formula. For any quadratic equation, the quadratic formula always works!",
+      "template_data": {
+        "left_column": {
+          "header": "Factoring",
+          "bullets": [
+            "Works for some equations",
+            "Requires finding factors"
+          ]
+        },
+        "right_column": {
+          "header": "Quadratic Formula",
+          "bullets": [
+            "Works for all equations",
+            "Direct method",
+            "Uses a, b, c values"
+          ]
+        }
+      }
+    },
+    {
+      "scene_no": 5,
+      "purpose": "Introduce the quadratic formula.",
+      "visual_strategy": "formula",
+      "template_id": "math_derivation",
+      "teacher_script": "This is the quadratic formula: x equals minus b, plus or minus the square root of b squared minus 4ac, all divided by 2a. It helps us find the values of 'x'.",
+      "visual_steps": [
+        {
+          "step_no": 1,
+          "visual_type": "equation",
+          "duration_seconds": 5,
+          "content": {
+            "text_content": "x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}"
+          },
+          "animation": {
+            "transition": "fade",
+            "camera_motion": "none"
+          }
+        }
+      ]
+    },
+    {
+      "scene_no": 6,
+      "purpose": "Demonstrate solving an equation using the quadratic formula.",
+      "visual_strategy": "process",
+      "template_id": "math_derivation",
+      "teacher_script": "Let's solve an example: x² + 5x + 6 = 0. First, identify a, b, and c. Then, substitute these values into the quadratic formula and simplify step-by-step.",
+      "visual_steps": [
+        {
+          "step_no": 1,
+          "visual_type": "equation",
+          "duration_seconds": 3,
+          "content": {
+            "text_content": "\\text{Equation: } x^2 + 5x + 6 = 0 \\\\ \\text{Identify: } a=1, b=5, c=6"
+          },
+          "animation": {
+            "transition": "fade",
+            "camera_motion": "none"
+          }
+        },
+        {
+          "step_no": 2,
+          "visual_type": "equation",
+          "duration_seconds": 4,
+          "content": {
+            "text_content": "x = \\frac{-5 \\pm \\sqrt{5^2 - 4(1)(6)}}{2(1)}"
+          },
+          "animation": {
+            "transition": "slide",
+            "camera_motion": "none"
+          }
+        },
+        {
+          "step_no": 3,
+          "visual_type": "equation",
+          "duration_seconds": 3,
+          "content": {
+            "text_content": "x = \\frac{-5 \\pm \\sqrt{25 - 24}}{2}"
+          },
+          "animation": {
+            "transition": "slide",
+            "camera_motion": "none"
+          }
+        },
+        {
+          "step_no": 4,
+          "visual_type": "equation",
+          "duration_seconds": 3,
+          "content": {
+            "text_content": "x = \\frac{-5 \\pm \\sqrt{1}}{2}"
+          },
+          "animation": {
+            "transition": "slide",
+            "camera_motion": "none"
+          }
+        },
+        {
+          "step_no": 5,
+          "visual_type": "equation",
+          "duration_seconds": 3,
+          "content": {
+            "text_content": "x = \\frac{-5 \\pm 1}{2}"
+          },
+          "animation": {
+            "transition": "slide",
+            "camera_motion": "none"
+          }
+        },
+        {
+          "step_no": 6,
+          "visual_type": "equation",
+          "duration_seconds": 5,
+          "content": {
+            "text_content": "x_1 = \\frac{-5 + 1}{2} = \\frac{-4}{2} = -2 \\\\ x_2 = \\frac{-5 - 1}{2} = \\frac{-6}{2} = -3"
+          },
+          "animation": {
+            "transition": "slide",
+            "camera_motion": "none"
+          }
+        }
+      ]
+    },
+    {
+      "scene_no": 7,
+      "purpose": "Check understanding of the standard form.",
+      "visual_strategy": "summary",
+      "template_id": "quiz_checkpoint",
+      "teacher_script": "What is the standard form of a quadratic equation? Remember, understanding this form is key to using the quadratic formula effectively.",
+      "template_data": {
+        "title": "Quick Check!",
+        "left_bullets": [
+          "What is the standard form of a quadratic equation?"
+        ],
+        "central_node": "ax² + bx + c = 0",
+        "animation_action": "rise",
+        "canvas_color": "#E0F7FA"
+      }
+    }
+  ],
+  "question": "how to solve an parabolic equation?"
+}

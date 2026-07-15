@@ -72,25 +72,92 @@ export interface DynamicIllustrationData {
   canvas_color?: string; // optional background accent
 }
 
+export interface StepAnimation {
+  transition: 'fade' | 'slide' | 'wipe' | 'none';
+  camera_motion: 'zoom_in' | 'zoom_out' | 'pan_left' | 'pan_right' | 'none';
+}
+
+export interface StepContent {
+  svg_elements?: SvgElement[];
+  text_content?: string;
+}
+
+export interface VisualStep {
+  step_no: number;
+  visual_type: 'diagram' | 'equation' | 'table';
+  focus?: string;
+  duration_seconds: number;
+  content: StepContent;
+  animation: StepAnimation;
+}
+
 export interface Scene {
   scene_no: number;
   clip_no?: number;
   camera?: Camera;
+  purpose: string;
+  visual_strategy: string;
   teacher_script: string;
   audio_url?: string;
   local_assets?: Asset[];
   assets?: Asset[];
   durationInFrames?: number; // populated dynamically
-  template_id?: string;
+  template_id?: 'title_slide' | 'concept_diagram' | 'cycle_template' | 'math_derivation' | 'venn_diagram' | 'taxonomy_tree' | 'cartesian_grid' | 'column_comparison' | 'geo_marker' | 'database_grid' | 'before_after_slider' | 'quiz_checkpoint' | 'horizontal_timeline' | 'illustrated_scene' | 'image_scene';
+  visual_steps?: VisualStep[];
   template_data?: any;
 }
 
 export interface Storyboard {
   lesson_title: string;
   layout_mode: 'timeline' | 'process' | 'comparison' | 'radial_breakdown';
-  theme: 'indigo' | 'gold' | 'emerald' | 'rose';
+  theme: 'indigo' | 'gold' | 'emerald' | 'rose' | 'Science' | 'Math' | 'History' | 'Civics' | 'General';
   global_assets?: Asset[];
   connections?: Connection[];
   lesson_id: string;
   scenes: Scene[];
 }
+
+export interface ZoomTarget {
+  x: number;           // % horizontal position (0-100)
+  y: number;           // % vertical position (0-100)
+  scale: number;       // zoom level (1 = normal, 2.5 = zoomed in)
+  at_percent: number;  // when in scene timeline (0% = start, 100% = end)
+}
+
+export interface ImageAnnotation {
+  type: 'arrow' | 'circle' | 'label';
+  x: number;           // % position
+  y: number;           // % position
+  target_x?: number;   // arrow endpoint (for arrows only)
+  target_y?: number;
+  label?: string;      // text content
+  color?: string;      // hex color
+  at_percent: number;  // when to appear (0-100%)
+}
+
+export interface MotionPath {
+  path_data: string;      // SVG path d attribute
+  dot_color?: string;     // dot fill color
+  dot_size?: number;      // dot radius
+  start_percent?: number; // when motion starts (0-100%)
+  duration_percent?: number; // how long motion takes (% of scene)
+}
+
+export interface SpotlightRegion {
+  x: number;           // % center position
+  y: number;
+  radius: number;      // spotlight radius in px
+  at_percent: number;  // when to activate
+}
+
+export interface ImageSceneData {
+  title: string;
+  image_prompt: string;
+  image_url: string;
+  zoom_targets?: ZoomTarget[];
+  annotations?: ImageAnnotation[];
+  motion_path?: MotionPath;
+  spotlight?: SpotlightRegion;
+  animation_style: 'zoom_and_annotate' | 'spotlight_reveal' | 'motion_path' | 'progressive_reveal' | 'simple_zoom';
+}
+

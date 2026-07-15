@@ -14,9 +14,86 @@ function main() {
   console.log("=========================================");
   console.log("   REMOTION VISUAL STORYBOARD SELECTOR   ");
   console.log("=========================================");
+  
+  rl.question("Enter storyboard JSON file path (or press Enter to list generated storyboards): ", (pathInput) => {
+    const filePath = pathInput.trim();
+    if (filePath) {
+      processStoryboardPath(filePath);
+    } else {
+      selectFromGenerated();
+    }
+  });
+}
 
+function processStoryboardPath(filePath) {
+  let resolvedPath = filePath.trim();
+  // Strip surrounding quotes
+  if ((resolvedPath.startsWith('"') && resolvedPath.endsWith('"')) || (resolvedPath.startsWith("'") && resolvedPath.endsWith("'"))) {
+    resolvedPath = resolvedPath.slice(1, -1);
+  }
+
+  if (!fs.existsSync(resolvedPath)) {
+    console.log(`[ERROR] File does not exist at: ${resolvedPath}`);
+    rl.close();
+    return;
+  }
+
+  let title = "Custom Storyboard";
+  let theme = "indigo";
+  try {
+    const data = JSON.parse(fs.readFileSync(resolvedPath, 'utf8'));
+    title = data.lesson_title || title;
+    theme = data.theme || theme;
+  } catch (e) {
+    console.log("[WARNING] Could not parse JSON file metadata, but will attempt loading it.");
+  }
+
+  console.log(`\nLoaded Storyboard: ${title}`);
+  console.log("[1] Preview on Localhost (Browser Player)");
+  console.log("[2] Render/Export to MP4 Video File");
+
+  rl.question(`Select action (1-2): `, (actionAnswer) => {
+    const action = actionAnswer.trim();
+    let cmd = 'npx';
+    let args = [];
+    
+    const absolutePropsPath = path.resolve(resolvedPath);
+
+      if (action === '1') {
+        console.log(`\nLaunching Remotion Player on localhost...`);
+        args = ['remotion', 'preview', 'src/index.ts', `--props=${absolutePropsPath}`];
+      } else if (action === '2') {
+        const baseName = path.basename(resolvedPath, '.json');
+        const outVideosDir = path.join(__dirname, 'outputs', 'output_videos');
+        if (!fs.existsSync(outVideosDir)) {
+          fs.mkdirSync(outVideosDir, { recursive: true });
+        }
+        const outName = `outputs/output_videos/${baseName}.mp4`;
+        console.log(`\nRendering video to ${outName} (this might take a minute)...`);
+        args = ['remotion', 'render', 'src/index.ts', 'StoryboardVideo', outName, `--props=${absolutePropsPath}`];
+      } else {
+        console.log("Invalid action. Exiting.");
+        rl.close();
+        return;
+      }
+
+      rl.close();
+
+      const child = spawn(cmd, args, { 
+        shell: true, 
+        stdio: 'inherit',
+        cwd: __dirname
+      });
+
+      child.on('close', (code) => {
+        console.log(`\nProcess finished with exit code ${code}`);
+      });
+    });
+}
+
+function selectFromGenerated() {
   if (!fs.existsSync(uploadsDir)) {
-    console.log("No storyboards folder found yet at:");
+    console.log("\nNo storyboards folder found yet at:");
     console.log(uploadsDir);
     console.log("\nGenerate a visual lesson storyboard first from the app or CLI helper!");
     rl.close();
@@ -28,7 +105,7 @@ function main() {
   });
 
   if (dirs.length === 0) {
-    console.log("No generated storyboards found in:");
+    console.log("\nNo generated storyboards found in:");
     console.log(uploadsDir);
     console.log("\nGenerate a visual lesson storyboard first!");
     rl.close();
@@ -88,7 +165,11 @@ function main() {
         console.log(`\nLaunching Remotion Player on localhost...`);
         args = ['remotion', 'preview', 'src/index.ts', `--props=${propsPath}`];
       } else if (action === '2') {
-        const outName = `output_${selectedLesson.id}.mp4`;
+        const outVideosDir = path.join(__dirname, 'outputs', 'output_videos');
+        if (!fs.existsSync(outVideosDir)) {
+          fs.mkdirSync(outVideosDir, { recursive: true });
+        }
+        const outName = `outputs/output_videos/${selectedLesson.id}.mp4`;
         console.log(`\nRendering video to ${outName} (this might take a minute)...`);
         args = ['remotion', 'render', 'src/index.ts', 'StoryboardVideo', outName, `--props=${propsPath}`];
       } else {
