@@ -741,19 +741,20 @@ class VisualLearningController {
         if (this.loadingScreen) this.loadingScreen.style.display = 'none';
         if (this.playerUI) this.playerUI.style.display = 'flex';
         
-        if (this.lessonPackage && this.lessonPackage.video_url) {
+        if (this.lessonPackage && this.lessonPackage.video_url && !this.lessonPackage.video_url.endsWith('.html')) {
             this.mountVideoPlayer(this.lessonPackage.video_url);
             return;
         }
 
-        if (this.lessonPackage && this.lessonPackage.html_url) {
+        if (this.lessonPackage && (this.lessonPackage.html_url || (this.lessonPackage.video_url && this.lessonPackage.video_url.endsWith('.html')))) {
+            const htmlUrl = this.lessonPackage.html_url || this.lessonPackage.video_url;
             if (this.canvas) {
                 if (window.gsap) gsap.killTweensOf(this.canvas);
                 this.canvas.style.transform = '';
                 this.canvas.style.width = '';
                 this.canvas.style.height = '';
             }
-            this.mountIframePlayer(this.lessonPackage.html_url);
+            this.mountIframePlayer(htmlUrl);
             return;
         }
 

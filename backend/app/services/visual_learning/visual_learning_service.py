@@ -33,7 +33,7 @@ def clean_and_parse_json(response_text: str) -> dict:
     # Remove single-line C++ style comments
     cleaned = re.sub(r'//.*', '', cleaned)
 
-    # Fix missing object closing brace before scene boundaries (e.g. template_data: { ... } \n , \n { -> template_data: { ... } } \n , \n {)
+    # Fix missing object closing brace before scene boundaries
     cleaned = re.sub(r'(\"template_data\"\s*:\s*\{[\s\S]*?\})\s*,\s*(\{\s*\"scene_no\")', r'\1}\n,\n\2', cleaned)
     cleaned = re.sub(r'(\}\s*\n\s*),\s*(\n\s*\{)', r'\1}\n,\2', cleaned)
     # Fix trailing commas before closing braces/brackets
@@ -83,18 +83,19 @@ def clean_and_parse_json(response_text: str) -> dict:
 async def generate_visual_lesson_stream(query: str, book_uuid: str, class_name: str, subject: str):
     """
     Main pipeline to generate a visual lesson storyboard.
-    Streams progress states and returns the completed lesson JSON package.
+    Streams progress states synchronized with frontend UI steps, compiles Hyperframes composition,
+    and returns completed lesson ready event.
     """
     lesson_id = f"vl_{uuid.uuid4().hex[:8]}"
     print("\n======================================================================")
-    print("🚀 [PIPELINE DEBUG] ENTER VisualLearning")
+    print(f"[PIPELINE DEBUG] ENTER VisualLearning")
     print(f"   Query: '{query}' | Lesson ID: {lesson_id}")
     print("======================================================================\n")
     
     try:
         # Step 1: Retrieve context from book using hybrid search
         yield f"data: {json.dumps({'type': 'progress', 'step': 'understanding_topic', 'status': 'in_progress', 'message': 'Retrieving relevant textbook context...'})}\n\n"
-        await asyncio.sleep(0.4)
+        await asyncio.sleep(0.3)
         
         context = ""
         try:
@@ -117,7 +118,7 @@ async def generate_visual_lesson_stream(query: str, book_uuid: str, class_name: 
         
         # Step 2: Design lesson storyboard blueprint with Gemini
         yield f"data: {json.dumps({'type': 'progress', 'step': 'designing_lesson', 'status': 'in_progress', 'message': 'Creating storyboard and scene animations...'})}\n\n"
-        await asyncio.sleep(0.4)
+        await asyncio.sleep(0.3)
         
         prompt = get_visual_lesson_prompt(class_name, subject, query, context)
         client = qdrant.gemini_client
@@ -127,39 +128,65 @@ async def generate_visual_lesson_stream(query: str, book_uuid: str, class_name: 
             raise RuntimeError("Gemini Client is not initialized in qdrant_service.")
             
         logger.info(f"[VisualLearning] Sending storyboard prompt to Gemini ({model_name})...")
-        try:
-            # Enforce strict JSON output mode with low temperature for deterministic formatting
+        
+        # Automatic multi-model fallback chain prioritizing gemini-2.5-flash
+        model_candidates = ["gemini-2.5-flash", model_name, "gemini-2.0-flash", "gemini-1.5-flash"]
+        models_to_try = []
+        for m in model_candidates:
+            if m not in models_to_try:
+                models_to_try.append(m)
+
+        response_text = None
+        for m_name in models_to_try:
             try:
-                from google.genai import types
-                gen_config = types.GenerateContentConfig(
-                    response_mime_type="application/json",
-                    temperature=0.2
-                )
-                response = client.models.generate_content(
-                    model=model_name,
-                    contents=prompt,
-                    config=gen_config
-                )
-            except Exception as cfg_err:
-                logger.warning(f"[VisualLearning] Custom config failed ({cfg_err}), falling back to standard generate_content.")
-                response = client.models.generate_content(
-                    model=model_name,
-                    contents=prompt
-                )
-            response_text = response.text.strip()
-            logger.info(f"[VisualLearning] Received Gemini response text (length: {len(response_text)})")
-        except Exception as e:
-            logger.error(f"[VisualLearning] Gemini API storyboard generation failed: {e}", exc_info=True)
-            raise RuntimeError(f"Gemini API storyboard generation failed: {e}")
+                logger.info(f"[VisualLearning] Attempting storyboard generation with model '{m_name}'...")
+                try:
+                    from google.genai import types
+                    gen_config = types.GenerateContentConfig(
+                        response_mime_type="application/json",
+                        temperature=0.2
+                    )
+                    response = client.models.generate_content(
+                        model=m_name,
+                        contents=prompt,
+                        config=gen_config
+                    )
+                except Exception:
+                    response = client.models.generate_content(
+                        model=m_name,
+                        contents=prompt
+                    )
+                response_text = response.text.strip()
+                logger.info(f"[VisualLearning] Received Gemini response text using '{m_name}' (length: {len(response_text)})")
+                break
+            except Exception as m_err:
+                logger.warning(f"[VisualLearning] Model '{m_name}' failed: {m_err}. Trying next candidate...")
+
+        if not response_text:
+            raise RuntimeError("All Gemini model candidates failed to generate storyboard.")
         
         try:
             blueprint = clean_and_parse_json(response_text)
-            clips = blueprint.get("clips", blueprint.get("scenes", []))
+            raw_clips = blueprint.get("clips", blueprint.get("scenes", []))
             global_assets = blueprint.get("global_assets", [])
             connections = blueprint.get("connections", [])
             layout_mode = blueprint.get("layout_mode", "timeline")
             theme = blueprint.get("theme", "indigo")
             
+            # Robust Clip Normalization (Guarantees dict object structure for every scene)
+            clips = []
+            for idx, item in enumerate(raw_clips, 1):
+                if isinstance(item, dict):
+                    clips.append(item)
+                elif isinstance(item, str):
+                    clips.append({
+                        "scene_no": idx,
+                        "purpose": item,
+                        "template_id": "title_slide" if idx == 1 else "concept_diagram",
+                        "teacher_script": item,
+                        "template_data": {"title": f"Scene {idx}", "subtitle": item}
+                    })
+
             # ── Template Selection Audit & Variety Validation Pass ────────────
             valid_templates = [
                 'title_slide', 'concept_diagram', 'cycle_template', 'math_derivation',
@@ -168,20 +195,17 @@ async def generate_visual_lesson_stream(query: str, book_uuid: str, class_name: 
             ]
             
             print("\n----------------------------------------------------------------------")
-            print("📋 [STORYBOARD AUDIT] LLM Template Selection & Reasoning Analysis:")
+            print("[STORYBOARD AUDIT] LLM Template Selection & Reasoning Analysis:")
             print(f"   Lesson Title: {blueprint.get('lesson_title', 'Untitled')}")
             print(f"   Total Scenes: {len(clips)}")
             print("----------------------------------------------------------------------")
             
-            selected_templates = []
             for idx, clip in enumerate(clips, 1):
                 tid = clip.get("template_id", "concept_diagram")
                 reasoning = clip.get("template_selection_reasoning", "No explicit reasoning provided.")
-                selected_templates.append(tid)
                 
-                # Verify validity
                 is_valid = tid in valid_templates
-                status_icon = "✅" if is_valid else "⚠️ (FALLBACK)"
+                status_icon = "[OK]" if is_valid else "[FALLBACK]"
                 print(f"   Scene {idx}: [{tid}] {status_icon}")
                 print(f"           Reasoning: {reasoning[:90]}...")
             
@@ -193,7 +217,6 @@ async def generate_visual_lesson_stream(query: str, book_uuid: str, class_name: 
                     if clips[idx].get("template_id") == "title_slide":
                         clips[idx]["template_id"] = "concept_diagram"
                     if clips[idx].get("template_id") == clips[idx-1].get("template_id"):
-                        # Swap duplicate consecutive template
                         alt_templates = [t for t in valid_templates if t not in [clips[idx-1].get("template_id"), 'title_slide']]
                         clips[idx]["template_id"] = alt_templates[0]
                         print(f"   [AUDIT REPAIR] Swapped consecutive duplicate template in Scene {idx+1} to '{clips[idx]['template_id']}'")
@@ -206,29 +229,38 @@ async def generate_visual_lesson_stream(query: str, book_uuid: str, class_name: 
             
         yield f"data: {json.dumps({'type': 'progress', 'step': 'designing_lesson', 'status': 'complete', 'message': f'Storyboard generated with {len(clips)} dynamic scenes.'})}\n\n"
         
-        # Step 3: Generate narration audio & process scenes
-        yield f"data: {json.dumps({'type': 'progress', 'step': 'generating_media', 'status': 'in_progress', 'message': 'Generating teacher voiceover and visual assets...'})}\n\n"
-        await asyncio.sleep(0.4)
+        # Step 3: Retrieve Animated Scene Assets
+        yield f"data: {json.dumps({'type': 'progress', 'step': 'generating_visuals', 'status': 'in_progress', 'message': 'Retrieving animated scene templates and visual assets...'})}\n\n"
+        await asyncio.sleep(0.3)
+        yield f"data: {json.dumps({'type': 'progress', 'step': 'generating_visuals', 'status': 'complete', 'message': 'Scene visual templates assembled.'})}\n\n"
+
+        # Step 4: Synthesize Voice Narration Audio
+        yield f"data: {json.dumps({'type': 'progress', 'step': 'creating_narration', 'status': 'in_progress', 'message': 'Synthesizing AI teacher voiceover narration...'})}\n\n"
+        await asyncio.sleep(0.3)
         
-        processed_scenes = []
-        for scene in clips:
-            script = scene.get("teacher_script", "")
-            audio_url = ""
-            if script:
-                try:
-                    audio_filename = f"{lesson_id}_scene_{scene.get('scene_no', 1)}.wav"
-                    audio_url = await generate_slide_audio(script, audio_filename)
-                except Exception as audio_err:
-                    logger.warning(f"[VisualLearning] Audio generation failed for scene {scene.get('scene_no')}: {audio_err}")
+        processed_scenes = clips
+        try:
+            audio_urls = await generate_slide_audio(clips, lesson_id)
+            for idx, scene in enumerate(processed_scenes):
+                if idx < len(audio_urls):
+                    scene["audio_url"] = audio_urls[idx]
+        except Exception as audio_err:
+            logger.warning(f"[VisualLearning] Batch audio generation notice: {audio_err}")
+            for scene in processed_scenes:
+                if "audio_url" not in scene:
+                    scene["audio_url"] = ""
             
-            scene["audio_url"] = audio_url
-            processed_scenes.append(scene)
-            
-        yield f"data: {json.dumps({'type': 'progress', 'step': 'generating_media', 'status': 'complete', 'message': 'Voiceovers & assets ready.'})}\n\n"
+        yield f"data: {json.dumps({'type': 'progress', 'step': 'creating_narration', 'status': 'complete', 'message': 'Voiceovers & narration ready.'})}\n\n"
         
-        # Step 4: Compile Hyperframes Interactive HTML Video
-        yield f"data: {json.dumps({'type': 'progress', 'step': 'compiling_engine', 'status': 'in_progress', 'message': 'Compiling Hyperframes 60fps HTML video engine...'})}\n\n"
-        await asyncio.sleep(0.4)
+        # Step 5: Compile Hyperframes Rendering Engine
+        yield f"data: {json.dumps({'type': 'progress', 'step': 'hyperframes_engine', 'status': 'in_progress', 'message': 'Compiling Hyperframes 60fps HTML video composition...'})}\n\n"
+        await asyncio.sleep(0.3)
+        
+        # Correctly calculate absolute PROJECT_ROOT (4 parent directory levels up from backend/app/services/visual_learning)
+        MAIN_DIR = os.path.dirname(os.path.abspath(__file__))
+        PROJECT_ROOT = os.path.abspath(os.path.join(MAIN_DIR, "..", "..", "..", ".."))
+        output_dir = os.path.join(PROJECT_ROOT, "uploads", "visual_lessons", lesson_id)
+        os.makedirs(output_dir, exist_ok=True)
         
         lesson_package = {
             "lesson_id": lesson_id,
@@ -240,36 +272,44 @@ async def generate_visual_lesson_stream(query: str, book_uuid: str, class_name: 
             "scenes": processed_scenes
         }
         
-        # Write lesson.json to storage directory
-        MAIN_DIR = os.path.dirname(os.path.abspath(__file__))
-        PROJECT_ROOT = os.path.abspath(os.path.join(MAIN_DIR, "..", "..", ".."))
-        output_dir = os.path.join(PROJECT_ROOT, "uploads", "visual_lessons", lesson_id)
-        os.makedirs(output_dir, exist_ok=True)
-        
+        # Write lesson.json to root uploads storage directory
         lesson_json_path = os.path.join(output_dir, "lesson.json")
         with open(lesson_json_path, "w", encoding="utf-8") as f:
             json.dump(lesson_package, f, indent=2)
             
-        # Trigger engine compilation bridge
+        # Trigger engine compilation bridge passing root output_dir
         try:
             from backend.app.services.visual_learning.hyperframes_engine_bridge import compile_hyperframes_html_fast
-            compiled_url = await compile_hyperframes_html_fast(lesson_id, lesson_json_path)
+            compiled_url = await compile_hyperframes_html_fast(lesson_id, output_dir)
         except Exception as compile_err:
             logger.warning(f"[VisualLearning] Engine bridge compilation notice: {compile_err}")
             compiled_url = f"/uploads/visual_lessons/{lesson_id}/index.html"
             
-        yield f"data: {json.dumps({'type': 'progress', 'step': 'compiling_engine', 'status': 'complete', 'message': 'Hyperframes compilation complete.'})}\n\n"
+        # Attach URLs explicitly for Hyperframes iframe mounting (video_url is set to None so frontend triggers iframe player)
+        lesson_package["html_url"] = compiled_url
+        lesson_package["interactive_url"] = compiled_url
+        lesson_package["video_url"] = None
+
+        yield f"data: {json.dumps({'type': 'progress', 'step': 'hyperframes_engine', 'status': 'complete', 'message': 'Hyperframes compilation complete.'})}\n\n"
         
-        # Final Event Payload
-        final_payload = {
-            "type": "final_result",
+        # Step 6: Launching Media Player & Emit lesson_ready Event
+        yield f"data: {json.dumps({'type': 'progress', 'step': 'launching_lesson', 'status': 'in_progress', 'message': 'Launching media player...'})}\n\n"
+        await asyncio.sleep(0.2)
+        yield f"data: {json.dumps({'type': 'progress', 'step': 'launching_lesson', 'status': 'complete', 'message': 'Lesson ready!'})}\n\n"
+
+        # Final Event Payload matching frontend handleSSEEvent contract
+        ready_payload = {
+            "type": "lesson_ready",
             "lesson_id": lesson_id,
             "lesson_title": lesson_package["lesson_title"],
             "interactive_url": compiled_url,
+            "html_url": compiled_url,
+            "video_url": None,
             "scene_count": len(processed_scenes),
+            "lesson": lesson_package,
             "lesson_package": lesson_package
         }
-        yield f"data: {json.dumps(final_payload)}\n\n"
+        yield f"data: {json.dumps(ready_payload)}\n\n"
         
     except Exception as e:
         logger.error(f"[VisualLearning] Failed to stream visual lesson storyboard: {e}", exc_info=True)
