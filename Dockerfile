@@ -19,8 +19,8 @@ RUN npm install
 # Copy application source code
 COPY . .
 
-# Expose port 7860 (Hugging Face default container port)
+# Expose default port
 EXPOSE 7860
 
-# Launch FastAPI using uvicorn binding to port 7860
-CMD ["uvicorn", "backend.app.main:app", "--host", "0.0.0.0", "--port", "7860"]
+# Launch FastAPI using shell expansion for dynamic $PORT binding
+CMD ["sh", "-c", "uvicorn backend.app.main:app --host 0.0.0.0 --port ${PORT:-7860}"]
