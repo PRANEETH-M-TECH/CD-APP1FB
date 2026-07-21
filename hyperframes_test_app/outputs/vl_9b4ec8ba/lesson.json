@@ -1,0 +1,182 @@
+{
+  "lesson_title": "The Amazing Journey of Paper: From Wood to Wonderful Sheets!",
+  "layout_mode": "timeline",
+  "theme": "Social Studies",
+  "global_assets": [],
+  "connections": [],
+  "lesson_id": "vl_9b4ec8ba",
+  "scenes": [
+    {
+      "scene_no": 1,
+      "purpose": "Introduce the lesson on paper making.",
+      "template_id": "title_slide",
+      "teacher_script": "Have you ever wondered how the paper in your books and notebooks is made? Today, we're going on an exciting journey to explore the fascinating process of paper-making!",
+      "template_data": {
+        "title": "The Amazing Journey of Paper",
+        "subtitle": "From Wood to Wonderful Sheets!"
+      },
+      "audio_url": "/uploads/visual_lessons/vl_9b4ec8ba/scene_1.wav"
+    },
+    {
+      "scene_no": 2,
+      "purpose": "Introduce the raw material and initial steps of paper production.",
+      "template_id": "concept_diagram",
+      "teacher_script": "It all begins with huge logs of wood, often from trees like subabul, arriving at the paper mill. Powerful lifter cranes carefully move these logs, ready for the first stage of transformation!",
+      "template_data": {
+        "concept_name": "Paper's Beginning: The Wood",
+        "attributes": [
+          {
+            "name": "Main Raw Material",
+            "value": "Subabul Wood Logs"
+          },
+          {
+            "name": "Arrival at Mill",
+            "value": "By Lorries (trucks)"
+          },
+          {
+            "name": "Initial Handling",
+            "value": "Lifter Crane to Platform"
+          }
+        ]
+      },
+      "audio_url": "/uploads/visual_lessons/vl_9b4ec8ba/scene_2.wav"
+    },
+    {
+      "scene_no": 3,
+      "purpose": "Explain the first mechanical step: Chipping.",
+      "template_id": "concept_diagram",
+      "teacher_script": "The very first step is called 'Chipping'. Here, the large wood logs are fed into special cutting machines that chop them into small, uniform pieces called wood chips. This makes them easier to process!",
+      "template_data": {
+        "concept_name": "Stage 1: Chipping",
+        "attributes": [
+          {
+            "name": "Action",
+            "value": "Logs cut into small, even chips"
+          },
+          {
+            "name": "Machine Used",
+            "value": "Cutting Machine"
+          },
+          {
+            "name": "Purpose",
+            "value": "Prepare wood for chemical treatment"
+          }
+        ]
+      },
+      "audio_url": "/uploads/visual_lessons/vl_9b4ec8ba/scene_3.wav"
+    },
+    {
+      "scene_no": 4,
+      "purpose": "Explain the chemical process of pulping and whitening.",
+      "template_id": "concept_diagram",
+      "teacher_script": "Next, these wood chips are boiled with water and special chemicals in large tanks. This process breaks down the wood fibres, turning them into a thick, liquid mixture called 'pulp', which is then whitened to a creamy color!",
+      "template_data": {
+        "concept_name": "Stage 2: Pulping & Whitening",
+        "attributes": [
+          {
+            "name": "Process",
+            "value": "Chips boiled with water & chemicals"
+          },
+          {
+            "name": "Result",
+            "value": "Wood transforms into liquid pulp (like cotton fibres)"
+          },
+          {
+            "name": "Refinement",
+            "value": "Pulp whitened to creamy-white using chemicals"
+          }
+        ]
+      },
+      "audio_url": "/uploads/visual_lessons/vl_9b4ec8ba/scene_4.wav"
+    },
+    {
+      "scene_no": 5,
+      "purpose": "Explain how the pulp begins to form a sheet.",
+      "template_id": "concept_diagram",
+      "teacher_script": "The creamy liquid pulp is then spread very thinly and evenly onto special screens that rotate on a cylinder. As the water drains out and evaporates from the heat, the pulp starts to dry and form a delicate, continuous sheet.",
+      "template_data": {
+        "concept_name": "Stage 3: Spreading the Pulp",
+        "attributes": [
+          {
+            "name": "Action",
+            "value": "Liquid pulp spread on thin screens over a cylinder"
+          },
+          {
+            "name": "Key Control",
+            "value": "Paper's width, length, and thickness are set here"
+          },
+          {
+            "name": "Transformation",
+            "value": "Water drains and evaporates due to heat"
+          }
+        ]
+      },
+      "audio_url": "/uploads/visual_lessons/vl_9b4ec8ba/scene_5.wav"
+    },
+    {
+      "scene_no": 6,
+      "purpose": "Explain the final stages of pressing, drying, and rolling the paper.",
+      "template_id": "concept_diagram",
+      "teacher_script": "The drying pulp sheet is now pressed by large rollers to make it smooth and remove any remaining water. Once completely dry, it becomes a strong, continuous sheet of paper, which is then rolled up into giant paper rolls.",
+      "template_data": {
+        "concept_name": "Stage 4: Pressing, Drying & Rolling",
+        "attributes": [
+          {
+            "name": "Smoothing",
+            "value": "Drying pulp pressed by heavy rollers"
+          },
+          {
+            "name": "Complete Drying",
+            "value": "All water removed to form a firm sheet"
+          },
+          {
+            "name": "Output",
+            "value": "Continuous sheet of paper rolled up"
+          }
+        ]
+      },
+      "audio_url": "/uploads/visual_lessons/vl_9b4ec8ba/scene_6.wav"
+    },
+    {
+      "scene_no": 7,
+      "purpose": "Explain the final cutting and finishing of the paper.",
+      "template_id": "concept_diagram",
+      "teacher_script": "Finally, these huge paper rolls are moved to powerful cutting machines. Here, the paper is cut precisely into the required sizes and shapes, whether it's for notebooks, printing, or other uses, ready to be sent out!",
+      "template_data": {
+        "concept_name": "Stage 5: Cutting & Finishing",
+        "attributes": [
+          {
+            "name": "Action",
+            "value": "Paper from rolls cut by machines"
+          },
+          {
+            "name": "Customization",
+            "value": "Cut into various sizes (sheets, smaller rolls)"
+          },
+          {
+            "name": "Ready For Use",
+            "value": "Packaged and prepared for market"
+          }
+        ]
+      },
+      "audio_url": "/uploads/visual_lessons/vl_9b4ec8ba/scene_7.wav"
+    },
+    {
+      "scene_no": 8,
+      "purpose": "Test the student's understanding of the paper making process.",
+      "template_id": "quiz_checkpoint",
+      "teacher_script": "Fantastic! You've learned how paper is made. Can you remember the very first step in transforming wood into paper before it becomes pulp?",
+      "template_data": {
+        "question": "Which of these is the initial step where wood logs are cut into small pieces?",
+        "options": [
+          "A. Pulping",
+          "B. Pressing",
+          "C. Chipping",
+          "D. Spreading"
+        ],
+        "correct_answer": "C. Chipping"
+      },
+      "audio_url": "/uploads/visual_lessons/vl_9b4ec8ba/scene_8.wav"
+    }
+  ]
+}

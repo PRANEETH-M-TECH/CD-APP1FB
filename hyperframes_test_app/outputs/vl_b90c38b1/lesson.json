@@ -1,0 +1,426 @@
+{
+  "lesson_title": "Perimeter vs. Area: Square and Rectangle Fields",
+  "lesson_id": "vl_b90c38b1",
+  "theme": "Maths",
+  "layout_mode": "process",
+  "learning_objectives": [
+    "Recall and apply perimeter formulas for squares and rectangles.",
+    "Recall and apply area formulas for squares and rectangles.",
+    "Compare the areas of two different shapes given they have the same perimeter."
+  ],
+  "student_level": "Middle School",
+  "estimated_duration": 8,
+  "difficulty": "intermediate",
+  "subject": "Geometry",
+  "chapter": "Area and Perimeter",
+  "concepts": [
+    "Perimeter",
+    "Area",
+    "Square",
+    "Rectangle",
+    "Formulas"
+  ],
+  "prerequisites": [
+    "Basic arithmetic operations",
+    "Understanding of geometric shapes"
+  ],
+  "misconceptions": [
+    "Believing that shapes with the same perimeter must have the same area.",
+    "Confusing the formulas for perimeter and area."
+  ],
+  "assessment_points": [
+    "Correctly calculating the perimeter of a square.",
+    "Deriving the unknown side of a rectangle from its perimeter.",
+    "Accurately calculating the area of both shapes.",
+    "Concluding which shape has a larger area."
+  ],
+  "summary": "This lesson demonstrates that two different geometric shapes, a square and a rectangle, can have the same perimeter but different areas. We will calculate the perimeter of the square, use it to find the unknown side of the rectangle, and then compare their respective areas.",
+  "teaching_plan": {
+    "teaching_steps": [
+      {
+        "step_id": "intro_problem",
+        "action_type": "INTRODUCE",
+        "instructional_purpose": "Set the context and present the core problem.",
+        "visual_purpose": "Capture attention and introduce the scenario.",
+        "concept": "Problem Statement",
+        "expected_outcome": "Students understand the problem to be solved.",
+        "related_components": [
+          "Square field",
+          "Rectangular field",
+          "Perimeter equality"
+        ],
+        "duration": 60,
+        "teaching_notes": "Emphasize the 'same perimeter' condition.",
+        "narration_hints": "Today, we tackle a common geometry puzzle: Can two fields have the same fence line but different amounts of usable land? We'll find out by comparing a square and a rectangular field."
+      },
+      {
+        "step_id": "calc_sq_perimeter",
+        "action_type": "EXPLAIN",
+        "instructional_purpose": "Calculate the perimeter of the square field.",
+        "visual_purpose": "Show step-by-step formula application.",
+        "concept": "Perimeter of a Square",
+        "expected_outcome": "Students can calculate the perimeter of the square.",
+        "related_components": [
+          "Square side length",
+          "Perimeter formula"
+        ],
+        "duration": 75,
+        "teaching_notes": "Review perimeter definition if necessary.",
+        "narration_hints": "First, let's determine the perimeter of our square field. With each side measuring 60 meters, its total boundary is simple to find using the formula P = 4s."
+      },
+      {
+        "step_id": "calc_rect_width",
+        "action_type": "EXPLAIN",
+        "instructional_purpose": "Use the known perimeter to find the missing width of the rectangle.",
+        "visual_purpose": "Illustrate algebraic manipulation to solve for an unknown.",
+        "concept": "Perimeter of a Rectangle (solving for unknown)",
+        "expected_outcome": "Students can derive the width of the rectangle.",
+        "related_components": [
+          "Rectangle length",
+          "Perimeter equality",
+          "Algebraic solution"
+        ],
+        "duration": 100,
+        "teaching_notes": "Highlight that the rectangle's perimeter is the same as the square's.",
+        "narration_hints": "Now, for the rectangular field, we know its length is 80 meters and it shares the same perimeter as the square. By rearranging the perimeter formula, we can unlock its hidden width."
+      },
+      {
+        "step_id": "calc_sq_area",
+        "action_type": "EXPLAIN",
+        "instructional_purpose": "Calculate the area of the square field.",
+        "visual_purpose": "Show step-by-step area calculation.",
+        "concept": "Area of a Square",
+        "expected_outcome": "Students can calculate the area of the square.",
+        "related_components": [
+          "Square side length",
+          "Area formula"
+        ],
+        "duration": 75,
+        "teaching_notes": "Emphasize units for area.",
+        "narration_hints": "With our square field's dimensions, calculating its area is straightforward. Remember, area tells us how much surface the field covers, and for a square, it's side times side."
+      },
+      {
+        "step_id": "calc_rect_area",
+        "action_type": "EXPLAIN",
+        "instructional_purpose": "Calculate the area of the rectangular field.",
+        "visual_purpose": "Show step-by-step area calculation using the derived width.",
+        "concept": "Area of a Rectangle",
+        "expected_outcome": "Students can calculate the area of the rectangle.",
+        "related_components": [
+          "Rectangle length",
+          "Rectangle width",
+          "Area formula"
+        ],
+        "duration": 75,
+        "teaching_notes": "Reinforce using the newly found width.",
+        "narration_hints": "Finally, we calculate the area of the rectangular field. Now that we know both its length and the width we just found, we can determine the space it occupies with the formula length times width."
+      },
+      {
+        "step_id": "compare_areas",
+        "action_type": "COMPARE",
+        "instructional_purpose": "Directly compare the calculated areas of both fields.",
+        "visual_purpose": "Clearly present the two final area values side-by-side.",
+        "concept": "Comparison of Areas",
+        "expected_outcome": "Students can identify which field has a larger area.",
+        "related_components": [
+          "Square Area",
+          "Rectangle Area",
+          "Inequality"
+        ],
+        "duration": 60,
+        "teaching_notes": "Draw a clear conclusion from the comparison.",
+        "narration_hints": "Now for the big reveal! Let's put the areas of both fields side-by-side. You might be surprised to see that even with the same perimeter, their total areas are quite different."
+      },
+      {
+        "step_id": "review_lesson",
+        "action_type": "REVIEW",
+        "instructional_purpose": "Consolidate learning and check understanding.",
+        "visual_purpose": "Engage students with a question to reinforce the main concept.",
+        "concept": "Perimeter and Area Relationship",
+        "expected_outcome": "Students can summarize the key takeaway about perimeter and area.",
+        "related_components": [
+          "Quiz question",
+          "Conceptual understanding"
+        ],
+        "duration": 60,
+        "teaching_notes": "Ensure the quiz question directly relates to the lesson's main point.",
+        "narration_hints": "Time for a quick check! Based on what we've learned, what can we conclude about shapes that share the same perimeter?"
+      }
+    ]
+  },
+  "scenes": [
+    {
+      "scene_no": 1,
+      "template_id": "title_slide",
+      "teaching_step_id": "intro_problem",
+      "teacher_script": "Welcome to our lesson on comparing geometric shapes! Today, we're presented with an interesting challenge: two fields, one square and one rectangular, both share the exact same perimeter. Our mission is to determine which of these fields offers a larger area. Let's dive in!",
+      "template_data": {
+        "title": "Perimeter vs. Area: Square and Rectangle Fields",
+        "subtitle": "Which field has a larger area?",
+        "animation_style": "fade_wave"
+      },
+      "metadata": {
+        "learning_objective": "Understand the problem statement.",
+        "concept_importance": "high",
+        "instruction_type": "Introduction",
+        "difficulty": "beginner",
+        "teaching_strategy": "Problem-based learning",
+        "reinforcement_level": "initial",
+        "quiz_hints": "Focus on the core question.",
+        "analytics_tags": "introduction, problem, geometry"
+      },
+      "audio_url": "./scene_1.wav"
+    },
+    {
+      "scene_no": 2,
+      "template_id": "math_derivation",
+      "teaching_step_id": "calc_sq_perimeter",
+      "teacher_script": "Let's begin with the square field. We know its side length is 60 meters. To find its perimeter, we simply multiply the side length by four, since all four sides are equal. This calculation gives us the total length of the boundary around our square field.",
+      "template_data": {
+        "title": "1. Perimeter of the Square Field",
+        "equation_steps": [
+          {
+            "step": "Side length (s)",
+            "value": "60 m"
+          },
+          {
+            "step": "Perimeter formula",
+            "value": "P = 4s"
+          },
+          {
+            "step": "Substitute value",
+            "value": "P = 4 × 60 m"
+          },
+          {
+            "step": "Calculate perimeter",
+            "value": "P = 240 m"
+          }
+        ],
+        "final_answer_label": "Square Perimeter:",
+        "final_answer_value": "240 m",
+        "animation_style": "stagger_in"
+      },
+      "metadata": {
+        "learning_objective": "Apply perimeter formula for a square.",
+        "concept_importance": "medium",
+        "instruction_type": "Explanation",
+        "difficulty": "beginner",
+        "teaching_strategy": "Step-by-step calculation",
+        "reinforcement_level": "fundamental",
+        "quiz_hints": "Recall P = 4s.",
+        "analytics_tags": "perimeter, square, calculation"
+      },
+      "audio_url": "./scene_2.wav"
+    },
+    {
+      "scene_no": 3,
+      "template_id": "math_derivation",
+      "teaching_step_id": "calc_rect_width",
+      "teacher_script": "Now, for the rectangular field. We are given its length is 80 meters, and crucially, it has the same perimeter as the square: 240 meters. Using the perimeter formula for a rectangle, P equals two times (length plus width), we can substitute our known values and solve for the missing width.",
+      "template_data": {
+        "title": "2. Finding the Width of the Rectangular Field",
+        "equation_steps": [
+          {
+            "step": "Given Perimeter (P)",
+            "value": "240 m"
+          },
+          {
+            "step": "Given Length (l)",
+            "value": "80 m"
+          },
+          {
+            "step": "Perimeter formula",
+            "value": "P = 2(l + w)"
+          },
+          {
+            "step": "Substitute knowns",
+            "value": "240 = 2(80 + w)"
+          },
+          {
+            "step": "Divide by 2",
+            "value": "120 = 80 + w"
+          },
+          {
+            "step": "Solve for w",
+            "value": "w = 120 - 80"
+          },
+          {
+            "step": "Width (w)",
+            "value": "40 m"
+          }
+        ],
+        "final_answer_label": "Rectangle Width:",
+        "final_answer_value": "40 m",
+        "animation_style": "stagger_in"
+      },
+      "metadata": {
+        "learning_objective": "Solve for unknown dimension using perimeter.",
+        "concept_importance": "high",
+        "instruction_type": "Explanation",
+        "difficulty": "intermediate",
+        "teaching_strategy": "Problem-solving, algebraic manipulation",
+        "reinforcement_level": "applied",
+        "quiz_hints": "Remember P = 2(l+w).",
+        "analytics_tags": "perimeter, rectangle, algebra, solving"
+      },
+      "audio_url": "./scene_3.wav"
+    },
+    {
+      "scene_no": 4,
+      "template_id": "math_derivation",
+      "teaching_step_id": "calc_sq_area",
+      "teacher_script": "With the perimeter handled, let's turn our attention to the area. For the square field, with a side length of 60 meters, the area is calculated by multiplying the side by itself. This gives us the total ground covered by the square field in square meters.",
+      "template_data": {
+        "title": "3. Area of the Square Field",
+        "equation_steps": [
+          {
+            "step": "Side length (s)",
+            "value": "60 m"
+          },
+          {
+            "step": "Area formula",
+            "value": "A = s × s"
+          },
+          {
+            "step": "Substitute value",
+            "value": "A = 60 m × 60 m"
+          },
+          {
+            "step": "Calculate area",
+            "value": "A = 3600 m²"
+          }
+        ],
+        "final_answer_label": "Square Area:",
+        "final_answer_value": "3600 m²",
+        "animation_style": "cascade"
+      },
+      "metadata": {
+        "learning_objective": "Apply area formula for a square.",
+        "concept_importance": "medium",
+        "instruction_type": "Explanation",
+        "difficulty": "beginner",
+        "teaching_strategy": "Step-by-step calculation",
+        "reinforcement_level": "fundamental",
+        "quiz_hints": "Recall A = s².",
+        "analytics_tags": "area, square, calculation"
+      },
+      "audio_url": "./scene_4.wav"
+    },
+    {
+      "scene_no": 5,
+      "template_id": "math_derivation",
+      "teaching_step_id": "calc_rect_area",
+      "teacher_script": "Now, we find the area of the rectangular field. We know its length is 80 meters and we've just calculated its width to be 40 meters. The area of a rectangle is simply length multiplied by width. Let's perform this final calculation.",
+      "template_data": {
+        "title": "4. Area of the Rectangular Field",
+        "equation_steps": [
+          {
+            "step": "Length (l)",
+            "value": "80 m"
+          },
+          {
+            "step": "Width (w)",
+            "value": "40 m"
+          },
+          {
+            "step": "Area formula",
+            "value": "A = l × w"
+          },
+          {
+            "step": "Substitute values",
+            "value": "A = 80 m × 40 m"
+          },
+          {
+            "step": "Calculate area",
+            "value": "A = 3200 m²"
+          }
+        ],
+        "final_answer_label": "Rectangle Area:",
+        "final_answer_value": "3200 m²",
+        "animation_style": "cascade"
+      },
+      "metadata": {
+        "learning_objective": "Apply area formula for a rectangle.",
+        "concept_importance": "medium",
+        "instruction_type": "Explanation",
+        "difficulty": "beginner",
+        "teaching_strategy": "Step-by-step calculation",
+        "reinforcement_level": "fundamental",
+        "quiz_hints": "Recall A = l × w.",
+        "analytics_tags": "area, rectangle, calculation"
+      },
+      "audio_url": "./scene_5.wav"
+    },
+    {
+      "scene_no": 6,
+      "template_id": "column_comparison",
+      "teaching_step_id": "compare_areas",
+      "teacher_script": "We've calculated both areas! The square field has an area of 3600 square meters, while the rectangular field has an area of 3200 square meters. Clearly, even though their perimeters were identical, the square field offers a larger total area. This highlights an important concept in geometry!",
+      "template_data": {
+        "title": "Comparison: Which field has a larger area?",
+        "column_titles": [
+          "Square Field",
+          "Rectangular Field"
+        ],
+        "rows": [
+          {
+            "label": "Perimeter",
+            "value1": "240 m",
+            "value2": "240 m"
+          },
+          {
+            "label": "Area",
+            "value1": "3600 m²",
+            "value2": "3200 m²"
+          }
+        ],
+        "highlighted_row_index": 1,
+        "conclusion": "The Square Field has a larger area (3600 m² > 3200 m²).",
+        "animation_style": "spring_pop"
+      },
+      "metadata": {
+        "learning_objective": "Compare calculated areas.",
+        "concept_importance": "high",
+        "instruction_type": "Comparison",
+        "difficulty": "beginner",
+        "teaching_strategy": "Direct comparison",
+        "reinforcement_level": "summary",
+        "quiz_hints": "Focus on the final area values.",
+        "analytics_tags": "comparison, area, conclusion"
+      },
+      "audio_url": "./scene_6.wav"
+    },
+    {
+      "scene_no": 7,
+      "template_id": "quiz_checkpoint",
+      "teaching_step_id": "review_lesson",
+      "teacher_script": "Before we wrap up, a quick challenge for you! If two shapes have the exact same perimeter, does that automatically mean they must have the same area? Think back to our square and rectangular fields. This is a crucial takeaway from today's lesson.",
+      "template_data": {
+        "question": "True or False: If two shapes have the same perimeter, they must also have the same area.",
+        "options": [
+          {
+            "id": "A",
+            "text": "True"
+          },
+          {
+            "id": "B",
+            "text": "False"
+          }
+        ],
+        "correct_answer_id": "B",
+        "explanation": "As shown with the square and rectangle fields, two shapes can have the same perimeter but different areas. The square had a larger area (3600 m²) than the rectangle (3200 m²), despite both having a perimeter of 240 m."
+      },
+      "metadata": {
+        "learning_objective": "Reinforce the relationship between perimeter and area.",
+        "concept_importance": "high",
+        "instruction_type": "Assessment",
+        "difficulty": "intermediate",
+        "teaching_strategy": "Formative assessment",
+        "reinforcement_level": "critical",
+        "quiz_hints": "Recall the main finding.",
+        "analytics_tags": "quiz, review, misconception, perimeter_area"
+      },
+      "audio_url": "./scene_7.wav"
+    }
+  ]
+}

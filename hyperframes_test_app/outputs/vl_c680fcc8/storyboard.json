@@ -1,0 +1,85 @@
+{
+  "lesson_title": "From Trees to Paper: A Journey of Transformation",
+  "layout_mode": "timeline",
+  "theme": "General",
+  "global_assets": [],
+  "connections": [],
+  "lesson_id": "vl_c680fcc8",
+  "scenes": [
+    {
+      "scene_no": 1,
+      "purpose": "Introduce the lesson topic and engage the student.",
+      "template_id": "title_slide",
+      "teacher_script": "Hello future innovators! Have you ever wondered how the paper in your notebooks, books, and even drawings is created? Today, we're going on an exciting journey to discover how ordinary trees become the paper we use every day!",
+      "template_data": {
+        "title": "From Trees to Paper: A Journey of Transformation",
+        "subtitle": "Unveiling the Secrets of Paper Manufacturing"
+      },
+      "audio_url": "/uploads/visual_lessons/vl_c680fcc8/scene_1.wav"
+    },
+    {
+      "scene_no": 2,
+      "purpose": "Explain the primary raw materials and key requirements for paper production, including the historical context of mill locations.",
+      "template_id": "concept_diagram",
+      "teacher_script": "The most important raw material for making paper is wood! Originally, paper mills were built close to forests where trees like bamboo and other softwoods were abundant. But with changing times, mills now source wood from further away, even encouraging farmers to grow specific trees like Subabul.",
+      "template_data": {
+        "main_concept": "Paper Mills: Where Paper Begins",
+        "attributes": {
+          "Primary Raw Material": "Wood (Bamboo, Soft Wood, Subabul)",
+          "Historical Location": "Near Forests (rich in bamboo)",
+          "Current Sourcing": "From Distant Places & Farmed Trees (like Subabul)",
+          "Essential Resource": "Large Quantity of Clean Water"
+        }
+      },
+      "audio_url": "/uploads/visual_lessons/vl_c680fcc8/scene_2.wav"
+    },
+    {
+      "scene_no": 3,
+      "purpose": "Detail the first step in paper making: Chipping, with vivid descriptions.",
+      "template_id": "concept_diagram",
+      "teacher_script": "The very first magical step is called 'Chipping'. Imagine huge logs arriving at the mill! Giant machines then cut these big pieces of wood into tiny, uniform 'chips'. It's so efficient, a whole lorry load of wood can be chipped in about 30 minutes!",
+      "template_data": {
+        "main_concept": "Step 1: Chipping the Wood",
+        "attributes": {
+          "Action": "Large pieces of wood are cut into small chips.",
+          "Tools Used": "Large, powerful machines (can chip a lorry load in ~30 mins).",
+          "Output": "Uniform wood chips, separated by size."
+        }
+      },
+      "audio_url": "/uploads/visual_lessons/vl_c680fcc8/scene_3.wav"
+    },
+    {
+      "scene_no": 4,
+      "purpose": "Explain the second crucial step: Making of Wood Pulp and its whitening.",
+      "template_id": "concept_diagram",
+      "teacher_script": "After chipping, the small wood chips move to the 'Fibre Line' section. Here, they're boiled with special chemicals in massive vessels. This process transforms the hard wood chips into a soft, thin, liquid 'pulp' – much like cotton fibres! Finally, this liquid pulp is whitened, ready for the next stages.",
+      "template_data": {
+        "main_concept": "Step 2: Making Wood Pulp",
+        "attributes": {
+          "Location": "Fibre Line Section",
+          "Process": "Wood chips are boiled with chemicals in large vessels.",
+          "Result": "Chips turn into a soft, thin pulp of fibres (like cotton).",
+          "Finishing": "The liquid pulp is then whitened."
+        }
+      },
+      "audio_url": "/uploads/visual_lessons/vl_c680fcc8/scene_4.wav"
+    },
+    {
+      "scene_no": 5,
+      "purpose": "Reinforce learning with a quick quiz.",
+      "template_id": "quiz_checkpoint",
+      "teacher_script": "You've learned some fascinating details! Let's see if you can remember the key ingredients and the very first steps in making paper. Good luck!",
+      "template_data": {
+        "question": "Which of these is the primary raw material for paper, and what are the first two steps in its transformation?",
+        "options": [
+          "A) Cotton; Spinning and Weaving",
+          "B) Wood; Chipping and Making Pulp",
+          "C) Plastic; Melting and Molding",
+          "D) Clay; Shaping and Baking"
+        ],
+        "correct_answer": "B) Wood; Chipping and Making Pulp"
+      },
+      "audio_url": "/uploads/visual_lessons/vl_c680fcc8/scene_5.wav"
+    }
+  ]
+}

@@ -1,6 +1,15 @@
 import os
+import sys
+import asyncio
 from contextlib import asynccontextmanager
 from dotenv import load_dotenv
+
+# Ensure Windows uses Proactor event loop for subprocess support
+if sys.platform == "win32":
+    try:
+        asyncio.set_event_loop_policy(asyncio.WindowsProactorEventLoopPolicy())
+    except Exception:
+        pass
 
 # Load environment variables FIRST with override to prioritize .env file over system env vars
 # Resolve root .env path relative to main.py

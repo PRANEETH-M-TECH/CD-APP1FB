@@ -1,0 +1,135 @@
+{
+  "lesson_title": "The Nizam's Rule: Protecting Feudal Power",
+  "layout_mode": "timeline",
+  "theme": "History",
+  "global_assets": [],
+  "connections": [],
+  "lesson_id": "vl_0926d417",
+  "scenes": [
+    {
+      "scene_no": 1,
+      "purpose": "Introduce the lesson topic and set the context for understanding the Nizam's rule from the provided text.",
+      "template_id": "title_slide",
+      "teacher_script": "Hello, students! Today, we'll explore the rule of the Nizams of Hyderabad. We'll specifically look at how they governed and responded to calls for change, based on our textbook.",
+      "template_data": {
+        "title": "The Nizam's Rule:",
+        "subtitle": "Protecting Feudal Power in Hyderabad State"
+      },
+      "audio_url": "/uploads/visual_lessons/vl_0926d417/scene_1.wav"
+    },
+    {
+      "scene_no": 2,
+      "purpose": "Provide an overview of the Asaf Jahi rulers (Nizams), their period of rule, and their initial political struggles and eventual dependency.",
+      "template_id": "concept_diagram",
+      "teacher_script": "The Asaf Jahi dynasty ruled Hyderabad for over 200 years, from 1724 to 1948. They started by fighting to create an independent state but later became dependent on the British.",
+      "template_data": {
+        "title": "Who were the Nizams?",
+        "central_concept": "Asaf Jahi Rulers (Nizams)",
+        "attributes": [
+          "Ruled Hyderabad State (1724-1948)",
+          "Ten kings, seven received 'Nizam' title",
+          "Fought Marathas & Mysore for independent state",
+          "Became dependent on British",
+          "Undertook colonial modernisation"
+        ]
+      },
+      "audio_url": "/uploads/visual_lessons/vl_0926d417/scene_2.wav"
+    },
+    {
+      "scene_no": 3,
+      "purpose": "Highlight the shift in the Nizam's political status and governance from striving for independence to becoming influenced by the British.",
+      "template_id": "column_comparison",
+      "teacher_script": "Initially, the Nizams aimed to build an independent state. But over time, their constant battles led them to rely on the British, which deeply influenced their administration.",
+      "template_data": {
+        "left_col": {
+          "header": "Early Goals (Nizams)",
+          "bullets": [
+            "Carve an independent state",
+            "Constantly fought Marathas and Mysore"
+          ]
+        },
+        "right_col": {
+          "header": "Later Reality (Nizams)",
+          "bullets": [
+            "Became dependent on the British",
+            "Lost independent status",
+            "Undertook colonial modernisation"
+          ]
+        }
+      },
+      "audio_url": "/uploads/visual_lessons/vl_0926d417/scene_3.wav"
+    },
+    {
+      "scene_no": 4,
+      "purpose": "Explain the feudal power structure that existed under the Nizams, which was at the core of resistance to reforms.",
+      "template_id": "concept_diagram",
+      "teacher_script": "Our textbook mentions a feudal power structure. This system involved powerful individuals like Mansabdars, Jagirdars, and Zamindars who held significant control over land and resources.",
+      "template_data": {
+        "title": "The Feudal Power Structure",
+        "central_concept": "Feudal System in Hyderabad State",
+        "attributes": [
+          "Mansabdars (High-ranking officials)",
+          "Jagirdars (Holders of land revenue assignments)",
+          "Zamindars (Landlords collecting revenue)",
+          "Elite (Privileged class)",
+          "Result: Power concentrated in few hands, resistant to change"
+        ]
+      },
+      "audio_url": "/uploads/visual_lessons/vl_0926d417/scene_4.wav"
+    },
+    {
+      "scene_no": 5,
+      "purpose": "Visually represent the VII Nizam's resistance to popular demand for liberal administrative reforms, which can be seen as the 'cruel' aspect in terms of governance.",
+      "template_id": "before_after_slider",
+      "teacher_script": "The text tells us that despite a popular movement pushing for liberal administrative reforms, the VII Nizam chose to protect this existing feudal power structure. This meant resisting changes that many people desired.",
+      "template_data": {
+        "title": "Resistance to Reform",
+        "before_text": "Popular Movement for Liberal Administrative Reforms (People demanding change for better governance and equality)",
+        "after_text": "VII Nizam Determines to Protect Feudal Power Structure (Old system, benefiting the elite, maintained despite popular demand)"
+      },
+      "audio_url": "/uploads/visual_lessons/vl_0926d417/scene_5.wav"
+    },
+    {
+      "scene_no": 6,
+      "purpose": "Provide a balanced view from the textbook, showing that not all Nizams resisted reform, by contrasting the VII Nizam's stance with the reforms of the VI Nizam.",
+      "template_id": "column_comparison",
+      "teacher_script": "However, it's important to note that not all Nizams were resistant to change. The VI Nizam, Mir Mahabub Ali Khan, actually introduced many reforms during his period, like establishing important institutions.",
+      "template_data": {
+        "left_col": {
+          "header": "VII Nizam's Stance",
+          "bullets": [
+            "Determined to protect feudal power structure",
+            "Resisted liberal administrative reforms"
+          ]
+        },
+        "right_col": {
+          "header": "VI Nizam's Reforms",
+          "bullets": [
+            "Period marked with a number of reforms",
+            "Established Asafia Library",
+            "Founded Victoria Memorial Orphanage",
+            "Opened Mahabubia Girls School"
+          ]
+        }
+      },
+      "audio_url": "/uploads/visual_lessons/vl_0926d417/scene_6.wav"
+    },
+    {
+      "scene_no": 7,
+      "purpose": "Test the student's understanding of the key point regarding the VII Nizam's actions related to reforms.",
+      "template_id": "quiz_checkpoint",
+      "teacher_script": "Let's quickly check your understanding! According to our textbook, what was the VII Nizam's stance on popular movements for liberal administrative reforms?",
+      "template_data": {
+        "question": "According to our textbook, what was the VII Nizam's stance on popular movements for liberal administrative reforms?",
+        "options": [
+          "A) He embraced them and introduced many changes.",
+          "B) He actively led the popular movements himself.",
+          "C) He determined to protect the feudal power structure despite them.",
+          "D) He ignored them completely and they had no impact."
+        ],
+        "correct_answer_index": 2
+      },
+      "audio_url": "/uploads/visual_lessons/vl_0926d417/scene_7.wav"
+    }
+  ]
+}

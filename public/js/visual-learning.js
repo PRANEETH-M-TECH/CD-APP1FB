@@ -88,6 +88,7 @@ class VisualLearningController {
             'designing_lesson',
             'generating_visuals',
             'creating_narration',
+            'hyperframes_engine',
             'launching_lesson'
         ];
         
@@ -108,10 +109,13 @@ class VisualLearningController {
         
         this.initDOMElements();
         
+        // Listen for IPC events from Hyperframes Engine inside iframe
+        window.addEventListener('message', (e) => this.handleIframeEvent(e));
+
         // Dynamic Canvas Scaling
         window.addEventListener('resize', () => {
             console.log("[VisualLearning LOG] Window resized. Re-calculating canvas scale.");
-            this.resizeCanvas();
+            this.scaleIframe();
         });
     }
 
@@ -140,11 +144,61 @@ class VisualLearningController {
         if (closeNotes) closeNotes.onclick = () => this.toggleNotes(false);
         if (this.notesBtn) this.notesBtn.onclick = () => this.toggleNotes();
         
+        const notesToggleBtn = document.getElementById('vl-notes-toggle-btn');
+        if (notesToggleBtn) notesToggleBtn.onclick = () => this.toggleNotes();
+
         const exitBtn = document.getElementById('vl-exit-btn');
         if (exitBtn) exitBtn.onclick = () => this.destroyLesson();
         
         const errorExitBtn = document.getElementById('vl-error-exit-btn');
         if (errorExitBtn) errorExitBtn.onclick = () => this.destroyLesson();
+
+        // Controls: Replay, Mute, Speed, Fullscreen
+        const replayBtn = document.getElementById('vl-replay-btn');
+        if (replayBtn) replayBtn.onclick = () => {
+            console.log("[VisualLearning LOG] Replay lesson triggered.");
+            this.sendCommandToIframe('RESTART');
+        };
+
+        this.isMuted = false;
+        const muteBtn = document.getElementById('vl-mute-btn');
+        const muteIcon = document.getElementById('vl-mute-icon');
+        if (muteBtn) muteBtn.onclick = () => {
+            this.isMuted = !this.isMuted;
+            this.sendCommandToIframe('TOGGLE_MUTE', { isMuted: this.isMuted });
+            if (muteIcon) muteIcon.textContent = this.isMuted ? '🔇' : '🔊';
+        };
+
+        this.playbackSpeeds = [1.0, 1.25, 1.5, 2.0, 0.75];
+        this.speedIndex = 0;
+        const speedBtn = document.getElementById('vl-speed-btn');
+        if (speedBtn) speedBtn.onclick = () => {
+            this.speedIndex = (this.speedIndex + 1) % this.playbackSpeeds.length;
+            const speed = this.playbackSpeeds[this.speedIndex];
+            speedBtn.innerHTML = `<span>${speed}x</span>`;
+            this.sendCommandToIframe('SET_PLAYBACK_RATE', { rate: speed });
+        };
+
+        const fullscreenBtn = document.getElementById('vl-fullscreen-btn');
+        if (fullscreenBtn) fullscreenBtn.onclick = () => {
+            const player = document.getElementById('vl-player') || document.getElementById('vl-video-container');
+            if (!document.fullscreenElement) {
+                if (player.requestFullscreen) player.requestFullscreen();
+                else if (player.webkitRequestFullscreen) player.webkitRequestFullscreen();
+            } else {
+                if (document.exitFullscreen) document.exitFullscreen();
+            }
+        };
+
+        // Wire AI Tool Chips
+        const chips = document.querySelectorAll('.vl-ai-chip');
+        chips.forEach(chip => {
+            chip.onclick = () => {
+                const label = chip.textContent.trim();
+                console.log(`[VisualLearning LOG] AI Tool Chip clicked: ${label}`);
+                this.showAIToolToast(label);
+            };
+        });
 
         const tabScriptBtn = document.getElementById('vl-tab-script');
         const tabOutlineBtn = document.getElementById('vl-tab-outline');
@@ -327,6 +381,11 @@ class VisualLearningController {
                     if (check) check.textContent = '✓';
                 }
             }
+
+            const logTextEl = document.getElementById('vl-engine-log-text');
+            if (logTextEl && event.message) {
+                logTextEl.textContent = event.message;
+            }
         } else if (event.type === 'lesson_ready') {
             console.log("[VisualLearning LOG] Lesson package is ready. Starting asset preloading sequence.", event.lesson);
             
@@ -355,6 +414,11 @@ class VisualLearningController {
     }
 
     async preloadLessonAssets() {
+        if (this.lessonPackage && (this.lessonPackage.html_url || this.lessonPackage.video_url)) {
+            console.log("[VisualLearning LOG] Fast-path active for Hyperframes player composition. Skipping client audio preloading.");
+            return;
+        }
+
         const scenes = this.lessonPackage.scenes;
         console.log(`[VisualLearning LOG] Preloading assets for ${scenes.length} scenes.`);
         this.preloadedImages = {};
@@ -479,16 +543,352 @@ class VisualLearningController {
         console.log(`[VisualLearning LOG] Total continuous lesson duration: ${this.totalDuration.toFixed(2)}s. Start times:`, this.clipStartTimes);
     }
 
+    sendCommandToIframe(command, payload = {}) {
+        const iframe = document.getElementById('vl-html-iframe');
+        if (iframe && iframe.contentWindow) {
+            iframe.contentWindow.postMessage({
+                target: 'HYPERFRAMES_ENGINE',
+                command,
+                ...payload
+            }, '*');
+        }
+    }
+
+    handleIframeEvent(e) {
+        const data = e.data;
+        if (!data || data.source !== 'HYPERFRAMES_ENGINE') return;
+        
+        switch (data.type) {
+            case 'READY':
+                console.log("⚡ [VisualLearning Parent] Received READY from Hyperframes Engine:", data);
+                this.iframeReady = true;
+                this.totalDuration = data.duration || 0;
+                this.totalScenes = data.totalScenes || 1;
+                this.lessonScenes = data.scenes || [];
+                
+                this.renderSidebarFromMetadata(data.scenes || []);
+                this.updateHeaderTitle(data.lessonTitle);
+                this.updateProgressTimeDisplay(0);
+
+                // Autoplay by default upon engine ready
+                console.log("▶ [VisualLearning Parent] Triggering automatic playback by default.");
+                this.sendCommandToIframe('PLAY');
+                this.isPlaying = true;
+                this.updatePlayPauseBtnUI(true);
+                break;
+
+            case 'PLAYING':
+                this.isPlaying = true;
+                this.updatePlayPauseBtnUI(true);
+                break;
+
+            case 'PAUSED':
+                this.isPlaying = false;
+                this.updatePlayPauseBtnUI(false);
+                break;
+
+            case 'CURRENT_TIME':
+                this.updatePlaybackTimeUI(data.currentTime, data.duration);
+                break;
+
+            case 'SCENE_CHANGED':
+                this.currentSlideIndex = (data.currentScene || 1) - 1;
+                this.updateSceneStateUI(data.currentScene, data.totalScenes, data.title, data.script);
+                break;
+
+            case 'SUBTITLE_CHANGED':
+                this.updateSubtitleText(data.script);
+                break;
+
+            case 'TIMELINE_FINISHED':
+                this.isPlaying = false;
+                this.updatePlayPauseBtnUI(false);
+                if (this.progressBarFill) this.progressBarFill.style.width = '100%';
+                break;
+        }
+    }
+
+    updatePlayPauseBtnUI(isPlaying) {
+        if (!this.playPauseBtn) return;
+        if (isPlaying) {
+            this.playPauseBtn.innerHTML = '<span>⏸</span> Pause';
+            this.playPauseBtn.className = 'vl-btn vl-btn-primary';
+        } else {
+            this.playPauseBtn.innerHTML = '<span>▶</span> Play';
+            this.playPauseBtn.className = 'vl-btn vl-btn-primary';
+        }
+    }
+
+    updatePlaybackTimeUI(currentTime, duration) {
+        const dur = duration || this.totalDuration || 1;
+        const pct = Math.max(0, Math.min(100, (currentTime / dur) * 100));
+        if (this.progressBarFill) {
+            this.progressBarFill.style.width = `${pct.toFixed(2)}%`;
+        }
+        this.updateProgressTimeDisplay(currentTime);
+    }
+
+    updateSceneStateUI(currentSceneNo, totalScenes, title, script) {
+        const total = totalScenes || (this.lessonPackage && this.lessonPackage.scenes ? this.lessonPackage.scenes.length : 1);
+        if (this.progressText) {
+            const curTimeStr = this.formatSeconds(this.lastCurrentTime || 0);
+            const totTimeStr = this.formatSeconds(this.totalDuration || 0);
+            this.progressText.textContent = `Scene ${currentSceneNo} / ${total} • ${curTimeStr} / ${totTimeStr}`;
+        }
+
+        // Update Subtitle Panel
+        this.updateSubtitleText(script);
+
+        // Update Notes Drawer
+        if (this.notesBody && script) {
+            this.notesBody.innerHTML = `<p>${script}</p>`;
+        }
+
+        // Highlight Active Scene in Sidebar
+        this.updateSidebarHighlight(currentSceneNo);
+    }
+
+    updateSubtitleText(scriptText) {
+        const subText = document.getElementById('vl-subtitle-text');
+        if (subText && scriptText) {
+            subText.textContent = scriptText;
+        }
+    }
+
+    updateHeaderTitle(titleText) {
+        const headerTitle = document.getElementById('vl-header-title');
+        if (headerTitle && titleText) {
+            headerTitle.textContent = titleText;
+        }
+    }
+
+    formatSeconds(time) {
+        const mins = Math.floor(time / 60);
+        const secs = Math.floor(time % 60);
+        return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+    }
+
+    renderSidebarFromMetadata(scenes) {
+        if (!this.slidesList) return;
+        this.slidesList.innerHTML = '';
+        scenes.forEach((scene, index) => {
+            const sceneNo = scene.scene_no || (index + 1);
+            const item = document.createElement('div');
+            item.id = `vl-slide-item-${sceneNo}`;
+            item.className = index === 0 ? 'vl-slide-item current' : 'vl-slide-item upcoming';
+            item.onclick = () => {
+                console.log(`[VisualLearning Parent UI] Clicked scene item #${sceneNo}`);
+                this.sendCommandToIframe('JUMP_SCENE', { sceneNo });
+            };
+            item.innerHTML = `
+                <div class="vl-slide-status-icon">${sceneNo}</div>
+                <div class="vl-slide-details">
+                    <span class="vl-slide-title">${scene.title || `Scene ${sceneNo}`}</span>
+                </div>
+            `;
+            this.slidesList.appendChild(item);
+        });
+    }
+
+    updateSidebarHighlight(activeSceneNo) {
+        if (!this.lessonScenes) return;
+        this.lessonScenes.forEach((scene, index) => {
+            const sceneNo = scene.scene_no || (index + 1);
+            const item = document.getElementById(`vl-slide-item-${sceneNo}`);
+            if (!item) return;
+            const icon = item.querySelector('.vl-slide-status-icon');
+            if (sceneNo < activeSceneNo) {
+                item.className = 'vl-slide-item completed';
+                if (icon) icon.textContent = '✓';
+            } else if (sceneNo === activeSceneNo) {
+                item.className = 'vl-slide-item current';
+                if (icon) icon.textContent = sceneNo;
+            } else {
+                item.className = 'vl-slide-item upcoming';
+                if (icon) icon.textContent = sceneNo;
+            }
+        });
+    }
+
+    showAIToolToast(toolName) {
+        let toast = document.getElementById('vl-ai-toast');
+        if (!toast) {
+            toast = document.createElement('div');
+            toast.id = 'vl-ai-toast';
+            toast.style.cssText = `
+                position: fixed; bottom: 24px; right: 24px; z-index: 9999;
+                background: rgba(15, 23, 42, 0.94); border: 1px solid rgba(99, 102, 241, 0.4);
+                color: #f1f5f9; padding: 12px 20px; border-radius: 12px; font-size: 13px; font-weight: 600;
+                backdrop-filter: blur(12px); box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+                transition: all 0.3s ease; transform: translateY(10px); opacity: 0;
+            `;
+            document.body.appendChild(toast);
+        }
+        toast.innerHTML = `✨ <strong>${toolName}</strong> — Feature initialized! Connected to AI pipeline.`;
+        toast.style.opacity = '1';
+        toast.style.transform = 'translateY(0)';
+        setTimeout(() => {
+            toast.style.opacity = '0';
+            toast.style.transform = 'translateY(10px)';
+        }, 3200);
+    }
+
     launchPlayer() {
-        console.log("[VisualLearning LOG] Launching player UI.");
-        this.loadingScreen.style.display = 'none';
-        this.playerUI.style.display = 'flex';
+        console.log("[VisualLearning LOG] launchPlayer triggered.");
+        console.log("1. lessonPackage.video_url:", this.lessonPackage ? this.lessonPackage.video_url : undefined);
+        console.log("2. lessonPackage.html_url:", this.lessonPackage ? this.lessonPackage.html_url : undefined);
+
+        if (this.loadingScreen) this.loadingScreen.style.display = 'none';
+        if (this.playerUI) this.playerUI.style.display = 'flex';
+        
+        if (this.lessonPackage && this.lessonPackage.video_url) {
+            this.mountVideoPlayer(this.lessonPackage.video_url);
+            return;
+        }
+
+        if (this.lessonPackage && this.lessonPackage.html_url) {
+            if (this.canvas) {
+                if (window.gsap) gsap.killTweensOf(this.canvas);
+                this.canvas.style.transform = '';
+                this.canvas.style.width = '';
+                this.canvas.style.height = '';
+            }
+            this.mountIframePlayer(this.lessonPackage.html_url);
+            return;
+        }
+
         this.currentSlideIndex = 0;
         this.isPlaying = false;
         
         this.resizeCanvas();
-        this.renderSidebar();
+        this.renderSidebarFromMetadata(this.lessonPackage ? this.lessonPackage.scenes : []);
         this.playSlide(1);
+    }
+
+    mountIframePlayer(htmlUrl) {
+        console.log("5. Inside mountIframePlayer():");
+        console.log("   - iframe created");
+        console.log("   - iframe.src:", htmlUrl);
+
+        this.canvas.innerHTML = `
+            <div class="hyperframes-iframe-wrapper" style="
+                width: 100%; height: 100%;
+                position: relative;
+                background: #090d16;
+                border-radius: 12px;
+                overflow: hidden;
+            ">
+                <iframe id="vl-html-iframe" src="${htmlUrl}"
+                    style="
+                        position: absolute;
+                        top: 0; left: 0;
+                        width: 1280px; height: 720px;
+                        border: none; outline: none;
+                        background: #090d16;
+                        transform-origin: top left;
+                    "
+                    allow="autoplay">
+                </iframe>
+            </div>
+        `;
+
+        const iframe = document.getElementById('vl-html-iframe');
+        if (iframe) {
+            iframe.onload = () => {
+                console.log("6. iframe.onload fired");
+                requestAnimationFrame(() => this.scaleIframe());
+                
+                // Hide inside-iframe subtitles container so subtitles ONLY render in dedicated Subtitle Panel below video
+                try {
+                    const doc = iframe.contentDocument || iframe.contentWindow.document;
+                    if (doc) {
+                        const style = doc.createElement('style');
+                        style.textContent = '.subtitles-container { display: none !important; }';
+                        doc.head.appendChild(style);
+                    }
+                } catch(e) {
+                    console.warn("[VisualLearning] Could not inject iframe subtitle override:", e);
+                }
+            };
+        }
+
+        this.updateHeaderAndSubtitles();
+        this.renderSidebar();
+        requestAnimationFrame(() => this.scaleIframe());
+        window.addEventListener('resize', () => this.scaleIframe());
+    }
+
+    scaleIframe() {
+        const iframe = document.getElementById('vl-html-iframe');
+        const wrapper = iframe && iframe.parentElement;
+        if (!iframe || !wrapper) return;
+
+        // Read dimensions from the wrapper (the immediate parent of the
+        // iframe) rather than this.canvas to avoid any stale canvas size.
+        const containerWidth  = wrapper.clientWidth  || this.canvas.clientWidth  || 800;
+        const containerHeight = wrapper.clientHeight || this.canvas.clientHeight || 450;
+        if (!containerWidth || !containerHeight) return;
+
+        // Uniform scale that fits the 1280×720 content into the container
+        // while preserving the aspect ratio (letterbox / pillarbox if needed).
+        const scale = Math.min(containerWidth / 1280, containerHeight / 720);
+        if (scale <= 0) return;
+
+        // Centre the scaled iframe within the wrapper using translate.
+        // transform-origin is top-left so the maths are straightforward:
+        //   scaledW = 1280 * scale,  offsetX = (containerW - scaledW) / 2
+        const offsetX = (containerWidth  - 1280 * scale) / 2;
+        const offsetY = (containerHeight - 720  * scale) / 2;
+
+        iframe.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(${scale})`;
+        console.log(`[scaleIframe] container=${containerWidth}x${containerHeight} scale=${scale.toFixed(4)} offset=(${offsetX.toFixed(1)},${offsetY.toFixed(1)})`);
+    }
+
+    mountVideoPlayer(videoUrl) {
+        this.canvas.innerHTML = `
+            <div class="hyperframes-video-wrapper" style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #000; position: relative; overflow: hidden; border-radius: 12px;">
+                <video id="vl-mp4-video" src="${videoUrl}" 
+                       style="width: 100%; height: 100%; object-fit: contain; outline: none; background: #000;" 
+                       playsinline controls autoplay>
+                </video>
+            </div>
+        `;
+
+        this.renderSidebar();
+
+        const videoEl = document.getElementById('vl-mp4-video');
+        if (videoEl) {
+            videoEl.onplay = () => {
+                this.isPlaying = true;
+                if (this.playPauseBtn) this.playPauseBtn.innerHTML = '❚❚';
+            };
+            videoEl.onpause = () => {
+                this.isPlaying = false;
+                if (this.playPauseBtn) this.playPauseBtn.innerHTML = '▶';
+            };
+            videoEl.ontimeupdate = () => {
+                if (videoEl.duration) {
+                    const pct = (videoEl.currentTime / videoEl.duration) * 100;
+                    if (this.progressBarFill) this.progressBarFill.style.width = pct + '%';
+                    if (this.progressText) {
+                        const cur = Math.floor(videoEl.currentTime);
+                        const tot = Math.floor(videoEl.duration);
+                        const curStr = `${Math.floor(cur / 60)}:${(cur % 60).toString().padStart(2, '0')}`;
+                        const totStr = `${Math.floor(tot / 60)}:${(tot % 60).toString().padStart(2, '0')}`;
+                        this.progressText.textContent = `${curStr} / ${totStr}`;
+                    }
+                }
+            };
+        }
+
+        if (this.playPauseBtn) {
+            this.playPauseBtn.onclick = () => {
+                if (videoEl) {
+                    if (videoEl.paused) videoEl.play();
+                    else videoEl.pause();
+                }
+            };
+        }
     }
 
     renderSidebar() {
@@ -576,6 +976,8 @@ class VisualLearningController {
         this.currentSlideIndex = sceneIndex;
         const scene = this.lessonPackage.scenes[sceneIndex];
 
+        this.updateHeaderAndSubtitles();
+
         // 1. Stop active audio
         if (this.audio) {
             console.log("[VisualLearning LOG] Pausing and resetting active audio.");
@@ -613,6 +1015,29 @@ class VisualLearningController {
             svgOverlay.style.zIndex = '1';
             this.canvas.appendChild(svgOverlay);
         }
+
+        // Render Scene Banner (Title + Script Subtitles)
+        let sceneBanner = document.getElementById('vl-scene-banner');
+        if (!sceneBanner) {
+            sceneBanner = document.createElement('div');
+            sceneBanner.id = 'vl-scene-banner';
+            sceneBanner.style.position = 'absolute';
+            sceneBanner.style.top = '24px';
+            sceneBanner.style.left = '50%';
+            sceneBanner.style.transform = 'translateX(-50%)';
+            sceneBanner.style.zIndex = '10';
+            sceneBanner.style.textAlign = 'center';
+            sceneBanner.style.maxWidth = '85%';
+            sceneBanner.style.pointerEvents = 'none';
+            this.canvas.appendChild(sceneBanner);
+        }
+        sceneBanner.innerHTML = `
+            <div style="background: rgba(15, 23, 42, 0.82); backdrop-filter: blur(12px); border: 1px solid rgba(99, 102, 241, 0.4); padding: 14px 28px; border-radius: 20px; box-shadow: 0 12px 36px rgba(0,0,0,0.6);">
+                <div style="color: #a5b4fc; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 4px;">Scene ${sceneNo} of ${this.lessonPackage.scenes.length}</div>
+                <h3 style="color: #ffffff; font-size: 20px; font-weight: 800; margin: 0 0 6px 0; font-family: system-ui, sans-serif;">${scene.title || `Concept #${sceneNo}`}</h3>
+                <p style="color: #cbd5e1; font-size: 13px; line-height: 1.5; margin: 0; font-family: system-ui, sans-serif;">${scene.teacher_script || ''}</p>
+            </div>
+        `;
 
         // Render/Diff Assets
         const globalAssets = this.lessonPackage.global_assets || [];
@@ -1015,165 +1440,42 @@ class VisualLearningController {
 
     updateProgressTimeDisplay(globalTime) {
         if (!this.progressText) return;
-        const formatTime = (time) => {
-            const mins = Math.floor(time / 60);
-            const secs = Math.floor(time % 60);
-            return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
-        };
+        this.lastCurrentTime = globalTime;
         const currentScene = this.currentSlideIndex + 1;
-        const totalScenes = this.lessonPackage.scenes.length;
-        const currentStr = formatTime(globalTime);
-        const totalStr = formatTime(this.totalDuration);
-        this.progressText.textContent = `Scene ${currentScene} / ${totalScenes} | ${currentStr} / ${totalStr}`;
+        const totalScenes = this.totalScenes || (this.lessonPackage && this.lessonPackage.scenes ? this.lessonPackage.scenes.length : 1);
+        const currentStr = this.formatSeconds(globalTime);
+        const totalStr = this.formatSeconds(this.totalDuration);
+        this.progressText.textContent = `Scene ${currentScene} / ${totalScenes} • ${currentStr} / ${totalStr}`;
     }
 
     handleProgressBarClick(e) {
         const progressBarContainer = document.querySelector('.vl-progress-bar-container');
-        if (!progressBarContainer || !this.lessonPackage || this.totalDuration <= 0) return;
+        if (!progressBarContainer || this.totalDuration <= 0) return;
 
         const rect = progressBarContainer.getBoundingClientRect();
         const offsetX = e.clientX - rect.left;
         const pct = Math.max(0, Math.min(1, offsetX / rect.width));
         const targetTime = pct * this.totalDuration;
         
-        console.log(`[VisualLearning LOG] User seek bar click: pct=${(pct*100).toFixed(1)}%, targetTime=${targetTime.toFixed(2)}s`);
-        this.seekTo(targetTime);
-    }
-
-    seekTo(targetTime) {
-        if (!this.lessonPackage || this.totalDuration <= 0) return;
-
-        this.isSeeking = true;
-
-        // Find active scene index
-        let targetSceneIndex = 0;
-        for (let i = 0; i < this.lessonPackage.scenes.length; i++) {
-            const startTime = this.clipStartTimes[i];
-            const endTime = this.clipStartTimes[i + 1] || Infinity;
-            if (targetTime >= startTime && targetTime < endTime) {
-                targetSceneIndex = i;
-                break;
-            }
-        }
-
-        const sceneNo = targetSceneIndex + 1;
-        const startOffset = targetTime - this.clipStartTimes[targetSceneIndex];
-
-        console.log(`[VisualLearning LOG] Seek targetTime maps to Scene #${sceneNo} at offset ${startOffset.toFixed(2)}s`);
-
-        if (this.currentSlideIndex === targetSceneIndex && this.audio) {
-            // Same scene, jump audio and timeline offset
-            this.audio.currentTime = startOffset;
-            if (this.timeline) {
-                this.timeline.seek(startOffset);
-            }
-            if (this.isPlaying) {
-                this.audio.play().catch(e => console.error(e));
-                this.timeline.play();
-                Object.values(this.lottieInstancesMap).forEach(inst => {
-                    try { inst.play(); } catch(e) {}
-                });
-            } else {
-                this.audio.pause();
-                this.timeline.pause();
-                Object.values(this.lottieInstancesMap).forEach(inst => {
-                    try { inst.pause(); } catch(e) {}
-                });
-            }
-            
-            // Force GUI updates
-            if (this.progressBarFill) {
-                const pct = (targetTime / this.totalDuration) * 100;
-                this.progressBarFill.style.width = `${pct}%`;
-            }
-            this.updateProgressTimeDisplay(targetTime);
-        } else {
-            // Scene changed, perform slide transition jump
-            this.playSlide(sceneNo, startOffset);
-        }
-
-        this.isSeeking = false;
-    }
-
-    checkAutoAdvance() {
-        console.log(`[VisualLearning LOG] checkAutoAdvance state: timelineFinished=${this.timelineFinished} | audioFinished=${this.audioFinished}`);
-        if (this.timelineFinished && this.audioFinished) {
-            const nextNo = this.currentSlideIndex + 2;
-            if (nextNo <= this.lessonPackage.scenes.length) {
-                console.log(`[VisualLearning LOG] Auto-advancing to Scene #${nextNo}`);
-                this.playSlide(nextNo);
-            } else {
-                console.log("[VisualLearning LOG] Storyboard Lesson complete. Closing timeline play.");
-                this.pause();
-                if (this.progressBarFill) this.progressBarFill.style.width = '100%';
-            }
-        }
-    }
-
-    play() {
-        if (!this.audio) {
-            console.warn("[VisualLearning WARNING] Play command issued, but no audio exists.");
-            return;
-        }
-        console.log("[VisualLearning LOG] Player resumed/played.");
-        this.isPlaying = true;
-        if (this.playPauseBtn) {
-            this.playPauseBtn.innerHTML = '<span>⏸</span> Pause';
-            this.playPauseBtn.className = 'vl-btn vl-btn-primary';
-        }
-        this.audio.play().catch(err => {
-            console.error("[VisualLearning ERROR] Playback failed:", err);
-            this.pause();
-        });
-        if (this.timeline) this.timeline.play();
-        Object.values(this.lottieInstancesMap).forEach(inst => {
-            try { inst.play(); } catch(e) {}
-        });
-    }
-
-    pause() {
-        if (!this.audio) {
-            console.warn("[VisualLearning WARNING] Pause command issued, but no audio exists.");
-            return;
-        }
-        console.log("[VisualLearning LOG] Player paused.");
-        this.isPlaying = false;
-        if (this.playPauseBtn) {
-            this.playPauseBtn.innerHTML = '<span>▶</span> Resume';
-            this.playPauseBtn.className = 'vl-btn vl-btn-primary';
-        }
-        this.audio.pause();
-        if (this.timeline) this.timeline.pause();
-        Object.values(this.lottieInstancesMap).forEach(inst => {
-            try { inst.pause(); } catch(e) {}
-        });
+        console.log(`[VisualLearning Parent UI] User seek bar click: pct=${(pct*100).toFixed(1)}%, targetTime=${targetTime.toFixed(2)}s`);
+        this.sendCommandToIframe('SEEK', { targetTime });
     }
 
     togglePlay() {
-        console.log("[VisualLearning LOG] TogglePlay triggered. Current state: isPlaying=", this.isPlaying);
-        if (this.isPlaying) {
-            this.pause();
-        } else {
-            this.play();
-        }
+        console.log("[VisualLearning Parent UI] togglePlay triggered. isPlaying=", this.isPlaying);
+        this.sendCommandToIframe(this.isPlaying ? 'PAUSE' : 'PLAY');
     }
 
     nextSlide() {
-        if (this.currentSlideIndex < this.lessonPackage.scenes.length - 1) {
-            console.log(`[VisualLearning LOG] Next button clicked. Scene index shifting up.`);
-            const nextSceneIndex = this.currentSlideIndex + 1;
-            const startTime = this.clipStartTimes[nextSceneIndex] || 0;
-            this.seekTo(startTime);
-        }
+        const nextNo = this.currentSlideIndex + 2;
+        console.log(`[VisualLearning Parent UI] Next button clicked. Requesting scene #${nextNo}`);
+        this.sendCommandToIframe('JUMP_SCENE', { sceneNo: nextNo });
     }
 
     previousSlide() {
-        if (this.currentSlideIndex > 0) {
-            console.log(`[VisualLearning LOG] Prev button clicked. Scene index shifting down.`);
-            const prevSceneIndex = this.currentSlideIndex - 1;
-            const startTime = this.clipStartTimes[prevSceneIndex] || 0;
-            this.seekTo(startTime);
-        }
+        const prevNo = this.currentSlideIndex;
+        console.log(`[VisualLearning Parent UI] Prev button clicked. Requesting scene #${prevNo}`);
+        this.sendCommandToIframe('JUMP_SCENE', { sceneNo: prevNo });
     }
 
     jumpToSlide(sceneNo) {

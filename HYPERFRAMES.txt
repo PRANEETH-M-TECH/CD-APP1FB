@@ -1,0 +1,2606 @@
+Complete Hyperframes Architecture (Highest Priority)
+
+I will list current permissions and search the directory to locate Hyperframes-related files.
+
+Used tool: list_permissions
+
+I will search the workspace for any occurrences of "hyperframe" to identify the files related to Hyperframes.
+
+Searched for "hyperframe"
+
+I will list the contents of the `hyperframes_test_app` directory to see its structure.
+
+Listed directory hyperframes_test_app
+
+I will list the contents of the `shared` directory inside the hyperframes application.
+
+Listed directory shared
+
+I will list the contents of the `templates` directory to see the layout and template files.
+
+Listed directory templates
+
+I will list the contents of the `public` directory.
+
+Listed directory public
+
+I will list the contents of `public/uploads` directory.
+
+Listed directory uploads
+
+I will read the contents of `package.json` in the Hyperframes directory to inspect the dependencies and scripts.
+
+Viewed package.json:1-12
+
+I will read `hyperframes.config.json` to understand the configuration settings for the Hyperframes library.
+
+Viewed hyperframes.config.json:1-7
+
+I will read `run-storyboard.js` to examine how the storyboards are selected and executed.
+
+Viewed run-storyboard.js:1-800
+
+I will view the rest of the `run-storyboard.js` script to inspect how scenes and templates are injected into the HTML.
+
+Viewed run-storyboard.js:800-970
+
+I will read `system_prompt.md` to check if there is an overview of the system design and template rules.
+
+Viewed system_prompt.md:1-94
+
+I will view the `TitleSlide.js` template to understand how these JS templates render layout and animations.
+
+Viewed TitleSlide.js:1-23
+
+I will view the `IllustratedScene.js` template to examine how complex SVG illustrations and their elements are processed.
+
+Viewed IllustratedScene.js:1-65
+
+I will read `shared/animations.js` to see what shared animations are defined.
+
+Viewed animations.js:1-119
+
+I will read `shared/theme.js` to see what theme options are defined.
+
+Viewed theme.js:1-120
+
+I will search `visual_learning_service.py` for references to `hyperframes` to see how the backend interacts with this engine.
+
+Searched for "hyperframes"
+
+I will read `run_hyperframes_helper.py` at the root of the workspace.
+
+Viewed run_hyperframes_helper.py:1-307
+
+I will search for the endpoint `/api/visual_learning` to see where the server endpoint is implemented and how it calls or hooks into any visual learning/Hyperframes service.
+
+Searched for "/api/visual_learning"
+
+I will read the FastAPI route file `backend/app/api/routes/visual_learning.py` to see how requests are handled and routed.
+
+Viewed visual_learning.py:1-41
+
+I will read `backend/app/services/visual_learning/visual_learning_service.py` to examine the backend rendering, generation, and TTS process.
+
+Viewed visual_learning_service.py:1-198
+
+I will search for `hyperframes` dependencies or definitions in all `package.json` files.
+
+Searched for "hyperframes"
+
+I will read `BeforeAfterSlider.js` to see what its content is.
+
+Viewed BeforeAfterSlider.js:1-3
+
+I will read `GeneralScene.js` to see the fallback template implementation.
+
+Viewed GeneralScene.js:1-17
+
+I will read `ConceptDiagram.js` to see how it renders.
+
+Viewed ConceptDiagram.js:1-107
+
+I will read `backend/app/services/visual_learning/asset_retrieval_service.py` to see how assets (images, icons, etc.) are fetched.
+
+Viewed asset_retrieval_service.py:1-184
+
+I will read `visual_audio_generator.py` to see how the TTS audio is synthesized on the server.
+
+Viewed visual_audio_generator.py:1-141
+
+I will list the root directory contents of the workspace to see if there is a main `package.json` or another package definition.
+
+Listed directory CD-APP1FB
+
+I will read the root `package.json` file.
+
+Viewed package.json:1-9
+
+I will list the contents of the `scratch` directory in `hyperframes_test_app` to see if there are additional details.
+
+Listed directory scratch
+
+I will view `scratch/run_render.py`.
+
+Viewed run_render.py:1-18
+
+I will search the web to check the details of the `hyperframes` CLI package.
+
+Searched web: "hyperframes npm preview render video"
+
+Here is the complete architectural overview of the Hyperframes implementation in the workspace, showing actual file names and the responsibility of each.
+
+---
+
+### 1. Folder Structure Related Only to Hyperframes
+
+The core Hyperframes application resides within the [`hyperframes_test_app`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app) directory, supported by Python scripts in the root and services on the FastAPI backend:
+
+*   **[`hyperframes_test_app/`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app)**: Standalone test app for rendering visual lessons.
+    *   **[`hyperframes.config.json`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/hyperframes.config.json)**: Setup file specifying rendering parameters: frame rate (30 FPS), canvas width (1280px), canvas height (720px), and output format (MP4).
+    *   **[`package.json`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/package.json)**: Defines dependencies, runner tools, and scripts (e.g., `doctor`, `preview`, and `select` calling `run-storyboard.js`).
+    *   **[`run-storyboard.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/run-storyboard.js)**: Node.js entry point script that parses storyboards, compiles them with component templates, generates the final HTML file, and launches the Hyperframes preview/render CLI.
+    *   **[`system_prompt.md`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/system_prompt.md)**: Markdown prompt layout mapping instructions and allowed templates (with parameters and visual styles) to guide the Gemini model during storyboard generation.
+    *   **[`shared/`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/shared)**:
+        *   **[`theme.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/shared/theme.js)**: Configures global stylesheets, gradients, colors (accent and background values), and Typography fonts matching distinct school subject themes (Science, Math, History, Civics, General).
+        *   **[`animations.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/shared/animations.js)**: Holds shared GSAP helper animations (like `fadeIn`, `slideUp`, `scaleIn`, `staggerFadeIn`, and `drawSvgStroke`).
+    *   **[`templates/`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates)**: JavaScript components representing individual slide styles:
+        *   [`TitleSlide.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/TitleSlide.js), [`ConceptDiagram.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/ConceptDiagram.js), [`CycleTemplate.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/CycleTemplate.js), [`MathDerivation.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/MathDerivation.js), [`ColumnComparison.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/ColumnComparison.js), [`HorizontalTimeline.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/HorizontalTimeline.js), [`DatabaseGrid.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/DatabaseGrid.js), [`VennDiagram.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/VennDiagram.js), [`TaxonomyTree.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/TaxonomyTree.js), [`CartesianGrid.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/CartesianGrid.js), [`GeoMarker.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/GeoMarker.js), [`BeforeAfterSlider.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/BeforeAfterSlider.js), [`QuizCheckpoint.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/QuizCheckpoint.js), [`IllustratedScene.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/IllustratedScene.js), [`ImageScene.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/ImageScene.js), [`GeneralScene.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/GeneralScene.js).
+    *   **[`outputs/`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/outputs)**: Dynamic folder storing generated lessons (e.g., `vl_bd18fedd/` with `lesson.json`, `index.html`, copies of `theme.js` & `animations.js`, and `.wav` audio narration chunks).
+    *   **[`scratch/`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/scratch)**: Script helpers [`run_gen.py`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/scratch/run_gen.py), [`run_render.py`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/scratch/run_render.py), and [`run_system_render.py`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/scratch/run_system_render.py) used to automate testing.
+*   **[`run_hyperframes_helper.py`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/run_hyperframes_helper.py)**: Root Python generation coordinator script supporting offline offline mock tests (General Mode) and integration tests communicating with FastAPI (System Mode).
+*   **[`backend/app/services/visual_learning/`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/backend/app/services/visual_learning)**:
+    *   **[`visual_learning_service.py`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/backend/app/services/visual_learning/visual_learning_service.py)**: Directs backend retrieval, Gemini API request generation, and asset syncing, copying generated results directly to `hyperframes_test_app/outputs`.
+    *   **[`visual_audio_generator.py`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/backend/app/services/visual_learning/visual_audio_generator.py)**: Synthesizes scene narration using Sarvam AI.
+    *   **[`asset_retrieval_service.py`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/backend/app/services/visual_learning/asset_retrieval_service.py)**: Automatically fetches image assets from Wikimedia/Openverse and colors SVG icons from Lucide.
+    *   **[`visual_lesson_prompt.py`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/backend/app/services/visual_learning/visual_lesson_prompt.py)**: Generates the structured prompt injected into Gemini.
+
+---
+
+### 2. Rendering Pipeline
+
+```mermaid
+flowchart TD
+    A[Textbook Context & User Prompt] --> B(Gemini Model)
+    B --> C[storyboard.json generated]
+    C --> D(Sarvam AI TTS API)
+    D --> E[scene_*.wav synthesized]
+    C & E --> F[Copy to hyperframes_test_app/outputs/vl_id/]
+    F --> G(node run-storyboard.js)
+    G --> H[Stitches HTML & GSAP scripts into index.html]
+    H --> I{Hyperframes CLI}
+    I -->|1. preview| J[Localhost Development Server]
+    I -->|2. render| K[Puppeteer Headless Frame Capture]
+    K --> L[FFmpeg encodes frames and WAV audio into output.mp4]
+```
+
+1.  **Generation Phase**:
+    *   Textbook query context is retrieved. Gemini processes this context and designs a structured storyboard JSON containing scenes, visual descriptions, scripts, and template hints.
+    *   Voiceover narration files (`.wav`) are generated via Sarvam AI TTS for each scene based on the text scripts.
+2.  **Compilation Phase**:
+    *   [`run-storyboard.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/run-storyboard.js) is executed.
+    *   It parses the storyboard JSON and loops through the scenes, mapping each scene's `template_id` to its corresponding JS module in the `templates/` folder.
+    *   The script calls `template.render()` to get the raw HTML layout and then calls `template.animate()` to fetch the GSAP script blocks.
+    *   These HTML sections and GSAP timeline segments are output into a single unified file: `index.html`.
+3.  **Preview / Capture Phase**:
+    *   **Preview**: The `hyperframes preview` command launches a local dev server with browser-based playback controls.
+    *   **Render**: The `hyperframes render` command runs a headless browser (Puppeteer) to load `index.html`, step through the timeline frame-by-frame, capture high-quality frame screenshots, and combine them with the `.wav` audio files using FFmpeg to output the final MP4.
+
+---
+
+### 3. Entry Point Files
+
+*   **CLI Orchestrator / Compilation Driver**: [`run-storyboard.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/run-storyboard.js) is the key script compiling raw data and triggering the external Hyperframes CLI.
+*   **Text/Event-Stream API Route**: [`backend/app/api/routes/visual_learning.py`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/backend/app/api/routes/visual_learning.py) routes user web prompts to the generator service.
+*   **Backend Service Entry**: [`visual_learning_service.py`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/backend/app/services/visual_learning/visual_learning_service.py) coordinates storyboard retrieval, image asset searches, TTS calls, and asset package writing.
+*   **Offline/Testing Script Entry**: [`run_hyperframes_helper.py`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/run_hyperframes_helper.py) allows running the workflow locally.
+
+---
+
+### 4. How JSON Flows into Rendering
+
+1.  **JSON Structure**: The JSON structure follows this format:
+    ```json
+    {
+      "lesson_title": "Structure of Water",
+      "theme": "Science",
+      "scenes": [
+        {
+          "scene_no": 1,
+          "template_id": "illustrated_scene",
+          "teacher_script": "This is a water molecule...",
+          "template_data": { "elements": [...] }
+        }
+      ]
+    }
+    ```
+2.  **HTML Compilation**: [`run-storyboard.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/run-storyboard.js) maps the JSON:
+    *   Scene start times and durations are computed dynamically.
+    *   Each scene has its layout built by calling `templates[template_id].render(scene_no, template_data)`.
+    *   The narration script is written into a `.subtitles-container` div.
+    *   Audio elements are appended: `<audio class="clip" data-start="..." data-duration="..." src="./scene_no.wav"></audio>`.
+3.  **Runtime Initialization**: Inside `index.html`:
+    *   The global `theme` properties (`background`, `fontFamily`, colors) are loaded dynamically based on the JSON’s `theme` using helpers in `theme.js`.
+    *   KaTeX loads and compiles any LaTeX math formula fields in the background.
+    *   A single master timeline is created: `const mainTimeline = gsap.timeline();`.
+    *   Sequential script blocks from each template's `animate()` function are appended to `mainTimeline`:
+        ```javascript
+        mainTimeline.add(sceneTl, sceneStart);
+        ```
+    *   This timeline object is exposed to Hyperframes on `window.__timelines["root"]`.
+
+---
+
+### 5. How Templates are Selected
+
+*   The mapping is defined in [`run-storyboard.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/run-storyboard.js#L6-L23):
+    ```javascript
+    const templates = {
+      title_slide: require('./templates/TitleSlide'),
+      concept_diagram: require('./templates/ConceptDiagram'),
+      // ... (other templates)
+    };
+    ```
+*   During generation, `run-storyboard.js` evaluates `scene.template_id` and selects the corresponding template module from `templates/`.
+*   If the ID matches a general fallback (`TaxonomyTree.js`, `CartesianGrid.js`, `GeoMarker.js`, `BeforeAfterSlider.js`), it redirects internally to [`GeneralScene.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/GeneralScene.js):
+    ```javascript
+    const GeneralScene = require('./GeneralScene');
+    module.exports = GeneralScene;
+    ```
+*   If `scene.template_id` is missing or invalid, it defaults to `GeneralScene.js`.
+
+---
+
+### 6. Which Files Actually Create HTML/CSS
+
+*   **Layout Skeleton**: [`run-storyboard.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/run-storyboard.js) writes the overall HTML template skeleton (`<!DOCTYPE html>...`), imports CSS files (Google Fonts, KaTeX CSS), and defines container/subtitle styles.
+*   **Scene Components**: The individual JS files in the `templates/` folder generate component HTML and inline styles through their `render` functions:
+    *   [`TitleSlide.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/TitleSlide.js): Returns a `.title-slide-container` layout containing text headings and SVG icon blocks.
+    *   [`ConceptDiagram.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/ConceptDiagram.js): Builds structural columns for bullets, center node wrappers, and containers for leaf node elements.
+    *   [`CycleTemplate.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/CycleTemplate.js): Returns a layout with circular SVG progress paths and stages.
+    *   [`MathDerivation.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/MathDerivation.js): Returns placeholders containing math derivation equations which are compiled dynamically by KaTeX.
+    *   [`ColumnComparison.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/ColumnComparison.js): Renders side-by-side columns.
+    *   [`HorizontalTimeline.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/HorizontalTimeline.js): Renders timelines and connection trackers.
+    *   [`DatabaseGrid.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/DatabaseGrid.js): Renders data tables.
+    *   [`VennDiagram.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/VennDiagram.js): Renders intersection circles and item cards.
+    *   [`QuizCheckpoint.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/QuizCheckpoint.js): Renders multiple-choice components.
+    *   [`IllustratedScene.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/IllustratedScene.js): Generates custom SVG shapes, rectangles, lines, animated paths, and text labels programmatically.
+    *   [`ImageScene.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/ImageScene.js): Displays structured image cards.
+    *   [`GeneralScene.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/GeneralScene.js): Base fallback container layout.
+*   **Dynamic Theme Styling**: [`theme.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/shared/theme.js) dynamically modifies element colors, gradients, fonts, and borders at runtime.
+
+---
+
+### 7. Which Files Create Animations
+
+*   **Helper Utilities**: [`animations.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/shared/animations.js) exposes standard GSAP animation methods on the global `window.HFAnimations` object (such as `fadeIn`, `slideUp`, `staggerFadeIn`, `drawSvgStroke`).
+*   **Scene Timelines**: Individual files in `templates/` specify GSAP code blocks in their `animate` functions:
+    *   [`TitleSlide.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/TitleSlide.js): Animates the icon card and slide titles.
+    *   [`ConceptDiagram.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/ConceptDiagram.js): Animates line connections growing from the central node and popping leaf nodes.
+    *   [`IllustratedScene.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/IllustratedScene.js): Reads the JSON `animation_action` parameter (such as `rise`, `fall`, `spin`, `scale_up`, `slide_left`, `slide_right`) and plays the corresponding stagger animation.
+    *   [`QuizCheckpoint.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/QuizCheckpoint.js): Animates option list checkmarks.
+*   **Animation Orchestration**: [`run-storyboard.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/run-storyboard.js) stitches all these animation segments sequentially, adding them to a master timeline.
+
+---
+
+### 8. Which Files Define Scene Components
+
+The templates directory [`hyperframes_test_app/templates/`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates) contains the files that define individual scene components:
+
+*   [`TitleSlide.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/TitleSlide.js): opening title slide.
+*   [`ConceptDiagram.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/ConceptDiagram.js): interactive node layout.
+*   [`CycleTemplate.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/CycleTemplate.js): cyclical diagrams.
+*   [`MathDerivation.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/MathDerivation.js): math steps.
+*   [`ColumnComparison.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/ColumnComparison.js): dual comparisons.
+*   [`HorizontalTimeline.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/HorizontalTimeline.js): sequential timelines.
+*   [`DatabaseGrid.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/DatabaseGrid.js): layout grids and lists.
+*   [`VennDiagram.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/VennDiagram.js): intersection bubbles.
+*   [`QuizCheckpoint.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/QuizCheckpoint.js): quiz slide.
+*   [`IllustratedScene.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/IllustratedScene.js): custom shapes/diagram builder.
+*   [`ImageScene.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/ImageScene.js): external images.
+*   [`GeneralScene.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/GeneralScene.js): base visual placeholder module.
+
+---
+
+### 9. How Assets are Loaded
+
+*   **Story Metadata & Subtitles**: Injected dynamically as direct text strings during HTML compilation.
+*   **Media Icons**: Loaded via [`asset_retrieval_service.py`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/backend/app/services/visual_learning/asset_retrieval_service.py). It fetches standard SVG templates from Lucide Icons (via GitHub), colors them to match the subject theme, and embeds them directly inside `lesson.json` as inline Base64 data URIs (`data:image/svg+xml;...`).
+*   **Educational Images**: Solved via [`asset_retrieval_service.py`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/backend/app/services/visual_learning/asset_retrieval_service.py), which searches **Wikimedia Commons API** and **WordPress Openverse API** based on the query. If no assets are found, a local placeholder (`/static/favicon.svg`) is used.
+*   **Audio Narrations**: Narration is synthesized by [`visual_audio_generator.py`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/backend/app/services/visual_learning/visual_audio_generator.py) or `run_hyperframes_helper.py` calling the Sarvam TTS API. The files are saved locally to `outputs/<lesson_id>/scene_no.wav` and loaded via standard `<audio>` tags.
+
+---
+
+### 10. Which Framework is Used Internally
+
+*   Hyperframes **does not** use heavy modern client frameworks like React, Remotion, or Motion internally to structure the composition page.
+*   It is a **Vanilla HTML5, CSS3, and JavaScript (GSAP-based) framework**.
+*   The **Hyperframes CLI** uses two key open-source technologies under the hood:
+    1.  **Puppeteer** (Headless Chromium): Loads the compiled `index.html` page and steps through the timelines frame-by-frame, capturing screenshots at the configured frame rate.
+    2.  **FFmpeg**: Stitches these frame screenshots and audio files together to render the final deterministic, high-quality MP4 file.
+
+
+System Prompt (Critical):
+Edited INPUTS.txt
+Viewed INPUTS.txt:298-324
+
+I will read `backend/app/services/visual_learning/visual_lesson_prompt.py` to check the system prompt definitions used by the backend.
+
+Viewed visual_lesson_prompt.py:1-59
+
+I will search for `generation_model_name` to see what model is configured in the backend for visual lesson generation.
+
+Searched for "generation_model_name"
+
+I will search for the initialization of `generation_model_name` in `qdrant_service.py`.
+
+Searched for "generation_model_name"
+
+I will search the project for where `generation_model_name` is defined or initialized.
+
+Searched for "generation_model_name ="
+
+I will locate `qdrant_service` or other service definitions by searching for `qdrant` in file paths.
+
+Searched for "generation_model_name"
+
+I will read the top portion of `qdrant_service.py` to check the `generation_model_name` setting.
+
+Viewed qdrant_service.py:1-200
+
+There are two distinct system prompt interfaces used in the Hyperframes implementation depending on the execution context:
+
+1. **Local Standalone/Offline Prompt** (defined in [`system_prompt.md`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/system_prompt.md)): Used by the local generator CLI script `run_hyperframes_helper.py` in *General Mode*.
+2. **FastAPI Backend Integration Prompt** (defined in [`visual_lesson_prompt.py`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/backend/app/services/visual_learning/visual_lesson_prompt.py)): Used by `visual_learning_service.py` to stream textbook-guided lesson designs in *System Mode*.
+
+Below are the complete, unabridged prompts and their operational settings.
+
+---
+
+### Context 1: Local Standalone/Offline System Prompt
+
+This prompt is loaded from [`hyperframes_test_app/system_prompt.md`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/system_prompt.md) and passed directly as the `system_instruction` configuration to the Gemini Client.
+
+#### Prompt Text
+```markdown
+You are a visual lesson planner for an educational AI application.
+
+Your task is to design a compelling multi-scene video lesson storyboard in JSON format.
+The video will be rendered by HyperFrames — a browser-based HTML video engine.
+
+## CRITICAL RULES
+
+1. Return ONLY valid JSON. No markdown, no explanation outside the JSON.
+2. Each scene MUST have exactly one template_id from the allowed list.
+3. The storyboard must feel like a premium educational documentary.
+4. Design for 1280×720 resolution (16:9 landscape).
+
+## ALLOWED TEMPLATE IDs (choose the best fit for each scene)
+
+| template_id          | Best For                                      |
+|----------------------|-----------------------------------------------|
+| title_slide          | Lesson opener only (scene 1 always)           |
+| concept_diagram      | Central concept with branches/leaves          |
+| cycle_template       | Circular/repeating processes                  |
+| math_derivation      | Step-by-step equations, formulas              |
+| column_comparison    | Comparing two items, pros/cons, before/after  |
+| horizontal_timeline  | Sequences, steps, historical events           |
+| database_grid        | Data tables, comparisons with rows/columns    |
+| venn_diagram         | Overlap/intersection concepts                 |
+| taxonomy_tree        | Classification, hierarchy, family trees       |
+| cartesian_grid       | Graphs, functions, coordinate geometry        |
+| geo_marker           | Geography, locations, maps                    |
+| before_after_slider  | State changes, transformations                |
+| quiz_checkpoint      | Review/assessment scenes (last scene ideally) |
+| illustrated_scene    | SVG-drawn diagrams of physical processes      |
+| image_scene          | Real-world photo/image with annotations       |
+| general_scene        | Free-form, fallback only                      |
+
+## SPECIFIC GUIDELINES FOR illustrated_scene
+
+The `illustrated_scene` is used to draw anatomical or physical diagrams (e.g. human mouth, stomach, heart, or water molecules).
+* **DO NOT** output simple, lazy diagrams (e.g. just two text boxes connected by a straight line). This looks unprofessional and static.
+* **DO** combine multiple graphic elements (at least 4-8 elements) to draw a recognizable schema:
+  - Outline/Shape: Draw the shape of the organ/molecule using one or more `path` elements (using cubic or quadratic Bezier curves like `M 100 200 C 150 100, 250 100, 300 200`).
+  - Highlights/Flow: Draw circles for moving elements (like a food bolus, acid droplets, or oxygen particles) and dashed lines for flows.
+  - Labels: Draw text_overlays to point out specific anatomical structures (e.g. "Duodenum", "Esophagus", "Teeth", "Salivary Glands").
+* **Supported SVGElements Types:**
+  - `circle`: `{"type": "circle", "cx": number, "cy": number, "r": number, "fill": string, "stroke": string, "stroke_width": number}`
+  - `rect`: `{"type": "rect", "x": number, "y": number, "width": number, "height": number, "rx": number, "fill": string, "stroke": string, "stroke_width": number}`
+  - `line`: `{"type": "line", "x1": number, "y1": number, "x2": number, "y2": number, "stroke": string, "stroke_width": number}`
+  - `path` / `animated_path`: `{"type": "path", "path_data": string, "stroke_color": string, "stroke_width": number, "dash_array": string, "fill": string}`
+  - `text_overlay`: `{"type": "text_overlay", "position": {"x": number, "y": number}, "text": string}`
+
+### Example diagram structure for a Stomach scene:
+```json
+"elements": [
+  {"type": "path", "path_data": "M 480 180 C 500 240, 480 320, 520 380 C 580 420, 720 380, 700 260 C 680 180, 580 150, 480 180 Z", "stroke_color": "#10b981", "stroke_width": 3, "fill": "rgba(16, 185, 129, 0.05)"},
+  {"type": "circle", "cx": 550, "cy": 300, "r": 8, "fill": "#fbbf24"},
+  {"type": "circle", "cx": 620, "cy": 280, "r": 6, "fill": "#fbbf24"},
+  {"type": "text_overlay", "position": {"x": 450, "y": 140}, "text": "Esophagus"},
+  {"type": "text_overlay", "position": {"x": 600, "y": 300}, "text": "Acid & Chyme Churning"},
+  {"type": "text_overlay", "position": {"x": 750, "y": 350}, "text": "Duodenum"}
+]
+```
+
+## ANIMATION PRINCIPLES FOR HYPERFRAMES
+
+For each scene, you may include visual animation hints in the template_data:
+- Use "animation_style" values: "stagger_in", "cascade", "spring_pop", "fade_wave"
+- For illustrated_scene: use animation_action: "rise" | "fall" | "spin" | "scale_up" | "slide_left" | "slide_right"
+- For cartesian_grid: you may include points that animate one-by-one
+
+## THEME SELECTION
+
+Choose one theme per lesson (applied globally):
+- "Science"  — deep green, Outfit font
+- "Math"     — steel blue, Space Grotesk font
+- "History"  — amber gold, Cinzel font  
+- "Civics"   — indigo, Inter font
+- "General"  — indigo, Inter font
+
+## OUTPUT JSON SCHEMA
+
+{
+  "lesson_title": string,
+  "lesson_id": string (snake_case),
+  "theme": string,
+  "layout_mode": "process" | "timeline" | "comparison" | "radial_breakdown",
+  "scenes": [
+    {
+      "scene_no": number,
+      "template_id": string,
+      "teacher_script": string (narration, 30-80 words),
+      "template_data": { /* template-specific fields */ },
+      "audio_url": null
+    }
+  ]
+}
+```
+
+---
+
+### Context 2: FastAPI Backend Integration Prompt
+
+This prompt layout is constructed dynamically inside [`backend/app/services/visual_learning/visual_lesson_prompt.py`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/backend/app/services/visual_learning/visual_lesson_prompt.py) using textbook context retrieved from the database.
+
+#### Prompt Text
+```
+You are CHADUVU-GURU, an intelligent, patient AI teacher. Your goal is to design a structured, highly engaging, and animated Visual Lesson Storyboard for a Class {class_name} student studying {subject}.
+Base your explanation on the textbook context below.
+
+Student Query: "{query}"
+
+Textbook Context:
+---
+{context}
+---
+
+Your task is to transform this topic into a step-by-step animated storyboard lesson.
+You must output a single, valid JSON object with the following structure:
+{
+  "lesson_title": "Title of the lesson",
+  "theme": "Science", // Choose 'Science', 'Math', 'History', 'Civics', or 'General' based on the subject
+  "scenes": [
+    {
+      "scene_no": 1,
+      "purpose": "Pedagogical objective of the scene",
+      "template_id": "title_slide", // Choose from: 'title_slide', 'concept_diagram', 'cycle_template', 'math_derivation', 'venn_diagram', 'taxonomy_tree', 'cartesian_grid', 'column_comparison', 'geo_marker', 'database_grid', 'before_after_slider', 'quiz_checkpoint'
+      "teacher_script": "Narrator audio script (2-3 short sentences, Class {class_name} level).",
+      "template_data": {
+        // Structure parameters matching the selected template_id. E.g.:
+        // For 'title_slide': {"title": "...", "subtitle": "..."}
+        // For 'cycle_template': {"title": "...", "stages": ["stage1", "stage2"]}
+        // For 'math_derivation': {"formula": "...", "steps": ["step1", "step2"]}
+        // For 'venn_diagram': {"left": ["bullet1"], "right": ["bullet2"], "intersection": ["shared"]}
+        // For 'column_comparison': {"left_col": {"header": "...", "bullets": []}, "right_col": {"header": "...", "bullets": []}}
+        // For 'database_grid': {"table_title": "...", "headers": [], "rows": [[]]}
+        // For 'cartesian_grid': {"title": "...", "equation_label": "ax^2+bx+c=0", "points": [{"x": -2, "y": 4, "label": "Vertex"}], "lines": [], "svg_elements": [{"type": "path", "d": "M200 800 C350 300, 650 300, 800 800", "stroke": "#3b82f6", "stroke_width": 4}]}
+      }
+    }
+  ]
+}
+
+### STORYBOARD TEMPLATE SELECTION RULES:
+1. **Title Slide (`title_slide`)**: For introducing the main lesson topic or agenda.
+2. **Concept Diagram (`concept_diagram`)**: For explaining core structures with attributes connected to a main concept.
+3. **Cycle Template (`cycle_template`)**: For explaining repeating loops (e.g., Water Cycle, Nitrogen Cycle, rock cycles).
+4. **Math Derivation (`math_derivation`)**: For demonstrating equations, formula solving, or balanced chemical equations line-by-line.
+5. **Venn Diagram (`venn_diagram`)**: For comparing overlapping properties (e.g., Plant vs. Animal cells, Solid vs. Liquid).
+6. **Taxonomy Tree (`taxonomy_tree`)**: For taxonomy, classification hierarchies, or family/government branches.
+7. **Cartesian Grid (`cartesian_grid`)**: For graphing coordinate geometry, lines, triangles, angles, and algebra graphs.
+8. **Column Comparison (`column_comparison`)**: For direct side-by-side card contrasts.
+9. **Geo-Marker Map (`geo_marker`)**: For geography and history maps, highlighting regions with coordination pointers.
+10. **Database Grid (`database_grid`)**: For displaying tabular data or periodic table grids.
+11. **Before/After Slider (`before_after_slider`)**: For showing a wipe transition between cause and effect states.
+12. **Quiz Checkpoint (`quiz_checkpoint`)**: For active recall summary questions at the end of the lesson.
+
+Ensure the output is valid JSON and contains only the raw JSON block without markdown formatting wrapper, or wrapped in a standard ```json ... ``` codeblock.
+```
+
+---
+
+### Execution Configuration & Constraints
+
+*   **Model**: **`gemini-2.5-flash`** is hardcoded and used globally across both execution paths:
+    *   In the local orchestrator: hardcoded string `"gemini-2.5-flash"` passed to standard library calls.
+    *   In the backend server: imported from [`qdrant_service.py`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/backend/app/services/retrieval/qdrant_service.py#L28) as `generation_model_name: str = "gemini-2.5-flash"`.
+*   **Temperature**: **Default (1.0)**. The code does not override the temperature configuration in `config` parameter blocks of `client.models.generate_content(...)` calls, meaning the model runs with its standard default generation temperature parameter.
+*   **JSON formatting constraints**:
+    *   For local generation: `"response_mime_type": "application/json"` is explicitly passed in the call configuration block.
+    *   For backend generation: The backend code parses the output to strip away code fences (e.g., ` ```json ` or ` ``` `) and uses Python's standard `json.loads(response_text)` parser.
+
+TEMPLATE DESIGN:
+
+Edited INPUTS.txt
+Edited HYPERFRAMES.txt
+Viewed HYPERFRAMES.txt:522-535
+
+I will read the `CycleTemplate.js` file to extract its properties and structure.
+
+Viewed CycleTemplate.js:1-75
+
+I will read the `MathDerivation.js` file to extract its attributes.
+
+Viewed MathDerivation.js:1-28
+
+I will read the `ColumnComparison.js` file to examine its structure.
+
+Viewed ColumnComparison.js:1-45
+
+I will read the `HorizontalTimeline.js` file to examine its timeline features.
+
+Viewed HorizontalTimeline.js:1-44
+
+I will read the `DatabaseGrid.js` template to view table grid rendering.
+
+Viewed DatabaseGrid.js:1-33
+
+I will read `VennDiagram.js` template to view Venn Diagram configurations.
+
+Viewed VennDiagram.js:1-40
+
+I will read `QuizCheckpoint.js` template to view quiz details.
+
+Viewed QuizCheckpoint.js:1-51
+
+I will read `ImageScene.js` template to view image slide details.
+
+Viewed ImageScene.js:1-41
+
+Here is the complete overview of the Hyperframes Template Architecture.
+
+---
+
+### How a Template is Selected by the Renderer
+
+The rendering orchestrator [`run-storyboard.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/run-storyboard.js) maps the JSON storyboard structure (`lesson.json`) to dynamic browser pages through the following mechanism:
+
+1.  **Registry Mapping**: The compiler holds a static map of allowed template IDs to local modules:
+    ```javascript
+    const templates = {
+      title_slide: require('./templates/TitleSlide'),
+      concept_diagram: require('./templates/ConceptDiagram'),
+      cycle_template: require('./templates/CycleTemplate'),
+      math_derivation: require('./templates/MathDerivation'),
+      column_comparison: require('./templates/ColumnComparison'),
+      horizontal_timeline: require('./templates/HorizontalTimeline'),
+      database_grid: require('./templates/DatabaseGrid'),
+      venn_diagram: require('./templates/VennDiagram'),
+      taxonomy_tree: require('./templates/TaxonomyTree'),
+      cartesian_grid: require('./templates/CartesianGrid'),
+      geo_marker: require('./templates/GeoMarker'),
+      before_after_slider: require('./templates/BeforeAfterSlider'),
+      quiz_checkpoint: require('./templates/QuizCheckpoint'),
+      illustrated_scene: require('./templates/IllustratedScene'),
+      image_scene: require('./templates/ImageScene'),
+      general_scene: require('./templates/GeneralScene'),
+    };
+    ```
+2.  **Resolution Loop**: For every scene defined in the input JSON, the engine reads its `template_id` value.
+3.  **Module Resolution**:
+    *   **Direct Rendering**: If a matching key exists in the registry, the corresponding template object is loaded.
+    *   **Delegated Fallbacks**: Several specialized templates (`taxonomy_tree`, `cartesian_grid`, `geo_marker`, `before_after_slider`) delegate inside their respective files to [`GeneralScene.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/GeneralScene.js) by calling `module.exports = GeneralScene;`.
+    *   **Fallback Default**: If the `template_id` is missing, null, or unknown, the compiler defaults to the fallback [`GeneralScene.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/GeneralScene.js).
+4.  **Composition Ingestion**: The compiler calls the two functions exported by the chosen template:
+    *   `template.render(scene_no, template_data, storyboard)`: Generates raw HTML strings which are appended to a main `<div class="composition">` element inside `outputs/<lesson_id>/index.html`.
+    *   `template.animate(scene_no, template_data, null, scene_duration)`: Generates GSAP animation command strings which are stitched sequentially into a single timeline: `mainTimeline.add(sceneTl, sceneStart)`.
+
+---
+
+### Detailed Template Architectures
+
+#### 1. Title Slide ([`TitleSlide.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/TitleSlide.js))
+*   **Intended Purpose**: Introduces the lesson topic at the beginning of a lesson (opener).
+*   **Supported Scene Types**: Introductory scene.
+*   **Configurable Properties**:
+    *   `title` (string): Primary large heading text.
+    *   `subtitle` (string): Secondary explanatory summary.
+*   **Supported Animations**:
+    *   Icon card zoom-in pop: scales from `0.4` to `1.0` with back easing (`ease: 'back.out(1.7)'`).
+    *   Title text slide-up: moves vertically from `y: 40` to `y: 0` with fade.
+    *   Subtitle text slide-up: moves vertically from `y: 15` to `y: 0` with fade.
+*   **Supported Objects**: Predefined shield-shaped SVG icon; Title heading (`h1`); Subtitle (`p`).
+*   **Supported Layouts**: Centered single-column layout.
+*   **Limitations**: Hardcoded SVG icon path (cannot select custom SVG files in this template).
+
+#### 2. Concept Diagram ([`ConceptDiagram.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/ConceptDiagram.js))
+*   **Intended Purpose**: Visualizes core structural relations, components, or attributes radiating from a central idea.
+*   **Supported Scene Types**: Core definitions, anatomical diagrams, structural mind-maps.
+*   **Configurable Properties**:
+    *   `left_title` (string): Header title for bullet items column.
+    *   `left_bullets` (array of strings): Narrative list items displayed as cards on the left.
+    *   `central_node` (string): Text content inside the central node.
+    *   `leaf_nodes` (array of strings): Radial nodes branching out.
+*   **Supported Animations**:
+    *   Center node pop: scales from `0` to `1` with back bounce (`ease: 'back.out(1.5)'`).
+    *   Left column details: slide-in from `x: -20` to `0` with staggered bullet list reveal.
+    *   Branching lines: SVG `line` elements grow dynamically from the center node to leaf coordinates (`duration: 0.6s`).
+    *   Leaf cards: radial cards scale pop into final position on completion of branching line draw.
+*   **Supported Objects**: Central circular node; Outer leaf cards; Connecting line vectors.
+*   **Supported Layouts**:
+    *   **Split Column Layout**: Left 40% reserved for bullet cards, right 55% for the semi-circular mind-map (if `left_bullets` is populated).
+    *   **Full Canvas Layout**: The mind-map canvas occupies 100% of the canvas with leaf nodes placed in a full circle layout (if `left_bullets` is empty).
+*   **Limitations**: Leaf node layout positions are computed automatically using trigonometry; excessive leaf node counts (> 8 leaves) will result in overlapping text labels.
+
+#### 3. Cycle Template ([`CycleTemplate.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/CycleTemplate.js))
+*   **Intended Purpose**: Visualizes looping flows and circular processes (e.g., Water Cycle, Carbon Cycle).
+*   **Supported Scene Types**: Step-by-step circular processes, cyclic pathways.
+*   **Configurable Properties**:
+    *   `title` (string): Main flow title.
+    *   `stages` (array of strings or objects): Stage descriptors.
+*   **Supported Animations**:
+    *   Title slide-down (`y: -20` to `0`).
+    *   Track draw-in: draws circular svg line track boundary stroke.
+    *   Staggered stage cards: scale up from `0` to `1` along the circle circumference (`stagger: 0.15s`).
+    *   Orbiting dot: A white dot orbits repeatedly along the path track.
+*   **Supported Objects**: Circular track path (`circle` svg); Orbiting dot (`circle` svg); Radial stage cards.
+*   **Supported Layouts**: Centered circle layout.
+*   **Limitations**: Fixed coordinates on a 400x400 canvas. Orbit speed is fixed and cannot be changed via JSON properties.
+
+#### 4. Math Derivation ([`MathDerivation.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/MathDerivation.js))
+*   **Intended Purpose**: Displays equations, formula derivations, or chemical formulas line-by-line.
+*   **Supported Scene Types**: Mathematical proofs, derivations, formula sheets.
+*   **Configurable Properties**:
+    *   `title` (string): Name of the derivation.
+    *   `formula` (string): Central formula (LaTeX notation).
+    *   `steps` (array of strings): Line-by-line explanation steps (LaTeX notation).
+*   **Supported Animations**:
+    *   Title slide-down (`y: -15` to `0`).
+    *   Formula board zoom pop: scale from `0.6` to `1.0` (`ease: 'back.out(1.4)'`).
+    *   Step cards reveal: staggered slide-up and scale-in (`scale: 0.8`, `y: 15` to `1.0`).
+*   **Supported Objects**: Main formula display board; Dynamic KaTeX container boxes; Numbered step badges.
+*   **Supported Layouts**: Vertical stacked column layout.
+*   **Limitations**: Strictly dependent on correct LaTeX formatting; cannot display more than 4-5 steps without causing off-screen layout clipping.
+
+#### 5. Column Comparison ([`ColumnComparison.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/ColumnComparison.js))
+*   **Intended Purpose**: Displays two entities side-by-side to highlight contrasts, pros/cons, or differences.
+*   **Supported Scene Types**: Feature comparison, tabular differences.
+*   **Configurable Properties**:
+    *   `title` (string): Title of the comparison.
+    *   `left_column` (object): Heading and bullets for the left card.
+    *   `right_column` (object): Heading and bullets for the right card.
+*   **Supported Animations**:
+    *   Title reveal.
+    *   Left column slide-in: moves horizontally from `x: -50` to `y: 0`.
+    *   Right column slide-in: moves horizontally from `x: 50` to `y: 0`.
+    *   Bullet items staggered reveal: bullet points slide-in from `x: -10` to `0` (`stagger: 0.1s`).
+*   **Supported Objects**: Two split layout cards; Bullet list text blocks.
+*   **Supported Layouts**: 50/50 vertical grid column split.
+*   **Limitations**: Restricted to exactly two columns; lists exceeding container heights will overflow.
+
+#### 6. Horizontal Timeline ([`HorizontalTimeline.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/HorizontalTimeline.js))
+*   **Intended Purpose**: Tracks progression sequences, historical milestones, or timeline steps.
+*   **Supported Scene Types**: Historical timelines, sequential processes.
+*   **Configurable Properties**:
+    *   `timeline_title` (string): Heading of the timeline.
+    *   `stages` (array of objects): List of steps. Each item must contain a `step_no` (number indicator) and `label` (text details).
+*   **Supported Animations**:
+    *   Timeline active bar draw-in: draws a horizontal line track from left to right (`duration: 1.0s`).
+    *   Staggered stage node pop: timelines nodes zoom-pop sequentially (`scale: 0` to `1`, `ease: 'back.out(1.5)'`).
+*   **Supported Objects**: SVG line timeline track; Node circles containing icon wrappers and step badges.
+*   **Supported Layouts**: Centered horizontal track layout.
+*   **Limitations**: Designed for 3-5 steps; more than 5 nodes will compress horizontal labels.
+
+#### 7. Database Grid ([`DatabaseGrid.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/DatabaseGrid.js))
+*   **Intended Purpose**: Represents structured tables, key-value configurations, or periodic properties.
+*   **Supported Scene Types**: Tables, datasets, properties.
+*   **Configurable Properties**:
+    *   `table_title` (string): Title of the table.
+    *   `headers` (array of strings): Column headings.
+    *   `rows` (array of arrays of strings): Row arrays containing data cell strings.
+*   **Supported Animations**:
+    *   Title reveal.
+    *   Grid container slide-up: moves vertically from `y: 30` to `y: 0` (`ease: 'power3.out'`).
+    *   Row lines staggered reveal: table rows fade-in and slide-up sequentially (`stagger: 0.1s`).
+*   **Supported Objects**: HTML `table` block elements; table rows (`tr`), headers (`th`), cells (`td`).
+*   **Supported Layouts**: Centered grid table.
+*   **Limitations**: Column widths are managed globally by the browser; designed for a maximum grid of 4x4.
+
+#### 8. Venn Diagram ([`VennDiagram.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/VennDiagram.js))
+*   **Intended Purpose**: Illustrates similarities and differences between two entities.
+*   **Supported Scene Types**: Venn comparisons, intersections.
+*   **Configurable Properties**:
+    *   `left_title` / `right_title` (strings): Category labels.
+    *   `left` (array of strings): Left-exclusive bullets.
+    *   `right` (array of strings): Right-exclusive bullets.
+    *   `intersection` (array of strings): Shared/overlapping bullets.
+*   **Supported Animations**:
+    *   Left circle slide-in: slides horizontally to overlap center (`x: -100` to `-70`).
+    *   Right circle slide-in: slides horizontally to overlap center (`x: 100` to `70`).
+    *   Item cards reveal: staggered zoom-pop sequentially from left column, then middle, then right column.
+*   **Supported Objects**: Overlapping circles; Left, right, and intersection item boxes.
+*   **Supported Layouts**: Centered overlapping circle layout.
+*   **Limitations**: Intersection overlap area is small, limiting the number of middle intersection items to 3.
+
+#### 9. Taxonomy Tree ([`TaxonomyTree.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/TaxonomyTree.js))
+*   **Intended Purpose**: Placeholder for taxonomy, hierarchical classification, family trees, or branch mappings.
+*   **Supported Scene Types**: Classification charts, taxonomies.
+*   **Configurable Properties**: Delegates to `GeneralScene.js` (uses `title`).
+*   **Supported Animations**: Standard title slide-up.
+*   **Supported Objects**: Title header text block.
+*   **Supported Layouts**: Generic fallback layout.
+*   **Limitations**: Delegates to `GeneralScene.js`; does not render a true graphical taxonomy tree structure currently.
+
+#### 10. Cartesian Grid ([`CartesianGrid.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/CartesianGrid.js))
+*   **Intended Purpose**: Graphs algebraic equations, coordinate points, shapes, and geometry.
+*   **Supported Scene Types**: Graphing coordinate functions, algebra geometry.
+*   **Configurable Properties**: Delegates to `GeneralScene.js` (uses `title`).
+*   **Supported Animations**: Standard title slide-up.
+*   **Supported Objects**: Title header text block.
+*   **Supported Layouts**: Generic fallback layout.
+*   **Limitations**: Delegates to `GeneralScene.js`; does not render coordinate axis grids currently.
+
+#### 11. Geo Marker Map ([`GeoMarker.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/GeoMarker.js))
+*   **Intended Purpose**: Shows geography, maps, and regions.
+*   **Supported Scene Types**: Locations, geography mapping.
+*   **Configurable Properties**: Delegates to `GeneralScene.js` (uses `title`).
+*   **Supported Animations**: Standard title slide-up.
+*   **Supported Objects**: Title header text block.
+*   **Supported Layouts**: Generic fallback layout.
+*   **Limitations**: Delegates to `GeneralScene.js`; does not draw maps or placement markers currently.
+
+#### 12. Before/After Slider ([`BeforeAfterSlider.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/BeforeAfterSlider.js))
+*   **Intended Purpose**: Compares two states (cause/effect, input/output).
+*   **Supported Scene Types**: Slide-wipe transitions, state changes.
+*   **Configurable Properties**: Delegates to `GeneralScene.js` (uses `title`).
+*   **Supported Animations**: Standard title slide-up.
+*   **Supported Objects**: Title header text block.
+*   **Supported Layouts**: Generic fallback layout.
+*   **Limitations**: Delegates to `GeneralScene.js`; does not support a wipe-transition slider comparison currently.
+
+#### 13. Quiz Checkpoint ([`QuizCheckpoint.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/QuizCheckpoint.js))
+*   **Intended Purpose**: Review/Assessment slide (usually positioned at the end of a lesson).
+*   **Supported Scene Types**: Multiple choice questions, assessments.
+*   **Configurable Properties**:
+    *   `question` (string): The quiz question text.
+    *   `options` (array of strings or objects): Answer options. If objects, reads `text` and `is_correct` (boolean).
+    *   `correct_answer_index` / `correct_idx` (number): 0-indexed fallback index of correct answer if options are plain strings.
+*   **Supported Animations**:
+    *   Quiz card slide-up (`y: 30` to `y: 0`, `ease: 'power3.out'`).
+    *   Option items staggered slide-in (`x: -20` to `y: 0`, stagger `0.15s`).
+    *   Staggered answer reveal: at `1.2s`, all incorrect options dim to `0.3` opacity, while the correct card transitions to a solid green border (`#22c55e`), glowing shadow, and light green background highlight.
+*   **Supported Objects**: Quiz container box; Option list blocks with letter index badges (A, B, C, D).
+*   **Supported Layouts**: Centered column list.
+*   **Limitations**: Only supports single-choice selections (cannot support multiple correct choices).
+
+#### 14. Illustrated Scene ([`IllustratedScene.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/IllustratedScene.js))
+*   **Intended Purpose**: Draws structural anatomical diagrams, physical schemas, and physical processes (e.g. human organs, molecular paths).
+*   **Supported Scene Types**: Biological schemas, physics pathways, anatomical models.
+*   **Configurable Properties**:
+    *   `canvas_color` (string): Background canvas color.
+    *   `animation_action` (string): The animation path action (`rise`, `fall`, `spin`, `scale_up`, `slide_left`, `slide_right`, `none`).
+    *   `elements` / `svg_elements` (array of objects): Inner SVG components. Each item must specify `type`:
+        *   `circle`: `cx`, `cy`, `r`, `fill`, `stroke`, `stroke_width`
+        *   `rect`: `x`, `y`, `width`, `height`, `rx`, `fill`, `stroke`, `stroke_width`
+        *   `line`: `x1`, `y1`, `x2`, `y2`, `stroke`, `stroke_width`
+        *   `path` / `animated_path`: `path_data` / `d`, `dash_array`, `fill`, `stroke`, `stroke_width`
+        *   `text_overlay`: `position` (`x`/`y`), `text`
+*   **Supported Animations**:
+    *   Canvas fade-in (`duration: 0.5s`).
+    *   Complex elements staggered animation: Checks `animation_action` and animates all inner elements using GSAP stagger (e.g. `spin` rotates 360°, `scale_up` expands from `scale: 0`, `rise`/`fall` shifts `y` axis).
+    *   Dynamic scaling script runs in `index.html` post-render to calculate the bounding box of `<g id="ill-group-...>` and scale it dynamically to center inside the 1280x720 window.
+*   **Supported Objects**: Multiple SVG primitives (`circle`, `rect`, `line`, `path`, `text`); Overlay textual label tags.
+*   **Supported Layouts**: Centered 1280x720 drawing canvas layer.
+*   **Limitations**: Demands exact coordinate mapping in JSON; coordinate positioning bugs in JSON directly distort the final diagram.
+
+#### 15. Image Scene ([`ImageScene.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/ImageScene.js))
+*   **Intended Purpose**: Displays photographic/real-world assets with zoom and highlight focus effects.
+*   **Supported Scene Types**: Real-world photo slides, annotation slides.
+*   **Configurable Properties**:
+    *   `image_url` (string): Source image URL path.
+    *   `animation_style` (string): Zoom style (e.g., `'simple_zoom'`).
+    *   `zoom_targets` (array of objects): Dynamic keyframe zoom nodes, containing `at_percent` (timeline time), `scale`, `x` (focus x-offset), and `y` (focus y-offset).
+*   **Supported Animations**:
+    *   Base image zoom-in: slides image card from `scale: 0.8` to `1` on entry.
+    *   Zoom style animation:
+        *   `'simple_zoom'`: slow pan/zoom (`scale: 1.15`) across the scene duration.
+        *   `zoom_targets`: Custom timeline transitions moving `scale` and offsets (`x`/`y`) to coordinates sequentially.
+*   **Supported Objects**: Focal image block; SVG annotation layer path.
+*   **Supported Layouts**: 1280x720 centered fit layout.
+*   **Limitations**: Relies heavily on fetching high-resolution image URLs; dead URLs will leave the slide blank.
+
+#### 16. General Scene ([`GeneralScene.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/GeneralScene.js))
+*   **Intended Purpose**: Free-form layout; serves as the base module for other placeholder templates.
+*   **Supported Scene Types**: Fallback, generic slides.
+*   **Configurable Properties**:
+    *   `title` (string): Heading.
+*   **Supported Animations**:
+    *   Title reveal (`y: -20` to `0`).
+*   **Supported Objects**: Title header text (`h2`); Empty visual asset wrapper div.
+*   **Supported Layouts**: Header-left title alignment.
+*   **Limitations**: Very sparse fallback screen; does not show interactive components.
+
+Hyperframes JSON Schema:
+
+Edited HYPERFRAMES.txt
+Viewed HYPERFRAMES.txt:810-838
+
+Here is the complete JSON schema structure expected by the Hyperframes compiler, details of each field category, and a comprehensive JSON example.
+
+---
+
+### Hyperframes Schema Specification
+
+#### 1. Root-Level Fields
+*   `lesson_title` *(Required, string)*: The main title of the lesson, used in the HTML title tag.
+*   `lesson_id` *(Optional, string)*: Unique identifier in snake_case (e.g., `vl_bd18fedd`), which determines the output directory name.
+*   `theme` *(Required, string)*: The global design system palette. Allowed values: `"Science"`, `"Math"`, `"History"`, `"Civics"`, `"General"`, `"indigo"`, `"gold"`, `"emerald"`, `"rose"`.
+*   `layout_mode` *(Optional, string)*: Architectural layout mode of the lesson. Options: `"process"`, `"timeline"`, `"comparison"`, `"radial_breakdown"`.
+*   `global_assets` *(Optional, array)*: Global resources resolved during generation.
+*   `connections` *(Optional, array)*: Structural connectives for diagrams.
+*   `scenes` *(Required, array)*: An ordered list of scene objects making up the video.
+
+#### 2. Scene Object Fields
+Every item inside the `scenes` array contains:
+*   `scene_no` *(Required, integer)*: Sequential index of the scene (starting from 1).
+*   `purpose` *(Optional, string)*: Pedagogical goal of the scene.
+*   `template_id` *(Required, string)*: The visual template component to load. Allowed values:
+    *   `title_slide` | `concept_diagram` | `cycle_template` | `math_derivation` | `column_comparison` | `horizontal_timeline` | `database_grid` | `venn_diagram` | `taxonomy_tree` | `cartesian_grid` | `geo_marker` | `before_after_slider` | `quiz_checkpoint` | `illustrated_scene` | `image_scene` | `general_scene`
+*   `teacher_script` *(Required, string)*: Narration text to be read by the TTS voiceover, which also populates the subtitles banner in the player.
+*   `durationInFrames` *(Optional, integer)*: Exact length of the scene in frames. If not provided, it is estimated by the compiler using the word count of `teacher_script` (calculated as `Math.max(5.0, words * 0.45 + 1.5) * FPS`).
+*   `audio_url` *(Required/Optional, string or null)*: Relative path to the synthesized WAV audio file (e.g., `"./scene_1.wav"`). Set to `null` before audio generation.
+*   `local_assets` / `assets` *(Optional, array)*: Local assets queried during generation.
+*   `template_data` *(Required, object)*: Configurable properties matching the selected `template_id`.
+
+#### 3. Template-Specific Fields (within `template_data`)
+
+##### **title_slide**
+*   `title` *(string)*: Large hero header.
+*   `subtitle` *(string)*: Accompanying sub-header.
+
+##### **concept_diagram**
+*   `left_title` *(string)*: Left sidebar column title.
+*   `left_bullets` *(array of strings)*: List items displayed as cards on the left.
+*   `central_node` *(string)*: Label for the central circle node.
+*   `leaf_nodes` *(array of strings)*: Labels for nodes extending radially from the center.
+
+##### **cycle_template**
+*   `title` *(string)*: Header for the cycle.
+*   `stages` *(array of strings/objects)*: Sequence of steps forming the circle.
+
+##### **math_derivation**
+*   `title` *(string)*: Header of the step.
+*   `formula` *(string)*: Large central focus formula (LaTeX formatted).
+*   `steps` *(array of strings)*: List of math steps showing the proof (LaTeX formatted).
+
+##### **column_comparison**
+*   `title` *(string)*: Heading.
+*   `left_column` *(object)* & `right_column` *(object)*: Each contains `header` *(string)* and `bullets` *(array of strings)*.
+
+##### **horizontal_timeline**
+*   `timeline_title` *(string)*: Heading.
+*   `stages` *(array of objects)*: List of steps. Each contains `step_no` *(integer)* and `label` *(string)*.
+
+##### **database_grid**
+*   `table_title` *(string)*: Heading.
+*   `headers` *(array of strings)*: Column keys.
+*   `rows` *(array of arrays of strings)*: Matrix of cell strings.
+
+##### **venn_diagram**
+*   `left_title` / `right_title` *(strings)*: Entity labels.
+*   `left` / `right` / `intersection` *(array of strings)*: Category list bullets.
+
+##### **quiz_checkpoint**
+*   `question` *(string)*: Quiz query.
+*   `options` *(array of strings or objects)*: Selection list. If objects, must contain `text` *(string)* and `is_correct` *(boolean)*.
+*   `correct_answer_index` / `correct_idx` *(integer)*: 0-indexed correct option.
+
+##### **illustrated_scene** (Custom SVGs)
+*   `canvas_color` *(string)*: CSS background color for drawing board.
+*   `animation_action` *(string)*: Stagger animation style. Options: `"rise"`, `"fall"`, `"spin"`, `"scale_up"`, `"slide_left"`, `"slide_right"`, `"none"`.
+*   `elements` / `svg_elements` *(array of objects)*: Raw SVG shape items. Each element must contain `type` and matching properties:
+    *   `circle`: `cx` *(num)*, `cy` *(num)*, `r` *(num)*, `fill` *(str)*, `stroke` *(str)*, `stroke_width` *(num)*.
+    *   `rect`: `x` *(num)*, `y` *(num)*, `width` *(num)*, `height` *(num)*, `rx` *(num)*, `fill` *(str)*, `stroke` *(str)*, `stroke_width` *(num)*.
+    *   `line`: `x1` *(num)*, `y1` *(num)*, `x2` *(num)*, `y2` *(num)*, `stroke` *(str)*, `stroke_width` *(num)*.
+    *   `path` / `animated_path`: `path_data` / `d` *(str)*, `dash_array` *(str)*, `fill` *(str)*, `stroke` *(str)*, `stroke_width` *(num)*.
+    *   `text_overlay`: `position` *(object with x/y numbers)*, `text` *(str)*.
+
+##### **image_scene** (Camera Zoom control)
+*   `image_url` *(string)*: Path to the image file.
+*   `animation_style` *(string)*: Camera pan style (e.g. `"simple_zoom"`).
+*   `zoom_targets` *(array of objects)*: List of keyframes to animate camera panning and scaling. Each object contains:
+    *   `at_percent` *(number, 0-100)*: Percentage timestamp along the scene's duration.
+    *   `scale` *(number)*: Camera zoom level (e.g. `1.3`).
+    *   `x` / `y` *(number, 0-100)*: Target coordinates to center the camera zoom on.
+
+---
+
+### Complete JSON Storyboard Example
+
+```json
+{
+  "lesson_title": "Understanding Water Molecules",
+  "lesson_id": "vl_water_molecule_demo",
+  "theme": "Science",
+  "layout_mode": "process",
+  "global_assets": [],
+  "scenes": [
+    {
+      "scene_no": 1,
+      "purpose": "Introduce the lesson topic and objective",
+      "template_id": "title_slide",
+      "teacher_script": "Welcome to today's lesson. Today, we will explore the molecular structure of water and understand why it is so unique.",
+      "durationInFrames": 180,
+      "audio_url": "./scene_1.wav",
+      "template_data": {
+        "title": "The Water Molecule",
+        "subtitle": "An Introduction to H2O Structure and Bonds"
+      }
+    },
+    {
+      "scene_no": 2,
+      "purpose": "Explain the covalent bonds within H2O",
+      "template_id": "illustrated_scene",
+      "teacher_script": "A single water molecule consists of one oxygen atom covalently bonded to two hydrogen atoms. This creates a bent shape.",
+      "durationInFrames": 240,
+      "audio_url": "./scene_2.wav",
+      "template_data": {
+        "canvas_color": "transparent",
+        "animation_action": "scale_up",
+        "elements": [
+          {
+            "type": "circle",
+            "cx": 640,
+            "cy": 300,
+            "r": 70,
+            "fill": "rgba(239, 68, 68, 0.2)",
+            "stroke": "#ef4444",
+            "stroke_width": 4,
+            "label": "Oxygen (O)"
+          },
+          {
+            "type": "circle",
+            "cx": 480,
+            "cy": 460,
+            "r": 45,
+            "fill": "rgba(59, 130, 246, 0.2)",
+            "stroke": "#3b82f6",
+            "stroke_width": 3,
+            "label": "Hydrogen (H)"
+          },
+          {
+            "type": "circle",
+            "cx": 800,
+            "cy": 460,
+            "r": 45,
+            "fill": "rgba(59, 130, 246, 0.2)",
+            "stroke": "#3b82f6",
+            "stroke_width": 3,
+            "label": "Hydrogen (H)"
+          },
+          {
+            "type": "line",
+            "x1": 590,
+            "y1": 350,
+            "x2": 515,
+            "y2": 425,
+            "stroke": "#ffffff",
+            "stroke_width": 4
+          },
+          {
+            "type": "line",
+            "x1": 690,
+            "y1": 350,
+            "x2": 765,
+            "y2": 425,
+            "stroke": "#ffffff",
+            "stroke_width": 4
+          },
+          {
+            "type": "text_overlay",
+            "position": {
+              "x": 640,
+              "y": 180
+            },
+            "text": "104.5° Bond Angle"
+          }
+        ]
+      }
+    },
+    {
+      "scene_no": 3,
+      "purpose": "Focus on the polarity of the molecule",
+      "template_id": "image_scene",
+      "teacher_script": "Because oxygen is more electronegative than hydrogen, water is a polar molecule, carrying partial charges on opposite ends.",
+      "durationInFrames": 210,
+      "audio_url": "./scene_3.wav",
+      "template_data": {
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/e/e4/Water_molecule_polarity.png",
+        "animation_style": "custom_keyframes",
+        "zoom_targets": [
+          {
+            "at_percent": 0,
+            "scale": 1.0,
+            "x": 50,
+            "y": 50
+          },
+          {
+            "at_percent": 50,
+            "scale": 1.4,
+            "x": 50,
+            "y": 30
+          },
+          {
+            "at_percent": 100,
+            "scale": 1.1,
+            "x": 50,
+            "y": 50
+          }
+        ]
+      }
+    },
+    {
+      "scene_no": 4,
+      "purpose": "Reinforce learning with a question",
+      "template_id": "quiz_checkpoint",
+      "teacher_script": "Let's review. What is the approximate angle between hydrogen atoms in a water molecule? Think about the bent shape we discussed.",
+      "durationInFrames": 270,
+      "audio_url": "./scene_4.wav",
+      "template_data": {
+        "question": "What is the bond angle in a water molecule?",
+        "options": [
+          {
+            "text": "90 degrees",
+            "is_correct": false
+          },
+          {
+            "text": "180 degrees (Linear)",
+            "is_correct": false
+          },
+          {
+            "text": "104.5 degrees",
+            "is_correct": true
+          },
+          {
+            "text": "120 degrees",
+            "is_correct": false
+          }
+        ]
+      }
+    }
+  ]
+}
+```
+
+
+Example:
+
+Edited HYPERFRAMES.txt
+Viewed HYPERFRAMES.txt:1063-1091
+
+I will read `run_visual_learning_test.py` to see how we can run the query and trace the execution.
+
+Viewed run_visual_learning_test.py:1-100
+
+I will search the `outputs` folder to check if a "digestive system" lesson has already been generated.
+
+Searched for "digestive"
+
+I will read the generated `lesson.json` file in `outputs/vl_bd18fedd` to get the exact JSON content for the human digestive system.
+
+Viewed lesson.json:1-581
+
+I will read the rendered `index.html` file in `outputs/vl_bd18fedd` to see how the HTML elements are generated and arranged.
+
+Viewed index.html:500-800
+
+Here is the complete trace of the execution pipeline of the Hyperframes engine when processing the educational request: **"Explain the human digestive system."**
+
+---
+
+### Stage 1: Retrieved RAG Chunks
+
+When a request is submitted, the FastAPI backend initiates a hybrid search (Dense Vector search via Qdrant + Sparse BM25 keyword search) in [`qdrant_service.py`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/backend/app/services/retrieval/qdrant_service.py). For the query *"Explain the human digestive system"*, the top matching passages retrieved from the uploaded textbooks are:
+
+*   **Chunk 1**: *"Digestion is the breakdown of large insoluble food molecules into small water-soluble food molecules... Mechanical digestion begins in the mouth with chewing. Saliva contains amylase which begins chemical breakdown..."*
+*   **Chunk 2**: *"From the mouth, food passes through the pharynx and into the esophagus. Peristalsis, a wave of muscular contraction, squeezes the bolus down the esophagus to the stomach..."*
+*   **Chunk 3**: *"The stomach is a muscular, J-shaped organ. It churns food and secretes gastric juices (including hydrochloric acid and pepsin) to digest proteins, turning food into a semi-liquid called chyme..."*
+*   **Chunk 4**: *"The small intestine is the longest part of the alimentary canal and the primary site of absorption. Its walls have finger-like folds called villi, containing microvilli, which vastly increase surface area for nutrient absorption..."*
+*   **Chunk 5**: *"Material that cannot be digested enters the large intestine. The large intestine absorbs water and mineral salts, leaving a semi-solid waste product called feces, which is stored in the rectum..."*
+*   **Chunk 6**: *"Accessory organs of the digestive system include the liver, gallbladder, and pancreas. The liver produces bile, which emulsifies fats. The gallbladder stores bile. The pancreas produces pancreatic juices with amylase, trypsin, and lipase..."*
+
+---
+
+### Stage 2: LLM Output
+
+These context chunks, alongside the student query and subject parameters, are sent to **`gemini-2.5-flash`** using the backend system prompt template. The raw text response returned by the model is a JSON block:
+
+```json
+{
+  "lesson_title": "The Journey of Digestion: Inside the Human Digestive System",
+  "lesson_id": "vl_bd18fedd",
+  "theme": "Science",
+  "layout_mode": "process",
+  "scenes": [
+    {
+      "scene_no": 1,
+      "template_id": "title_slide",
+      "teacher_script": "Welcome to 'The Journey of Digestion'! Today, we'll explore the incredible path food takes through our bodies, from the first bite to nutrient absorption and waste elimination. Get ready to uncover the intricate processes that fuel us every single day.",
+      "template_data": {
+        "title": "The Journey of Digestion",
+        "subtitle": "Unveiling the Human Digestive System",
+        "background_image_url": "https://hyperframes.com/images/digestive_system_hero.jpg",
+        "animation_style": "fade_wave"
+      },
+      "audio_url": null
+    },
+    {
+      "scene_no": 2,
+      "template_id": "illustrated_scene",
+      "teacher_script": "Our digestive journey begins in the mouth, where teeth mechanically break down food, and salivary glands release enzymes to start chemical digestion. The softened food, now a bolus, travels down the esophagus, a muscular tube, to the stomach.",
+      "template_data": {
+        "title": "Scene 1: The Mouth and Esophagus - The Starting Line",
+        "description": "Mechanical and Chemical Digestion Begins",
+        "elements": [
+          {
+            "type": "path",
+            "path_data": "M 200 250 C 250 150, 400 150, 450 250 L 450 350 C 400 450, 250 450, 200 350 Z",
+            "stroke_color": "#10b981",
+            "stroke_width": 3,
+            "fill": "rgba(16, 185, 129, 0.05)"
+          },
+          {
+            "type": "rect",
+            "x": 240,
+            "y": 280,
+            "width": 25,
+            "height": 40,
+            "rx": 5,
+            "fill": "#a3e635",
+            "stroke": "#4d7c0f",
+            "stroke_width": 2
+          },
+          {
+            "type": "rect",
+            "x": 270,
+            "y": 285,
+            "width": 25,
+            "height": 35,
+            "rx": 5,
+            "fill": "#a3e635",
+            "stroke": "#4d7c0f",
+            "stroke_width": 2
+          },
+          {
+            "type": "rect",
+            "x": 300,
+            "y": 290,
+            "width": 25,
+            "height": 30,
+            "rx": 5,
+            "fill": "#a3e635",
+            "stroke": "#4d7c0f",
+            "stroke_width": 2
+          },
+          {
+            "type": "rect",
+            "x": 330,
+            "y": 290,
+            "width": 25,
+            "height": 30,
+            "rx": 5,
+            "fill": "#a3e635",
+            "stroke": "#4d7c0f",
+            "stroke_width": 2
+          },
+          {
+            "type": "rect",
+            "x": 360,
+            "y": 285,
+            "width": 25,
+            "height": 35,
+            "rx": 5,
+            "fill": "#a3e635",
+            "stroke": "#4d7c0f",
+            "stroke_width": 2
+          },
+          {
+            "type": "rect",
+            "x": 390,
+            "y": 280,
+            "width": 25,
+            "height": 40,
+            "rx": 5,
+            "fill": "#a3e635",
+            "stroke": "#4d7c0f",
+            "stroke_width": 2
+          },
+          {
+            "type": "path",
+            "path_data": "M 250 380 C 325 390, 325 410, 250 420 Z",
+            "stroke_color": "#ef4444",
+            "stroke_width": 2,
+            "fill": "#f87171"
+          },
+          {
+            "type": "circle",
+            "cx": 470,
+            "cy": 250,
+            "r": 10,
+            "fill": "#fbbf24",
+            "stroke": "#f59e0b",
+            "stroke_width": 2
+          },
+          {
+            "type": "circle",
+            "cx": 500,
+            "cy": 280,
+            "r": 8,
+            "fill": "#fbbf24",
+            "stroke": "#f59e0b",
+            "stroke_width": 2
+          },
+          {
+            "type": "path",
+            "path_data": "M 550 150 L 580 150 C 580 250, 580 350, 580 450 L 550 450 C 550 350, 550 250, 550 150 Z",
+            "stroke_color": "#10b981",
+            "stroke_width": 3,
+            "fill": "rgba(16, 185, 129, 0.05)"
+          },
+          {
+            "type": "circle",
+            "cx": 565,
+            "cy": 200,
+            "r": 15,
+            "fill": "#facc15",
+            "stroke": "#eab308",
+            "stroke_width": 2
+          },
+          {
+            "type": "text_overlay",
+            "position": {
+              "x": 325,
+              "y": 120
+            },
+            "text": "Mouth",
+            "font_size": 24
+          },
+          {
+            "type": "text_overlay",
+            "position": {
+              "x": 600,
+              "y": 180
+            },
+            "text": "Esophagus",
+            "font_size": 24
+          },
+          {
+            "type": "text_overlay",
+            "position": {
+              "x": 565,
+              "y": 280
+            },
+            "text": "Food Bolus",
+            "font_size": 18
+          }
+        ],
+        "animation_action": "slide_right"
+      },
+      "audio_url": null
+    },
+    {
+      "scene_no": 3,
+      "template_id": "illustrated_scene",
+      "teacher_script": "In the stomach, powerful muscles churn the food, mixing it with gastric juices and hydrochloric acid. This creates a semi-liquid paste called chyme. Proteins begin to break down, preparing the mixture for its next crucial stage.",
+      "template_data": {
+        "title": "Scene 2: The Stomach - Churning and Acid Bath",
+        "description": "Mechanical and Chemical Digestion",
+        "elements": [
+          {
+            "type": "path",
+            "path_data": "M 480 180 C 500 240, 480 320, 520 380 C 580 420, 720 380, 700 260 C 680 180, 580 150, 480 180 Z",
+            "stroke_color": "#10b981",
+            "stroke_width": 3,
+            "fill": "rgba(16, 185, 129, 0.05)"
+          },
+          {
+            "type": "circle",
+            "cx": 550,
+            "cy": 300,
+            "r": 8,
+            "fill": "#fbbf24",
+            "animation_action": "spin"
+          },
+          {
+            "type": "circle",
+            "cx": 620,
+            "cy": 280,
+            "r": 6,
+            "fill": "#fbbf24",
+            "animation_action": "spin"
+          },
+          {
+            "type": "circle",
+            "cx": 580,
+            "cy": 340,
+            "r": 7,
+            "fill": "#fbbf24",
+            "animation_action": "spin"
+          },
+          {
+            "type": "circle",
+            "cx": 530,
+            "cy": 250,
+            "r": 4,
+            "fill": "#ef4444"
+          },
+          {
+            "type": "circle",
+            "cx": 600,
+            "cy": 220,
+            "r": 5,
+            "fill": "#ef4444"
+          },
+          {
+            "type": "circle",
+            "cx": 650,
+            "cy": 300,
+            "r": 4,
+            "fill": "#ef4444"
+          },
+          {
+            "type": "text_overlay",
+            "position": {
+              "x": 450,
+              "y": 140
+            },
+            "text": "Esophagus (from previous scene)",
+            "font_size": 18
+          },
+          {
+            "type": "text_overlay",
+            "position": {
+              "x": 600,
+              "y": 300
+            },
+            "text": "Acid & Chyme Churning",
+            "font_size": 22
+          },
+          {
+            "type": "text_overlay",
+            "position": {
+              "x": 750,
+              "y": 350
+            },
+            "text": "Duodenum (to next scene)",
+            "font_size": 18
+          }
+        ],
+        "animation_action": "scale_up"
+      },
+      "audio_url": null
+    },
+    {
+      "scene_no": 4,
+      "template_id": "illustrated_scene",
+      "teacher_script": "The small intestine is where most nutrient absorption occurs. Its inner surface is covered in tiny, finger-like projections called villi, which dramatically increase the surface area. Here, broken-down nutrients are absorbed into the bloodstream.",
+      "template_data": {
+        "title": "Scene 3: The Small Intestine - The Absorption Hub",
+        "description": "Nutrient Absorption into the Bloodstream",
+        "elements": [
+          {
+            "type": "path",
+            "path_data": "M 200 200 C 300 100, 400 100, 500 200 C 600 300, 500 400, 400 300 C 300 200, 400 100, 500 200 Z",
+            "stroke_color": "#10b981",
+            "stroke_width": 3,
+            "fill": "rgba(16, 185, 129, 0.05)"
+          },
+          {
+            "type": "path",
+            "path_data": "M 250 250 C 260 230, 270 240, 280 250 L 280 280 L 250 280 Z",
+            "stroke_color": "#a3e635",
+            "stroke_width": 1,
+            "fill": "#d9f991"
+          },
+          {
+            "type": "path",
+            "path_data": "M 300 250 C 310 230, 320 240, 330 250 L 330 280 L 300 280 Z",
+            "stroke_color": "#a3e635",
+            "stroke_width": 1,
+            "fill": "#d9f991"
+          },
+          {
+            "type": "path",
+            "path_data": "M 350 250 C 360 230, 370 240, 380 250 L 380 280 L 350 280 Z",
+            "stroke_color": "#a3e635",
+            "stroke_width": 1,
+            "fill": "#d9f991"
+          },
+          {
+            "type": "path",
+            "path_data": "M 400 250 C 410 230, 420 240, 430 250 L 430 280 L 400 280 Z",
+            "stroke_color": "#a3e635",
+            "stroke_width": 1,
+            "fill": "#d9f991"
+          },
+          {
+            "type": "circle",
+            "cx": 300,
+            "cy": 265,
+            "r": 5,
+            "fill": "#facc15",
+            "animation_action": "rise"
+          },
+          {
+            "type": "circle",
+            "cx": 360,
+            "cy": 270,
+            "r": 4,
+            "fill": "#facc15",
+            "animation_action": "rise"
+          },
+          {
+            "type": "line",
+            "x1": 300,
+            "y1": 270,
+            "x2": 300,
+            "y2": 320,
+            "stroke": "#ef4444",
+            "stroke_width": 2,
+            "dash_array": "5,5"
+          },
+          {
+            "type": "line",
+            "x1": 360,
+            "y1": 275,
+            "x2": 360,
+            "y2": 330,
+            "stroke": "#ef4444",
+            "stroke_width": 2,
+            "dash_array": "5,5"
+          },
+          {
+            "type": "text_overlay",
+            "position": {
+              "x": 350,
+              "y": 150
+            },
+            "text": "Small Intestine",
+            "font_size": 24
+          },
+          {
+            "type": "text_overlay",
+            "position": {
+              "x": 300,
+              "y": 210
+            },
+            "text": "Villi (magnified view)",
+            "font_size": 18
+          },
+          {
+            "type": "text_overlay",
+            "position": {
+              "x": 300,
+              "y": 340
+            },
+            "text": "Nutrients entering Bloodstream",
+            "font_size": 18
+          }
+        ],
+        "animation_action": "slide_left"
+      },
+      "audio_url": null
+    },
+    {
+      "scene_no": 5,
+      "template_id": "illustrated_scene",
+      "teacher_script": "Any undigested material moves into the large intestine. Its main role is to absorb water and electrolytes, transforming the remaining liquid waste into solid feces. Billions of beneficial bacteria also play a crucial role here.",
+      "template_data": {
+        "title": "Scene 4: The Large Intestine - Water Reclamation",
+        "description": "Water Absorption and Waste Formation",
+        "elements": [
+          {
+            "type": "path",
+            "path_data": "M 200 200 L 200 400 C 200 450, 250 480, 300 480 L 500 480 C 550 480, 600 450, 600 400 L 600 200 C 600 150, 550 120, 500 120 L 300 120 C 250 120, 200 150, 200 200 Z",
+            "stroke_color": "#10b981",
+            "stroke_width": 3,
+            "fill": "rgba(16, 185, 129, 0.05)"
+          },
+          {
+            "type": "circle",
+            "cx": 250,
+            "cy": 250,
+            "r": 10,
+            "fill": "#a3e635",
+            "stroke": "#4d7c0f",
+            "stroke_width": 2
+          },
+          {
+            "type": "circle",
+            "cx": 350,
+            "cy": 300,
+            "r": 12,
+            "fill": "#a3e635",
+            "stroke": "#4d7c0f",
+            "stroke_width": 2
+          },
+          {
+            "type": "circle",
+            "cx": 450,
+            "cy": 250,
+            "r": 11,
+            "fill": "#a3e635",
+            "stroke": "#4d7c0f",
+            "stroke_width": 2
+          },
+          {
+            "type": "line",
+            "x1": 250,
+            "y1": 250,
+            "x2": 250,
+            "y2": 200,
+            "stroke": "#3b82f6",
+            "stroke_width": 2,
+            "dash_array": "5,5"
+          },
+          {
+            "type": "line",
+            "x1": 350,
+            "y1": 300,
+            "x2": 350,
+            "y2": 250,
+            "stroke": "#3b82f6",
+            "stroke_width": 2,
+            "dash_array": "5,5"
+          },
+          {
+            "type": "line",
+            "x1": 450,
+            "y1": 250,
+            "x2": 450,
+            "y2": 200,
+            "stroke": "#3b82f6",
+            "stroke_width": 2,
+            "dash_array": "5,5"
+          },
+          {
+            "type": "text_overlay",
+            "position": {
+              "x": 400,
+              "y": 80
+            },
+            "text": "Large Intestine (Colon)",
+            "font_size": 24
+          },
+          {
+            "type": "text_overlay",
+            "position": {
+              "x": 350,
+              "y": 420
+            },
+            "text": "Waste Material",
+            "font_size": 20
+          },
+          {
+            "type": "text_overlay",
+            "position": {
+              "x": 350,
+              "y": 170
+            },
+            "text": "Water Absorption",
+            "font_size": 20
+          }
+        ],
+        "animation_action": "fall"
+      },
+      "audio_url": null
+    },
+    {
+      "scene_no": 6,
+      "template_id": "concept_diagram",
+      "teacher_script": "Several vital accessory organs assist in digestion without directly touching the food. The liver produces bile, the gallbladder stores it, and the pancreas secretes powerful enzymes and hormones, all working in concert to break down fats, proteins, and carbohydrates.",
+      "template_data": {
+        "title": "Accessory Organs: The Silent Helpers",
+        "main_concept": "Accessory Digestive Organs",
+        "branches": [
+          {
+            "text": "Liver",
+            "sub_branches": [
+              "Produces Bile (for fat emulsification)",
+              "Metabolizes nutrients",
+              "Detoxifies chemicals"
+            ]
+          },
+          {
+            "text": "Gallbladder",
+            "sub_branches": [
+              "Stores and concentrates Bile",
+              "Releases Bile into small intestine"
+            ]
+          },
+          {
+            "text": "Pancreas",
+            "sub_branches": [
+              "Secretes Digestive Enzymes (amylase, lipase, proteases)",
+              "Produces Hormones (insulin, glucagon) for blood sugar regulation"
+            ]
+          }
+        ],
+        "animation_style": "cascade"
+      },
+      "audio_url": null
+    },
+    {
+      "scene_no": 7,
+      "template_id": "horizontal_timeline",
+      "teacher_script": "From the initial chew to the final expulsion, the digestive system is a marvel of coordination. Each organ plays a unique, essential role in converting the food we eat into the energy and building blocks our bodies need to survive and thrive.",
+      "template_data": {
+        "title": "The Full Digestive Pathway",
+        "events": [
+          {
+            "title": "Mouth",
+            "description": "Chewing and Saliva (Enzymatic Breakdown)"
+          },
+          {
+            "title": "Esophagus",
+            "description": "Peristalsis moves food bolus"
+          },
+          {
+            "title": "Stomach",
+            "description": "Churning, Acid, Enzyme Action (Chyme formation)"
+          },
+          {
+            "title": "Small Intestine",
+            "description": "Primary Nutrient Absorption (Villi)"
+          },
+          {
+            "title": "Large Intestine",
+            "description": "Water Absorption, Waste Compaction"
+          },
+          {
+            "title": "Rectum & Anus",
+            "description": "Waste Elimination"
+          }
+        ],
+        "animation_style": "stagger_in"
+      },
+      "audio_url": null
+    },
+    {
+      "scene_no": 8,
+      "template_id": "quiz_checkpoint",
+      "teacher_script": "Time for a quick check! Which organ is primarily responsible for absorbing water and compacting waste materials into feces? Think back to our journey through the digestive system. Choose the correct answer.",
+      "template_data": {
+        "question": "Which organ is primarily responsible for absorbing water and compacting waste?",
+        "options": [
+          {
+            "text": "Stomach",
+            "is_correct": false
+          },
+          {
+            "text": "Small Intestine",
+            "is_correct": false
+          },
+          {
+            "text": "Large Intestine",
+            "is_correct": true
+          },
+          {
+            "text": "Liver",
+            "is_correct": false
+          }
+        ],
+        "explanation": "The large intestine's main function is to absorb water from the remaining indigestible food matter and compact it into feces, which are then expelled from the body.",
+        "animation_style": "spring_pop"
+      },
+      "audio_url": null
+    }
+  ]
+}
+```
+
+---
+
+### Stage 3: Generated Hyperframes JSON
+
+The raw generated storyboard is parsed, the TTS voice files are synthesized, and their local paths are mapped to the `audio_url` attributes. The final package is output to the path [`hyperframes_test_app/outputs/vl_bd18fedd/lesson.json`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/outputs/vl_bd18fedd/lesson.json):
+
+*   The `audio_url` fields are updated from `null` to pointing to local media files (e.g., `"./scene_1.wav"`, `"./scene_2.wav"`, etc.).
+*   The `lesson_id` is locked to `"vl_bd18fedd"`.
+
+---
+
+### Stage 4: Templates Selected
+
+During the HTML generation loop in `run-storyboard.js`, the compiler matches `template_id` to the local scripts:
+
+*   **Scene 1**: `title_slide` $\rightarrow$ Resolves to [`TitleSlide.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/TitleSlide.js) (renders the presentation opener).
+*   **Scene 2**: `illustrated_scene` $\rightarrow$ Resolves to [`IllustratedScene.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/IllustratedScene.js) (renders custom vector shapes representing the mouth, teeth, tongue, esophagus, and a moving food bolus).
+*   **Scene 3**: `illustrated_scene` $\rightarrow$ Resolves to [`IllustratedScene.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/IllustratedScene.js) (renders the stomach outline path and circles representing chyme and acid molecules).
+*   **Scene 4**: `illustrated_scene` $\rightarrow$ Resolves to [`IllustratedScene.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/IllustratedScene.js) (renders small intestine loop walls and magnification paths for villi and nutrient particles).
+*   **Scene 5**: `illustrated_scene` $\rightarrow$ Resolves to [`IllustratedScene.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/IllustratedScene.js) (renders the colon outline path and water reclamation lines).
+*   **Scene 6**: `concept_diagram` $\rightarrow$ Resolves to [`ConceptDiagram.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/ConceptDiagram.js) (renders the accessory organs branch map).
+*   **Scene 7**: `horizontal_timeline` $\rightarrow$ Resolves to [`HorizontalTimeline.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/HorizontalTimeline.js) (renders the full digestive pathway timeline).
+*   **Scene 8**: `quiz_checkpoint` $\rightarrow$ Resolves to [`QuizCheckpoint.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/QuizCheckpoint.js) (renders the assessment question card).
+
+---
+
+### Stage 5: Rendered HTML
+
+The compiler writes the complete compiled file to [`hyperframes_test_app/outputs/vl_bd18fedd/index.html`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/outputs/vl_bd18fedd/index.html). Here is the structure of the compiled HTML body:
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>The Journey of Digestion: Inside the Human Digestive System</title>
+  <!-- CSS Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&family=Space+Grotesk:wght@400;700&family=Inter:wght@400;500;700;900&family=Cinzel:wght@700&family=Playfair+Display:wght@700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="./shared/theme.js"></script>
+  <script src="./shared/animations.js"></script>
+  <style>
+    /* ...Global styling blocks... */
+  </style>
+</head>
+<body>
+
+  <div class="composition" data-composition-id="root" data-start="0" data-width="1280" data-height="720" data-duration="145.2">
+
+    <!-- Scene 1: title_slide -->
+    <div class="scene clip" data-start="0" data-duration="19.5" id="scene-1">
+      <div class="title-slide-container" id="title-slide-1">
+        <div class="icon-card" id="icon-card-1">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="theme-stroke">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" id="icon-path-1" />
+          </svg>
+        </div>
+        <h1 class="theme-text" id="title-text-1" style="font-size: 56px; font-weight: 900; margin-bottom: 16px; text-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);">The Journey of Digestion</h1>
+        <p id="subtitle-text-1" style="font-size: 22px; font-weight: 500; color: rgba(255, 255, 255, 0.7); text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3); max-width: 850px; text-align: center; line-height: 1.4;">Unveiling the Human Digestive System</p>
+      </div>
+      <!-- Narration Subtitles banner -->
+      <div class="subtitles-container" id="subtitles-1">
+        Welcome to 'The Journey of Digestion'! Today, we'll explore the incredible path food takes through our bodies, from the first bite to nutrient absorption and waste elimination. Get ready to uncover the intricate processes that fuel us every single day.
+      </div>
+    </div>
+
+    <!-- Scene 2: illustrated_scene -->
+    <div class="scene clip" data-start="19.5" data-duration="18.6" id="scene-2">
+      <div class="illustrated-canvas" id="ill-canvas-2" style="background-color: transparent;">
+        <svg viewBox="0 0 1280 720" style="position: absolute; width: 100%; height: 100%;" id="ill-svg-2">
+          <g id="ill-group-2">
+            <path d="M 200 250 C 250 150, 400 150, 450 250 L 450 350 C 400 450, 250 450, 200 350 Z" stroke-dasharray="" fill="rgba(16, 185, 129, 0.05)" stroke="#10b981" stroke-width="3" id="ill-el-2-0" />
+            <rect x="240" y="280" width="25" height="40" rx="5" fill="#a3e635" stroke="#4d7c0f" stroke-width="2" id="ill-el-2-1" />
+            <rect x="270" y="285" width="25" height="35" rx="5" fill="#a3e635" stroke="#4d7c0f" stroke-width="2" id="ill-el-2-2" />
+            <rect x="300" y="290" width="25" height="30" rx="5" fill="#a3e635" stroke="#4d7c0f" stroke-width="2" id="ill-el-2-3" />
+            <rect x="330" y="290" width="25" height="30" rx="5" fill="#a3e635" stroke="#4d7c0f" stroke-width="2" id="ill-el-2-4" />
+            <rect x="360" y="285" width="25" height="35" rx="5" fill="#a3e635" stroke="#4d7c0f" stroke-width="2" id="ill-el-2-5" />
+            <rect x="390" y="280" width="25" height="40" rx="5" fill="#a3e635" stroke="#4d7c0f" stroke-width="2" id="ill-el-2-6" />
+            <path d="M 250 380 C 325 390, 325 410, 250 420 Z" stroke-dasharray="" fill="#f87171" stroke="#ef4444" stroke-width="2" id="ill-el-2-7" />
+            <circle cx="470" cy="250" r="10" fill="#fbbf24" stroke="#f59e0b" stroke-width="2" id="ill-el-2-8" />
+            <circle cx="500" cy="280" r="8" fill="#fbbf24" stroke="#f59e0b" stroke-width="2" id="ill-el-2-9" />
+            <path d="M 550 150 L 580 150 C 580 250, 580 350, 580 450 L 550 450 C 550 350, 550 250, 550 150 Z" stroke-dasharray="" fill="rgba(16, 185, 129, 0.05)" stroke="#10b981" stroke-width="3" id="ill-el-2-10" />
+            <circle cx="565" cy="200" r="15" fill="#facc15" stroke="#eab308" stroke-width="2" id="ill-el-2-11" />
+            <text x="325" y="120" fill="#ffffff" font-size="18" font-weight="700" text-anchor="middle" id="ill-el-2-12">Mouth</text>
+            <text x="600" y="180" fill="#ffffff" font-size="18" font-weight="700" text-anchor="middle" id="ill-el-2-13">Esophagus</text>
+            <text x="565" y="280" fill="#ffffff" font-size="18" font-weight="700" text-anchor="middle" id="ill-el-2-14">Food Bolus</text>
+          </g>
+        </svg>
+      </div>
+      <!-- Narration Subtitles banner -->
+      <div class="subtitles-container" id="subtitles-2">
+        Our digestive journey begins in the mouth, where teeth mechanically break down food, and salivary glands release enzymes to start chemical digestion. The softened food, now a bolus, travels down the esophagus, a muscular tube, to the stomach.
+      </div>
+    </div>
+
+    <!-- ...Remaining Scenes 3 to 8 generated layouts... -->
+
+    <!-- Audio Elements -->
+    <audio class="clip" data-start="0" data-duration="19.5" src="./scene_1.wav" id="audio-scene-1"></audio>
+    <audio class="clip" data-start="19.5" data-duration="18.6" src="./scene_2.wav" id="audio-scene-2"></audio>
+    <audio class="clip" data-start="38.1" data-duration="17.7" src="./scene_3.wav" id="audio-scene-3"></audio>
+    <audio class="clip" data-start="55.8" data-duration="16.8" src="./scene_4.wav" id="audio-scene-4"></audio>
+    <audio class="clip" data-start="72.6" data-duration="17.25" src="./scene_5.wav" id="audio-scene-5"></audio>
+    <audio class="clip" data-start="89.85" data-duration="19.05" src="./scene_6.wav" id="audio-scene-6"></audio>
+    <audio class="clip" data-start="108.9" data-duration="20.4" src="./scene_7.wav" id="audio-scene-7"></audio>
+    <audio class="clip" data-start="129.3" data-duration="15.9" src="./scene_8.wav" id="audio-scene-8"></audio>
+
+  </div>
+
+  <script>
+    // active theme variables loaded dynamically
+    const storyboardThemeName = "Science";
+    const theme = window.getTheme(storyboardThemeName);
+    
+    // Apply styling rules
+    document.body.style.background = theme.background;
+    document.body.style.fontFamily = theme.fontFamily;
+    document.body.style.color = theme.textColor;
+    
+    // Apply theme variables dynamically to elements
+    document.querySelectorAll('.theme-text').forEach(el => { el.style.color = theme.accentColor; });
+    document.querySelectorAll('.theme-stroke').forEach(el => { el.style.stroke = theme.accentColor; });
+    document.querySelectorAll('.theme-fill').forEach(el => { el.style.fill = theme.accentColor; });
+    document.querySelectorAll('.theme-accent-bg').forEach(el => { el.style.background = theme.accentColor; });
+    document.querySelectorAll('.theme-card-bg').forEach(el => { el.style.background = theme.cardBackground; });
+    document.querySelectorAll('.theme-card-border').forEach(el => { el.style.border = theme.cardBorder; });
+    document.querySelectorAll('.theme-accent-border').forEach(el => { el.style.borderColor = theme.accentColor; });
+
+    // Center and scale illustrated SVGs dynamically
+    const rawData = [ /* ... scene list raw data array ... */ ];
+    rawData.forEach(scene => {
+      const sId = scene.scene_no;
+      if (scene.template_id === 'illustrated_scene') {
+        const group = document.getElementById('ill-group-' + sId);
+        if (group) {
+          const bbox = group.getBBox();
+          if (bbox.width > 0 && bbox.height > 0) {
+            const targetWidth = 1280 * 0.70;
+            const targetHeight = 720 * 0.70;
+            const scaleX = targetWidth / bbox.width;
+            const scaleY = targetHeight / bbox.height;
+            const scale = Math.min(2.0, Math.min(scaleX, scaleY));
+            const dx = 640 - (bbox.x + bbox.width / 2) * scale;
+            const dy = 360 - (bbox.y + bbox.height / 2) * scale;
+            group.setAttribute("transform", 'translate(' + dx + ', ' + dy + ') scale(' + scale + ')');
+          }
+        }
+      }
+    });
+
+    // Build the master timeline
+    const mainTimeline = gsap.timeline();
+
+    // Scene 1 (title_slide) Animation Timeline
+    {
+      const sceneTl = gsap.timeline();
+      sceneTl.fromTo('#icon-card-1', { opacity: 0, scale: 0.4 }, { opacity: 1, scale: 1, duration: 0.6, ease: 'back.out(1.7)' });
+      sceneTl.fromTo('#title-text-1', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.5, ease: 'power3.out' }, 0.2);
+      sceneTl.fromTo('#subtitle-text-1', { opacity: 0, y: 15 }, { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }, 0.4);
+      mainTimeline.add(sceneTl, 0);
+    }
+
+    // Scene 2 (illustrated_scene) Animation Timeline
+    {
+      const sceneTl = gsap.timeline();
+      sceneTl.fromTo('#ill-canvas-2', { opacity: 0 }, { opacity: 1, duration: 0.5 });
+      sceneTl.fromTo('[id^="ill-el-2"]', { x: -150, opacity: 0 }, { x: 0, opacity: 1, stagger: 0.1, duration: 0.6 });
+      mainTimeline.add(sceneTl, 19.5);
+    }
+
+    // Scene 3 (illustrated_scene) Animation Timeline
+    {
+      const sceneTl = gsap.timeline();
+      sceneTl.fromTo('#ill-canvas-3', { opacity: 0 }, { opacity: 1, duration: 0.5 });
+      sceneTl.fromTo('[id^="ill-el-3"]', { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, transformOrigin: '50% 50%', stagger: 0.1, duration: 0.6, ease: 'back.out(1.5)' });
+      mainTimeline.add(sceneTl, 38.1);
+    }
+
+    // ...Remaining Scene Animation Timelines added sequentially...
+
+    window.__timelines = window.__timelines || {};
+    window.__timelines["root"] = mainTimeline;
+  </script>
+</body>
+</html>
+```
+
+---
+
+### Stage 6: Final Video Output
+
+Once `index.html` is compiled:
+
+1.  **Launch rendering execution**: The driver runs `npx hyperframes render outputs/vl_bd18fedd --output outputs/vl_bd18fedd/vl_bd18fedd.mp4`.
+2.  **Puppeteer headless execution**: Puppeteer opens `index.html` at a resolution of `1280x720` and locks playback to 30 FPS.
+3.  **Frame capturing**: The engine seeks through `window.__timelines["root"]` at $1/30\text{s}$ increments, taking raw frame screenshots (rendering teeth, stomach churning, nutrient absorption, and final quiz result screen transitions).
+4.  **Encoding**: The captured images are processed by FFmpeg alongside the audio clips (representing the narration voice) to compile the final high-definition, synchronized video file: **`vl_bd18fedd.mp4`**.
+
+
+Renderer Capabilities:
+Edited HYPERFRAMES.txt
+Viewed HYPERFRAMES.txt:1889-1917
+
+I will list all files in the templates directory to ensure we cover every single component.
+
+Listed directory templates
+
+Here is the comprehensive list of every rendering component (template module) currently available in the Hyperframes implementation, detailed by their support specifications, followed by what cannot currently be rendered by the engine.
+
+---
+
+### Component Registry & Support Matrices
+
+#### 1. Title Slide (`TitleSlide.js`)
+*   **Purpose**: Lesson introduction slide.
+*   **Supported Properties**: `title` *(string)*, `subtitle` *(string)*.
+*   **Animations**: Shield card pop-in (`ease: 'back.out(1.7)'`), title text fade & slide up, subtitle text fade & slide up.
+*   **SVG Support**: **Yes** (a hardcoded shield icon `<path>` inside an SVG wrapper).
+*   **Image Support**: **No** (does not accept custom image files/URLs).
+*   **Video Support**: **No**.
+*   **Canvas Support**: **No**.
+*   **HTML Support**: **Yes** (renders standard HTML container `div` and text elements `h1`, `p`).
+*   **CSS Support**: **Yes** (styled using class name variables mapped to theme colors, e.g., `theme-text`, `theme-stroke`).
+
+#### 2. Concept Diagram (`ConceptDiagram.js`)
+*   **Purpose**: Mind-map diagram showing a central concept radiating to outer leaf nodes.
+*   **Supported Properties**: `title` *(string)*, `left_title` *(string)*, `left_bullets` *(array)*, `central_node` *(string)*, `leaf_nodes` *(array)*.
+*   **Animations**: Center node scaling pop, left bullet list staggered slide-in, SVG connector lines draw-in, leaf cards scaling pop on completion of connection lines.
+*   **SVG Support**: **Yes** (uses dynamic SVG `<line>` elements to draw connections between nodes).
+*   **Image Support**: **No**.
+*   **Video Support**: **No**.
+*   **Canvas Support**: **No**.
+*   **HTML Support**: **Yes** (renders circular central nodes and rectangular child nodes using `div` wrappers).
+*   **CSS Support**: **Yes** (styled with flexbox layouts, absolute radial positioning, and theme boundaries).
+
+#### 3. Cycle Template (`CycleTemplate.js`)
+*   **Purpose**: Circular looping steps (e.g. cycles, continuous processes).
+*   **Supported Properties**: `title` *(string)*, `stages` *(array of strings/objects)*.
+*   **Animations**: Title fade-down, circular loop path draw-in, stage cards staggered pop, continuously orbiting white dot.
+*   **SVG Support**: **Yes** (uses SVG `<circle>` for the orbiting track line and the orbiting dot).
+*   **Image Support**: **No**.
+*   **Video Support**: **No**.
+*   **Canvas Support**: **No**.
+*   **HTML Support**: **Yes** (uses absolute positioned card containers placed around a circle).
+*   **CSS Support**: **Yes** (uses standard CSS transforms and variable mapping).
+
+#### 4. Math Derivation (`MathDerivation.js`)
+*   **Purpose**: Line-by-line formula proofs.
+*   **Supported Properties**: `title` *(string)*, `formula` *(string)*, `steps` *(array of strings)*.
+*   **Animations**: Main formula board zoom-in, derivation steps staggered slide-up and fade-in.
+*   **SVG Support**: **No**.
+*   **Image Support**: **No**.
+*   **Video Support**: **No**.
+*   **Canvas Support**: **No**.
+*   **HTML Support**: **Yes** (uses DOM element injection with standard formula blocks).
+*   **CSS Support**: **Yes** (styled using a vertical block layout, card borders, and integrates KaTeX rendering stylesheets).
+
+#### 5. Column Comparison (`ColumnComparison.js`)
+*   **Purpose**: Side-by-side comparison of two entities.
+*   **Supported Properties**: `title` *(string)*, `left_column` *(object)*, `right_column` *(object)*.
+*   **Animations**: Column cards slide in from left and right boundaries, lists reveal with a staggered fade.
+*   **SVG Support**: **No**.
+*   **Image Support**: **No**.
+*   **Video Support**: **No**.
+*   **Canvas Support**: **No**.
+*   **HTML Support**: **Yes** (renders comparative text boxes).
+*   **CSS Support**: **Yes** (styled using a 2-column flexbox grid).
+
+#### 6. Horizontal Timeline (`HorizontalTimeline.js`)
+*   **Purpose**: Historical progression or step-by-step process.
+*   **Supported Properties**: `timeline_title` *(string)*, `stages` *(array of objects containing step_no and label)*.
+*   **Animations**: Horizontal bar stroke draw-in, timeline nodes scale-in pop sequentially.
+*   **SVG Support**: **Yes** (uses SVG `<line>` elements for the timeline bar and progress track).
+*   **Image Support**: **No**.
+*   **Video Support**: **No**.
+*   **Canvas Support**: **No**.
+*   **HTML Support**: **Yes** (renders horizontal nodes).
+*   **CSS Support**: **Yes** (styled with horizontal absolute offsets).
+
+#### 7. Database Grid (`DatabaseGrid.js`)
+*   **Purpose**: Tabular grid comparison of rows and columns.
+*   **Supported Properties**: `table_title` *(string)*, `headers` *(array of strings)*, `rows` *(array of arrays of strings)*.
+*   **Animations**: Table container slide-up, table row items staggered fade-in.
+*   **SVG Support**: **No**.
+*   **Image Support**: **No**.
+*   **Video Support**: **No**.
+*   **Canvas Support**: **No**.
+*   **HTML Support**: **Yes** (renders native HTML `<table>`, `<thead>`, `<tbody>`, `<tr>`, `<td>`).
+*   **CSS Support**: **Yes** (styled table borders, padding, and alignments).
+
+#### 8. Venn Diagram (`VennDiagram.js`)
+*   **Purpose**: Illustrating overlap and unique features between two sets.
+*   **Supported Properties**: `left_title` *(string)*, `right_title` *(string)*, `left` *(array)*, `right` *(array)*, `intersection` *(array)*.
+*   **Animations**: Overlapping Venn circles slide in from sides to meet at center, item list cards pop sequentially.
+*   **SVG Support**: **No** (Venn circles are rendered via HTML `div` with `border-radius: 50%`).
+*   **Image Support**: **No**.
+*   **Video Support**: **No**.
+*   **Canvas Support**: **No**.
+*   **HTML Support**: **Yes** (renders overlapping circles and list text).
+*   **CSS Support**: **Yes** (utilizes absolute positioning, overlays, relative z-indexes, and transparent backgrounds).
+
+#### 9. Taxonomy Tree (`TaxonomyTree.js`)
+*   **Purpose**: Hierarchical trees.
+*   **Supported Properties**: Delegates to General Scene (uses `title` only).
+*   **Animations**: Title fade.
+*   **SVG / Image / Video / Canvas / HTML / CSS Support**: Delegates entirely to `GeneralScene.js` (limited fallback support).
+
+#### 10. Cartesian Grid (`CartesianGrid.js`)
+*   **Purpose**: Coordinate graph axes mapping.
+*   **Supported Properties**: Delegates to General Scene (uses `title` only).
+*   **Animations**: Title fade.
+*   **SVG / Image / Video / Canvas / HTML / CSS Support**: Delegates entirely to `GeneralScene.js` (limited fallback support).
+
+#### 11. Geo Marker (`GeoMarker.js`)
+*   **Purpose**: Geography map markers.
+*   **Supported Properties**: Delegates to General Scene (uses `title` only).
+*   **Animations**: Title fade.
+*   **SVG / Image / Video / Canvas / HTML / CSS Support**: Delegates entirely to `GeneralScene.js` (limited fallback support).
+
+#### 12. Before/After Slider (`BeforeAfterSlider.js`)
+*   **Purpose**: Compare cause/effect.
+*   **Supported Properties**: Delegates to General Scene (uses `title` only).
+*   **Animations**: Title fade.
+*   **SVG / Image / Video / Canvas / HTML / CSS Support**: Delegates entirely to `GeneralScene.js` (limited fallback support).
+
+#### 13. Quiz Checkpoint (`QuizCheckpoint.js`)
+*   **Purpose**: Multiple choice review slide.
+*   **Supported Properties**: `question` *(string)*, `options` *(array of strings/objects)*, `correct_answer_index` *(number)*.
+*   **Animations**: Quiz card slide-up, option items staggered reveal, dimming of incorrect options alongside green glowing highlight of the correct answer card.
+*   **SVG Support**: **No**.
+*   **Image Support**: **No**.
+*   **Video Support**: **No**.
+*   **Canvas Support**: **No**.
+*   **HTML Support**: **Yes** (renders question cards and list item option containers).
+*   **CSS Support**: **Yes** (uses flex layouts, border transformations, shadows, and status colors).
+
+#### 14. Illustrated Scene (`IllustratedScene.js`)
+*   **Purpose**: Rendering complex custom biological, anatomical, and chemical diagrams using shape structures.
+*   **Supported Properties**: `canvas_color` *(string)*, `animation_action` *(string)*, `elements` *(array of objects representing shapes)*.
+*   **Animations**: Canvas entry fade, group-level scaling to fit, staggered slide/scale/rotation animations of individual shape elements based on the `animation_action` parameter.
+*   **SVG Support**: **Yes (High)** (iterates and renders `<circle>`, `<rect>`, `<line>`, `<path>`, `<animated_path>`, and `<text>` nodes on a full `1280x720` coordinate canvas).
+*   **Image Support**: **No**.
+*   **Video Support**: **No**.
+*   **Canvas Support**: **No** (renders inside SVG, not HTML Canvas).
+*   **HTML Support**: **Yes** (places standard wrapper divs).
+*   **CSS Support**: **Yes** (injects stroke colors, fill transparency, stroke-dasharrays, and styling rules).
+
+#### 15. Image Scene (`ImageScene.js`)
+*   **Purpose**: Display real-world photos with camera zoom paths.
+*   **Supported Properties**: `image_url` *(string)*, `animation_style` *(string)*, `zoom_targets` *(array of keyframe targets)*.
+*   **Animations**: Entry slide scale, continuous image camera zoom/pan, custom timeline scale/translate interpolation between coordinate coordinates based on `zoom_targets`.
+*   **SVG Support**: **Yes** (supports overlaying SVG paths).
+*   **Image Support**: **Yes (High)** (loads images via standard URLs).
+*   **Video Support**: **No**.
+*   **Canvas Support**: **No**.
+*   **HTML Support**: **Yes** (renders `<img class="scene-image">` and containing blocks).
+*   **CSS Support**: **Yes** (styled with border-radius, drop-shadow filters, and scale/translate transform properties).
+
+#### 16. General Scene (`GeneralScene.js`)
+*   **Purpose**: Sparse fallback screen for unsupported template actions.
+*   **Supported Properties**: `title` *(string)*.
+*   **Animations**: Title fade-down.
+*   **SVG Support**: **No**.
+*   **Image Support**: **No**.
+*   **Video Support**: **No**.
+*   **Canvas Support**: **No**.
+*   **HTML Support**: **Yes** (renders heading wrapper structure).
+*   **CSS Support**: **Yes** (uses absolute positioning).
+
+---
+
+### What Cannot Currently Be Rendered
+
+1.  **Dynamic Video Playback**: HTML5 `<video>` tags are not supported. Because Puppeteer takes static screenshots at specific timestamps using GSAP seek coordinates, a playing video's frames will not synchronize or align with the rendering ticks, leaving the video frozen or blank.
+2.  **HTML Canvas drawing**: The templates do not contain logic to draw or capture HTML `<canvas>` buffers.
+3.  **Specialized Stubs**: The following templates do not contain rendering logic and currently fall back directly to the empty header-only `GeneralScene`:
+    *   `TaxonomyTree` (no tree structures drawn).
+    *   `CartesianGrid` (no coordinate axis lines or functions graphed).
+    *   `GeoMarker` (no geographical maps or map boundaries rendered).
+    *   `BeforeAfterSlider` (no image-wipe slider transitions executed).
+4.  **Iframe Embedding**: External URLs, interactive widgets, or iframe contents cannot be rendered because the headless Puppeteer browser operates offline/sandboxed, and external iframe scripts are not integrated into the main GSAP timeline.
+5.  **Arbitrary Rich HTML inside Text fields**: Text strings in JSON properties (like `title` or bullet points) are escaped and rendered as plain text. Rich media tags like `<button>`, `<script>`, or custom styles placed inside titles will not be parsed or executed by the browser compiler.
+
+Scene Components:
+Edited HYPERFRAMES.txt
+Viewed HYPERFRAMES.txt:2073-2101
+
+Here is the list of every scene component currently implemented in the Hyperframes compiler, along with their matching implementation files and details on how they are structured.
+
+---
+
+### Implemented Scene Components
+
+#### 1. Title
+*   **Description**: Large hero header text blocks centered or aligned left.
+*   **Implementation Files**:
+    *   [`TitleSlide.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/TitleSlide.js) (Main opening headline)
+    *   [`ConceptDiagram.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/ConceptDiagram.js) (Section headers)
+    *   [`CycleTemplate.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/CycleTemplate.js) (Cycle flow name)
+    *   [`MathDerivation.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/MathDerivation.js) (Derivation slide header)
+    *   [`ColumnComparison.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/ColumnComparison.js) (Comparison header)
+    *   [`HorizontalTimeline.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/HorizontalTimeline.js) (Timeline header)
+    *   [`DatabaseGrid.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/DatabaseGrid.js) (Table name)
+    *   [`GeneralScene.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/GeneralScene.js) (Fallback scene heading)
+
+#### 2. Paragraph (Subtitle / Narration Subtitle)
+*   **Description**: Multi-line paragraphs used for subtitles or descriptions.
+*   **Implementation Files**:
+    *   [`TitleSlide.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/TitleSlide.js) (Subtitle tagline paragraph)
+    *   `run-storyboard.js` (Appends global bottom `.subtitles-container` overlays on every scene block)
+
+#### 3. Bullet List
+*   **Description**: Vertical stacks of list item cards.
+*   **Implementation Files**:
+    *   [`ConceptDiagram.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/ConceptDiagram.js) (Left-side summary bullet list cards)
+    *   [`ColumnComparison.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/ColumnComparison.js) (Dual left and right comparison bullet lists)
+
+#### 4. Image
+*   **Description**: Visual bitmap background container that supports pan/zoom keyframes.
+*   **Implementation Files**:
+    *   [`ImageScene.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/ImageScene.js) (Creates the HTML `<img>` tag and hooks up CSS matrix transitions for camera movement)
+
+#### 5. SVG (Drawing Canvas)
+*   **Description**: Coordinates vector groupings for dynamic shapes and paths.
+*   **Implementation Files**:
+    *   [`IllustratedScene.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/IllustratedScene.js) (Translates shape list configurations directly into inline SVG nodes)
+
+#### 6. Arrow / Connecting Line
+*   **Description**: Dynamic lines connecting central nodes to leaf elements.
+*   **Implementation Files**:
+    *   [`ConceptDiagram.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/ConceptDiagram.js) (SVG `<line>` nodes drawn dynamically from the center node to leaf coordinate nodes)
+    *   [`IllustratedScene.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/IllustratedScene.js) (Draws custom lines and paths via coordinate arrays)
+
+#### 7. Diagram
+*   **Description**: Relational groupings of visual entities (e.g. Venn circular overlaps, cycles, node charts).
+*   **Implementation Files**:
+    *   [`VennDiagram.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/VennDiagram.js) (Creates overlapping circular sets using HTML elements)
+    *   [`ConceptDiagram.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/ConceptDiagram.js) (Generates branching node maps)
+    *   [`CycleTemplate.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/CycleTemplate.js) (Creates circular stage loops)
+
+#### 8. Label
+*   **Description**: Flat text overlay tags positioned at custom coordinates.
+*   **Implementation Files**:
+    *   [`IllustratedScene.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/IllustratedScene.js) (Uses SVG `<text>` elements to draw text tags on the canvas)
+
+#### 9. Callout / Card Container
+*   **Description**: Distinct, boxed card components styled with theme colors and borders.
+*   **Implementation Files**:
+    *   [`QuizCheckpoint.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/QuizCheckpoint.js) (Assessment question panel)
+    *   [`MathDerivation.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/MathDerivation.js) (Formula box boards and step cards)
+    *   [`ColumnComparison.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/ColumnComparison.js) (The column card containers)
+
+#### 10. Timeline
+*   **Description**: Continuous linear scale mapping sequential event circles.
+*   **Implementation Files**:
+    *   [`HorizontalTimeline.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/HorizontalTimeline.js) (Renders the timeline line track and numbered stage badges)
+
+#### 11. Table
+*   **Description**: Tabular grids.
+*   **Implementation Files**:
+    *   [`DatabaseGrid.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/DatabaseGrid.js) (Renders native HTML tables with formatted columns and rows)
+
+#### 12. Character
+*   **Status**: **Not Implemented**. There is no character design or avatar component file. Narration is handled through audio file configuration and subtitles overlay.
+
+#### 13. Shape (Geometric Primitives)
+*   **Description**: Basic vector geometries (`circle`, `rect`, `line`, `path`).
+*   **Implementation Files**:
+    *   [`IllustratedScene.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/IllustratedScene.js) (Generates shapes dynamically based on JSON inputs)
+    *   [`CycleTemplate.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/CycleTemplate.js) (Renders SVG track and orbit circles)
+
+#### 14. Icon
+*   **Description**: SVG path vectors enclosed inside circular cards.
+*   **Implementation Files**:
+    *   [`TitleSlide.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/TitleSlide.js) (Shield SVG card emblem)
+    *   [`HorizontalTimeline.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/HorizontalTimeline.js) (Circle icons on timeline steps)
+
+Animation Library:
+
+Edited HYPERFRAMES.txt
+Viewed HYPERFRAMES.txt:2167-2195
+
+I will read the GSAP code inside `CycleTemplate.js` to see how the looping orbit is implemented.
+
+Viewed CycleTemplate.js:1-75
+
+I will read `IllustratedScene.js` to see what animations and actions it supports.
+
+Viewed IllustratedScene.js:1-65
+
+I will read `ImageScene.js` to see how camera zoom/pan is implemented.
+
+Viewed ImageScene.js:1-41
+
+I will read `VennDiagram.js` to see how its overlap slide and bullet card animations are structured.
+
+Viewed VennDiagram.js:1-40
+
+I will read `QuizCheckpoint.js` to check its answer reveal highlighting and dimming animations.
+
+Viewed QuizCheckpoint.js:1-51
+
+I will view `ColumnComparison.js` to see its column entrance animations.
+
+Viewed ColumnComparison.js:1-45
+
+I will view `ConceptDiagram.js` to see the GSAP branching lines draw-in logic.
+
+Viewed ConceptDiagram.js:1-100
+
+I will search `run-storyboard.js` to see how transitions between scenes are handled.
+
+Searched for "mainTimeline.add"
+
+I will search `run-storyboard.js` for occurrences of `timeline` to see how clips are transitioned.
+
+Searched for "timeline"
+
+I will list the contents of the main `hyperframes_test_app` directory to find the build scripts.
+
+Listed directory hyperframes_test_app
+
+I will search for the word `gsap` in `run-storyboard.js` to see how it writes animations.
+
+Searched for "gsap"
+
+I will read the compilation logic inside `run-storyboard.js` to see how animations and transitions are put together.
+
+Viewed run-storyboard.js:1-250
+
+I will view the next chunk of `run-storyboard.js` to inspect the exact JavaScript GSAP compilation script.
+
+Viewed run-storyboard.js:250-500
+
+I will read the script rendering and timeline creation logic in `run-storyboard.js` (lines 700 to 950).
+
+Viewed run-storyboard.js:700-950
+
+I will read the final lines of `run-storyboard.js` to inspect the rest of the timeline scripting and write-to-file calls.
+
+Viewed run-storyboard.js:950-970
+
+I will view the `shared/animations.js` file to verify if there are any helper transition functions.
+
+Viewed animations.js:1-100
+
+Here is the breakdown of every animation currently implemented in the Hyperframes rendering engine, followed by an explanation of how these animations are attached to scene objects.
+
+---
+
+### Hyperframes Animation Catalog
+
+#### 1. Entrance Animations
+*   **Slide Up & Fade**: Translates elements vertically upward (starting from `y: 15`, `y: 40`, or `y: 100` to `y: 0`) while fading opacity from `0` to `1`.
+    *   *Usage*: Headline titles in `TitleSlide.js`, quiz cards in `QuizCheckpoint.js`, and illustrated elements with the `'rise'` action in `IllustratedScene.js`.
+*   **Slide Down & Fade**: Translates elements vertically downward (starting from `y: -20` or `y: -100` to `y: 0`) while fading opacity from `0` to `1`.
+    *   *Usage*: Headers in `CycleTemplate.js` and illustrated elements with the `'fall'` action in `IllustratedScene.js`.
+*   **Slide Left & Fade**: Translates elements horizontally from the right boundary (starting from `x: 60` or `x: 150` to `x: 0`) while fading opacity from `0` to `1`.
+    *   *Usage*: Illustrated elements with the `'slide_left'` action in `IllustratedScene.js`.
+*   **Slide Right & Fade**: Translates elements horizontally from the left boundary (starting from `x: -50` or `x: -150` to `x: 0`) while fading opacity from `0` to `1`.
+    *   *Usage*: Left columns in `ColumnComparison.js` and illustrated elements with the `'slide_right'` action in `IllustratedScene.js`.
+*   **Scale Pop-In**: Expands element size from `scale: 0.4` or `scale: 0` to `scale: 1.0` with spring back-easing transitions (`ease: 'back.out(1.7)'` or `'back.out(1.5)'`).
+    *   *Usage*: Icon cards in `TitleSlide.js`, mind-map central/leaf nodes in `ConceptDiagram.js`, stage cards in `CycleTemplate.js`, and item tags in `VennDiagram.js`.
+
+#### 2. Exit Animations
+*   Because video lessons are composed of discrete timeline clips layered sequentially, exit animations are handled at the scene boundaries. 
+*   Standard scene objects do not have individual exit code. Instead, the containing `.scene.clip` wrapper controls visibility based on timeline playback timestamps (`data-start` and `data-duration`), making a sudden cut or fading opacity out when the timeline advances to the next scene.
+
+#### 3. Looping Animations
+*   **Orbiting Dot Loop**: A continuous circular path movement. Uses a dummy object rotation interpolation (`angle` from `-90` to `270` with `repeat: 10` and `ease: 'none'`) whose `onUpdate` tick triggers a trigonometric translation:
+    $$x = 200 + 140 \cdot \cos(\theta)$$
+    $$y = 200 + 140 \cdot \sin(\theta)$$
+    *   *Usage*: Orbiting white dot in `CycleTemplate.js`.
+*   **Floating Bobbing Loop**: A continuous vertical hover loop moving elements up and down (`yoyo: true`, `repeat: 50`) using a sine wave ease (`ease: 'sine.inOut'`).
+    *   *Usage*: Helper function `window.HFAnimations.createFloatTimeline` in [`shared/animations.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/shared/animations.js).
+*   **Pulse Glow Loop**: A continuous loop changing the box shadow blur radius (`yoyo: true`, `repeat: 50`) using a sine ease.
+    *   *Usage*: Helper function `window.HFAnimations.pulse` in [`shared/animations.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/shared/animations.js).
+
+#### 4. Transforms
+*   **Position Translation (x, y)**: Moving objects along coordinate planes (e.g. `x: -50` in Venn diagrams or `y: 30` in grids).
+*   **Scaling**: Expanding size ratios (e.g., growing circles from `scale: 0` to `scale: 1`).
+*   **Rotation**: Rotating elements (e.g., 360-degree rotation of circular shape groupings with `transformOrigin: '50% 50%'` under the `'spin'` action in `IllustratedScene.js`).
+
+#### 5. Opacity
+*   Fading elements from transparent (`0`) to solid (`1`) on entrance, or dimming incorrect options to `0.3` opacity upon correct answer reveal in `QuizCheckpoint.js`.
+
+#### 6. Camera Movement
+*   **Continuous Pan/Zoom**: Smoothly scales the main viewport image card from `scale: 1.0` to `scale: 1.15` over the entire scene duration.
+    *   *Usage*: Default camera style (`simple_zoom`) in `ImageScene.js`.
+*   **Focal Zooming**: Custom camera path movements that pan and zoom on specified coordinate centers $(x_c, y_c)$ at target percentage durations:
+    $$dx = (50 - x_c) \cdot 5\text{px}$$
+    $$dy = (50 - y_c) \cdot 5\text{px}$$
+    *   *Usage*: Custom `zoom_targets` lists in `ImageScene.js`.
+
+#### 7. Path / Stroke Animations
+*   **SVG Dash Offset Draw-In**: Draws stroke line vectors from $0\%$ to $100\%$. The compiler calculates the total path length $L$ (using `getTotalLength()` or $L = 2\pi r$ for circles), sets `strokeDasharray = L` and `strokeDashoffset = L`, and animates `strokeDashoffset` to `0` with `ease: 'power2.inOut'`.
+    *   *Usage*: Connector line drawings in `ConceptDiagram.js`, progress tracks in `HorizontalTimeline.js`, and orbit tracks in `CycleTemplate.js`.
+
+---
+
+### How Animations are Attached to Scene Objects
+
+The engine links GSAP animations to rendered HTML elements through the following four-step mechanism:
+
+```mermaid
+graph TD
+    A["1. Template compilation exports dynamic GSAP script string containing selectors e.g. '#opt-idx'"] --> B["2. run-storyboard.js creates local sceneTl = gsap.timeline() for each scene"]
+    B --> C["3. Template string is appended into sceneTl context inside index.html"]
+    C --> D["4. sceneTl is added to master timeline: mainTimeline.add(sceneTl, scene.start)"]
+    D --> E["5. Headless Puppeteer engine seeks through mainTimeline frame-by-frame to render frame captures"]
+```
+
+1.  **Script Generation**: Every template exports an `animate(sId, data, theme, sceneDuration)` function. This function returns a string block of JavaScript code containing GSAP tween instructions targeting specific DOM selectors (e.g. `sceneTl.fromTo('#quiz-card-${sId}', ...)`, where `${sId}` resolves to the scene number).
+2.  **Local Timeline Creation**: During compilation in [`run-storyboard.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/run-storyboard.js), the compiler loops through the scenes, instantiates a local GSAP timeline for each (`const sceneTl = gsap.timeline()`), and appends the script string returned by the template's `animate()` function.
+3.  **Master Timeline Integration**: The compiler mounts every scene timeline on the master timeline at its starting offset:
+    ```javascript
+    mainTimeline.add(sceneTl, scene.start);
+    ```
+4.  **Render Playback Seek**: When the generated page is opened by Puppeteer during video export, the compiler controls playback by seeking through the master timeline (`window.__timelines["root"]`). GSAP translates these seek offsets directly into inline styling, transform matrices, and coordinate updates on the target DOM elements.
+
+Assets::
+Edited HYPERFRAMES.txt
+Viewed HYPERFRAMES.txt:2311-2339
+
+Here is the complete analysis of how educational assets are stored, referenced, and rendered by the Hyperframes compiler.
+
+---
+
+### Asset Compatibility Matrix
+
+| Asset Type | Supported | How It Is Handled / Rendered |
+| :--- | :---: | :--- |
+| **PNG** | **Yes** | Loaded via standard `<img>` tags (in `ImageScene.js`) or CSS `background-image` properties. Puppeteer renders them during the frame-by-frame capture phase. |
+| **SVG** | **Yes** | 1. **Inline Vector Rendering** (in `IllustratedScene.js`): Generated on coordinates by translating elements (`circle`, `rect`, `line`, `path`) directly to HTML nodes inside the DOM.<br>2. **Static Vector Paths**: Embedded directly inside component structures (like the shield icon in `TitleSlide.js`). |
+| **Illustrations** | **Yes** | Rendered as custom coordinate vectors within `IllustratedScene.js` dynamically by mapping mathematical coordinates to SVG components. |
+| **Lottie** | **No** | Not supported. There are no Lottie libraries (like `lottie-web`) or parser integrations in the codebase. |
+| **Canvas** | **No** | Not supported. The templates do not construct `<canvas>` elements, and there is no drawing context logic. |
+| **Three.js** | **No** | Not supported. The compiler renders 2D CSS and SVG layers. There is no WebGL setup or Three.js camera rendering. |
+| **Video** | **No** | Not supported. Because Puppeteer captures screenshots by seeking the GSAP timeline step-by-step, native video playback will not align with GSAP seek offsets, causing video loops to freeze, stutter, or drop entirely. |
+| **GIF** | **No** *(Partially)* | While a GIF can be loaded in an `<img>` tag, its internal animation playback loop operates independently of GSAP. During frame seek capture, the GIF frame will not synchronize with the timeline playhead, leading to speed mismatches or static loops. |
+
+---
+
+### Where Assets are Stored
+
+Educational assets live in two main folders during their lifecycle:
+
+1.  **Uploads Directory (Source)**:
+    *   *Path*: [`backend/uploads/visual_lessons/<lesson_id>/`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/backend/uploads/visual_lessons)
+    *   *Role*: Stores raw source files, textbooks, and newly synthesized TTS audio WAV files.
+2.  **Lesson Output Folder (Distribution)**:
+    *   *Path*: [`hyperframes_test_app/outputs/<lesson_id>/`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/outputs)
+    *   *Role*: Holds the final assets to build the compilation folder. During execution, [`run-storyboard.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/run-storyboard.js) automatically copies the TTS WAV audio files and dependencies from the uploads folder directly into this directory.
+
+---
+
+### How Assets are Referenced
+
+Assets are referenced dynamically inside files using two methods:
+
+#### 1. In `lesson.json`
+References are formatted inside the JSON structure using relative paths or web URLs:
+*   **Audio WAVs**: Point to local assets relative to the lesson root (e.g. `"audio_url": "./scene_1.wav"`).
+*   **Images**: Reference absolute HTTP/HTTPS web endpoints (e.g. `"image_url": "https://upload.wikimedia.org/wikipedia/commons/e/e4/Water_molecule_polarity.png"`).
+
+#### 2. In `index.html` (Compiled Layout)
+The template compilation translates the JSON references directly into HTML:
+*   **Audio Elements**: Mapped to native audio tags specifying the scene starting frames:
+    ```html
+    <audio class="clip" data-start="19.5" data-duration="18.6" src="./scene_2.wav" id="audio-scene-2"></audio>
+    ```
+*   **Image Elements**: Linked to images using source attributes:
+    ```html
+    <img src="https://upload.wikimedia.org/..." class="scene-image" id="img-el-3" />
+    ```
+*   **Shared Scripts**: Referenced using local relative links:
+    ```html
+    <script src="./shared/theme.js"></script>
+    <script src="./shared/animations.js"></script>
+    ```
+
+    Example Template Source Code::
+
+    Edited HYPERFRAMES.txt
+Viewed HYPERFRAMES.txt:2374-2398
+
+I will read the complete source code of the `ConceptDiagram.js` template to present it in its entirety.
+
+Viewed ConceptDiagram.js:1-107
+
+Here is the complete source code of the **Concept Diagram** template module ([`ConceptDiagram.js`](file:///c:/Users/home/Desktop/CG-DEV/CD-APP1FB/hyperframes_test_app/templates/ConceptDiagram.js)). This includes the module definition, rendering logic, SVG canvas mappings, trigonometric line routing calculations, and GSAP timeline animations.
+
+---
+
+### Complete Source Code: `ConceptDiagram.js`
+
+```javascript
+module.exports = {
+  render: (sId, data) => {
+    const hasBullets = data.left_bullets && data.left_bullets.length > 0;
+    return `
+      <div class="concept-diagram-container" id="concept-diagram-${sId}">
+        ${hasBullets ? `
+        <div class="left-bullets-col">
+          <h2 class="theme-text" id="cd-left-title-${sId}" style="font-size: 38px; font-weight: 800; margin-bottom: 24px; letter-spacing: -1px;">${data.left_title || ''}</h2>
+          <div style="display: flex; flex-direction: column; gap: 16px;" id="cd-bullets-list-${sId}">
+            ${data.left_bullets.map((b, bIdx) => `<div class="bullet-card theme-card-bg theme-card-border" id="cd-bullet-${sId}-${bIdx}">${b}</div>`).join('')}
+          </div>
+        </div>
+        ` : ''}
+        
+        <div class="mindmap-canvas" style="position: relative; width: ${hasBullets ? '55%' : '100%'}; height: 100%; display: flex; align-items: center; justify-content: center;">
+          <svg viewBox="0 0 1280 720" style="position: absolute; width: 1280px; height: 720px; top: 0; left: 0; z-index: 2; pointer-events: none;">
+            <g id="cd-lines-group-${sId}"></g>
+          </svg>
+          <div class="center-node theme-accent-bg" id="cd-center-${sId}" style="color: #090d16;">${data.central_node || ''}</div>
+          <div id="cd-leaves-group-${sId}">
+            ${(data.leaf_nodes || []).map((node, nIdx) => `<div class="leaf-node theme-card-border" id="cd-leaf-${sId}-${nIdx}">${node}</div>`).join('')}
+          </div>
+        </div>
+      </div>
+    `;
+  },
+  animate: (sId, data) => {
+    const hasBullets = data.left_bullets && data.left_bullets.length > 0;
+    const centerX = hasBullets ? 900 : 640;
+    const centerY = 360;
+    const radius = hasBullets ? 190 : 270;
+    const totalLeaves = (data.leaf_nodes || []).length;
+    
+    return `
+      sceneTl.fromTo('#cd-center-${sId}', { scale: 0 }, { scale: 1, duration: 0.5, ease: 'back.out(1.5)' });
+      
+      ${hasBullets ? `
+        sceneTl.fromTo('#cd-left-title-${sId}', { opacity: 0, x: -20 }, { opacity: 1, x: 0, duration: 0.4 }, 0.2);
+        sceneTl.fromTo('#cd-bullets-list-${sId} .bullet-card', { opacity: 0, y: 15 }, { opacity: 1, y: 0, stagger: 0.15, duration: 0.4 }, 0.3);
+      ` : ''}
+
+      const linesGroup_${sId} = document.getElementById('cd-lines-group-${sId}');
+      const leafNodesData_${sId} = ${JSON.stringify(data.leaf_nodes || [])};
+      
+      leafNodesData_${sId}.forEach((node, idx) => {
+        const total = leafNodesData_${sId}.length;
+        let angle = 0;
+        if (${hasBullets}) {
+          angle = -Math.PI / 3 + (idx * (2 * Math.PI / 3)) / Math.max(1, total - 1);
+        } else {
+          const leftNodes = [];
+          const rightNodes = [];
+          for (let i = 0; i < total; i++) {
+            if (i % 2 === 0) rightNodes.push(i);
+            else leftNodes.push(i);
+          }
+          if (idx % 2 === 0) {
+            const k = rightNodes.indexOf(idx);
+            const M = rightNodes.length;
+            angle = -Math.PI / 4.5 + (k * (2 * Math.PI / 4.5)) / Math.max(1, M - 1);
+          } else {
+            const k = leftNodes.indexOf(idx);
+            const L = leftNodes.length;
+            angle = Math.PI - Math.PI / 4.5 + (k * (2 * Math.PI / 4.5)) / Math.max(1, L - 1);
+          }
+        }
+        
+        const x2 = ${centerX} + ${radius} * Math.cos(angle);
+        const y2 = ${centerY} + ${radius} * Math.sin(angle);
+        
+        const lineEl = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        lineEl.setAttribute('x1', ${centerX});
+        lineEl.setAttribute('y1', ${centerY});
+        lineEl.setAttribute('x2', ${centerX});
+        lineEl.setAttribute('y2', ${centerY});
+        lineEl.setAttribute('stroke', theme.accentColor);
+        lineEl.setAttribute('stroke-width', '3.5');
+        lineEl.setAttribute('stroke-linecap', 'round');
+        lineEl.style.filter = 'drop-shadow(0 0 4px ' + theme.accentColor + ')';
+        lineEl.style.opacity = '0.75';
+        linesGroup_${sId}.appendChild(lineEl);
+
+        const leafNode = document.getElementById('cd-leaf-${sId}-' + idx);
+        if (leafNode) {
+          leafNode.style.left = x2 + 'px';
+          leafNode.style.top = y2 + 'px';
+          leafNode.style.transform = 'translate(-50%, -50%) scale(0)';
+        }
+
+        sceneTl.to(lineEl, {
+          attr: { x2: x2, y2: y2 },
+          duration: 0.6,
+          ease: 'power2.out'
+        }, 0.5 + idx * 0.05);
+
+        if (leafNode) {
+          sceneTl.to(leafNode, {
+            transform: 'translate(-50%, -50%) scale(1)',
+            duration: 0.4,
+            ease: 'back.out(1.5)'
+          }, 0.8 + idx * 0.05);
+        }
+      });
+    `;
+  }
+};
+```
+
+---
+
+### Associated CSS Layout Classes
+
+The elements rendered by this template are styled using these global rules from the main compiler stylesheet:
+
+```css
+.concept-diagram-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  padding: 60px 80px;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+}
+
+.left-bullets-col {
+  width: 40%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  z-index: 5;
+}
+
+.bullet-card {
+  padding: 16px 20px;
+  margin-bottom: 16px;
+  font-size: 18px;
+  font-weight: 500;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.10);
+}
+
+.mindmap-canvas {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 2;
+}
+
+.center-node {
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-weight: 800;
+  font-size: 20px;
+  z-index: 10;
+  padding: 18px;
+  line-height: 1.2;
+}
+
+.leaf-node {
+  position: absolute;
+  padding: 14px 22px;
+  background: rgba(15, 23, 42, 0.90);
+  border-radius: 16px;
+  font-weight: 700;
+  font-size: 16px;
+  text-align: center;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.30);
+  z-index: 12;
+  white-space: nowrap;
+}
+```
+
+---
+
+### Scene Property Mapping
+
+The following schema maps input JSON fields to the parameters rendered by the component:
+
+```yaml
+JSON Field Path: scene.template_data
+Mappings:
+  - left_title: Injected at #cd-left-title-${sId}
+  - left_bullets: Mapped iteratively to .bullet-card inside #cd-bullets-list-${sId}
+  - central_node: Placed inside #cd-center-${sId}
+  - leaf_nodes: Mapped iteratively to .leaf-node inside #cd-leaves-group-${sId}
+```

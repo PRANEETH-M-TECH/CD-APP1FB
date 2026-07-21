@@ -1,0 +1,180 @@
+{
+  "lesson_title": "Discovering Acids and Bases: The Test!",
+  "layout_mode": "timeline",
+  "theme": "Science",
+  "global_assets": [],
+  "connections": [],
+  "lesson_id": "vl_e410def6",
+  "scenes": [
+    {
+      "scene_no": 1,
+      "purpose": "Introduce the lesson about identifying acids and bases.",
+      "template_id": "title_slide",
+      "teacher_script": "Hello young scientists! Have you ever wondered how we know if a substance is an acid or a base without tasting it? Today, we're going to explore exciting tests for this!",
+      "template_data": {
+        "title": "Discovering Acids and Bases: The Test!",
+        "subtitle": "How to tell an Acid from a Base?"
+      },
+      "audio_url": "/uploads/visual_lessons/vl_e410def6/scene_1.wav"
+    },
+    {
+      "scene_no": 2,
+      "purpose": "Provide a simple, everyday understanding of acids and bases.",
+      "template_id": "concept_diagram",
+      "teacher_script": "First, let's understand what acids and bases generally are. Acids often taste sour, like a lemon, but can be harmful. Bases often feel slippery, like soap, and taste bitter.",
+      "template_data": {
+        "title": "What are Acids and Bases?",
+        "main_concept": {
+          "text": "Substances",
+          "color": "#a855f7"
+        },
+        "branches": [
+          {
+            "id": "acid",
+            "text": "Acids",
+            "color": "#ef4444",
+            "attributes": [
+              "Taste Sour (like lemon)",
+              "Can be corrosive",
+              "Examples: Lemon juice, Vinegar"
+            ]
+          },
+          {
+            "id": "base",
+            "text": "Bases",
+            "color": "#22c55e",
+            "attributes": [
+              "Feel Slippery (like soap)",
+              "Taste Bitter",
+              "Examples: Soap, Baking soda"
+            ]
+          }
+        ]
+      },
+      "audio_url": "/uploads/visual_lessons/vl_e410def6/scene_2.wav"
+    },
+    {
+      "scene_no": 3,
+      "purpose": "Introduce the concept of indicators as tools to identify acids and bases.",
+      "template_id": "concept_diagram",
+      "teacher_script": "Since tasting is not safe for many substances, we use special 'detectives' called indicators! These amazing substances change color to tell us if something is an acid or a base.",
+      "template_data": {
+        "title": "Introducing Indicators!",
+        "main_concept": {
+          "text": "Indicators",
+          "color": "#f59e0b"
+        },
+        "branches": [
+          {
+            "id": "special_substances",
+            "text": "Special Substances",
+            "color": "#14b8a6",
+            "attributes": [
+              "Don't taste them!",
+              "Safe way to test"
+            ]
+          },
+          {
+            "id": "color_change",
+            "text": "Change Color",
+            "color": "#60a5fa",
+            "attributes": [
+              "Different colors for acid/base",
+              "Like a traffic light for chemicals!"
+            ]
+          }
+        ]
+      },
+      "audio_url": "/uploads/visual_lessons/vl_e410def6/scene_3.wav"
+    },
+    {
+      "scene_no": 4,
+      "purpose": "Explain the litmus paper test, a common and easy method.",
+      "template_id": "column_comparison",
+      "teacher_script": "One of the most popular indicators is litmus paper! It comes in two colors: blue and red. Let's see what happens when we dip them into acids and bases.",
+      "template_data": {
+        "left_col": {
+          "header": "If it's an ACID...",
+          "bullets": [
+            "Blue litmus paper turns RED.",
+            "Red litmus paper stays RED.",
+            "Think: A for Acid, A for Alarm (Red)!"
+          ]
+        },
+        "right_col": {
+          "header": "If it's a BASE...",
+          "bullets": [
+            "Red litmus paper turns BLUE.",
+            "Blue litmus paper stays BLUE.",
+            "Think: B for Base, B for Blue!"
+          ]
+        }
+      },
+      "audio_url": "/uploads/visual_lessons/vl_e410def6/scene_4.wav"
+    },
+    {
+      "scene_no": 5,
+      "purpose": "Demonstrate a natural, household indicator like turmeric.",
+      "template_id": "concept_diagram",
+      "teacher_script": "Isn't that neat? Here's another fun fact: you can even use turmeric from your kitchen as an indicator! It's bright yellow normally, but watch what happens in a base!",
+      "template_data": {
+        "title": "Turmeric: A Natural Indicator!",
+        "main_concept": {
+          "text": "Turmeric Paste",
+          "color": "#fbbf24"
+        },
+        "branches": [
+          {
+            "id": "normal_state",
+            "text": "In Acid or Neutral",
+            "color": "#fcd34d",
+            "attributes": [
+              "Stays Yellow",
+              "Like your curry!"
+            ]
+          },
+          {
+            "id": "base_state",
+            "text": "In a Base",
+            "color": "#dc2626",
+            "attributes": [
+              "Turns Reddish-Brown",
+              "Try with a drop of soap water!"
+            ]
+          }
+        ]
+      },
+      "audio_url": "/uploads/visual_lessons/vl_e410def6/scene_5.wav"
+    },
+    {
+      "scene_no": 6,
+      "purpose": "Assess student understanding with a quick recall question.",
+      "template_id": "quiz_checkpoint",
+      "teacher_script": "Great job everyone! Now, let's test your knowledge. If you dip a red litmus paper into a liquid and it turns blue, what kind of substance is it?",
+      "template_data": {
+        "question": "If red litmus paper turns BLUE when dipped into a liquid, what type of substance is it?",
+        "options": [
+          {
+            "text": "An Acid",
+            "is_correct": false
+          },
+          {
+            "text": "A Base",
+            "is_correct": true
+          },
+          {
+            "text": "Neutral",
+            "is_correct": false
+          },
+          {
+            "text": "A Magnet",
+            "is_correct": false
+          }
+        ],
+        "correct_answer_feedback": "That's right! Red litmus turning blue indicates a Base!",
+        "incorrect_answer_feedback": "Not quite! Remember, 'B' for Base and 'B' for Blue litmus!"
+      },
+      "audio_url": "/uploads/visual_lessons/vl_e410def6/scene_6.wav"
+    }
+  ]
+}

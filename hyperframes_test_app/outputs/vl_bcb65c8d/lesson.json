@@ -1,0 +1,786 @@
+{
+  "lesson_title": "Understanding Like and Unlike Fractions",
+  "lesson_id": "vl_bcb65c8d",
+  "theme": "maths",
+  "layout_mode": "process",
+  "learning_objqjectives": [
+    "Define the terms 'numerator' and 'denominator' of a fraction.",
+    "Identify and explain 'like fractions' based on their denominators.",
+    "Identify and explain 'unlike fractions' based on their denominators.",
+    "Understand the significance of distinguishing between like and unlike fractions for future operations."
+  ],
+  "student_level": "Elementary School (Grades 3-5)",
+  "estimated_duration": 7,
+  "difficulty": "beginner",
+  "subject": "Mathematics",
+  "chapter": "Introduction to Fractions",
+  "concepts": [
+    "Fraction",
+    "Numerator",
+    "Denominator",
+    "Like Fractions",
+    "Unlike Fractions"
+  ],
+  "prerequisites": [
+    "Basic understanding of whole numbers",
+    "Concept of dividing a whole into equal parts"
+  ],
+  "misconceptions": [
+    "Confusing numerator and denominator.",
+    "Believing that fractions with different numerators but same denominators are 'unlike'.",
+    "Not understanding why denominators are key to classification."
+  ],
+  "assessment_points": [
+    "Can the student correctly identify like fractions from a given set?",
+    "Can the student correctly identify unlike fractions from a given set?",
+    "Can the student explain the difference between like and unlike fractions?"
+  ],
+  "summary": "This lesson introduces the fundamental concepts of like and unlike fractions. Students will learn to define and identify these fraction types by focusing on their denominators, laying a crucial foundation for understanding fraction operations like addition and subtraction.",
+  "teaching_plan": {
+    "teaching_steps": [
+      {
+        "step_id": "intro_fractions",
+        "action_type": "INTRODUCE",
+        "instructional_purpose": "Set the stage and review basic fraction components.",
+        "visual_purpose": "Engage students and introduce the lesson topic visually.",
+        "concept": "Fraction basics",
+        "expected_outcome": "Students recall numerator and denominator.",
+        "related_components": [
+          "title_slide"
+        ],
+        "duration": 60,
+        "teaching_notes": "Start with a relatable example of sharing.",
+        "narration_hints": "Welcome! Today we dive into fractions, specifically like and unlike fractions. Let's start with a quick recap."
+      },
+      {
+        "step_id": "explain_parts",
+        "action_type": "EXPLAIN",
+        "instructional_purpose": "Clarify numerator and denominator roles.",
+        "visual_purpose": "Visually breakdown a fraction into its parts.",
+        "concept": "Numerator and Denominator",
+        "expected_outcome": "Students can identify and define numerator and denominator.",
+        "related_components": [
+          "concept_diagram"
+        ],
+        "duration": 50,
+        "teaching_notes": "Use a simple diagram like a pizza or pie chart.",
+        "narration_hints": "Remember, a fraction like 1/2 has two main parts: the top number is the numerator, and the bottom is the denominator."
+      },
+      {
+        "step_id": "visualize_like",
+        "action_type": "EXPLAIN",
+        "instructional_purpose": "Visually introduce fractions that share the same 'whole' division.",
+        "visual_purpose": "Show multiple fractions with the same total parts, emphasizing the denominator.",
+        "concept": "Common Denominator",
+        "expected_outcome": "Students recognize fractions where the whole is divided into the same number of parts.",
+        "related_components": [
+          "illustrated_scene"
+        ],
+        "duration": 70,
+        "teaching_notes": "Use identical shapes divided into equal parts to represent different numerators but same denominators.",
+        "narration_hints": "Look at these pizzas. Each is cut into eight equal slices. This 'eight' is very important!"
+      },
+      {
+        "step_id": "define_like_fractions",
+        "action_type": "EXPLAIN",
+        "instructional_purpose": "Formally define like fractions.",
+        "visual_purpose": "Present clear definitions and examples.",
+        "concept": "Like Fractions",
+        "expected_outcome": "Students can state the definition of like fractions and provide examples.",
+        "related_components": [
+          "math_derivation"
+        ],
+        "duration": 60,
+        "teaching_notes": "Emphasize 'same denominator'.",
+        "narration_hints": "Fractions that share the exact same denominator are called 'like fractions'. Think of them as being 'alike' because they divide the whole into the same number of parts."
+      },
+      {
+        "step_id": "visualize_unlike",
+        "action_type": "EXPLAIN",
+        "instructional_purpose": "Visually introduce fractions with different 'whole' divisions.",
+        "visual_purpose": "Show different shapes or shapes divided into different numbers of parts.",
+        "concept": "Different Denominators",
+        "expected_outcome": "Students recognize fractions where the whole is divided into different numbers of parts.",
+        "related_components": [
+          "illustrated_scene"
+        ],
+        "duration": 70,
+        "teaching_notes": "Use different shapes or the same shape divided into unequal parts (e.g., one pie in 4, another in 6).",
+        "narration_hints": "Now, what if our pizzas are cut differently? One into four slices, another into six? Their denominators are different."
+      },
+      {
+        "step_id": "define_unlike_fractions",
+        "action_type": "EXPLAIN",
+        "instructional_purpose": "Formally define unlike fractions.",
+        "visual_purpose": "Present clear definitions and examples.",
+        "concept": "Unlike Fractions",
+        "expected_outcome": "Students can state the definition of unlike fractions and provide examples.",
+        "related_components": [
+          "math_derivation"
+        ],
+        "duration": 60,
+        "teaching_notes": "Emphasize 'different denominators'.",
+        "narration_hints": "Conversely, fractions with different denominators are known as 'unlike fractions'. They represent parts of wholes divided into different numbers of pieces."
+      },
+      {
+        "step_id": "compare_types",
+        "action_type": "COMPARE",
+        "instructional_purpose": "Highlight the key distinction between like and unlike fractions.",
+        "visual_purpose": "Directly compare characteristics side-by-side.",
+        "concept": "Comparison",
+        "expected_outcome": "Students can articulate the primary difference and provide examples for both.",
+        "related_components": [
+          "column_comparison"
+        ],
+        "duration": 80,
+        "teaching_notes": "Summarize the definitions and show examples for both categories.",
+        "narration_hints": "Let's put them side-by-side. The key difference between like and unlike fractions is purely in their denominators."
+      },
+      {
+        "step_id": "why_it_matters",
+        "action_type": "HIGHLIGHT",
+        "instructional_purpose": "Explain the practical importance of this classification.",
+        "visual_purpose": "Show a subtle hint about future fraction operations.",
+        "concept": "Importance for Operations",
+        "expected_outcome": "Students understand why this distinction is important for future fraction lessons.",
+        "related_components": [
+          "general_scene"
+        ],
+        "duration": 50,
+        "teaching_notes": "Briefly mention addition/subtraction requires common denominators.",
+        "narration_hints": "Why is this distinction so important? Well, when you want to add or subtract fractions, knowing if they're 'like' or 'unlike' is the first critical step."
+      },
+      {
+        "step_id": "review_quiz",
+        "action_type": "REVIEW",
+        "instructional_purpose": "Assess understanding and reinforce learning.",
+        "visual_purpose": "Provide an interactive quiz to test knowledge.",
+        "concept": "Reinforcement",
+        "expected_outcome": "Students can correctly answer questions about like and unlike fractions.",
+        "related_components": [
+          "quiz_checkpoint"
+        ],
+        "duration": 90,
+        "teaching_notes": "Include multiple choice or identification questions.",
+        "narration_hints": "Time for a quick check! Can you identify the like and unlike fractions in these examples?"
+      }
+    ]
+  },
+  "scenes": [
+    {
+      "scene_no": 1,
+      "template_id": "title_slide",
+      "teaching_step_id": "intro_fractions",
+      "teacher_script": "Hello and welcome to our math lesson! Today, we're going to unlock a key concept in fractions: understanding 'like' and 'unlike' fractions. This is a fundamental building block for all your future fraction adventures, so let's get ready to explore!",
+      "template_data": {
+        "title": "Understanding Like and Unlike Fractions",
+        "subtitle": "The Denominator's Role",
+        "background_image_url": "https://images.unsplash.com/photo-1596495578028-21d3f278c772?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "animation_style": "fade_wave"
+      },
+      "metadata": {
+        "learning_objective": "Set the stage for understanding fraction types.",
+        "concept_importance": "high",
+        "instruction_type": "introduction",
+        "difficulty": "beginner",
+        "teaching_strategy": "engage_and_preview",
+        "reinforcement_level": "low",
+        "quiz_hints": "No quiz points yet.",
+        "analytics_tags": "introduction, fractions, lesson_opener"
+      },
+      "audio_url": "./scene_1.wav"
+    },
+    {
+      "scene_no": 2,
+      "template_id": "concept_diagram",
+      "teaching_step_id": "explain_parts",
+      "teacher_script": "Before we dive deeper, let's quickly review the basic parts of any fraction. Every fraction has a top number, called the numerator, and a bottom number, called the denominator. The denominator tells us how many equal parts the whole is divided into.",
+      "template_data": {
+        "title": "Fraction Basics: Numerator & Denominator",
+        "main_concept": "Fraction",
+        "branches": [
+          {
+            "text": "Numerator",
+            "description": "Number of parts taken or selected",
+            "icon_url": "https://img.icons8.com/ios-filled/50/4ade80/count.png"
+          },
+          {
+            "text": "Denominator",
+            "description": "Total number of equal parts in the whole",
+            "icon_url": "https://img.icons8.com/ios-filled/50/fde047/divide.png"
+          }
+        ],
+        "example_equation": "¹⁄₂",
+        "example_label_1": "Numerator (1)",
+        "example_label_2": "Denominator (2)",
+        "animation_style": "stagger_in"
+      },
+      "metadata": {
+        "learning_objective": "Recall and define numerator and denominator.",
+        "concept_importance": "high",
+        "instruction_type": "review",
+        "difficulty": "beginner",
+        "teaching_strategy": "recall_prior_knowledge",
+        "reinforcement_level": "medium",
+        "quiz_hints": "Identify numerator/denominator.",
+        "analytics_tags": "fraction_parts, math_basics, concept_review"
+      },
+      "audio_url": "./scene_2.wav"
+    },
+    {
+      "scene_no": 3,
+      "template_id": "illustrated_scene",
+      "teaching_step_id": "visualize_like",
+      "teacher_script": "Imagine you have several delicious pies, and each pie is cut into the exact same number of slices – say, four equal slices. Whether you take one slice, two slices, or three, the 'four' slices represent the total parts of the whole for each pie. This 'sameness' of the total parts is what we're looking for.",
+      "template_data": {
+        "title": "Visualizing Common Denominators",
+        "description": "Fractions whose wholes are divided into the same number of parts.",
+        "elements": [
+          {
+            "type": "path",
+            "path_data": "M 200 200 A 80 80 0 1 1 200 360 L 200 200 Z",
+            "stroke_color": "#10b981",
+            "stroke_width": 2,
+            "fill": "rgba(16, 185, 129, 0.2)"
+          },
+          {
+            "type": "path",
+            "path_data": "M 200 200 L 200 360",
+            "stroke_color": "#10b981",
+            "stroke_width": 2
+          },
+          {
+            "type": "path",
+            "path_data": "M 200 200 L 270 270",
+            "stroke_color": "#10b981",
+            "stroke_width": 2
+          },
+          {
+            "type": "text_overlay",
+            "position": {
+              "x": 160,
+              "y": 140
+            },
+            "text": "1/4",
+            "font_size": 32,
+            "color": "#10b981"
+          },
+          {
+            "type": "path",
+            "path_data": "M 480 200 A 80 80 0 1 1 480 360 L 480 200 Z",
+            "stroke_color": "#eab308",
+            "stroke_width": 2,
+            "fill": "rgba(234, 179, 8, 0.4)"
+          },
+          {
+            "type": "path",
+            "path_data": "M 480 200 L 480 360",
+            "stroke_color": "#eab308",
+            "stroke_width": 2
+          },
+          {
+            "type": "path",
+            "path_data": "M 480 200 L 410 270",
+            "stroke_color": "#eab308",
+            "stroke_width": 2
+          },
+          {
+            "type": "path",
+            "path_data": "M 480 200 L 550 270",
+            "stroke_color": "#eab308",
+            "stroke_width": 2
+          },
+          {
+            "type": "text_overlay",
+            "position": {
+              "x": 440,
+              "y": 140
+            },
+            "text": "2/4",
+            "font_size": 32,
+            "color": "#eab308"
+          },
+          {
+            "type": "path",
+            "path_data": "M 760 200 A 80 80 0 1 1 760 360 L 760 200 Z",
+            "stroke_color": "#ef4444",
+            "stroke_width": 2,
+            "fill": "rgba(239, 68, 68, 0.6)"
+          },
+          {
+            "type": "path",
+            "path_data": "M 760 200 L 760 360",
+            "stroke_color": "#ef4444",
+            "stroke_width": 2
+          },
+          {
+            "type": "path",
+            "path_data": "M 760 200 L 690 270",
+            "stroke_color": "#ef4444",
+            "stroke_width": 2
+          },
+          {
+            "type": "path",
+            "path_data": "M 760 200 L 830 270",
+            "stroke_color": "#ef4444",
+            "stroke_width": 2
+          },
+          {
+            "type": "path",
+            "path_data": "M 760 200 L 760 280",
+            "stroke_color": "#ef4444",
+            "stroke_width": 2
+          },
+          {
+            "type": "text_overlay",
+            "position": {
+              "x": 720,
+              "y": 140
+            },
+            "text": "3/4",
+            "font_size": 32,
+            "color": "#ef4444"
+          },
+          {
+            "type": "text_overlay",
+            "position": {
+              "x": 480,
+              "y": 420
+            },
+            "text": "All denominators are '4'!",
+            "font_size": 40,
+            "color": "#3b82f6"
+          }
+        ],
+        "animation_action": "slide_up"
+      },
+      "metadata": {
+        "learning_objective": "Visually identify fractions with common denominators.",
+        "concept_importance": "high",
+        "instruction_type": "visual_explanation",
+        "difficulty": "beginner",
+        "teaching_strategy": "visual_analogy",
+        "reinforcement_level": "medium",
+        "quiz_hints": "Look for equal divisions.",
+        "analytics_tags": "visual_fractions, common_denominator, parts_of_whole"
+      },
+      "audio_url": "./scene_3.wav"
+    },
+    {
+      "scene_no": 4,
+      "template_id": "math_derivation",
+      "teaching_step_id": "define_like_fractions",
+      "teacher_script": "Now we can formally define them: Like fractions are fractions that have the same denominator. This means the whole amount is divided into the exact same number of parts, even if you are talking about different amounts of those parts.",
+      "template_data": {
+        "title": "What are Like Fractions?",
+        "equations": [
+          {
+            "step": "Definition:",
+            "equation": "Fractions with the same denominator."
+          },
+          {
+            "step": "Example 1:",
+            "equation": "¹⁄₄, ²⁄₄, ³⁄₄",
+            "description": "All divided into 4 parts."
+          },
+          {
+            "step": "Example 2:",
+            "equation": "⁵⁄₈, ³⁄₈, ¹⁄₈",
+            "description": "All divided into 8 parts."
+          },
+          {
+            "step": "Key Takeaway:",
+            "equation": "Focus on the bottom number!"
+          }
+        ],
+        "highlight_color": "#4ade80",
+        "animation_style": "stagger_in"
+      },
+      "metadata": {
+        "learning_objective": "Define and identify like fractions.",
+        "concept_importance": "high",
+        "instruction_type": "definition_explanation",
+        "difficulty": "beginner",
+        "teaching_strategy": "direct_instruction",
+        "reinforcement_level": "high",
+        "quiz_hints": "Test recognition of like fractions.",
+        "analytics_tags": "like_fractions, definition, math_terms"
+      },
+      "audio_url": "./scene_4.wav"
+    },
+    {
+      "scene_no": 5,
+      "template_id": "illustrated_scene",
+      "teaching_step_id": "visualize_unlike",
+      "teacher_script": "But what if your pies are cut differently? One pie is cut into four slices, another into six, and maybe a third into eight. When the total number of parts, the denominator, is different, those fractions are 'unlike'. They are not divided in the same way, making direct comparisons tricky.",
+      "template_data": {
+        "title": "Visualizing Different Denominators",
+        "description": "Fractions whose wholes are divided into different numbers of parts.",
+        "elements": [
+          {
+            "type": "path",
+            "path_data": "M 200 200 A 80 80 0 1 1 200 360 L 200 200 Z",
+            "stroke_color": "#10b981",
+            "stroke_width": 2,
+            "fill": "rgba(16, 185, 129, 0.2)"
+          },
+          {
+            "type": "path",
+            "path_data": "M 200 200 L 200 360",
+            "stroke_color": "#10b981",
+            "stroke_width": 2
+          },
+          {
+            "type": "path",
+            "path_data": "M 200 200 L 270 270",
+            "stroke_color": "#10b981",
+            "stroke_width": 2
+          },
+          {
+            "type": "text_overlay",
+            "position": {
+              "x": 160,
+              "y": 140
+            },
+            "text": "1/4",
+            "font_size": 32,
+            "color": "#10b981"
+          },
+          {
+            "type": "circle",
+            "cx": 200,
+            "cy": 300,
+            "r": 5,
+            "fill": "#10b981",
+            "animation_action": "spin"
+          },
+          {
+            "type": "path",
+            "path_data": "M 480 200 A 80 80 0 1 1 480 360 L 480 200 Z",
+            "stroke_color": "#eab308",
+            "stroke_width": 2,
+            "fill": "rgba(234, 179, 8, 0.4)"
+          },
+          {
+            "type": "path",
+            "path_data": "M 480 200 L 480 360",
+            "stroke_color": "#eab308",
+            "stroke_width": 2
+          },
+          {
+            "type": "path",
+            "path_data": "M 480 200 L 440 230",
+            "stroke_color": "#eab308",
+            "stroke_width": 2
+          },
+          {
+            "type": "path",
+            "path_data": "M 480 200 L 440 330",
+            "stroke_color": "#eab308",
+            "stroke_width": 2
+          },
+          {
+            "type": "path",
+            "path_data": "M 480 200 L 520 230",
+            "stroke_color": "#eab308",
+            "stroke_width": 2
+          },
+          {
+            "type": "path",
+            "path_data": "M 480 200 L 520 330",
+            "stroke_color": "#eab308",
+            "stroke_width": 2
+          },
+          {
+            "type": "text_overlay",
+            "position": {
+              "x": 440,
+              "y": 140
+            },
+            "text": "2/6",
+            "font_size": 32,
+            "color": "#eab308"
+          },
+          {
+            "type": "circle",
+            "cx": 480,
+            "cy": 250,
+            "r": 5,
+            "fill": "#eab308",
+            "animation_action": "spin"
+          },
+          {
+            "type": "path",
+            "path_data": "M 760 200 A 80 80 0 1 1 760 360 L 760 200 Z",
+            "stroke_color": "#ef4444",
+            "stroke_width": 2,
+            "fill": "rgba(239, 68, 68, 0.6)"
+          },
+          {
+            "type": "path",
+            "path_data": "M 760 200 L 760 360",
+            "stroke_color": "#ef4444",
+            "stroke_width": 2
+          },
+          {
+            "type": "path",
+            "path_data": "M 760 200 L 690 270",
+            "stroke_color": "#ef4444",
+            "stroke_width": 2
+          },
+          {
+            "type": "path",
+            "path_data": "M 760 200 L 830 270",
+            "stroke_color": "#ef4444",
+            "stroke_width": 2
+          },
+          {
+            "type": "path",
+            "path_data": "M 760 200 L 715 225",
+            "stroke_color": "#ef4444",
+            "stroke_width": 2
+          },
+          {
+            "type": "path",
+            "path_data": "M 760 200 L 805 225",
+            "stroke_color": "#ef4444",
+            "stroke_width": 2
+          },
+          {
+            "type": "path",
+            "path_data": "M 760 200 L 715 335",
+            "stroke_color": "#ef4444",
+            "stroke_width": 2
+          },
+          {
+            "type": "path",
+            "path_data": "M 760 200 L 805 335",
+            "stroke_color": "#ef4444",
+            "stroke_width": 2
+          },
+          {
+            "type": "text_overlay",
+            "position": {
+              "x": 720,
+              "y": 140
+            },
+            "text": "3/8",
+            "font_size": 32,
+            "color": "#ef4444"
+          },
+          {
+            "type": "circle",
+            "cx": 760,
+            "cy": 300,
+            "r": 5,
+            "fill": "#ef4444",
+            "animation_action": "spin"
+          },
+          {
+            "type": "text_overlay",
+            "position": {
+              "x": 480,
+              "y": 420
+            },
+            "text": "Denominators are 4, 6, and 8!",
+            "font_size": 40,
+            "color": "#3b82f6"
+          }
+        ],
+        "animation_action": "slide_left"
+      },
+      "metadata": {
+        "learning_objective": "Visually identify fractions with different denominators.",
+        "concept_importance": "high",
+        "instruction_type": "visual_explanation",
+        "difficulty": "beginner",
+        "teaching_strategy": "visual_analogy",
+        "reinforcement_level": "medium",
+        "quiz_hints": "Look for unequal divisions.",
+        "analytics_tags": "visual_fractions, different_denominator, parts_of_whole"
+      },
+      "audio_url": "./scene_5.wav"
+    },
+    {
+      "scene_no": 6,
+      "template_id": "math_derivation",
+      "teaching_step_id": "define_unlike_fractions",
+      "teacher_script": "In contrast, unlike fractions are fractions that have different denominators. This means the whole amount is divided into different numbers of parts, making them fundamentally different in how they represent a portion of a whole.",
+      "template_data": {
+        "title": "What are Unlike Fractions?",
+        "equations": [
+          {
+            "step": "Definition:",
+            "equation": "Fractions with different denominators."
+          },
+          {
+            "step": "Example 1:",
+            "equation": "¹⁄₂, ¹⁄₄, ¹⁄₈",
+            "description": "Denominators are 2, 4, 8."
+          },
+          {
+            "step": "Example 2:",
+            "equation": "²⁄₃, ³⁄₅, ¹⁄₆",
+            "description": "Denominators are 3, 5, 6."
+          },
+          {
+            "step": "Key Takeaway:",
+            "equation": "The bottom numbers are not the same!"
+          }
+        ],
+        "highlight_color": "#fde047",
+        "animation_style": "stagger_in"
+      },
+      "metadata": {
+        "learning_objective": "Define and identify unlike fractions.",
+        "concept_importance": "high",
+        "instruction_type": "definition_explanation",
+        "difficulty": "beginner",
+        "teaching_strategy": "direct_instruction",
+        "reinforcement_level": "high",
+        "quiz_hints": "Test recognition of unlike fractions.",
+        "analytics_tags": "unlike_fractions, definition, math_terms"
+      },
+      "audio_url": "./scene_6.wav"
+    },
+    {
+      "scene_no": 7,
+      "template_id": "column_comparison",
+      "teaching_step_id": "compare_types",
+      "teacher_script": "Let's summarize the main difference. Like fractions are best friends because they share the same denominator, meaning their wholes are divided equally. Unlike fractions are distinct, as their denominators are different, dividing their wholes into varied numbers of pieces. This is the crucial distinction!",
+      "template_data": {
+        "title": "Like vs. Unlike Fractions: A Comparison",
+        "column_titles": [
+          "Like Fractions",
+          "Unlike Fractions"
+        ],
+        "rows": [
+          {
+            "label": "Denominators",
+            "value1": "Same",
+            "value2": "Different"
+          },
+          {
+            "label": "Example Set 1",
+            "value1": "¹⁄₅, ²⁄₅, ³⁄₅",
+            "value2": "¹⁄₃, ¹⁄₄, ¹⁄₅"
+          },
+          {
+            "label": "Example Set 2",
+            "value1": "⁷⁄₁₀, ³⁄₁₀, ⁹⁄₁₀",
+            "value2": "²⁄₇, ⁴⁄₉, ¹⁄₂"
+          }
+        ],
+        "highlight_color_1": "#3b82f6",
+        "highlight_color_2": "#ef4444",
+        "animation_style": "cascade"
+      },
+      "metadata": {
+        "learning_objective": "Compare and contrast like and unlike fractions.",
+        "concept_importance": "high",
+        "instruction_type": "comparison",
+        "difficulty": "intermediate",
+        "teaching_strategy": "comparative_analysis",
+        "reinforcement_level": "high",
+        "quiz_hints": "Differentiate between categories.",
+        "analytics_tags": "comparison, like_vs_unlike, fraction_types"
+      },
+      "audio_url": "./scene_7.wav"
+    },
+    {
+      "scene_no": 8,
+      "template_id": "general_scene",
+      "teaching_step_id": "why_it_matters",
+      "teacher_script": "Why is this distinction so important? Well, imagine trying to combine slices from pies that are cut into completely different numbers of pieces! It's difficult without making them similar first. This understanding sets the stage for adding, subtracting, and comparing fractions later on.",
+      "template_data": {
+        "title": "Why Does it Matter?",
+        "description": "Understanding like and unlike fractions is crucial for future operations.",
+        "main_image_url": "https://images.unsplash.com/photo-1542435503-921c58d34341?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "text_overlays": [
+          {
+            "position": {
+              "x": 50,
+              "y": 150
+            },
+            "text": "🔑 Foundation for adding fractions",
+            "font_size": 36,
+            "color": "#3b82f6"
+          },
+          {
+            "position": {
+              "x": 50,
+              "y": 250
+            },
+            "text": "🔑 Essential for subtracting fractions",
+            "font_size": 36,
+            "color": "#3b82f6"
+          },
+          {
+            "position": {
+              "x": 50,
+              "y": 350
+            },
+            "text": "🔑 Key to comparing fractions",
+            "font_size": 36,
+            "color": "#3b82f6"
+          }
+        ],
+        "animation_style": "spring_pop"
+      },
+      "metadata": {
+        "learning_objective": "Understand the practical importance of like/unlike fraction classification.",
+        "concept_importance": "high",
+        "instruction_type": "application",
+        "difficulty": "intermediate",
+        "teaching_strategy": "foreshadowing_future_concepts",
+        "reinforcement_level": "medium",
+        "quiz_hints": "Why classify fractions?",
+        "analytics_tags": "importance, fraction_operations, future_learning"
+      },
+      "audio_url": "./scene_8.wav"
+    },
+    {
+      "scene_no": 9,
+      "template_id": "quiz_checkpoint",
+      "teaching_step_id": "review_quiz",
+      "teacher_script": "Great job! You've learned the fundamental difference between like and unlike fractions. Now, let's test your knowledge. Take a moment to answer these questions and see how well you can identify these important fraction types!",
+      "template_data": {
+        "title": "Quiz Checkpoint: Test Your Knowledge!",
+        "questions": [
+          {
+            "question": "Which set contains ONLY like fractions?",
+            "options": [
+              "A) ¹⁄₂, ¹⁄₃, ¹⁄₄",
+              "B) ²⁄₅, ³⁄₅, ⁴⁄₅",
+              "C) ¹⁄₆, ²⁄₇, ³⁄₈"
+            ],
+            "correct_answer": "B",
+            "explanation": "Like fractions have the same denominator. In option B, all denominators are 5."
+          },
+          {
+            "question": "Are ³⁄₄ and ³⁄₅ like or unlike fractions?",
+            "options": [
+              "A) Like Fractions",
+              "B) Unlike Fractions",
+              "C) Cannot determine"
+            ],
+            "correct_answer": "B",
+            "explanation": "The denominators (4 and 5) are different, so they are unlike fractions."
+          }
+        ],
+        "animation_style": "stagger_in"
+      },
+      "metadata": {
+        "learning_objective": "Assess student's ability to identify and differentiate like and unlike fractions.",
+        "concept_importance": "high",
+        "instruction_type": "assessment",
+        "difficulty": "intermediate",
+        "teaching_strategy": "formative_assessment",
+        "reinforcement_level": "high",
+        "quiz_hints": "Final check on definitions.",
+        "analytics_tags": "quiz, assessment, review, fractions"
+      },
+      "audio_url": "./scene_9.wav"
+    }
+  ]
+}

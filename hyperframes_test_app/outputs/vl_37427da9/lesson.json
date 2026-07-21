@@ -1,0 +1,240 @@
+{
+  "lesson_title": "How India Elects Its Leaders: Prime Minister & President",
+  "layout_mode": "timeline",
+  "theme": "Civics",
+  "global_assets": [],
+  "connections": [],
+  "lesson_id": "vl_37427da9",
+  "scenes": [
+    {
+      "scene_no": 1,
+      "purpose": "Introduce the lesson topic and spark student interest.",
+      "template_id": "title_slide",
+      "teacher_script": "Namaste, bright minds! Have you ever wondered how India chooses its two most important leaders – the Prime Minister and the President? Today, we'll explore their fascinating election journeys!",
+      "template_data": {
+        "title": "Electing India's Leaders",
+        "subtitle": "The Prime Minister & The President"
+      },
+      "audio_url": "/uploads/visual_lessons/vl_37427da9/scene_1.wav"
+    },
+    {
+      "scene_no": 2,
+      "purpose": "Explain the foundational concept of citizens voting for representatives, linking to general election qualifications from the textbook.",
+      "template_id": "concept_diagram",
+      "teacher_script": "It all begins with your vote! Every eligible Indian citizen participates in elections to choose their representatives. Remember, to contest, a person must be an Indian citizen, at least 25 years old, and not hold any office of profit under the government.",
+      "template_data": {
+        "title": "Your Vote, Your Representative",
+        "main_concept": "General Elections",
+        "attributes": [
+          {
+            "text": "Citizens vote for candidates",
+            "icon": "how_to_vote"
+          },
+          {
+            "text": "Candidates can be from Political Parties or be Independents",
+            "icon": "groups"
+          },
+          {
+            "text": "Qualifications to Contest: Citizen of India, 25+ years old, no 'office of profit'",
+            "icon": "gavel"
+          }
+        ],
+        "connections": [
+          {
+            "from": "Citizens vote for candidates",
+            "to": "Candidates can be from Political Parties or be Independents"
+          },
+          {
+            "from": "Qualifications to Contest: Citizen of India, 25+ years old, no 'office of profit'",
+            "to": "Candidates can be from Political Parties or be Independents"
+          }
+        ]
+      },
+      "audio_url": "/uploads/visual_lessons/vl_37427da9/scene_2.wav"
+    },
+    {
+      "scene_no": 3,
+      "purpose": "Introduce the election of the Prime Minister, explaining their role and connection to the Lok Sabha.",
+      "template_id": "concept_diagram",
+      "teacher_script": "The Prime Minister is the head of our government, responsible for running the country. They aren't directly voted for as PM, but rather emerge from the Lok Sabha elections, where people vote for Members of Parliament, or MPs!",
+      "template_data": {
+        "title": "Electing the Prime Minister: Head of Government",
+        "main_concept": "Prime Minister",
+        "attributes": [
+          {
+            "text": "Head of Government",
+            "icon": "account_balance"
+          },
+          {
+            "text": "Leads the Union Cabinet and advises the President",
+            "icon": "group_work"
+          },
+          {
+            "text": "Elected indirectly via Lok Sabha elections",
+            "icon": "ballot"
+          }
+        ],
+        "connections": [
+          {
+            "from": "Head of Government",
+            "to": "Leads the Union Cabinet and advises the President"
+          },
+          {
+            "from": "Elected indirectly via Lok Sabha elections",
+            "to": "Prime Minister"
+          }
+        ]
+      },
+      "audio_url": "/uploads/visual_lessons/vl_37427da9/scene_3.wav"
+    },
+    {
+      "scene_no": 4,
+      "purpose": "Detail the step-by-step process of how the Prime Minister is selected after general elections.",
+      "template_id": "cycle_template",
+      "teacher_script": "Here's how it works: First, General Elections are held for the Lok Sabha, where voters choose their MPs. The political party that wins the most seats then chooses its leader. Finally, the President formally appoints this leader as the Prime Minister!",
+      "template_data": {
+        "title": "Steps to Electing the Prime Minister",
+        "stages": [
+          {
+            "name": "1. General Elections (Lok Sabha)",
+            "description": "Citizens vote for Members of Parliament (MPs) across constituencies."
+          },
+          {
+            "name": "2. Majority Party Forms",
+            "description": "The party winning more than half the seats forms the government."
+          },
+          {
+            "name": "3. Leader Chosen",
+            "description": "The winning party's elected MPs choose their leader."
+          },
+          {
+            "name": "4. Appointed by President",
+            "description": "The President formally appoints the chosen leader as the Prime Minister."
+          }
+        ]
+      },
+      "audio_url": "/uploads/visual_lessons/vl_37427da9/scene_4.wav"
+    },
+    {
+      "scene_no": 5,
+      "purpose": "Introduce the President of India, their role, and the concept of the Electoral College.",
+      "template_id": "concept_diagram",
+      "teacher_script": "Next, let's learn about the President of India – our Head of State and the first citizen! Unlike the PM, the President is elected indirectly by a special group called the 'Electoral College'.",
+      "template_data": {
+        "title": "Electing the President: Head of State",
+        "main_concept": "President of India",
+        "attributes": [
+          {
+            "text": "Head of State & Commander-in-Chief of Armed Forces",
+            "icon": "flag"
+          },
+          {
+            "text": "First Citizen of India, upholds the Constitution",
+            "icon": "person"
+          },
+          {
+            "text": "Elected by Electoral College (Indirect Election)",
+            "icon": "how_to_vote"
+          }
+        ],
+        "connections": [
+          {
+            "from": "Head of State & Commander-in-Chief of Armed Forces",
+            "to": "First Citizen of India, upholds the Constitution"
+          },
+          {
+            "from": "Elected by Electoral College (Indirect Election)",
+            "to": "President of India"
+          }
+        ]
+      },
+      "audio_url": "/uploads/visual_lessons/vl_37427da9/scene_5.wav"
+    },
+    {
+      "scene_no": 6,
+      "purpose": "Explain the composition of the Electoral College for the President, differentiating between MPs and MLAs.",
+      "template_id": "column_comparison",
+      "teacher_script": "The Electoral College for the President includes elected members from both our Parliament and the State Assemblies. This means elected MPs from Lok Sabha and Rajya Sabha, and elected MLAs from all states, cast their votes!",
+      "template_data": {
+        "left_col": {
+          "header": "Elected Members of Parliament (MPs)",
+          "bullets": [
+            "From Lok Sabha (House of the People)",
+            "From Rajya Sabha (Council of States)"
+          ]
+        },
+        "right_col": {
+          "header": "Elected Members of Legislative Assemblies (MLAs)",
+          "bullets": [
+            "From all State Legislative Assemblies",
+            "Votes weighed by state population to ensure fairness"
+          ]
+        },
+        "title": "Who Forms the President's Electoral College?"
+      },
+      "audio_url": "/uploads/visual_lessons/vl_37427da9/scene_6.wav"
+    },
+    {
+      "scene_no": 7,
+      "purpose": "Outline the simplified process of the President's election, mentioning proportional representation.",
+      "template_id": "cycle_template",
+      "teacher_script": "In the President's election, MPs and MLAs cast their votes. Each vote has a specific value based on population, ensuring proportional representation. The candidate who secures a clear majority of these weighted votes wins and becomes our President!",
+      "template_data": {
+        "title": "Steps to Electing the President",
+        "stages": [
+          {
+            "name": "1. Electoral College Formed",
+            "description": "Comprises elected MPs and elected MLAs from states and union territories."
+          },
+          {
+            "name": "2. Voting Process",
+            "description": "Members cast their secret ballots using a proportional representation system."
+          },
+          {
+            "name": "3. Vote Value Calculated",
+            "description": "Each vote is assigned a specific value based on the population represented."
+          },
+          {
+            "name": "4. Majority Wins",
+            "description": "The candidate who secures more than 50% of the total valid weighted votes becomes President."
+          }
+        ]
+      },
+      "audio_url": "/uploads/visual_lessons/vl_37427da9/scene_7.wav"
+    },
+    {
+      "scene_no": 8,
+      "purpose": "Assess student understanding with active recall questions.",
+      "template_id": "quiz_checkpoint",
+      "teacher_script": "Fantastic! We've covered a lot about how our top leaders are elected. Now, let's see what you remember with a quick quiz!",
+      "template_data": {
+        "title": "Quiz Time!",
+        "questions": [
+          {
+            "question": "Who do citizens directly vote for in a General Election for the Union Government?",
+            "options": [
+              "Prime Minister",
+              "President",
+              "Members of Parliament (MPs)",
+              "Governor"
+            ],
+            "correct_answer": "Members of Parliament (MPs)",
+            "explanation": "Citizens directly vote for MPs who represent their constituency in the Lok Sabha."
+          },
+          {
+            "question": "Which special body elects the President of India?",
+            "options": [
+              "The Union Cabinet",
+              "The Supreme Court Judges",
+              "The Electoral College",
+              "The Prime Minister"
+            ],
+            "correct_answer": "The Electoral College",
+            "explanation": "The President is elected indirectly by an Electoral College consisting of elected MPs and MLAs."
+          }
+        ]
+      },
+      "audio_url": "/uploads/visual_lessons/vl_37427da9/scene_8.wav"
+    }
+  ]
+}

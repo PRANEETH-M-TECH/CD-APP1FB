@@ -1,0 +1,203 @@
+{
+  "lesson_title": "The Rule of the Nizams: Hyderabad's Journey",
+  "layout_mode": "timeline",
+  "theme": "History",
+  "global_assets": [],
+  "connections": [],
+  "lesson_id": "vl_0d371a3b",
+  "scenes": [
+    {
+      "scene_no": 1,
+      "purpose": "Introduce the main topic: the rule of the Nizams of Hyderabad.",
+      "template_id": "title_slide",
+      "teacher_script": "Hello, young historians! Today, we're embarking on an exciting journey to explore the fascinating rule of the Nizams in Hyderabad. Let's uncover their story!",
+      "template_data": {
+        "title": "The Rule of the Nizams",
+        "subtitle": "A Glimpse into Hyderabad's History"
+      },
+      "audio_url": "/uploads/visual_lessons/vl_0d371a3b/scene_1.wav"
+    },
+    {
+      "scene_no": 2,
+      "purpose": "Explain the origin and founder of the Asaf Jahi dynasty.",
+      "template_id": "concept_diagram",
+      "teacher_script": "After the Mughal Empire weakened, its governors asserted independence. One powerful figure, Chin Qulich Khan, also known as Nizam-Ul-Mulk, founded the Asaf Jahi dynasty in Hyderabad in 1724.",
+      "template_data": {
+        "title": "Birth of the Asaf Jahi Dynasty",
+        "main_concept": "Asaf Jahi Dynasty (Hyderabad State)",
+        "attributes": [
+          {
+            "label": "Founder",
+            "value": "Chin Qulich Khan (Nizam-Ul-Mulk)"
+          },
+          {
+            "label": "Established In",
+            "value": "1724 CE"
+          },
+          {
+            "label": "Origin",
+            "value": "Mughal Subedar of Deccan"
+          }
+        ]
+      },
+      "audio_url": "/uploads/visual_lessons/vl_0d371a3b/scene_2.wav"
+    },
+    {
+      "scene_no": 3,
+      "purpose": "Provide an overview of the Asaf Jahi rulers and who received the 'Nizam' title.",
+      "template_id": "database_grid",
+      "teacher_script": "The Asaf Jahi dynasty saw ten rulers from 1724 to 1948. Interestingly, only seven of them actually received the prestigious title 'Nizam' from the Mughals.",
+      "template_data": {
+        "table_title": "Asaf Jahi Rulers (1724-1948)",
+        "headers": [
+          "Ruler Type",
+          "Number/Names",
+          "Received 'Nizam' Title?"
+        ],
+        "rows": [
+          [
+            "Total Asaf Jahi Rulers",
+            "10 Kings",
+            "Some did, some didn't"
+          ],
+          [
+            "Kings with 'Nizam' Title",
+            "7 Kings",
+            "Yes, from Mughals"
+          ],
+          [
+            "Kings without 'Nizam' Title",
+            "Nazar Jung, Muzafar Jung, Sabath Jung",
+            "No"
+          ]
+        ]
+      },
+      "audio_url": "/uploads/visual_lessons/vl_0d371a3b/scene_3.wav"
+    },
+    {
+      "scene_no": 4,
+      "purpose": "Explain the reasons behind the Nizams' growing dependency on the British.",
+      "template_id": "column_comparison",
+      "teacher_script": "The Nizams constantly fought the Marathas and Mysore rulers to create their independent state. However, these continuous wars made them reliant on the British, eventually leading to a loss of their full independent status.",
+      "template_data": {
+        "title": "Path to British Dependency",
+        "left_col": {
+          "header": "Nizams' Efforts",
+          "bullets": [
+            "Fought Marathas",
+            "Fought Rulers of Mysore",
+            "Aimed to carve independent Hyderabad State"
+          ]
+        },
+        "right_col": {
+          "header": "Consequences",
+          "bullets": [
+            "Became dependent on the British",
+            "Lost their independent status"
+          ]
+        }
+      },
+      "audio_url": "/uploads/visual_lessons/vl_0d371a3b/scene_4.wav"
+    },
+    {
+      "scene_no": 5,
+      "purpose": "Illustrate Hyderabad's development under British influence and 'colonial modernisation'.",
+      "template_id": "concept_diagram",
+      "teacher_script": "Under the influence of British officials, the Nizams adopted 'colonial modernization'. The British were fond of Hyderabad's unique culture, and this period saw significant development in the late 19th century.",
+      "template_data": {
+        "title": "Hyderabad's Modernisation",
+        "main_concept": "Colonial Modernisation (Hyderabad)",
+        "attributes": [
+          {
+            "label": "Influence",
+            "value": "British Officials"
+          },
+          {
+            "label": "Period",
+            "value": "Late 19th Century"
+          },
+          {
+            "label": "Outcome",
+            "value": "Embarkment on Development"
+          },
+          {
+            "label": "British Perception",
+            "value": "Loved Hyderabad Culture"
+          }
+        ]
+      },
+      "audio_url": "/uploads/visual_lessons/vl_0d371a3b/scene_5.wav"
+    },
+    {
+      "scene_no": 6,
+      "purpose": "Highlight key figures and their contributions to reforms and development.",
+      "template_id": "concept_diagram",
+      "teacher_script": "Salar Jung, a prominent Prime Minister from 1853 to 1883, championed colonial development schemes. The Sixth Nizam, Mir Mahabub Ali Khan, also marked his period with numerous reforms, including building significant institutions.",
+      "template_data": {
+        "title": "Notable Personalities and Reforms",
+        "main_concept": "Hyderabad's Reformers",
+        "attributes": [
+          {
+            "label": "Salar Jung I (PM)",
+            "value": "• Prime Minister (1853-1883)\n• Imbibed colonial development schemes"
+          },
+          {
+            "label": "Mir Mahabub Ali Khan",
+            "value": "• Sixth Nizam\n• Period marked with many reforms\n• Founded Asafia Library, Victoria Memorial Orphanage, Mahabubia Girls School"
+          }
+        ]
+      },
+      "audio_url": "/uploads/visual_lessons/vl_0d371a3b/scene_6.wav"
+    },
+    {
+      "scene_no": 7,
+      "purpose": "Describe the VII Nizam's stance on feudal power despite reform movements.",
+      "template_id": "concept_diagram",
+      "teacher_script": "Towards the later period, the Seventh Nizam, despite popular movements for liberal reforms, was determined to protect the existing feudal power structure.",
+      "template_data": {
+        "title": "The VII Nizam's Challenge",
+        "main_concept": "VII Nizam's Rule",
+        "attributes": [
+          {
+            "label": "Popular Demand",
+            "value": "Liberal administrative reforms"
+          },
+          {
+            "label": "Nizam's Stance",
+            "value": "Determined to protect feudal power structure"
+          }
+        ]
+      },
+      "audio_url": "/uploads/visual_lessons/vl_0d371a3b/scene_7.wav"
+    },
+    {
+      "scene_no": 8,
+      "purpose": "Test the student's understanding of the key concepts learned.",
+      "template_id": "quiz_checkpoint",
+      "teacher_script": "Fantastic! You've learned so much about the Nizams. Let's test your knowledge with a quick question before we conclude!",
+      "template_data": {
+        "question": "Who founded the Asaf Jahi dynasty of Hyderabad State?",
+        "options": [
+          {
+            "text": "Akbar",
+            "is_correct": false
+          },
+          {
+            "text": "Chin Qulich Khan (Nizam-Ul-Mulk)",
+            "is_correct": true
+          },
+          {
+            "text": "Mir Mahabub Ali Khan",
+            "is_correct": false
+          },
+          {
+            "text": "Salar Jung I",
+            "is_correct": false
+          }
+        ],
+        "explanation": "Chin Qulich Khan, known as Nizam-Ul-Mulk, founded the Asaf Jahi dynasty in 1724 after the weakening of the Mughal Empire."
+      },
+      "audio_url": "/uploads/visual_lessons/vl_0d371a3b/scene_8.wav"
+    }
+  ]
+}

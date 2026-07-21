@@ -1,0 +1,1259 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>The Human Digestive System: A Journey Through Digestion</title>
+  
+  <!-- CSS Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&family=Space+Grotesk:wght@400;700&family=Inter:wght@400;500;700;900&family=Cinzel:wght@700&family=Playfair+Display:wght@700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  
+  <!-- KaTeX for math rendering -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  
+  <!-- GSAP for animations -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  
+  <!-- Shared hyperframes JS -->
+  <script src="./shared/theme.js"></script>
+  <script src="./shared/animations.js"></script>
+
+  <style>
+    
+      :root {
+        --theme-primary-color: #0f172a;
+        --theme-secondary-color: #1e293b;
+        --theme-accent-color: #3b82f6;
+        --theme-bg-color: #090d16;
+        --theme-surface-color: #131b2e;
+        --theme-text-color: #ffffff;
+        --theme-muted-text-color: rgba(255, 255, 255, 0.7);
+
+        --theme-font-family: Inter, system-ui, sans-serif;
+        --theme-font-size-title: 56px;
+        --theme-font-size-heading: 34px;
+        --theme-font-size-body: 16px;
+
+        --theme-border-radius-sm: 4px;
+        --theme-border-radius-md: 8px;
+        --theme-border-radius-lg: 16px;
+
+        --theme-spacing-sm: 8px;
+        --theme-spacing-md: 16px;
+        --theme-spacing-lg: 24px;
+
+        --theme-shadow-low: 0 2px 4px rgba(0,0,0,0.1);
+        --theme-shadow-high: 0 4px 16px rgba(0,0,0,0.4);
+      }
+    
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      width: 1280px;
+      height: 720px;
+      overflow: hidden;
+      background: var(--theme-bg-color, #090d16);
+      font-family: var(--theme-font-family, 'Inter', system-ui, sans-serif);
+      color: var(--theme-text-color, #ffffff);
+      -webkit-font-smoothing: antialiased;
+    }
+    
+    .composition {
+      width: 1280px;
+      height: 720px;
+      position: relative;
+    }
+    
+    /* Scene wrappers managed by HyperFrames */
+    .scene {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 1;
+    }
+
+    /* Subtitles banner */
+    .subtitles-container {
+      position: absolute;
+      bottom: 45px;
+      left: 8%;
+      right: 8%;
+      text-align: center;
+      font-size: 22px;
+      font-weight: 700;
+      line-height: 1.4;
+      color: #ffffff;
+      z-index: 90;
+      text-shadow: 
+        0 2px 4px rgba(0,0,0,0.9), 
+        0 0 10px rgba(0,0,0,0.9), 
+        1px 1px 0px #000, 
+        -1px -1px 0px #000, 
+        1px -1px 0px #000, 
+        -1px 1px 0px #000;
+      font-family: 'Inter', system-ui, sans-serif;
+    }
+
+    /* Template components specific styles */
+    .title-slide-container {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 60px;
+    }
+    .icon-card {
+      width: 140px;
+      height: 140px;
+      border-radius: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 30px;
+      margin-bottom: 40px;
+    }
+    .icon-card svg {
+      width: 100%;
+      height: 100%;
+    }
+    
+    .concept-diagram-container {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      padding: 60px 80px;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+    }
+    .left-bullets-col {
+      width: 40%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      z-index: 5;
+    }
+    .bullet-card {
+      padding: 16px 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      margin-bottom: 16px;
+      font-size: 18px;
+      font-weight: 500;
+      border-radius: 16px;
+    }
+    .mindmap-canvas {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      z-index: 2;
+    }
+    .center-node {
+      position: absolute;
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      font-weight: 800;
+      font-size: 20px;
+      z-index: 10;
+      padding: 18px;
+      line-height: 1.2;
+    }
+    .leaf-node {
+      position: absolute;
+      padding: 14px 22px;
+      background: rgba(15, 23, 42, 0.9);
+      border-radius: 16px;
+      font-weight: 700;
+      font-size: 16px;
+      text-align: center;
+      box-shadow: 0 12px 28px rgba(0,0,0,0.3);
+      z-index: 12;
+      white-space: nowrap;
+    }
+
+    .cycle-container {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 50px 60px;
+    }
+    .cycle-canvas {
+      width: 400px;
+      height: 400px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .cycle-svg {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      transform: rotate(-90deg);
+    }
+    .cycle-stage {
+      position: absolute;
+      width: 120px;
+      height: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      border-radius: 24px;
+      padding: 12px;
+      z-index: 20;
+    }
+    .cycle-stage-badge {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .cycle-stage-label {
+      font-size: 14px;
+      font-weight: 700;
+      text-align: center;
+      line-height: 1.2;
+    }
+
+    .math-container {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 50px 60px;
+    }
+    .math-formula-board {
+      background: rgba(15, 23, 42, 0.6);
+      border-radius: 20px;
+      padding: 24px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      margin-bottom: 35px;
+      box-shadow: 0 12px 36px rgba(0,0,0,0.3);
+    }
+    .math-step-card {
+      display: flex;
+      align-items: center;
+      border-radius: 16px;
+      padding: 16px 24px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      width: 85%;
+      margin-bottom: 12px;
+    }
+    .math-step-badge {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      color: #000000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 14px;
+      margin-right: 20px;
+      flex-shrink: 0;
+    }
+    .math-step-text {
+      font-size: 20px;
+      font-weight: 600;
+      width: 100%;
+    }
+
+    .comparison-container {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 50px 60px;
+    }
+    .comparison-grid {
+      display: flex;
+      width: 90%;
+      justify-content: space-between;
+      gap: 40px;
+      margin-top: 20px;
+    }
+    .comparison-column {
+      width: 50%;
+      border-radius: 24px;
+      padding: 30px;
+      box-shadow: 0 12px 32px rgba(0,0,0,0.25);
+    }
+    .comparison-col-header {
+      font-size: 26px;
+      font-weight: 800;
+      margin-bottom: 24px;
+      border-bottom: 2px solid;
+      padding-bottom: 12px;
+    }
+    .comparison-bullet {
+      font-size: 18px;
+      font-weight: 500;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+    }
+    .comparison-bullet-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      margin-right: 14px;
+      flex-shrink: 0;
+    }
+
+    .timeline-container {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 50px 60px;
+    }
+    .timeline-track {
+      position: relative;
+      width: 80%;
+      height: 250px;
+      display: flex;
+      align-items: center;
+    }
+    .timeline-svg {
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 100%;
+      height: 20px;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .timeline-stage {
+      position: absolute;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      z-index: 10;
+      width: 120px;
+    }
+    .timeline-stage-circle {
+      position: relative;
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #090d16 0%, #151824 100%);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+    }
+    .timeline-stage-circle svg {
+      width: 100%;
+      height: 100%;
+    }
+    .timeline-stage-badge {
+      position: absolute;
+      top: -6px;
+      right: -6px;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      color: #000000;
+      font-size: 12px;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid #090d16;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    }
+    .timeline-stage-label {
+      margin-top: 16px;
+      font-size: 14px;
+      font-weight: 700;
+      color: #e2e8f0;
+      text-align: center;
+      line-height: 1.3;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.6);
+    }
+
+    .database-container {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 50px 60px;
+    }
+    .database-grid-card {
+      background: rgba(15, 23, 42, 0.6);
+      border-radius: 24px;
+      padding: 24px;
+      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
+      width: 90%;
+      margin-top: 20px;
+      overflow: hidden;
+    }
+    .database-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 16px;
+    }
+    .database-table th {
+      text-align: left;
+      padding: 16px 20px;
+      font-weight: 800;
+      color: rgba(255, 255, 255, 0.6);
+      border-bottom: 2px solid rgba(255,255,255,0.1);
+    }
+    .database-table td {
+      padding: 16px 20px;
+      font-weight: 600;
+      color: #ffffff;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .venn-container {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 50px 60px;
+    }
+    .venn-headers {
+      display: flex;
+      justify-content: space-between;
+      width: 600px;
+      margin-bottom: 20px;
+      font-size: 24px;
+      font-weight: 800;
+    }
+    .venn-diagram-canvas {
+      width: 600px;
+      height: 400px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .venn-circle-left {
+      position: absolute;
+      width: 320px;
+      height: 320px;
+      border-radius: 50%;
+      z-index: 1;
+    }
+    .venn-circle-right {
+      position: absolute;
+      width: 320px;
+      height: 320px;
+      border-radius: 50%;
+      z-index: 1;
+    }
+    .venn-content-left {
+      position: absolute;
+      width: 180px;
+      left: 30px;
+      top: 80px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      z-index: 10;
+    }
+    .venn-content-middle {
+      position: absolute;
+      width: 180px;
+      top: 80px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      align-items: center;
+      z-index: 10;
+    }
+    .venn-content-right {
+      position: absolute;
+      width: 180px;
+      right: 30px;
+      top: 80px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      z-index: 10;
+    }
+    .venn-item-card {
+      font-size: 14px;
+      font-weight: 600;
+      background: rgba(15, 23, 42, 0.75);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      padding: 10px 14px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+
+    .quiz-container {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 50px 60px;
+    }
+    .quiz-card {
+      background: rgba(15, 23, 42, 0.6);
+      border-radius: 24px;
+      padding: 36px 40px;
+      width: 85%;
+      margin-top: 20px;
+      box-shadow: 0 16px 48px rgba(0,0,0,0.4);
+    }
+    .quiz-question {
+      font-size: 26px;
+      font-weight: 800;
+      line-height: 1.3;
+      margin-bottom: 30px;
+    }
+    .quiz-options-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .quiz-option {
+      display: flex;
+      align-items: center;
+      padding: 18px 24px;
+      border-radius: 16px;
+      font-size: 18px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+    .quiz-option-index {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      margin-right: 20px;
+    }
+    
+    .illustrated-canvas {
+      width: 100%;
+      height: 100%;
+      position: relative;
+    }
+    
+    .image-scene-container {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .scene-image {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      box-shadow: 0 12px 48px rgba(0,0,0,0.5);
+      border-radius: 16px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="composition" data-composition-id="root" data-start="0" data-width="1280" data-height="720" data-duration="174.60000000000002">
+
+    <!-- Scene 1: title_slide -->
+    <div class="scene clip" data-start="0" data-duration="21.75" id="scene-1">
+    
+      <div class="camera-viewport-wrapper" style="width: 100%; height: 100%; position: relative; overflow: hidden; transform-origin: 640px 360px; transform: translate(0px, 0px) scale(1) rotate(0deg);">
+        
+      <div class="title-slide-container" id="title-slide-1">
+        <div class="icon-card" id="icon-card-1">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="theme-stroke">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" id="icon-path-1" />
+          </svg>
+        </div>
+        <h1 class="theme-text" id="title-text-1" style="font-size: 56px; font-weight: 900; margin-bottom: 16px; text-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);">The Human Digestive System</h1>
+        <p id="subtitle-text-1" style="font-size: 22px; font-weight: 500; color: rgba(255, 255, 255, 0.7); text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3); max-width: 850px; text-align: center; line-height: 1.4;">A Journey Through Digestion</p>
+      </div>
+    
+      </div>
+    
+        <!-- Narration Subtitles banner -->
+        <div class="subtitles-container" id="subtitles-1">
+          Welcome to 'The Human Digestive System: A Journey Through Digestion'. Have you ever wondered what happens to the food you eat after you swallow it? How does your body get the energy and nutrients it needs? Join us as we explore this incredible internal process.
+        </div>
+      </div>
+    
+    <!-- Scene 2: illustrated_scene -->
+    <div class="scene clip" data-start="21.75" data-duration="19.05" id="scene-2">
+    
+      <div class="camera-viewport-wrapper" style="width: 100%; height: 100%; position: relative; overflow: hidden; transform-origin: 640px 360px; transform: translate(0px, 0px) scale(1) rotate(0deg);">
+        
+      <div class="illustrated-canvas" id="ill-canvas-2" style="background-color: transparent; width: 100%; height: 100%; position: relative; overflow: hidden;">
+        <h2 class="theme-text" id="ill-title-2" style="position: absolute; top: 28px; left: 48px; z-index: 20; font-size: 28px; font-weight: 800; margin: 0; text-shadow: 0 2px 8px rgba(0,0,0,0.5);">The Alimentary Canal: The Main Pathway</h2>
+        <svg viewBox="0 0 1280 720" width="1280" height="720" id="canvas_comp_2" style="width: 1280px; height: 720px; position: absolute; top: 0; left: 0; z-index: 10"><path d="M 200 150 L 250 150 C 270 150, 270 200, 250 200 L 200 200 C 180 200, 180 150, 200 150 Z" stroke-dasharray="" id="el_comp_2_0" fill="rgba(76, 201, 240, 0.1)" stroke="#4ade80" stroke-width="2" style="z-index: 10" /><path d="M 225 200 C 220 250, 220 300, 250 350 C 280 400, 350 400, 380 350 C 410 300, 420 250, 400 200 C 380 150, 300 120, 225 200 Z" stroke-dasharray="" id="el_comp_2_1" fill="rgba(76, 201, 240, 0.1)" stroke="#22c55e" stroke-width="2" style="z-index: 10" /><path d="M 200 150 C 200 100, 300 80, 400 100 C 500 120, 600 100, 650 150" stroke-dasharray="" id="el_comp_2_2" fill="none" stroke="#ef4444" stroke-width="3" style="z-index: 10" /><path d="M 650 150 C 700 200, 750 300, 650 400 C 550 500, 400 550, 300 500 C 200 450, 150 350, 200 200" stroke-dasharray="" id="el_comp_2_3" fill="none" stroke="#f97316" stroke-width="3" style="z-index: 10" /><path d="M 300 500 C 350 550, 450 600, 550 550 C 650 500, 700 450, 700 400 L 650 400" stroke-dasharray="" id="el_comp_2_4" fill="none" stroke="#facc15" stroke-width="3" style="z-index: 10" /><text x="680" y="140" fill="#FFFFFF" id="el_comp_2_5" style="font-family: Inter; font-size: 16px; color: #FFFFFF; z-index: 10">Esophagus</text><text x="750" y="300" fill="#FFFFFF" id="el_comp_2_6" style="font-family: Inter; font-size: 16px; color: #FFFFFF; z-index: 10">Stomach</text><text x="480" y="580" fill="#FFFFFF" id="el_comp_2_7" style="font-family: Inter; font-size: 16px; color: #FFFFFF; z-index: 10">Small Intestine</text><text x="780" y="450" fill="#FFFFFF" id="el_comp_2_8" style="font-family: Inter; font-size: 16px; color: #FFFFFF; z-index: 10">Large Intestine</text><text x="150" y="130" fill="#FFFFFF" id="el_comp_2_9" style="font-family: Inter; font-size: 16px; color: #FFFFFF; z-index: 10">Mouth</text></svg>
+      </div>
+    
+      </div>
+    
+        <!-- Narration Subtitles banner -->
+        <div class="subtitles-container" id="subtitles-2">
+          Our digestive journey begins with the alimentary canal, a continuous muscular tube extending from the mouth to the anus. It's often called the gastrointestinal or GI tract, and it's where food is processed and absorbed. Let's trace its path.
+        </div>
+      </div>
+    
+    <!-- Scene 3: illustrated_scene -->
+    <div class="scene clip" data-start="40.8" data-duration="18.6" id="scene-3">
+    
+      <div class="camera-viewport-wrapper" style="width: 100%; height: 100%; position: relative; overflow: hidden; transform-origin: 640px 360px; transform: translate(0px, 0px) scale(1) rotate(0deg);">
+        
+      <div class="illustrated-canvas" id="ill-canvas-3" style="background-color: transparent; width: 100%; height: 100%; position: relative; overflow: hidden;">
+        <h2 class="theme-text" id="ill-title-3" style="position: absolute; top: 28px; left: 48px; z-index: 20; font-size: 28px; font-weight: 800; margin: 0; text-shadow: 0 2px 8px rgba(0,0,0,0.5);">Mouth & Esophagus: The First Steps</h2>
+        <svg viewBox="0 0 1280 720" width="1280" height="720" id="canvas_comp_3" style="width: 1280px; height: 720px; position: absolute; top: 0; left: 0; z-index: 10"><path d="M 150 300 C 180 250, 250 220, 300 250 C 350 280, 380 320, 350 350 C 320 380, 250 380, 200 350 C 170 320, 150 300, 150 300 Z" stroke-dasharray="" id="el_comp_3_0" fill="rgba(251, 191, 36, 0.1)" stroke="#f97316" stroke-width="2" style="z-index: 10" /><circle cx="250" cy="300" r="20" id="el_comp_3_1" fill="#ef4444" stroke="#ffffff" stroke-width="2" style="z-index: 10" /><path d="M 250 280 L 250 100" stroke-dasharray="" id="el_comp_3_2" fill="none" stroke="#22c55e" stroke-width="50" style="z-index: 10" /><path d="M 250 280 C 270 250, 270 200, 250 150 C 230 100, 230 50, 250 20" stroke-dasharray="" id="el_comp_3_3" fill="none" stroke="#3b82f6" stroke-width="10" style="z-index: 10" /><text x="100" y="300" fill="#FFFFFF" id="el_comp_3_4" style="font-family: Inter; font-size: 16px; color: #FFFFFF; z-index: 10">Mouth (Chewing & Saliva)</text><text x="280" y="120" fill="#FFFFFF" id="el_comp_3_5" style="font-family: Inter; font-size: 16px; color: #FFFFFF; z-index: 10">Esophagus (Peristalsis)</text><text x="240" y="280" fill="#FFFFFF" id="el_comp_3_6" style="font-family: Inter; font-size: 16px; color: #FFFFFF; z-index: 10">Food Bolus</text><path d="M 200 300 Q 220 280, 240 300 Q 260 320, 280 300" stroke-dasharray="5,5" id="el_comp_3_7" fill="none" stroke="#3b82f6" stroke-width="2" style="z-index: 10" /></svg>
+      </div>
+    
+      </div>
+    
+        <!-- Narration Subtitles banner -->
+        <div class="subtitles-container" id="subtitles-3">
+          Digestion starts in your mouth! Chewing mechanically breaks down food, while saliva, containing enzymes like amylase, begins chemical digestion of carbohydrates. Once swallowed, a muscular wave called peristalsis gently pushes the food down the esophagus towards the stomach.
+        </div>
+      </div>
+    
+    <!-- Scene 4: illustrated_scene -->
+    <div class="scene clip" data-start="59.4" data-duration="19.05" id="scene-4">
+    
+      <div class="camera-viewport-wrapper" style="width: 100%; height: 100%; position: relative; overflow: hidden; transform-origin: 640px 360px; transform: translate(0px, 0px) scale(1) rotate(0deg);">
+        
+      <div class="illustrated-canvas" id="ill-canvas-4" style="background-color: transparent; width: 100%; height: 100%; position: relative; overflow: hidden;">
+        <h2 class="theme-text" id="ill-title-4" style="position: absolute; top: 28px; left: 48px; z-index: 20; font-size: 28px; font-weight: 800; margin: 0; text-shadow: 0 2px 8px rgba(0,0,0,0.5);">The Stomach: Churning & Acid Breakdown</h2>
+        <svg viewBox="0 0 1280 720" width="1280" height="720" id="canvas_comp_4" style="width: 1280px; height: 720px; position: absolute; top: 0; left: 0; z-index: 10"><path d="M 480 180 C 500 240, 480 320, 520 380 C 580 420, 720 380, 700 260 C 680 180, 580 150, 480 180 Z" stroke-dasharray="" id="el_comp_4_0" fill="rgba(16, 185, 129, 0.05)" stroke="#10b981" stroke-width="3" style="z-index: 10" /><circle cx="550" cy="300" r="8" id="el_comp_4_1" fill="#fbbf24" stroke="#ffffff" stroke-width="2" style="z-index: 10" /><circle cx="620" cy="280" r="6" id="el_comp_4_2" fill="#fbbf24" stroke="#ffffff" stroke-width="2" style="z-index: 10" /><path d="M 550 300 L 570 320 M 570 300 L 550 320" stroke-dasharray="" id="el_comp_4_3" fill="none" stroke="#ef4444" stroke-width="2" style="z-index: 10" /><path d="M 600 300 L 620 320 M 620 300 L 600 320" stroke-dasharray="" id="el_comp_4_4" fill="none" stroke="#ef4444" stroke-width="2" style="z-index: 10" /><text x="400" y="150" fill="#FFFFFF" id="el_comp_4_5" style="font-family: Inter; font-size: 16px; color: #FFFFFF; z-index: 10">Esophagus</text><text x="600" y="300" fill="#FFFFFF" id="el_comp_4_6" style="font-family: Inter; font-size: 16px; color: #FFFFFF; z-index: 10">Acid & Chyme Churning</text><text x="750" y="350" fill="#FFFFFF" id="el_comp_4_7" style="font-family: Inter; font-size: 16px; color: #FFFFFF; z-index: 10">Duodenum (Small Intestine)</text><path d="M 500 250 A 50 50 0 0 1 500 350" stroke-dasharray="3,3" id="el_comp_4_8" fill="none" stroke="#3b82f6" stroke-width="2" style="z-index: 10" /><path d="M 680 280 A 50 50 0 0 0 680 380" stroke-dasharray="3,3" id="el_comp_4_9" fill="none" stroke="#3b82f6" stroke-width="2" style="z-index: 10" /></svg>
+      </div>
+    
+      </div>
+    
+        <!-- Narration Subtitles banner -->
+        <div class="subtitles-container" id="subtitles-4">
+          The stomach is a muscular, J-shaped organ that acts like a powerful blender. It churns food with strong gastric juices, containing hydrochloric acid and pepsin, breaking down proteins. This turns your meal into a thick, acidic liquid called chyme.
+        </div>
+      </div>
+    
+    <!-- Scene 5: illustrated_scene -->
+    <div class="scene clip" data-start="78.45" data-duration="18.150000000000002" id="scene-5">
+    
+      <div class="camera-viewport-wrapper" style="width: 100%; height: 100%; position: relative; overflow: hidden; transform-origin: 640px 360px; transform: translate(0px, 0px) scale(1) rotate(0deg);">
+        
+      <div class="illustrated-canvas" id="ill-canvas-5" style="background-color: transparent; width: 100%; height: 100%; position: relative; overflow: hidden;">
+        <h2 class="theme-text" id="ill-title-5" style="position: absolute; top: 28px; left: 48px; z-index: 20; font-size: 28px; font-weight: 800; margin: 0; text-shadow: 0 2px 8px rgba(0,0,0,0.5);">Small Intestine: Nutrient Absorption Powerhouse</h2>
+        <svg viewBox="0 0 1280 720" width="1280" height="720" id="canvas_comp_5" style="width: 1280px; height: 720px; position: absolute; top: 0; left: 0; z-index: 10"><path d="M 200 300 C 250 200, 350 200, 400 300 C 450 400, 550 400, 600 300 C 650 200, 750 200, 800 300" stroke-dasharray="" id="el_comp_5_0" fill="none" stroke="#facc15" stroke-width="5" style="z-index: 10" /><path d="M 250 350 C 300 250, 400 250, 450 350 C 500 450, 600 450, 650 350 C 700 250, 800 250, 850 350" stroke-dasharray="" id="el_comp_5_1" fill="none" stroke="#facc15" stroke-width="5" style="z-index: 10" /><path d="M 600 200 L 600 100" stroke-dasharray="" id="el_comp_5_2" fill="none" stroke="#3b82f6" stroke-width="2" style="z-index: 10" /><path d="M 610 200 L 610 100" stroke-dasharray="" id="el_comp_5_3" fill="none" stroke="#3b82f6" stroke-width="2" style="z-index: 10" /><path d="M 620 200 L 620 100" stroke-dasharray="" id="el_comp_5_4" fill="none" stroke="#3b82f6" stroke-width="2" style="z-index: 10" /><circle cx="610" cy="120" r="5" id="el_comp_5_5" fill="#ef4444" stroke="#ffffff" stroke-width="2" style="z-index: 10" /><text x="550" y="70" fill="#FFFFFF" id="el_comp_5_6" style="font-family: Inter; font-size: 16px; color: #FFFFFF; z-index: 10">Villi for absorption</text><text x="500" y="480" fill="#FFFFFF" id="el_comp_5_7" style="font-family: Inter; font-size: 16px; color: #FFFFFF; z-index: 10">Small Intestine (6 meters coiled!)</text><path d="M 700 300 Q 720 280, 740 300 Q 760 320, 780 300" stroke-dasharray="5,5" id="el_comp_5_8" fill="none" stroke="#22c55e" stroke-width="2" style="z-index: 10" /></svg>
+      </div>
+    
+      </div>
+    
+        <!-- Narration Subtitles banner -->
+        <div class="subtitles-container" id="subtitles-5">
+          The small intestine is where most chemical digestion and nutrient absorption occur. Its incredible length, coupled with tiny finger-like projections called villi and microvilli, creates a massive surface area to efficiently absorb digested nutrients into the bloodstream.
+        </div>
+      </div>
+    
+    <!-- Scene 6: illustrated_scene -->
+    <div class="scene clip" data-start="96.60000000000001" data-duration="19.95" id="scene-6">
+    
+      <div class="camera-viewport-wrapper" style="width: 100%; height: 100%; position: relative; overflow: hidden; transform-origin: 640px 360px; transform: translate(0px, 0px) scale(1) rotate(0deg);">
+        
+      <div class="illustrated-canvas" id="ill-canvas-6" style="background-color: transparent; width: 100%; height: 100%; position: relative; overflow: hidden;">
+        <h2 class="theme-text" id="ill-title-6" style="position: absolute; top: 28px; left: 48px; z-index: 20; font-size: 28px; font-weight: 800; margin: 0; text-shadow: 0 2px 8px rgba(0,0,0,0.5);">Large Intestine: Water Recovery & Waste Formation</h2>
+        <svg viewBox="0 0 1280 720" width="1280" height="720" id="canvas_comp_6" style="width: 1280px; height: 720px; position: absolute; top: 0; left: 0; z-index: 10"><path d="M 300 200 Q 250 100, 400 100 C 550 100, 600 150, 600 250 C 600 350, 550 400, 400 400 C 250 400, 200 350, 200 250 C 200 150, 250 100, 400 100" stroke-dasharray="" id="el_comp_6_0" fill="rgba(34, 197, 94, 0.1)" stroke="#22c55e" stroke-width="5" style="z-index: 10" /><text x="500" y="100" fill="#FFFFFF" id="el_comp_6_1" style="font-family: Inter; font-size: 16px; color: #FFFFFF; z-index: 10">Ascending Colon</text><text x="500" y="400" fill="#FFFFFF" id="el_comp_6_2" style="font-family: Inter; font-size: 16px; color: #FFFFFF; z-index: 10">Descending Colon</text><text x="400" y="50" fill="#FFFFFF" id="el_comp_6_3" style="font-family: Inter; font-size: 16px; color: #FFFFFF; z-index: 10">Transverse Colon</text><circle cx="450" cy="250" r="10" id="el_comp_6_4" fill="#3b82f6" stroke="#ffffff" stroke-width="2" style="z-index: 10" /><circle cx="480" cy="280" r="8" id="el_comp_6_5" fill="#3b82f6" stroke="#ffffff" stroke-width="2" style="z-index: 10" /><path d="M 450 250 C 430 230, 430 270, 450 250" stroke-dasharray="3,3" id="el_comp_6_6" fill="none" stroke="#ef4444" stroke-width="2" style="z-index: 10" /><text x="650" y="250" fill="#FFFFFF" id="el_comp_6_7" style="font-family: Inter; font-size: 16px; color: #FFFFFF; z-index: 10">Water Reabsorption</text><path d="M 500 350 L 500 450 L 400 450" stroke-dasharray="" id="el_comp_6_8" fill="none" stroke="#fbbf24" stroke-width="5" style="z-index: 10" /><text x="350" y="480" fill="#FFFFFF" id="el_comp_6_9" style="font-family: Inter; font-size: 16px; color: #FFFFFF; z-index: 10">Rectum & Anus</text></svg>
+      </div>
+    
+      </div>
+    
+        <!-- Narration Subtitles banner -->
+        <div class="subtitles-container" id="subtitles-6">
+          After the small intestine, any remaining undigested food and water enter the large intestine. Here, excess water is absorbed back into the body, and the remaining waste material is compacted into feces, ready for elimination. It's also home to beneficial bacteria.
+        </div>
+      </div>
+    
+    <!-- Scene 7: illustrated_scene -->
+    <div class="scene clip" data-start="116.55000000000001" data-duration="21.3" id="scene-7">
+    
+      <div class="camera-viewport-wrapper" style="width: 100%; height: 100%; position: relative; overflow: hidden; transform-origin: 640px 360px; transform: translate(0px, 0px) scale(1) rotate(0deg);">
+        
+      <div class="illustrated-canvas" id="ill-canvas-7" style="background-color: transparent; width: 100%; height: 100%; position: relative; overflow: hidden;">
+        <h2 class="theme-text" id="ill-title-7" style="position: absolute; top: 28px; left: 48px; z-index: 20; font-size: 28px; font-weight: 800; margin: 0; text-shadow: 0 2px 8px rgba(0,0,0,0.5);">Accessory Organs: The Support Team</h2>
+        <svg viewBox="0 0 1280 720" width="1280" height="720" id="canvas_comp_7" style="width: 1280px; height: 720px; position: absolute; top: 0; left: 0; z-index: 10"><path d="M 500 150 C 600 100, 750 150, 700 300 C 650 400, 500 350, 450 250 C 400 150, 500 150, 500 150 Z" stroke-dasharray="" id="el_comp_7_0" fill="rgba(239, 68, 68, 0.1)" stroke="#ef4444" stroke-width="3" style="z-index: 10" /><text x="600" y="80" fill="#FFFFFF" id="el_comp_7_1" style="font-family: Inter; font-size: 16px; color: #FFFFFF; z-index: 10">Liver (Bile Production)</text><circle cx="650" cy="280" r="20" id="el_comp_7_2" fill="#10b981" stroke="#ffffff" stroke-width="2" style="z-index: 10" /><text x="680" y="280" fill="#FFFFFF" id="el_comp_7_3" style="font-family: Inter; font-size: 16px; color: #FFFFFF; z-index: 10">Gallbladder (Bile Storage)</text><path d="M 400 300 C 450 350, 600 350, 650 300 C 600 250, 450 250, 400 300 Z" stroke-dasharray="" id="el_comp_7_4" fill="rgba(250, 204, 21, 0.1)" stroke="#facc15" stroke-width="3" style="z-index: 10" /><text x="520" y="380" fill="#FFFFFF" id="el_comp_7_5" style="font-family: Inter; font-size: 16px; color: #FFFFFF; z-index: 10">Pancreas (Enzyme & Bicarbonate Production)</text><path d="M 620 270 L 550 270 L 520 290" stroke-dasharray="5,5" id="el_comp_7_6" fill="none" stroke="#3b82f6" stroke-width="2" style="z-index: 10" /><text x="400" y="270" fill="#FFFFFF" id="el_comp_7_7" style="font-family: Inter; font-size: 16px; color: #FFFFFF; z-index: 10">To Small Intestine</text><path d="M 520 290 L 520 300 L 550 300" stroke-dasharray="5,5" id="el_comp_7_8" fill="none" stroke="#3b82f6" stroke-width="2" style="z-index: 10" /></svg>
+      </div>
+    
+      </div>
+    
+        <!-- Narration Subtitles banner -->
+        <div class="subtitles-container" id="subtitles-7">
+          Beyond the main tract, accessory organs play crucial roles without food passing through them directly. The liver produces bile to help digest fats, stored in the gallbladder. The pancreas produces digestive enzymes and bicarbonate, essential for neutralizing stomach acid and breaking down all macronutrients.
+        </div>
+      </div>
+    
+    <!-- Scene 8: horizontal_timeline -->
+    <div class="scene clip" data-start="137.85000000000002" data-duration="19.05" id="scene-8">
+    
+      <div class="camera-viewport-wrapper" style="width: 100%; height: 100%; position: relative; overflow: hidden; transform-origin: 640px 360px; transform: translate(0px, 0px) scale(1) rotate(0deg);">
+        
+      <div class="timeline-container" id="timeline-8">
+        <h2 style="font-size: 36px; font-weight: 800; color: #ffffff; text-align: center; margin: 0 0 80px 0; text-transform: uppercase; letter-spacing: 1px; text-shadow: 0 4px 8px rgba(0,0,0,0.5);" class="theme-text" id="timeline-title-8">The Full Digestive Journey: A Summary</h2>
+        <div class="timeline-track">
+          <svg class="timeline-svg">
+            <line x1="5%" y1="50%" x2="95%" y2="50%" stroke="rgba(255,255,255,0.06)" stroke-width="4" stroke-linecap="round"></line>
+            <line x1="5%" y1="50%" x2="5%" y2="50%" stroke-width="4" stroke-linecap="round" id="timeline-active-line-8" class="theme-stroke"></line>
+          </svg>
+          
+          <div id="timeline-stages-8">
+            
+              <div class="timeline-stage" id="timeline-stage-8-0">
+                <div class="timeline-stage-circle theme-card-border">
+                  <div class="timeline-stage-badge theme-accent-bg">1</div>
+                  <svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="theme-stroke">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" id="timeline-icon-8-0" />
+                  </svg>
+                </div>
+                <p class="timeline-stage-label">Ingestion & Chewing</p>
+              </div>
+            
+              <div class="timeline-stage" id="timeline-stage-8-1">
+                <div class="timeline-stage-circle theme-card-border">
+                  <div class="timeline-stage-badge theme-accent-bg">2</div>
+                  <svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="theme-stroke">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" id="timeline-icon-8-1" />
+                  </svg>
+                </div>
+                <p class="timeline-stage-label">Swallowing</p>
+              </div>
+            
+              <div class="timeline-stage" id="timeline-stage-8-2">
+                <div class="timeline-stage-circle theme-card-border">
+                  <div class="timeline-stage-badge theme-accent-bg">3</div>
+                  <svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="theme-stroke">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" id="timeline-icon-8-2" />
+                  </svg>
+                </div>
+                <p class="timeline-stage-label">Churning & Acid Digestion</p>
+              </div>
+            
+              <div class="timeline-stage" id="timeline-stage-8-3">
+                <div class="timeline-stage-circle theme-card-border">
+                  <div class="timeline-stage-badge theme-accent-bg">4</div>
+                  <svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="theme-stroke">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" id="timeline-icon-8-3" />
+                  </svg>
+                </div>
+                <p class="timeline-stage-label">Nutrient Absorption</p>
+              </div>
+            
+              <div class="timeline-stage" id="timeline-stage-8-4">
+                <div class="timeline-stage-circle theme-card-border">
+                  <div class="timeline-stage-badge theme-accent-bg">5</div>
+                  <svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="theme-stroke">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" id="timeline-icon-8-4" />
+                  </svg>
+                </div>
+                <p class="timeline-stage-label">Water Reabsorption</p>
+              </div>
+            
+              <div class="timeline-stage" id="timeline-stage-8-5">
+                <div class="timeline-stage-circle theme-card-border">
+                  <div class="timeline-stage-badge theme-accent-bg">6</div>
+                  <svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="theme-stroke">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" id="timeline-icon-8-5" />
+                  </svg>
+                </div>
+                <p class="timeline-stage-label">Elimination</p>
+              </div>
+            
+          </div>
+        </div>
+      </div>
+    
+      </div>
+    
+        <!-- Narration Subtitles banner -->
+        <div class="subtitles-container" id="subtitles-8">
+          From the initial bite to final elimination, the digestive system is a marvel of coordination. Each organ plays a specific, vital role in transforming food into the energy and building blocks our bodies need. It’s a continuous, orchestrated process.
+        </div>
+      </div>
+    
+    <!-- Scene 9: quiz_checkpoint -->
+    <div class="scene clip" data-start="156.90000000000003" data-duration="17.7" id="scene-9">
+    
+      <div class="camera-viewport-wrapper" style="width: 100%; height: 100%; position: relative; overflow: hidden; transform-origin: 640px 360px; transform: translate(0px, 0px) scale(1) rotate(0deg);">
+        
+      <div class="quiz-container" id="quiz-9">
+        <div class="quiz-card theme-card-border" id="quiz-card-9">
+          <div class="quiz-question" id="quiz-question-9">Which organ is primarily responsible for absorbing water from undigested food?</div>
+          <div class="quiz-options-list" id="quiz-options-9">
+            
+              <div class="quiz-option theme-card-bg theme-card-border" id="quiz-opt-9-0">
+                <div class="quiz-option-index theme-accent-bg" id="quiz-opt-idx-9-0">A</div>
+                <div class="quiz-option-text">A) Stomach</div>
+              </div>
+            
+              <div class="quiz-option theme-card-bg theme-card-border" id="quiz-opt-9-1">
+                <div class="quiz-option-index theme-accent-bg" id="quiz-opt-idx-9-1">B</div>
+                <div class="quiz-option-text">B) Small Intestine</div>
+              </div>
+            
+              <div class="quiz-option theme-card-bg theme-card-border" id="quiz-opt-9-2">
+                <div class="quiz-option-index theme-accent-bg" id="quiz-opt-idx-9-2">C</div>
+                <div class="quiz-option-text">C) Large Intestine</div>
+              </div>
+            
+              <div class="quiz-option theme-card-bg theme-card-border" id="quiz-opt-9-3">
+                <div class="quiz-option-index theme-accent-bg" id="quiz-opt-idx-9-3">D</div>
+                <div class="quiz-option-text">D) Esophagus</div>
+              </div>
+            
+          </div>
+        </div>
+      </div>
+    
+      </div>
+    
+        <!-- Narration Subtitles banner -->
+        <div class="subtitles-container" id="subtitles-9">
+          Time for a quick check! Which organ is primarily responsible for absorbing water from undigested food? Is it the A) Stomach, B) Small Intestine, C) Large Intestine, or D) Esophagus? Think about what we just learned.
+        </div>
+      </div>
+    
+      <audio class="clip" data-start="0" data-duration="21.75" src="./scene_1.wav" id="audio-scene-1"></audio>
+      
+      <audio class="clip" data-start="21.75" data-duration="19.05" src="./scene_2.wav" id="audio-scene-2"></audio>
+      
+      <audio class="clip" data-start="40.8" data-duration="18.6" src="./scene_3.wav" id="audio-scene-3"></audio>
+      
+      <audio class="clip" data-start="59.4" data-duration="19.05" src="./scene_4.wav" id="audio-scene-4"></audio>
+      
+      <audio class="clip" data-start="78.45" data-duration="18.150000000000002" src="./scene_5.wav" id="audio-scene-5"></audio>
+      
+      <audio class="clip" data-start="96.60000000000001" data-duration="19.95" src="./scene_6.wav" id="audio-scene-6"></audio>
+      
+      <audio class="clip" data-start="116.55000000000001" data-duration="21.3" src="./scene_7.wav" id="audio-scene-7"></audio>
+      
+      <audio class="clip" data-start="137.85000000000002" data-duration="19.05" src="./scene_8.wav" id="audio-scene-8"></audio>
+      
+      <audio class="clip" data-start="156.90000000000003" data-duration="17.7" src="./scene_9.wav" id="audio-scene-9"></audio>
+      
+  </div>
+
+  <script>
+    // active theme variables loaded dynamically
+    const storyboardThemeName = "Science";
+    const theme = window.getTheme(storyboardThemeName);
+    
+    // Apply styling rules
+    document.body.style.background = theme.background;
+    document.body.style.fontFamily = theme.fontFamily;
+    document.body.style.color = theme.textColor;
+    
+    // Dynamic Styling Updates across all template headers
+    document.querySelectorAll('.theme-text').forEach(el => {
+      el.style.color = theme.accentColor;
+    });
+    document.querySelectorAll('.theme-stroke').forEach(el => {
+      el.style.stroke = theme.accentColor;
+    });
+    document.querySelectorAll('.theme-fill').forEach(el => {
+      el.style.fill = theme.accentColor;
+    });
+    document.querySelectorAll('.theme-accent-bg').forEach(el => {
+      el.style.background = theme.accentColor;
+    });
+    document.querySelectorAll('.theme-card-bg').forEach(el => {
+      el.style.background = theme.cardBackground;
+    });
+    document.querySelectorAll('.theme-card-border').forEach(el => {
+      el.style.border = theme.cardBorder;
+    });
+    document.querySelectorAll('.theme-accent-border').forEach(el => {
+      el.style.borderColor = theme.accentColor;
+    });
+
+    // Populate dynamic LaTeX inputs in DOM
+    const rawData = [{"scene_no":1,"template_id":"title_slide","teacher_script":"Welcome to 'The Human Digestive System: A Journey Through Digestion'. Have you ever wondered what happens to the food you eat after you swallow it? How does your body get the energy and nutrients it needs? Join us as we explore this incredible internal process.","metadata":{"title":"The Human Digestive System","description":"","learning_objective":"Understand the overall scope of the digestive system.","concept_importance":"high","instruction_type":"Introduction","difficulty":"beginner","teaching_strategy":"Engage & Orient","reinforcement_level":"low","quiz_hints":"What is the primary purpose of the digestive system?","analytics_tags":"intro, human body, digestion"},"nodes":[{"id":"title_1","type":"TEXT","component":{"id":"title_comp_1","type":"TEXT","properties":{"text":"The Human Digestive System"},"style":{"fontFamily":"Inter","fontSize":"16px","color":"#FFFFFF","zIndex":10},"children":[],"metadata":{},"visibility":true},"children":[],"metadata":{}},{"id":"subtitle_1","type":"TEXT","component":{"id":"subtitle_comp_1","type":"TEXT","properties":{"text":"A Journey Through Digestion"},"style":{"fontFamily":"Inter","fontSize":"16px","color":"#FFFFFF","zIndex":10},"children":[],"metadata":{},"visibility":true},"children":[],"metadata":{}},{"id":"icon_card_1","type":"CUSTOM","component":{"id":"icon_comp_1","type":"CUSTOM","properties":{"type":"icon","name":"shield"},"style":{"zIndex":10},"children":[],"metadata":{},"visibility":true},"children":[],"metadata":{}}],"timeline":{"animation_style":"fade_wave","animation_action":"none","audio_url":"./scene_1.wav","audio_asset":{"id":"scene_audio_1","provider":"LocalPNGProvider","path":"./scene_1.wav","format":"wav","dimensions":{"width":0,"height":0},"metadata":{},"quality":"medium","source":"local","license":"proprietary","status":"resolved","future_cache_info":{}},"durationInFrames":null},"camera":{"camera_id":"cam_fd1puk0ue","position":{"x":640,"y":360},"target":null,"zoom":1,"rotation":0,"viewport":{"width":1280,"height":720},"anchor":{"x":0.5,"y":0.5},"padding":0,"mode":"STATIC","timeline":[],"metadata":{},"future_constraints":{}},"layout":{"layout_id":"lay_ekigw2bk5","layout_type":"FREE","constraints":null,"alignment":"CENTER","padding":{"top":0,"left":0,"bottom":0,"right":0},"margin":{"top":0,"left":0,"bottom":0,"right":0},"spacing":0,"safe_area":null,"responsive":true,"metadata":{}},"focuses":[],"theme_id":"default","template_data":{"title":"The Human Digestive System","subtitle":"A Journey Through Digestion","theme_color":"#1e3a8a","animation_style":"fade_wave"},"audio_url":"./scene_1.wav","durationInFrames":null,"start":0,"duration":21.75},{"scene_no":2,"template_id":"illustrated_scene","teacher_script":"Our digestive journey begins with the alimentary canal, a continuous muscular tube extending from the mouth to the anus. It's often called the gastrointestinal or GI tract, and it's where food is processed and absorbed. Let's trace its path.","metadata":{"title":"The Alimentary Canal: The Main Pathway","description":"","learning_objective":"Identify the main organs of the GI tract.","concept_importance":"high","instruction_type":"Core Concept","difficulty":"beginner","teaching_strategy":"Visual Labeling","reinforcement_level":"medium","quiz_hints":"What are the major parts of the alimentary canal?","analytics_tags":"alimentary canal, GI tract, organs"},"nodes":[{"id":"title_2","type":"TEXT","component":{"id":"title_comp_2","type":"TEXT","properties":{"text":"The Alimentary Canal: The Main Pathway"},"style":{"fontFamily":"Inter","fontSize":"16px","color":"#FFFFFF","zIndex":10},"children":[],"metadata":{},"visibility":true},"children":[],"metadata":{}},{"id":"canvas_2","type":"SVG","component":{"id":"canvas_comp_2","type":"SVG","properties":{"color":"transparent","viewBox":"0 0 1280 720"},"style":{"width":"1280px","height":"720px","position":"absolute","top":"0","left":"0","zIndex":10},"children":[{"id":"el_comp_2_0","type":"SHAPE","properties":{"shapeType":"path","path_data":"M 200 150 L 250 150 C 270 150, 270 200, 250 200 L 200 200 C 180 200, 180 150, 200 150 Z","stroke_width":2,"fill":"rgba(76, 201, 240, 0.1)","stroke":"#4ade80","strokeWidth":2,"dash_array":"","d":"M 200 150 L 250 150 C 270 150, 270 200, 250 200 L 200 200 C 180 200, 180 150, 200 150 Z"},"style":{"fill":"rgba(76, 201, 240, 0.1)","stroke":"#4ade80","strokeWidth":2,"zIndex":10},"children":[],"metadata":{},"visibility":true},{"id":"el_comp_2_1","type":"SHAPE","properties":{"shapeType":"path","path_data":"M 225 200 C 220 250, 220 300, 250 350 C 280 400, 350 400, 380 350 C 410 300, 420 250, 400 200 C 380 150, 300 120, 225 200 Z","stroke_width":2,"fill":"rgba(76, 201, 240, 0.1)","stroke":"#22c55e","strokeWidth":2,"dash_array":"","d":"M 225 200 C 220 250, 220 300, 250 350 C 280 400, 350 400, 380 350 C 410 300, 420 250, 400 200 C 380 150, 300 120, 225 200 Z"},"style":{"fill":"rgba(76, 201, 240, 0.1)","stroke":"#22c55e","strokeWidth":2,"zIndex":10},"children":[],"metadata":{},"visibility":true},{"id":"el_comp_2_2","type":"SHAPE","properties":{"shapeType":"path","path_data":"M 200 150 C 200 100, 300 80, 400 100 C 500 120, 600 100, 650 150","stroke_width":3,"animation_action":"slide_right","stroke":"#ef4444","fill":"none","strokeWidth":3,"dash_array":"","d":"M 200 150 C 200 100, 300 80, 400 100 C 500 120, 600 100, 650 150"},"style":{"fill":"none","stroke":"#ef4444","strokeWidth":3,"zIndex":10},"children":[],"metadata":{},"visibility":true},{"id":"el_comp_2_3","type":"SHAPE","properties":{"shapeType":"path","path_data":"M 650 150 C 700 200, 750 300, 650 400 C 550 500, 400 550, 300 500 C 200 450, 150 350, 200 200","stroke_width":3,"animation_action":"scale_up","stroke":"#f97316","fill":"none","strokeWidth":3,"dash_array":"","d":"M 650 150 C 700 200, 750 300, 650 400 C 550 500, 400 550, 300 500 C 200 450, 150 350, 200 200"},"style":{"fill":"none","stroke":"#f97316","strokeWidth":3,"zIndex":10},"children":[],"metadata":{},"visibility":true},{"id":"el_comp_2_4","type":"SHAPE","properties":{"shapeType":"path","path_data":"M 300 500 C 350 550, 450 600, 550 550 C 650 500, 700 450, 700 400 L 650 400","stroke_width":3,"animation_action":"slide_left","stroke":"#facc15","fill":"none","strokeWidth":3,"dash_array":"","d":"M 300 500 C 350 550, 450 600, 550 550 C 650 500, 700 450, 700 400 L 650 400"},"style":{"fill":"none","stroke":"#facc15","strokeWidth":3,"zIndex":10},"children":[],"metadata":{},"visibility":true},{"id":"el_comp_2_5","type":"TEXT","properties":{"text":"Esophagus","x":680,"y":140},"style":{"fontFamily":"Inter","fontSize":"16px","color":"#FFFFFF","zIndex":10},"children":[],"metadata":{},"visibility":true},{"id":"el_comp_2_6","type":"TEXT","properties":{"text":"Stomach","x":750,"y":300},"style":{"fontFamily":"Inter","fontSize":"16px","color":"#FFFFFF","zIndex":10},"children":[],"metadata":{},"visibility":true},{"id":"el_comp_2_7","type":"TEXT","properties":{"text":"Small Intestine","x":480,"y":580},"style":{"fontFamily":"Inter","fontSize":"16px","color":"#FFFFFF","zIndex":10},"children":[],"metadata":{},"visibility":true},{"id":"el_comp_2_8","type":"TEXT","properties":{"text":"Large Intestine","x":780,"y":450},"style":{"fontFamily":"Inter","fontSize":"16px","color":"#FFFFFF","zIndex":10},"children":[],"metadata":{},"visibility":true},{"id":"el_comp_2_9","type":"TEXT","properties":{"text":"Mouth","x":150,"y":130},"style":{"fontFamily":"Inter","fontSize":"16px","color":"#FFFFFF","zIndex":10},"children":[],"metadata":{},"visibility":true}],"metadata":{},"visibility":true},"children":[{"id":"el_2_0","type":"SHAPE","component":{"id":"el_comp_2_0","type":"SHAPE","properties":{"shapeType":"path","path_data":"M 200 150 L 250 150 C 270 150, 270 200, 250 200 L 200 200 C 180 200, 180 150, 200 150 Z","stroke_width":2,"fill":"rgba(76, 201, 240, 0.1)","stroke":"#4ade80","strokeWidth":2,"dash_array":"","d":"M 200 150 L 250 150 C 270 150, 270 200, 250 200 L 200 200 C 180 200, 180 150, 200 150 Z"},"style":{"fill":"rgba(76, 201, 240, 0.1)","stroke":"#4ade80","strokeWidth":2,"zIndex":10},"children":[],"metadata":{},"visibility":true},"children":[],"metadata":{}},{"id":"el_2_1","type":"SHAPE","component":{"id":"el_comp_2_1","type":"SHAPE","properties":{"shapeType":"path","path_data":"M 225 200 C 220 250, 220 300, 250 350 C 280 400, 350 400, 380 350 C 410 300, 420 250, 400 200 C 380 150, 300 120, 225 200 Z","stroke_width":2,"fill":"rgba(76, 201, 240, 0.1)","stroke":"#22c55e","strokeWidth":2,"dash_array":"","d":"M 225 200 C 220 250, 220 300, 250 350 C 280 400, 350 400, 380 350 C 410 300, 420 250, 400 200 C 380 150, 300 120, 225 200 Z"},"style":{"fill":"rgba(76, 201, 240, 0.1)","stroke":"#22c55e","strokeWidth":2,"zIndex":10},"children":[],"metadata":{},"visibility":true},"children":[],"metadata":{}},{"id":"el_2_2","type":"SHAPE","component":{"id":"el_comp_2_2","type":"SHAPE","properties":{"shapeType":"path","path_data":"M 200 150 C 200 100, 300 80, 400 100 C 500 120, 600 100, 650 150","stroke_width":3,"animation_action":"slide_right","stroke":"#ef4444","fill":"none","strokeWidth":3,"dash_array":"","d":"M 200 150 C 200 100, 300 80, 400 100 C 500 120, 600 100, 650 150"},"style":{"fill":"none","stroke":"#ef4444","strokeWidth":3,"zIndex":10},"children":[],"metadata":{},"visibility":true},"children":[],"metadata":{}},{"id":"el_2_3","type":"SHAPE","component":{"id":"el_comp_2_3","type":"SHAPE","properties":{"shapeType":"path","path_data":"M 650 150 C 700 200, 750 300, 650 400 C 550 500, 400 550, 300 500 C 200 450, 150 350, 200 200","stroke_width":3,"animation_action":"scale_up","stroke":"#f97316","fill":"none","strokeWidth":3,"dash_array":"","d":"M 650 150 C 700 200, 750 300, 650 400 C 550 500, 400 550, 300 500 C 200 450, 150 350, 200 200"},"style":{"fill":"none","stroke":"#f97316","strokeWidth":3,"zIndex":10},"children":[],"metadata":{},"visibility":true},"children":[],"metadata":{}},{"id":"el_2_4","type":"SHAPE","component":{"id":"el_comp_2_4","type":"SHAPE","properties":{"shapeType":"path","path_data":"M 300 500 C 350 550, 450 600, 550 550 C 650 500, 700 450, 700 400 L 650 400","stroke_width":3,"animation_action":"slide_left","stroke":"#facc15","fill":"none","strokeWidth":3,"dash_array":"","d":"M 300 500 C 350 550, 450 600, 550 550 C 650 500, 700 450, 700 400 L 650 400"},"style":{"fill":"none","stroke":"#facc15","strokeWidth":3,"zIndex":10},"children":[],"metadata":{},"visibility":true},"children":[],"metadata":{}},{"id":"el_2_5","type":"TEXT","component":{"id":"el_comp_2_5","type":"TEXT","properties":{"text":"Esophagus","x":680,"y":140},"style":{"fontFamily":"Inter","fontSize":"16px","color":"#FFFFFF","zIndex":10},"children":[],"metadata":{},"visibility":true},"children":[],"metadata":{}},{"id":"el_2_6","type":"TEXT","component":{"id":"el_comp_2_6","type":"TEXT","properties":{"text":"Stomach","x":750,"y":300},"style":{"fontFamily":"Inter","fontSize":"16px","color":"#FFFFFF","zIndex":10},"children":[],"metadata":{},"visibility":true},"children":[],"metadata":{}},{"id":"el_2_7","type":"TEXT","component":{"id":"el_comp_2_7","type":"TEXT","properties":{"text":"Small Intestine","x":480,"y":580},"style":{"fontFamily":"Inter","fontSize":"16px","color":"#FFFFFF","zIndex":10},"children":[],"metadata":{},"visibility":true},"children":[],"metadata":{}},{"id":"el_2_8","type":"TEXT","component":{"id":"el_comp_2_8","type":"TEXT","properties":{"text":"Large Intestine","x":780,"y":450},"style":{"fontFamily":"Inter","fontSize":"16px","color":"#FFFFFF","zIndex":10},"children":[],"metadata":{},"visibility":true},"children":[],"metadata":{}},{"id":"el_2_9","type":"TEXT","component":{"id":"el_comp_2_9","type":"TEXT","properties":{"text":"Mouth","x":150,"y":130},"style":{"fontFamily":"Inter","fontSize":"16px","color":"#FFFFFF","zIndex":10},"children":[],"metadata":{},"visibility":true},"children":[],"metadata":{}}],"metadata":{}}],"timeline":{"animation_style":"stagger_in","animation_action":"none","audio_url":"./scene_2.wav","audio_asset":{"id":"scene_audio_2","provider":"LocalPNGProvider","path":"./scene_2.wav","format":"wav","dimensions":{"width":0,"height":0},"metadata":{},"quality":"medium","source":"local","license":"proprietary","status":"resolved","future_cache_info":{}},"durationInFrames":null},"camera":{"camera_id":"cam_0h2mypprt","position":{"x":640,"y":360},"target":null,"zoom":1,"rotation":0,"viewport":{"width":1280,"height":720},"anchor":{"x":0.5,"y":0.5},"padding":0,"mode":"STATIC","timeline":[],"metadata":{},"future_constraints":{}},"layout":{"layout_id":"lay_wvt4x1o13","layout_type":"FREE","constraints":null,"alignment":"CENTER","padding":{"top":0,"left":0,"bottom":0,"right":0},"margin":{"top":0,"left":0,"bottom":0,"right":0},"spacing":0,"safe_area":null,"responsive":true,"metadata":{}},"focuses":[],"theme_id":"default","template_data":{"title":"The Alimentary Canal: The Main Pathway","elements":[{"type":"path","path_data":"M 200 150 L 250 150 C 270 150, 270 200, 250 200 L 200 200 C 180 200, 180 150, 200 150 Z","stroke_color":"#4ade80","stroke_width":2,"fill":"rgba(76, 201, 240, 0.1)"},{"type":"path","path_data":"M 225 200 C 220 250, 220 300, 250 350 C 280 400, 350 400, 380 350 C 410 300, 420 250, 400 200 C 380 150, 300 120, 225 200 Z","stroke_color":"#22c55e","stroke_width":2,"fill":"rgba(76, 201, 240, 0.1)"},{"type":"path","path_data":"M 200 150 C 200 100, 300 80, 400 100 C 500 120, 600 100, 650 150","stroke_color":"#ef4444","stroke_width":3,"animation_action":"slide_right"},{"type":"path","path_data":"M 650 150 C 700 200, 750 300, 650 400 C 550 500, 400 550, 300 500 C 200 450, 150 350, 200 200","stroke_color":"#f97316","stroke_width":3,"animation_action":"scale_up"},{"type":"path","path_data":"M 300 500 C 350 550, 450 600, 550 550 C 650 500, 700 450, 700 400 L 650 400","stroke_color":"#facc15","stroke_width":3,"animation_action":"slide_left"},{"type":"text_overlay","position":{"x":680,"y":140},"text":"Esophagus"},{"type":"text_overlay","position":{"x":750,"y":300},"text":"Stomach"},{"type":"text_overlay","position":{"x":480,"y":580},"text":"Small Intestine"},{"type":"text_overlay","position":{"x":780,"y":450},"text":"Large Intestine"},{"type":"text_overlay","position":{"x":150,"y":130},"text":"Mouth"}],"animation_style":"stagger_in"},"audio_url":"./scene_2.wav","durationInFrames":null,"start":21.75,"duration":19.05},{"scene_no":3,"template_id":"illustrated_scene","teacher_script":"Digestion starts in your mouth! Chewing mechanically breaks down food, while saliva, containing enzymes like amylase, begins chemical digestion of carbohydrates. Once swallowed, a muscular wave called peristalsis gently pushes the food down the esophagus towards the stomach.","metadata":{"title":"Mouth & Esophagus: The First Steps","description":"","learning_objective":"Describe mechanical and chemical digestion in the mouth.","concept_importance":"medium","instruction_type":"Process Detail","difficulty":"beginner","teaching_strategy":"Step-by-step Visual","reinforcement_level":"medium","quiz_hints":"What two types of digestion occur in the mouth?","analytics_tags":"mouth, esophagus, chewing, saliva, peristalsis"},"nodes":[{"id":"title_3","type":"TEXT","component":{"id":"title_comp_3","type":"TEXT","properties":{"text":"Mouth & Esophagus: The First Steps"},"style":{"fontFamily":"Inter","fontSize":"16px","color":"#FFFFFF","zIndex":10},"children":[],"metadata":{},"visibility":true},"children":[],"metadata":{}},{"id":"canvas_3","type":"SVG","component":{"id":"canvas_comp_3","type":"SVG","properties":{"color":"transparent","viewBox":"0 0 1280 720"},"style":{"width":"1280px","height":"720px","position":"absolute","top":"0","left":"0","zIndex":10},"children":[{"id":"el_comp_3_0","type":"SHAPE","properties":{"shapeType":"path","path_data":"M 150 300 C 180 250, 250 220, 300 250 C 350 280, 380 320, 350 350 C 320 380, 250 380, 200 350 C 170 320, 150 300, 150 300 Z","stroke_width":2,"fill":"rgba(251, 191, 36, 0.1)","stroke":"#f97316","strokeWidth":2,"dash_array":"","d":"M 150 300 C 180 250, 250 220, 300 250 C 350 280, 380 320, 350 350 C 320 380, 250 380, 200 350 C 170 320, 150 300, 150 300 Z"},"style":{"fill":"rgba(251, 191, 36, 0.1)","stroke":"#f97316","strokeWidth":2,"zIndex":10},"children":[],"metadata":{},"visibility":true},{"id":"el_comp_3_1","type":"SHAPE","properties":{"shapeType":"circle","cx":250,"cy":300,"r":20,"fill":"#ef4444","animation_action":"fall","stroke":"#ffffff","strokeWidth":2,"dash_array":"","d":"","path_data":""},"style":{"fill":"#ef4444","stroke":"#ffffff","strokeWidth":2,"zIndex":10},"children":[],"metadata":{},"visibility":true},{"id":"el_comp_3_2","type":"SHAPE","properties":{"shapeType":"path","path_data":"M 250 280 L 250 100","stroke_width":50,"fill":"none","stroke_linecap":"round","stroke":"#22c55e","strokeWidth":50,"dash_array":"","d":"M 250 280 L 250 100"},"style":{"fill":"none","stroke":"#22c55e","strokeWidth":50,"zIndex":10},"children":[],"metadata":{},"visibility":true},{"id":"el_comp_3_3","type":"SHAPE","properties":{"shapeType":"path","path_data":"M 250 280 C 270 250, 270 200, 250 150 C 230 100, 230 50, 250 20","stroke_width":10,"animation_action":"slide_right","stroke":"#3b82f6","fill":"none","strokeWidth":10,"dash_array":"","d":"M 250 280 C 270 250, 270 200, 250 150 C 230 100, 230 50, 250 20"},"style":{"fill":"none","stroke":"#3b82f6","strokeWidth":10,"zIndex":10},"children":[],"metadata":{},"visibility":true},{"id":"el_comp_3_4","type":"TEXT","properties":{"text":"Mouth (Chewing & Saliva)","x":100,"y":300},"style":{"fontFamily":"Inter","fontSize":"16px","color":"#FFFFFF","zIndex":10},"children":[],"metadata":{},"visibility":true},{"id":"el_comp_3_5","type":"TEXT","properties":{"text":"Esophagus (Peristalsis)","x":280,"y":120},"style":{"fontFamily":"Inter","fontSize":"16px","color":"#FFFFFF","zIndex":10},"children":[],"metadata":{},"visibility":true},{"id":"el_comp_3_6","type":"TEXT","properties":{"text":"Food Bolus","x":240,"y":280},"style":{"fontFamily":"Inter","fontSize":"16px","color":"#FFFFFF","zIndex":10},"children":[],"metadata":{},"visibility":true},{"id":"el_comp_3_7","type":"SHAPE","properties":{"shapeType":"path","path_data":"M 200 300 Q 220 280, 240 300 Q 260 320, 280 300","stroke_width":2,"stroke_dasharray":"5,5","animation_action":"rise","stroke":"#3b82f6","fill":"none","strokeWidth":2,"dash_array":"5,5","d":"M 200 300 Q 220 280, 240 300 Q 260 320, 280 300"},"style":{"fill":"none","stroke":"#3b82f6","strokeWidth":2,"zIndex":10},"children":[],"metadata":{},"visibility":true}],"metadata":{},"visibility":true},"children":[{"id":"el_3_0","type":"SHAPE","component":{"id":"el_comp_3_0","type":"SHAPE","properties":{"shapeType":"path","path_data":"M 150 300 C 180 250, 250 220, 300 250 C 350 280, 380 320, 350 350 C 320 380, 250 380, 200 350 C 170 320, 150 300, 150 300 Z","stroke_width":2,"fill":"rgba(251, 191, 36, 0.1)","stroke":"#f97316","strokeWidth":2,"dash_array":"","d":"M 150 300 C 180 250, 250 220, 300 250 C 350 280, 380 320, 350 350 C 320 380, 250 380, 200 350 C 170 320, 150 300, 150 300 Z"},"style":{"fill":"rgba(251, 191, 36, 0.1)","stroke":"#f97316","strokeWidth":2,"zIndex":10},"children":[],"metadata":{},"visibility":true},"children":[],"metadata":{}},{"id":"el_3_1","type":"SHAPE","component":{"id":"el_comp_3_1","type":"SHAPE","properties":{"shapeType":"circle","cx":250,"cy":300,"r":20,"fill":"#ef4444","animation_action":"fall","stroke":"#ffffff","strokeWidth":2,"dash_array":"","d":"","path_data":""},"style":{"fill":"#ef4444","stroke":"#ffffff","strokeWidth":2,"zIndex":10},"children":[],"metadata":{},"visibility":true},"children":[],"metadata":{}},{"id":"el_3_2","type":"SHAPE","component":{"id":"el_comp_3_2","type":"SHAPE","properties":{"shapeType":"path","path_data":"M 250 280 L 250 100","stroke_width":50,"fill":"none","stroke_linecap":"round","stroke":"#22c55e","strokeWidth":50,"dash_array":"","d":"M 250 280 L 250 100"},"style":{"fill":"none","stroke":"#22c55e","strokeWidth":50,"zIndex":10},"children":[],"metadata":{},"visibility":true},"children":[],"metadata":{}},{"id":"el_3_3","type":"SHAPE","component":{"id":"el_comp_3_3","type":"SHAPE","properties":{"shapeType":"path","path_data":"M 250 280 C 270 250, 270 200, 250 150 C 230 100, 230 50, 250 20","stroke_width":10,"animation_action":"slide_right","stroke":"#3b82f6","fill":"none","strokeWidth":10,"dash_array":"","d":"M 250 280 C 270 250, 270 200, 250 150 C 230 100, 230 50, 250 20"},"style":{"fill":"none","stroke":"#3b82f6","strokeWidth":10,"zIndex":10},"children":[],"metadata":{},"visibility":true},"children":[],"metadata":{}},{"id":"el_3_4","type":"TEXT","component":{"id":"el_comp_3_4","type":"TEXT","properties":{"text":"Mouth (Chewing & Saliva)","x":100,"y":300},"style":{"fontFamily":"Inter","fontSize":"16px","color":"#FFFFFF","zIndex":10},"children":[],"metadata":{},"visibility":true},"children":[],"metadata":{}},{"id":"el_3_5","type":"TEXT","component":{"id":"el_comp_3_5","type":"TEXT","properties":{"text":"Esophagus (Peristalsis)","x":280,"y":120},"style":{"fontFamily":"Inter","fontSize":"16px","color":"#FFFFFF","zIndex":10},"children":[],"metadata":{},"visibility":true},"children":[],"metadata":{}},{"id":"el_3_6","type":"TEXT","component":{"id":"el_comp_3_6","type":"TEXT","properties":{"text":"Food Bolus","x":240,"y":280},"style":{"fontFamily":"Inter","fontSize":"16px","color":"#FFFFFF","zIndex":10},"children":[],"metadata":{},"visibility":true},"children":[],"metadata":{}},{"id":"el_3_7","type":"SHAPE","component":{"id":"el_comp_3_7","type":"SHAPE","properties":{"shapeType":"path","path_data":"M 200 300 Q 220 280, 240 300 Q 260 320, 280 300","stroke_width":2,"stroke_dasharray":"5,5","animation_action":"rise","stroke":"#3b82f6","fill":"none","strokeWidth":2,"dash_array":"5,5","d":"M 200 300 Q 220 280, 240 300 Q 260 320, 280 300"},"style":{"fill":"none","stroke":"#3b82f6","strokeWidth":2,"zIndex":10},"children":[],"metadata":{},"visibility":true},"children":[],"metadata":{}}],"metadata":{}}],"timeline":{"animation_style":"cascade","animation_action":"none","audio_url":"./scene_3.wav","audio_asset":{"id":"scene_audio_3","provider":"LocalPNGProvider","path":"./scene_3.wav","format":"wav","dimensions":{"width":0,"height":0},"metadata":{},"quality":"medium","source":"local","license":"proprietary","status":"resolved","future_cache_info":{}},"durationInFrames":null},"camera":{"camera_id":"cam_0kho4zd5v","position":{"x":640,"y":360},"target":null,"zoom":1,"rotation":0,"viewport":{"width":1280,"height":720},"anchor":{"x":0.5,"y":0.5},"padding":0,"mode":"STATIC","timeline":[],"metadata":{},"future_constraints":{}},"layout":{"layout_id":"lay_tc87d6sef","layout_type":"FREE","constraints":null,"alignment":"CENTER","padding":{"top":0,"left":0,"bottom":0,"right":0},"margin":{"top":0,"left":0,"bottom":0,"right":0},"spacing":0,"safe_area":null,"responsive":true,"metadata":{}},"focuses":[],"theme_id":"default","template_data":{"title":"Mouth & Esophagus: The First Steps","elements":[{"type":"path","path_data":"M 150 300 C 180 250, 250 220, 300 250 C 350 280, 380 320, 350 350 C 320 380, 250 380, 200 350 C 170 320, 150 300, 150 300 Z","stroke_color":"#f97316","stroke_width":2,"fill":"rgba(251, 191, 36, 0.1)"},{"type":"circle","cx":250,"cy":300,"r":20,"fill":"#ef4444","animation_action":"fall"},{"type":"path","path_data":"M 250 280 L 250 100","stroke_color":"#22c55e","stroke_width":50,"fill":"none","stroke_linecap":"round"},{"type":"path","path_data":"M 250 280 C 270 250, 270 200, 250 150 C 230 100, 230 50, 250 20","stroke_color":"#3b82f6","stroke_width":10,"animation_action":"slide_right"},{"type":"text_overlay","position":{"x":100,"y":300},"text":"Mouth (Chewing & Saliva)"},{"type":"text_overlay","position":{"x":280,"y":120},"text":"Esophagus (Peristalsis)"},{"type":"text_overlay","position":{"x":240,"y":280},"text":"Food Bolus"},{"type":"path","path_data":"M 200 300 Q 220 280, 240 300 Q 260 320, 280 300","stroke_color":"#3b82f6","stroke_width":2,"stroke_dasharray":"5,5","animation_action":"rise"}],"animation_style":"cascade"},"audio_url":"./scene_3.wav","durationInFrames":null,"start":40.8,"duration":18.6},{"scene_no":4,"template_id":"illustrated_scene","teacher_script":"The stomach is a muscular, J-shaped organ that acts like a powerful blender. It churns food with strong gastric juices, containing hydrochloric acid and pepsin, breaking down proteins. This turns your meal into a thick, acidic liquid called chyme.","metadata":{"title":"The Stomach: Churning & Acid Breakdown","description":"","learning_objective":"Describe the stomach's role in protein digestion and chyme formation.","concept_importance":"high","instruction_type":"Core Concept","difficulty":"intermediate","teaching_strategy":"Process Illustration","reinforcement_level":"high","quiz_hints":"What is chyme and where is it formed?","analytics_tags":"stomach, chyme, gastric juice, pepsin"},"nodes":[{"id":"title_4","type":"TEXT","component":{"id":"title_comp_4","type":"TEXT","properties":{"text":"The Stomach: Churning & Acid Breakdown"},"style":{"fontFamily":"Inter","fontSize":"16px","color":"#FFFFFF","zIndex":10},"children":[],"metadata":{},"visibility":true},"children":[],"metadata":{}},{"id":"canvas_4","type":"SVG","component":{"id":"canvas_comp_4","type":"SVG","properties":{"color":"transparent","viewBox":"0 0 1280 720"},"style":{"width":"1280px","height":"720px","position":"absolute","top":"0","left":"0","zIndex":10},"children":[{"id":"el_comp_4_0","type":"SHAPE","properties":{"shapeType":"path","path_data":"M 480 180 C 500 240, 480 320, 520 380 C 580 420, 720 380, 700 260 C 680 180, 580 150, 480 180 Z","stroke_width":3,"fill":"rgba(16, 185, 129, 0.05)","stroke":"#10b981","strokeWidth":3,"dash_array":"","d":"M 480 180 C 500 240, 480 320, 520 380 C 580 420, 720 380, 700 260 C 680 180, 580 150, 480 180 Z"},"style":{"fill":"rgba(16, 185, 129, 0.05)","stroke":"#10b981","strokeWidth":3,"zIndex":10},"children":[],"metadata":{},"visibility":true},{"id":"el_comp_4_1","type":"SHAPE","properties":{"shapeType":"circle","cx":550,"cy":300,"r":8,"fill":"#fbbf24","animation_action":"spin","stroke":"#ffffff","strokeWidth":2,"dash_array":"","d":"","path_data":""},"style":{"fill":"#fbbf24","stroke":"#ffffff","strokeWidth":2,"zIndex":10},"children":[],"metadata":{},"visibility":true},{"id":"el_comp_4_2","type":"SHAPE","properties":{"shapeType":"circle","cx":620,"cy":280,"r":6,"fill":"#fbbf24","animation_action":"spin","stroke":"#ffffff","strokeWidth":2,"dash_array":"","d":"","path_data":""},"style":{"fill":"#fbbf24","stroke":"#ffffff","strokeWidth":2,"zIndex":10},"children":[],"metadata":{},"visibility":true},{"id":"el_comp_4_3","type":"SHAPE","properties":{"shapeType":"path","path_data":"M 550 300 L 570 320 M 570 300 L 550 320","stroke_width":2,"animation_action":"rise","stroke":"#ef4444","fill":"none","strokeWidth":2,"dash_array":"","d":"M 550 300 L 570 320 M 570 300 L 550 320"},"style":{"fill":"none","stroke":"#ef4444","strokeWidth":2,"zIndex":10},"children":[],"metadata":{},"visibility":true},{"id":"el_comp_4_4","type":"SHAPE","properties":{"shapeType":"path","path_data":"M 600 300 L 620 320 M 620 300 L 600 320","stroke_width":2,"animation_action":"rise","stroke":"#ef4444","fill":"none","strokeWidth":2,"dash_array":"","d":"M 600 300 L 620 320 M 620 300 L 600 320"},"style":{"fill":"none","stroke":"#ef4444","strokeWidth":2,"zIndex":10},"children":[],"metadata":{},"visibility":true},{"id":"el_comp_4_5","type":"TEXT","properties":{"text":"Esophagus","x":400,"y":150},"style":{"fontFamily":"Inter","fontSize":"16px","color":"#FFFFFF","zIndex":10},"children":[],"metadata":{},"visibility":true},{"id":"el_comp_4_6","type":"TEXT","properties":{"text":"Acid & Chyme Churning","x":600,"y":300},"style":{"fontFamily":"Inter","fontSize":"16px","color":"#FFFFFF","zIndex":10},"children":[],"metadata":{},"visibility":true},{"id":"el_comp_4_7","type":"TEXT","properties":{"text":"Duodenum (Small Intestine)","x":750,"y":350},"style":{"fontFamily":"Inter","fontSize":"16px","color":"#FFFFFF","zIndex":10},"children":[],"metadata":{},"visibility":true},{"id":"el_comp_4_8","type":"SHAPE","properties":{"shapeType":"path","path_data":"M 500 250 A 50 50 0 0 1 500 350","stroke_width":2,"stroke_dasharray":"3,3","animation_action":"slide_right","stroke":"#3b82f6","fill":"none","strokeWidth":2,"dash_array":"3,3","d":"M 500 250 A 50 50 0 0 1 500 350"},"style":{"fill":"none","stroke":"#3b82f6","strokeWidth":2,"zIndex":10},"children":[],"metadata":{},"visibility":true},{"id":"el_comp_4_9","type":"SHAPE","properties":{"shapeType":"path","path_data":"M 680 280 A 50 50 0 0 0 680 380","stroke_width":2,"stroke_dasharray":"3,3","animation_action":"slide_left","stroke":"#3b82f6","fill":"none","strokeWidth":2,"dash_array":"3,3","d":"M 680 280 A 50 50 0 0 0 680 380"},"style":{"fill":"none","stroke":"#3b82f6","strokeWidth":2,"zIndex":10},"children":[],"metadata":{},"visibility":true}],"metadata":{},"visibility":true},"children":[{"id":"el_4_0","type":"SHAPE","component":{"id":"el_comp_4_0","type":"SHAPE","properties":{"shapeType":"path","path_data":"M 480 180 C 500 240, 480 320, 520 380 C 580 420, 720 380, 700 260 C 680 180, 580 150, 480 180 Z","stroke_width":3,"fill":"rgba(16, 185, 129, 0.05)","stroke":"#10b981","strokeWidth":3,"dash_array":"","d":"M 480 180 C 500 240, 480 320, 520 380 C 580 420, 720 380, 700 260 C 680 180, 580 150, 480 180 Z"},"style":{"fill":"rgba(16, 185, 129, 0.05)","stroke":"#10b981","strokeWidth":3,"zIndex":10},"children":[],"metadata":{},"visibility":true},"children":[],"metadata":{}},{"id":"el_4_1","type":"SHAPE","component":{"id":"el_comp_4_1","type":"SHAPE","properties":{"shapeType":"circle","cx":550,"cy":300,"r":8,"fill":"#fbbf24","animation_action":"spin","stroke":"#ffffff","strokeWidth":2,"dash_array":"","d":"","path_data":""},"style":{"fill":"#fbbf24","stroke":"#ffffff","strokeWidth":2,"zIndex":10},"children":[],"metadata":{},"visibility":true},"children":[],"metadata":{}},{"id":"el_4_2","type":"SHAPE","component":{"id":"el_comp_4_2","type":"SHAPE","properties":{"shapeType":"circle","cx":620,"cy":280,"r":6,"fill":"#fbbf24","animation_action":"spin","stroke":"#ffffff","strokeWidth":2,"dash_array":"","d":"","path_data":""},"style":{"fill":"#fbbf24","stroke":"#ffffff","strokeWidth":2,"zIndex":10},"children":[],"metadata":{},"visibility":true},"children":[],"metadata":{}},{"id":"el_4_3","type":"SHAPE","component":{"id":"el_comp_4_3","type":"SHAPE","properties":{"shapeType":"path","path_data":"M 550 300 L 570 320 M 570 300 L 550 320","stroke_width":2,"animation_action":"rise","stroke":"#ef4444","fill":"none","strokeWidth":2,"dash_array":"","d":"M 550 300 L 570 320 M 570 300 L 550 320"},"style":{"fill":"none","stroke":"#ef4444","strokeWidth":2,"zIndex":10},"children":[],"metadata":{},"visibility":true},"children":[],"metadata":{}},{"id":"el_4_4","type":"SHAPE","component":{"id":"el_comp_4_4","type":"SHAPE","properties":{"shapeType":"path","path_data":"M 600 300 L 620 320 M 620 300 L 600 320","stroke_width":2,"animation_action":"rise","stroke":"#ef4444","fill":"none","strokeWidth":2,"dash_array":"","d":"M 600 300 L 620 320 M 620 300 L 600 320"},"style":{"fill":"none","stroke":"#ef4444","strokeWidth":2,"zIndex":10},"children":[],"metadata":{},"visibility":true},"children":[],"metadata":{}},{"id":"el_4_5","type":"TEXT","component":{"id":"el_comp_4_5","type":"TEXT","properties":{"text":"Esophagus","x":400,"y":150},"style":{"fontFamily":"Inter","fontSize":"16px","color":"#FFFFFF","zIndex":10},"children":[],"metadata":{},"visibility":true},"children":[],"metadata":{}},{"id":"el_4_6","type":"TEXT","component":{"id":"el_comp_4_6","type":"TEXT","properties":{"text":"Acid & Chyme Churning","x":600,"y":300},"style":{"fontFamily":"Inter","fontSize":"16px","color":"#FFFFFF","zIndex":10},"children":[],"metadata":{},"visibility":true},"children":[],"metadata":{}},{"id":"el_4_7","type":"TEXT","component":{"id":"el_comp_4_7","type":"TEXT","properties":{"text":"Duodenum (Small Intestine)","x":750,"y":350},"style":{"fontFamily":"Inter","fontSize":"16px","color":"#FFFFFF","zIndex":10},"children":[],"metadata":{},"visibility":true},"children":[],"metadata":{}},{"id":"el_4_8","type":"SHAPE","component":{"id":"el_comp_4_8","type":"SHAPE","properties":{"shapeType":"path","path_data":"M 500 250 A 50 50 0 0 1 500 350","stroke_width":2,"stroke_dasharray":"3,3","animation_action":"slide_right","stroke":"#3b82f6","fill":"none","strokeWidth":2,"dash_array":"3,3","d":"M 500 250 A 50 50 0 0 1 500 350"},"style":{"fill":"none","stroke":"#3b82f6","strokeWidth":2,"zIndex":10},"children":[],"metadata":{},"visibility":true},"children":[],"metadata":{}},{"id":"el_4_9","type":"SHAPE","component":{"id":"el_comp_4_9","type":"SHAPE","properties":{"shapeType":"path","path_data":"M 680 280 A 50 50 0 0 0 680 380","stroke_width":2,"stroke_dasharray":"3,3","animation_action":"slide_left","stroke":"#3b82f6","fill":"none","strokeWidth":2,"dash_array":"3,3","d":"M 680 280 A 50 50 0 0 0 680 380"},"style":{"fill":"none","stroke":"#3b82f6","strokeWidth":2,"zIndex":10},"children":[],"metadata":{},"visibility":true},"children":[],"metadata":{}}],"metadata":{}}],"timeline":{"animation_style":"spring_pop","animation_action":"none","audio_url":"./scene_4.wav","audio_asset":{"id":"scene_audio_4","provider":"LocalPNGProvider","path":"./scene_4.wav","format":"wav","dimensions":{"width":0,"height":0},"metadata":{},"quality":"medium","source":"local","license":"proprietary","status":"resolved","future_cache_info":{}},"durationInFrames":null},"camera":{"camera_id":"cam_vncyvkqt1","position":{"x":640,"y":360},"target":null,"zoom":1,"rotation":0,"viewport":{"width":1280,"height":720},"anchor":{"x":0.5,"y":0.5},"padding":0,"mode":"STATIC","timeline":[],"metadata":{},"future_constraints":{}},"layout":{"layout_id":"lay_o40uja802","layout_type":"FREE","constraints":null,"alignment":"CENTER","padding":{"top":0,"left":0,"bottom":0,"right":0},"margin":{"top":0,"left":0,"bottom":0,"right":0},"spacing":0,"safe_area":null,"responsive":true,"metadata":{}},"focuses":[],"theme_id":"default","template_data":{"title":"The Stomach: Churning & Acid Breakdown","elements":[{"type":"path","path_data":"M 480 180 C 500 240, 480 320, 520 380 C 580 420, 720 380, 700 260 C 680 180, 580 150, 480 180 Z","stroke_color":"#10b981","stroke_width":3,"fill":"rgba(16, 185, 129, 0.05)"},{"type":"circle","cx":550,"cy":300,"r":8,"fill":"#fbbf24","animation_action":"spin"},{"type":"circle","cx":620,"cy":280,"r":6,"fill":"#fbbf24","animation_action":"spin"},{"type":"path","path_data":"M 550 300 L 570 320 M 570 300 L 550 320","stroke_color":"#ef4444","stroke_width":2,"animation_action":"rise"},{"type":"path","path_data":"M 600 300 L 620 320 M 620 300 L 600 320","stroke_color":"#ef4444","stroke_width":2,"animation_action":"rise"},{"type":"text_overlay","position":{"x":400,"y":150},"text":"Esophagus"},{"type":"text_overlay","position":{"x":600,"y":300},"text":"Acid & Chyme Churning"},{"type":"text_overlay","position":{"x":750,"y":350},"text":"Duodenum (Small Intestine)"},{"type":"path","path_data":"M 500 250 A 50 50 0 0 1 500 350","stroke_color":"#3b82f6","stroke_width":2,"stroke_dasharray":"3,3","animation_action":"slide_right"},{"type":"path","path_data":"M 680 280 A 50 50 0 0 0 680 380","stroke_color":"#3b82f6","stroke_width":2,"stroke_dasharray":"3,3","animation_action":"slide_left"}],"animation_style":"spring_pop"},"audio_url":"./scene_4.wav","durationInFrames":null,"start":59.4,"duration":19.05},{"scene_no":5,"template_id":"illustrated_scene","teacher_script":"The small intestine is where most chemical digestion and nutrient absorption occur. Its incredible length, coupled with tiny finger-like projections called villi and microvilli, creates a massive surface area to efficiently absorb digested nutrients into the bloodstream.","metadata":{"title":"Small Intestine: Nutrient Absorption Powerhouse","description":"","learning_objective":"Explain the role of villi in nutrient absorption.","concept_importance":"high","instruction_type":"Core Concept","difficulty":"intermediate","teaching_strategy":"Detail Explanation","reinforcement_level":"high","quiz_hints":"What structures increase surface area in the small intestine?","analytics_tags":"small intestine, absorption, villi, microvilli, nutrients"},"nodes":[{"id":"title_5","type":"TEXT","component":{"id":"title_comp_5","type":"TEXT","properties":{"text":"Small Intestine: Nutrient Absorption Powerhouse"},"style":{"fontFamily":"Inter","fontSize":"16px","color":"#FFFFFF","zIndex":10},"children":[],"metadata":{},"visibility":true},"children":[],"metadata":{}},{"id":"canvas_5","type":"SVG","component":{"id":"canvas_comp_5","type":"SVG","properties":{"color":"transparent","viewBox":"0 0 1280 720"},"style":{"width":"1280px","height":"720px","position":"absolute","top":"0","left":"0","zIndex":10},"children":[{"id":"el_comp_5_0","type":"SHAPE","properties":{"shapeType":"path","path_data":"M 200 300 C 250 200, 350 200, 400 300 C 450 400, 550 400, 600 300 C 650 200, 750 200, 800 300","stroke_width":5,"fill":"none","stroke":"#facc15","strokeWidth":5,"dash_array":"","d":"M 200 300 C 250 200, 350 200, 400 300 C 450 400, 550 400, 600 300 C 650 200, 750 200, 800 300"},"style":{"fill":"none","stroke":"#facc15","strokeWidth":5,"zIndex":10},"children":[],"metadata":{},"visibility":true},{"id":"el_comp_5_1","type":"SHAPE","properties":{"shapeType":"path","path_data":"M 250 350 C 300 250, 400 250, 450 350 C 500 450, 600 450, 650 350 C 700 250, 800 250, 850 350","stroke_width":5,"fill":"none","stroke":"#facc15","strokeWidth":5,"dash_array":"","d":"M 250 350 C 300 250, 400 250, 450 350 C 500 450, 600 450, 650 350 C 700 250, 800 250, 850 350"},"style":{"fill":"none","stroke":"#facc15","strokeWidth":5,"zIndex":10},"children":[],"metadata":{},"visibility":true},{"id":"el_comp_5_2","type":"SHAPE","properties":{"shapeType":"path","path_data":"M 600 200 L 600 100","stroke_width":2,"stroke":"#3b82f6","fill":"none","strokeWidth":2,"dash_array":"","d":"M 600 200 L 600 100"},"style":{"fill":"none","stroke":"#3b82f6","strokeWidth":2,"zIndex":10},"children":[],"metadata":{},"visibility":true},{"id":"el_comp_5_3","type":"SHAPE","properties":{"shapeType":"path","path_data":"M 610 200 L 610 100","stroke_width":2,"stroke":"#3b82f6","fill":"none","strokeWidth":2,"dash_array":"","d":"M 610 200 L 610 100"},"style":{"fill":"none","stroke":"#3b82f6","strokeWidth":2,"zIndex":10},"children":[],"metadata":{},"visibility":true},{"id":"el_comp_5_4","type":"SHAPE","properties":{"shapeType":"path","path_data":"M 620 200 L 620 100","stroke_width":2,"stroke":"#3b82f6","fill":"none","strokeWidth":2,"dash_array":"","d":"M 620 200 L 620 100"},"style":{"fill":"none","stroke":"#3b82f6","strokeWidth":2,"zIndex":10},"children":[],"metadata":{},"visibility":true},{"id":"el_comp_5_5","type":"SHAPE","properties":{"shapeType":"circle","cx":610,"cy":120,"r":5,"fill":"#ef4444","animation_action":"rise","stroke":"#ffffff","strokeWidth":2,"dash_array":"","d":"","path_data":""},"style":{"fill":"#ef4444","stroke":"#ffffff","strokeWidth":2,"zIndex":10},"children":[],"metadata":{},"visibility":true},{"id":"el_comp_5_6","type":"TEXT","properties":{"text":"Villi for absorption","x":550,"y":70},"style":{"fontFamily":"Inter","fontSize":"16px","color":"#FFFFFF","zIndex":10},"children":[],"metadata":{},"visibility":true},{"id":"el_comp_5_7","type":"TEXT","properties":{"text":"Small Intestine (6 meters coiled!)","x":500,"y":480},"style":{"fontFamily":"Inter","fontSize":"16px","color":"#FFFFFF","zIndex":10},"children":[],"metadata":{},"visibility":true},{"id":"el_comp_5_8","type":"SHAPE","properties":{"shapeType":"path","path_data":"M 700 300 Q 720 280, 740 300 Q 760 320, 780 300","stroke_width":2,"stroke_dasharray":"5,5","animation_action":"slide_right","stroke":"#22c55e","fill":"none","strokeWidth":2,"dash_array":"5,5","d":"M 700 300 Q 720 280, 740 300 Q 760 320, 780 300"},"style":{"fill":"none","stroke":"#22c55e","strokeWidth":2,"zIndex":10},"children":[],"metadata":{},"visibility":true}],"metadata":{},"visibility":true},"children":[{"id":"el_5_0","type":"SHAPE","component":{"id":"el_comp_5_0","type":"SHAPE","properties":{"shapeType":"path","path_data":"M 200 300 C 250 200, 350 200, 400 300 C 450 400, 550 400, 600 300 C 650 200, 750 200, 800 300","stroke_width":5,"fill":"none","stroke":"#facc15","strokeWidth":5,"dash_array":"","d":"M 200 300 C 250 200, 350 200, 400 300 C 450 400, 550 400, 600 300 C 650 200, 750 200, 800 300"},"style":{"fill":"none","stroke":"#facc15","strokeWidth":5,"zIndex":10},"children":[],"metadata":{},"visibility":true},"children":[],"metadata":{}},{"id":"el_5_1","type":"SHAPE","component":{"id":"el_comp_5_1","type":"SHAPE","properties":{"shapeType":"path","path_data":"M 250 350 C 300 250, 400 250, 450 350 C 500 450, 600 450, 650 350 C 700 250, 800 250, 850 350","stroke_width":5,"fill":"none","stroke":"#facc15","strokeWidth":5,"dash_array":"","d":"M 250 350 C 300 250, 400 250, 450 350 C 500 450, 600 450, 650 350 C 700 250, 800 250, 850 350"},"style":{"fill":"none","stroke":"#facc15","strokeWidth":5,"zIndex":10},"children":[],"metadata":{},"visibility":true},"children":[],"metadata":{}},{"id":"el_5_2","type":"SHAPE","component":{"id":"el_comp_5_2","type":"SHAPE","properties":{"shapeType":"path","path_data":"M 600 200 L 600 100","stroke_width":2,"stroke":"#3b82f6","fill":"none","strokeWidth":2,"dash_array":"","d":"M 600 200 L 600 100"},"style":{"fill":"none","stroke":"#3b82f6","strokeWidth":2,"zIndex":10},"children":[],"metadata":{},"visibility":true},"children":[],"metadata":{}},{"id":"el_5_3","type":"SHAPE","component":{"id":"el_comp_5_3","type":"SHAPE","properties":{"shapeType":"path","path_data":"M 610 200 L 610 100","stroke_width":2,"stroke":"#3b82f6","fill":"none","strokeWidth":2,"dash_array":"","d":"M 610 200 L 610 100"},"style":{"fill":"none","stroke":"#3b82f6","strokeWidth":2,"zIndex":10},"children":[],"metadata":{},"visibility":true},"children":[],"metadata":{}},{"id":"el_5_4","type":"SHAPE","component":{"id":"el_comp_5_4","type":"SHAPE","properties":{"shapeType":"path","path_data":"M 620 200 L 620 100","stroke_width":2,"stroke":"#3b82f6","fill":"none","strokeWidth":2,"dash_array":"","d":"M 620 200 L 620 100"},"style":{"fill":"none","stroke":"#3b82f6","strokeWidth":2,"zIndex":10},"children":[],"metadata":{},"visibility":true},"children":[],"metadata":{}},{"id":"el_5_5","type":"SHAPE","component":{"id":"el_comp_5_5","type":"SHAPE","properties":{"shapeType":"circle","cx":610,"cy":120,"r":5,"fill":"#ef4444","animation_action":"rise","stroke":"#ffffff","strokeWidth":2,"dash_array":"","d":"","path_data":""},"style":{"fill":"#ef4444","stroke":"#ffffff","strokeWidth":2,"zIndex":10},"children":[],"metadata":{},"visibility":true},"children":[],"metadata":{}},{"id":"el_5_6","type":"TEXT","component":{"id":"el_comp_5_6","type":"TEXT","properties":{"text":"Villi for absorption","x":550,"y":70},"style":{"fontFamily":"Inter","fontSize":"16px","color":"#FFFFFF","zIndex":10},"children":[],"metadata":{},"visibility":true},"children":[],"metadata":{}},{"id":"el_5_7","type":"TEXT","component":{"id":"el_comp_5_7","type":"TEXT","properties":{"text":"Small Intestine (6 meters coiled!)","x":500,"y":480},"style":{"fontFamily":"Inter","fontSize":"16px","color":"#FFFFFF","zIndex":10},"children":[],"metadata":{},"visibility":true},"children":[],"metadata":{}},{"id":"el_5_8","type":"SHAPE","component":{"id":"el_comp_5_8","type":"SHAPE","properties":{"shapeType":"path","path_data":"M 700 300 Q 720 280, 740 300 Q 760 320, 780 300","stroke_width":2,"stroke_dasharray":"5,5","animation_action":"slide_right","stroke":"#22c55e","fill":"none","strokeWidth":2,"dash_array":"5,5","d":"M 700 300 Q 720 280, 740 300 Q 760 320, 780 300"},"style":{"fill":"none","stroke":"#22c55e","strokeWidth":2,"zIndex":10},"children":[],"metadata":{},"visibility":true},"children":[],"metadata":{}}],"metadata":{}}],"timeline":{"animation_style":"stagger_in","animation_action":"none","audio_url":"./scene_5.wav","audio_asset":{"id":"scene_audio_5","provider":"LocalPNGProvider","path":"./scene_5.wav","format":"wav","dimensions":{"width":0,"height":0},"metadata":{},"quality":"medium","source":"local","license":"proprietary","status":"resolved","future_cache_info":{}},"durationInFrames":null},"camera":{"camera_id":"cam_cowc2nl4d","position":{"x":640,"y":360},"target":null,"zoom":1,"rotation":0,"viewport":{"width":1280,"height":720},"anchor":{"x":0.5,"y":0.5},"padding":0,"mode":"STATIC","timeline":[],"metadata":{},"future_constraints":{}},"layout":{"layout_id":"lay_s0es2bmx9","layout_type":"FREE","constraints":null,"alignment":"CENTER","padding":{"top":0,"left":0,"bottom":0,"right":0},"margin":{"top":0,"left":0,"bottom":0,"right":0},"spacing":0,"safe_area":null,"responsive":true,"metadata":{}},"focuses":[],"theme_id":"default","template_data":{"title":"Small Intestine: Nutrient Absorption Powerhouse","elements":[{"type":"path","path_data":"M 200 300 C 250 200, 350 200, 400 300 C 450 400, 550 400, 600 300 C 650 200, 750 200, 800 300","stroke_color":"#facc15","stroke_width":5,"fill":"none"},{"type":"path","path_data":"M 250 350 C 300 250, 400 250, 450 350 C 500 450, 600 450, 650 350 C 700 250, 800 250, 850 350","stroke_color":"#facc15","stroke_width":5,"fill":"none"},{"type":"path","path_data":"M 600 200 L 600 100","stroke_color":"#3b82f6","stroke_width":2},{"type":"path","path_data":"M 610 200 L 610 100","stroke_color":"#3b82f6","stroke_width":2},{"type":"path","path_data":"M 620 200 L 620 100","stroke_color":"#3b82f6","stroke_width":2},{"type":"circle","cx":610,"cy":120,"r":5,"fill":"#ef4444","animation_action":"rise"},{"type":"text_overlay","position":{"x":550,"y":70},"text":"Villi for absorption"},{"type":"text_overlay","position":{"x":500,"y":480},"text":"Small Intestine (6 meters coiled!)"},{"type":"path","path_data":"M 700 300 Q 720 280, 740 300 Q 760 320, 780 300","stroke_color":"#22c55e","stroke_width":2,"stroke_dasharray":"5,5","animation_action":"slide_right"}],"animation_style":"stagger_in"},"audio_url":"./scene_5.wav","durationInFrames":null,"start":78.45,"duration":18.150000000000002},{"scene_no":6,"template_id":"illustrated_scene","teacher_script":"After the small intestine, any remaining undigested food and water enter the large intestine. Here, excess water is absorbed back into the body, and the remaining waste material is compacted into feces, ready for elimination. It's also home to beneficial bacteria.","metadata":{"title":"Large Intestine: Water Recovery & Waste Formation","description":"","learning_objective":"Understand water absorption and waste formation in the large intestine.","concept_importance":"medium","instruction_type":"Process Detail","difficulty":"intermediate","teaching_strategy":"Functional Diagram","reinforcement_level":"medium","quiz_hints":"What is the primary role of the large intestine?","analytics_tags":"large intestine, colon, water absorption, feces"},"nodes":[{"id":"title_6","type":"TEXT","component":{"id":"title_comp_6","type":"TEXT","properties":{"text":"Large Intestine: Water Recovery & Waste Formation"},"style":{"fontFamily":"Inter","fontSize":"16px","color":"#FFFFFF","zIndex":10},"children":[],"metadata":{},"visibility":true},"children":[],"metadata":{}},{"id":"canvas_6","type":"SVG","component":{"id":"canvas_comp_6","type":"SVG","properties":{"color":"transparent","viewBox":"0 0 1280 720"},"style":{"width":"1280px","height":"720px","position":"absolute","top":"0","left":"0","zIndex":10},"children":[{"id":"el_comp_6_0","type":"SHAPE","properties":{"shapeType":"path","path_data":"M 300 200 Q 250 100, 400 100 C 550 100, 600 150, 600 250 C 600 350, 550 400, 400 400 C 250 400, 200 350, 200 250 C 200 150, 250 100, 400 100","stroke_width":5,"fill":"rgba(34, 197, 94, 0.1)","stroke":"#22c55e","strokeWidth":5,"dash_array":"","d":"M 300 200 Q 250 100, 400 100 C 550 100, 600 150, 600 250 C 600 350, 550 400, 400 400 C 250 400, 200 350, 200 250 C 200 150, 250 100, 400 100"},"style":{"fill":"rgba(34, 197, 94, 0.1)","stroke":"#22c55e","strokeWidth":5,"zIndex":10},"children":[],"metadata":{},"visibility":true},{"id":"el_comp_6_1","type":"TEXT","properties":{"text":"Ascending Colon","x":500,"y":100},"style":{"fontFamily":"Inter","fontSize":"16px","color":"#FFFFFF","zIndex":10},"children":[],"metadata":{},"visibility":true},{"id":"el_comp_6_2","type":"TEXT","properties":{"text":"Descending Colon","x":500,"y":400},"style":{"fontFamily":"Inter","fontSize":"16px","color":"#FFFFFF","zIndex":10},"children":[],"metadata":{},"visibility":true},{"id":"el_comp_6_3","type":"TEXT","properties":{"text":"Transverse Colon","x":400,"y":50},"style":{"fontFamily":"Inter","fontSize":"16px","color":"#FFFFFF","zIndex":10},"children":[],"metadata":{},"visibility":true},{"id":"el_comp_6_4","type":"SHAPE","properties":{"shapeType":"circle","cx":450,"cy":250,"r":10,"fill":"#3b82f6","animation_action":"fall","stroke":"#ffffff","strokeWidth":2,"dash_array":"","d":"","path_data":""},"style":{"fill":"#3b82f6","stroke":"#ffffff","strokeWidth":2,"zIndex":10},"children":[],"metadata":{},"visibility":true},{"id":"el_comp_6_5","type":"SHAPE","properties":{"shapeType":"circle","cx":480,"cy":280,"r":8,"fill":"#3b82f6","animation_action":"fall","stroke":"#ffffff","strokeWidth":2,"dash_array":"","d":"","path_data":""},"style":{"fill":"#3b82f6","stroke":"#ffffff","strokeWidth":2,"zIndex":10},"children":[],"metadata":{},"visibility":true},{"id":"el_comp_6_6","type":"SHAPE","properties":{"shapeType":"path","path_data":"M 450 250 C 430 230, 430 270, 450 250","stroke_width":2,"stroke_dasharray":"3,3","animation_action":"rise","stroke":"#ef4444","fill":"none","strokeWidth":2,"dash_array":"3,3","d":"M 450 250 C 430 230, 430 270, 450 250"},"style":{"fill":"none","stroke":"#ef4444","strokeWidth":2,"zIndex":10},"children":[],"metadata":{},"visibility":true},{"id":"el_comp_6_7","type":"TEXT","properties":{"text":"Water Reabsorption","x":650,"y":250},"style":{"fontFamily":"Inter","fontSize":"16px","color":"#FFFFFF","zIndex":10},"children":[],"metadata":{},"visibility":true},{"id":"el_comp_6_8","type":"SHAPE","properties":{"shapeType":"path","path_data":"M 500 350 L 500 450 L 400 450","stroke_width":5,"animation_action":"slide_left","stroke":"#fbbf24","fill":"none","strokeWidth":5,"dash_array":"","d":"M 500 350 L 500 450 L 400 450"},"style":{"fill":"none","stroke":"#fbbf24","strokeWidth":5,"zIndex":10},"children":[],"metadata":{},"visibility":true},{"id":"el_comp_6_9","type":"TEXT","properties":{"text":"Rectum & Anus","x":350,"y":480},"style":{"fontFamily":"Inter","fontSize":"16px","color":"#FFFFFF","zIndex":10},"children":[],"metadata":{},"visibility":true}],"metadata":{},"visibility":true},"children":[{"id":"el_6_0","type":"SHAPE","component":{"id":"el_comp_6_0","type":"SHAPE","properties":{"shapeType":"path","path_data":"M 300 200 Q 250 100, 400 100 C 550 100, 600 150, 600 250 C 600 350, 550 400, 400 400 C 250 400, 200 350, 200 250 C 200 150, 250 100, 400 100","stroke_width":5,"fill":"rgba(34, 197, 94, 0.1)","stroke":"#22c55e","strokeWidth":5,"dash_array":"","d":"M 300 200 Q 250 100, 400 100 C 550 100, 600 150, 600 250 C 600 350, 550 400, 400 400 C 250 400, 200 350, 200 250 C 200 150, 250 100, 400 100"},"style":{"fill":"rgba(34, 197, 94, 0.1)","stroke":"#22c55e","strokeWidth":5,"zIndex":10},"children":[],"metadata":{},"visibility":true},"children":[],"metadata":{}},{"id":"el_6_1","type":"TEXT","component":{"id":"el_comp_6_1","type":"TEXT","properties":{"text":"Ascending Colon","x":500,"y":100},"style":{"fontFamily":"Inter","fontSize":"16px","color":"#FFFFFF","zIndex":10},"children":[],"metadata":{},"visibility":true},"children":[],"metadata":{}},{"id":"el_6_2","type":"TEXT","component":{"id":"el_comp_6_2","type":"TEXT","properties":{"text":"Descending Colon","x":500,"y":400},"style":{"fontFamily":"Inter","fontSize":"16px","color":"#FFFFFF","zIndex":10},"children":[],"metadata":{},"visibility":true},"children":[],"metadata":{}},{"id":"el_6_3","type":"TEXT","component":{"id":"el_comp_6_3","type":"TEXT","properties":{"text":"Transverse Colon","x":400,"y":50},"style":{"fontFamily":"Inter","fontSize":"16px","color":"#FFFFFF","zIndex":10},"children":[],"metadata":{},"visibility":true},"children":[],"metadata":{}},{"id":"el_6_4","type":"SHAPE","component":{"id":"el_comp_6_4","type":"SHAPE","properties":{"shapeType":"circle","cx":450,"cy":250,"r":10,"fill":"#3b82f6","animation_action":"fall","stroke":"#ffffff","strokeWidth":2,"dash_array":"","d":"","path_data":""},"style":{"fill":"#3b82f6","stroke":"#ffffff","strokeWidth":2,"zIndex":10},"children":[],"metadata":{},"visibility":true},"children":[],"metadata":{}},{"id":"el_6_5","type":"SHAPE","component":{"id":"el_comp_6_5","type":"SHAPE","properties":{"shapeType":"circle","cx":480,"cy":280,"r":8,"fill":"#3b82f6","animation_action":"fall","stroke":"#ffffff","strokeWidth":2,"dash_array":"","d":"","path_data":""},"style":{"fill":"#3b82f6","stroke":"#ffffff","strokeWidth":2,"zIndex":10},"children":[],"metadata":{},"visibility":true},"children":[],"metadata":{}},{"id":"el_6_6","type":"SHAPE","component":{"id":"el_comp_6_6","type":"SHAPE","properties":{"shapeType":"path","path_data":"M 450 250 C 430 230, 430 270, 450 250","stroke_width":2,"stroke_dasharray":"3,3","animation_action":"rise","stroke":"#ef4444","fill":"none","strokeWidth":2,"dash_array":"3,3","d":"M 450 250 C 430 230, 430 270, 450 250"},"style":{"fill":"none","stroke":"#ef4444","strokeWidth":2,"zIndex":10},"children":[],"metadata":{},"visibility":true},"children":[],"metadata":{}},{"id":"el_6_7","type":"TEXT","component":{"id":"el_comp_6_7","type":"TEXT","properties":{"text":"Water Reabsorption","x":650,"y":250},"style":{"fontFamily":"Inter","fontSize":"16px","color":"#FFFFFF","zIndex":10},"children":[],"metadata":{},"visibility":true},"children":[],"metadata":{}},{"id":"el_6_8","type":"SHAPE","component":{"id":"el_comp_6_8","type":"SHAPE","properties":{"shapeType":"path","path_data":"M 500 350 L 500 450 L 400 450","stroke_width":5,"animation_action":"slide_left","stroke":"#fbbf24","fill":"none","strokeWidth":5,"dash_array":"","d":"M 500 350 L 500 450 L 400 450"},"style":{"fill":"none","stroke":"#fbbf24","strokeWidth":5,"zIndex":10},"children":[],"metadata":{},"visibility":true},"children":[],"metadata":{}},{"id":"el_6_9","type":"TEXT","component":{"id":"el_comp_6_9","type":"TEXT","properties":{"text":"Rectum & Anus","x":350,"y":480},"style":{"fontFamily":"Inter","fontSize":"16px","color":"#FFFFFF","zIndex":10},"children":[],"metadata":{},"visibility":true},"children":[],"metadata":{}}],"metadata":{}}],"timeline":{"animation_style":"cascade","animation_action":"none","audio_url":"./scene_6.wav","audio_asset":{"id":"scene_audio_6","provider":"LocalPNGProvider","path":"./scene_6.wav","format":"wav","dimensions":{"width":0,"height":0},"metadata":{},"quality":"medium","source":"local","license":"proprietary","status":"resolved","future_cache_info":{}},"durationInFrames":null},"camera":{"camera_id":"cam_te147q41y","position":{"x":640,"y":360},"target":null,"zoom":1,"rotation":0,"viewport":{"width":1280,"height":720},"anchor":{"x":0.5,"y":0.5},"padding":0,"mode":"STATIC","timeline":[],"metadata":{},"future_constraints":{}},"layout":{"layout_id":"lay_acfyhg3a5","layout_type":"FREE","constraints":null,"alignment":"CENTER","padding":{"top":0,"left":0,"bottom":0,"right":0},"margin":{"top":0,"left":0,"bottom":0,"right":0},"spacing":0,"safe_area":null,"responsive":true,"metadata":{}},"focuses":[],"theme_id":"default","template_data":{"title":"Large Intestine: Water Recovery & Waste Formation","elements":[{"type":"path","path_data":"M 300 200 Q 250 100, 400 100 C 550 100, 600 150, 600 250 C 600 350, 550 400, 400 400 C 250 400, 200 350, 200 250 C 200 150, 250 100, 400 100","stroke_color":"#22c55e","stroke_width":5,"fill":"rgba(34, 197, 94, 0.1)"},{"type":"text_overlay","position":{"x":500,"y":100},"text":"Ascending Colon"},{"type":"text_overlay","position":{"x":500,"y":400},"text":"Descending Colon"},{"type":"text_overlay","position":{"x":400,"y":50},"text":"Transverse Colon"},{"type":"circle","cx":450,"cy":250,"r":10,"fill":"#3b82f6","animation_action":"fall"},{"type":"circle","cx":480,"cy":280,"r":8,"fill":"#3b82f6","animation_action":"fall"},{"type":"path","path_data":"M 450 250 C 430 230, 430 270, 450 250","stroke_color":"#ef4444","stroke_width":2,"stroke_dasharray":"3,3","animation_action":"rise"},{"type":"text_overlay","position":{"x":650,"y":250},"text":"Water Reabsorption"},{"type":"path","path_data":"M 500 350 L 500 450 L 400 450","stroke_color":"#fbbf24","stroke_width":5,"animation_action":"slide_left"},{"type":"text_overlay","position":{"x":350,"y":480},"text":"Rectum & Anus"}],"animation_style":"cascade"},"audio_url":"./scene_6.wav","durationInFrames":null,"start":96.60000000000001,"duration":19.95},{"scene_no":7,"template_id":"illustrated_scene","teacher_script":"Beyond the main tract, accessory organs play crucial roles without food passing through them directly. The liver produces bile to help digest fats, stored in the gallbladder. The pancreas produces digestive enzymes and bicarbonate, essential for neutralizing stomach acid and breaking down all macronutrients.","metadata":{"title":"Accessory Organs: The Support Team","description":"","learning_objective":"Identify accessory organs and their functions.","concept_importance":"high","instruction_type":"Support Functions","difficulty":"intermediate","teaching_strategy":"Relationship Mapping","reinforcement_level":"high","quiz_hints":"Name an accessory organ and its secretion.","analytics_tags":"liver, gallbladder, pancreas, bile, enzymes"},"nodes":[{"id":"title_7","type":"TEXT","component":{"id":"title_comp_7","type":"TEXT","properties":{"text":"Accessory Organs: The Support Team"},"style":{"fontFamily":"Inter","fontSize":"16px","color":"#FFFFFF","zIndex":10},"children":[],"metadata":{},"visibility":true},"children":[],"metadata":{}},{"id":"canvas_7","type":"SVG","component":{"id":"canvas_comp_7","type":"SVG","properties":{"color":"transparent","viewBox":"0 0 1280 720"},"style":{"width":"1280px","height":"720px","position":"absolute","top":"0","left":"0","zIndex":10},"children":[{"id":"el_comp_7_0","type":"SHAPE","properties":{"shapeType":"path","path_data":"M 500 150 C 600 100, 750 150, 700 300 C 650 400, 500 350, 450 250 C 400 150, 500 150, 500 150 Z","stroke_width":3,"fill":"rgba(239, 68, 68, 0.1)","stroke":"#ef4444","strokeWidth":3,"dash_array":"","d":"M 500 150 C 600 100, 750 150, 700 300 C 650 400, 500 350, 450 250 C 400 150, 500 150, 500 150 Z"},"style":{"fill":"rgba(239, 68, 68, 0.1)","stroke":"#ef4444","strokeWidth":3,"zIndex":10},"children":[],"metadata":{},"visibility":true},{"id":"el_comp_7_1","type":"TEXT","properties":{"text":"Liver (Bile Production)","x":600,"y":80},"style":{"fontFamily":"Inter","fontSize":"16px","color":"#FFFFFF","zIndex":10},"children":[],"metadata":{},"visibility":true},{"id":"el_comp_7_2","type":"SHAPE","properties":{"shapeType":"circle","cx":650,"cy":280,"r":20,"fill":"#10b981","animation_action":"scale_up","stroke":"#ffffff","strokeWidth":2,"dash_array":"","d":"","path_data":""},"style":{"fill":"#10b981","stroke":"#ffffff","strokeWidth":2,"zIndex":10},"children":[],"metadata":{},"visibility":true},{"id":"el_comp_7_3","type":"TEXT","properties":{"text":"Gallbladder (Bile Storage)","x":680,"y":280},"style":{"fontFamily":"Inter","fontSize":"16px","color":"#FFFFFF","zIndex":10},"children":[],"metadata":{},"visibility":true},{"id":"el_comp_7_4","type":"SHAPE","properties":{"shapeType":"path","path_data":"M 400 300 C 450 350, 600 350, 650 300 C 600 250, 450 250, 400 300 Z","stroke_width":3,"fill":"rgba(250, 204, 21, 0.1)","stroke":"#facc15","strokeWidth":3,"dash_array":"","d":"M 400 300 C 450 350, 600 350, 650 300 C 600 250, 450 250, 400 300 Z"},"style":{"fill":"rgba(250, 204, 21, 0.1)","stroke":"#facc15","strokeWidth":3,"zIndex":10},"children":[],"metadata":{},"visibility":true},{"id":"el_comp_7_5","type":"TEXT","properties":{"text":"Pancreas (Enzyme & Bicarbonate Production)","x":520,"y":380},"style":{"fontFamily":"Inter","fontSize":"16px","color":"#FFFFFF","zIndex":10},"children":[],"metadata":{},"visibility":true},{"id":"el_comp_7_6","type":"SHAPE","properties":{"shapeType":"path","path_data":"M 620 270 L 550 270 L 520 290","stroke_width":2,"stroke_dasharray":"5,5","animation_action":"slide_left","stroke":"#3b82f6","fill":"none","strokeWidth":2,"dash_array":"5,5","d":"M 620 270 L 550 270 L 520 290"},"style":{"fill":"none","stroke":"#3b82f6","strokeWidth":2,"zIndex":10},"children":[],"metadata":{},"visibility":true},{"id":"el_comp_7_7","type":"TEXT","properties":{"text":"To Small Intestine","x":400,"y":270},"style":{"fontFamily":"Inter","fontSize":"16px","color":"#FFFFFF","zIndex":10},"children":[],"metadata":{},"visibility":true},{"id":"el_comp_7_8","type":"SHAPE","properties":{"shapeType":"path","path_data":"M 520 290 L 520 300 L 550 300","stroke_width":2,"stroke_dasharray":"5,5","animation_action":"slide_left","stroke":"#3b82f6","fill":"none","strokeWidth":2,"dash_array":"5,5","d":"M 520 290 L 520 300 L 550 300"},"style":{"fill":"none","stroke":"#3b82f6","strokeWidth":2,"zIndex":10},"children":[],"metadata":{},"visibility":true}],"metadata":{},"visibility":true},"children":[{"id":"el_7_0","type":"SHAPE","component":{"id":"el_comp_7_0","type":"SHAPE","properties":{"shapeType":"path","path_data":"M 500 150 C 600 100, 750 150, 700 300 C 650 400, 500 350, 450 250 C 400 150, 500 150, 500 150 Z","stroke_width":3,"fill":"rgba(239, 68, 68, 0.1)","stroke":"#ef4444","strokeWidth":3,"dash_array":"","d":"M 500 150 C 600 100, 750 150, 700 300 C 650 400, 500 350, 450 250 C 400 150, 500 150, 500 150 Z"},"style":{"fill":"rgba(239, 68, 68, 0.1)","stroke":"#ef4444","strokeWidth":3,"zIndex":10},"children":[],"metadata":{},"visibility":true},"children":[],"metadata":{}},{"id":"el_7_1","type":"TEXT","component":{"id":"el_comp_7_1","type":"TEXT","properties":{"text":"Liver (Bile Production)","x":600,"y":80},"style":{"fontFamily":"Inter","fontSize":"16px","color":"#FFFFFF","zIndex":10},"children":[],"metadata":{},"visibility":true},"children":[],"metadata":{}},{"id":"el_7_2","type":"SHAPE","component":{"id":"el_comp_7_2","type":"SHAPE","properties":{"shapeType":"circle","cx":650,"cy":280,"r":20,"fill":"#10b981","animation_action":"scale_up","stroke":"#ffffff","strokeWidth":2,"dash_array":"","d":"","path_data":""},"style":{"fill":"#10b981","stroke":"#ffffff","strokeWidth":2,"zIndex":10},"children":[],"metadata":{},"visibility":true},"children":[],"metadata":{}},{"id":"el_7_3","type":"TEXT","component":{"id":"el_comp_7_3","type":"TEXT","properties":{"text":"Gallbladder (Bile Storage)","x":680,"y":280},"style":{"fontFamily":"Inter","fontSize":"16px","color":"#FFFFFF","zIndex":10},"children":[],"metadata":{},"visibility":true},"children":[],"metadata":{}},{"id":"el_7_4","type":"SHAPE","component":{"id":"el_comp_7_4","type":"SHAPE","properties":{"shapeType":"path","path_data":"M 400 300 C 450 350, 600 350, 650 300 C 600 250, 450 250, 400 300 Z","stroke_width":3,"fill":"rgba(250, 204, 21, 0.1)","stroke":"#facc15","strokeWidth":3,"dash_array":"","d":"M 400 300 C 450 350, 600 350, 650 300 C 600 250, 450 250, 400 300 Z"},"style":{"fill":"rgba(250, 204, 21, 0.1)","stroke":"#facc15","strokeWidth":3,"zIndex":10},"children":[],"metadata":{},"visibility":true},"children":[],"metadata":{}},{"id":"el_7_5","type":"TEXT","component":{"id":"el_comp_7_5","type":"TEXT","properties":{"text":"Pancreas (Enzyme & Bicarbonate Production)","x":520,"y":380},"style":{"fontFamily":"Inter","fontSize":"16px","color":"#FFFFFF","zIndex":10},"children":[],"metadata":{},"visibility":true},"children":[],"metadata":{}},{"id":"el_7_6","type":"SHAPE","component":{"id":"el_comp_7_6","type":"SHAPE","properties":{"shapeType":"path","path_data":"M 620 270 L 550 270 L 520 290","stroke_width":2,"stroke_dasharray":"5,5","animation_action":"slide_left","stroke":"#3b82f6","fill":"none","strokeWidth":2,"dash_array":"5,5","d":"M 620 270 L 550 270 L 520 290"},"style":{"fill":"none","stroke":"#3b82f6","strokeWidth":2,"zIndex":10},"children":[],"metadata":{},"visibility":true},"children":[],"metadata":{}},{"id":"el_7_7","type":"TEXT","component":{"id":"el_comp_7_7","type":"TEXT","properties":{"text":"To Small Intestine","x":400,"y":270},"style":{"fontFamily":"Inter","fontSize":"16px","color":"#FFFFFF","zIndex":10},"children":[],"metadata":{},"visibility":true},"children":[],"metadata":{}},{"id":"el_7_8","type":"SHAPE","component":{"id":"el_comp_7_8","type":"SHAPE","properties":{"shapeType":"path","path_data":"M 520 290 L 520 300 L 550 300","stroke_width":2,"stroke_dasharray":"5,5","animation_action":"slide_left","stroke":"#3b82f6","fill":"none","strokeWidth":2,"dash_array":"5,5","d":"M 520 290 L 520 300 L 550 300"},"style":{"fill":"none","stroke":"#3b82f6","strokeWidth":2,"zIndex":10},"children":[],"metadata":{},"visibility":true},"children":[],"metadata":{}}],"metadata":{}}],"timeline":{"animation_style":"fade_wave","animation_action":"none","audio_url":"./scene_7.wav","audio_asset":{"id":"scene_audio_7","provider":"LocalPNGProvider","path":"./scene_7.wav","format":"wav","dimensions":{"width":0,"height":0},"metadata":{},"quality":"medium","source":"local","license":"proprietary","status":"resolved","future_cache_info":{}},"durationInFrames":null},"camera":{"camera_id":"cam_ov3yn1uj8","position":{"x":640,"y":360},"target":null,"zoom":1,"rotation":0,"viewport":{"width":1280,"height":720},"anchor":{"x":0.5,"y":0.5},"padding":0,"mode":"STATIC","timeline":[],"metadata":{},"future_constraints":{}},"layout":{"layout_id":"lay_l8g43mwd0","layout_type":"FREE","constraints":null,"alignment":"CENTER","padding":{"top":0,"left":0,"bottom":0,"right":0},"margin":{"top":0,"left":0,"bottom":0,"right":0},"spacing":0,"safe_area":null,"responsive":true,"metadata":{}},"focuses":[],"theme_id":"default","template_data":{"title":"Accessory Organs: The Support Team","elements":[{"type":"path","path_data":"M 500 150 C 600 100, 750 150, 700 300 C 650 400, 500 350, 450 250 C 400 150, 500 150, 500 150 Z","stroke_color":"#ef4444","stroke_width":3,"fill":"rgba(239, 68, 68, 0.1)"},{"type":"text_overlay","position":{"x":600,"y":80},"text":"Liver (Bile Production)"},{"type":"circle","cx":650,"cy":280,"r":20,"fill":"#10b981","animation_action":"scale_up"},{"type":"text_overlay","position":{"x":680,"y":280},"text":"Gallbladder (Bile Storage)"},{"type":"path","path_data":"M 400 300 C 450 350, 600 350, 650 300 C 600 250, 450 250, 400 300 Z","stroke_color":"#facc15","stroke_width":3,"fill":"rgba(250, 204, 21, 0.1)"},{"type":"text_overlay","position":{"x":520,"y":380},"text":"Pancreas (Enzyme & Bicarbonate Production)"},{"type":"path","path_data":"M 620 270 L 550 270 L 520 290","stroke_color":"#3b82f6","stroke_width":2,"stroke_dasharray":"5,5","animation_action":"slide_left"},{"type":"text_overlay","position":{"x":400,"y":270},"text":"To Small Intestine"},{"type":"path","path_data":"M 520 290 L 520 300 L 550 300","stroke_color":"#3b82f6","stroke_width":2,"stroke_dasharray":"5,5","animation_action":"slide_left"}],"animation_style":"fade_wave"},"audio_url":"./scene_7.wav","durationInFrames":null,"start":116.55000000000001,"duration":21.3},{"scene_no":8,"template_id":"horizontal_timeline","teacher_script":"From the initial bite to final elimination, the digestive system is a marvel of coordination. Each organ plays a specific, vital role in transforming food into the energy and building blocks our bodies need. It’s a continuous, orchestrated process.","metadata":{"title":"The Full Digestive Journey: A Summary","description":"","learning_objective":"Recap the complete food pathway.","concept_importance":"high","instruction_type":"Summary","difficulty":"beginner","teaching_strategy":"Sequential Review","reinforcement_level":"high","quiz_hints":"List the organs in the order food passes through them.","analytics_tags":"summary, food path, digestive process"},"nodes":[{"id":"title_8","type":"TEXT","component":{"id":"title_comp_8","type":"TEXT","properties":{"text":"The Full Digestive Journey: A Summary"},"style":{"fontFamily":"Inter","fontSize":"16px","color":"#FFFFFF","zIndex":10},"children":[],"metadata":{},"visibility":true},"children":[],"metadata":{}},{"id":"stages_8","type":"GROUP","component":{"id":"stages_comp_8","type":"GROUP","properties":{},"style":{"zIndex":10},"children":[{"id":"stage_comp_8_0","type":"TEXT","properties":{"text":"Ingestion & Chewing"},"style":{"fontFamily":"Inter","fontSize":"16px","color":"#FFFFFF","zIndex":10},"children":[],"metadata":{"step_no":1},"visibility":true},{"id":"stage_comp_8_1","type":"TEXT","properties":{"text":"Swallowing"},"style":{"fontFamily":"Inter","fontSize":"16px","color":"#FFFFFF","zIndex":10},"children":[],"metadata":{"step_no":2},"visibility":true},{"id":"stage_comp_8_2","type":"TEXT","properties":{"text":"Churning & Acid Digestion"},"style":{"fontFamily":"Inter","fontSize":"16px","color":"#FFFFFF","zIndex":10},"children":[],"metadata":{"step_no":3},"visibility":true},{"id":"stage_comp_8_3","type":"TEXT","properties":{"text":"Nutrient Absorption"},"style":{"fontFamily":"Inter","fontSize":"16px","color":"#FFFFFF","zIndex":10},"children":[],"metadata":{"step_no":4},"visibility":true},{"id":"stage_comp_8_4","type":"TEXT","properties":{"text":"Water Reabsorption"},"style":{"fontFamily":"Inter","fontSize":"16px","color":"#FFFFFF","zIndex":10},"children":[],"metadata":{"step_no":5},"visibility":true},{"id":"stage_comp_8_5","type":"TEXT","properties":{"text":"Elimination"},"style":{"fontFamily":"Inter","fontSize":"16px","color":"#FFFFFF","zIndex":10},"children":[],"metadata":{"step_no":6},"visibility":true}],"metadata":{},"visibility":true},"children":[{"id":"stage_8_0","type":"TEXT","component":{"id":"stage_comp_8_0","type":"TEXT","properties":{"text":"Ingestion & Chewing"},"style":{"fontFamily":"Inter","fontSize":"16px","color":"#FFFFFF","zIndex":10},"children":[],"metadata":{"step_no":1},"visibility":true},"children":[],"metadata":{}},{"id":"stage_8_1","type":"TEXT","component":{"id":"stage_comp_8_1","type":"TEXT","properties":{"text":"Swallowing"},"style":{"fontFamily":"Inter","fontSize":"16px","color":"#FFFFFF","zIndex":10},"children":[],"metadata":{"step_no":2},"visibility":true},"children":[],"metadata":{}},{"id":"stage_8_2","type":"TEXT","component":{"id":"stage_comp_8_2","type":"TEXT","properties":{"text":"Churning & Acid Digestion"},"style":{"fontFamily":"Inter","fontSize":"16px","color":"#FFFFFF","zIndex":10},"children":[],"metadata":{"step_no":3},"visibility":true},"children":[],"metadata":{}},{"id":"stage_8_3","type":"TEXT","component":{"id":"stage_comp_8_3","type":"TEXT","properties":{"text":"Nutrient Absorption"},"style":{"fontFamily":"Inter","fontSize":"16px","color":"#FFFFFF","zIndex":10},"children":[],"metadata":{"step_no":4},"visibility":true},"children":[],"metadata":{}},{"id":"stage_8_4","type":"TEXT","component":{"id":"stage_comp_8_4","type":"TEXT","properties":{"text":"Water Reabsorption"},"style":{"fontFamily":"Inter","fontSize":"16px","color":"#FFFFFF","zIndex":10},"children":[],"metadata":{"step_no":5},"visibility":true},"children":[],"metadata":{}},{"id":"stage_8_5","type":"TEXT","component":{"id":"stage_comp_8_5","type":"TEXT","properties":{"text":"Elimination"},"style":{"fontFamily":"Inter","fontSize":"16px","color":"#FFFFFF","zIndex":10},"children":[],"metadata":{"step_no":6},"visibility":true},"children":[],"metadata":{}}],"metadata":{}}],"timeline":{"animation_style":"cascade","animation_action":"none","audio_url":"./scene_8.wav","audio_asset":{"id":"scene_audio_8","provider":"LocalPNGProvider","path":"./scene_8.wav","format":"wav","dimensions":{"width":0,"height":0},"metadata":{},"quality":"medium","source":"local","license":"proprietary","status":"resolved","future_cache_info":{}},"durationInFrames":null},"camera":{"camera_id":"cam_6ovdhtvis","position":{"x":640,"y":360},"target":null,"zoom":1,"rotation":0,"viewport":{"width":1280,"height":720},"anchor":{"x":0.5,"y":0.5},"padding":0,"mode":"STATIC","timeline":[],"metadata":{},"future_constraints":{}},"layout":{"layout_id":"lay_cykve3j2l","layout_type":"FREE","constraints":null,"alignment":"CENTER","padding":{"top":0,"left":0,"bottom":0,"right":0},"margin":{"top":0,"left":0,"bottom":0,"right":0},"spacing":0,"safe_area":null,"responsive":true,"metadata":{}},"focuses":[],"theme_id":"default","template_data":{"title":"The Full Digestive Journey: A Summary","events":[{"label":"Ingestion & Chewing","description":"Mouth: Mechanical & chemical digestion starts."},{"label":"Swallowing","description":"Esophagus: Peristalsis moves food to stomach."},{"label":"Churning & Acid Digestion","description":"Stomach: Proteins broken down, chyme formed."},{"label":"Nutrient Absorption","description":"Small Intestine: Most digestion and absorption."},{"label":"Water Reabsorption","description":"Large Intestine: Water absorbed, waste compacted."},{"label":"Elimination","description":"Rectum/Anus: Feces expelled from the body."}],"start_date":"Mouth","end_date":"Anus","event_color":"#3b82f6","animation_style":"cascade","timeline_title":"The Full Digestive Journey: A Summary","stages":[{"label":"Ingestion & Chewing","step_no":1},{"label":"Swallowing","step_no":2},{"label":"Churning & Acid Digestion","step_no":3},{"label":"Nutrient Absorption","step_no":4},{"label":"Water Reabsorption","step_no":5},{"label":"Elimination","step_no":6}]},"audio_url":"./scene_8.wav","durationInFrames":null,"start":137.85000000000002,"duration":19.05},{"scene_no":9,"template_id":"quiz_checkpoint","teacher_script":"Time for a quick check! Which organ is primarily responsible for absorbing water from undigested food? Is it the A) Stomach, B) Small Intestine, C) Large Intestine, or D) Esophagus? Think about what we just learned.","metadata":{"title":"Quiz Checkpoint: Test Your Knowledge!","description":"","learning_objective":"Assess understanding of large intestine function.","concept_importance":"high","instruction_type":"Assessment","difficulty":"intermediate","teaching_strategy":"Formative Assessment","reinforcement_level":"critical","quiz_hints":"Recall the large intestine's specific function.","analytics_tags":"quiz, assessment, large intestine, water absorption"},"nodes":[{"id":"question_9","type":"TEXT","component":{"id":"question_comp_9","type":"TEXT","properties":{"text":"Which organ is primarily responsible for absorbing water from undigested food?"},"style":{"fontFamily":"Inter","fontSize":"16px","color":"#FFFFFF","zIndex":10},"children":[],"metadata":{},"visibility":true},"children":[],"metadata":{}},{"id":"options_9","type":"GROUP","component":{"id":"options_comp_9","type":"GROUP","properties":{},"style":{"zIndex":10},"children":[{"id":"option_comp_9_0","type":"TEXT","properties":{"text":"A) Stomach"},"style":{"fontFamily":"Inter","fontSize":"16px","color":"#FFFFFF","isCorrect":false,"zIndex":10},"children":[],"metadata":{},"visibility":true},{"id":"option_comp_9_1","type":"TEXT","properties":{"text":"B) Small Intestine"},"style":{"fontFamily":"Inter","fontSize":"16px","color":"#FFFFFF","isCorrect":false,"zIndex":10},"children":[],"metadata":{},"visibility":true},{"id":"option_comp_9_2","type":"TEXT","properties":{"text":"C) Large Intestine"},"style":{"fontFamily":"Inter","fontSize":"16px","color":"#FFFFFF","isCorrect":true,"zIndex":10},"children":[],"metadata":{},"visibility":true},{"id":"option_comp_9_3","type":"TEXT","properties":{"text":"D) Esophagus"},"style":{"fontFamily":"Inter","fontSize":"16px","color":"#FFFFFF","isCorrect":false,"zIndex":10},"children":[],"metadata":{},"visibility":true}],"metadata":{},"visibility":true},"children":[{"id":"option_9_0","type":"TEXT","component":{"id":"option_comp_9_0","type":"TEXT","properties":{"text":"A) Stomach"},"style":{"fontFamily":"Inter","fontSize":"16px","color":"#FFFFFF","isCorrect":false,"zIndex":10},"children":[],"metadata":{},"visibility":true},"children":[],"metadata":{}},{"id":"option_9_1","type":"TEXT","component":{"id":"option_comp_9_1","type":"TEXT","properties":{"text":"B) Small Intestine"},"style":{"fontFamily":"Inter","fontSize":"16px","color":"#FFFFFF","isCorrect":false,"zIndex":10},"children":[],"metadata":{},"visibility":true},"children":[],"metadata":{}},{"id":"option_9_2","type":"TEXT","component":{"id":"option_comp_9_2","type":"TEXT","properties":{"text":"C) Large Intestine"},"style":{"fontFamily":"Inter","fontSize":"16px","color":"#FFFFFF","isCorrect":true,"zIndex":10},"children":[],"metadata":{},"visibility":true},"children":[],"metadata":{}},{"id":"option_9_3","type":"TEXT","component":{"id":"option_comp_9_3","type":"TEXT","properties":{"text":"D) Esophagus"},"style":{"fontFamily":"Inter","fontSize":"16px","color":"#FFFFFF","isCorrect":false,"zIndex":10},"children":[],"metadata":{},"visibility":true},"children":[],"metadata":{}}],"metadata":{}},{"id":"explanation_9","type":"TEXT","component":{"id":"explanation_comp_9","type":"TEXT","properties":{"text":"The large intestine's main role is to absorb remaining water and electrolytes from undigested food material, forming solid waste."},"style":{"fontFamily":"Inter","fontSize":"16px","color":"#FFFFFF","zIndex":10},"children":[],"metadata":{},"visibility":true},"children":[],"metadata":{}}],"timeline":{"animation_style":"stagger_in","animation_action":"none","audio_url":"./scene_9.wav","audio_asset":{"id":"scene_audio_9","provider":"LocalPNGProvider","path":"./scene_9.wav","format":"wav","dimensions":{"width":0,"height":0},"metadata":{},"quality":"medium","source":"local","license":"proprietary","status":"resolved","future_cache_info":{}},"durationInFrames":null},"camera":{"camera_id":"cam_5xdkda6v3","position":{"x":640,"y":360},"target":null,"zoom":1,"rotation":0,"viewport":{"width":1280,"height":720},"anchor":{"x":0.5,"y":0.5},"padding":0,"mode":"STATIC","timeline":[],"metadata":{},"future_constraints":{}},"layout":{"layout_id":"lay_2ge1oljki","layout_type":"FREE","constraints":null,"alignment":"CENTER","padding":{"top":0,"left":0,"bottom":0,"right":0},"margin":{"top":0,"left":0,"bottom":0,"right":0},"spacing":0,"safe_area":null,"responsive":true,"metadata":{}},"focuses":[],"theme_id":"default","template_data":{"title":"Quiz Checkpoint: Test Your Knowledge!","question":"Which organ is primarily responsible for absorbing water from undigested food?","options":[{"text":"A) Stomach","is_correct":false},{"text":"B) Small Intestine","is_correct":false},{"text":"C) Large Intestine","is_correct":true},{"text":"D) Esophagus","is_correct":false}],"explanation":"The large intestine's main role is to absorb remaining water and electrolytes from undigested food material, forming solid waste.","animation_style":"stagger_in"},"audio_url":"./scene_9.wav","durationInFrames":null,"start":156.90000000000003,"duration":17.7}];
+    
+    rawData.forEach(scene => {
+      const sId = scene.scene_no;
+      const data = scene.template_data || {};
+      
+      if (scene.template_id === 'math_derivation') {
+        const fEl = document.getElementById('math-formula-' + sId);
+        if (fEl && data.formula) {
+          fEl.innerHTML = katex.renderToString(data.formula.trim().replace(/^\$+|\$+$/g, ''), { throwOnError: false });
+        }
+        // Prefer normalized steps; fall back to equation_steps from LLM payloads
+        const mathSteps = (data.steps && data.steps.length)
+          ? data.steps
+          : (data.equation_steps || []).map(function(s) {
+              if (typeof s === 'string') return s;
+              var label = (s && (s.step || s.label)) || '';
+              var value = (s && (s.value || s.result)) || '';
+              return label && value ? (label + ': ' + value) : (label || value || '');
+            });
+        mathSteps.forEach((step, sIdx) => {
+          const sEl = document.getElementById('math-step-text-' + sId + '-' + sIdx);
+          if (sEl && typeof step === 'string' && step.trim()) {
+            try {
+              sEl.innerHTML = katex.renderToString(step.trim().replace(/^\$+|\$+$/g, ''), { throwOnError: false });
+            } catch (e) {
+              sEl.textContent = step;
+            }
+          }
+        });
+      }
+    });
+
+    // Center and scale illustrated SVGs dynamically
+    rawData.forEach(scene => {
+      const sId = scene.scene_no;
+      if (scene.template_id === 'illustrated_scene') {
+        const group = document.getElementById('ill-group-' + sId);
+        if (group) {
+          const bbox = group.getBBox();
+          if (bbox.width > 0 && bbox.height > 0) {
+            const targetWidth = 1280 * 0.70;
+            const targetHeight = 720 * 0.70;
+            const scaleX = targetWidth / bbox.width;
+            const scaleY = targetHeight / bbox.height;
+            const scale = Math.min(2.0, Math.min(scaleX, scaleY));
+            const dx = 640 - (bbox.x + bbox.width / 2) * scale;
+            const dy = 360 - (bbox.y + bbox.height / 2) * scale;
+            group.setAttribute("transform", 'translate(' + dx + ', ' + dy + ') scale(' + scale + ')');
+          }
+        }
+      }
+    });
+
+    // Build the master timeline
+    const mainTimeline = gsap.timeline();
+  
+    // Scene 1 (title_slide) Animation Timeline
+    {
+      const sceneTl = gsap.timeline();
+      
+      sceneTl.fromTo('#icon-card-1', { opacity: 0, scale: 0.4 }, { opacity: 1, scale: 1, duration: 0.6, ease: 'back.out(1.7)' });
+      sceneTl.fromTo('#title-text-1', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.5, ease: 'power3.out' }, 0.2);
+      sceneTl.fromTo('#subtitle-text-1', { opacity: 0, y: 15 }, { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }, 0.4);
+    
+      mainTimeline.add(sceneTl, 0);
+    }
+    
+    // Scene 2 (illustrated_scene) Animation Timeline
+    {
+      const sceneTl = gsap.timeline();
+      sceneTl.fromTo('#scene-2', { opacity: 0 }, { opacity: 1, duration: 0.4, ease: 'power2.out' });
+      
+      sceneTl.fromTo('#ill-canvas-2', { opacity: 0 }, { opacity: 1, duration: 0.5 });
+      if (document.querySelector('#ill-title-2')) {
+        sceneTl.fromTo('#ill-title-2', { opacity: 0, y: -12 }, { opacity: 1, y: 0, duration: 0.4 }, '<');
+      }
+
+      const action_2 = "none";
+      // Match RenderTreeNode output ids: el_comp_<sceneNo>_<idx>
+      const elementsSelector_2 = '[id^="el_comp_2_"]';
+      const elementsList_2 = document.querySelectorAll(elementsSelector_2);
+      
+      if (elementsList_2.length > 0) {
+        if (action_2 === 'rise') {
+          sceneTl.fromTo(elementsSelector_2, { y: 100, opacity: 0 }, { y: 0, opacity: 1, stagger: 0.1, duration: 0.8, ease: 'power2.out' });
+        } else if (action_2 === 'fall') {
+          sceneTl.fromTo(elementsSelector_2, { y: -100, opacity: 0 }, { y: 0, opacity: 1, stagger: 0.1, duration: 0.8, ease: 'power2.out' });
+        } else if (action_2 === 'spin') {
+          sceneTl.fromTo(elementsSelector_2, { rotation: 0, opacity: 0 }, { rotation: 360, opacity: 1, transformOrigin: '50% 50%', stagger: 0.1, duration: 1.0 });
+        } else if (action_2 === 'scale_up') {
+          sceneTl.fromTo(elementsSelector_2, { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, transformOrigin: '50% 50%', stagger: 0.1, duration: 0.6, ease: 'back.out(1.5)' });
+        } else if (action_2 === 'slide_left') {
+          sceneTl.fromTo(elementsSelector_2, { x: 150, opacity: 0 }, { x: 0, opacity: 1, stagger: 0.1, duration: 0.6 });
+        } else if (action_2 === 'slide_right') {
+          sceneTl.fromTo(elementsSelector_2, { x: -150, opacity: 0 }, { x: 0, opacity: 1, stagger: 0.1, duration: 0.6 });
+        } else {
+          sceneTl.fromTo(elementsSelector_2, { opacity: 0 }, { opacity: 1, stagger: 0.1, duration: 0.5 });
+        }
+      }
+    
+      mainTimeline.add(sceneTl, 21.75);
+    }
+    
+    // Scene 3 (illustrated_scene) Animation Timeline
+    {
+      const sceneTl = gsap.timeline();
+      sceneTl.fromTo('#scene-3', { opacity: 0 }, { opacity: 1, duration: 0.4, ease: 'power2.out' });
+      
+      sceneTl.fromTo('#ill-canvas-3', { opacity: 0 }, { opacity: 1, duration: 0.5 });
+      if (document.querySelector('#ill-title-3')) {
+        sceneTl.fromTo('#ill-title-3', { opacity: 0, y: -12 }, { opacity: 1, y: 0, duration: 0.4 }, '<');
+      }
+
+      const action_3 = "none";
+      // Match RenderTreeNode output ids: el_comp_<sceneNo>_<idx>
+      const elementsSelector_3 = '[id^="el_comp_3_"]';
+      const elementsList_3 = document.querySelectorAll(elementsSelector_3);
+      
+      if (elementsList_3.length > 0) {
+        if (action_3 === 'rise') {
+          sceneTl.fromTo(elementsSelector_3, { y: 100, opacity: 0 }, { y: 0, opacity: 1, stagger: 0.1, duration: 0.8, ease: 'power2.out' });
+        } else if (action_3 === 'fall') {
+          sceneTl.fromTo(elementsSelector_3, { y: -100, opacity: 0 }, { y: 0, opacity: 1, stagger: 0.1, duration: 0.8, ease: 'power2.out' });
+        } else if (action_3 === 'spin') {
+          sceneTl.fromTo(elementsSelector_3, { rotation: 0, opacity: 0 }, { rotation: 360, opacity: 1, transformOrigin: '50% 50%', stagger: 0.1, duration: 1.0 });
+        } else if (action_3 === 'scale_up') {
+          sceneTl.fromTo(elementsSelector_3, { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, transformOrigin: '50% 50%', stagger: 0.1, duration: 0.6, ease: 'back.out(1.5)' });
+        } else if (action_3 === 'slide_left') {
+          sceneTl.fromTo(elementsSelector_3, { x: 150, opacity: 0 }, { x: 0, opacity: 1, stagger: 0.1, duration: 0.6 });
+        } else if (action_3 === 'slide_right') {
+          sceneTl.fromTo(elementsSelector_3, { x: -150, opacity: 0 }, { x: 0, opacity: 1, stagger: 0.1, duration: 0.6 });
+        } else {
+          sceneTl.fromTo(elementsSelector_3, { opacity: 0 }, { opacity: 1, stagger: 0.1, duration: 0.5 });
+        }
+      }
+    
+      mainTimeline.add(sceneTl, 40.8);
+    }
+    
+    // Scene 4 (illustrated_scene) Animation Timeline
+    {
+      const sceneTl = gsap.timeline();
+      sceneTl.fromTo('#scene-4', { opacity: 0 }, { opacity: 1, duration: 0.4, ease: 'power2.out' });
+      
+      sceneTl.fromTo('#ill-canvas-4', { opacity: 0 }, { opacity: 1, duration: 0.5 });
+      if (document.querySelector('#ill-title-4')) {
+        sceneTl.fromTo('#ill-title-4', { opacity: 0, y: -12 }, { opacity: 1, y: 0, duration: 0.4 }, '<');
+      }
+
+      const action_4 = "none";
+      // Match RenderTreeNode output ids: el_comp_<sceneNo>_<idx>
+      const elementsSelector_4 = '[id^="el_comp_4_"]';
+      const elementsList_4 = document.querySelectorAll(elementsSelector_4);
+      
+      if (elementsList_4.length > 0) {
+        if (action_4 === 'rise') {
+          sceneTl.fromTo(elementsSelector_4, { y: 100, opacity: 0 }, { y: 0, opacity: 1, stagger: 0.1, duration: 0.8, ease: 'power2.out' });
+        } else if (action_4 === 'fall') {
+          sceneTl.fromTo(elementsSelector_4, { y: -100, opacity: 0 }, { y: 0, opacity: 1, stagger: 0.1, duration: 0.8, ease: 'power2.out' });
+        } else if (action_4 === 'spin') {
+          sceneTl.fromTo(elementsSelector_4, { rotation: 0, opacity: 0 }, { rotation: 360, opacity: 1, transformOrigin: '50% 50%', stagger: 0.1, duration: 1.0 });
+        } else if (action_4 === 'scale_up') {
+          sceneTl.fromTo(elementsSelector_4, { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, transformOrigin: '50% 50%', stagger: 0.1, duration: 0.6, ease: 'back.out(1.5)' });
+        } else if (action_4 === 'slide_left') {
+          sceneTl.fromTo(elementsSelector_4, { x: 150, opacity: 0 }, { x: 0, opacity: 1, stagger: 0.1, duration: 0.6 });
+        } else if (action_4 === 'slide_right') {
+          sceneTl.fromTo(elementsSelector_4, { x: -150, opacity: 0 }, { x: 0, opacity: 1, stagger: 0.1, duration: 0.6 });
+        } else {
+          sceneTl.fromTo(elementsSelector_4, { opacity: 0 }, { opacity: 1, stagger: 0.1, duration: 0.5 });
+        }
+      }
+    
+      mainTimeline.add(sceneTl, 59.4);
+    }
+    
+    // Scene 5 (illustrated_scene) Animation Timeline
+    {
+      const sceneTl = gsap.timeline();
+      sceneTl.fromTo('#scene-5', { opacity: 0 }, { opacity: 1, duration: 0.4, ease: 'power2.out' });
+      
+      sceneTl.fromTo('#ill-canvas-5', { opacity: 0 }, { opacity: 1, duration: 0.5 });
+      if (document.querySelector('#ill-title-5')) {
+        sceneTl.fromTo('#ill-title-5', { opacity: 0, y: -12 }, { opacity: 1, y: 0, duration: 0.4 }, '<');
+      }
+
+      const action_5 = "none";
+      // Match RenderTreeNode output ids: el_comp_<sceneNo>_<idx>
+      const elementsSelector_5 = '[id^="el_comp_5_"]';
+      const elementsList_5 = document.querySelectorAll(elementsSelector_5);
+      
+      if (elementsList_5.length > 0) {
+        if (action_5 === 'rise') {
+          sceneTl.fromTo(elementsSelector_5, { y: 100, opacity: 0 }, { y: 0, opacity: 1, stagger: 0.1, duration: 0.8, ease: 'power2.out' });
+        } else if (action_5 === 'fall') {
+          sceneTl.fromTo(elementsSelector_5, { y: -100, opacity: 0 }, { y: 0, opacity: 1, stagger: 0.1, duration: 0.8, ease: 'power2.out' });
+        } else if (action_5 === 'spin') {
+          sceneTl.fromTo(elementsSelector_5, { rotation: 0, opacity: 0 }, { rotation: 360, opacity: 1, transformOrigin: '50% 50%', stagger: 0.1, duration: 1.0 });
+        } else if (action_5 === 'scale_up') {
+          sceneTl.fromTo(elementsSelector_5, { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, transformOrigin: '50% 50%', stagger: 0.1, duration: 0.6, ease: 'back.out(1.5)' });
+        } else if (action_5 === 'slide_left') {
+          sceneTl.fromTo(elementsSelector_5, { x: 150, opacity: 0 }, { x: 0, opacity: 1, stagger: 0.1, duration: 0.6 });
+        } else if (action_5 === 'slide_right') {
+          sceneTl.fromTo(elementsSelector_5, { x: -150, opacity: 0 }, { x: 0, opacity: 1, stagger: 0.1, duration: 0.6 });
+        } else {
+          sceneTl.fromTo(elementsSelector_5, { opacity: 0 }, { opacity: 1, stagger: 0.1, duration: 0.5 });
+        }
+      }
+    
+      mainTimeline.add(sceneTl, 78.45);
+    }
+    
+    // Scene 6 (illustrated_scene) Animation Timeline
+    {
+      const sceneTl = gsap.timeline();
+      sceneTl.fromTo('#scene-6', { opacity: 0 }, { opacity: 1, duration: 0.4, ease: 'power2.out' });
+      
+      sceneTl.fromTo('#ill-canvas-6', { opacity: 0 }, { opacity: 1, duration: 0.5 });
+      if (document.querySelector('#ill-title-6')) {
+        sceneTl.fromTo('#ill-title-6', { opacity: 0, y: -12 }, { opacity: 1, y: 0, duration: 0.4 }, '<');
+      }
+
+      const action_6 = "none";
+      // Match RenderTreeNode output ids: el_comp_<sceneNo>_<idx>
+      const elementsSelector_6 = '[id^="el_comp_6_"]';
+      const elementsList_6 = document.querySelectorAll(elementsSelector_6);
+      
+      if (elementsList_6.length > 0) {
+        if (action_6 === 'rise') {
+          sceneTl.fromTo(elementsSelector_6, { y: 100, opacity: 0 }, { y: 0, opacity: 1, stagger: 0.1, duration: 0.8, ease: 'power2.out' });
+        } else if (action_6 === 'fall') {
+          sceneTl.fromTo(elementsSelector_6, { y: -100, opacity: 0 }, { y: 0, opacity: 1, stagger: 0.1, duration: 0.8, ease: 'power2.out' });
+        } else if (action_6 === 'spin') {
+          sceneTl.fromTo(elementsSelector_6, { rotation: 0, opacity: 0 }, { rotation: 360, opacity: 1, transformOrigin: '50% 50%', stagger: 0.1, duration: 1.0 });
+        } else if (action_6 === 'scale_up') {
+          sceneTl.fromTo(elementsSelector_6, { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, transformOrigin: '50% 50%', stagger: 0.1, duration: 0.6, ease: 'back.out(1.5)' });
+        } else if (action_6 === 'slide_left') {
+          sceneTl.fromTo(elementsSelector_6, { x: 150, opacity: 0 }, { x: 0, opacity: 1, stagger: 0.1, duration: 0.6 });
+        } else if (action_6 === 'slide_right') {
+          sceneTl.fromTo(elementsSelector_6, { x: -150, opacity: 0 }, { x: 0, opacity: 1, stagger: 0.1, duration: 0.6 });
+        } else {
+          sceneTl.fromTo(elementsSelector_6, { opacity: 0 }, { opacity: 1, stagger: 0.1, duration: 0.5 });
+        }
+      }
+    
+      mainTimeline.add(sceneTl, 96.60000000000001);
+    }
+    
+    // Scene 7 (illustrated_scene) Animation Timeline
+    {
+      const sceneTl = gsap.timeline();
+      sceneTl.fromTo('#scene-7', { opacity: 0 }, { opacity: 1, duration: 0.4, ease: 'power2.out' });
+      
+      sceneTl.fromTo('#ill-canvas-7', { opacity: 0 }, { opacity: 1, duration: 0.5 });
+      if (document.querySelector('#ill-title-7')) {
+        sceneTl.fromTo('#ill-title-7', { opacity: 0, y: -12 }, { opacity: 1, y: 0, duration: 0.4 }, '<');
+      }
+
+      const action_7 = "none";
+      // Match RenderTreeNode output ids: el_comp_<sceneNo>_<idx>
+      const elementsSelector_7 = '[id^="el_comp_7_"]';
+      const elementsList_7 = document.querySelectorAll(elementsSelector_7);
+      
+      if (elementsList_7.length > 0) {
+        if (action_7 === 'rise') {
+          sceneTl.fromTo(elementsSelector_7, { y: 100, opacity: 0 }, { y: 0, opacity: 1, stagger: 0.1, duration: 0.8, ease: 'power2.out' });
+        } else if (action_7 === 'fall') {
+          sceneTl.fromTo(elementsSelector_7, { y: -100, opacity: 0 }, { y: 0, opacity: 1, stagger: 0.1, duration: 0.8, ease: 'power2.out' });
+        } else if (action_7 === 'spin') {
+          sceneTl.fromTo(elementsSelector_7, { rotation: 0, opacity: 0 }, { rotation: 360, opacity: 1, transformOrigin: '50% 50%', stagger: 0.1, duration: 1.0 });
+        } else if (action_7 === 'scale_up') {
+          sceneTl.fromTo(elementsSelector_7, { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, transformOrigin: '50% 50%', stagger: 0.1, duration: 0.6, ease: 'back.out(1.5)' });
+        } else if (action_7 === 'slide_left') {
+          sceneTl.fromTo(elementsSelector_7, { x: 150, opacity: 0 }, { x: 0, opacity: 1, stagger: 0.1, duration: 0.6 });
+        } else if (action_7 === 'slide_right') {
+          sceneTl.fromTo(elementsSelector_7, { x: -150, opacity: 0 }, { x: 0, opacity: 1, stagger: 0.1, duration: 0.6 });
+        } else {
+          sceneTl.fromTo(elementsSelector_7, { opacity: 0 }, { opacity: 1, stagger: 0.1, duration: 0.5 });
+        }
+      }
+    
+      mainTimeline.add(sceneTl, 116.55000000000001);
+    }
+    
+    // Scene 8 (horizontal_timeline) Animation Timeline
+    {
+      const sceneTl = gsap.timeline();
+      sceneTl.fromTo('#scene-8', { opacity: 0 }, { opacity: 1, duration: 0.4, ease: 'power2.out' });
+      
+      sceneTl.fromTo('#timeline-title-8', { opacity: 0, y: -20 }, { opacity: 1, y: 0, duration: 0.5 });
+      sceneTl.fromTo('#timeline-active-line-8', { attr: { x1: '5%', x2: '5%' } }, { attr: { x2: '95%' }, duration: 1.0, ease: 'power2.inOut' }, 0.3);
+      
+      const stagesData_8 = [{"label":"Ingestion & Chewing","step_no":1},{"label":"Swallowing","step_no":2},{"label":"Churning & Acid Digestion","step_no":3},{"label":"Nutrient Absorption","step_no":4},{"label":"Water Reabsorption","step_no":5},{"label":"Elimination","step_no":6}];
+      stagesData_8.forEach((stage, idx) => {
+        const stageEl = document.getElementById('timeline-stage-8-' + idx);
+        if (stageEl) {
+          sceneTl.fromTo(stageEl, { opacity: 0, scale: 0 }, { opacity: 1, scale: 1, duration: 0.5, ease: 'back.out(1.5)' }, 0.5 + idx * 0.15);
+        }
+      });
+    
+      mainTimeline.add(sceneTl, 137.85000000000002);
+    }
+    
+    // Scene 9 (quiz_checkpoint) Animation Timeline
+    {
+      const sceneTl = gsap.timeline();
+      sceneTl.fromTo('#scene-9', { opacity: 0 }, { opacity: 1, duration: 0.4, ease: 'power2.out' });
+      
+      sceneTl.fromTo('#quiz-card-9', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' });
+      sceneTl.fromTo('#quiz-options-9 .quiz-option', { opacity: 0, x: -20 }, { opacity: 1, x: 0, stagger: 0.15, duration: 0.4 }, 0.3);
+      
+      // Resolve correct answer index dynamically (supports is_correct, index, id, or answer string)
+      const optionsData_9 = [{"text":"A) Stomach","is_correct":false},{"text":"B) Small Intestine","is_correct":false},{"text":"C) Large Intestine","is_correct":true},{"text":"D) Esophagus","is_correct":false}];
+      let correctIdx_9 = 0;
+      if (optionsData_9.length > 0) {
+        if (typeof optionsData_9[0] === 'object') {
+          correctIdx_9 = optionsData_9.findIndex(opt => opt.is_correct);
+          if (correctIdx_9 === -1 && null != null) {
+            const wantId = null;
+            correctIdx_9 = optionsData_9.findIndex(opt => String(opt.id) === String(wantId));
+          }
+          if (correctIdx_9 === -1) correctIdx_9 = 0;
+        } else {
+          const idxAlias = null;
+          if (idxAlias !== null) {
+            correctIdx_9 = idxAlias;
+          } else if (null != null) {
+            const ans = String("").trim().toLowerCase();
+            correctIdx_9 = optionsData_9.findIndex(opt => {
+              const t = String(opt).trim().toLowerCase();
+              return t === ans || t.startsWith(ans) || ans.includes(t);
+            });
+            if (correctIdx_9 === -1) correctIdx_9 = 0;
+          }
+        }
+      }
+      
+      const correctOpt_9 = document.getElementById('quiz-opt-9-' + correctIdx_9);
+      if (correctOpt_9) {
+        sceneTl.to('#quiz-options-9 .quiz-option', { opacity: 0.3, duration: 0.4 }, 1.2);
+        sceneTl.to(correctOpt_9, { 
+          opacity: 1, 
+          borderColor: '#22c55e', 
+          background: 'rgba(34, 197, 94, 0.15)',
+          boxShadow: '0 0 24px rgba(34, 197, 94, 0.4)',
+          duration: 0.5 
+        }, 1.4);
+      }
+    
+      mainTimeline.add(sceneTl, 156.90000000000003);
+    }
+    
+    window.__timelines = window.__timelines || {};
+    window.__timelines["root"] = mainTimeline;
+  </script>
+</body>
+</html>

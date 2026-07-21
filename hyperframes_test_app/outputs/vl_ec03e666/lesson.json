@@ -1,0 +1,182 @@
+{
+  "lesson_title": "How is India's President Elected?",
+  "layout_mode": "timeline",
+  "theme": "Civics",
+  "global_assets": [],
+  "connections": [],
+  "lesson_id": "vl_ec03e666",
+  "scenes": [
+    {
+      "scene_no": 1,
+      "purpose": "Introduce the student's query and the lesson topic, setting the stage.",
+      "template_id": "title_slide",
+      "teacher_script": "Hello, future leaders! You've asked a super important question: How is the President of India elected? While our textbook talks about monsoons, rainfall, and general elections for MLAs and MLCs, it mentions that the Governor is appointed by the President. This tells us the President is a very important figure! Let's explore how they are chosen.",
+      "template_data": {
+        "title": "The President's Path to Power",
+        "subtitle": "Understanding Presidential Elections in India"
+      },
+      "audio_url": "/uploads/visual_lessons/vl_ec03e666/scene_1.wav"
+    },
+    {
+      "scene_no": 2,
+      "purpose": "Explain the President's role and introduce the idea of an 'Electoral College' in simple terms.",
+      "template_id": "concept_diagram",
+      "teacher_script": "The President is the head of our country and the supreme commander of the armed forces, acting as the guardian of our Constitution. Unlike general elections where all citizens vote directly, our President is elected by a special group of people. This group is called the 'Electoral College'.",
+      "template_data": {
+        "main_concept": "President of India",
+        "attributes": [
+          {
+            "name": "Head of State",
+            "description": "Acts as the first citizen of India."
+          },
+          {
+            "name": "Guardian of Constitution",
+            "description": "Ensures the country functions by its rules."
+          },
+          {
+            "name": "Supreme Commander",
+            "description": "Leads the Armed Forces (Army, Navy, Air Force)."
+          },
+          {
+            "name": "Elected By",
+            "description": "The Electoral College (a special group of elected representatives)."
+          }
+        ],
+        "connections": [
+          {
+            "from": "President of India",
+            "to": "Head of State"
+          },
+          {
+            "from": "President of India",
+            "to": "Guardian of Constitution"
+          },
+          {
+            "from": "President of India",
+            "to": "Supreme Commander"
+          },
+          {
+            "from": "President of India",
+            "to": "Elected By"
+          }
+        ]
+      },
+      "audio_url": "/uploads/visual_lessons/vl_ec03e666/scene_2.wav"
+    },
+    {
+      "scene_no": 3,
+      "purpose": "Detail who makes up the Electoral College, clarifying the difference between elected and nominated members.",
+      "template_id": "taxonomy_tree",
+      "teacher_script": "So, who are these special people in the Electoral College? It includes only the 'elected' members from both houses of our Parliament (Lok Sabha and Rajya Sabha) and the 'elected' members from the Legislative Assemblies of all states and Union Territories. Nominated members do not vote!",
+      "template_data": {
+        "title": "Who Elects the President? The Electoral College!",
+        "root": "Electoral College",
+        "branches": [
+          {
+            "name": "Elected Members of Parliament (MPs)",
+            "children": [
+              {
+                "name": "Lok Sabha (House of the People)",
+                "description": "Elected members"
+              },
+              {
+                "name": "Rajya Sabha (Council of States)",
+                "description": "Elected members"
+              }
+            ]
+          },
+          {
+            "name": "Elected Members of Legislative Assemblies (MLAs)",
+            "children": [
+              {
+                "name": "State Legislative Assemblies",
+                "description": "Elected members from all states."
+              },
+              {
+                "name": "Union Territories (Delhi & Puducherry)",
+                "description": "Elected members from these UTs."
+              }
+            ]
+          }
+        ]
+      },
+      "audio_url": "/uploads/visual_lessons/vl_ec03e666/scene_3.wav"
+    },
+    {
+      "scene_no": 4,
+      "purpose": "Briefly explain the method of voting – proportional representation and single transferable vote – at a Class 8 level.",
+      "template_id": "concept_diagram",
+      "teacher_script": "The voting method is quite unique! Instead of a simple 'one person, one vote' system, they use 'Proportional Representation with Single Transferable Vote'. This means the value of each vote can differ, ensuring that states with larger populations have their votes weighted appropriately, leading to a fair outcome for the entire nation.",
+      "template_data": {
+        "main_concept": "Presidential Voting System",
+        "attributes": [
+          {
+            "name": "Proportional Representation",
+            "description": "Ensures votes from different states carry different weights based on population."
+          },
+          {
+            "name": "Single Transferable Vote",
+            "description": "Voters rank candidates in order of preference instead of just picking one."
+          },
+          {
+            "name": "Secret Ballot",
+            "description": "Like other elections, voting is confidential."
+          },
+          {
+            "name": "Goal",
+            "description": "To elect a President who truly represents the nation."
+          }
+        ],
+        "connections": [
+          {
+            "from": "Presidential Voting System",
+            "to": "Proportional Representation"
+          },
+          {
+            "from": "Presidential Voting System",
+            "to": "Single Transferable Vote"
+          },
+          {
+            "from": "Presidential Voting System",
+            "to": "Secret Ballot"
+          },
+          {
+            "from": "Presidential Voting System",
+            "to": "Goal"
+          }
+        ]
+      },
+      "audio_url": "/uploads/visual_lessons/vl_ec03e666/scene_4.wav"
+    },
+    {
+      "scene_no": 5,
+      "purpose": "Conclude the lesson with a quick recall question to reinforce learning.",
+      "template_id": "quiz_checkpoint",
+      "teacher_script": "Fantastic! Now you understand the special process of electing our President. Let's see if you can recall a key detail.",
+      "template_data": {
+        "question": "Which of these groups are part of the Electoral College that elects the President?",
+        "options": [
+          {
+            "text": "All citizens of India aged 18 and above.",
+            "is_correct": false
+          },
+          {
+            "text": "Elected MPs (Lok Sabha & Rajya Sabha) and elected MLAs (State Assemblies).",
+            "is_correct": true
+          },
+          {
+            "text": "Only nominated members of Parliament.",
+            "is_correct": false
+          },
+          {
+            "text": "Only the Chief Ministers of all states.",
+            "is_correct": false
+          }
+        ],
+        "correct_answer_feedback": "That's right! Only elected representatives from Parliament and State Assemblies form the Electoral College. Great job!",
+        "incorrect_answer_feedback": "Not quite! Remember, the President is elected by a special 'Electoral College' made up of elected MPs and MLAs."
+      },
+      "audio_url": "/uploads/visual_lessons/vl_ec03e666/scene_5.wav"
+    }
+  ]
+}

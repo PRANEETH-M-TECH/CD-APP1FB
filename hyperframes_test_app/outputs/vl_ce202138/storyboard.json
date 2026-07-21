@@ -1,0 +1,269 @@
+{
+  "lesson_title": "How is the President of India Elected?",
+  "layout_mode": "timeline",
+  "theme": "Civics",
+  "global_assets": [],
+  "connections": [],
+  "lesson_id": "vl_ce202138",
+  "scenes": [
+    {
+      "scene_no": 1,
+      "purpose": "Introduce the lesson topic and the importance of the President.",
+      "template_id": "title_slide",
+      "teacher_script": "Hello future citizens! Today, we're going to learn about a very important person in our country: The President of India. Do you know how this powerful position is filled?",
+      "template_data": {
+        "title": "The President of India: How is S/He Elected?",
+        "subtitle": "Understanding the Unique Electoral Process"
+      },
+      "audio_url": "/uploads/visual_lessons/vl_ce202138/scene_1.wav"
+    },
+    {
+      "scene_no": 2,
+      "purpose": "Explain the role and significance of the President.",
+      "template_id": "concept_diagram",
+      "teacher_script": "The President is not just a figurehead; they are the Head of State, the first citizen, and the supreme commander of our armed forces! But how do they get chosen?",
+      "template_data": {
+        "main_concept": "President of India",
+        "attributes": [
+          {
+            "name": "Head of State",
+            "description": "The symbolic head of the country."
+          },
+          {
+            "name": "First Citizen",
+            "description": "Represents India on national and international platforms."
+          },
+          {
+            "name": "Supreme Commander",
+            "description": "Leads the Indian Armed Forces."
+          },
+          {
+            "name": "Appoints Governor",
+            "description": "As per your textbook, the President appoints the Governor of a state."
+          }
+        ],
+        "diagram_type": "star"
+      },
+      "audio_url": "/uploads/visual_lessons/vl_ce202138/scene_2.wav"
+    },
+    {
+      "scene_no": 3,
+      "purpose": "Introduce the Electoral College as the special body that elects the President.",
+      "template_id": "taxonomy_tree",
+      "teacher_script": "Unlike general elections where you directly vote for an MLA or MP, the President is elected indirectly by a special body called the Electoral College.",
+      "template_data": {
+        "title": "Who Elects the President?",
+        "main_branch": {
+          "name": "Electoral College",
+          "description": "A group of elected members"
+        },
+        "sub_branches": [
+          {
+            "name": "Elected Members of Parliament",
+            "children": [
+              {
+                "name": "Lok Sabha (Lower House)",
+                "description": "Members from all states and UTs."
+              },
+              {
+                "name": "Rajya Sabha (Upper House)",
+                "description": "Members from all states and UTs."
+              }
+            ]
+          },
+          {
+            "name": "Elected Members of State Legislative Assemblies",
+            "children": [
+              {
+                "name": "MLAs from all States",
+                "description": "Members of Vidhan Sabhas."
+              },
+              {
+                "name": "MLAs from Delhi & Puducherry",
+                "description": "Union Territories with their own Assemblies."
+              }
+            ]
+          }
+        ]
+      },
+      "audio_url": "/uploads/visual_lessons/vl_ce202138/scene_3.wav"
+    },
+    {
+      "scene_no": 4,
+      "purpose": "Explain the unique voting system used for the Presidential election.",
+      "template_id": "concept_diagram",
+      "teacher_script": "The election of the President uses a unique system to ensure fair representation from both states and the central government. It's called Proportional Representation with Single Transferable Vote.",
+      "template_data": {
+        "main_concept": "Presidential Election System",
+        "attributes": [
+          {
+            "name": "Indirect Election",
+            "description": "Citizens don't vote directly."
+          },
+          {
+            "name": "Proportional Representation",
+            "description": "Ensures all states have a fair say."
+          },
+          {
+            "name": "Single Transferable Vote",
+            "description": "Voters rank candidates in order of preference."
+          },
+          {
+            "name": "Secret Ballot",
+            "description": "Voting is confidential, just like in general elections you learned about!"
+          }
+        ],
+        "diagram_type": "flow"
+      },
+      "audio_url": "/uploads/visual_lessons/vl_ce202138/scene_4.wav"
+    },
+    {
+      "scene_no": 5,
+      "purpose": "Introduce the concept of 'vote value' for MLAs and MPs.",
+      "template_id": "column_comparison",
+      "teacher_script": "Here's a twist! Not all votes in the Presidential election count equally. The value of an MLA's vote varies from state to state, and an MP's vote has a different value.",
+      "template_data": {
+        "left_col": {
+          "header": "MLA's Vote Value",
+          "bullets": [
+            "Depends on the population of their state.",
+            "Higher population states have MLAs with higher vote values.",
+            "Ensures states are equally represented, not just by number of MLAs."
+          ]
+        },
+        "right_col": {
+          "header": "MP's Vote Value",
+          "bullets": [
+            "Calculated based on the total vote value of all MLAs.",
+            "All MPs (Lok Sabha and Rajya Sabha) have the same vote value.",
+            "Ensures balance between state and union representation."
+          ]
+        }
+      },
+      "audio_url": "/uploads/visual_lessons/vl_ce202138/scene_5.wav"
+    },
+    {
+      "scene_no": 6,
+      "purpose": "Show the simplified formula for calculating an MLA's vote value.",
+      "template_id": "math_derivation",
+      "teacher_script": "Let's see a simplified way to understand how an MLA's vote value is calculated. This formula ensures that states with larger populations get more weight.",
+      "template_data": {
+        "title": "Calculating MLA's Vote Value (Simplified)",
+        "formula": "Vote Value of an MLA = (Total Population of the State / Total Elected MLAs in that State) / 1000",
+        "steps": [
+          "1. Find the total population of the state (from the last census).",
+          "2. Divide by the total number of elected MLAs in that state.",
+          "3. Divide the result by 1000 (to make the number manageable)."
+        ]
+      },
+      "audio_url": "/uploads/visual_lessons/vl_ce202138/scene_6.wav"
+    },
+    {
+      "scene_no": 7,
+      "purpose": "Show the simplified formula for calculating an MP's vote value.",
+      "template_id": "math_derivation",
+      "teacher_script": "After calculating the vote values for all MLAs, we can find the vote value for each MP. This makes sure that the total weight of MPs balances the total weight of MLAs.",
+      "template_data": {
+        "title": "Calculating MP's Vote Value (Simplified)",
+        "formula": "Vote Value of an MP = (Total Vote Value of all MLAs in India / Total Elected MPs in India)",
+        "steps": [
+          "1. Sum up the vote values of all elected MLAs from all states and UTs.",
+          "2. Count the total number of elected MPs from both Lok Sabha and Rajya Sabha.",
+          "3. Divide the total MLA vote value by the total number of elected MPs."
+        ]
+      },
+      "audio_url": "/uploads/visual_lessons/vl_ce202138/scene_7.wav"
+    },
+    {
+      "scene_no": 8,
+      "purpose": "Outline the step-by-step process of the Presidential election.",
+      "template_id": "cycle_template",
+      "teacher_script": "Now, let's put it all together and see the complete cycle of how the President is elected, from nomination to results.",
+      "template_data": {
+        "title": "The Presidential Election Cycle",
+        "stages": [
+          {
+            "name": "Nomination",
+            "description": "Candidates file their nominations with proposers and seconders."
+          },
+          {
+            "name": "Campaigning",
+            "description": "Candidates seek support from the Electoral College members."
+          },
+          {
+            "name": "Voting Day",
+            "description": "Members of the Electoral College cast their secret ballots, ranking candidates by preference."
+          },
+          {
+            "name": "Counting & Preferences",
+            "description": "Votes are counted based on preferences until a candidate secures the required quota."
+          },
+          {
+            "name": "Result Declaration",
+            "description": "The candidate who secures the required quota of votes is declared President."
+          }
+        ]
+      },
+      "audio_url": "/uploads/visual_lessons/vl_ce202138/scene_8.wav"
+    },
+    {
+      "scene_no": 9,
+      "purpose": "Reinforce the concept of secret ballot and connect it to general elections mentioned in the textbook.",
+      "template_id": "concept_diagram",
+      "teacher_script": "Remember how your textbook mentioned 'secret ballot' for general elections? This principle is equally important in the Presidential election, ensuring fairness and preventing pressure on voters.",
+      "template_data": {
+        "main_concept": "Why Secret Ballot?",
+        "attributes": [
+          {
+            "name": "Fairness",
+            "description": "Ensures every voter can vote freely without fear."
+          },
+          {
+            "name": "Prevents Pressure",
+            "description": "Protects electors from external influence or intimidation."
+          },
+          {
+            "name": "Confidentiality",
+            "description": "The choice of vote remains private and unknown."
+          },
+          {
+            "name": "Integrity of Election",
+            "description": "A cornerstone of democratic elections, as mentioned in your Social textbook for general voting!"
+          }
+        ],
+        "diagram_type": "star"
+      },
+      "audio_url": "/uploads/visual_lessons/vl_ce202138/scene_9.wav"
+    },
+    {
+      "scene_no": 10,
+      "purpose": "Assess student understanding of the key concepts through a quiz.",
+      "template_id": "quiz_checkpoint",
+      "teacher_script": "Great job! You've learned a lot about this complex process. Let's quickly check your understanding with a question.",
+      "template_data": {
+        "question": "Which body is responsible for electing the President of India?",
+        "options": [
+          {
+            "text": "All adult citizens of India directly",
+            "is_correct": false
+          },
+          {
+            "text": "Members of the Electoral College",
+            "is_correct": true
+          },
+          {
+            "text": "Only the Members of Parliament",
+            "is_correct": false
+          },
+          {
+            "text": "Only the Chief Ministers of States",
+            "is_correct": false
+          }
+        ],
+        "correct_feedback": "That's correct! The Electoral College is the special body responsible for electing the President.",
+        "incorrect_feedback": "Not quite! Remember, it's an indirect election by the Electoral College, not direct public vote or only MPs."
+      },
+      "audio_url": "/uploads/visual_lessons/vl_ce202138/scene_10.wav"
+    }
+  ]
+}

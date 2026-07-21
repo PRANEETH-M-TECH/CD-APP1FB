@@ -1,0 +1,969 @@
+{
+  "lesson_title": "The Amazing Water Cycle",
+  "lesson_id": "vl_a084a9bf",
+  "theme": "Science",
+  "layout_mode": "process",
+  "learning_obj": "Define the key stages of the water cycle: evaporation, condensation, precipitation, and collection. Understand how solar energy drives this continuous process. Identify the different forms water takes throughout the cycle and recognize its importance for life on Earth.",
+  "learning_objectives": [
+    "Define evaporation, condensation, precipitation, and collection.",
+    "Explain the role of solar energy in the water cycle.",
+    "Describe how clouds form.",
+    "Identify different forms of precipitation.",
+    "Recognize the importance of the water cycle for ecosystems."
+  ],
+  "student_level": "Middle School",
+  "estimated_duration": 8,
+  "difficulty": "beginner",
+  "subject": "Earth Science",
+  "chapter": "Atmosphere and Hydrosphere",
+  "concepts": [
+    "Evaporation",
+    "Condensation",
+    "Precipitation",
+    "Collection",
+    "Transpiration",
+    "Runoff",
+    "Groundwater"
+  ],
+  "prerequisites": [
+    "Basic understanding of states of matter (liquid, gas)",
+    "Concept of energy from the sun"
+  ],
+  "misconceptions": [
+    "Water just 'disappears' when it evaporates.",
+    "Clouds are made of steam or smoke.",
+    "Rain is simply water falling from a hole in the sky."
+  ],
+  "assessment_points": [
+    "Can students list the four main stages?",
+    "Can students explain how temperature changes affect water's state?",
+    "Can students identify where water is stored in the collection phase?"
+  ],
+  "summary": "The water cycle describes the continuous movement of water on, above, and below the surface of the Earth. Driven by the sun's energy, it involves key stages like evaporation, condensation, precipitation, and collection, ensuring a constant supply of fresh water and shaping our planet's climate and ecosystems.",
+  "teaching_plan": {
+    "teaching_steps": [
+      {
+        "step_id": "intro_water_cycle",
+        "action_type": "INTRODUCE",
+        "instructional_purpose": "Set the stage and introduce the central topic.",
+        "visual_purpose": "Display lesson title and objectives.",
+        "concept": "Introduction to Water Cycle",
+        "expected_outcome": "Students are engaged and aware of what they will learn.",
+        "related_components": [],
+        "duration": 45,
+        "teaching_notes": "Emphasize the 'cycle' aspect and its continuous nature.",
+        "narration_hints": "Begin with a hook about water's importance."
+      },
+      {
+        "step_id": "explain_evaporation",
+        "action_type": "EXPLAIN",
+        "instructional_purpose": "Define and illustrate evaporation.",
+        "visual_purpose": "Show water turning into vapor due to heat.",
+        "concept": "Evaporation",
+        "expected_outcome": "Students understand water turning into gas from heat.",
+        "related_components": [
+          "Solar energy",
+          "Bodies of water"
+        ],
+        "duration": 60,
+        "teaching_notes": "Connect evaporation directly to the sun's energy.",
+        "narration_hints": "Use analogies like 'puddles drying up'."
+      },
+      {
+        "step_id": "highlight_transpiration",
+        "action_type": "HIGHLIGHT",
+        "instructional_purpose": "Introduce transpiration as a special type of evaporation.",
+        "visual_purpose": "Illustrate plants releasing water vapor.",
+        "concept": "Transpiration",
+        "expected_outcome": "Students understand plants contribute to atmospheric water.",
+        "related_components": [
+          "Plants",
+          "Leaves"
+        ],
+        "duration": 45,
+        "teaching_notes": "Explain it's like plants 'sweating'.",
+        "narration_hints": "Describe how trees act like tiny pumps."
+      },
+      {
+        "step_id": "explain_condensation",
+        "action_type": "EXPLAIN",
+        "instructional_purpose": "Describe how water vapor forms clouds.",
+        "visual_purpose": "Show water vapor rising, cooling, and forming clouds.",
+        "concept": "Condensation",
+        "expected_outcome": "Students grasp that cooling vapor forms liquid droplets/ice crystals.",
+        "related_components": [
+          "Atmosphere",
+          "Clouds",
+          "Temperature drop"
+        ],
+        "duration": 75,
+        "teaching_notes": "Explain cooling and the formation of tiny water droplets/ice crystals.",
+        "narration_hints": "Relate it to a cold glass 'sweating'."
+      },
+      {
+        "step_id": "explain_precipitation",
+        "action_type": "EXPLAIN",
+        "instructional_purpose": "Detail the various forms of water falling back to Earth.",
+        "visual_purpose": "Illustrate rain, snow, sleet, hail falling from clouds.",
+        "concept": "Precipitation",
+        "expected_outcome": "Students can name different types of precipitation and understand why they occur.",
+        "related_components": [
+          "Clouds",
+          "Gravity",
+          "Temperature"
+        ],
+        "duration": 60,
+        "teaching_notes": "Discuss different conditions for rain vs. snow.",
+        "narration_hints": "Explain the role of gravity."
+      },
+      {
+        "step_id": "explain_collection",
+        "action_type": "EXPLAIN",
+        "instructional_purpose": "Show where precipitated water ends up.",
+        "visual_purpose": "Illustrate water flowing into rivers, lakes, oceans, and groundwater.",
+        "concept": "Collection",
+        "expected_outcome": "Students understand how water is stored before evaporating again.",
+        "related_components": [
+          "Oceans",
+          "Lakes",
+          "Rivers",
+          "Groundwater",
+          "Runoff"
+        ],
+        "duration": 70,
+        "teaching_notes": "Distinguish between surface runoff and groundwater.",
+        "narration_hints": "Emphasize that this water is 'collected' and starts the cycle anew."
+      },
+      {
+        "step_id": "summarize_cycle",
+        "action_type": "SUMMARIZE",
+        "instructional_purpose": "Present the entire water cycle as a continuous process.",
+        "visual_purpose": "Show a diagram with all stages in a loop.",
+        "concept": "Water Cycle Overview",
+        "expected_outcome": "Students can visualize and describe the entire cycle.",
+        "related_components": [
+          "All stages"
+        ],
+        "duration": 50,
+        "teaching_notes": "Reinforce the cyclical nature and constant movement.",
+        "narration_hints": "Recap the journey of a single water molecule."
+      },
+      {
+        "step_id": "review_quiz",
+        "action_type": "REVIEW",
+        "instructional_purpose": "Assess understanding of key terms and processes.",
+        "visual_purpose": "Present a multiple-choice question.",
+        "concept": "Reinforcement",
+        "expected_outcome": "Students can answer review questions correctly.",
+        "related_components": [
+          "All concepts"
+        ],
+        "duration": 40,
+        "teaching_notes": "Use this to check for common misconceptions.",
+        "narration_hints": "Encourage students to recall definitions."
+      }
+    ]
+  },
+  "scenes": [
+    {
+      "scene_no": 1,
+      "template_id": "title_slide",
+      "teaching_step_id": "intro_water_cycle",
+      "teacher_script": "Hello future environmental scientists! Today, we embark on a journey with water, exploring its incredible adventure around our planet. We're diving into the 'Water Cycle', a fundamental process that sustains all life on Earth. Get ready to discover how every drop of water keeps moving!",
+      "template_data": {
+        "title": "The Amazing Water Cycle",
+        "subtitle": "Earth's Essential Journey of Water",
+        "logo_url": "https://example.com/water_cycle_logo.png",
+        "background_image_url": "https://images.unsplash.com/photo-1549429712-421b92040b2a?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "animation_style": "spring_pop"
+      },
+      "metadata": {
+        "learning_objective": "Set the stage for understanding the water cycle.",
+        "concept_importance": "high",
+        "instruction_type": "Introduction",
+        "difficulty": "beginner",
+        "teaching_strategy": "Engage and inform",
+        "reinforcement_level": "low",
+        "quiz_hints": "N/A",
+        "analytics_tags": "intro, water cycle, Earth science"
+      },
+      "audio_url": "./scene_1.wav"
+    },
+    {
+      "scene_no": 2,
+      "template_id": "illustrated_scene",
+      "teaching_step_id": "explain_evaporation",
+      "teacher_script": "Our journey begins with evaporation. Driven by the sun's energy, water on the Earth's surface – from oceans, lakes, and rivers – heats up and transforms into an invisible gas called water vapor. This vapor then rises into the atmosphere, lighter than the surrounding air.",
+      "template_data": {
+        "title": "Stage 1: Evaporation",
+        "elements": [
+          {
+            "type": "path",
+            "path_data": "M 0 550 L 1280 550 L 1280 720 L 0 720 Z",
+            "fill": "#4299e1"
+          },
+          {
+            "type": "path",
+            "path_data": "M 0 550 L 1280 550 C 1000 500, 800 600, 600 550 C 400 500, 200 600, 0 550 Z",
+            "fill": "#63b3ed"
+          },
+          {
+            "type": "circle",
+            "cx": 1000,
+            "cy": 150,
+            "r": 80,
+            "fill": "#faca15",
+            "stroke_width": 0,
+            "animation_action": "pulse"
+          },
+          {
+            "type": "path",
+            "path_data": "M 800 300 C 780 250, 750 200, 700 180 S 600 150, 500 180 S 400 250, 380 300 S 350 400, 450 450 S 700 480, 800 400 S 820 350, 800 300 Z",
+            "fill": "rgba(255, 255, 255, 0.2)",
+            "stroke_color": "#ffffff",
+            "stroke_width": 2
+          },
+          {
+            "type": "text_overlay",
+            "position": {
+              "x": 1000,
+              "y": 90
+            },
+            "text": "Solar Energy",
+            "font_size": 28,
+            "color": "#faca15"
+          },
+          {
+            "type": "text_overlay",
+            "position": {
+              "x": 640,
+              "y": 600
+            },
+            "text": "Ocean/Lake",
+            "font_size": 36,
+            "color": "#ffffff"
+          },
+          {
+            "type": "circle",
+            "cx": 500,
+            "cy": 450,
+            "r": 8,
+            "fill": "#ffffff",
+            "animation_action": "rise",
+            "animation_delay": 0.5
+          },
+          {
+            "type": "circle",
+            "cx": 600,
+            "cy": 480,
+            "r": 6,
+            "fill": "#ffffff",
+            "animation_action": "rise",
+            "animation_delay": 1
+          },
+          {
+            "type": "circle",
+            "cx": 700,
+            "cy": 430,
+            "r": 7,
+            "fill": "#ffffff",
+            "animation_action": "rise",
+            "animation_delay": 1.5
+          },
+          {
+            "type": "dashed_line",
+            "x1": 500,
+            "y1": 450,
+            "x2": 500,
+            "y2": 300,
+            "stroke_color": "#ffffff",
+            "stroke_width": 2,
+            "dash_array": "5 5",
+            "animation_action": "draw"
+          },
+          {
+            "type": "dashed_line",
+            "x1": 600,
+            "y1": 480,
+            "x2": 600,
+            "y2": 330,
+            "stroke_color": "#ffffff",
+            "stroke_width": 2,
+            "dash_array": "5 5",
+            "animation_action": "draw"
+          },
+          {
+            "type": "dashed_line",
+            "x1": 700,
+            "y1": 430,
+            "x2": 700,
+            "y2": 280,
+            "stroke_color": "#ffffff",
+            "stroke_width": 2,
+            "dash_array": "5 5",
+            "animation_action": "draw"
+          },
+          {
+            "type": "text_overlay",
+            "position": {
+              "x": 750,
+              "y": 250
+            },
+            "text": "Water Vapor Rises",
+            "font_size": 24,
+            "color": "#ffffff",
+            "animation_action": "slide_left"
+          }
+        ],
+        "animation_style": "stagger_in"
+      },
+      "metadata": {
+        "learning_objective": "Define and visualize the process of evaporation.",
+        "concept_importance": "high",
+        "instruction_type": "Explain Concept",
+        "difficulty": "beginner",
+        "teaching_strategy": "Visual demonstration",
+        "reinforcement_level": "medium",
+        "quiz_hints": "What energy source drives evaporation?",
+        "analytics_tags": "evaporation, sun, water vapor, states of matter"
+      },
+      "audio_url": "./scene_2.wav"
+    },
+    {
+      "scene_no": 3,
+      "template_id": "illustrated_scene",
+      "teaching_step_id": "highlight_transpiration",
+      "teacher_script": "Plants also contribute to the water cycle through a process called transpiration. Water absorbed by plant roots travels up to the leaves and is then released as water vapor into the atmosphere. Forests and large plant areas can release massive amounts of water!",
+      "template_data": {
+        "title": "Transpiration: Plants' Contribution",
+        "elements": [
+          {
+            "type": "path",
+            "path_data": "M 0 550 L 1280 550 L 1280 720 L 0 720 Z",
+            "fill": "#8b5e32"
+          },
+          {
+            "type": "path",
+            "path_data": "M 550 550 V 250 H 600 V 550 Z",
+            "fill": "#a0522d",
+            "stroke_color": "#7a3e1a",
+            "stroke_width": 3
+          },
+          {
+            "type": "path",
+            "path_data": "M 600 350 C 650 300, 700 300, 750 350 S 700 400, 650 400 S 600 350, 600 350 Z",
+            "fill": "#38a169",
+            "stroke_color": "#2f855a",
+            "stroke_width": 2
+          },
+          {
+            "type": "path",
+            "path_data": "M 550 350 C 500 300, 450 300, 400 350 S 450 400, 500 400 S 550 350, 550 350 Z",
+            "fill": "#38a169",
+            "stroke_color": "#2f855a",
+            "stroke_width": 2
+          },
+          {
+            "type": "path",
+            "path_data": "M 620 280 C 670 230, 720 230, 770 280 S 720 330, 670 330 S 620 280, 620 280 Z",
+            "fill": "#38a169",
+            "stroke_color": "#2f855a",
+            "stroke_width": 2
+          },
+          {
+            "type": "path",
+            "path_data": "M 530 280 C 480 230, 430 230, 380 280 S 430 330, 480 330 S 530 280, 530 280 Z",
+            "fill": "#38a169",
+            "stroke_color": "#2f855a",
+            "stroke_width": 2
+          },
+          {
+            "type": "path",
+            "path_data": "M 575 550 C 550 600, 500 650, 450 650",
+            "stroke_color": "#5a412a",
+            "stroke_width": 3,
+            "fill": "none"
+          },
+          {
+            "type": "path",
+            "path_data": "M 575 550 C 600 600, 650 650, 700 650",
+            "stroke_color": "#5a412a",
+            "stroke_width": 3,
+            "fill": "none"
+          },
+          {
+            "type": "circle",
+            "cx": 670,
+            "cy": 250,
+            "r": 5,
+            "fill": "#ffffff",
+            "animation_action": "rise",
+            "animation_delay": 0.5
+          },
+          {
+            "type": "circle",
+            "cx": 580,
+            "cy": 260,
+            "r": 4,
+            "fill": "#ffffff",
+            "animation_action": "rise",
+            "animation_delay": 1
+          },
+          {
+            "type": "dashed_line",
+            "x1": 670,
+            "y1": 250,
+            "x2": 670,
+            "y2": 180,
+            "stroke_color": "#ffffff",
+            "stroke_width": 2,
+            "dash_array": "5 5",
+            "animation_action": "draw"
+          },
+          {
+            "type": "dashed_line",
+            "x1": 580,
+            "y1": 260,
+            "x2": 580,
+            "y2": 190,
+            "stroke_color": "#ffffff",
+            "stroke_width": 2,
+            "dash_array": "5 5",
+            "animation_action": "draw"
+          },
+          {
+            "type": "text_overlay",
+            "position": {
+              "x": 670,
+              "y": 150
+            },
+            "text": "Water Vapor (Transpiration)",
+            "font_size": 22,
+            "color": "#ffffff",
+            "animation_action": "slide_left"
+          },
+          {
+            "type": "text_overlay",
+            "position": {
+              "x": 575,
+              "y": 680
+            },
+            "text": "Roots absorb water",
+            "font_size": 24,
+            "color": "#ffffff"
+          }
+        ],
+        "animation_style": "fade_wave"
+      },
+      "metadata": {
+        "learning_objective": "Understand the role of plants in the water cycle through transpiration.",
+        "concept_importance": "medium",
+        "instruction_type": "Highlight Specific Process",
+        "difficulty": "beginner",
+        "teaching_strategy": "Detailed illustration",
+        "reinforcement_level": "medium",
+        "quiz_hints": "What is the process called when plants release water vapor?",
+        "analytics_tags": "transpiration, plants, leaves, ecosystem"
+      },
+      "audio_url": "./scene_3.wav"
+    },
+    {
+      "scene_no": 4,
+      "template_id": "illustrated_scene",
+      "teaching_step_id": "explain_condensation",
+      "teacher_script": "As water vapor rises higher into the atmosphere, it cools down. This cooling causes the vapor to change back into tiny liquid water droplets or ice crystals. These droplets gather around microscopic dust particles, forming what we see as clouds! This process is called condensation.",
+      "template_data": {
+        "title": "Stage 2: Condensation",
+        "elements": [
+          {
+            "type": "path",
+            "path_data": "M 0 450 L 1280 450 L 1280 720 L 0 720 Z",
+            "fill": "#a0aec0"
+          },
+          {
+            "type": "path",
+            "path_data": "M 0 450 C 200 400, 400 480, 600 450 C 800 420, 1000 480, 1280 450 Z",
+            "fill": "#cbd5e0"
+          },
+          {
+            "type": "dashed_line",
+            "x1": 400,
+            "y1": 600,
+            "x2": 400,
+            "y2": 300,
+            "stroke_color": "#e2e8f0",
+            "stroke_width": 3,
+            "dash_array": "8 8",
+            "animation_action": "draw"
+          },
+          {
+            "type": "dashed_line",
+            "x1": 550,
+            "y1": 650,
+            "x2": 550,
+            "y2": 350,
+            "stroke_color": "#e2e8f0",
+            "stroke_width": 3,
+            "dash_array": "8 8",
+            "animation_action": "draw"
+          },
+          {
+            "type": "dashed_line",
+            "x1": 700,
+            "y1": 620,
+            "x2": 700,
+            "y2": 320,
+            "stroke_color": "#e2e8f0",
+            "stroke_width": 3,
+            "dash_array": "8 8",
+            "animation_action": "draw"
+          },
+          {
+            "type": "text_overlay",
+            "position": {
+              "x": 475,
+              "y": 680
+            },
+            "text": "Warm, Moist Air Rises",
+            "font_size": 28,
+            "color": "#ffffff",
+            "animation_action": "slide_right"
+          },
+          {
+            "type": "text_overlay",
+            "position": {
+              "x": 750,
+              "y": 100
+            },
+            "text": "Colder Air",
+            "font_size": 28,
+            "color": "#ffffff",
+            "animation_action": "fade_in"
+          },
+          {
+            "type": "path",
+            "path_data": "M 300 200 C 250 150, 200 180, 220 230 S 300 280, 380 250 S 350 180, 300 200 Z",
+            "fill": "#ffffff",
+            "opacity": 0.9,
+            "animation_action": "scale_up"
+          },
+          {
+            "type": "path",
+            "path_data": "M 500 150 C 450 100, 400 130, 420 180 S 500 230, 580 200 S 550 130, 500 150 Z",
+            "fill": "#ffffff",
+            "opacity": 0.8,
+            "animation_action": "scale_up",
+            "animation_delay": 0.2
+          },
+          {
+            "type": "path",
+            "path_data": "M 700 180 C 650 130, 600 160, 620 210 S 700 260, 780 230 S 750 160, 700 180 Z",
+            "fill": "#ffffff",
+            "opacity": 0.9,
+            "animation_action": "scale_up",
+            "animation_delay": 0.4
+          },
+          {
+            "type": "path",
+            "path_data": "M 900 130 C 850 80, 800 110, 820 160 S 900 210, 980 180 S 950 110, 900 130 Z",
+            "fill": "#ffffff",
+            "opacity": 0.85,
+            "animation_action": "scale_up",
+            "animation_delay": 0.6
+          },
+          {
+            "type": "text_overlay",
+            "position": {
+              "x": 640,
+              "y": 50
+            },
+            "text": "Clouds form from condensed water vapor",
+            "font_size": 28,
+            "color": "#ffffff",
+            "animation_action": "fade_in"
+          }
+        ],
+        "animation_style": "cascade"
+      },
+      "metadata": {
+        "learning_objective": "Explain the process of condensation and cloud formation.",
+        "concept_importance": "high",
+        "instruction_type": "Explain Process",
+        "difficulty": "intermediate",
+        "teaching_strategy": "Sequential illustration",
+        "reinforcement_level": "high",
+        "quiz_hints": "What happens to water vapor when it cools?",
+        "analytics_tags": "condensation, clouds, atmosphere, temperature"
+      },
+      "audio_url": "./scene_4.wav"
+    },
+    {
+      "scene_no": 5,
+      "template_id": "illustrated_scene",
+      "teaching_step_id": "explain_precipitation",
+      "teacher_script": "When these water droplets or ice crystals in clouds grow large enough and become too heavy, gravity pulls them back down to Earth. This is precipitation! It can take many forms depending on atmospheric temperatures, such as rain, snow, sleet, or hail.",
+      "template_data": {
+        "title": "Stage 3: Precipitation",
+        "elements": [
+          {
+            "type": "path",
+            "path_data": "M 0 500 L 1280 500 L 1280 720 L 0 720 Z",
+            "fill": "#48bb78"
+          },
+          {
+            "type": "path",
+            "path_data": "M 0 500 C 200 450, 400 550, 600 500 C 800 450, 1000 550, 1280 500 Z",
+            "fill": "#68d391"
+          },
+          {
+            "type": "path",
+            "path_data": "M 300 150 C 250 100, 200 130, 220 180 S 300 230, 380 200 S 350 130, 300 150 Z",
+            "fill": "#ffffff",
+            "opacity": 0.9
+          },
+          {
+            "type": "path",
+            "path_data": "M 500 100 C 450 50, 400 80, 420 130 S 500 180, 580 150 S 550 80, 500 100 Z",
+            "fill": "#ffffff",
+            "opacity": 0.8
+          },
+          {
+            "type": "path",
+            "path_data": "M 700 130 C 650 80, 600 110, 620 160 S 700 210, 780 180 S 750 110, 700 130 Z",
+            "fill": "#ffffff",
+            "opacity": 0.9
+          },
+          {
+            "type": "circle",
+            "cx": 350,
+            "cy": 250,
+            "r": 6,
+            "fill": "#4299e1",
+            "animation_action": "fall",
+            "animation_speed": "slow",
+            "animation_delay": 0.5
+          },
+          {
+            "type": "circle",
+            "cx": 450,
+            "cy": 300,
+            "r": 5,
+            "fill": "#4299e1",
+            "animation_action": "fall",
+            "animation_speed": "slow",
+            "animation_delay": 1
+          },
+          {
+            "type": "circle",
+            "cx": 550,
+            "cy": 280,
+            "r": 7,
+            "fill": "#4299e1",
+            "animation_action": "fall",
+            "animation_speed": "slow",
+            "animation_delay": 1.5
+          },
+          {
+            "type": "path",
+            "path_data": "M 700 250 L 710 260 L 700 270 L 690 260 Z M 720 270 L 730 280 L 720 290 L 710 280 Z",
+            "fill": "#e2e8f0",
+            "animation_action": "fall",
+            "animation_speed": "slow",
+            "animation_delay": 2
+          },
+          {
+            "type": "path",
+            "path_data": "M 800 260 L 810 270 L 800 280 L 790 270 Z M 820 280 L 830 290 L 820 300 L 810 290 Z",
+            "fill": "#e2e8f0",
+            "animation_action": "fall",
+            "animation_speed": "slow",
+            "animation_delay": 2.5
+          },
+          {
+            "type": "text_overlay",
+            "position": {
+              "x": 450,
+              "y": 380
+            },
+            "text": "Rain",
+            "font_size": 28,
+            "color": "#4299e1",
+            "animation_action": "fade_in"
+          },
+          {
+            "type": "text_overlay",
+            "position": {
+              "x": 750,
+              "y": 380
+            },
+            "text": "Snow",
+            "font_size": 28,
+            "color": "#e2e8f0",
+            "animation_action": "fade_in"
+          }
+        ],
+        "animation_style": "fade_wave"
+      },
+      "metadata": {
+        "learning_objective": "Identify different forms of precipitation and the conditions under which they occur.",
+        "concept_importance": "high",
+        "instruction_type": "Define and Illustrate",
+        "difficulty": "beginner",
+        "teaching_strategy": "Categorization and visual examples",
+        "reinforcement_level": "medium",
+        "quiz_hints": "What causes precipitation? Name two types.",
+        "analytics_tags": "precipitation, rain, snow, sleet, hail, gravity"
+      },
+      "audio_url": "./scene_5.wav"
+    },
+    {
+      "scene_no": 6,
+      "template_id": "illustrated_scene",
+      "teaching_step_id": "explain_collection",
+      "teacher_script": "Once precipitation reaches the Earth, it gathers in various places. Some water forms runoff, flowing over the land into rivers, lakes, and eventually the oceans. Other water soaks into the ground, becoming groundwater. This collected water is where our cycle begins again!",
+      "template_data": {
+        "title": "Stage 4: Collection",
+        "elements": [
+          {
+            "type": "path",
+            "path_data": "M 0 500 L 1280 500 L 1280 720 L 0 720 Z",
+            "fill": "#48bb78"
+          },
+          {
+            "type": "path",
+            "path_data": "M 0 500 C 200 450, 400 550, 600 500 C 800 450, 1000 550, 1280 500 Z",
+            "fill": "#68d391"
+          },
+          {
+            "type": "path",
+            "path_data": "M 100 500 C 150 480, 200 480, 250 500 S 200 520, 150 520 S 100 500, 100 500 Z",
+            "fill": "#4299e1",
+            "stroke_color": "#3182ce",
+            "stroke_width": 2
+          },
+          {
+            "type": "path",
+            "path_data": "M 300 500 C 350 480, 400 480, 450 500 S 400 520, 350 520 S 300 500, 300 500 Z",
+            "fill": "#4299e1",
+            "stroke_color": "#3182ce",
+            "stroke_width": 2
+          },
+          {
+            "type": "path",
+            "path_data": "M 500 500 C 550 480, 600 480, 650 500 S 600 520, 550 520 S 500 500, 500 500 Z",
+            "fill": "#4299e1",
+            "stroke_color": "#3182ce",
+            "stroke_width": 2
+          },
+          {
+            "type": "path",
+            "path_data": "M 600 520 C 650 500, 700 500, 750 520 S 700 540, 650 540 S 600 520, 600 520 Z",
+            "fill": "#4299e1",
+            "stroke_color": "#3182ce",
+            "stroke_width": 2
+          },
+          {
+            "type": "path",
+            "path_data": "M 150 520 C 180 530, 200 550, 220 570 L 220 590 L 120 590 L 120 570 C 100 550, 120 530, 150 520 Z",
+            "fill": "#4299e1",
+            "stroke_color": "#3182ce",
+            "stroke_width": 2
+          },
+          {
+            "type": "path",
+            "path_data": "M 350 520 C 380 530, 400 550, 420 570 L 420 590 L 320 590 L 320 570 C 300 550, 320 530, 350 520 Z",
+            "fill": "#4299e1",
+            "stroke_color": "#3182ce",
+            "stroke_width": 2
+          },
+          {
+            "type": "path",
+            "path_data": "M 550 520 C 580 530, 600 550, 620 570 L 620 590 L 520 590 L 520 570 C 500 550, 520 530, 550 520 Z",
+            "fill": "#4299e1",
+            "stroke_color": "#3182ce",
+            "stroke_width": 2
+          },
+          {
+            "type": "path",
+            "path_data": "M 750 520 C 780 530, 800 550, 820 570 L 820 590 L 720 590 L 720 570 C 700 550, 720 530, 750 520 Z",
+            "fill": "#4299e1",
+            "stroke_color": "#3182ce",
+            "stroke_width": 2
+          },
+          {
+            "type": "text_overlay",
+            "position": {
+              "x": 250,
+              "y": 640
+            },
+            "text": "Surface Runoff",
+            "font_size": 24,
+            "color": "#ffffff"
+          },
+          {
+            "type": "path",
+            "path_data": "M 0 650 L 1280 650 L 1280 720 L 0 720 Z",
+            "fill": "#1a472a"
+          },
+          {
+            "type": "path",
+            "path_data": "M 1000 500 C 1050 480, 1100 480, 1150 500 L 1150 650 C 1100 600, 1050 600, 1000 650 Z",
+            "fill": "#4299e1",
+            "stroke_color": "#3182ce",
+            "stroke_width": 2
+          },
+          {
+            "type": "text_overlay",
+            "position": {
+              "x": 1075,
+              "y": 670
+            },
+            "text": "Lake/Ocean",
+            "font_size": 28,
+            "color": "#ffffff"
+          },
+          {
+            "type": "text_overlay",
+            "position": {
+              "x": 640,
+              "y": 590
+            },
+            "text": "Groundwater",
+            "font_size": 24,
+            "color": "#ffffff"
+          },
+          {
+            "type": "dashed_line",
+            "x1": 800,
+            "y1": 550,
+            "x2": 1000,
+            "y2": 530,
+            "stroke_color": "#ffffff",
+            "stroke_width": 2,
+            "dash_array": "5 5",
+            "animation_action": "draw"
+          }
+        ],
+        "animation_style": "stagger_in"
+      },
+      "metadata": {
+        "learning_objective": "Understand how water is collected in various forms after precipitation.",
+        "concept_importance": "high",
+        "instruction_type": "Explain Concept",
+        "difficulty": "beginner",
+        "teaching_strategy": "Illustrate storage points",
+        "reinforcement_level": "medium",
+        "quiz_hints": "Where does water go after it rains?",
+        "analytics_tags": "collection, runoff, groundwater, lakes, oceans, rivers"
+      },
+      "audio_url": "./scene_6.wav"
+    },
+    {
+      "scene_no": 7,
+      "template_id": "cycle_template",
+      "teaching_step_id": "summarize_cycle",
+      "teacher_script": "And so, the water cycle continues, an endless, vital loop. Water moves from the land and oceans to the atmosphere, forming clouds, falling back as precipitation, and collecting again, ready to repeat its journey. It's a perfect system that constantly renews our planet's freshwater supply!",
+      "template_data": {
+        "title": "The Continuous Water Cycle",
+        "center_text": "Water Cycle",
+        "cycle_elements": [
+          {
+            "id": "evaporation",
+            "label": "Evaporation",
+            "description": "Water changes from liquid to gas (vapor) due to heat."
+          },
+          {
+            "id": "condensation",
+            "label": "Condensation",
+            "description": "Water vapor cools and turns back into liquid droplets, forming clouds."
+          },
+          {
+            "id": "precipitation",
+            "label": "Precipitation",
+            "description": "Water falls back to Earth as rain, snow, sleet, or hail."
+          },
+          {
+            "id": "collection",
+            "label": "Collection",
+            "description": "Water gathers in oceans, lakes, rivers, or as groundwater."
+          }
+        ],
+        "arrows": [
+          {
+            "from": "evaporation",
+            "to": "condensation",
+            "label": "Rising Vapor"
+          },
+          {
+            "from": "condensation",
+            "to": "precipitation",
+            "label": "Falling Water"
+          },
+          {
+            "from": "precipitation",
+            "to": "collection",
+            "label": "Runoff & Seepage"
+          },
+          {
+            "from": "collection",
+            "to": "evaporation",
+            "label": "Sun's Heat"
+          }
+        ],
+        "animation_style": "stagger_in"
+      },
+      "metadata": {
+        "learning_objective": "Summarize the entire water cycle as a continuous process.",
+        "concept_importance": "high",
+        "instruction_type": "Summary/Review",
+        "difficulty": "beginner",
+        "teaching_strategy": "Cyclical diagram",
+        "reinforcement_level": "high",
+        "quiz_hints": "Draw the water cycle and label its parts.",
+        "analytics_tags": "water cycle summary, continuous process, global water"
+      },
+      "audio_url": "./scene_7.wav"
+    },
+    {
+      "scene_no": 8,
+      "template_id": "quiz_checkpoint",
+      "teaching_step_id": "review_quiz",
+      "teacher_script": "Let's quickly check your understanding. Which stage of the water cycle involves water vapor cooling and changing back into liquid droplets to form clouds? Think carefully about the process we just learned!",
+      "template_data": {
+        "question": "Which stage of the water cycle involves water vapor cooling and changing back into liquid droplets?",
+        "options": [
+          {
+            "id": "A",
+            "text": "Evaporation"
+          },
+          {
+            "id": "B",
+            "text": "Condensation"
+          },
+          {
+            "id": "C",
+            "text": "Precipitation"
+          },
+          {
+            "id": "D",
+            "text": "Collection"
+          }
+        ],
+        "correct_answer_id": "B",
+        "explanation": "Condensation is the process where water vapor cools and turns into liquid water droplets or ice crystals, forming clouds.",
+        "animation_style": "spring_pop"
+      },
+      "metadata": {
+        "learning_objective": "Assess student understanding of water cycle stages.",
+        "concept_importance": "high",
+        "instruction_type": "Assessment",
+        "difficulty": "beginner",
+        "teaching_strategy": "Multiple choice quiz",
+        "reinforcement_level": "high",
+        "quiz_hints": "Focus on the definition of each stage.",
+        "analytics_tags": "quiz, assessment, water cycle, condensation"
+      },
+      "audio_url": "./scene_8.wav"
+    }
+  ]
+}

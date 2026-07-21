@@ -1076,10 +1076,20 @@
               <span class="vl-step-check">4</span>
               <span>Synthesizing Voice Narration</span>
             </div>
-            <div class="vl-loading-step" id="vl-step-launching_lesson">
+            <div class="vl-loading-step" id="vl-step-hyperframes_engine">
               <span class="vl-step-check">5</span>
+              <span>Hyperframes Rendering Engine</span>
+            </div>
+            <div class="vl-loading-step" id="vl-step-launching_lesson">
+              <span class="vl-step-check">6</span>
               <span>Launching Media Player</span>
             </div>
+          </div>
+
+          <!-- Hyperframes Subsystem Detailed Stream Log Display -->
+          <div id="vl-engine-log-box" class="mt-4 p-3 bg-slate-900/80 border border-slate-800 rounded-xl text-left max-w-md w-full font-mono text-[11px] text-slate-300 space-y-1">
+             <div class="text-[10px] text-indigo-400 font-bold uppercase tracking-wider mb-1">⚡ Hyperframes Engine Stream Log:</div>
+             <div id="vl-engine-log-text" class="text-slate-400 truncate">Initializing Hyperframes Pipeline...</div>
           </div>
 
           <!-- Error Alert UI inside loading screen -->
@@ -1090,56 +1100,129 @@
           </div>
         </div>
 
-        <!-- Lesson Player -->
-        <div id="vl-player" style="display: none; position: relative;">
-          <!-- Floating Close Button -->
-          <button id="vl-exit-btn" class="vl-floating-close-btn" title="Close Player">✕</button>
+        <!-- Lesson Player (Coursera / YouTube-inspired Educational Video Player) -->
+        <div id="vl-player" style="display: none;">
+          <!-- Component 1: Header Bar -->
+          <div id="vl-header" class="vl-header-bar">
+            <div class="vl-header-left">
+              <span class="vl-header-badge">🎬 VISUAL LEARNING ENGINE</span>
+              <h2 id="vl-header-title" class="vl-header-title">AI Animated Lesson</h2>
+            </div>
+            <div class="vl-header-right">
+              <button id="vl-notes-toggle-btn" class="vl-header-action-btn" title="Toggle Lesson Script & Scenes">📖 Notes & Script</button>
+              <button id="vl-exit-btn" class="vl-header-close-btn" title="Exit Visual Learning">✕</button>
+            </div>
+          </div>
 
-          <!-- Progress Bar -->
-          <div class="vl-progress-bar-container">
-            <div id="vl-progress-bar-fill" class="vl-progress-bar-fill"></div>
-          </div>
-          
-          <div class="vl-player-body">
-            <!-- Main Content (Responsive 16:9 Canvas Container) -->
-            <div id="vl-main">
-              <div id="vl-canvas">
-                <!-- Scene assets will be rendered here dynamically -->
-              </div>
-            </div>
-            
-            <!-- Notes Overlay -->
-            <div id="vl-notes-overlay">
-              <div class="vl-notes-header">
-                <div class="vl-drawer-tabs flex gap-2">
-                  <button type="button" id="vl-tab-script" class="vl-drawer-tab active">📖 Script</button>
-                  <button type="button" id="vl-tab-outline" class="vl-drawer-tab">📋 Outline</button>
+          <div class="vl-player-stage-column">
+            <!-- Component 2: Video Player Container (16:9 Aspect Ratio) -->
+            <div id="vl-video-container">
+              <div id="vl-main">
+                <div id="vl-canvas">
+                  <!-- Hyperframes iframe or canvas presentation mounted here -->
                 </div>
-                <button id="vl-close-notes-btn" class="text-white opacity-60 hover:opacity-100 font-bold text-lg">&times;</button>
               </div>
-              <div id="vl-drawer-script-content" class="vl-drawer-content active">
-                <div id="vl-notes-body" class="vl-notes-body"></div>
+            </div>
+
+            <!-- Component 3: Player Controls (Directly BELOW Video Container) -->
+            <div id="vl-controls">
+              <!-- Integrated Progress / Seek Bar -->
+              <div class="vl-progress-bar-container" title="Click to Seek">
+                <div id="vl-progress-bar-fill" class="vl-progress-bar-fill"></div>
               </div>
-              <div id="vl-drawer-outline-content" class="vl-drawer-content" style="display: none;">
-                <div id="vl-slides-list" class="vl-outline-list"></div>
+
+              <div class="vl-controls-row">
+                <!-- Left Controls Group -->
+                <div class="vl-control-group left">
+                  <button id="vl-play-pause-btn" class="vl-control-btn vl-play-btn" title="Play / Pause">
+                    <span class="vl-btn-icon">▶</span>
+                  </button>
+                  <button id="vl-prev-btn" class="vl-control-btn" title="Previous Scene">
+                    <span class="vl-btn-icon">⏮</span>
+                  </button>
+                  <button id="vl-next-btn" class="vl-control-btn" title="Next Scene">
+                    <span class="vl-btn-icon">⏭</span>
+                  </button>
+                  <button id="vl-replay-btn" class="vl-control-btn" title="Replay Lesson">
+                    <span class="vl-btn-icon">🔄</span>
+                  </button>
+                  <div class="vl-time-display">
+                    <span id="vl-progress-text">Scene 1 / 4 • 0:00 / 0:00</span>
+                  </div>
+                </div>
+
+                <!-- Right Controls Group -->
+                <div class="vl-control-group right">
+                  <button id="vl-mute-btn" class="vl-control-btn" title="Mute / Unmute">
+                    <span id="vl-mute-icon" class="vl-btn-icon">🔊</span>
+                  </button>
+                  <button id="vl-speed-btn" class="vl-control-btn vl-pill-btn" title="Playback Speed">
+                    <span>1.0x</span>
+                  </button>
+                  <button id="vl-notes-btn" class="vl-control-btn" title="Toggle Lesson Script & Scenes">
+                    <span class="vl-btn-icon">📖</span>
+                  </button>
+                  <button id="vl-fullscreen-btn" class="vl-control-btn" title="Toggle Fullscreen">
+                    <span class="vl-btn-icon">⛶</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Component 4: Subtitle Panel (Below Player Controls) -->
+            <div id="vl-subtitle-panel">
+              <div class="vl-subtitle-badge">
+                <span class="vl-subtitle-avatar">🎙️</span>
+                <span class="vl-subtitle-speaker">AI Tutor</span>
+              </div>
+              <div id="vl-subtitle-text" class="vl-subtitle-text">
+                Teacher narration script will display here smoothly as the visual presentation plays...
+              </div>
+            </div>
+
+            <!-- Component 5: Future AI Tools (Placeholder Component) -->
+            <div id="vl-future-ai-tools">
+              <div class="vl-ai-tools-header">
+                <span class="vl-ai-tools-title">✨ AI Interactive Learning Suite</span>
+                <span class="vl-ai-tools-badge">Next Gen</span>
+              </div>
+              <div class="vl-ai-tools-chips">
+                <button type="button" class="vl-ai-chip" title="AI will re-explain current scene with simpler real-world analogies">
+                  <span class="chip-icon">🤖</span> AI Explain Scene
+                </button>
+                <button type="button" class="vl-ai-chip" title="Ask AI Tutor a doubt about this specific visual frame">
+                  <span class="chip-icon">💡</span> AI Ask Doubt
+                </button>
+                <button type="button" class="vl-ai-chip" title="Download AI-generated summary notes for this lesson">
+                  <span class="chip-icon">📝</span> Download Notes
+                </button>
+                <button type="button" class="vl-ai-chip" title="Toggle full interactive lesson transcript">
+                  <span class="chip-icon">📜</span> Transcript
+                </button>
+                <button type="button" class="vl-ai-chip" title="Save current timestamp to your study bookmarks">
+                  <span class="chip-icon">🔖</span> Bookmark Frame
+                </button>
+                <button type="button" class="vl-ai-chip" title="Replay voice narration with custom voice style">
+                  <span class="chip-icon">🎧</span> Voice Accent
+                </button>
               </div>
             </div>
           </div>
-          
-          <!-- Controls -->
-          <div id="vl-controls">
-            <div class="vl-control-group">
-              <span id="vl-progress-text" class="vl-progress-text">Scene 1 / 4</span>
+
+          <!-- Notes Slide-out Drawer Panel -->
+          <div id="vl-notes-overlay">
+            <div class="vl-notes-header">
+              <div class="vl-drawer-tabs flex gap-2">
+                <button type="button" id="vl-tab-script" class="vl-drawer-tab active">📖 Script</button>
+                <button type="button" id="vl-tab-outline" class="vl-drawer-tab">📋 Scenes</button>
+              </div>
+              <button id="vl-close-notes-btn" class="text-white opacity-60 hover:opacity-100 font-bold text-lg">&times;</button>
             </div>
-            
-            <div class="vl-control-group">
-              <button id="vl-prev-btn" class="vl-btn vl-btn-secondary">◀ Prev</button>
-              <button id="vl-play-pause-btn" class="vl-btn vl-btn-primary">⏸ Pause</button>
-              <button id="vl-next-btn" class="vl-btn vl-btn-secondary">Next ▶</button>
+            <div id="vl-drawer-script-content" class="vl-drawer-content active">
+              <div id="vl-notes-body" class="vl-notes-body"></div>
             </div>
-            
-            <div class="vl-control-group">
-              <button id="vl-notes-btn" class="vl-btn vl-btn-secondary">📖 Details</button>
+            <div id="vl-drawer-outline-content" class="vl-drawer-content" style="display: none;">
+              <div id="vl-slides-list" class="vl-outline-list"></div>
             </div>
           </div>
         </div>

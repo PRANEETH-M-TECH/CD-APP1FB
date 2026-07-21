@@ -479,12 +479,10 @@ class StreamingAudioPipeline {
             }
 
             const charCount = text ? text.length : 0;
-            const timeoutDuration = Math.min(12000, Math.max(3000, charCount * 45));
+            // Generous fallback timeout (minimum 30 seconds or 200ms/char) to allow full speech playback without premature cutoff
+            const timeoutDuration = Math.max(30000, charCount * 200);
             let timer = setTimeout(() => {
-                console.warn(`[STREAM] Browser TTS speaking timeout (${timeoutDuration}ms) for text: "${text.slice(0, 40)}..."`);
-                if (window.speechSynthesis) {
-                    window.speechSynthesis.cancel();
-                }
+                console.warn(`[STREAM] Browser TTS speaking safety timeout (${timeoutDuration}ms) reached for text: "${text.slice(0, 40)}..."`);
                 resolve();
             }, timeoutDuration);
 

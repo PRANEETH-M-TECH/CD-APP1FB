@@ -1,0 +1,252 @@
+{
+  "lesson_title": "Perimeter vs. Area: Square and Rectangle Fields",
+  "lesson_id": "vl_3da0ec2a",
+  "theme": "Math",
+  "layout_mode": "comparison",
+  "scenes": [
+    {
+      "scene_no": 1,
+      "template_id": "title_slide",
+      "teacher_script": "Welcome to a geometric challenge! Today, we'll explore the fascinating relationship between perimeter and area, comparing a square field and a rectangular field. Our goal is to determine which field encloses a larger area, despite sharing the same perimeter.",
+      "template_data": {
+        "title": "Perimeter vs. Area Challenge",
+        "subtitle": "Comparing Fields with Equal Perimeters"
+      },
+      "audio_url": "./scene_1.wav"
+    },
+    {
+      "scene_no": 2,
+      "template_id": "illustrated_scene",
+      "teacher_script": "Imagine two fields: a square one, with each side measuring 60 meters. And a rectangular field, with a known length of 80 meters, but its width is still a mystery. Both fields, we're told, have the exact same perimeter.",
+      "template_data": {
+        "elements": [
+          {
+            "type": "rect",
+            "x": 200,
+            "y": 250,
+            "width": 180,
+            "height": 180,
+            "fill": "rgba(100, 200, 100, 0.2)",
+            "stroke": "#10b981",
+            "stroke_width": 3,
+            "rx": 10
+          },
+          {
+            "type": "text_overlay",
+            "position": {
+              "x": 280,
+              "y": 220
+            },
+            "text": "Square Field"
+          },
+          {
+            "type": "text_overlay",
+            "position": {
+              "x": 290,
+              "y": 335
+            },
+            "text": "Side = 60m"
+          },
+          {
+            "type": "line",
+            "x1": 200,
+            "y1": 340,
+            "x2": 380,
+            "y2": 340,
+            "stroke": "#10b981",
+            "stroke_width": 2,
+            "dash_array": "5 5"
+          },
+          {
+            "type": "line",
+            "x1": 290,
+            "y1": 250,
+            "x2": 290,
+            "y2": 430,
+            "stroke": "#10b981",
+            "stroke_width": 2,
+            "dash_array": "5 5"
+          },
+          {
+            "type": "rect",
+            "x": 600,
+            "y": 250,
+            "width": 280,
+            "height": 140,
+            "fill": "rgba(100, 100, 200, 0.2)",
+            "stroke": "#3b82f6",
+            "stroke_width": 3,
+            "rx": 10
+          },
+          {
+            "type": "text_overlay",
+            "position": {
+              "x": 740,
+              "y": 220
+            },
+            "text": "Rectangular Field"
+          },
+          {
+            "type": "text_overlay",
+            "position": {
+              "x": 740,
+              "y": 300
+            },
+            "text": "Length = 80m"
+          },
+          {
+            "type": "text_overlay",
+            "position": {
+              "x": 580,
+              "y": 320
+            },
+            "text": "Width = ?"
+          },
+          {
+            "type": "line",
+            "x1": 600,
+            "y1": 320,
+            "x2": 880,
+            "y2": 320,
+            "stroke": "#3b82f6",
+            "stroke_width": 2,
+            "dash_array": "5 5"
+          },
+          {
+            "type": "line",
+            "x1": 740,
+            "y1": 250,
+            "x2": 740,
+            "y2": 390,
+            "stroke": "#3b82f6",
+            "stroke_width": 2,
+            "dash_array": "5 5"
+          }
+        ],
+        "animation_action": "scale_up"
+      },
+      "audio_url": "./scene_2.wav"
+    },
+    {
+      "scene_no": 3,
+      "template_id": "math_derivation",
+      "teacher_script": "First, let's calculate the perimeter of the square field. A square has four equal sides, so its perimeter is simply four times the length of one side. With a side of 60 meters, the square's perimeter is 240 meters.",
+      "template_data": {
+        "equation_steps": [
+          "Perimeter of Square = 4 × Side",
+          "Perimeter of Square = 4 × 60 m",
+          "Perimeter of Square = 240 m"
+        ],
+        "animation_style": "stagger_in"
+      },
+      "audio_url": "./scene_3.wav"
+    },
+    {
+      "scene_no": 4,
+      "template_id": "math_derivation",
+      "teacher_script": "Now, we know the rectangular field has the same perimeter: 240 meters. The formula for a rectangle's perimeter is 2 times (length + width). We have the length, so we can solve for the unknown width.",
+      "template_data": {
+        "equation_steps": [
+          "Perimeter of Rectangle = 2 × (Length + Width)",
+          "240 m = 2 × (80 m + Width)",
+          "120 m = 80 m + Width",
+          "Width = 120 m - 80 m",
+          "Width = 40 m"
+        ],
+        "animation_style": "stagger_in"
+      },
+      "audio_url": "./scene_4.wav"
+    },
+    {
+      "scene_no": 5,
+      "template_id": "math_derivation",
+      "teacher_script": "With all dimensions known, let's calculate the area. The area of a square is found by multiplying the side length by itself. For our 60-meter square, this gives us 3600 square meters.",
+      "template_data": {
+        "equation_steps": [
+          "Area of Square = Side × Side",
+          "Area of Square = 60 m × 60 m",
+          "Area of Square = 3600 m²"
+        ],
+        "animation_style": "stagger_in"
+      },
+      "audio_url": "./scene_5.wav"
+    },
+    {
+      "scene_no": 6,
+      "template_id": "math_derivation",
+      "teacher_script": "Next, we calculate the area of the rectangular field. We now know its length is 80 meters and its width is 40 meters. Multiplying these two dimensions gives us an area of 3200 square meters.",
+      "template_data": {
+        "equation_steps": [
+          "Area of Rectangle = Length × Width",
+          "Area of Rectangle = 80 m × 40 m",
+          "Area of Rectangle = 3200 m²"
+        ],
+        "animation_style": "stagger_in"
+      },
+      "audio_url": "./scene_6.wav"
+    },
+    {
+      "scene_no": 7,
+      "template_id": "column_comparison",
+      "teacher_script": "Now for the comparison! The square field has an area of 3600 square meters, while the rectangular field has an area of 3200 square meters. Clearly, the square field has a larger area.",
+      "template_data": {
+        "title": "Comparing Areas",
+        "column_headers": [
+          "Square Field",
+          "Rectangular Field"
+        ],
+        "rows": [
+          {
+            "Square Field": "Perimeter: 240 m",
+            "Rectangular Field": "Perimeter: 240 m"
+          },
+          {
+            "Square Field": "Side: 60 m",
+            "Rectangular Field": "Length: 80 m"
+          },
+          {
+            "Square Field": "Area: 3600 m²",
+            "Rectangular Field": "Width: 40 m"
+          },
+          {
+            "Square Field": "",
+            "Rectangular Field": "Area: 3200 m²"
+          }
+        ],
+        "highlight_row": 3,
+        "animation_style": "cascade"
+      },
+      "audio_url": "./scene_7.wav"
+    },
+    {
+      "scene_no": 8,
+      "template_id": "quiz_checkpoint",
+      "teacher_script": "What did we learn? For a fixed perimeter, shapes closer to a square (or a circle in general) tend to enclose the largest area. Keep this principle in mind for your next geometry challenge!",
+      "template_data": {
+        "question": "If two fields have the same perimeter, which shape generally encloses a larger area?",
+        "options": [
+          {
+            "text": "A long, thin rectangle",
+            "is_correct": false
+          },
+          {
+            "text": "A square",
+            "is_correct": true
+          },
+          {
+            "text": "A very wide rectangle",
+            "is_correct": false
+          },
+          {
+            "text": "It depends entirely on the specific dimensions",
+            "is_correct": false
+          }
+        ],
+        "correct_answer_feedback": "Exactly! Among rectangles, a square encloses the maximum area for a given perimeter.",
+        "incorrect_answer_feedback": "Not quite. Think about how the side lengths relate to the area.",
+        "animation_style": "spring_pop"
+      },
+      "audio_url": "./scene_8.wav"
+    }
+  ]
+}

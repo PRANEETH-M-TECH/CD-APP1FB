@@ -1,0 +1,11 @@
+{
+  "name": "hyperframes-test-app",
+  "version": "1.0.0",
+  "description": "HyperFrames standalone test for visual storyboard video generation",
+  "scripts": {
+    "doctor": "npx hyperframes doctor",
+    "preview": "npx hyperframes preview",
+    "select": "node run-storyboard.js"
+  },
+  "devDependencies": {}
+}

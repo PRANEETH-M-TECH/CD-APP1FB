@@ -1,0 +1,133 @@
+{
+  "lesson_title": "The Indian Constitution: Our Nation's Guiding Principles",
+  "layout_mode": "timeline",
+  "theme": "Civics",
+  "global_assets": [],
+  "connections": [],
+  "lesson_id": "vl_245a3515",
+  "scenes": [
+    {
+      "scene_no": 1,
+      "purpose": "Introduce the lesson and main topic.",
+      "template_id": "title_slide",
+      "teacher_script": "Hello, future citizens! Today, we're going to explore something super important for our country: The Indian Constitution. It's like a foundational rulebook that guides our nation.",
+      "template_data": {
+        "title": "The Indian Constitution",
+        "subtitle": "Understanding Its Uses"
+      },
+      "audio_url": "/uploads/visual_lessons/vl_245a3515/scene_1.wav"
+    },
+    {
+      "scene_no": 2,
+      "purpose": "Define the Constitution and its core purpose.",
+      "template_id": "concept_diagram",
+      "teacher_script": "Think of the Constitution as a master blueprint. Our leaders created it with a vision and goals for how India should be governed. It's the supreme law of the land.",
+      "template_data": {
+        "main_concept": "What is the Constitution?",
+        "attributes": [
+          {
+            "name": "Vision & Goals",
+            "description": "Sets out the aspirations and future direction for the nation."
+          },
+          {
+            "name": "Fundamental Rules",
+            "description": "A collection of basic laws and principles for governing."
+          },
+          {
+            "name": "Guides Law-Making",
+            "description": "Lays down the procedures for Parliament and Assemblies to make laws."
+          }
+        ]
+      },
+      "audio_url": "/uploads/visual_lessons/vl_245a3515/scene_2.wav"
+    },
+    {
+      "scene_no": 3,
+      "purpose": "Explain the Constitution's role in ensuring equality.",
+      "template_id": "concept_diagram",
+      "teacher_script": "One of the Constitution's most vital uses is to ensure equality for every Indian. It guarantees equal rights and opportunities for everyone, treating all persons as equal.",
+      "template_data": {
+        "main_concept": "Use 1: Ensuring Equality",
+        "attributes": [
+          {
+            "name": "Equal Rights & Opportunities",
+            "description": "Every person has the same rights and chances in society."
+          },
+          {
+            "name": "Abolishes Untouchability",
+            "description": "Declared a crime and legally removed to ensure dignity."
+          },
+          {
+            "name": "Open Government Jobs",
+            "description": "Public sector employment is accessible to all citizens."
+          }
+        ]
+      },
+      "audio_url": "/uploads/visual_lessons/vl_245a3515/scene_3.wav"
+    },
+    {
+      "scene_no": 4,
+      "purpose": "Detail how the government implements constitutional equality.",
+      "template_id": "column_comparison",
+      "teacher_script": "The Constitution also places a big responsibility on our government to actively make equality a reality. They use two main approaches to achieve this for everyone.",
+      "template_data": {
+        "left_col": {
+          "header": "Through Laws",
+          "bullets": [
+            "Many laws protect every person’s right to be treated equally.",
+            "These laws prevent discrimination and ensure fair treatment."
+          ]
+        },
+        "right_col": {
+          "header": "Through Schemes",
+          "bullets": [
+            "Government launches programs to help disadvantaged communities.",
+            "These schemes aim to improve lives and fulfill the right to equality."
+          ]
+        }
+      },
+      "audio_url": "/uploads/visual_lessons/vl_245a3515/scene_4.wav"
+    },
+    {
+      "scene_no": 5,
+      "purpose": "Illustrate the Constitution's role in guiding governance and law-making.",
+      "template_id": "concept_diagram",
+      "teacher_script": "Unlike old rulers, modern governments function strictly according to laws set by the Constitution. It ensures that no one, not even ministers, is above the law and guides how new laws are made.",
+      "template_data": {
+        "main_concept": "Use 2: Guiding Governance & Law-Making",
+        "attributes": [
+          {
+            "name": "Rule of Law",
+            "description": "No one is above the law; all officials must follow it."
+          },
+          {
+            "name": "Defined Law-Making",
+            "description": "Lays down procedures for Legislative Assemblies and Parliament."
+          },
+          {
+            "name": "Democratic Functioning",
+            "description": "Ensures governments run by rules, not by personal whims."
+          }
+        ]
+      },
+      "audio_url": "/uploads/visual_lessons/vl_245a3515/scene_5.wav"
+    },
+    {
+      "scene_no": 6,
+      "purpose": "Recap the main use of the Constitution with a quick quiz.",
+      "template_id": "quiz_checkpoint",
+      "teacher_script": "Alright, fantastic work! Now, let's quickly check your understanding. What is one major way the Indian Constitution helps to create a fair society?",
+      "template_data": {
+        "question": "Which of these is a key use of the Indian Constitution?",
+        "options": [
+          "It predicts monsoon rainfall patterns in Telangana.",
+          "It ensures all people have equal rights and opportunities.",
+          "It allows government ministers to make any law they wish.",
+          "It helps in counting the number of rivers in a state."
+        ],
+        "correct_option_index": 1
+      },
+      "audio_url": "/uploads/visual_lessons/vl_245a3515/scene_6.wav"
+    }
+  ]
+}

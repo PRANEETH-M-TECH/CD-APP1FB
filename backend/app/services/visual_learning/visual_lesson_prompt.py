@@ -24,34 +24,50 @@ You must output a single, valid JSON object with the following structure:
       "scene_no": 1,
       "purpose": "Pedagogical objective of the scene",
       "template_id": "title_slide", // Choose from: 'title_slide', 'concept_diagram', 'cycle_template', 'math_derivation', 'venn_diagram', 'taxonomy_tree', 'cartesian_grid', 'column_comparison', 'geo_marker', 'database_grid', 'before_after_slider', 'quiz_checkpoint'
+      "template_selection_reasoning": "Detailed pedagogical explanation of WHY this specific template was selected for this scene instead of others.",
+      "camera": {{
+        "zoom": 1.1, // Camera zoom level (1.0 = standard, 1.15 = close-up focus, 0.9 = wide overview)
+        "pan_x": 0,  // Horizontal camera pan offset (-50 to 50)
+        "pan_y": 0,  // Vertical camera pan offset (-30 to 30)
+        "target_node": "main_concept" // ID of element to focus framing on
+      }},
       "teacher_script": "Narrator audio script (2-3 short sentences, Class {class_name} level).",
       "template_data": {{
         // Structure parameters matching the selected template_id. E.g.:
         // For 'title_slide': {{"title": "...", "subtitle": "..."}}
+        // For 'concept_diagram': {{"title": "...", "main_concept": {{"text": "...", "color": "..."}}, "branches": [{{"id": "...", "text": "...", "color": "...", "attributes": []}}]}}
         // For 'cycle_template': {{"title": "...", "stages": ["stage1", "stage2"]}}
-        // For 'math_derivation': {{"formula": "...", "steps": ["step1", "step2"]}}
-        // For 'venn_diagram': {{"left": ["bullet1"], "right": ["bullet2"], "intersection": ["shared"]}}
-        // For 'column_comparison': {{"left_col": {{"header": "...", "bullets": []}}, "right_col": {{"header": "...", "bullets": []}}}}
-        // For 'database_grid': {{"table_title": "...", "headers": [], "rows": [[]]}}
+        // For 'math_derivation': {{"title": "...", "formula": "...", "steps": ["step1", "step2"]}}
+        // For 'venn_diagram': {{"left_title": "...", "right_title": "...", "left": ["bullet1"], "right": ["bullet2"], "intersection": ["shared"]}}
+        // For 'column_comparison': {{"title": "...", "left_col": {{"header": "...", "bullets": []}}, "right_col": {{"header": "...", "bullets": []}}}}
+        // For 'database_grid': {{"title": "...", "headers": [], "rows": [[]]}}
+        // For 'taxonomy_tree': {{"title": "...", "root": {{"label": "...", "children": [{{"label": "...", "children": []}}]}}}}
         // For 'cartesian_grid': {{"title": "...", "equation_label": "ax^2+bx+c=0", "points": [{{"x": -2, "y": 4, "label": "Vertex"}}], "lines": [], "svg_elements": [{{"type": "path", "d": "M200 800 C350 300, 650 300, 800 800", "stroke": "#3b82f6", "stroke_width": 4}}]}}
+        // For 'geo_marker': {{"title": "...", "map_type": "world", "markers": [{{"label": "...", "x": 40, "y": 50, "description": "..."}}]}}
+        // For 'before_after_slider': {{"title": "...", "before": {{"label": "...", "bullets": []}}, "after": {{"label": "...", "bullets": []}}}}
       }}
     }}
   ]
 }}
 
 ### STORYBOARD TEMPLATE SELECTION RULES:
-1. **Title Slide (`title_slide`)**: For introducing the main lesson topic or agenda.
-2. **Concept Diagram (`concept_diagram`)**: For explaining core structures with attributes connected to a main concept.
-3. **Cycle Template (`cycle_template`)**: For explaining repeating loops (e.g., Water Cycle, Nitrogen Cycle, rock cycles).
-4. **Math Derivation (`math_derivation`)**: For demonstrating equations, formula solving, or balanced chemical equations line-by-line.
-5. **Venn Diagram (`venn_diagram`)**: For comparing overlapping properties (e.g., Plant vs. Animal cells, Solid vs. Liquid).
-6. **Taxonomy Tree (`taxonomy_tree`)**: For taxonomy, classification hierarchies, or family/government branches.
-7. **Cartesian Grid (`cartesian_grid`)**: For graphing coordinate geometry, lines, triangles, angles, and algebra graphs.
-8. **Column Comparison (`column_comparison`)**: For direct side-by-side card contrasts.
-9. **Geo-Marker Map (`geo_marker`)**: For geography and history maps, highlighting regions with coordination pointers.
-10. **Database Grid (`database_grid`)**: For displaying tabular data or periodic table grids.
-11. **Before/After Slider (`before_after_slider`)**: For showing a wipe transition between cause and effect states.
-12. **Quiz Checkpoint (`quiz_checkpoint`)**: For active recall summary questions at the end of the lesson.
+1. **Title Slide (`title_slide`)**: MUST be used ONLY for Scene 1 (lesson title).
+2. **Concept Diagram (`concept_diagram`)**: Use MAX 1 TIME per lesson. DO NOT use concept_diagram for every scene.
+3. **Cycle Template (`cycle_template`)**: Use for repeating processes, step-by-step loops, or sequential stages.
+4. **Math Derivation (`math_derivation`)**: Use for step-by-step formulas, derivations, or step breakdown.
+5. **Venn Diagram (`venn_diagram`)**: Use for comparing 2 contrasting concepts with overlapping properties.
+6. **Taxonomy Tree (`taxonomy_tree`)**: Use for hierarchical classification, categories, family/government branches.
+7. **Cartesian Grid (`cartesian_grid`)**: Use for coordinate geometry, graphs, functions, or numeric plotting.
+8. **Column Comparison (`column_comparison`)**: Use for side-by-side contrast of two distinct concepts.
+9. **Geo-Marker Map (`geo_marker`)**: Use for geographical locations, spatial distributions, or historical places.
+10. **Database Grid (`database_grid`)**: Use for structured tabular data, elements, properties, or numeric tables.
+11. **Before/After Slider (`before_after_slider`)**: Use for cause vs effect, reaction start vs end, or transformed states.
+12. **Quiz Checkpoint (`quiz_checkpoint`)**: MUST be used for the final scene as an active recall question.
+
+### CRITICAL DIVERSITY MANDATE:
+- **NEVER use the same `template_id` in consecutive scenes.**
+- You MUST use at least 3 to 4 DIFFERENT template IDs across the lesson scenes.
+- Every scene MUST include `"template_selection_reasoning"` explaining why that specific template was chosen.
 
 Ensure the output is valid JSON and contains only the raw JSON block without markdown formatting wrapper, or wrapped in a standard ```json ... ``` codeblock.
 """

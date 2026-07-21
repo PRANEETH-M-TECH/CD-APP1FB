@@ -1,0 +1,718 @@
+{
+  "lesson_title": "Understanding the Human Digestive System",
+  "lesson_id": "vl_00b4b8ff",
+  "theme": "Science",
+  "layout_mode": "process",
+  "learning_objecgtives": [
+    "Identify the major organs of the digestive system.",
+    "Describe the function of each major organ in the digestive process.",
+    "Explain the difference between mechanical and chemical digestion.",
+    "Trace the path of food through the digestive tract."
+  ],
+  "student_level": "intermediate",
+  "estimated_duration": 8,
+  "difficulty": "intermediate",
+  "subject": "Biology",
+  "chapter": "Human Anatomy & Physiology",
+  "concepts": [
+    "Digestion",
+    "Absorption",
+    "Peristalsis",
+    "Enzymes",
+    "Mechanical Digestion",
+    "Chemical Digestion",
+    "Nutrient Uptake"
+  ],
+  "prerequisites": [
+    "Basic knowledge of human body systems",
+    "Understanding of cells and nutrients"
+  ],
+  "misconceptions": [
+    "Digestion only happens in the stomach.",
+    "All food types are broken down at the same rate and in the same way.",
+    "The small intestine is 'small' because it's short."
+  ],
+  "assessment_points": [
+    "Name the main organs of the digestive tract.",
+    "Explain the role of stomach acid.",
+    "Identify where most nutrient absorption occurs."
+  ],
+  "summary": "The human digestive system is a complex network of organs that work together to break down food into absorbable nutrients, eliminate waste, and maintain body health. This lesson covers its major components and functions.",
+  "teaching_plan": {
+    "teaching_steps": [
+      {
+        "step_id": "intro_digestive_system",
+        "action_type": "INTRODUCE",
+        "instructional_purpose": "To set the stage and provide an overview of the digestive system's importance.",
+        "visual_purpose": "Engage students with a compelling title and visual representation.",
+        "concept": "Introduction to Digestion",
+        "expected_outcome": "Students will understand the scope of the lesson.",
+        "related_components": [],
+        "duration": 60,
+        "teaching_notes": "Emphasize the 'journey' aspect of food.",
+        "narration_hints": "Welcome to our journey through the amazing human digestive system, a masterpiece of biological engineering that processes everything we eat and drink."
+      },
+      {
+        "step_id": "mouth_esophagus",
+        "action_type": "EXPLAIN",
+        "instructional_purpose": "Detail the initial stages of digestion: mouth, pharynx, and esophagus.",
+        "visual_purpose": "Illustrate mechanical and chemical breakdown in the mouth and the movement through the esophagus.",
+        "concept": "Oral Cavity & Peristalsis",
+        "expected_outcome": "Students will grasp the roles of chewing, saliva, and peristalsis.",
+        "related_components": [
+          "Teeth",
+          "Salivary Glands",
+          "Tongue",
+          "Esophagus"
+        ],
+        "duration": 90,
+        "teaching_notes": "Distinguish clearly between mechanical (chewing) and chemical (saliva) digestion.",
+        "narration_hints": "Our food journey begins in the mouth, where mechanical digestion, or chewing, breaks food into smaller pieces, and chemical digestion starts with enzymes in saliva."
+      },
+      {
+        "step_id": "stomach_role",
+        "action_type": "EXPLAIN",
+        "instructional_purpose": "Explain the stomach's role in churning food and initial protein digestion.",
+        "visual_purpose": "Show the stomach's muscular action and the acidic environment.",
+        "concept": "Gastric Digestion",
+        "expected_outcome": "Students will understand how the stomach transforms food into chyme.",
+        "related_components": [
+          "Stomach muscles",
+          "Gastric acid",
+          "Pepsin"
+        ],
+        "duration": 90,
+        "teaching_notes": "Highlight the protective mucus lining of the stomach.",
+        "narration_hints": "From the esophagus, food enters the stomach, a muscular organ that churns and mixes food with powerful gastric juices, forming a semi-liquid mixture called chyme."
+      },
+      {
+        "step_id": "small_intestine_absorption",
+        "action_type": "EXPLAIN",
+        "instructional_purpose": "Describe the small intestine's primary role in nutrient absorption.",
+        "visual_purpose": "Illustrate the villi and microvilli structures for increased surface area.",
+        "concept": "Nutrient Absorption",
+        "expected_outcome": "Students will understand the significance of the small intestine's structure.",
+        "related_components": [
+          "Duodenum",
+          "Jejunum",
+          "Ileum",
+          "Villi",
+          "Microvilli"
+        ],
+        "duration": 120,
+        "teaching_notes": "Emphasize the length and folded structure of the small intestine.",
+        "narration_hints": "The small intestine is where most chemical digestion and nearly all nutrient absorption takes place, thanks to its incredible length and folded inner surface lined with tiny finger-like projections called villi."
+      },
+      {
+        "step_id": "accessory_organs",
+        "action_type": "HIGHLIGHT",
+        "instructional_purpose": "Introduce the roles of the liver, gallbladder, and pancreas as accessory organs.",
+        "visual_purpose": "Show the location and connection of these organs to the small intestine.",
+        "concept": "Accessory Organ Functions",
+        "expected_outcome": "Students will recognize how these organs support digestion.",
+        "related_components": [
+          "Liver",
+          "Gallbladder",
+          "Pancreas",
+          "Bile",
+          "Digestive Enzymes"
+        ],
+        "duration": 90,
+        "teaching_notes": "Explain the specific secretions (bile, insulin, glucagon, digestive enzymes).",
+        "narration_hints": "While not directly part of the digestive tract, the liver, gallbladder, and pancreas are vital accessory organs. They produce crucial digestive juices and enzymes that flow into the small intestine to aid breakdown."
+      },
+      {
+        "step_id": "large_intestine_waste",
+        "action_type": "EXPLAIN",
+        "instructional_purpose": "Detail the large intestine's role in water absorption and waste formation.",
+        "visual_purpose": "Illustrate the large intestine's structure and the movement of waste.",
+        "concept": "Water Absorption & Waste",
+        "expected_outcome": "Students will understand the final stages of digestion and waste elimination.",
+        "related_components": [
+          "Colon",
+          "Cecum",
+          "Rectum",
+          "Anus",
+          "Water Absorption"
+        ],
+        "duration": 90,
+        "teaching_notes": "Mention the role of gut bacteria.",
+        "narration_hints": "Finally, the remaining undigested food and water enter the large intestine. Its main job is to absorb water and electrolytes, transforming the liquid chyme into solid waste, or feces, which is then eliminated from the body."
+      },
+      {
+        "step_id": "digestive_path_summary",
+        "action_type": "SUMMARIZE",
+        "instructional_purpose": "Provide a comprehensive overview of the food's journey through the digestive tract.",
+        "visual_purpose": "Visually trace the entire path, reinforcing sequential understanding.",
+        "concept": "Food Pathway",
+        "expected_outcome": "Students will be able to recall the sequential flow of digestion.",
+        "related_components": [
+          "Mouth",
+          "Esophagus",
+          "Stomach",
+          "Small Intestine",
+          "Large Intestine"
+        ],
+        "duration": 60,
+        "teaching_notes": "Quick recap of each major organ's function along the path.",
+        "narration_hints": "Let's recap the amazing journey food takes: from mouth to esophagus, into the stomach, through the small intestine, and finally, the large intestine, before elimination."
+      },
+      {
+        "step_id": "quiz_review",
+        "action_type": "REVIEW",
+        "instructional_purpose": "Assess student understanding of key concepts.",
+        "visual_purpose": "Present interactive questions.",
+        "concept": "Lesson Review",
+        "expected_outcome": "Students will consolidate their learning and identify areas for further study.",
+        "related_components": [],
+        "duration": 60,
+        "teaching_notes": "Encourage students to re-evaluate their understanding.",
+        "narration_hints": "Now, let's test your knowledge! What have you learned about the incredible human digestive system?"
+      }
+    ]
+  },
+  "scenes": [
+    {
+      "scene_no": 1,
+      "template_id": "title_slide",
+      "teaching_step_id": "intro_digestive_system",
+      "teacher_script": "Welcome to an exploration of one of the human body's most vital systems: the digestive system. In this lesson, we'll uncover how our bodies process the food we eat, transforming it into the energy and nutrients essential for life.",
+      "template_data": {
+        "title": "The Human Digestive System",
+        "subtitle": "Your Body's Incredible Food Processor",
+        "background_image_url": "https://images.unsplash.com/photo-1549491763-71887e497f1f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTIyMjh8MHwxfHNlYXJjaHwxfHxodW1hbiUyMGRpZ2VzdGl2ZSUyMHN5c3RlbXxlbnwwfHx8fDE3MTQ5NjUwMzF8MA&ixlib=rb-4.0.3&q=80&w=1080",
+        "animation_style": "spring_pop"
+      },
+      "metadata": {
+        "learning_objective": "Identify the major organs of the digestive system.",
+        "concept_importance": "high",
+        "instruction_type": "introduction",
+        "difficulty": "beginner",
+        "teaching_strategy": "overview",
+        "reinforcement_level": "low",
+        "quiz_hints": "None",
+        "analytics_tags": "digestive_system, intro, human_biology"
+      },
+      "audio_url": "./scene_1.wav"
+    },
+    {
+      "scene_no": 2,
+      "template_id": "illustrated_scene",
+      "teaching_step_id": "mouth_esophagus",
+      "teacher_script": "Our food's journey begins in the mouth, where teeth provide mechanical digestion, and saliva initiates chemical digestion with enzymes. After swallowing, food travels through the pharynx and down the esophagus via a wave-like muscle contraction called peristalsis.",
+      "template_data": {
+        "title": "The Beginning: Mouth to Esophagus",
+        "elements": [
+          {
+            "type": "path",
+            "path_data": "M 200 280 C 250 200, 350 200, 400 280 C 420 320, 400 380, 350 400 C 300 420, 250 400, 200 350 Z",
+            "stroke_color": "#4a5568",
+            "stroke_width": 3,
+            "fill": "rgba(107, 114, 128, 0.05)",
+            "animation_action": "scale_up"
+          },
+          {
+            "type": "text_overlay",
+            "position": {
+              "x": 300,
+              "y": 240
+            },
+            "text": "Mouth",
+            "font_size": 24,
+            "color": "#2d3748"
+          },
+          {
+            "type": "circle",
+            "cx": 300,
+            "cy": 330,
+            "r": 10,
+            "fill": "#f59e0b",
+            "animation_action": "spin"
+          },
+          {
+            "type": "text_overlay",
+            "position": {
+              "x": 350,
+              "y": 320
+            },
+            "text": "Food Bolus",
+            "font_size": 18,
+            "color": "#2d3748"
+          },
+          {
+            "type": "path",
+            "path_data": "M 320 400 L 320 650 A 50 50 0 0 1 370 700 L 400 700",
+            "stroke_color": "#10b981",
+            "stroke_width": 4,
+            "animation_action": "rise"
+          },
+          {
+            "type": "text_overlay",
+            "position": {
+              "x": 420,
+              "y": 550
+            },
+            "text": "Esophagus",
+            "font_size": 20,
+            "color": "#10b981"
+          },
+          {
+            "type": "path",
+            "path_data": "M 320 480 Q 300 490, 320 500 Q 300 510, 320 520",
+            "stroke_color": "#ef4444",
+            "stroke_width": 2,
+            "stroke_dasharray": "5,5",
+            "animation_action": "fade_wave"
+          },
+          {
+            "type": "text_overlay",
+            "position": {
+              "x": 200,
+              "y": 480
+            },
+            "text": "Peristalsis",
+            "font_size": 16,
+            "color": "#ef4444"
+          }
+        ],
+        "animation_style": "stagger_in"
+      },
+      "metadata": {
+        "learning_objective": "Describe the function of each major organ in the digestive process.",
+        "concept_importance": "high",
+        "instruction_type": "explanation",
+        "difficulty": "beginner",
+        "teaching_strategy": "visual_explanation",
+        "reinforcement_level": "medium",
+        "quiz_hints": "Define peristalsis.",
+        "analytics_tags": "mouth, esophagus, mechanical_digestion, chemical_digestion"
+      },
+      "audio_url": "./scene_2.wav"
+    },
+    {
+      "scene_no": 3,
+      "template_id": "illustrated_scene",
+      "teaching_step_id": "stomach_role",
+      "teacher_script": "The stomach is a muscular, J-shaped organ that vigorously churns food, mixing it with strong gastric acids and enzymes like pepsin. This process breaks down proteins and sterilizes the food, turning it into a semi-liquid mixture called chyme.",
+      "template_data": {
+        "title": "The Stomach: Churning and Acid",
+        "elements": [
+          {
+            "type": "path",
+            "path_data": "M 480 180 C 500 240, 480 320, 520 380 C 580 420, 720 380, 700 260 C 680 180, 580 150, 480 180 Z",
+            "stroke_color": "#10b981",
+            "stroke_width": 3,
+            "fill": "rgba(16, 185, 129, 0.05)",
+            "animation_action": "scale_up"
+          },
+          {
+            "type": "circle",
+            "cx": 550,
+            "cy": 300,
+            "r": 8,
+            "fill": "#fbbf24",
+            "animation_action": "spin"
+          },
+          {
+            "type": "circle",
+            "cx": 620,
+            "cy": 280,
+            "r": 6,
+            "fill": "#fbbf24",
+            "animation_action": "spin"
+          },
+          {
+            "type": "text_overlay",
+            "position": {
+              "x": 450,
+              "y": 140
+            },
+            "text": "Esophagus Entry",
+            "font_size": 18,
+            "color": "#2d3748"
+          },
+          {
+            "type": "text_overlay",
+            "position": {
+              "x": 600,
+              "y": 300
+            },
+            "text": "Acid & Chyme Churning",
+            "font_size": 18,
+            "color": "#2d3748"
+          },
+          {
+            "type": "path",
+            "path_data": "M 600 330 C 620 350, 650 340, 670 360",
+            "stroke_color": "#ef4444",
+            "stroke_width": 2,
+            "stroke_dasharray": "5,5",
+            "animation_action": "fade_wave"
+          },
+          {
+            "type": "text_overlay",
+            "position": {
+              "x": 750,
+              "y": 350
+            },
+            "text": "Duodenum Exit",
+            "font_size": 18,
+            "color": "#2d3748"
+          }
+        ],
+        "animation_style": "stagger_in"
+      },
+      "metadata": {
+        "learning_objective": "Describe the function of each major organ in the digestive process.",
+        "concept_importance": "high",
+        "instruction_type": "explanation",
+        "difficulty": "intermediate",
+        "teaching_strategy": "detailed_diagram",
+        "reinforcement_level": "medium",
+        "quiz_hints": "What is chyme?",
+        "analytics_tags": "stomach, gastric_acid, pepsin, chyme"
+      },
+      "audio_url": "./scene_3.wav"
+    },
+    {
+      "scene_no": 4,
+      "template_id": "illustrated_scene",
+      "teaching_step_id": "small_intestine_absorption",
+      "teacher_script": "The small intestine, despite its name, is a long, coiled tube. Its inner surface is covered with millions of tiny, finger-like projections called villi, which are further covered by microvilli. This dramatically increases the surface area for maximum nutrient absorption.",
+      "template_data": {
+        "title": "Small Intestine: Nutrient Absorption",
+        "elements": [
+          {
+            "type": "path",
+            "path_data": "M 300 200 C 400 100, 500 100, 600 200 C 700 300, 600 400, 500 400 C 400 400, 300 300, 300 200 Z",
+            "stroke_color": "#3b82f6",
+            "stroke_width": 3,
+            "fill": "rgba(59, 130, 246, 0.05)",
+            "animation_action": "scale_up"
+          },
+          {
+            "type": "text_overlay",
+            "position": {
+              "x": 450,
+              "y": 140
+            },
+            "text": "Small Intestine Wall",
+            "font_size": 20,
+            "color": "#3b82f6"
+          },
+          {
+            "type": "path",
+            "path_data": "M 400 250 C 410 230, 420 250, 430 230 C 440 250, 450 230, 460 250",
+            "stroke_color": "#fcd34d",
+            "stroke_width": 2,
+            "fill": "none",
+            "animation_action": "rise"
+          },
+          {
+            "type": "path",
+            "path_data": "M 480 250 C 490 230, 500 250, 510 230 C 520 250, 530 230, 540 250",
+            "stroke_color": "#fcd34d",
+            "stroke_width": 2,
+            "fill": "none",
+            "animation_action": "rise"
+          },
+          {
+            "type": "text_overlay",
+            "position": {
+              "x": 450,
+              "y": 210
+            },
+            "text": "Villi",
+            "font_size": 18,
+            "color": "#fcd34d"
+          },
+          {
+            "type": "circle",
+            "cx": 420,
+            "cy": 270,
+            "r": 5,
+            "fill": "#ef4444",
+            "animation_action": "slide_left"
+          },
+          {
+            "type": "circle",
+            "cx": 490,
+            "cy": 270,
+            "r": 5,
+            "fill": "#ef4444",
+            "animation_action": "slide_right"
+          },
+          {
+            "type": "text_overlay",
+            "position": {
+              "x": 550,
+              "y": 260
+            },
+            "text": "Nutrients Absorbed",
+            "font_size": 18,
+            "color": "#ef4444"
+          }
+        ],
+        "animation_style": "cascade"
+      },
+      "metadata": {
+        "learning_objective": "Describe the function of each major organ in the digestive process.",
+        "concept_importance": "high",
+        "instruction_type": "detailed_explanation",
+        "difficulty": "intermediate",
+        "teaching_strategy": "zoom_in_diagram",
+        "reinforcement_level": "high",
+        "quiz_hints": "What are villi for?",
+        "analytics_tags": "small_intestine, villi, microvilli, nutrient_absorption"
+      },
+      "audio_url": "./scene_4.wav"
+    },
+    {
+      "scene_no": 5,
+      "template_id": "concept_diagram",
+      "teaching_step_id": "accessory_organs",
+      "teacher_script": "Crucial to the small intestine's work are accessory organs like the liver, which produces bile for fat digestion; the gallbladder, storing and concentrating bile; and the pancreas, secreting digestive enzymes and hormones like insulin.",
+      "template_data": {
+        "title": "Accessory Organs: The Digestive Support Team",
+        "central_concept": {
+          "text": "Small Intestine",
+          "color": "#3b82f6",
+          "font_size": 32
+        },
+        "branches": [
+          {
+            "text": "Liver",
+            "description": "Produces bile to emulsify fats",
+            "color": "#10b981",
+            "icon": "liver"
+          },
+          {
+            "text": "Gallbladder",
+            "description": "Stores and concentrates bile",
+            "color": "#fbbf24",
+            "icon": "gallbladder"
+          },
+          {
+            "text": "Pancreas",
+            "description": "Secretes digestive enzymes (e.g., amylase, lipase, protease) and hormones (insulin)",
+            "color": "#ef4444",
+            "icon": "pancreas"
+          }
+        ],
+        "animation_style": "fade_wave"
+      },
+      "metadata": {
+        "learning_objective": "Identify the major organs of the digestive system.",
+        "concept_importance": "high",
+        "instruction_type": "connection_explanation",
+        "difficulty": "intermediate",
+        "teaching_strategy": "relational_diagram",
+        "reinforcement_level": "medium",
+        "quiz_hints": "Name an accessory organ and its function.",
+        "analytics_tags": "liver, gallbladder, pancreas, bile, enzymes, hormones"
+      },
+      "audio_url": "./scene_5.wav"
+    },
+    {
+      "scene_no": 6,
+      "template_id": "illustrated_scene",
+      "teaching_step_id": "large_intestine_waste",
+      "teacher_script": "The large intestine processes the remaining indigestible food material. Its primary role is to absorb water and electrolytes, solidifying the waste into feces. Beneficial gut bacteria also play a role in further breaking down some indigestible materials and producing vitamins.",
+      "template_data": {
+        "title": "Large Intestine: Water Absorption & Waste Formation",
+        "elements": [
+          {
+            "type": "path",
+            "path_data": "M 200 200 L 200 500 A 100 100 0 0 0 300 600 L 600 600 A 100 100 0 0 0 700 500 L 700 200 A 100 100 0 0 0 600 100 L 300 100 A 100 100 0 0 0 200 200 Z",
+            "stroke_color": "#16a34a",
+            "stroke_width": 3,
+            "fill": "rgba(22, 163, 74, 0.05)",
+            "animation_action": "scale_up"
+          },
+          {
+            "type": "text_overlay",
+            "position": {
+              "x": 450,
+              "y": 70
+            },
+            "text": "Transverse Colon",
+            "font_size": 18,
+            "color": "#16a34a"
+          },
+          {
+            "type": "text_overlay",
+            "position": {
+              "x": 150,
+              "y": 350
+            },
+            "text": "Ascending Colon",
+            "font_size": 18,
+            "color": "#16a34a"
+          },
+          {
+            "type": "text_overlay",
+            "position": {
+              "x": 750,
+              "y": 350
+            },
+            "text": "Descending Colon",
+            "font_size": 18,
+            "color": "#16a34a"
+          },
+          {
+            "type": "circle",
+            "cx": 400,
+            "cy": 350,
+            "r": 10,
+            "fill": "#a78bfa",
+            "animation_action": "slide_left"
+          },
+          {
+            "type": "circle",
+            "cx": 500,
+            "cy": 350,
+            "r": 10,
+            "fill": "#a78bfa",
+            "animation_action": "slide_right"
+          },
+          {
+            "type": "text_overlay",
+            "position": {
+              "x": 450,
+              "y": 400
+            },
+            "text": "Water Absorption",
+            "font_size": 18,
+            "color": "#a78bfa"
+          },
+          {
+            "type": "path",
+            "path_data": "M 400 450 L 400 500 L 380 520 L 380 550",
+            "stroke_color": "#ef4444",
+            "stroke_width": 2,
+            "stroke_dasharray": "5,5",
+            "animation_action": "fall"
+          },
+          {
+            "type": "text_overlay",
+            "position": {
+              "x": 300,
+              "y": 570
+            },
+            "text": "Waste Elimination",
+            "font_size": 16,
+            "color": "#ef4444"
+          }
+        ],
+        "animation_style": "stagger_in"
+      },
+      "metadata": {
+        "learning_objective": "Describe the function of each major organ in the digestive process.",
+        "concept_importance": "medium",
+        "instruction_type": "explanation",
+        "difficulty": "intermediate",
+        "teaching_strategy": "visual_explanation",
+        "reinforcement_level": "medium",
+        "quiz_hints": "What is the large intestine's main role?",
+        "analytics_tags": "large_intestine, colon, water_absorption, feces"
+      },
+      "audio_url": "./scene_6.wav"
+    },
+    {
+      "scene_no": 7,
+      "template_id": "horizontal_timeline",
+      "teaching_step_id": "digestive_path_summary",
+      "teacher_script": "From the initial bite in the mouth, through the stomach's churning, the nutrient absorption in the small intestine, and finally, water reclamation in the large intestine, this entire process is a seamless, coordinated effort to nourish our bodies.",
+      "template_data": {
+        "title": "The Food Pathway: A Complete Journey",
+        "events": [
+          {
+            "title": "Mouth",
+            "description": "Mechanical & Chemical Digestion (Saliva)"
+          },
+          {
+            "title": "Esophagus",
+            "description": "Peristalsis moves food"
+          },
+          {
+            "title": "Stomach",
+            "description": "Churning & Acid Breakdown"
+          },
+          {
+            "title": "Small Intestine",
+            "description": "Nutrient Absorption"
+          },
+          {
+            "title": "Large Intestine",
+            "description": "Water Absorption & Waste Formation"
+          }
+        ],
+        "animation_style": "stagger_in"
+      },
+      "metadata": {
+        "learning_objective": "Trace the path of food through the digestive tract.",
+        "concept_importance": "high",
+        "instruction_type": "summary",
+        "difficulty": "beginner",
+        "teaching_strategy": "sequential_review",
+        "reinforcement_level": "high",
+        "quiz_hints": "Order the digestive organs.",
+        "analytics_tags": "digestive_path, summary, food_journey"
+      },
+      "audio_url": "./scene_7.wav"
+    },
+    {
+      "scene_no": 8,
+      "template_id": "quiz_checkpoint",
+      "teaching_step_id": "quiz_review",
+      "teacher_script": "Great job exploring the human digestive system! Now, let's quickly review some key concepts to ensure you've grasped the incredible complexity and efficiency of this vital bodily process.",
+      "template_data": {
+        "title": "Quiz Checkpoint: Test Your Knowledge!",
+        "questions": [
+          {
+            "question": "Which organ is responsible for most nutrient absorption?",
+            "options": [
+              "Stomach",
+              "Large Intestine",
+              "Small Intestine",
+              "Esophagus"
+            ],
+            "correct_answer": "Small Intestine"
+          },
+          {
+            "question": "What is the primary role of the large intestine?",
+            "options": [
+              "Break down proteins",
+              "Absorb water",
+              "Produce bile",
+              "Churn food"
+            ],
+            "correct_answer": "Absorb water"
+          },
+          {
+            "question": "The wave-like muscle contractions that move food through the esophagus are called:",
+            "options": [
+              "Digestion",
+              "Absorption",
+              "Peristalsis",
+              "Churning"
+            ],
+            "correct_answer": "Peristalsis"
+          }
+        ],
+        "animation_style": "spring_pop"
+      },
+      "metadata": {
+        "learning_objective": "Reinforce all learning objectives.",
+        "concept_importance": "high",
+        "instruction_type": "assessment",
+        "difficulty": "intermediate",
+        "teaching_strategy": "formative_assessment",
+        "reinforcement_level": "high",
+        "quiz_hints": "Review all sections.",
+        "analytics_tags": "quiz, review, assessment, digestive_system_review"
+      },
+      "audio_url": "./scene_8.wav"
+    }
+  ]
+}

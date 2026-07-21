@@ -1,0 +1,159 @@
+{
+  "lesson_title": "Understanding Elections: Choosing Our Leaders",
+  "layout_mode": "timeline",
+  "theme": "Civics",
+  "global_assets": [],
+  "connections": [],
+  "lesson_id": "vl_ceb25881",
+  "scenes": [
+    {
+      "scene_no": 1,
+      "purpose": "Introduce the topic of elections and their importance in a democracy.",
+      "template_id": "title_slide",
+      "teacher_script": "Hello, young citizens! Today, we're going to explore how we choose our leaders in India. We'll learn about the exciting process of elections, specifically for the State Legislative Assembly.",
+      "template_data": {
+        "title": "The Process of Elections in India",
+        "subtitle": "Choosing Our Leaders for the State Assembly"
+      },
+      "audio_url": "/uploads/visual_lessons/vl_ceb25881/scene_1.wav"
+    },
+    {
+      "scene_no": 2,
+      "purpose": "Explain the essential qualifications for a person to contest in state assembly elections.",
+      "template_id": "concept_diagram",
+      "teacher_script": "To stand in an election and become an MLA, there are some important rules candidates must follow. Let's look at who is eligible to contest!",
+      "template_data": {
+        "title": "Who Can Contest Elections?",
+        "main_concept": {
+          "name": "Aspiring MLA",
+          "description": "A person who wishes to be elected as a Member of Legislative Assembly."
+        },
+        "attributes": [
+          {
+            "name": "Citizen of India",
+            "icon": "🇮🇳"
+          },
+          {
+            "name": "25+ Years Old",
+            "icon": "🎂"
+          },
+          {
+            "name": "No 'Office of Profit'",
+            "icon": "🚫💼"
+          },
+          {
+            "name": "Other Qualifications",
+            "icon": "📜"
+          }
+        ]
+      },
+      "audio_url": "/uploads/visual_lessons/vl_ceb25881/scene_2.wav"
+    },
+    {
+      "scene_no": 3,
+      "purpose": "Highlight the role of political parties, independent candidates, manifestos, and campaigning in elections.",
+      "template_id": "column_comparison",
+      "teacher_script": "Political parties play a huge role in elections, but individuals can also contest! Let's understand how they reach out to voters and what promises they make.",
+      "template_data": {
+        "title": "Parties, Independents & Their Promises",
+        "left_col": {
+          "header": "Political Parties",
+          "bullets": [
+            "Field candidates to contest elections.",
+            "Have a specific party symbol.",
+            "Publish Election Manifestos (programs & promises).",
+            "Organize large campaigns, meetings, and rallies."
+          ]
+        },
+        "right_col": {
+          "header": "Independent Candidates",
+          "bullets": [
+            "Contest elections without belonging to any party.",
+            "Must get a unique symbol allotted.",
+            "Create their own election manifestos.",
+            "Conduct individual campaigns (often door-to-door)."
+          ]
+        }
+      },
+      "audio_url": "/uploads/visual_lessons/vl_ceb25881/scene_3.wav"
+    },
+    {
+      "scene_no": 4,
+      "purpose": "Explain the concepts of voters and electoral constituencies, and how they relate to electing MLAs.",
+      "template_id": "geo_marker",
+      "teacher_script": "Before voting, an area is divided into smaller units called constituencies. And remember, every voter must be registered in their specific area!",
+      "template_data": {
+        "title": "Dividing the Vote: Constituencies & Voters",
+        "map_description": "An illustrative map of a state, visually divided into several distinct, colored 'constituency' regions. Voter icons and constituency labels appear with animations.",
+        "markers": [
+          {
+            "id": "voter_reg",
+            "lat": 17.385,
+            "lon": 78.4867,
+            "label": "Voter Registration",
+            "description": "Voters must register their names in the area where they live."
+          },
+          {
+            "id": "constituency_div",
+            "lat": 18.0,
+            "lon": 79.0,
+            "label": "Electoral Constituency",
+            "description": "Each region (villages, towns, cities) is divided into constituencies."
+          },
+          {
+            "id": "one_mla",
+            "lat": 17.7,
+            "lon": 78.7,
+            "label": "One MLA per Constituency",
+            "description": "All voters of one constituency elect one MLA for the Assembly."
+          },
+          {
+            "id": "pop_based",
+            "lat": 17.5,
+            "lon": 79.5,
+            "label": "Population & Constituencies",
+            "description": "Districts with larger populations have more constituencies."
+          }
+        ]
+      },
+      "audio_url": "/uploads/visual_lessons/vl_ceb25881/scene_4.wav"
+    },
+    {
+      "scene_no": 5,
+      "purpose": "Illustrate the cyclical nature of state assembly elections and the role of the Election Commission.",
+      "template_id": "cycle_template",
+      "teacher_script": "The entire election process is managed by an independent body called the Election Commission. They ensure free and fair elections, which typically occur every five years.",
+      "template_data": {
+        "title": "The Election Cycle for State Assemblies",
+        "stages": [
+          "Election Commission Announcing Dates",
+          "Candidates Filing Nominations",
+          "Campaigning Period (Manifestos & Door-to-Door)",
+          "Polling Day (Voters Cast Their Votes)",
+          "Counting of Votes & Declaration of Results",
+          "Formation of New State Legislative Assembly"
+        ],
+        "description": "The Election Commission conducts elections to the state legislative assembly, usually once every five years."
+      },
+      "audio_url": "/uploads/visual_lessons/vl_ceb25881/scene_5.wav"
+    },
+    {
+      "scene_no": 6,
+      "purpose": "Reinforce understanding of a key eligibility criterion for contesting elections.",
+      "template_id": "quiz_checkpoint",
+      "teacher_script": "Great job following along! Now, let's quickly check your understanding of India's election process.",
+      "template_data": {
+        "question": "What is the minimum age required to contest elections for a State Legislative Assembly in India?",
+        "options": [
+          "18 years",
+          "21 years",
+          "25 years",
+          "30 years"
+        ],
+        "answer": "25 years",
+        "explanation": "According to the textbook, a person must have completed twenty-five years of age to contest elections."
+      },
+      "audio_url": "/uploads/visual_lessons/vl_ceb25881/scene_6.wav"
+    }
+  ]
+}
