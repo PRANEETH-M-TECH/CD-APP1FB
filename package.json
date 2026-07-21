@@ -1,5 +1,8 @@
 {
   "dependencies": {
-    "marked": "^16.4.1"
+    "@remotion/cli": "^4.0.478",
+    "@remotion/player": "^4.0.478",
+    "marked": "^16.4.1",
+    "remotion": "^4.0.478"
   }
 }

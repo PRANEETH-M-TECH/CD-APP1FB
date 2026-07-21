@@ -1,0 +1,6 @@
+Return a single valid JSON object with keys: reformulated_query, keywords (array of {{keyword, importance}}), conceptual_score.
+
+User Query: "{raw_query}"
+
+Example output:
+{{"reformulated_query":"Detailed...","keywords":[ {{"keyword":"photosynthesis","importance":0.95}} ],"conceptual_score":0.85}}

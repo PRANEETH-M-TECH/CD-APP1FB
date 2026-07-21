@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Analytics - Chaduvu Guru</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100">
+    <!-- Header -->
+    <div class="bg-gray-900 text-white py-4 shadow-md">
+        <div class="container mx-auto px-6 flex justify-between items-center">
+            <h1 class="text-2xl font-bold flex items-center gap-2">
+                <span>📈</span> Admin Analytics Dashboard
+            </h1>
+            <div class="flex items-center gap-4">
+                <span id="admin-email" class="text-gray-400 text-sm">admin@cg.com</span>
+                <button onclick="logout()" class="bg-red-600 hover:bg-red-700 px-3 py-1 rounded text-sm transition">
+                    Logout
+                </button>
+                <a href="/admin"
+                    class="bg-purple-600 hover:bg-purple-700 px-4 py-2 rounded text-sm transition font-semibold flex items-center gap-2">
+                    <span>📚</span> Upload Book
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container mx-auto px-6 py-8">
+
+        <!-- Overview Stats -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="bg-white p-6 rounded-xl shadow-sm">
+                <h3 class="text-gray-500 text-sm font-medium uppercase">Total Queries</h3>
+                <p id="total-queries" class="text-3xl font-bold text-gray-800 mt-2">Loading...</p>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow-sm">
+                <h3 class="text-gray-500 text-sm font-medium uppercase">Active Students</h3>
+                <p id="active-students" class="text-3xl font-bold text-blue-600 mt-2">--</p>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow-sm">
+                <h3 class="text-gray-500 text-sm font-medium uppercase">Top Subject</h3>
+                <p id="top-subject" class="text-3xl font-bold text-green-600 mt-2">--</p>
+            </div>
+        </div>
+
+        <!-- Charts Row 1 -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            <!-- Class Distribution -->
+            <div class="bg-white p-6 rounded-xl shadow-sm">
+                <h2 class="text-lg font-bold mb-4 text-gray-800">Queries by Class</h2>
+                <div class="h-64">
+                    <canvas id="class-chart"></canvas>
+                </div>
+            </div>
+
+            <!-- Subject Distribution -->
+            <div class="bg-white p-6 rounded-xl shadow-sm">
+                <h2 class="text-lg font-bold mb-4 text-gray-800">Subject Distribution</h2>
+                <div class="h-64 flex justify-center">
+                    <canvas id="subject-chart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chapter Hotspots -->
+        <div class="bg-white p-6 rounded-xl shadow-sm mb-8">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-lg font-bold text-gray-800">🔥 Chapter Hotspots (Most Queried)</h2>
+                <div class="flex gap-2">
+                    <select id="class-filter" class="border rounded px-3 py-1 text-sm">
+                        <option value="1">Class 1</option>
+                        <option value="2">Class 2</option>
+                        <option value="3">Class 3</option>
+                        <option value="4">Class 4</option>
+                        <option value="5">Class 5</option>
+                        <option value="6">Class 6</option>
+                        <option value="7">Class 7</option>
+                        <option value="8" selected>Class 8</option>
+                        <option value="9">Class 9</option>
+                        <option value="10">Class 10</option>
+                    </select>
+                    <select id="subject-filter" class="border rounded px-3 py-1 text-sm">
+                        <option value="english">English</option>
+                        <option value="maths">Maths</option>
+                        <option value="science">Science (Classes 1-6)</option>
+                        <option value="physics" selected>Physics (Classes 7-10)</option>
+                        <option value="biology">Biology (Classes 7-10)</option>
+                        <option value="social">Social</option>
+                    </select>
+                    <button onclick="loadHotspots()"
+                        class="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700">Filter</button>
+                </div>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left">
+                    <thead class="bg-gray-50 text-gray-600 text-sm uppercase">
+                        <tr>
+                            <th class="px-4 py-3">Rank</th>
+                            <th class="px-4 py-3">Chapter Name</th>
+                            <th class="px-4 py-3">Total Queries</th>
+                            <th class="px-4 py-3">Unique Students</th>
+                            <th class="px-4 py-3">Avg Difficulty</th>
+                        </tr>
+                    </thead>
+                    <tbody id="hotspots-body" class="divide-y divide-gray-100">
+                        <tr>
+                            <td colspan="5" class="px-4 py-4 text-center text-gray-400">Loading data...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Student Lookup -->
+        <div class="bg-white p-6 rounded-xl shadow-sm">
+            <h2 class="text-lg font-bold mb-4 text-gray-800">🔍 Student Performance Lookup</h2>
+            <div class="flex gap-2 mb-6">
+                <input id="student-uid" type="text" placeholder="Enter Student UID..."
+                    class="flex-1 border rounded px-4 py-2">
+                <button onclick="lookupStudent()"
+                    class="bg-gray-800 text-white px-6 py-2 rounded hover:bg-gray-900">Search</button>
+            </div>
+            <div id="student-result" class="hidden border rounded-lg p-6 bg-gray-50">
+                <!-- Result populated by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Config Script -->
+    <script src="/static/firebase-config.js"></script>
+
+    <script>
+        let currentUser = null;
+        let userToken = null;
+
+        // Auth listener
+        firebase.auth().onAuthStateChanged(async (user) => {
+            if (user) {
+                // Check if admin (simplified for demo - real check is in backend middleware)
+                currentUser = user;
+                userToken = await user.getIdToken();
+                document.getElementById('admin-email').textContent = user.email;
+                loadAdminDashboard();
+            } else {
+                window.location.href = '/admin-login.html';
+            }
+        });
+
+        async function loadAdminDashboard() {
+            try {
+                // Load Class Overview
+                const classData = await fetchAPI('/api/admin/class-overview');
+                document.getElementById('total-queries').textContent = classData.total_queries.toLocaleString();
+                renderClassChart(classData.class_distribution);
+
+                // Load Subject Distribution
+                const subjectData = await fetchAPI('/api/admin/subject-distribution');
+                if (subjectData.subjects.length > 0) {
+                    document.getElementById('top-subject').textContent = subjectData.subjects[0].toUpperCase();
+                }
+                renderSubjectChart(subjectData);
+
+                // Load Hotspots (default)
+                loadHotspots();
+
+            } catch (error) {
+                console.error('Admin dashboard error:', error);
+            }
+        }
+
+        async function loadHotspots() {
+            const className = document.getElementById('class-filter').value;
+            const subject = document.getElementById('subject-filter').value;
+
+            try {
+                const data = await fetchAPI(`/api/admin/chapter-hotspots?class_name=${className}&subject=${subject}&limit=5`);
+                const tbody = document.getElementById('hotspots-body');
+
+                if (data.hotspots.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="5" class="px-4 py-4 text-center text-gray-400">No data found for this selection</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = data.hotspots.map((h, idx) => `
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-4 py-3 font-bold text-gray-400">#${idx + 1}</td>
+                        <td class="px-4 py-3 font-medium text-gray-800">${h.chapter_name}</td>
+                        <td class="px-4 py-3 text-blue-600 font-bold">${h.total_queries}</td>
+                        <td class="px-4 py-3">${h.unique_students}</td>
+                        <td class="px-4 py-3">
+                            <span class="px-2 py-1 rounded text-xs font-bold ${getDifficultyColor(h.avg_difficulty)}">
+                                ${h.avg_difficulty.toFixed(1)}
+                            </span>
+                        </td>
+                    </tr>
+                `).join('');
+            } catch (error) {
+                console.error('Hotspots error:', error);
+            }
+        }
+
+        async function lookupStudent() {
+            const uid = document.getElementById('student-uid').value;
+            if (!uid) return;
+
+            const resultDiv = document.getElementById('student-result');
+            resultDiv.innerHTML = '<p class="text-gray-500 text-center">Loading student report...</p>';
+            resultDiv.classList.remove('hidden');
+
+            try {
+                const data = await fetchAPI(`/api/admin/student-report?uid=${uid}`);
+
+                if (!data || !data.basic_stats) {
+                    resultDiv.innerHTML = `<p class="text-red-500">Student not found or no data available.</p>`;
+                    return;
+                }
+
+                const stats = data.basic_stats;
+                const weakAreas = data.weak_areas || [];
+                const recent = data.recent_queries || [];
+
+                resultDiv.innerHTML = `
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                        <div class="bg-white p-4 rounded border">
+                            <p class="text-sm text-gray-500">Total Queries</p>
+                            <p class="text-2xl font-bold text-indigo-600">${stats.total_queries || 0}</p>
+                        </div>
+                        <div class="bg-white p-4 rounded border">
+                            <p class="text-sm text-gray-500">Current Streak</p>
+                            <p class="text-2xl font-bold text-orange-500">${stats.streak || 0} days</p>
+                        </div>
+                        <div class="bg-white p-4 rounded border">
+                            <p class="text-sm text-gray-500">Subjects</p>
+                            <p class="text-2xl font-bold text-green-600">${stats.subjects_count ? Object.keys(stats.subjects_count).length : 0}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <h4 class="font-bold mb-3 text-gray-800">⚠️ Weak Areas</h4>
+                            ${weakAreas.length > 0 ?
+                        `<ul class="space-y-2">
+                                    ${weakAreas.map(w => `
+                                        <li class="flex items-center gap-2 text-sm bg-red-50 p-2 rounded text-red-700">
+                                            <span>📌</span> ${w.topic} (${w.chapter})
+                                        </li>
+                                    `).join('')}
+                                </ul>` :
+                        '<p class="text-sm text-green-600 italic">No significant weak areas detected.</p>'
+                    }
+                        </div>
+                        <div>
+                            <h4 class="font-bold mb-3 text-gray-800">🕒 Recent Activity</h4>
+                            ${recent.length > 0 ?
+                        `<ul class="space-y-2">
+                                    ${recent.slice(0, 5).map(q => `
+                                        <li class="text-sm border-b pb-1 last:border-0">
+                                            <p class="font-medium truncate">${q.query}</p>
+                                            <p class="text-xs text-gray-500">${q.chapter} • ${new Date(q.timestamp).toLocaleDateString()}</p>
+                                        </li>
+                                    `).join('')}
+                                </ul>` :
+                        '<p class="text-sm text-gray-500 italic">No recent activity.</p>'
+                    }
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h4 class="font-bold mb-3 text-gray-800">📚 Subject Distribution</h4>
+                        <div class="flex flex-wrap gap-2">
+                            ${Object.entries(data.subject_distribution || {}).map(([subj, count]) => `
+                                <span class="px-3 py-1 bg-gray-100 rounded-full text-sm font-medium text-gray-700 capitalize">
+                                    ${subj}: ${count}
+                                </span>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            } catch (error) {
+                console.error('Lookup error:', error);
+                resultDiv.innerHTML = `<p class="text-red-500">Error fetching student report.</p>`;
+            }
+        }
+
+        // API helper
+        async function fetchAPI(endpoint) {
+            const response = await fetch(endpoint, {
+                headers: { 'Authorization': `Bearer ${userToken}` }
+            });
+            return response.json();
+        }
+
+        function getDifficultyColor(score) {
+            if (score < 0.4) return 'bg-green-100 text-green-700';
+            if (score < 0.7) return 'bg-yellow-100 text-yellow-700';
+            return 'bg-red-100 text-red-700';
+        }
+
+        function renderClassChart(distribution) {
+            const ctx = document.getElementById('class-chart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(distribution).map(k => `Class ${k}`),
+                    datasets: [{
+                        label: 'Queries',
+                        data: Object.values(distribution),
+                        backgroundColor: '#4f46e5',
+                        borderRadius: 6
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+        }
+
+        function renderSubjectChart(data) {
+            const ctx = document.getElementById('subject-chart').getContext('2d');
+            new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: data.subjects.map(s => s.toUpperCase()),
+                    datasets: [{
+                        data: data.counts,
+                        backgroundColor: ['#4f46e5', '#0ea5e9', '#10b981', '#f59e0b']
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+        }
+
+        async function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                await firebase.auth().signOut();
+                window.location.href = '/admin-login.html';
+            }
+        }
+    </script>
+</body>
+
+</html>

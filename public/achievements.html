@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏆 My Achievements - Chaduvu Guru</title>
+    <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/static/sidebar.css">
+    <link rel="stylesheet" href="/static/css/my-bag.css">
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+
+        /* Tier Badge Styling */
+        .tier-badge {
+            background: linear-gradient(135deg, var(--tier-color-1), var(--tier-color-2));
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Achievement Card */
+        .achievement-card {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .achievement-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.6s;
+        }
+
+        .achievement-card:hover::before {
+            left: 100%;
+        }
+
+        .achievement-card:hover {
+            transform: translateY(-8px) scale(1.03);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .achievement-locked {
+            filter: grayscale(90%);
+            opacity: 0.6;
+        }
+
+        .achievement-unlocked {
+            animation: unlock 0.6s ease-out;
+        }
+
+        @keyframes unlock {
+            0% {
+                transform: scale(0.8) rotate(-5deg);
+                opacity: 0;
+            }
+
+            50% {
+                transform: scale(1.1) rotate(5deg);
+            }
+
+            100% {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+            }
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            height: 8px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 10px;
+            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Category Filter */
+        .category-btn {
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .category-btn.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-color: #764ba2;
+            transform: scale(1.05);
+        }
+
+        /* Confetti */
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            opacity: 0;
+            pointer-events: none;
+            animation: confetti-fall 3s linear forwards;
+        }
+
+        @keyframes confetti-fall {
+            to {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 1;
+            }
+        }
+
+        /* Tier Progress Ring */
+        .tier-ring {
+            stroke-dasharray: 283;
+            stroke-dashoffset: 283;
+            transition: stroke-dashoffset 1s ease-out;
+        }
+
+        /* Notification Toast */
+        .toast {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            z-index: 9999;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Hindi Text */
+        .hindi-text {
+            font-family: 'Noto Sans Devanagari', sans-serif;
+            font-size: 0.85em;
+            opacity: 0.8;
+        }
+
+        /* Streak Flame Animation */
+        .flame-animate {
+            animation: flame 1.5s ease-in-out infinite;
+        }
+
+        @keyframes flame {
+
+            0%,
+            100% {
+                transform: scale(1) rotate(-5deg);
+            }
+
+            50% {
+                transform: scale(1.1) rotate(5deg);
+            }
+        }
+    </style>
+</head>
+
+<body class="min-h-screen">
+    <!-- Sidebar -->
+    <div id="sidebar-container"></div>
+
+    <!-- My Bag Component (keeping existing integration) -->
+    <div id="my-bag-overlay" class="my-bag-overlay" onclick="closeBag()"></div>
+    <div id="my-bag-sidebar" class="my-bag-sidebar">
+        <div class="bag-header">
+            <div class="bag-title">
+                <div class="bag-icon-wrapper"><span class="text-2xl">🎒</span></div>
+                <div>
+                    <h2 class="text-xl font-bold">My Bag</h2>
+                    <p class="text-xs opacity-80">Your Learning Collection</p>
+                </div>
+            </div>
+            <button onclick="closeBag()" class="bag-close-btn">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+            </button>
+        </div>
+        <div class="bag-content">
+            <div class="bag-tabs">
+                <button onclick="showBagTab('notebooks')" id="notebooks-tab" class="bag-tab active">
+                    <span>📚</span> Notebooks
+                </button>
+                <button onclick="showBagTab('saved')" id="saved-tab" class="bag-tab">
+                    <span>💾</span> Saved
+                </button>
+            </div>
+            <div id="notebooks-view">
+                <button onclick="showCreateNotebookModal()" class="create-btn">
+                    <span>+</span> Create New Notebook
+                </button>
+                <div id="notebooks-grid" class="notebook-grid"></div>
+            </div>
+            <div id="saved-view" style="display: none;">
+                <button onclick="showCreateNoteModal()" class="create-btn">
+                    <span>+</span> Write a Note
+                </button>
+                <div class="form-group">
+                    <select id="notebook-filter" onchange="filterItems()" class="form-select">
+                        <option value="">All Notebooks</option>
+                    </select>
+                </div>
+                <div id="items-list" class="notebook-grid"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="ml-0 md:ml-64 p-4 md:p-8 transition-all duration-300">
+
+        <!-- Header Section -->
+        <div class="mb-8">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+                <div>
+                    <h1 class="text-4xl font-bold text-gray-800 flex items-center gap-3 mb-2">
+                        🏆 My Achievements
+                        <span class="text-2xl text-gray-600">Trophy Room</span>
+                    </h1>
+                    <p class="text-gray-600">Keep learning to unlock more badges! 🎯✨</p>
+                </div>
+            </div>
+
+            <!-- Tier & Points Display -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <!-- Current Tier -->
+                <div class="bg-white rounded-3xl p-6 shadow-lg relative overflow-hidden">
+                    <div
+                        class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-purple-100 to-pink-100 rounded-full -mr-16 -mt-16 opacity-50">
+                    </div>
+                    <div class="relative z-10">
+                        <p class="text-sm font-medium text-gray-500 uppercase mb-2">Your Tier</p>
+                        <div class="flex items-center gap-4">
+                            <div id="tier-icon" class="text-6xl">🌱</div>
+                            <div>
+                                <h2 id="tier-name" class="text-3xl font-bold text-gray-800">Newcomer</h2>
+                                <p id="tier-progress" class="text-sm text-gray-500 mt-1">0 / 100 points to next tier</p>
+                            </div>
+                        </div>
+                        <!-- Progress to Next Tier -->
+                        <div class="mt-4 bg-gray-200 rounded-full h-3 overflow-hidden">
+                            <div id="tier-progress-bar" class="progress-bar" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Total Points & Streak -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-gradient-to-br from-yellow-400 to-orange-500 rounded-2xl p-6 text-white shadow-lg">
+                        <div class="text-4xl mb-2">⭐</div>
+                        <div class="text-sm opacity-90">Total Points</div>
+                        <div id="total-points" class="text-4xl font-bold mt-1">0</div>
+                    </div>
+                    <div class="bg-gradient-to-br from-orange-500 to-red-500 rounded-2xl p-6 text-white shadow-lg">
+                        <div class="text-4xl mb-2 flame-animate">🔥</div>
+                        <div class="text-sm opacity-90">Streak</div>
+                        <div id="current-streak" class="text-4xl font-bold mt-1">0</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Summary -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+            <div class="bg-white rounded-xl p-4 shadow-sm text-center">
+                <div class="text-3xl mb-2">🎯</div>
+                <div class="text-2xl font-bold text-purple-600" id="unlocked-count">0</div>
+                <div class="text-xs text-gray-500">Unlocked</div>
+            </div>
+            <div class="bg-white rounded-xl p-4 shadow-sm text-center">
+                <div class="text-3xl mb-2">🔒</div>
+                <div class="text-2xl font-bold text-gray-400" id="locked-count">18</div>
+                <div class="text-xs text-gray-500">Locked</div>
+            </div>
+            <div class="bg-white rounded-xl p-4 shadow-sm text-center">
+                <div class="text-3xl mb-2">📈</div>
+                <div class="text-2xl font-bold text-green-600" id="completion-rate">0%</div>
+                <div class="text-xs text-gray-500">Completion</div>
+            </div>
+            <div class="bg-white rounded-xl p-4 shadow-sm text-center">
+                <div class="text-3xl mb-2">🌟</div>
+                <div class="text-2xl font-bold text-yellow-600" id="next-badge">Loading...</div>
+                <div class="text-xs text-gray-500">Next Badge</div>
+            </div>
+        </div>
+
+        <!-- Category Filter -->
+        <div class="bg-white rounded-2xl p-6 shadow-sm mb-8">
+            <h3 class="text-lg font-bold text-gray-800 mb-4">📂 Filter by Category</h3>
+            <div class="flex flex-wrap gap-3" id="category-filters">
+                <button onclick="filterCategory('all')"
+                    class="category-btn active px-4 py-2 rounded-lg font-medium bg-gray-100">
+                    All Badges
+                </button>
+                <button onclick="filterCategory('core')"
+                    class="category-btn px-4 py-2 rounded-lg font-medium bg-gray-100">
+                    🎓 Core Learning
+                </button>
+                <button onclick="filterCategory('streak')"
+                    class="category-btn px-4 py-2 rounded-lg font-medium bg-gray-100">
+                    🔥 Streak
+                </button>
+                <button onclick="filterCategory('subject')"
+                    class="category-btn px-4 py-2 rounded-lg font-medium bg-gray-100">
+                    📚 Subject Mastery
+                </button>
+                <button onclick="filterCategory('milestone')"
+                    class="category-btn px-4 py-2 rounded-lg font-medium bg-gray-100">
+                    ⏳ Milestones
+                </button>
+            </div>
+        </div>
+
+        <!-- Achievements Grid -->
+        <div id="achievements-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <!-- Loading State -->
+            <div class="col-span-full text-center py-12">
+                <div class="animate-spin rounded-full h-16 w-16 border-b-4 border-purple-600 mx-auto mb-4"></div>
+                <p class="text-gray-500 text-lg">Loading your achievements...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Achievement Detail Modal -->
+    <div id="achievement-modal"
+        class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4"
+        onclick="closeModal(event)">
+        <div class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl" onclick="event.stopPropagation()">
+            <div class="text-center">
+                <div id="modal-icon" class="text-8xl mb-4">🏆</div>
+                <h3 id="modal-name" class="text-3xl font-bold text-gray-800 mb-2">Achievement Name</h3>
+                <p id="modal-description" class="text-gray-600 mb-4">Description here</p>
+
+                <!-- Progress -->
+                <div class="mb-6">
+                    <div class="flex justify-between text-sm mb-2">
+                        <span class="text-gray-500">Progress</span>
+                        <span id="modal-progress-text" class="font-semibold text-purple-600">0%</span>
+                    </div>
+                    <div class="bg-gray-200 rounded-full h-3 overflow-hidden">
+                        <div id="modal-progress-bar" class="progress-bar" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <!-- Points & Tier -->
+                <div class="grid grid-cols-2 gap-4 mb-6">
+                    <div class="bg-yellow-50 rounded-xl p-4">
+                        <div class="text-yellow-600 text-sm font-medium">Points</div>
+                        <div id="modal-points" class="text-2xl font-bold text-yellow-700">+50</div>
+                    </div>
+                    <div class="bg-purple-50 rounded-xl p-4">
+                        <div class="text-purple-600 text-sm font-medium">Tier</div>
+                        <div id="modal-tier" class="text-2xl font-bold text-purple-700 capitalize">Bronze</div>
+                    </div>
+                </div>
+
+                <button onclick="closeModal()"
+                    class="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 rounded-xl font-semibold hover:shadow-lg transition">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/static/firebase-config.js"></script>
+    <script src="/static/auth.js"></script>
+    <script src="/static/sidebar.js"></script>
+    <script src="/static/js/my-bag.js"></script>
+
+    <script>
+        let currentUser = null;
+        let userToken = null;
+        let achievementsData = null;
+        let currentFilter = 'all';
+
+        // Auth & Initialization
+        firebase.auth().onAuthStateChanged(async (user) => {
+            if (user) {
+                currentUser = user;
+                userToken = await user.getIdToken();
+
+                // Initialize sidebar
+                const userData = {
+                    name: user.displayName || 'Student',
+                    class: localStorage.getItem('userClass') || '8',
+                    email: user.email,
+                    studyStreak: 0
+                };
+                initializeSidebar(userData, { hideAchievements: true });
+
+                // Load achievements
+                await loadAchievements();
+            } else {
+                window.location.href = '/?login=true';
+            }
+        });
+
+        async function loadAchievements() {
+            try {
+                console.log('[ACHIEVEMENTS] Fetching data for user:', currentUser.uid);
+
+                const response = await fetch(`/api/achievements/summary?uid=${currentUser.uid}`, {
+                    headers: { 'Authorization': `Bearer ${userToken}` }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                achievementsData = await response.json();
+                console.log('[ACHIEVEMENTS] Loaded:', achievementsData);
+
+                // Update UI
+                updateStats();
+                updateTierDisplay();
+                renderAchievements();
+                checkNewlyUnlocked();
+
+            } catch (error) {
+                console.error('[ACHIEVEMENTS] Error loading:', error);
+                document.getElementById('achievements-grid').innerHTML = `
+                    <div class="col-span-full text-center py-12">
+                        <div class="text-6xl mb-4">😔</div>
+                        <p class="text-gray-600 text-lg">Error loading achievements</p>
+                        <p class="text-gray-500 text-sm mt-2">${error.message}</p>
+                        <button onclick="loadAchievements()" class="mt-4 px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700">
+                            Retry
+                        </button>
+                    </div>
+                `;
+            }
+        }
+
+        function updateStats() {
+            const { total_points, tier, unlocked_count, total_count, achievements } = achievementsData;
+
+            document.getElementById('total-points').textContent = total_points || 0;
+            document.getElementById('unlocked-count').textContent = unlocked_count || 0;
+            document.getElementById('locked-count').textContent = (total_count - unlocked_count) || 0;
+
+            const completion = Math.round((unlocked_count / total_count) * 100);
+            document.getElementById('completion-rate').textContent = `${completion}%`;
+
+            // Find next badge to unlock
+            const nextBadge = achievements.find(a => !a.is_unlocked && a.progress > 0);
+            if (nextBadge) {
+                document.getElementById('next-badge').textContent = nextBadge.name;
+            } else {
+                document.getElementById('next-badge').textContent = 'All unlocked!';
+            }
+
+            // Get user analytics for streak
+            fetch(`/api/dashboard/summary?uid=${currentUser.uid}`, {
+                headers: { 'Authorization': `Bearer ${userToken}` }
+            })
+                .then(res => res.json())
+                .then(data => {
+                    document.getElementById('current-streak').textContent = data.streak || 0;
+                })
+                .catch(err => console.error('Error loading streak:', err));
+        }
+
+        function updateTierDisplay() {
+            const { tier, total_points } = achievementsData;
+
+            const tierInfo = {
+                'newbie': { name: 'Newbie 🌱', icon: '🌱', next: 100 },
+                'rising_star': { name: 'Rising Star ⭐', icon: '⭐', next: 500 },
+                'pro_player': { name: 'Pro Player 🎮', icon: '🎮', next: 1000 },
+                'champion': { name: 'Champion 🏆', icon: '🏆', next: 2500 },
+                'legend': { name: 'Legend 💎', icon: '💎', next: null }
+            };
+
+            const current = tierInfo[tier] || tierInfo.newbie;
+            document.getElementById('tier-icon').textContent = current.icon;
+            document.getElementById('tier-name').textContent = current.name;
+
+            if (current.next) {
+                const remaining = current.next - total_points;
+                const progress = (total_points / current.next) * 100;
+                document.getElementById('tier-progress').textContent = `${remaining} points to next tier`;
+                document.getElementById('tier-progress-bar').style.width = `${Math.min(progress, 100)}%`;
+            } else {
+                document.getElementById('tier-progress').textContent = 'Max tier achieved! 🎉';
+                document.getElementById('tier-progress-bar').style.width = '100%';
+            }
+        }
+
+        function renderAchievements() {
+            const grid = document.getElementById('achievements-grid');
+            const achievements = achievementsData.achievements.filter(a => {
+                if (currentFilter === 'all') return true;
+                return a.category === currentFilter;
+            });
+
+            if (achievements.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full text-center py-12">
+                        <div class="text-6xl mb-4">🔍</div>
+                        <p class="text-gray-600">No badges in this category yet</p>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = achievements.map(achievement => {
+                const isUnlocked = achievement.is_unlocked;
+                const progress = Math.round(achievement.progress * 100);
+
+                return `
+                    <div class="achievement-card ${isUnlocked ? 'achievement-unlocked' : 'achievement-locked'} bg-white rounded-2xl p-6 shadow-sm cursor-pointer"
+                         onclick='showDetail(${JSON.stringify(achievement).replace(/'/g, "&apos;")})'>
+                        
+                        <!-- Badge Icon -->
+                        <div class="text-center mb-4">
+                            <div class="text-6xl mb-2 ${isUnlocked ? '' : 'grayscale opacity-50'}">${achievement.icon}</div>
+                            ${isUnlocked ? '<div class="text-xs font-bold text-green-500 bg-green-50 px-3 py-1 rounded-full inline-block">✓ UNLOCKED</div>' :
+                        '<div class="text-xs font-bold text-gray-400 bg-gray-100 px-3 py-1 rounded-full inline-block">🔒 LOCKED</div>'}
+                        </div>
+
+                        <!-- Name -->
+                        <h4 class="font-bold text-gray-800 text-lg mb-1 text-center">${achievement.name}</h4>
+                        
+                        <!-- Description -->
+                        <p class="text-sm text-gray-600 text-center mb-3 min-h-[40px]">${achievement.description}</p>
+
+                        <!-- Progress Bar -->
+                        ${!isUnlocked ? `
+                            <div class="mb-3">
+                                <div class="flex justify-between text-xs mb-1">
+                                    <span class="text-gray-500">Progress</span>
+                                    <span class="font-semibold text-purple-600">${progress}%</span>
+                                </div>
+                                <div class="bg-gray-200 rounded-full h-2 overflow-hidden">
+                                    <div class="progress-bar" style="width: ${progress}%"></div>
+                                </div>
+                            </div>
+                        ` : ''}
+
+                        <!-- Footer -->
+                        <div class="flex justify-between items-center mt-4 pt-4 border-t border-gray-100">
+                            <div class="text-sm">
+                                <span class="text-yellow-600 font-bold">+${achievement.points}</span>
+                                <span class="text-gray-500 text-xs"> points</span>
+                            </div>
+                            <div class="px-2 py-1 rounded-lg text-xs font-medium capitalize
+                                        ${achievement.tier === 'legendary' ? 'bg-purple-100 text-purple-700' :
+                        achievement.tier === 'diamond' ? 'bg-blue-100 text-blue-700' :
+                            achievement.tier === 'gold' ? 'bg-yellow-100 text-yellow-700' :
+                                achievement.tier === 'silver' ? 'bg-gray-200 text-gray-700' :
+                                    'bg-orange-100 text-orange-700'}">
+                                ${achievement.tier}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function filterCategory(category) {
+            currentFilter = category;
+
+            // Update button states
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            renderAchievements();
+        }
+
+        function showDetail(achievement) {
+            const modal = document.getElementById('achievement-modal');
+            const progress = Math.round(achievement.progress * 100);
+
+            document.getElementById('modal-icon').textContent = achievement.icon;
+            document.getElementById('modal-name').textContent = achievement.name;
+            document.getElementById('modal-description').textContent = achievement.description;
+            document.getElementById('modal-points').textContent = `+${achievement.points}`;
+            document.getElementById('modal-tier').textContent = achievement.tier;
+            document.getElementById('modal-progress-text').textContent = `${progress}%`;
+            document.getElementById('modal-progress-bar').style.width = `${progress}%`;
+
+            modal.classList.remove('hidden');
+        }
+
+        function closeModal(event) {
+            if (!event || event.target.id === 'achievement-modal') {
+                document.getElementById('achievement-modal').classList.add('hidden');
+            }
+        }
+
+        function checkNewlyUnlocked() {
+            const newlyUnlocked = achievementsData.newly_unlocked || [];
+
+            if (newlyUnlocked.length > 0) {
+                // Show confetti
+                createConfetti();
+
+                // Show toast notifications
+                newlyUnlocked.forEach((badge, index) => {
+                    setTimeout(() => {
+                        showToast(badge);
+                    }, index * 1000);
+                });
+            }
+        }
+
+        function showToast(badge) {
+            const toast = document.createElement('div');
+            toast.className = 'toast bg-white rounded-xl p-4 shadow-2xl flex items-center gap-4 max-w-sm';
+            toast.innerHTML = `
+                <div class="text-4xl">${badge.icon}</div>
+                <div class="flex-1">
+                    <div class="font-bold text-gray-800">🎉 Achievement Unlocked!</div>
+                    <div class="text-sm text-gray-600">${badge.name}</div>
+                    <div class="text-xs text-yellow-600 font-bold mt-1">+${badge.points} points</div>
+                </div>
+            `;
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateX(400px)';
+                setTimeout(() => toast.remove(), 500);
+            }, 4000);
+        }
+
+        function createConfetti() {
+            const colors = ['#667eea', '#764ba2', '#f093fb', '#4facfe', '#43e97b', '#fa709a'];
+
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * window.innerWidth + 'px';
+                    confetti.style.top = '-10px';
+                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.animationDelay = Math.random() * 0.3 + 's';
+                    document.body.appendChild(confetti);
+
+                    setTimeout(() => confetti.remove(), 3000);
+                }, i * 30);
+            }
+        }
+    </script>
+</body>
+
+</html>

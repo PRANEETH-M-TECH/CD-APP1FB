@@ -1,0 +1,197 @@
+{
+  "lesson_title": "Exploring Types of Fabrics",
+  "layout_mode": "timeline",
+  "theme": "Science",
+  "global_assets": [],
+  "connections": [],
+  "lesson_id": "vl_4036545c",
+  "scenes": [
+    {
+      "scene_no": 1,
+      "purpose": "Introduce the lesson topic and spark student interest in fabrics.",
+      "template_id": "title_slide",
+      "template_selection_reasoning": "The 'title_slide' template is exclusively used for the first scene to clearly present the lesson's title and a welcoming subtitle, setting the stage for the learning experience.",
+      "camera": {
+        "zoom": 1.1,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "main_concept"
+      },
+      "teacher_script": "Hello, young scientists! Today, we're going on an exciting journey to explore the wonderful world of fabrics. Have you ever wondered why you wear different clothes in different seasons?",
+      "template_data": {
+        "title": "Exploring Types of Fabrics",
+        "subtitle": "How we choose what to wear!"
+      },
+      "audio_url": "/uploads/visual_lessons/vl_4036545c/scene_1.wav"
+    },
+    {
+      "scene_no": 2,
+      "purpose": "Illustrate how fabric choices are influenced by different seasons, as mentioned in the textbook context regarding 'Seasons Cloths we wear'.",
+      "template_id": "column_comparison",
+      "template_selection_reasoning": "The 'column_comparison' template is ideal for directly contrasting two different categories, in this case, fabrics suitable for 'Summer' versus 'Winter' as prompted by the textbook. This visual separation helps students understand the distinct properties required for each season.",
+      "camera": {
+        "zoom": 1.0,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "main_concept"
+      },
+      "teacher_script": "Just like the textbook asks, we pick our clothes based on the weather! Let's compare the fabrics we use for sunny summer days and chilly winter evenings.",
+      "template_data": {
+        "title": "Fabrics for Different Seasons",
+        "left_col": {
+          "header": "Summer Fabrics",
+          "bullets": [
+            "Light and thin",
+            "Keep us cool",
+            "Examples: Cotton, Linen"
+          ]
+        },
+        "right_col": {
+          "header": "Winter Fabrics",
+          "bullets": [
+            "Warm and thick",
+            "Keep us cozy",
+            "Examples: Wool, Fleece"
+          ]
+        }
+      },
+      "audio_url": "/uploads/visual_lessons/vl_4036545c/scene_2.wav"
+    },
+    {
+      "scene_no": 3,
+      "purpose": "Categorize fabrics based on various properties and uses, including texture, appearance, and purpose (casual/formal), as hinted by the textbook description.",
+      "template_id": "taxonomy_tree",
+      "template_selection_reasoning": "A 'taxonomy_tree' template is chosen to visually represent the hierarchical classification of fabrics based on their characteristics and uses. This helps students understand that 'types of fabrics' isn't just one list, but a way of grouping them by different attributes like feel, purpose, and appearance.",
+      "camera": {
+        "zoom": 0.95,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "root"
+      },
+      "teacher_script": "Fabrics are also chosen based on how they feel, look, and what we want to use them for. It's like a family tree for clothes!",
+      "template_data": {
+        "title": "How We Categorize Fabrics",
+        "root": {
+          "label": "Fabrics",
+          "children": [
+            {
+              "label": "By Feel & Texture",
+              "children": [
+                {
+                  "label": "Soft & Smooth (e.g., Silk)"
+                },
+                {
+                  "label": "Rough & Coarse (e.g., Denim)"
+                },
+                {
+                  "label": "Light & Thin (e.g., Chiffon)"
+                }
+              ]
+            },
+            {
+              "label": "By Purpose & Use",
+              "children": [
+                {
+                  "label": "Everyday Wear (e.g., Cotton T-shirts)"
+                },
+                {
+                  "label": "Formal Wear (e.g., Suits, Dresses)"
+                },
+                {
+                  "label": "Protective Gear (e.g., Raincoats)"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "audio_url": "/uploads/visual_lessons/vl_4036545c/scene_3.wav"
+    },
+    {
+      "scene_no": 4,
+      "purpose": "Provide specific examples of fabric types with their key characteristics and common uses, reinforcing the concepts of properties and choice.",
+      "template_id": "database_grid",
+      "template_selection_reasoning": "The 'database_grid' template is selected to present information about different fabric types in a clear, tabular format. This allows students to easily see and compare the names of fabrics, their typical characteristics (like light, coarse, shiny), and their common applications, mirroring the practical choices mentioned in the textbook.",
+      "camera": {
+        "zoom": 1.0,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "main_concept"
+      },
+      "teacher_script": "Let's look at some examples! Every fabric has special qualities that make it perfect for certain clothes and situations.",
+      "template_data": {
+        "title": "Fabric Properties and Uses",
+        "headers": [
+          "Fabric Name",
+          "Key Property",
+          "Common Use"
+        ],
+        "rows": [
+          [
+            "Cotton",
+            "Soft, absorbent, breathable",
+            "Summer clothes, T-shirts"
+          ],
+          [
+            "Wool",
+            "Warm, thick, insulates",
+            "Winter sweaters, blankets"
+          ],
+          [
+            "Silk",
+            "Smooth, shiny, luxurious",
+            "Party dresses, scarves"
+          ],
+          [
+            "Denim",
+            "Coarse, strong, durable",
+            "Jeans, casual wear"
+          ],
+          [
+            "Nylon/Polyester",
+            "Water-resistant, quick-dry",
+            "Raincoats, sportswear"
+          ]
+        ]
+      },
+      "audio_url": "/uploads/visual_lessons/vl_4036545c/scene_4.wav"
+    },
+    {
+      "scene_no": 5,
+      "purpose": "Assess the student's understanding of how fabric properties influence choice, especially in relation to seasons, based on the lesson's context.",
+      "template_id": "quiz_checkpoint",
+      "template_selection_reasoning": "The 'quiz_checkpoint' template is mandatory for the final scene of the lesson. It provides an active recall opportunity for students to test their understanding of how fabric choices are made based on properties and purpose, reinforcing the core learning objectives.",
+      "camera": {
+        "zoom": 1.1,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "main_concept"
+      },
+      "teacher_script": "Time for a quick check! Based on what we've learned, why would you choose a thick, warm fabric for winter, and a light, airy fabric for summer?",
+      "template_data": {
+        "question": "If you are going out on a very cold winter day, which type of fabric would be best for your jacket?",
+        "options": [
+          {
+            "id": "A",
+            "text": "Thin cotton"
+          },
+          {
+            "id": "B",
+            "text": "Warm wool"
+          },
+          {
+            "id": "C",
+            "text": "Shiny silk"
+          },
+          {
+            "id": "D",
+            "text": "Coarse denim"
+          }
+        ],
+        "correct_option_id": "B",
+        "explanation": "Warm wool fabrics are excellent for winter because their thick fibers trap air, providing good insulation against the cold. Thin cotton, shiny silk, and coarse denim do not offer the same level of warmth."
+      },
+      "audio_url": "/uploads/visual_lessons/vl_4036545c/scene_5.wav"
+    }
+  ]
+}

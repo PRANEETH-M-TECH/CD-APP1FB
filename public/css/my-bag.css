@@ -1,0 +1,637 @@
+/* My Bag - Premium Animated UI */
+:root {
+    --bag-primary: #4F46E5;
+    --bag-secondary: #818CF8;
+    --bag-bg: rgba(15, 23, 42, 0.95);
+    --bag-glass: rgba(255, 255, 255, 0.1);
+    --bag-border: rgba(255, 255, 255, 0.2);
+}
+
+/* Add standard property for compatibility */
+.shelf-header h1 {
+    -webkit-background-clip: text;
+    background-clip: text;
+}
+
+/* Modal Overlay */
+.bag-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: var(--bag-bg);
+    backdrop-filter: blur(20px);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+}
+
+.bag-modal.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+/* Bag Animation Container */
+.bag-animation-stage {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* 3D Bag Icon */
+.bag-icon-3d {
+    width: 120px;
+    height: 140px;
+    background: linear-gradient(135deg, var(--bag-primary), var(--bag-secondary));
+    border-radius: 20px;
+    position: relative;
+    box-shadow: 0 20px 50px rgba(79, 70, 229, 0.4);
+    transform: scale(0.8);
+    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    cursor: pointer;
+}
+
+.bag-icon-3d::before {
+    content: '';
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 40px;
+    border: 8px solid var(--bag-secondary);
+    border-bottom: none;
+    border-radius: 20px 20px 0 0;
+    z-index: -1;
+}
+
+.bag-icon-3d::after {
+    content: '';
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.bag-modal.opening .bag-icon-3d {
+    transform: scale(20);
+    opacity: 0;
+    transition: transform 0.8s ease-in, opacity 0.6s ease-in;
+}
+
+/* Notebook Grid View */
+.notebook-shelf {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: 40px;
+    box-sizing: border-box;
+    opacity: 0;
+    transform: scale(0.9);
+    transition: all 0.5s ease 0.3s;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+.bag-modal.open .notebook-shelf {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.shelf-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+    color: white;
+}
+
+.shelf-header h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    background: linear-gradient(to right, #fff, #a5b4fc);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.create-btn {
+    background: var(--bag-primary);
+    color: white;
+    padding: 12px 24px;
+    border-radius: 12px;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: transform 0.2s;
+    box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
+}
+
+.create-btn:hover {
+    transform: translateY(-2px);
+}
+
+.notebook-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 30px;
+    padding-bottom: 40px;
+}
+
+/* Notebook Card */
+.notebook-card {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    padding: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 1px solid var(--bag-border);
+    position: relative;
+    overflow: hidden;
+    height: 280px;
+    display: flex;
+    flex-direction: column;
+}
+
+.notebook-card:hover {
+    transform: translateY(-10px) rotateX(5deg);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    border-color: var(--bag-secondary);
+}
+
+.notebook-cover {
+    flex: 1;
+    background: linear-gradient(135deg, var(--color), #1e1b4b);
+    border-radius: 8px 12px 12px 8px;
+    margin-bottom: 15px;
+    position: relative;
+    box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.notebook-cover::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 12px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px 0 0 8px;
+}
+
+.notebook-title {
+    color: white;
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin-bottom: 5px;
+}
+
+.notebook-meta {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.85rem;
+}
+
+/* Editor View */
+.editor-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #0f172a;
+    z-index: 10000;
+    transform: translateY(100%);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex;
+    flex-direction: column;
+}
+
+.editor-overlay.active {
+    transform: translateY(0);
+}
+
+.editor-header {
+    padding: 20px 40px;
+    border-bottom: 1px solid var(--bag-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(15, 23, 42, 0.9);
+}
+
+.back-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+}
+
+.back-btn:hover {
+    opacity: 1;
+}
+
+.editor-content {
+    flex: 1;
+    padding: 40px;
+    max-width: 900px;
+    margin: 0 auto;
+    width: 100%;
+    overflow-y: auto;
+}
+
+.note-item {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--bag-border);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    color: #e2e8f0;
+}
+
+.note-item h3 {
+    margin: 0 0 10px 0;
+    color: var(--bag-secondary);
+}
+
+.note-item p {
+    margin: 0;
+    line-height: 1.6;
+    white-space: pre-wrap;
+}
+
+.add-note-area {
+    margin-bottom: 30px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 20px;
+}
+
+.add-note-area textarea {
+    width: 100%;
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 1rem;
+    min-height: 100px;
+    resize: vertical;
+    outline: none;
+}
+
+.save-note-btn {
+    background: var(--bag-primary);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 10px;
+    float: right;
+}
+
+/* Close Button */
+.close-bag {
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+    z-index: 100;
+}
+
+.close-bag:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* ========================================
+   MY BAG SIDEBAR STYLES (FROM HTML)
+   ======================================== */
+
+/* Bag Overlay */
+.my-bag-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 9998;
+    backdrop-filter: blur(4px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.my-bag-overlay.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+/* Bag Sidebar */
+.my-bag-sidebar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 480px;
+    max-width: 90vw;
+    height: 100vh;
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    box-shadow: -4px 0 20px rgba(0, 0, 0, 0.3);
+    z-index: 9999;
+    transform: translateX(100%);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.my-bag-sidebar.active {
+    transform: translateX(0);
+}
+
+/* Bag Header */
+.bag-header {
+    padding: 24px;
+    background: rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.bag-title {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    color: white;
+}
+
+.bag-icon-wrapper {
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, var(--bag-primary), var(--bag-secondary));
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+}
+
+.bag-close-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+}
+
+.bag-close-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* Bag Content */
+.bag-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 24px;
+}
+
+/* Bag Tabs */
+.bag-tabs {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 24px;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 6px;
+    border-radius: 12px;
+}
+
+.bag-tab {
+    flex: 1;
+    padding: 12px;
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.6);
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.bag-tab.active {
+    background: var(--bag-primary);
+    color: white;
+}
+
+.bag-tab:hover:not(.active) {
+    background: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.8);
+}
+
+/* Form Elements */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-label {
+    display: block;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 8px;
+}
+
+.form-input,
+.form-select {
+    width: 100%;
+    padding: 12px 16px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: white;
+    font-size: 14px;
+    transition: all 0.2s;
+}
+
+.form-input:focus,
+.form-select:focus {
+    outline: none;
+    border-color: var(--bag-primary);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.form-input::placeholder {
+    color: rgba(255, 255, 255, 0.3);
+}
+
+/* Premium Modal Overlay */
+.premium-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(8px);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.premium-modal-overlay.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+/* Premium Modal */
+.premium-modal {
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    border-radius: 20px;
+    padding: 32px;
+    max-width: 500px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    animation: modalSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes modalSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal-header {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.modal-icon {
+    font-size: 48px;
+    margin-bottom: 12px;
+}
+
+.modal-title {
+    color: white;
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.btn-primary,
+.btn-secondary {
+    flex: 1;
+    padding: 12px 24px;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+    font-size: 14px;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--bag-primary), var(--bag-secondary));
+    color: white;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(79, 70, 229, 0.4);
+}
+
+.btn-secondary {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+.btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+/* Color Options */
+.color-options {
+    display: flex;
+    gap: 12px;
+    margin-top: 8px;
+}
+
+.color-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 3px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.color-btn.selected {
+    border-color: white;
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.2);
+    transform: scale(1.1);
+}
+
+.color-btn:hover:not(.selected) {
+    transform: scale(1.05);
+    opacity: 0.8;
+}

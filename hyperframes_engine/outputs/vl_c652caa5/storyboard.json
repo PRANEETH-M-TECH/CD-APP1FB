@@ -1,0 +1,263 @@
+{
+  "lesson_title": "Fueling Up: A Balanced Diet for Growing Students!",
+  "layout_mode": "timeline",
+  "theme": "Science",
+  "global_assets": [],
+  "connections": [],
+  "lesson_id": "vl_c652caa5",
+  "scenes": [
+    {
+      "scene_no": 1,
+      "purpose": "To introduce the topic of a healthy diet for students and capture their attention.",
+      "template_id": "title_slide",
+      "template_selection_reasoning": "The 'title_slide' template is exclusively designed for the first scene to present the lesson's title and provide an engaging introduction. It sets the stage for the learning journey.",
+      "camera": {
+        "zoom": 1.1,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "main_concept"
+      },
+      "teacher_script": "Hello, young scientists! Today, we're going to explore something super important for your growing bodies and sharp minds: a balanced diet! What kind of food should you eat every day to be energetic and healthy?",
+      "template_data": {
+        "title": "Fueling Up: A Balanced Diet for Growing Students!",
+        "subtitle": "Eating Smart for Health and Energy!"
+      },
+      "audio_url": "/uploads/visual_lessons/vl_c652caa5/scene_1.wav"
+    },
+    {
+      "scene_no": 2,
+      "purpose": "To visually categorize and introduce the main components of a balanced diet for a student.",
+      "template_id": "concept_diagram",
+      "template_selection_reasoning": "The 'concept_diagram' template is perfect for breaking down a main idea ('Balanced Diet') into its core components (different food groups). It allows for a clear, hierarchical visual representation of interconnected concepts, making it easy for Class 6 students to grasp the different parts of a healthy diet.",
+      "camera": {
+        "zoom": 1.15,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "main_concept"
+      },
+      "teacher_script": "A balanced diet means eating the right amount of different types of foods. It's like building blocks for your body! Let's see the main groups your body needs.",
+      "template_data": {
+        "title": "What makes a 'Balanced Diet'?",
+        "main_concept": {
+          "text": "Balanced Diet",
+          "color": "#4CAF50"
+        },
+        "branches": [
+          {
+            "id": "carbohydrates",
+            "text": "Energy Foods (Carbohydrates)",
+            "color": "#FFC107",
+            "attributes": [
+              "Rice, Bread, Potatoes",
+              "Give you energy to play and study!"
+            ]
+          },
+          {
+            "id": "proteins",
+            "text": "Body Building Foods (Proteins)",
+            "color": "#2196F3",
+            "attributes": [
+              "Dal, Eggs, Chicken, Milk",
+              "Help you grow tall and strong!"
+            ]
+          },
+          {
+            "id": "vitamins_minerals",
+            "text": "Protective Foods (Vitamins & Minerals)",
+            "color": "#9C27B0",
+            "attributes": [
+              "Fruits, Vegetables",
+              "Keep you healthy and prevent sickness!"
+            ]
+          },
+          {
+            "id": "fats",
+            "text": "Fats & Oils",
+            "color": "#FF5722",
+            "attributes": [
+              "Butter, Nuts, Oils",
+              "Provide extra energy and warmth (in small amounts)!"
+            ]
+          },
+          {
+            "id": "water",
+            "text": "Water",
+            "color": "#00BCD4",
+            "attributes": [
+              "Essential for all body functions!"
+            ]
+          }
+        ]
+      },
+      "audio_url": "/uploads/visual_lessons/vl_c652caa5/scene_2.wav"
+    },
+    {
+      "scene_no": 3,
+      "purpose": "To help students differentiate between foods that are good for them and foods that should be eaten sparingly.",
+      "template_id": "column_comparison",
+      "template_selection_reasoning": "The 'column_comparison' template is excellent for clearly contrasting two distinct categories: 'Healthy Choices' versus 'Foods to Limit'. This side-by-side visual helps students understand which foods contribute positively to their diet and which ones should be consumed less often, reinforcing healthy habits.",
+      "camera": {
+        "zoom": 1.0,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "main_concept"
+      },
+      "teacher_script": "It's important to know which foods you should eat a lot of, and which ones are better to enjoy only sometimes. Let's compare!",
+      "template_data": {
+        "title": "Smart Food Choices for Students",
+        "left_col": {
+          "header": "Healthy Daily Choices",
+          "bullets": [
+            "Whole Grains (chapati, brown bread)",
+            "Fresh Fruits (apple, banana, guava)",
+            "Leafy Vegetables (spinach, cabbage)",
+            "Protein Sources (dal, eggs, paneer)",
+            "Milk and Dairy Products",
+            "Plenty of Water"
+          ]
+        },
+        "right_col": {
+          "header": "Foods to Limit (Sometimes Treats)",
+          "bullets": [
+            "Sugary Drinks (sodas, fizzy drinks)",
+            "Processed Snacks (chips, biscuits)",
+            "Too much Fried Food (samosa, puri)",
+            "Candies and Chocolates",
+            "Fast Food (burgers, pizzas – occasionally!)"
+          ]
+        }
+      },
+      "audio_url": "/uploads/visual_lessons/vl_c652caa5/scene_3.wav"
+    },
+    {
+      "scene_no": 4,
+      "purpose": "To illustrate how a balanced diet can be incorporated throughout a student's day, from morning to evening.",
+      "template_id": "cycle_template",
+      "template_selection_reasoning": "The 'cycle_template' is ideal for showing the continuous, repeating nature of daily meals. It visually explains how different food groups can be distributed across breakfast, lunch, dinner, and snacks, reinforcing the concept of regular and balanced intake throughout the day.",
+      "camera": {
+        "zoom": 0.9,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "main_concept"
+      },
+      "teacher_script": "How can you make sure you get all these good foods every day? Think of your day as a cycle of meals, each an opportunity to make a healthy choice!",
+      "template_data": {
+        "title": "Your Daily Balanced Meal Cycle",
+        "stages": [
+          {
+            "label": "Breakfast: Fuel Your Brain!",
+            "description": "Start with grains (oats/paratha), milk, and a fruit."
+          },
+          {
+            "label": "Mid-morning Snack: Boost!",
+            "description": "A fruit or handful of nuts."
+          },
+          {
+            "label": "Lunch: Energy for the Afternoon!",
+            "description": "Dal/paneer, chapati/rice, veggies, curd/salad."
+          },
+          {
+            "label": "Evening Snack: Playtime Power!",
+            "description": "Vegetable sandwich, sprouts, or an apple."
+          },
+          {
+            "label": "Dinner: Rest & Repair!",
+            "description": "Lighter meal: dal, roti, veggies. Finish before bedtime."
+          }
+        ]
+      },
+      "audio_url": "/uploads/visual_lessons/vl_c652caa5/scene_4.wav"
+    },
+    {
+      "scene_no": 5,
+      "purpose": "To provide specific examples of food items corresponding to different essential nutrients.",
+      "template_id": "database_grid",
+      "template_selection_reasoning": "The 'database_grid' template is perfect for organizing and presenting detailed information in a structured, tabular format. It allows students to easily see various nutrients, their importance, and concrete food examples, making the lesson more practical and memorable.",
+      "camera": {
+        "zoom": 1.0,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "main_concept"
+      },
+      "teacher_script": "Let's look at some examples of foods for each nutrient group. Knowing these will help you make smarter choices every day!",
+      "template_data": {
+        "title": "Nutrients and Their Food Sources",
+        "headers": [
+          "Nutrient",
+          "Why it's important",
+          "Food Examples"
+        ],
+        "rows": [
+          [
+            "Carbohydrates",
+            "Main energy source",
+            "Rice, Wheat, Potatoes, Maize, Sweet Potato"
+          ],
+          [
+            "Proteins",
+            "Helps growth and repair",
+            "Dal (Lentils), Eggs, Milk, Chicken, Fish, Paneer"
+          ],
+          [
+            "Vitamins",
+            "Protects body from diseases",
+            "Fruits (Orange, Guava), Vegetables (Carrot, Spinach)"
+          ],
+          [
+            "Minerals",
+            "For strong bones and blood",
+            "Milk, Green Leafy Vegetables, Salt, Nuts"
+          ],
+          [
+            "Fats",
+            "Stores energy, keeps you warm",
+            "Butter, Ghee, Nuts, Oils (in small amounts)"
+          ],
+          [
+            "Roughage/Fibre",
+            "Helps digestion",
+            "Whole Grains, Fruits with skin, Vegetables"
+          ]
+        ]
+      },
+      "audio_url": "/uploads/visual_lessons/vl_c652caa5/scene_5.wav"
+    },
+    {
+      "scene_no": 6,
+      "purpose": "To test the student's understanding of the key concepts learned in the lesson.",
+      "template_id": "quiz_checkpoint",
+      "template_selection_reasoning": "The 'quiz_checkpoint' template is mandatory for the final scene as it serves as an active recall exercise. It allows students to check their understanding and reinforces the most important lesson takeaway in an interactive way.",
+      "camera": {
+        "zoom": 1.1,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "main_concept"
+      },
+      "teacher_script": "Great job! Now, let's see what you've learned. Think carefully before you answer this question!",
+      "template_data": {
+        "question": "Which food group is mainly responsible for giving you energy to play and study?",
+        "options": [
+          {
+            "id": "a",
+            "text": "Proteins"
+          },
+          {
+            "id": "b",
+            "text": "Vitamins and Minerals"
+          },
+          {
+            "id": "c",
+            "text": "Carbohydrates"
+          },
+          {
+            "id": "d",
+            "text": "Fats"
+          }
+        ],
+        "correct_option_id": "c",
+        "explanation": "Carbohydrates like rice, bread, and potatoes are your body's primary source of energy!"
+      },
+      "audio_url": "/uploads/visual_lessons/vl_c652caa5/scene_6.wav"
+    }
+  ]
+}

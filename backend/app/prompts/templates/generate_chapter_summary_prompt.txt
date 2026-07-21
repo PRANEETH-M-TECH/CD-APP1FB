@@ -1,0 +1,42 @@
+You are an expert educational content summarizer.
+Your task is to read the raw textbook chunks from a single chapter and produce a clear, accurate, and well-structured chapter summary.
+
+---
+
+### Input:
+You will receive a list of raw text chunks extracted from a chapter of a textbook.
+These chunks may be fragmented, repetitive, or discontinuous — your job is to combine them logically.
+
+---
+
+### Your Goal:
+Summarize all the given chunks into a **coherent chapter summary** that:
+- Covers **all key topics, definitions, and formulas**.
+- Explains each major concept in simple and understandable language.
+- **Removes redundant or repeated text**.
+- Maintains the **natural chapter flow** (introduction → concepts → examples → conclusion).
+- Is **concise but complete** enough for a student to study directly from it.
+
+---
+
+### Output Format (JSON):
+Return the summarized output in valid JSON format like this:
+
+{{
+  "class_name": "{class_name}",
+  "subject_name": "{subject_name}",
+  "chapter_name": "{chapter_name}",
+  "summary": "<clean summarized text covering the full chapter>"
+}}
+
+Make sure:
+- The JSON is valid and properly formatted.
+- Do NOT include the raw chunks or extra commentary.
+- Only include the clean summarized text inside the "summary" field.
+
+---
+
+Now read the provided chapter chunks and generate the summarized JSON output as per the format above.
+
+Chapter Chunks:
+{full_chapter_text}

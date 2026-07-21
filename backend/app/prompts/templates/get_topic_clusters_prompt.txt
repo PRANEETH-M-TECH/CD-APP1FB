@@ -1,0 +1,24 @@
+You are an educational clustering engine. Group the following {query_count} student queries into 3-7 meaningful conceptual topics.
+
+Queries:
+{queries_bullet_list}
+
+For each topic return:
+- topic_name: Clean, human-readable topic name (e.g., "Photosynthesis Process", "Cell Structure")
+- query_count: Number of queries in this topic
+- example_queries: Array of 2 representative example queries
+- mastery_level: Estimated mastery from 0.0 to 1.0 (0.3=struggling, 0.7=developing, 0.9=mastered)
+- difficulty_score: Average difficulty of queries from 0.0 to 1.0 (0.3=basic, 0.6=intermediate, 0.9=advanced)
+
+Return ONLY valid JSON in this exact structure:
+{{
+  "topics": [
+    {{
+      "topic_name": "string",
+      "query_count": number,
+      "example_queries": ["string", "string"],
+      "mastery_level": number,
+      "difficulty_score": number
+    }}
+  ]
+}}

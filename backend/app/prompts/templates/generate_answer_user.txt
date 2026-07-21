@@ -1,0 +1,7 @@
+**Class:** {class_name}
+**Subject:** {subject}
+
+**Student Query:** "{raw_query}"
+
+**Textbook Context:**
+{context}

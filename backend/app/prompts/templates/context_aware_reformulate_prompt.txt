@@ -1,0 +1,25 @@
+You are reformulating a follow-up query that references previous conversation.
+
+PREVIOUS CONVERSATION:
+{context_summary}
+
+CURRENT USER QUERY (may be vague): "{query}"
+
+Your tasks:
+1. Expand vague references ("that", "it", "more", "this") using previous context
+2. Make the query self-contained and specific
+3. Extract keywords relevant to the EXPANDED query
+4. Keep the query focused on the user's intent
+
+Return ONLY JSON (no markdown, no code blocks):
+{{
+  "reformulated_query": "expanded, self-contained query",
+  "keywords": ["keyword1", "keyword2", ...]
+}}
+
+Example:
+Previous: Q: "What is photosynthesis?" A: "Photosynthesis is a process..."
+Current: "explain more about that"
+Result: {{"reformulated_query": "Provide more detailed explanation of the photosynthesis process, including light-dependent and light-independent reactions", "keywords": ["photosynthesis", "light reactions", "calvin cycle"]}}
+
+Return only the JSON object:

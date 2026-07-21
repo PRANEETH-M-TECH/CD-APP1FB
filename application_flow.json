@@ -1,0 +1,293 @@
+{
+    "application": {
+        "name": "CHADUVU-GURU",
+        "tagline": "AI-Powered Study Assistant for Indian Students",
+        "description": "CHADUVU-GURU is an intelligent study companion designed to help students understand their textbooks better. It provides a conversational interface powered by Google Gemini AI to answer questions about PDF textbooks, making learning interactive and engaging.",
+        "targetAudience": "Indian students from classes 6-12",
+        "uniqueSellingPoints": [
+            "AI-powered conversational learning",
+            "Support for multiple classes and subjects",
+            "Chapter-wise textbook analysis",
+            "Gamified learning with achievements and badges",
+            "Personalized analytics and progress tracking",
+            "Save important answers to personal notebooks"
+        ]
+    },
+    "userJourney": {
+        "step1_landing": {
+            "page": "Landing Page (index.html)",
+            "description": "Beautiful landing page introducing CHADUVU-GURU with feature highlights",
+            "userActions": [
+                "View features",
+                "Sign up / Login"
+            ],
+            "marketingValue": "First impression - showcases the modern, student-friendly design"
+        },
+        "step2_authentication": {
+            "page": "Auth Modal",
+            "description": "Firebase-powered authentication with email/password or Google sign-in",
+            "userActions": [
+                "Sign up with email",
+                "Login with Google",
+                "Password recovery"
+            ],
+            "marketingValue": "Quick onboarding - students can start learning in seconds"
+        },
+        "step3_modeSelection": {
+            "page": "Mode Selection (mode-selection.html)",
+            "description": "Students choose their class and subject to begin",
+            "userActions": [
+                "Select class (6-12)",
+                "Choose subject (Science, Maths, Social, etc.)"
+            ],
+            "marketingValue": "Personalized learning path based on student's curriculum"
+        },
+        "step4_chapterSelection": {
+            "page": "Chapters Page (chapters.html)",
+            "description": "View all available chapters from the textbook",
+            "userActions": [
+                "Browse chapters",
+                "Select a chapter to study"
+            ],
+            "marketingValue": "Organized content structure following NCERT/State board syllabus"
+        },
+        "step5_studySession": {
+            "page": "User Chat Interface (user.html)",
+            "description": "The core learning experience - conversational AI for studying",
+            "userActions": [
+                "Ask questions in natural language",
+                "Get AI-generated explanations",
+                "View smart follow-up suggestions",
+                "Save important answers to notebooks",
+                "Request chapter summaries"
+            ],
+            "marketingValue": "24/7 AI tutor that explains concepts in simple, student-friendly language"
+        },
+        "step6_trackProgress": {
+            "page": "Dashboard (enhanced-dashboard.html)",
+            "description": "Comprehensive analytics and progress tracking",
+            "userActions": [
+                "View total questions asked",
+                "Check learning streak",
+                "Analyze subjects explored",
+                "See weekly activity trends",
+                "Identify strengths and weaknesses"
+            ],
+            "marketingValue": "Data-driven insights help students and parents track learning progress"
+        },
+        "step7_achievements": {
+            "page": "Achievements (achievements.html)",
+            "description": "Gamified learning with badges and rewards",
+            "userActions": [
+                "Unlock achievement badges",
+                "Progress through tiers (Bronze → Silver → Gold → Platinum → Diamond)",
+                "Earn points for learning activities"
+            ],
+            "marketingValue": "Gamification keeps students motivated and engaged"
+        },
+        "step8_profile": {
+            "page": "Profile (profile.html)",
+            "description": "Personal profile with stats and customization",
+            "userActions": [
+                "View level and XP",
+                "See top achievements",
+                "Track 90-day activity heatmap",
+                "View subject distribution",
+                "Check class ranking"
+            ],
+            "marketingValue": "Personal identity and recognition within the learning community"
+        },
+        "step9_myBag": {
+            "page": "My Bag / Notebooks (my-bag-component.html)",
+            "description": "Personal notebook system to save important content",
+            "userActions": [
+                "Create custom notebooks",
+                "Save AI answers to notebooks",
+                "Organize by subject/topic",
+                "Mark favorites for quick access"
+            ],
+            "marketingValue": "Students build their personal study repository"
+        }
+    },
+    "coreFeatures": {
+        "smartQuery": {
+            "name": "Smart Query AI",
+            "description": "Advanced conversational AI that understands context and provides relevant answers",
+            "technology": "Google Gemini AI with RAG (Retrieval-Augmented Generation)",
+            "highlights": [
+                "Contextual understanding - remembers previous questions in a session",
+                "Chapter-aware responses - pulls information from relevant textbook sections",
+                "Follow-up suggestions - generates smart next questions automatically",
+                "Real-time streaming - answers appear word-by-word for engaging experience"
+            ],
+            "contentTeamNote": "This is our flagship feature - the AI tutor that never sleeps!"
+        },
+        "chapterSummaries": {
+            "name": "AI Chapter Summaries",
+            "description": "Auto-generated comprehensive summaries for each chapter",
+            "highlights": [
+                "Teacher-like explanations",
+                "Key concepts highlighted",
+                "Easy to understand language"
+            ],
+            "contentTeamNote": "Great for quick revision before exams"
+        },
+        "analyticsEngine": {
+            "name": "Learning Analytics",
+            "description": "Deep insights into student learning patterns",
+            "highlights": [
+                "Subject-wise performance tracking",
+                "Streak calculation for consistent learning",
+                "Topic clusters showing areas of interest",
+                "Weak area identification with AI analysis",
+                "Personalized study suggestions"
+            ],
+            "contentTeamNote": "Helps parents understand their child's learning behavior"
+        },
+        "gamification": {
+            "name": "Achievements & Gamification",
+            "description": "Badge system to motivate continuous learning",
+            "badgeCategories": {
+                "learning": [
+                    "First Question",
+                    "Question Master (100)",
+                    "Expert (500)",
+                    "Scholar (1000)"
+                ],
+                "streak": [
+                    "First Streak",
+                    "Week Warrior (7 days)",
+                    "Month Master (30 days)"
+                ],
+                "exploration": [
+                    "Subject Explorer",
+                    "Chapter Champion",
+                    "Textbook Titan"
+                ]
+            },
+            "tiers": [
+                "Bronze",
+                "Silver",
+                "Gold",
+                "Platinum",
+                "Diamond"
+            ],
+            "contentTeamNote": "Kids love collecting badges - this drives repeat usage!"
+        },
+        "notebookSystem": {
+            "name": "My Bag / Notebooks",
+            "description": "Personal content saving and organization",
+            "highlights": [
+                "Create unlimited notebooks",
+                "Save any AI answer with one click",
+                "Organize by subject or custom categories",
+                "Mark favorites for quick revision"
+            ],
+            "contentTeamNote": "Students build their own personalized study material"
+        }
+    },
+    "adminFeatures": {
+        "dashboard": {
+            "name": "Admin Dashboard",
+            "description": "Comprehensive oversight for teachers and administrators",
+            "capabilities": [
+                "View all student activity",
+                "Class-wise performance overview",
+                "Subject distribution analytics",
+                "Chapter hotspot analysis",
+                "Individual student performance reports"
+            ]
+        },
+        "contentManagement": {
+            "name": "Book & Content Upload",
+            "description": "Easy PDF textbook upload and processing",
+            "capabilities": [
+                "Upload PDF textbooks",
+                "Automatic chapter extraction using AI",
+                "Vector database indexing for smart search",
+                "Multi-class, multi-subject organization"
+            ]
+        }
+    },
+    "technicalArchitecture": {
+        "frontend": {
+            "technology": "HTML5, CSS3, JavaScript (Vanilla)",
+            "styling": "Modern glassmorphism design with dark mode support",
+            "features": [
+                "Responsive design",
+                "Real-time SSE streaming",
+                "Firebase Auth integration"
+            ]
+        },
+        "backend": {
+            "technology": "Python FastAPI",
+            "aiEngine": "Google Gemini AI (gemini-pro, gemini-1.5-flash)",
+            "vectorDatabase": "Qdrant Cloud",
+            "cache": "Redis (Memurai for Windows)",
+            "database": "Firebase Firestore"
+        },
+        "deployment": {
+            "recommended": "Split deployment - Vercel (frontend) + Render (backend)",
+            "estimatedCost": "$0-7.40/month on free tiers"
+        }
+    },
+    "marketingHighlights": {
+        "forStudents": [
+            "🎓 Ask questions in your own language - AI understands you!",
+            "📚 Available 24/7 - study anytime, anywhere",
+            "🎮 Earn badges and level up while learning",
+            "📊 Track your progress with beautiful dashboards",
+            "💾 Save important answers to your personal notebooks"
+        ],
+        "forParents": [
+            "👀 Monitor your child's learning activity",
+            "📈 Get insights into strengths and areas to improve",
+            "🔒 Safe, ad-free learning environment",
+            "💰 Affordable alternative to private tutors"
+        ],
+        "forSchools": [
+            "📊 Class-wide analytics and reporting",
+            "📚 Upload your own textbook content",
+            "👨‍🏫 Teacher dashboard for oversight",
+            "🔗 Easy integration with existing LMS"
+        ],
+        "promotionalTaglines": [
+            "Your AI Study Buddy - Always Ready to Help!",
+            "Learn Smarter, Not Harder with CHADUVU-GURU",
+            "Textbook Confusion? Ask CHADUVU-GURU!",
+            "From Questions to Understanding in Seconds",
+            "Gamified Learning That Kids Actually Love",
+            "The Tutor That Never Sleeps"
+        ]
+    },
+    "contentTeamResources": {
+        "screenshotNeeded": [
+            "Landing page hero section",
+            "Chat interface with AI response streaming",
+            "Dashboard with analytics charts",
+            "Achievements page with badges",
+            "Mode selection with class/subject options",
+            "Profile page with heatmap"
+        ],
+        "videoIdeas": [
+            "30-second demo: Ask a science question, get instant answer",
+            "Feature walkthrough: From signup to first question",
+            "Student testimonial: How CHADUVU-GURU helped with exams",
+            "Badge collection montage: Show gamification in action"
+        ],
+        "socialMediaContent": [
+            "Quick tips using CHADUVU-GURU for exam prep",
+            "Before/After: Confusion vs Understanding",
+            "Weekly streak challenges",
+            "Badge unlock celebrations"
+        ]
+    },
+    "futureRoadmap": [
+        "Voice-based questions (ask by speaking)",
+        "Image upload for diagram/equation questions",
+        "Collaborative study rooms",
+        "Practice quiz generator",
+        "Parent mobile app",
+        "Regional language support (Telugu, Hindi, Tamil)"
+    ]
+}

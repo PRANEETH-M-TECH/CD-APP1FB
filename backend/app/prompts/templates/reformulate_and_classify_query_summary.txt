@@ -1,0 +1,11 @@
+4. Classify Chapter: Based on the provided chapter summaries, identify which chapter the user's query is most likely related to. If the query does not clearly relate to any specific chapter, state 'None'.
+
+Chapter Summaries:
+{summary_context}
+
+Return a single valid JSON object with keys: reformulated_query, keywords (array of {{keyword, importance}}), conceptual_score, classified_chapter.
+
+User Query: "{raw_query}"
+
+Example output:
+{{"reformulated_query":"Detailed...","keywords":[ {{"keyword":"photosynthesis","importance":0.95}} ],"conceptual_score":0.85, "classified_chapter": "PLANTS: PARTS AND FUNCTIONS"}}

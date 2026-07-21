@@ -1,30 +1,87 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ask a Query - CHADUVU GURU</title>
   <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+  <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+  <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+  <link href="/static/css/inline-notebook.css" rel="stylesheet">
   <link rel="stylesheet" href="/static/style.css">
+  <link rel="stylesheet" href="/static/conversation.css">
+  <link rel="stylesheet" href="/static/voice-overlay.css">
+  <link rel="stylesheet" href="/static/sidebar.css">
+  <link rel="stylesheet" href="/static/css/my-bag.css">
+  <link rel="stylesheet" href="/static/save-selection.css">
+  <link rel="stylesheet" href="/static/css/visual-learning.css?v=105">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV" crossorigin="anonymous">
-  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmImMNkdTe" crossorigin="anonymous"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"
+    integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV" crossorigin="anonymous">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"
+    integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmImMNkdTe"
+    crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05"
+    crossorigin="anonymous"></script>
 
   <style>
     body {
       font-family: 'Inter', sans-serif;
       background-color: #f8fafc;
+      margin: 0;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* When left pane is collapsed */
+    body.left-pane-collapsed #left-pane {
+      width: 0;
+      min-width: 0;
+      padding: 0;
+      margin: 0;
+      overflow: hidden;
+    }
+
+    body.left-pane-collapsed #right-pane {
+      width: 100%;
+    }
+
+    /* Left pane toggle button */
+    #toggle-left-pane-btn {
+      transition: transform 0.3s ease;
+    }
+
+    body.left-pane-collapsed #toggle-left-pane-btn {
+      transform: translateX(0);
+      position: fixed;
+      left: 300px;
+      border-radius: 0 0.5rem 0.5rem 0;
+    }
+
+    @media (max-width: 768px) {
+      body {
+        margin-left: 0;
+      }
     }
 
     /* Smooth fade for messages */
     .fade-in {
       animation: fadeIn 0.4s ease forwards;
     }
+
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     .markdown-content table {
@@ -33,17 +90,20 @@
       margin-top: 1rem;
       margin-bottom: 1rem;
     }
+
     .markdown-content th,
     .markdown-content td {
       border: 1px solid #e2e8f0;
       padding: 0.75rem;
       text-align: left;
     }
+
     .markdown-content th {
       background-color: #f1f5f9;
       font-weight: 600;
       color: #334155;
     }
+
     .markdown-content tr:nth-child(even) {
       background-color: #f8fafc;
     }
@@ -53,11 +113,12 @@
       background: #fff;
       border: 1px solid #e2e8f0;
       border-radius: 1rem;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
       padding: 1rem 1.25rem;
       margin-top: 1rem;
       transition: transform 0.2s ease;
     }
+
     .ai-card:hover {
       transform: translateY(-2px);
     }
@@ -69,9 +130,91 @@
       color: #64748b;
       cursor: pointer;
     }
+
     .copy-btn:hover {
       color: #2563eb;
     }
+
+    /* Speak button */
+    .speak-btn {
+      background: none;
+      border: none;
+      color: #64748b;
+      cursor: pointer;
+    }
+
+    .speak-btn:hover {
+      color: #2563eb;
+    }
+
+    /* ── TTS Selector Panel ───────────────────────────────────── */
+    #tts-selector-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      background: linear-gradient(135deg, #f8faff 0%, #eef2ff 100%);
+      border: 1px solid #c7d2fe;
+      border-radius: 999px;
+      font-size: 12px;
+      color: #4338ca;
+      font-weight: 500;
+      flex-wrap: wrap;
+      box-shadow: 0 2px 8px rgba(99,102,241,0.12);
+      transition: box-shadow 0.2s;
+    }
+    #tts-selector-bar:hover {
+      box-shadow: 0 4px 16px rgba(99,102,241,0.2);
+    }
+    #tts-selector-bar label {
+      font-size: 11px;
+      color: #6366f1;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      white-space: nowrap;
+    }
+    .tts-select {
+      border: 1px solid #c7d2fe;
+      border-radius: 999px;
+      background: #fff;
+      color: #4338ca;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 3px 10px 3px 8px;
+      cursor: pointer;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236366f1' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 6px center;
+      padding-right: 22px;
+    }
+    .tts-select:focus {
+      border-color: #6366f1;
+      box-shadow: 0 0 0 2px rgba(99,102,241,0.2);
+    }
+    .tts-divider {
+      width: 1px;
+      height: 16px;
+      background: #c7d2fe;
+      border-radius: 1px;
+    }
+    #tts-status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #10b981;
+      display: inline-block;
+      flex-shrink: 0;
+      animation: tts-pulse 2s infinite;
+    }
+    @keyframes tts-pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: 0.6; transform: scale(1.2); }
+    }
+    #tts-status-dot.offline { background: #94a3b8; animation: none; }
+    /* ── End TTS Selector Panel ───────────────────────────────── */
 
     /* Gradient header */
     .gradient-header {
@@ -81,9 +224,11 @@
     /* Left pane */
     .left-pane {
       background: #ffffff;
-      border-right: 1px solid #e2e8f0;
-      box-shadow: 2px 0 10px rgba(0,0,0,0.04);
-      padding: 1.2rem;
+      border-radius: 1rem;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+      padding: 1.5rem;
+      margin: 1rem;
+      border-right: none;
     }
 
     /* PDF viewer */
@@ -91,7 +236,7 @@
       border-radius: 0.75rem;
       border: 1px solid #e2e8f0;
       background: #f9fafb;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
       flex-grow: 1;
       display: flex;
       flex-direction: column;
@@ -100,7 +245,8 @@
     #pdf-render-area-user {
       display: flex;
       justify-content: center;
-      align-items: flex-start; /* Changed from center to flex-start */
+      align-items: flex-start;
+      /* Changed from center to flex-start */
       flex-grow: 1;
       overflow: auto;
     }
@@ -109,15 +255,25 @@
       width: 100%;
       height: auto;
       border-radius: 0.5rem;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
     }
 
     /* Chat pane */
     .right-pane {
-      flex: 1;
       display: flex;
       flex-direction: column;
-      background: #f8fafc;
+      background: #ffffff;
+      border-radius: 1rem;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+      margin: 1rem;
+      margin-left: 0;
+    }
+
+    /* Ensure chat container doesn't overflow */
+    #chat-container {
+      flex: 1 1 0;
+      min-height: 0;
+      overflow-y: auto;
     }
 
     /* Chat input */
@@ -125,59 +281,607 @@
       resize: none;
       transition: border-color 0.2s, box-shadow 0.2s;
     }
+
     textarea#query-text:focus {
       outline: none;
       border-color: #3b82f6;
-      box-shadow: 0 0 0 2px rgba(59,130,246,0.2);
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
     }
 
     /* Scrollbar */
     ::-webkit-scrollbar {
       width: 8px;
     }
+
     ::-webkit-scrollbar-thumb {
       background-color: #cbd5e1;
       border-radius: 10px;
     }
+
+    /* Conversation modal extras: pulse mic, robot animation, progress bar, debug panel */
+    .mic-button.recording {
+      box-shadow: 0 12px 36px rgba(16, 185, 129, 0.28), 0 6px 18px rgba(16, 185, 129, 0.12);
+      animation: micPulse 1.2s infinite;
+      transform: scale(0.98);
+    }
+
+    @keyframes micPulse {
+      from {
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.28);
+      }
+
+      to {
+        box-shadow: 0 0 0 18px rgba(16, 185, 129, 0);
+      }
+    }
+
+    /* Enhanced robot and mic animations */
+    .robot-anim {
+      width: 56px;
+      height: 56px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+    }
+
+    .robot-anim.speaking {
+      transform: translateY(-6px);
+      filter: drop-shadow(0 8px 16px rgba(59, 130, 246, 0.3));
+      animation: robotPulse 2s infinite;
+    }
+
+    @keyframes robotPulse {
+      0% {
+        transform: translateY(-6px) scale(1);
+      }
+
+      50% {
+        transform: translateY(-6px) scale(1.05);
+      }
+
+      100% {
+        transform: translateY(-6px) scale(1);
+      }
+    }
+
+    .progress-bar {
+      width: 100%;
+      max-width: 480px;
+      height: 6px;
+      background: #e6eef6;
+      border-radius: 6px;
+      overflow: hidden;
+      box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+    }
+
+    .progress-bar .fill {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, #10B981, #3b82f6);
+      transition: width 200ms linear;
+      box-shadow: 0 0 8px rgba(59, 130, 246, 0.4);
+    }
+
+    /* Speaking state indicators */
+    .state-user #user-waveform {
+      opacity: 1;
+    }
+
+    .state-user #ai-waveform {
+      opacity: 0.1;
+    }
+
+    .state-ai #user-waveform {
+      opacity: 0.1;
+    }
+
+    .state-ai #ai-waveform {
+      opacity: 1;
+    }
+
+    #waveform-area {
+      position: relative;
+      transition: all 0.3s ease;
+    }
+
+    .waveform-canvas {
+      transition: all 0.3s ease;
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(226, 232, 240, 0.6);
+    }
+
+    /* Mic button states */
+    .mic-button {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .mic-button.recording {
+      background: #ef4444 !important;
+      box-shadow: 0 12px 36px rgba(239, 68, 68, 0.28), 0 6px 18px rgba(239, 68, 68, 0.12) !important;
+      transform: scale(0.96) !important;
+    }
+
+    .mic-button.ai-speaking {
+      background: #3b82f6 !important;
+      box-shadow: 0 12px 36px rgba(59, 130, 246, 0.28), 0 6px 18px rgba(59, 130, 246, 0.12) !important;
+    }
+
+    .mic-button.recording:hover {
+      background: #dc2626 !important;
+    }
+
+    .mic-button.ai-speaking:hover {
+      background: #2563eb !important;
+    }
+
+    /* Status indicator states */
+    .status-indicator {
+      padding: 6px 12px;
+      border-radius: 16px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+
+    .status-indicator.recording {
+      background: rgba(239, 68, 68, 0.1);
+      color: #ef4444;
+    }
+
+    .status-indicator.ai-speaking {
+      background: rgba(59, 130, 246, 0.1);
+      color: #3b82f6;
+    }
+
+    .debug-panel {
+      width: 100%;
+      max-width: 720px;
+      height: 120px;
+      background: #0f172a;
+      color: #d1d5db;
+      font-family: monospace;
+      font-size: 12px;
+      overflow: auto;
+      padding: 8px;
+      border-radius: 8px;
+      display: none;
+    }
+
+    .debug-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* New Mic Button Styles */
+    #mic-button {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    #mic-button.idle {
+      background-color: #3b82f6;
+      /* Blue */
+    }
+
+    #mic-button.listening {
+      background-color: #ef4444;
+      /* Red */
+      animation: pulse 1.5s infinite;
+    }
+
+    #mic-button.processing {
+      background-color: #f97316;
+      /* Orange */
+      cursor: not-allowed;
+    }
+
+    #mic-button.speaking {
+      background-color: #10b981;
+      /* Green */
+    }
+
+    @keyframes pulse {
+      0% {
+        transform: scale(1);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+
+      50% {
+        transform: scale(1.05);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+      }
+
+      100% {
+        transform: scale(1);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+    }
+
+    #status-indicator {
+      font-size: 16px;
+      font-weight: 500;
+      color: #4b5563;
+      min-height: 24px;
+    }
+
+    /* Voice search animation */
+    #voice-search-btn {
+      position: relative;
+      overflow: visible;
+      transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+    }
+
+    #voice-search-btn>* {
+      position: relative;
+      z-index: 2;
+    }
+
+    #voice-search-btn.recording {
+      transform: translateY(-1px);
+      box-shadow: 0 16px 32px rgba(239, 68, 68, 0.28);
+    }
+
+    #voice-search-btn.recording::before,
+    #voice-search-btn.recording::after {
+      content: '';
+      position: absolute;
+      inset: -8px;
+      border-radius: 9999px;
+      background: radial-gradient(circle at center, rgba(239, 68, 68, 0.35), rgba(239, 68, 68, 0));
+      z-index: 1;
+      opacity: 0;
+      animation: voicePulse 1.6s infinite ease-out;
+    }
+
+    #voice-search-btn.recording::after {
+      inset: -16px;
+      animation-delay: 0.4s;
+    }
+
+    @keyframes voicePulse {
+      0% {
+        opacity: 0.55;
+        transform: scale(0.92);
+      }
+
+      70% {
+        opacity: 0.0;
+        transform: scale(1.3);
+      }
+
+      100% {
+        opacity: 0;
+        transform: scale(1.35);
+      }
+    }
+
+    .voice-visualizer {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(59, 130, 246, 0.14);
+      background: rgba(37, 99, 235, 0.08);
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.1);
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      opacity: 0;
+      transform: translateY(4px);
+    }
+
+    .voice-visualizer.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .voice-visualizer span {
+      width: 4px;
+      height: 12px;
+      background: linear-gradient(180deg, #60a5fa 0%, #2563eb 100%);
+      border-radius: 999px;
+      animation: voiceBar 1.1s infinite ease-in-out;
+      animation-play-state: paused;
+    }
+
+    .voice-visualizer span:nth-child(2) {
+      animation-delay: 0.12s;
+    }
+
+    .voice-visualizer span:nth-child(3) {
+      animation-delay: 0.24s;
+    }
+
+    .voice-visualizer span:nth-child(4) {
+      animation-delay: 0.36s;
+    }
+
+    .voice-visualizer span:nth-child(5) {
+      animation-delay: 0.48s;
+    }
+
+    .voice-visualizer.active span {
+      animation-play-state: running;
+    }
+
+    @keyframes voiceBar {
+
+      0%,
+      100% {
+        transform: scaleY(0.35);
+      }
+
+      40% {}
+    }
+
+    /* AI Thinking Animation */
+    .typing-indicator {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+    }
+
+    .typing-indicator span {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: #9ca3af;
+      animation: typing 1s infinite ease-in-out;
+    }
+
+    .typing-indicator span:nth-child(2) {
+      animation-delay: 0.15s;
+    }
+
+    .typing-indicator span:nth-child(3) {
+      animation-delay: 0.3s;
+    }
+
+    @keyframes typing {
+
+      0%,
+      100% {
+        transform: translateY(0);
+        opacity: 0.5;
+      }
+
+      50% {
+        transform: translateY(-4px);
+        opacity: 1;
+      }
+    }
+
+    .slide-in-right {
+      animation: slideInRight 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+
+    @keyframes slideInRight {
+      from {
+        transform: translateX(100px);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    /* Modern Page Navigation Styles */
+    .nav-icon-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+
+    .nav-icon-btn:hover {
+      transform: scale(1.1);
+    }
+
+    .nav-icon-btn:active {
+      transform: scale(0.95);
+    }
+
+    .nav-icon-btn:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    #page-input-user::-webkit-inner-spin-button,
+    #page-input-user::-webkit-outer-spin-button {
+      opacity: 1;
+    }
+
+    #pdf-viewer-header-user {
+      animation: fadeInDown 0.3s ease-out;
+    }
+
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    }
+
+    .fade-in {
+      animation: fadeIn 0.3s ease-in;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* AI Voice Mode Flagship UI styles */
+    #voice-interaction-panel {
+      transition: all 0.3s ease;
+    }
+    
+    .voice-panel-mic-btn-compact {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      border: 1px solid #cbd5e1;
+      background: #f8fafc;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
+      margin: 0 auto;
+    }
+
+    .voice-panel-mic-btn-compact:hover {
+      transform: scale(1.08);
+      background: #f1f5f9;
+      border-color: #94a3b8;
+    }
+
+    .voice-panel-mic-btn-compact:active {
+      transform: scale(0.95);
+    }
+
+    /* States & Animations */
+    .voice-panel-mic-btn-compact.listening {
+      background: #ef4444 !important;
+      color: white !important;
+      border-color: #fca5a5 !important;
+      animation: voiceCompactPulse 1.2s infinite alternate;
+    }
+
+    .voice-panel-mic-btn-compact.processing {
+      background: #f59e0b !important;
+      color: white !important;
+      border-color: #fcd34d !important;
+      animation: voiceCompactSpin 2s linear infinite;
+    }
+
+    .voice-panel-mic-btn-compact.speaking {
+      background: #10b981 !important;
+      color: white !important;
+      border-color: #6ee7b7 !important;
+      animation: voiceCompactPulse 1.5s infinite alternate;
+    }
+
+    .voice-panel-mic-btn-compact.paused {
+      background: #6b7280 !important;
+      color: white !important;
+      border-color: #9ca3af !important;
+    }
+
+    @keyframes voiceCompactPulse {
+      0% {
+        box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4);
+      }
+      100% {
+        box-shadow: 0 0 0 10px rgba(99, 102, 241, 0);
+      }
+    }
+
+    @keyframes voiceCompactSpin {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* Live Transcription Overlay styles */
+    #live-transcript-overlay {
+      transition: opacity 0.3s ease;
+    }
   </style>
+  <!-- Quill Theme -->
+  <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+  <!-- Quill JS -->
+  <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 </head>
 
-<body class="text-gray-800">
+<body class="flex text-gray-800 user-page-body">
+  <!-- Sidebar -->
+  <div id="sidebar-container"></div>
+
   <div class="user-app-container flex flex-col md:flex-row h-screen relative">
-    <button id="toggle-left-pane" class="absolute top-4 right-1/2 z-10 bg-gray-200 p-2 rounded-full hover:bg-gray-300 transition-all duration-300">
-        <svg id="toggle-icon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-        </svg>
-    </button>
-
     <!-- Left Pane (Book Viewer) -->
-    <div id="left-pane" class="left-pane w-1/2 flex flex-col transition-all duration-300">
+    <div id="left-pane" class="left-pane w-1/2 flex flex-col transition-all duration-300 relative overflow-hidden">
 
-      <div class="flex gap-4">
-        <div class="flex-1">
-          <label for="class-select" class="block text-sm font-medium text-gray-600">Class</label>
-          <select id="class-select" class="w-full border border-gray-300 rounded-lg px-3 py-2 mt-1">
-            <option disabled selected value="">Select...</option>
-            <option>6</option><option>7</option><option>8</option><option>9</option><option>10</option>
-          </select>
-        </div>
-        <div class="flex-1">
-          <label for="subject-select" class="block text-sm font-medium text-gray-600">Subject</label>
-          <select id="subject-select" disabled class="w-full border border-gray-300 rounded-lg px-3 py-2 mt-1">
-            <option selected value="">Select...</option>
-            <option>Telugu</option><option>Hindi</option><option>English</option>
-            <option>Maths</option><option>Science</option><option>Social</option>
+      <!-- Compact Top Bar - Subject dropdown and toggle -->
+      <div class="flex items-center justify-between px-4 py-2 bg-white border-b border-gray-200">
+        <!-- Subject Selector - Compact -->
+        <div class="flex items-center gap-2">
+          <label for="subject-select" class="text-sm font-medium text-gray-700 whitespace-nowrap">📚 Subject:</label>
+          <select id="subject-select"
+            class="text-sm border border-gray-300 rounded-lg px-3 py-1.5 bg-white focus:border-blue-500 focus:ring-1 focus:ring-blue-200 transition-all cursor-pointer">
+            <option disabled selected>Choose subject...</option>
+            <!-- Options will be populated dynamically based on user's class -->
           </select>
         </div>
 
+        <!-- Collapse/Expand Toggle Button -->
+        <button id="toggle-left-pane-btn" title="Hide/Show PDF Viewer"
+          class="bg-blue-600 hover:bg-blue-700 text-white shadow-md p-2 rounded-lg transition-all duration-300 flex-shrink-0">
+          <svg id="left-pane-toggle-icon" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
+            viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
       </div>
 
-      <!-- PDF Viewer -->
-      <div id="book-viewer-container" class="mt-4">
-        <div id="pdf-viewer-header-user" class="flex justify-between items-center mb-2 hidden">
-          <button id="prev-page-user" class="bg-blue-500 text-white px-3 py-1 rounded-lg text-sm hover:bg-blue-600">Prev</button>
-          <span class="text-gray-600 text-sm">Page: <span id="page-num-user"></span> / <span id="page-count-user"></span></span>
-          <button id="next-page-user" class="bg-blue-500 text-white px-3 py-1 rounded-lg text-sm hover:bg-blue-600">Next</button>
+      <!-- PDF Viewer - Full Space -->
+      <div id="book-viewer-container" class="flex-1 flex flex-col bg-gray-50">
+        <!-- Modern Page Navigation Header -->
+        <!-- PDF Page Navigation - Simplified -->
+        <div id="pdf-viewer-header-user"
+          class="flex items-center justify-center gap-3 px-4 py-3 bg-white/80 backdrop-blur-md rounded-2xl shadow-lg border border-gray-100">
+
+          <!-- Previous Page -->
+          <button id="prev-page-user"
+            class="nav-icon-btn flex items-center justify-center w-10 h-10 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-blue-500">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+
+          <!-- Page Number Input -->
+          <div class="flex items-center gap-2">
+            <span class="text-sm font-medium text-gray-600">Page</span>
+            <input id="page-input-user" type="number" min="1" value="1"
+              onkeypress="if(event.key==='Enter') jumpToPageInput()"
+              class="w-16 px-2 py-1.5 text-center border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
+            <span class="text-sm text-gray-500">/ <span id="page-count-user">0</span></span>
+          </div>
+
+          <!-- Next Page -->
+          <button id="next-page-user"
+            class="nav-icon-btn flex items-center justify-center w-10 h-10 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-blue-500">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+
         </div>
         <div id="pdf-render-area-user">
           <canvas id="pdf-canvas-user"></canvas>
@@ -191,46 +895,443 @@
       </div>
     </div>
 
-    <!-- Right Pane (Chat Area) -->
-    <div id="right-pane" class="right-pane w-1/2 transition-all duration-300">
+    <!-- Inline Notebook Editor (Hidden by default) -->
+    <div id="inline-notebook-container" style="display: none;" class="flex-1 flex flex-col bg-white">
+      <!-- Enhanced Header -->
+      <div class="notebook-header-enhanced">
+        <!-- Top Row: Main Navigation -->
+        <div class="notebook-header-row-top">
+          <button onclick="closeInlineNotebook()" class="back-to-book-btn-new">
+            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Back to Book
+          </button>
 
-      <!-- Chat History -->
-      <div id="chat-container" class="flex flex-col flex-1 p-5 overflow-y-auto">
-        <div id="chat-history">
-          <div class="ai-card fade-in">
-            <div class="flex justify-between items-center mb-2">
-              <h2 class="font-semibold text-gray-700">🤖 Welcome</h2>
-              <button class="copy-btn" onclick="copyMessage(this)">📋</button>
-            </div>
-            <div class="markdown-content">
-              <p>Welcome! I am <strong>Chaduvu Guru</strong>, your personal AI study assistant. Please select a book on the left to begin.</p>
+          <div class="notebook-title-section">
+            <span class="notebook-emoji">📓</span>
+            <h3 id="inline-notebook-title" class="notebook-title-text">My Notebook</h3>
+          </div>
+
+          <div class="notebook-actions-top">
+            <button onclick="openInMyBag()" class="my-bag-btn" title="Open in My Bag">
+              <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+              </svg>
+              My Bag
+            </button>
+            <button onclick="toggleFullscreen()" id="fullscreen-toggle-btn" class="fullscreen-btn"
+              title="Expand notebook">
+              <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Bottom Row: Page Controls -->
+        <div class="notebook-header-row-bottom">
+          <div class="page-controls-left">
+            <button id="prev-page-btn-header" onclick="prevInlinePage()" class="page-nav-btn" title="Previous Page">
+              <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+
+            <span class="page-counter-display">
+              Page <span id="current-page-num-header" class="page-num-current">1</span> of <span
+                id="total-pages-num-header" class="page-num-total">1</span>
+            </span>
+
+            <button id="next-page-btn-header" onclick="nextInlinePage()" class="page-nav-btn" title="Next Page">
+              <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+          </div>
+
+          <div class="page-controls-right">
+            <button onclick="addInlinePage()" class="add-page-btn" title="Add New Page">
+              <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+              </svg>
+              Add Page
+            </button>
+
+            <button onclick="deleteInlinePage()" class="delete-page-btn" title="Delete Current Page">
+              <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
+            </button>
+
+            <div class="save-section">
+              <span id="save-status" class="save-status-text">Saved</span>
+              <button onclick="saveInlinePage()" class="save-inline-btn-new">
+                <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
+                </svg>
+                Save
+              </button>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Chat Input -->
-      <div id="chat-input-container" class="p-4 border-t border-gray-200 bg-white shadow-inner">
-        <div class="flex justify-start mb-2 gap-2">
-            <button type="button" id="list-chapters-btn" class="hidden bg-indigo-500 hover:bg-indigo-600 text-white p-2 px-4 transition text-sm">
-              List Chapters
-            </button>
-            <button type="button" id="summarize-btn" class="hidden bg-indigo-500 hover:bg-indigo-600 text-white p-2 px-4 transition text-sm">
-              Summarize
-            </button>
-        </div>
-        <form id="user-query-form">
-          <textarea id="query-text" placeholder="Ask a question about the selected book..." required disabled
-            class="w-full border border-gray-300 rounded-lg p-3 h-12 focus:ring-2 focus:ring-blue-400"></textarea>
-          <div class="flex justify-end items-center gap-2 mt-2">
-            <button type="submit" id="submit-query-btn" disabled
-              class="bg-blue-600 hover:bg-blue-700 text-white rounded-lg p-2 px-4 transition disabled:bg-gray-300 disabled:cursor-not-allowed">
-              Ask ➤
-            </button>
-          </div>
-        </form>
+      <!-- Editor -->
+      <div id="inline-editor-wrapper">
+        <div id="inline-editor"></div>
       </div>
     </div>
+
+    <!-- Right Pane (Chat Area) - Fixed Layout -->
+    <div id="right-pane" class="right-pane w-1/2 flex flex-col" style="height: calc(100vh - 5rem); overflow: hidden; background-color: #fcfcfc;">
+
+      <!-- ═══ Unified AI Control Header ═══════════════════════════════════ -->
+      <div class="ai-control-header border-b border-gray-200 bg-white">
+        
+        <!-- Row 1: Visual Inverted Premium Header (Mode is Hero on left, Brand is Secondary on right) -->
+        <div class="ai-ctrl-row ai-ctrl-row--top flex items-center justify-between py-3 px-4">
+          
+          <!-- Left: Hero Mode Selector -->
+          <div class="flex flex-col gap-1">
+            <span class="text-[9px] font-bold text-gray-400 uppercase tracking-wider leading-none">Learning Mode</span>
+            <button type="button" id="learning-mode-trigger" class="flex items-center gap-1.5 px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 text-indigo-700 text-xs font-bold rounded-xl shadow-sm transition-all cursor-pointer">
+              <span id="trigger-mode-icon">📖</span>
+              <span id="trigger-mode-text">Reading Mode</span>
+              <span class="text-[8px] opacity-60 font-normal ml-0.5">▼</span>
+            </button>
+          </div>
+
+          <!-- Right: Secondary Brand and Connection Status -->
+          <div class="flex items-center gap-3">
+            <div class="text-right flex flex-col justify-center">
+              <span class="text-[10px] font-bold text-slate-500 tracking-tight leading-none">AI Study Companion</span>
+              <span class="text-[9px] text-slate-400 font-medium leading-normal mt-0.5">Personalized Learning</span>
+            </div>
+
+            <div class="w-px h-6 bg-gray-200 flex-shrink-0"></div>
+
+            <!-- TTS live status dot (kept for JS compatibility) -->
+            <div class="flex items-center gap-1" title="TTS Connection Status">
+              <div class="relative flex h-1.5 w-1.5">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" id="tts-ping-dot"></span>
+                <span id="tts-status-dot" class="relative inline-flex rounded-full h-1.5 w-1.5 bg-green-500"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hidden selector and badge kept for JS state tracking compatibility -->
+        <select id="answer-preference-select" style="display:none;" title="Hidden Answer Preference select element">
+          <option value="text_text">📖 Reading</option>
+          <option value="text_audio">🎧 Tutor</option>
+          <option value="audio_text">🎙️ Voice Query</option>
+          <option value="audio_audio">🧑🏫 AI Voice</option>
+          <option value="visual_learning">🎬 Visual Learning</option>
+        </select>
+        <span id="active-mode-badge" style="display:none;"></span>
+      </div>
+      <!-- ════════════════════════════════════════════════════════════════ -->
+
+      <!-- Visual Learning Player (replaces chat area when active) -->
+      <div id="visual-learning-container" style="display: none; flex-direction: column; flex: 1; overflow: hidden;">
+        <!-- Landing View -->
+        <div id="vl-landing-view" class="flex flex-col items-center justify-center h-full p-8 text-center" style="background: radial-gradient(circle at center, #1e1b4b 0%, #0f172a 100%);">
+          <div class="text-6xl mb-4 animate-bounce">🎬</div>
+          <h3 class="text-xl font-bold text-indigo-300 mb-2">Visual Learning Mode</h3>
+          <p class="text-xs text-slate-400 max-w-sm leading-relaxed mb-4">
+            Type a query at the bottom to watch an interactive, AI-generated animated lesson with scenes and teacher voice narration.
+          </p>
+          <div class="px-4 py-2 bg-indigo-950/50 border border-indigo-800/40 rounded-xl text-[11px] text-indigo-300/80 max-w-xs leading-normal">
+            💡 "Explain the Water Cycle" or "How do magnets work?" make great lessons!
+          </div>
+        </div>
+
+        <!-- Loading Screen -->
+        <div id="vl-loading-screen" style="display: none;">
+          <h2 class="text-xl font-bold mb-6 text-indigo-300 text-center" id="vl-loading-title">🎬 Creating Animated Lesson...</h2>
+          <div class="vl-loader-animation" id="vl-loading-spinner">
+            <div class="vl-loader-ring outer"></div>
+            <div class="vl-loader-ring middle"></div>
+            <div class="vl-loader-ring inner"></div>
+          </div>
+          <div class="vl-loading-steps" id="vl-loading-steps-container">
+            <div class="vl-loading-step" id="vl-step-understanding_topic">
+              <span class="vl-step-check">1</span>
+              <span>Understanding Topic</span>
+            </div>
+            <div class="vl-loading-step" id="vl-step-designing_lesson">
+              <span class="vl-step-check">2</span>
+              <span>Designing Storyboard Scenes</span>
+            </div>
+            <div class="vl-loading-step" id="vl-step-generating_visuals">
+              <span class="vl-step-check">3</span>
+              <span>Retrieving Animated Scene Assets</span>
+            </div>
+            <div class="vl-loading-step" id="vl-step-creating_narration">
+              <span class="vl-step-check">4</span>
+              <span>Synthesizing Voice Narration</span>
+            </div>
+            <div class="vl-loading-step" id="vl-step-hyperframes_engine">
+              <span class="vl-step-check">5</span>
+              <span>Hyperframes Rendering Engine</span>
+            </div>
+            <div class="vl-loading-step" id="vl-step-launching_lesson">
+              <span class="vl-step-check">6</span>
+              <span>Launching Media Player</span>
+            </div>
+          </div>
+
+          <!-- Hyperframes Subsystem Detailed Stream Log Display -->
+          <div id="vl-engine-log-box" class="mt-4 p-3 bg-slate-900/80 border border-slate-800 rounded-xl text-left max-w-md w-full font-mono text-[11px] text-slate-300 space-y-1">
+             <div class="text-[10px] text-indigo-400 font-bold uppercase tracking-wider mb-1">⚡ Hyperframes Engine Stream Log:</div>
+             <div id="vl-engine-log-text" class="text-slate-400 truncate">Initializing Hyperframes Pipeline...</div>
+          </div>
+
+          <!-- Error Alert UI inside loading screen -->
+          <div id="vl-error-container" class="hidden mt-6 p-5 bg-red-950/40 border border-red-800/40 rounded-2xl text-center max-w-sm flex flex-col items-center justify-center">
+             <div class="text-red-400 font-bold text-base mb-2">⚠️ Something went wrong</div>
+             <p id="vl-error-message" class="text-[11px] text-red-300/80 mb-4 leading-relaxed"></p>
+             <button id="vl-error-exit-btn" class="px-4 py-2 bg-red-800/60 hover:bg-red-700 text-white rounded-xl text-xs font-bold transition-all cursor-pointer">Go Back</button>
+          </div>
+        </div>
+
+        <!-- Lesson Player (Coursera / YouTube-inspired Educational Video Player) -->
+        <div id="vl-player" style="display: none;">
+          <!-- Component 1: Header Bar -->
+          <div id="vl-header" class="vl-header-bar">
+            <div class="vl-header-left">
+              <span class="vl-header-badge">🎬 VISUAL LEARNING ENGINE</span>
+              <h2 id="vl-header-title" class="vl-header-title">AI Animated Lesson</h2>
+            </div>
+            <div class="vl-header-right">
+              <button id="vl-notes-toggle-btn" class="vl-header-action-btn" title="Toggle Lesson Script & Scenes">📖 Notes & Script</button>
+              <button id="vl-exit-btn" class="vl-header-close-btn" title="Exit Visual Learning">✕</button>
+            </div>
+          </div>
+
+          <div class="vl-player-stage-column">
+            <!-- Component 2: Video Player Container (16:9 Aspect Ratio) -->
+            <div id="vl-video-container">
+              <div id="vl-main">
+                <div id="vl-canvas">
+                  <!-- Hyperframes iframe or canvas presentation mounted here -->
+                </div>
+              </div>
+            </div>
+
+            <!-- Component 3: Player Controls (Directly BELOW Video Container) -->
+            <div id="vl-controls">
+              <!-- Integrated Progress / Seek Bar -->
+              <div class="vl-progress-bar-container" title="Click to Seek">
+                <div id="vl-progress-bar-fill" class="vl-progress-bar-fill"></div>
+              </div>
+
+              <div class="vl-controls-row">
+                <!-- Left Controls Group -->
+                <div class="vl-control-group left">
+                  <button id="vl-play-pause-btn" class="vl-control-btn vl-play-btn" title="Play / Pause">
+                    <span class="vl-btn-icon">▶</span>
+                  </button>
+                  <button id="vl-prev-btn" class="vl-control-btn" title="Previous Scene">
+                    <span class="vl-btn-icon">⏮</span>
+                  </button>
+                  <button id="vl-next-btn" class="vl-control-btn" title="Next Scene">
+                    <span class="vl-btn-icon">⏭</span>
+                  </button>
+                  <button id="vl-replay-btn" class="vl-control-btn" title="Replay Lesson">
+                    <span class="vl-btn-icon">🔄</span>
+                  </button>
+                  <div class="vl-time-display">
+                    <span id="vl-progress-text">Scene 1 / 4 • 0:00 / 0:00</span>
+                  </div>
+                </div>
+
+                <!-- Right Controls Group -->
+                <div class="vl-control-group right">
+                  <button id="vl-mute-btn" class="vl-control-btn" title="Mute / Unmute">
+                    <span id="vl-mute-icon" class="vl-btn-icon">🔊</span>
+                  </button>
+                  <button id="vl-speed-btn" class="vl-control-btn vl-pill-btn" title="Playback Speed">
+                    <span>1.0x</span>
+                  </button>
+                  <button id="vl-notes-btn" class="vl-control-btn" title="Toggle Lesson Script & Scenes">
+                    <span class="vl-btn-icon">📖</span>
+                  </button>
+                  <button id="vl-fullscreen-btn" class="vl-control-btn" title="Toggle Fullscreen">
+                    <span class="vl-btn-icon">⛶</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Component 4: Subtitle Panel (Below Player Controls) -->
+            <div id="vl-subtitle-panel">
+              <div class="vl-subtitle-badge">
+                <span class="vl-subtitle-avatar">🎙️</span>
+                <span class="vl-subtitle-speaker">AI Tutor</span>
+              </div>
+              <div id="vl-subtitle-text" class="vl-subtitle-text">
+                Teacher narration script will display here smoothly as the visual presentation plays...
+              </div>
+            </div>
+
+            <!-- Component 5: Future AI Tools (Placeholder Component) -->
+            <div id="vl-future-ai-tools">
+              <div class="vl-ai-tools-header">
+                <span class="vl-ai-tools-title">✨ AI Interactive Learning Suite</span>
+                <span class="vl-ai-tools-badge">Next Gen</span>
+              </div>
+              <div class="vl-ai-tools-chips">
+                <button type="button" class="vl-ai-chip" title="AI will re-explain current scene with simpler real-world analogies">
+                  <span class="chip-icon">🤖</span> AI Explain Scene
+                </button>
+                <button type="button" class="vl-ai-chip" title="Ask AI Tutor a doubt about this specific visual frame">
+                  <span class="chip-icon">💡</span> AI Ask Doubt
+                </button>
+                <button type="button" class="vl-ai-chip" title="Download AI-generated summary notes for this lesson">
+                  <span class="chip-icon">📝</span> Download Notes
+                </button>
+                <button type="button" class="vl-ai-chip" title="Toggle full interactive lesson transcript">
+                  <span class="chip-icon">📜</span> Transcript
+                </button>
+                <button type="button" class="vl-ai-chip" title="Save current timestamp to your study bookmarks">
+                  <span class="chip-icon">🔖</span> Bookmark Frame
+                </button>
+                <button type="button" class="vl-ai-chip" title="Replay voice narration with custom voice style">
+                  <span class="chip-icon">🎧</span> Voice Accent
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Notes Slide-out Drawer Panel -->
+          <div id="vl-notes-overlay">
+            <div class="vl-notes-header">
+              <div class="vl-drawer-tabs flex gap-2">
+                <button type="button" id="vl-tab-script" class="vl-drawer-tab active">📖 Script</button>
+                <button type="button" id="vl-tab-outline" class="vl-drawer-tab">📋 Scenes</button>
+              </div>
+              <button id="vl-close-notes-btn" class="text-white opacity-60 hover:opacity-100 font-bold text-lg">&times;</button>
+            </div>
+            <div id="vl-drawer-script-content" class="vl-drawer-content active">
+              <div id="vl-notes-body" class="vl-notes-body"></div>
+            </div>
+            <div id="vl-drawer-outline-content" class="vl-drawer-content" style="display: none;">
+              <div id="vl-slides-list" class="vl-outline-list"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chat History (Scrollable - Flex-1 to consume empty space) -->
+      <div id="chat-container" class="flex-1 overflow-y-auto">
+        <div class="p-4">
+          <canvas id="voice-waveform" class="hidden w-full h-32"></canvas>
+          <div id="chat-history">
+            <div class="ai-card fade-in">
+              <div class="flex justify-between items-center mb-2">
+                <h2 class="font-semibold text-gray-700">🤖 Welcome</h2>
+                <button class="copy-btn" onclick="copyMessage(this)">📋</button>
+              </div>
+              <div class="markdown-content">
+                <p>Welcome! I am <strong>Chaduvu Guru</strong>, your personal AI study assistant. Please select a book
+                  on
+                  the left to begin.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sticky Follow-up Panel -->
+      <div id="followup-sticky-panel" class="hidden">
+        <div class="followup-sticky-header">
+          <span class="followup-sticky-title">💡 Quick Follow-ups</span>
+          <button id="toggle-followup-btn" onclick="toggleFollowupPanel()" aria-label="Toggle follow-up panel">
+            <svg class="followup-toggle-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+        </div>
+        <div id="followup-sticky-content" class="followup-sticky-content">
+          <!-- Follow-up chips will be inserted here -->
+        </div>
+      </div>
+
+      <!-- Bottom Section - Fixed at bottom -->
+      <div class="flex-shrink-0 bg-white">
+
+        <!-- Voice Interaction Panel (AI Voice Mode Flagship UI) -->
+        <div id="voice-interaction-panel" style="display: none; padding: 1rem;" class="border-t border-gray-100 bg-white">
+          <div class="flex flex-col items-center justify-center text-center gap-2">
+            <button type="button" id="voice-panel-mic" class="voice-panel-mic-btn-compact" title="Ask by Voice">
+              <span id="voice-panel-icon" class="text-xl">🎤</span>
+            </button>
+            <div class="flex flex-col gap-0.5">
+              <span id="voice-panel-status" class="text-xs font-bold text-slate-700">Ask by Voice</span>
+              <span id="voice-panel-subtitle" class="text-[10px] text-slate-500 font-medium">Ask anything from this textbook</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chat Input (Always visible at bottom) -->
+        <div id="chat-input-container" class="chat-input-container">
+          <!-- Text input row -->
+          <form id="user-query-form" class="chat-input-form">
+            <textarea id="query-text"
+              placeholder="Ask a question about the selected book..."
+              required disabled
+              class="chat-input-textarea"
+              onkeydown="if(event.key==='Enter' && !event.shiftKey){event.preventDefault();document.getElementById('user-query-form').requestSubmit();}"></textarea>
+
+            <!-- Inline action buttons (All input controls embedded inside container, no floating buttons) -->
+            <div class="chat-input-actions">
+              <!-- Settings overlay trigger -->
+              <button type="button" id="settings-overlay-trigger" title="Voice & Learning Settings" class="chat-action-btn chat-action-btn--settings">
+                <span class="settings-icon">⚙️</span>
+              </button>
+
+              <!-- Voice search (text-input modes) -->
+              <button type="button" id="voice-search-btn" title="Voice Input" disabled class="chat-action-btn chat-action-btn--mic">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+                </svg>
+              </button>
+
+              <!-- Preference voice search (audio-input modes) -->
+              <button type="button" id="pref-mic-btn" title="Speak your question" class="chat-action-btn chat-action-btn--pref-mic" style="display: none;">
+                <span class="pref-mic-icon">🎙️</span>
+              </button>
+
+              <!-- Send -->
+              <button type="submit" id="submit-query-btn" title="Send" disabled class="chat-action-btn chat-action-btn--send">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="22" y1="2" x2="11" y2="13"></line>
+                  <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                </svg>
+              </button>
+            </div>
+          </form>
+
+          <!-- Preference mic status wrapper (integrated inline status) -->
+          <div id="pref-mic-wrapper" style="display:none; padding: 6px 12px 0;" class="pref-mic-status-wrapper">
+            <span id="pref-mic-status" class="text-xs text-indigo-600 font-semibold animate-pulse"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="voice-status" class="text-sm text-gray-500 hidden absolute right-24 top-4 bg-white px-2 py-1 rounded shadow">
+    Recording...
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.4.120/build/pdf.min.js"></script>
@@ -239,37 +1340,258 @@
       'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.4.120/build/pdf.worker.min.js';
   </script>
 
-  <script src="/static/script.js"></script>
+  <link rel="stylesheet" href="/static/conversation.css">
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+  <!-- Firebase config -->
+  <script src="/static/firebase-config.js"></script>
+
+  <!-- Sidebar -->
+  <link rel="stylesheet" href="/static/sidebar.css">
+  <script src="/static/sidebar.js"></script>
+
+  <!-- Profile Dropdown -->
+  <link rel="stylesheet" href="/static/profile-dropdown.css">
+  <script src="/static/profile-dropdown.js"></script>
+
+  <!-- TTS Manager (load FIRST so it's ready when script.js runs) -->
+  <script src="/static/js/tts-manager.js?v=102"></script>
+
+  <!-- Answer Preference: Streaming TTS Pipeline (load before script.js) -->
+  <script src="/static/js/tts-streaming-manager.js?v=102"></script>
+
+  <!-- Main script -->
+  <script src="/static/script.js?v=102"></script>
+  <script src="/static/conversation.js?v=102"></script>
+  <script src="/static/save-selection.js"></script>
+
+  <!-- Answer Preference Manager (load after script.js so submitSmartQueryFromMic is defined first) -->
+  <script src="/static/js/answer-preference-manager.js?v=102"></script>
+  
+  <!-- GSAP & Lottie libraries for Visual Learning V1 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
+
+  <!-- Visual Learning Player script -->
+  <script src="/static/js/visual-learning.js?v=105"></script>
+
+  <!-- TTS Selector Wiring -->
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const modelSelect = document.getElementById('tts-model-select');
+      const voiceSelect = document.getElementById('tts-voice-select');
+      const statusDot   = document.getElementById('tts-status-dot');
+
+      if (!modelSelect || !voiceSelect) return;
+
+      // ── Restore saved preferences into dropdowns ──────────────────
+      if (window.ttsManager) {
+        modelSelect.value = window.ttsManager.model || 'sarvam';
+        // Voices loaded asynchronously below
+      }
+
+      // ── Populate voice dropdown from backend ──────────────────────
+      async function loadVoices(model) {
+        voiceSelect.innerHTML = '<option value="">Loading…</option>';
+        voiceSelect.disabled  = true;
+
+        if (model === 'browser') {
+          voiceSelect.innerHTML = '<option value="default">Default</option>';
+          voiceSelect.disabled  = false;
+          return;
+        }
+
+        try {
+          const voices = await window.ttsManager.fetchVoices(model);
+          voiceSelect.innerHTML = voices.map(v =>
+            `<option value="${v.id}">${v.name} ${v.gender === 'Female' ? '♀' : '♂'}</option>`
+          ).join('');
+
+          // Restore saved voice
+          const savedVoice = window.ttsManager.voice;
+          if (savedVoice && voiceSelect.querySelector(`option[value="${savedVoice}"]`)) {
+            voiceSelect.value = savedVoice;
+          }
+
+          voiceSelect.disabled = false;
+          if (statusDot) statusDot.classList.remove('offline');
+        } catch (e) {
+          voiceSelect.innerHTML = '<option value="ritu">Ritu ♀</option>';
+          voiceSelect.disabled  = false;
+          if (statusDot) statusDot.classList.add('offline');
+        }
+      }
+
+      // Initial load
+      await loadVoices(modelSelect.value);
+
+      // ── Model change ──────────────────────────────────────────────
+      modelSelect.addEventListener('change', async () => {
+        const newModel = modelSelect.value;
+        if (window.ttsManager) window.ttsManager.setModel(newModel);
+        await loadVoices(newModel);
+        // Update voice in ttsManager to the newly selected default
+        if (window.ttsManager) window.ttsManager.setVoice(voiceSelect.value);
+      });
+
+      // ── Voice change ──────────────────────────────────────────────
+      voiceSelect.addEventListener('change', () => {
+        if (window.ttsManager) window.ttsManager.setVoice(voiceSelect.value);
+      });
+    });
+  </script>
+
+  <!-- Initialize Sidebar -->
+  <script>
+    console.log('[USER PAGE] Starting sidebar initialization...');
+
+    // Check auth and initialize sidebar
+    firebase.auth().onAuthStateChanged(async (user) => {
+      console.log('[USER PAGE] Auth state changed:', user ? user.email : 'No user');
+
+      if (!user) {
+        // Not logged in - redirect to home
+        console.warn('[USER PAGE] No user logged in, redirecting to home');
+        window.location.href = '/';
+        return;
+      }
+
+      try {
+        // Load user data
+        console.log('[USER PAGE] Loading user data from Firestore...');
+        const userDoc = await db.collection('users').doc(user.uid).get();
+
+        if (userDoc.exists) {
+          const userData = userDoc.data();
+          console.log('[USER PAGE] User data loaded:', userData);
+
+          // Initialize sidebar (THIS IS THE KEY PART!)
+          if (typeof initializeSidebar === 'function') {
+            console.log('[USER PAGE] Calling initializeSidebar with userData');
+            initializeSidebar(userData);
+            console.log('[USER PAGE] ✅ Sidebar initialized successfully!');
+          } else {
+            console.error('[USER PAGE] ❌ initializeSidebar function not found! Check if sidebar.js is loaded.');
+            // Fallback: Show error message
+            const container = document.getElementById('sidebar-container');
+            if (container) {
+              container.innerHTML = `<div style="color: red; padding: 20px;">Error: Sidebar script not loaded</div>`;
+            }
+          }
+
+          // Store class globally for script.js to access
+          window.currentUserClass = userData.class;
+          console.log('[USER PAGE] Class stored globally:', userData.class);
+
+          // Populate subjects for the loaded class
+          if (window.populateSubjectsForUser) {
+            console.log('[USER PAGE] Calling populateSubjectsForUser with class:', userData.class);
+            window.populateSubjectsForUser(userData.class);
+          } else {
+            console.error('[USER PAGE] ❌ populateSubjectsForUser function not found!');
+          }
+        } else {
+          console.error('[USER PAGE] User document not found in Firestore');
+          alert('User profile not found. Please contact admin.');
+        }
+      } catch (error) {
+        console.error('[USER PAGE] Error loading profile:', error);
+        alert('Error loading your profile: ' + error.message);
+      }
+    });
+
+    // Toggle left pane (PDF viewer) functionality
+    document.addEventListener('DOMContentLoaded', () => {
+      const toggleBtn = document.getElementById('toggle-left-pane-btn');
+      const body = document.body;
+
+      if (toggleBtn) {
+        toggleBtn.addEventListener('click', () => {
+          const isCollapsed = body.classList.toggle('left-pane-collapsed');
+
+          // Rotate icon
+          const icon = toggleBtn.querySelector('svg');
+          if (icon) {
+            if (isCollapsed) {
+              // Point left when collapsed (to show)
+              icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />';
+            } else {
+              // Point right when expanded (to hide)
+              icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />';
+            }
+          }
+        });
+      }
+    });
+  </script>
 
   <!-- New script for 'List Chapters' and 'Summarize' button functionality -->
   <script>
     function addMessageToChat({ role, content }) {
-        const chatHistory = document.getElementById('chat-history');
-        const messageElement = document.createElement('div');
-        messageElement.classList.add('ai-card', 'fade-in');
+      const chatHistory = document.getElementById('chat-history');
+      const messageElement = document.createElement('div');
 
-        const header = role === 'ai' ? '🤖 Chaduvu Guru' : '👤 You';
-        
-        const htmlContent = marked.parse(content);
+      const isAI = role === 'ai';
+      messageElement.className = `flex items-start gap-3 my-4 ${isAI ? '' : 'flex-row-reverse'}`;
 
-        messageElement.innerHTML = `
-            <div class="flex justify-between items-center mb-2">
-                <h2 class="font-semibold text-gray-700">${header}</h2>
-                <button class="copy-btn" onclick="copyMessage(this)">📋</button>
+      const avatar = isAI
+        ? '<div class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-xl">🤖</div>'
+        : '';
+
+      const bubbleColor = isAI ? 'bg-gray-100' : 'bg-blue-500 text-white';
+      const bubbleRadius = isAI ? 'rounded-r-lg rounded-bl-lg' : 'rounded-l-lg rounded-br-lg';
+
+      messageElement.innerHTML = `
+        ${avatar}
+        <div class="flex-1">
+          <div class="p-4 rounded-lg shadow-sm ${bubbleColor} ${bubbleRadius}">
+            <div class="markdown-content">${marked.parse(content)}</div>
+          </div>
+        </div>
+      `;
+
+      chatHistory.appendChild(messageElement);
+      chatHistory.scrollTop = chatHistory.scrollHeight; // Auto-scroll to bottom
+    }
+    function copyMessage(button) {
+      const card = button.closest('.ai-card');
+      const content = card.querySelector('.markdown-content').innerText;
+      navigator.clipboard.writeText(content).then(() => {
+        button.textContent = '✅';
+        setTimeout(() => { button.textContent = '📋'; }, 1000);
+      });
+    }
+
+    // The speakMessage function is now correctly handled globally by script.js and tts-manager.js
+    function showThinkingIndicator() {
+      const chatHistory = document.getElementById('chat-history');
+      const thinkingElement = document.createElement('div');
+      thinkingElement.id = 'thinking-indicator';
+      thinkingElement.className = 'flex items-start gap-3 my-4';
+      thinkingElement.innerHTML = `
+        <div class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-xl">🤖</div>
+        <div class="flex-1">
+          <div class="p-4 rounded-lg shadow-sm bg-gray-100 rounded-r-lg rounded-bl-lg">
+            <div class="typing-indicator">
+              <span></span>
+              <span></span>
+              <span></span>
             </div>
-            <div class="markdown-content">${htmlContent}</div>
-        `;
+          </div>
+        </div>
+      `;
+      chatHistory.appendChild(thinkingElement);
+      chatHistory.scrollTop = chatHistory.scrollHeight;
+    }
 
-        chatHistory.appendChild(messageElement);
-        chatHistory.scrollTop = chatHistory.scrollHeight; // Auto-scroll to bottom
-    }    
-    function copyMessage(button) {
-        const card = button.closest('.ai-card');
-        const content = card.querySelector('.markdown-content').innerText;
-        navigator.clipboard.writeText(content).then(() => {
-            button.textContent = '✅';
-            setTimeout(() => { button.textContent = '📋'; }, 1000);
-        });
+    function removeThinkingIndicator() {
+      const thinkingElement = document.getElementById('thinking-indicator');
+      if (thinkingElement) {
+        thinkingElement.remove();
+      }
     }
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -277,105 +1599,110 @@
       const summarizeBtn = document.getElementById('summarize-btn');
 
       if (listChaptersBtn) {
-          listChaptersBtn.addEventListener('click', async () => {
-            const classSelect = document.getElementById('class-select');
-            const subjectSelect = document.getElementById('subject-select');
+        listChaptersBtn.addEventListener('click', async () => {
+          const subjectSelect = document.getElementById('subject-select');
 
-            const selectedClass = classSelect.value;
-            const selectedSubject = subjectSelect.value;
+          // Get class from user profile (stored in window.currentUserClass)
+          const selectedClass = window.currentUserClass;
+          const selectedSubject = subjectSelect.value;
 
-            if (!selectedClass || selectedClass === 'Select...') {
-              alert('Please select a class first.');
-              return;
+          if (!selectedClass) {
+            alert('Class information not loaded. Please refresh the page.');
+            return;
+          }
+          if (!selectedSubject || selectedSubject === 'Choose your subject...') {
+            alert('Please select a subject first.');
+            return;
+          }
+
+          // Clear previous chat history before adding new messages
+          document.getElementById('chat-history').innerHTML = '';
+
+          showThinkingIndicator();
+
+          try {
+            const response = await fetch(`/api/list-chapters?class_name=${selectedClass}&subject=${selectedSubject}`);
+
+            if (!response.ok) {
+              throw new Error('Could not retrieve chapters. Please ensure the book has been processed.');
             }
-            if (!selectedSubject || selectedSubject === 'Select...') {
-              alert('Please select a subject first.');
-              return;
-            }
 
-            // Clear previous chat history before adding new messages
-            document.getElementById('chat-history').innerHTML = '';
+            const data = await response.json();
 
-            addMessageToChat({
-              role: 'ai',
-              content: 'Fetching chapter list...'
-            });
+            removeThinkingIndicator();
 
-            try {
-              const response = await fetch(`/api/list-chapters?class_name=${selectedClass}&subject=${selectedSubject}`);
-              
-              if (!response.ok) {
-                throw new Error('Could not retrieve chapters. Please ensure the book has been processed.');
-              }
-
-              const data = await response.json();
-              
-              if (data && data.chapters && data.chapters.length > 0) {
-                displayChaptersInChat(data.chapters);
-              } else {
-                addMessageToChat({
-                  role: 'ai',
-                  content: 'No chapters found for this book.'
-                });
-              }
-
-            } catch (error) {
-              console.error('Error fetching chapters:', error);
+            if (data && data.chapters && data.chapters.length > 0) {
+              displayChaptersInChat(data.chapters);
+            } else {
               addMessageToChat({
                 role: 'ai',
-                content: `Sorry, an error occurred while fetching chapters: ${error.message}`
+                content: 'No chapters found for this book.'
               });
             }
-          });
+
+          } catch (error) {
+            console.error('Error fetching chapters:', error);
+            removeThinkingIndicator();
+            addMessageToChat({
+              role: 'ai',
+              content: `Sorry, an error occurred while fetching chapters: ${error.message}`
+            });
+          }
+        });
       }
 
       if (summarizeBtn) {
-          summarizeBtn.addEventListener('click', async () => {
-            const classSelect = document.getElementById('class-select');
-            const subjectSelect = document.getElementById('subject-select');
+        summarizeBtn.addEventListener('click', async () => {
+          const subjectSelect = document.getElementById('subject-select');
 
-            const selectedClass = classSelect.value;
-            const selectedSubject = subjectSelect.value;
+          // Get class from user profile (stored in window.currentUserClass)
+          const selectedClass = window.currentUserClass;
+          const selectedSubject = subjectSelect.value;
 
-            if (!selectedClass || selectedClass === 'Select...') {
-              alert('Please select a class first.');
-              return;
+          if (!selectedClass) {
+            alert('Class information not loaded. Please refresh the page.');
+            return;
+          }
+          if (!selectedSubject || selectedSubject === 'Choose your subject...') {
+            alert('Please select a subject first.');
+            return;
+          }
+
+          // Clear previous chat history before adding new messages
+          document.getElementById('chat-history').innerHTML = '';
+
+          showThinkingIndicator();
+
+          try {
+            const response = await fetch(`/api/list-chapters?class_name=${selectedClass}&subject=${selectedSubject}`);
+
+            if (!response.ok) {
+              throw new Error('Could not retrieve chapters. Please ensure the book has been processed.');
             }
-            if (!selectedSubject || selectedSubject === 'Select...') {
-              alert('Please select a subject first.');
-              return;
+
+            const data = await response.json();
+
+            removeThinkingIndicator();
+
+            if (data && data.chapters && data.chapters.length > 0) {
+              displayChapterDropdown(data.chapters);
             }
-
-            // Clear previous chat history before adding new messages
-            document.getElementById('chat-history').innerHTML = '';
-
-            try {
-              const response = await fetch(`/api/list-chapters?class_name=${selectedClass}&subject=${selectedSubject}`);
-              
-              if (!response.ok) {
-                throw new Error('Could not retrieve chapters. Please ensure the book has been processed.');
-              }
-
-              const data = await response.json();
-              
-              if (data && data.chapters && data.chapters.length > 0) {
-                displayChapterDropdown(data.chapters);
-              }
-              else {
-                addMessageToChat({
-                  role: 'ai',
-                  content: 'No chapters found for this book.'
-                });
-              }
-
-            } catch (error) {
-              console.error('Error fetching chapters:', error);
+            else {
               addMessageToChat({
                 role: 'ai',
-                content: `Sorry, an error occurred while fetching chapters: ${error.message}`
+                content: 'No chapters found for this book.'
               });
             }
-          });
+
+          } catch (error) {
+            console.error('Error fetching chapters:', error);
+            removeThinkingIndicator();
+            addMessageToChat({
+              role: 'ai',
+              content: `Sorry, an error occurred while fetching chapters: ${error.message}`
+            });
+          }
+        });
       }
 
       function displayChaptersInChat(chapters) {
@@ -425,22 +1752,27 @@
             return;
           }
 
-          const classSelect = document.getElementById('class-select');
           const subjectSelect = document.getElementById('subject-select');
-          const selectedClass = classSelect.value;
+          // Get class from user profile (stored in window.currentUserClass)
+          const selectedClass = window.currentUserClass;
           const selectedSubject = subjectSelect.value;
 
+          showThinkingIndicator();
+
           try {
+            const requestBody = {
+              class_name: String(selectedClass), // Explicitly convert to string
+              subject: selectedSubject,
+              chapter_name: selectedChapter
+            };
+            console.log("Sending to /api/summarize:", JSON.stringify(requestBody, null, 2));
+
             const response = await fetch('/api/summarize', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json'
               },
-              body: JSON.stringify({
-                class_name: selectedClass,
-                subject: selectedSubject,
-                chapter_name: selectedChapter
-              })
+              body: JSON.stringify(requestBody)
             });
 
             if (!response.ok) {
@@ -448,6 +1780,9 @@
             }
 
             const data = await response.json();
+
+            removeThinkingIndicator();
+
             addMessageToChat({
               role: 'ai',
               content: data.summary
@@ -455,6 +1790,7 @@
 
           } catch (error) {
             console.error('Error fetching summary:', error);
+            removeThinkingIndicator();
             addMessageToChat({
               role: 'ai',
               content: `Sorry, an error occurred while fetching the summary: ${error.message}`
@@ -462,483 +1798,467 @@
           }
         }
       });
-      
+
       window.copyMessage = copyMessage;
     });
   </script>
-</body>
-</html>, right: '    }
-    
-    function copyMessage(button) {
-        const card = button.closest('.ai-card');
-        const content = card.querySelector('.markdown-content').innerText;
-        navigator.clipboard.writeText(content).then(() => {
-            button.textContent = '✅';
-            setTimeout(() => { button.textContent = '📋'; }, 1000);
-        });
-    }
 
+  <!-- My Bag Component -->
+  <link rel="stylesheet" href="/static/css/my-bag.css">
+
+  <!-- Bag Overlay -->
+  <div id="my-bag-overlay" class="my-bag-overlay" onclick="closeBag()"></div>
+
+  <!-- Bag Sidebar -->
+  <div id="my-bag-sidebar" class="my-bag-sidebar">
+    <!-- Header -->
+    <div class="bag-header">
+      <div class="bag-title">
+        <div class="bag-icon-wrapper">
+          <span class="text-2xl">🎒</span>
+        </div>
+        <div>
+          <h2 class="text-xl font-bold">My Bag</h2>
+          <p class="text-xs opacity-80">Your Learning Collection</p>
+        </div>
+      </div>
+      <button onclick="closeBag()" class="bag-close-btn">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Content -->
+    <div class="bag-content">
+      <!-- Tabs -->
+      <div class="bag-tabs">
+        <button onclick="showBagTab('notebooks')" id="notebooks-tab" class="bag-tab active">
+          <span>📚</span> Notebooks
+        </button>
+        <button onclick="showBagTab('saved')" id="saved-tab" class="bag-tab">
+          <span>💾</span> Saved
+        </button>
+      </div>
+
+      <!-- Notebooks View -->
+      <div id="notebooks-view">
+        <button onclick="showCreateNotebookModal()" class="create-btn">
+          <span>+</span> Create New Notebook
+        </button>
+        <div id="notebooks-grid" class="notebook-grid">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+      <!-- Saved Items View -->
+      <div id="saved-view" style="display: none;">
+        <button onclick="showCreateNoteModal()" class="create-btn">
+          <span>+</span> Write a Note
+        </button>
+        <div class="form-group">
+          <select id="notebook-filter" onchange="filterItems()" class="form-select">
+            <option value="">All Notebooks</option>
+          </select>
+        </div>
+        <div id="items-list" class="notebook-grid">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Create Notebook Modal -->
+  <div id="create-notebook-overlay" class="premium-modal-overlay">
+    <div id="create-notebook-modal" class="premium-modal">
+      <div class="modal-header">
+        <div class="modal-icon">📓</div>
+        <h3 class="modal-title">New Notebook</h3>
+        <p class="text-gray-500">Create a space for your notes</p>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Notebook Name</label>
+        <input id="notebook-name" type="text" class="form-input" placeholder="e.g., Science Notes">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Subject</label>
+        <select id="notebook-subject" class="form-select">
+          <option value="english">📖 English</option>
+          <option value="maths">🔢 Maths</option>
+          <option value="science">🔬 Science</option>
+          <option value="physics">⚛️ Physics</option>
+          <option value="biology">🧬 Biology</option>
+          <option value="social">🌍 Social</option>
+          <option value="general">📚 General</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Color Theme</label>
+        <div class="color-options">
+          <button onclick="selectColor('#6366f1')" data-color="#6366f1" class="color-btn selected"
+            style="background: #6366f1"></button>
+          <button onclick="selectColor('#10b981')" data-color="#10b981" class="color-btn"
+            style="background: #10b981"></button>
+          <button onclick="selectColor('#f59e0b')" data-color="#f59e0b" class="color-btn"
+            style="background: #f59e0b"></button>
+          <button onclick="selectColor('#ef4444')" data-color="#ef4444" class="color-btn"
+            style="background: #ef4444"></button>
+          <button onclick="selectColor('#8b5cf6')" data-color="#8b5cf6" class="color-btn"
+            style="background: #8b5cf6"></button>
+          <button onclick="selectColor('#ec4899')" data-color="#ec4899" class="color-btn"
+            style="background: #ec4899"></button>
+        </div>
+        <input type="hidden" id="notebook-color" value="#6366f1">
+      </div>
+
+      <div class="modal-actions">
+        <button onclick="hideCreateNotebookModal()" class="btn-secondary">Cancel</button>
+        <button onclick="createNotebook()" class="btn-primary">Create Notebook</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Create Note Modal -->
+  <div id="create-note-overlay" class="premium-modal-overlay">
+    <div id="create-note-modal" class="premium-modal">
+      <div class="modal-header">
+        <div class="modal-icon">📝</div>
+        <h3 class="modal-title">Write a Note</h3>
+        <p class="text-gray-500">Capture your thoughts</p>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Select Notebook</label>
+        <select id="note-notebook" class="form-select"></select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Title</label>
+        <input id="note-title" type="text" class="form-input" placeholder="Note Title">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Content</label>
+        <textarea id="note-content" rows="4" class="form-textarea" placeholder="Write something..."></textarea>
+      </div>
+
+      <div class="modal-actions">
+        <button onclick="hideCreateNoteModal()" class="btn-secondary">Cancel</button>
+        <button onclick="saveNote()" class="btn-primary">Save Note</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/static/js/my-bag.js"></script>
+  <script src="/static/js/inline-notebook.js"></script>
+
+  <!-- Save-to-Bag Component Integration -->
+  <script>
+    fetch('/static/save-to-bag-component.html')
+      .then(r => r.text())
+      .then(html => {
+        const container = document.createElement('div');
+        container.innerHTML = html;
+        document.body.appendChild(container);
+      });
+
+    // Enforce Auth
     document.addEventListener('DOMContentLoaded', () => {
-      const toggleBtn = document.getElementById('toggle-left-pane');
-      const toggleIcon = document.getElementById('toggle-icon');
-      const leftPane = document.getElementById('left-pane');
-      const rightPane = document.getElementById('right-pane');
+      if (window.authManager) {
+        authManager.requireAuth();
+      }
+    });
+  </script>
 
-      if (toggleBtn) {
-        toggleBtn.addEventListener('click', () => {
-          leftPane.classList.toggle('hidden');
-          rightPane.classList.toggle('w-1/2');
-          rightPane.classList.toggle('w-full');
+  <!-- Glassmorphic Learning Mode Overlay -->
+  <div id="learning-mode-overlay" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-md opacity-0 pointer-events-none transition-opacity duration-200">
+    <div class="learning-mode-modal bg-white/90 border border-white/20 rounded-2xl p-6 shadow-2xl max-w-xl w-full max-h-[90vh] overflow-y-auto transform scale-95 transition-transform duration-200">
+      
+      <div class="flex items-center justify-between pb-3 border-b border-gray-200/60 mb-5">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">🎓</span>
+          <h3 class="font-bold text-gray-800 text-base">Select Your Learning Mode</h3>
+        </div>
+        <button type="button" id="close-overlay-btn" class="text-gray-400 hover:text-gray-600 transition-colors text-lg font-semibold">✕</button>
+      </div>
 
-          // Change button icon and position
-          if (leftPane.classList.contains('hidden')) {
-            toggleIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />';
-            toggleBtn.classList.remove('right-1/2');
-            toggleBtn.classList.add('left-4');
+      <p class="text-gray-600 text-sm font-semibold text-center mb-6">How would you like Chaduvu Guru to help you today?</p>
+
+      <!-- The 4 Mode Cards Grid -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        
+        <!-- Card 1: Reading Mode -->
+        <div class="learning-mode-card border-2 border-gray-200 hover:border-indigo-400 rounded-xl p-4 bg-white shadow-sm cursor-pointer transition-all flex flex-col gap-1.5" data-mode="text_text">
+          <div class="flex items-center justify-between">
+            <span class="text-2xl font-bold">📖</span>
+            <span class="card-radio-circle w-4 h-4 rounded-full border border-gray-300 flex items-center justify-center">
+              <span class="card-radio-dot w-2 h-2 rounded-full bg-indigo-600 hidden"></span>
+            </span>
+          </div>
+          <h4 class="font-bold text-gray-800 text-sm">Reading Mode</h4>
+          <p class="text-[11px] text-gray-500 leading-tight">Read answers in text format.</p>
+        </div>
+
+        <!-- Card 2: Tutor Mode -->
+        <div class="learning-mode-card border-2 border-gray-200 hover:border-indigo-400 rounded-xl p-4 bg-white shadow-sm cursor-pointer transition-all flex flex-col gap-1.5" data-mode="text_audio">
+          <div class="flex items-center justify-between">
+            <span class="text-2xl font-bold">🎧</span>
+            <span class="card-radio-circle w-4 h-4 rounded-full border border-gray-300 flex items-center justify-center">
+              <span class="card-radio-dot w-2 h-2 rounded-full bg-indigo-600 hidden"></span>
+            </span>
+          </div>
+          <h4 class="font-bold text-gray-800 text-sm">Tutor Mode</h4>
+          <p class="text-[11px] text-gray-500 leading-tight">Read and listen simultaneously.</p>
+        </div>
+
+        <!-- Card 3: Voice Query -->
+        <div class="learning-mode-card border-2 border-gray-200 hover:border-indigo-400 rounded-xl p-4 bg-white shadow-sm cursor-pointer transition-all flex flex-col gap-1.5" data-mode="audio_text">
+          <div class="flex items-center justify-between">
+            <span class="text-2xl font-bold">🎙️</span>
+            <span class="card-radio-circle w-4 h-4 rounded-full border border-gray-300 flex items-center justify-center">
+              <span class="card-radio-dot w-2 h-2 rounded-full bg-indigo-600 hidden"></span>
+            </span>
+          </div>
+          <h4 class="font-bold text-gray-800 text-sm">Voice Query</h4>
+          <p class="text-[11px] text-gray-500 leading-tight">Speak your question and receive text answers.</p>
+        </div>
+
+        <!-- Card 4: AI Voice Mode -->
+        <div class="learning-mode-card border-2 border-gray-200 hover:border-indigo-400 rounded-xl p-4 bg-white shadow-sm cursor-pointer transition-all flex flex-col gap-1.5" data-mode="audio_audio">
+          <div class="flex items-center justify-between">
+            <span class="text-2xl font-bold">🧑🏫</span>
+            <span class="card-radio-circle w-4 h-4 rounded-full border border-gray-300 flex items-center justify-center">
+              <span class="card-radio-dot w-2 h-2 rounded-full bg-indigo-600 hidden"></span>
+            </span>
+          </div>
+          <h4 class="font-bold text-gray-800 text-sm">AI Voice Mode</h4>
+          <p class="text-[11px] text-gray-500 leading-tight">Speak and receive voice explanations.</p>
+        </div>
+
+        <!-- Card 5: Visual Learning Mode -->
+        <div class="learning-mode-card border-2 border-gray-200 hover:border-indigo-400 rounded-xl p-4 bg-white shadow-sm cursor-pointer transition-all flex flex-col gap-1.5" data-mode="visual_learning">
+          <div class="flex items-center justify-between">
+            <span class="text-2xl font-bold">🎬</span>
+            <span class="card-radio-circle w-4 h-4 rounded-full border border-gray-300 flex items-center justify-center">
+              <span class="card-radio-dot w-2 h-2 rounded-full bg-indigo-600 hidden"></span>
+            </span>
+          </div>
+          <h4 class="font-bold text-gray-800 text-sm">Visual Learning</h4>
+          <p class="text-[11px] text-gray-500 leading-tight">Watch interactive, AI-generated animated lessons with teacher voice narration.</p>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const trigger = document.getElementById('learning-mode-trigger');
+      const overlay = document.getElementById('learning-mode-overlay');
+      const modal = overlay?.querySelector('.learning-mode-modal');
+      const closeBtn = document.getElementById('close-overlay-btn');
+      const cards = document.querySelectorAll('.learning-mode-card');
+      const selectEl = document.getElementById('answer-preference-select');
+      const triggerIcon = document.getElementById('trigger-mode-icon');
+      const triggerText = document.getElementById('trigger-mode-text');
+
+      const modeDetails = {
+        text_text:   { label: 'Reading Mode', icon: '📖' },
+        text_audio:  { label: 'Tutor Mode', icon: '🎧' },
+        audio_text:  { label: 'Voice Query', icon: '🎙️' },
+        audio_audio: { label: 'AI Voice Mode', icon: '🧑🏫' },
+        visual_learning: { label: 'Visual Learning Mode', icon: '🎬' }
+      };
+
+      function updateActiveUI(mode) {
+        const details = modeDetails[mode] || { label: mode, icon: '🎓' };
+        if (triggerIcon) triggerIcon.textContent = details.icon;
+        if (triggerText) triggerText.textContent = details.label;
+
+        cards.forEach(card => {
+          const cardMode = card.getAttribute('data-mode');
+          const dot = card.querySelector('.card-radio-dot');
+          if (cardMode === mode) {
+            card.classList.add('border-indigo-500', 'bg-indigo-50/20');
+            card.classList.remove('border-gray-200');
+            if (dot) dot.classList.remove('hidden');
           } else {
-            toggleIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />';
-            toggleBtn.classList.remove('left-4');
-            toggleBtn.classList.add('right-1/2');
+            card.classList.remove('border-indigo-500', 'bg-indigo-50/20');
+            card.classList.add('border-gray-200');
+            if (dot) dot.classList.add('hidden');
           }
         });
       }
 
-      const listChaptersBtn = document.getElementById('list-chapters-btn');
-      const summarizeBtn = document.getElementById('summarize-btn');
+      // Sync UI on load after the state manager initializes
+      setTimeout(() => {
+        if (selectEl) {
+          updateActiveUI(selectEl.value || 'text_text');
+        }
+      }, 150);
 
-      if (listChaptersBtn) {
-          listChaptersBtn.addEventListener('click', async () => {
-            const classSelect = document.getElementById('class-select');
-            const subjectSelect = document.getElementById('subject-select');
-
-            const selectedClass = classSelect.value;
-            const selectedSubject = subjectSelect.value;
-
-            if (!selectedClass || selectedClass === 'Select...') {
-              alert('Please select a class first.');
-              return;
-            }
-            if (!selectedSubject || selectedSubject === 'Select...') {
-              alert('Please select a subject first.');
-              return;
-            }
-
-            // Clear previous chat history before adding new messages
-            document.getElementById('chat-history').innerHTML = '';
-
-            addMessageToChat({
-              role: 'ai',
-              content: 'Fetching chapter list...'
-            });
-
-            try {
-              const response = await fetch(`/api/list-chapters?class_name=${selectedClass}&subject=${selectedSubject}`);
-              
-              if (!response.ok) {
-                throw new Error('Could not retrieve chapters. Please ensure the book has been processed.');
-              }
-
-              const data = await response.json();
-              
-              if (data && data.chapters && data.chapters.length > 0) {
-                displayChaptersInChat(data.chapters);
-              } else {
-                addMessageToChat({
-                  role: 'ai',
-                  content: 'No chapters found for this book.'
-                });
-              }
-
-            } catch (error) {
-              console.error('Error fetching chapters:', error);
-              addMessageToChat({
-                role: 'ai',
-                content: `Sorry, an error occurred while fetching chapters: ${error.message}`
-              });
-            }
-          });
-      }
-
-      if (summarizeBtn) {
-          summarizeBtn.addEventListener('click', async () => {
-            const classSelect = document.getElementById('class-select');
-            const subjectSelect = document.getElementById('subject-select');
-
-            const selectedClass = classSelect.value;
-            const selectedSubject = subjectSelect.value;
-
-            if (!selectedClass || selectedClass === 'Select...') {
-              alert('Please select a class first.');
-              return;
-            }
-            if (!selectedSubject || selectedSubject === 'Select...') {
-              alert('Please select a subject first.');
-              return;
-            }
-
-            // Clear previous chat history before adding new messages
-            document.getElementById('chat-history').innerHTML = '';
-
-            try {
-              const response = await fetch(`/api/list-chapters?class_name=${selectedClass}&subject=${selectedSubject}`);
-              
-              if (!response.ok) {
-                throw new Error('Could not retrieve chapters. Please ensure the book has been processed.');
-              }
-
-              const data = await response.json();
-              
-              if (data && data.chapters && data.chapters.length > 0) {
-                displayChapterDropdown(data.chapters);
-              } else {
-                addMessageToChat({
-                  role: 'ai',
-                  content: 'No chapters found for this book.'
-                });
-              }
-
-            } catch (error) {
-              console.error('Error fetching chapters:', error);
-              addMessageToChat({
-                role: 'ai',
-                content: `Sorry, an error occurred while fetching chapters: ${error.message}`
-              });
-            }
-          });
-      }
-
-      function displayChaptersInChat(chapters) {
-        let markdownText = '### Chapters\n\n';
-        markdownText += '| S.No. | Chapter Name | Start Page | End Page |\n';
-        markdownText += '| :--- | :--- | :--- | :--- |\n'; // Updated markdown table separator
-
-        chapters.forEach((chapter, index) => { // Added index to forEach
-          const sNo = index + 1; // Calculate serial number
-          const name = chapter.chapter_name || 'N/A';
-          const start = chapter.chpstpage || '-'; // Use chpstpage
-          const end = chapter.chpendpage || '-';   // Use chpendpage
-          markdownText += `| ${sNo} | ${name} | ${start} | ${end} |\n`;
-        });
-
-        addMessageToChat({
-          role: 'ai',
-          content: markdownText
+      // Sync UI when select element undergoes standard changes
+      if (selectEl) {
+        selectEl.addEventListener('change', (e) => {
+          updateActiveUI(e.target.value);
         });
       }
 
-      function displayChapterDropdown(chapters) {
-        let dropdownHTML = '### Select a Chapter to Summarize\n\n';
-        dropdownHTML += '<select id="chapter-summary-select" class="w-full border border-gray-300 rounded-lg px-3 py-2 mt-1">';
-        dropdownHTML += '<option disabled selected>Select a chapter...</option>';
-
-        chapters.forEach(chapter => {
-          dropdownHTML += `<option value="${chapter.chapter_name}">${chapter.chapter_name}</option>`;
-        });
-
-        dropdownHTML += '</select>';
-        dropdownHTML += '<button id="get-summary-btn" class="mt-2 bg-blue-500 hover:bg-blue-600 text-white p-2 px-4 transition text-sm rounded-lg">Get Summary</button>';
-
-        addMessageToChat({
-          role: 'ai',
-          content: dropdownHTML
-        });
-      }
-
-      document.getElementById('chat-history').addEventListener('click', async (event) => {
-        if (event.target.id === 'get-summary-btn') {
-          const chapterSelect = document.getElementById('chapter-summary-select');
-          const selectedChapter = chapterSelect.value;
-
-          if (!selectedChapter || selectedChapter === 'Select a chapter...') {
-            alert('Please select a chapter first.');
-            return;
+      // Open overlay
+      if (trigger) {
+        trigger.addEventListener('click', () => {
+          if (overlay && modal) {
+            overlay.classList.remove('opacity-0', 'pointer-events-none');
+            modal.classList.remove('scale-95');
+            modal.classList.add('scale-100');
+            if (selectEl) {
+              updateActiveUI(selectEl.value);
+            }
           }
+        });
+      }
 
-          const classSelect = document.getElementById('class-select');
-          const subjectSelect = document.getElementById('subject-select');
-          const selectedClass = classSelect.value;
-          const selectedSubject = subjectSelect.value;
+      // Close overlay
+      function closeOverlay() {
+        if (overlay && modal) {
+          overlay.classList.add('opacity-0', 'pointer-events-none');
+          modal.classList.remove('scale-100');
+          modal.classList.add('scale-95');
+        }
+      }
 
-          try {
-            const response = await fetch('/api/summarize', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify({
-                class_name: selectedClass,
-                subject: selectedSubject,
-                chapter_name: selectedChapter
-              })
-            });
+      if (closeBtn) {
+        closeBtn.addEventListener('click', closeOverlay);
+      }
 
-            if (!response.ok) {
-              throw new Error('Could not retrieve summary.');
-            }
-
-            const data = await response.json();
-            addMessageToChat({
-              role: 'ai',
-              content: data.summary
-            });
-
-          } catch (error) {
-            console.error('Error fetching summary:', error);
-            addMessageToChat({
-              role: 'ai',
-              content: `Sorry, an error occurred while fetching the summary: ${error.message}`
-            });
-          }
+      overlay?.addEventListener('click', (e) => {
+        if (e.target === overlay) {
+          closeOverlay();
         }
       });
+
+      // Select Card and dispatch change trigger
+      cards.forEach(card => {
+        card.addEventListener('click', () => {
+          const selectedMode = card.getAttribute('data-mode');
+          if (selectEl) {
+            selectEl.value = selectedMode;
+            selectEl.dispatchEvent(new Event('change'));
+          }
+          closeOverlay();
+        });
+      });
+
+      // ── Settings Overlay Controller (Task 2B) ──────────────────────
+      const settingsTrigger = document.getElementById('settings-overlay-trigger');
+      const settingsOverlay = document.getElementById('learning-settings-overlay');
+      const settingsModal   = settingsOverlay?.querySelector('.learning-settings-modal');
+      const closeSettingsBtn = document.getElementById('close-settings-btn');
       
-      window.copyMessage = copyMessage;
-    });
-  </script>
-</body>
-</html>, display: false},
-        
-                                                {left: '\\(', right: '\\)', display: false},
-        
-                                                {left: '\\[', right: '\\]', display: true}
-        
-                                            ]
-        
-                                        });
-        
-                                    } else {
-        
-                                        console.error("KaTeX or renderMathInElement is not loaded. Math will not be rendered.");
-        
-                                    }
-        
-                                }, 0);    }
-    
-    function copyMessage(button) {
-        const card = button.closest('.ai-card');
-        const content = card.querySelector('.markdown-content').innerText;
-        navigator.clipboard.writeText(content).then(() => {
-            button.textContent = '✅';
-            setTimeout(() => { button.textContent = '📋'; }, 1000);
-        });
-    }
+      function closeSettings() {
+        if (settingsOverlay && settingsModal) {
+          settingsOverlay.classList.add('opacity-0', 'pointer-events-none');
+          settingsModal.classList.remove('scale-100');
+          settingsModal.classList.add('scale-95');
+        }
+      }
 
-    document.addEventListener('DOMContentLoaded', () => {
-      const toggleBtn = document.getElementById('toggle-left-pane');
-      const toggleIcon = document.getElementById('toggle-icon');
-      const leftPane = document.getElementById('left-pane');
-      const rightPane = document.getElementById('right-pane');
-
-      if (toggleBtn) {
-        toggleBtn.addEventListener('click', () => {
-          leftPane.classList.toggle('hidden');
-          rightPane.classList.toggle('w-1/2');
-          rightPane.classList.toggle('w-full');
-
-          // Change button icon and position
-          if (leftPane.classList.contains('hidden')) {
-            toggleIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />';
-            toggleBtn.classList.remove('right-1/2');
-            toggleBtn.classList.add('left-4');
-          } else {
-            toggleIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />';
-            toggleBtn.classList.remove('left-4');
-            toggleBtn.classList.add('right-1/2');
+      if (settingsTrigger) {
+        settingsTrigger.addEventListener('click', () => {
+          if (settingsOverlay && settingsModal) {
+            settingsOverlay.classList.remove('opacity-0', 'pointer-events-none');
+            settingsModal.classList.remove('scale-95');
+            settingsModal.classList.add('scale-100');
           }
         });
       }
 
-      const listChaptersBtn = document.getElementById('list-chapters-btn');
-      const summarizeBtn = document.getElementById('summarize-btn');
-
-      if (listChaptersBtn) {
-          listChaptersBtn.addEventListener('click', async () => {
-            const classSelect = document.getElementById('class-select');
-            const subjectSelect = document.getElementById('subject-select');
-
-            const selectedClass = classSelect.value;
-            const selectedSubject = subjectSelect.value;
-
-            if (!selectedClass || selectedClass === 'Select...') {
-              alert('Please select a class first.');
-              return;
-            }
-            if (!selectedSubject || selectedSubject === 'Select...') {
-              alert('Please select a subject first.');
-              return;
-            }
-
-            // Clear previous chat history before adding new messages
-            document.getElementById('chat-history').innerHTML = '';
-
-            addMessageToChat({
-              role: 'ai',
-              content: 'Fetching chapter list...'
-            });
-
-            try {
-              const response = await fetch(`/api/list-chapters?class_name=${selectedClass}&subject=${selectedSubject}`);
-              
-              if (!response.ok) {
-                throw new Error('Could not retrieve chapters. Please ensure the book has been processed.');
-              }
-
-              const data = await response.json();
-              
-              if (data && data.chapters && data.chapters.length > 0) {
-                displayChaptersInChat(data.chapters);
-              } else {
-                addMessageToChat({
-                  role: 'ai',
-                  content: 'No chapters found for this book.'
-                });
-              }
-
-            } catch (error) {
-              console.error('Error fetching chapters:', error);
-              addMessageToChat({
-                role: 'ai',
-                content: `Sorry, an error occurred while fetching chapters: ${error.message}`
-              });
-            }
-          });
+      if (closeSettingsBtn) {
+        closeSettingsBtn.addEventListener('click', closeSettings);
       }
 
-      if (summarizeBtn) {
-          summarizeBtn.addEventListener('click', async () => {
-            const classSelect = document.getElementById('class-select');
-            const subjectSelect = document.getElementById('subject-select');
-
-            const selectedClass = classSelect.value;
-            const selectedSubject = subjectSelect.value;
-
-            if (!selectedClass || selectedClass === 'Select...') {
-              alert('Please select a class first.');
-              return;
-            }
-            if (!selectedSubject || selectedSubject === 'Select...') {
-              alert('Please select a subject first.');
-              return;
-            }
-
-            // Clear previous chat history before adding new messages
-            document.getElementById('chat-history').innerHTML = '';
-
-            try {
-              const response = await fetch(`/api/list-chapters?class_name=${selectedClass}&subject=${selectedSubject}`);
-              
-              if (!response.ok) {
-                throw new Error('Could not retrieve chapters. Please ensure the book has been processed.');
-              }
-
-              const data = await response.json();
-              
-              if (data && data.chapters && data.chapters.length > 0) {
-                displayChapterDropdown(data.chapters);
-              } else {
-                addMessageToChat({
-                  role: 'ai',
-                  content: 'No chapters found for this book.'
-                });
-              }
-
-            } catch (error) {
-              console.error('Error fetching chapters:', error);
-              addMessageToChat({
-                role: 'ai',
-                content: `Sorry, an error occurred while fetching chapters: ${error.message}`
-              });
-            }
-          });
-      }
-
-      function displayChaptersInChat(chapters) {
-        let markdownText = '### Chapters\n\n';
-        markdownText += '| S.No. | Chapter Name | Start Page | End Page |\n';
-        markdownText += '| :--- | :--- | :--- | :--- |\n'; // Updated markdown table separator
-
-        chapters.forEach((chapter, index) => { // Added index to forEach
-          const sNo = index + 1; // Calculate serial number
-          const name = chapter.chapter_name || 'N/A';
-          const start = chapter.chpstpage || '-'; // Use chpstpage
-          const end = chapter.chpendpage || '-';   // Use chpendpage
-          markdownText += `| ${sNo} | ${name} | ${start} | ${end} |\n`;
-        });
-
-        addMessageToChat({
-          role: 'ai',
-          content: markdownText
-        });
-      }
-
-      function displayChapterDropdown(chapters) {
-        let dropdownHTML = '### Select a Chapter to Summarize\n\n';
-        dropdownHTML += '<select id="chapter-summary-select" class="w-full border border-gray-300 rounded-lg px-3 py-2 mt-1">';
-        dropdownHTML += '<option disabled selected>Select a chapter...</option>';
-
-        chapters.forEach(chapter => {
-          dropdownHTML += `<option value="${chapter.chapter_name}">${chapter.chapter_name}</option>`;
-        });
-
-        dropdownHTML += '</select>';
-        dropdownHTML += '<button id="get-summary-btn" class="mt-2 bg-blue-500 hover:bg-blue-600 text-white p-2 px-4 transition text-sm rounded-lg">Get Summary</button>';
-
-        addMessageToChat({
-          role: 'ai',
-          content: dropdownHTML
-        });
-      }
-
-      document.getElementById('chat-history').addEventListener('click', async (event) => {
-        if (event.target.id === 'get-summary-btn') {
-          const chapterSelect = document.getElementById('chapter-summary-select');
-          const selectedChapter = chapterSelect.value;
-
-          if (!selectedChapter || selectedChapter === 'Select a chapter...') {
-            alert('Please select a chapter first.');
-            return;
-          }
-
-          const classSelect = document.getElementById('class-select');
-          const subjectSelect = document.getElementById('subject-select');
-          const selectedClass = classSelect.value;
-          const selectedSubject = subjectSelect.value;
-
-          try {
-            const response = await fetch('/api/summarize', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify({
-                class_name: selectedClass,
-                subject: selectedSubject,
-                chapter_name: selectedChapter
-              })
-            });
-
-            if (!response.ok) {
-              throw new Error('Could not retrieve summary.');
-            }
-
-            const data = await response.json();
-            addMessageToChat({
-              role: 'ai',
-              content: data.summary
-            });
-
-          } catch (error) {
-            console.error('Error fetching summary:', error);
-            addMessageToChat({
-              role: 'ai',
-              content: `Sorry, an error occurred while fetching the summary: ${error.message}`
-            });
-          }
+      settingsOverlay?.addEventListener('click', (e) => {
+        if (e.target === settingsOverlay) {
+          closeSettings();
         }
       });
-      
-      window.copyMessage = copyMessage;
+
+      // Automatically close settings modal when secondary utility actions are fired
+      document.getElementById('list-chapters-btn')?.addEventListener('click', closeSettings);
+      document.getElementById('summarize-btn')?.addEventListener('click', closeSettings);
     });
   </script>
+
+  <!-- Glassmorphic Settings Overlay -->
+  <div id="learning-settings-overlay" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-md opacity-0 pointer-events-none transition-opacity duration-200">
+    <div class="learning-settings-modal bg-white/95 border border-white/20 rounded-2xl p-6 shadow-2xl max-w-sm w-full transform scale-95 transition-transform duration-200">
+      
+      <div class="flex items-center justify-between pb-3 border-b border-gray-200 mb-4">
+        <div class="flex items-center gap-2 text-gray-850 font-bold text-sm">
+          <span>⚙️</span>
+          <h3 class="text-xs uppercase tracking-wider text-gray-700">Learning Settings</h3>
+        </div>
+        <button type="button" id="close-settings-btn" class="text-gray-400 hover:text-gray-600 transition-colors text-lg font-semibold">✕</button>
+      </div>
+
+      <div class="flex flex-col gap-4">
+        <!-- Section 1 & 2: Voice & Engine -->
+        <div class="bg-slate-50 border border-gray-150 rounded-xl p-3 flex flex-col gap-3">
+          <!-- Voice Settings -->
+          <div class="flex flex-col gap-1">
+            <span class="text-[9px] font-bold text-gray-400 uppercase tracking-wider">Voice Assistant</span>
+            <div class="flex items-center justify-between bg-white border border-gray-250 rounded-lg p-2">
+              <span class="text-[11px] text-gray-600 font-semibold">Assistant Voice</span>
+              <select id="tts-voice-select" class="modern-card-select-compact" title="Speaker Voice">
+                <option value="ritu">Ritu ♀</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Engine Settings -->
+          <div class="flex flex-col gap-1">
+            <span class="text-[9px] font-bold text-gray-400 uppercase tracking-wider">Speech Engine</span>
+            <div class="flex items-center justify-between bg-white border border-gray-250 rounded-lg p-2">
+              <span class="text-[11px] text-gray-600 font-semibold">Synthesis Engine</span>
+              <select id="tts-model-select" class="modern-card-select-compact" title="Voice Engine">
+                <option value="sarvam">Sarvam AI</option>
+                <option value="azure">Azure TTS</option>
+                <option value="browser">Browser</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 3: Helper Tools -->
+        <div class="bg-slate-50 border border-gray-150 rounded-xl p-3 flex flex-col gap-2">
+          <span class="text-[9px] font-bold text-gray-400 uppercase tracking-wider">Learning Helper Tools</span>
+          <div class="grid grid-cols-2 gap-2 mt-0.5">
+            <button type="button" id="list-chapters-btn" class="modern-settings-tool-btn modern-settings-tool-btn--indigo">
+              <span>📚</span> Chapters
+            </button>
+            <button type="button" id="summarize-btn" class="modern-settings-tool-btn modern-settings-tool-btn--emerald">
+              <span>✨</span> Summarize
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  <!-- Live Transcription Overlay -->
+  <div id="live-transcript-overlay" class="fixed inset-0 z-50 flex items-center justify-center pointer-events-none opacity-0 transition-opacity duration-300">
+    <div class="bg-slate-900/90 text-white px-6 py-5 rounded-2xl shadow-2xl flex flex-col items-center gap-3 max-w-md text-center pointer-events-auto border border-slate-700 backdrop-blur-md">
+      <div class="flex items-center gap-2">
+        <span class="text-lg animate-pulse">🎤</span>
+        <span class="text-xs uppercase tracking-wider text-slate-400 font-bold">Listening...</span>
+      </div>
+      <p id="live-transcript-text" class="text-sm font-medium text-slate-200">Start speaking to ask a question...</p>
+      <span class="text-[10px] text-slate-500 mt-1">Tap microphone button again to stop and submit</span>
+    </div>
+  </div>
 </body>
+
 </html>

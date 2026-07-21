@@ -1,0 +1,486 @@
+const RenderTree = require('./RenderTree');
+
+/**
+ * Renderer.js
+ * The single rendering authority in the HyperFrames modular engine.
+ * Renders structured Scene Graph containers into visual HTML/SVG elements.
+ */
+class Renderer {
+  /**
+   * Main entry method to render a Scene.
+   * @param {Scene} scene 
+   * @returns {string} Compiled HTML markup
+   */
+  static renderScene(scene) {
+    if (!scene) {
+      throw new Error("[Renderer Error] Cannot render null or undefined scene.");
+    }
+
+    const templateId = scene.templateId || 'general_scene';
+    
+    // Structured developer logging
+    console.log(`[Renderer LOG] Processing rendering pipeline for Scene ${scene.sceneNo} (${templateId})`);
+
+    // Run structural validations
+    Renderer.validateScene(scene);
+
+    // Execute Layout Manager positioning calculations
+    const LayoutManager = require('../layout/managers/LayoutManager');
+    LayoutManager.layoutScene(scene);
+
+    // Execute Focus & Layer Engine calculations
+    const LayerManager = require('../focus/layers/LayerManager');
+    const AttentionManager = require('../focus/manager/AttentionManager');
+    const VisualEmphasisEngine = require('../focus/effects/VisualEmphasisEngine');
+
+    LayerManager.applyLayering(scene);
+    AttentionManager.resolveSceneFocus(scene);
+    VisualEmphasisEngine.applyEmphasis(scene);
+
+    // Build the internal Render Tree representation
+    const renderTree = RenderTree.build(scene);
+
+    // Resolve Camera transform style
+    const Camera = require('../camera/models/Camera');
+    const CameraController = require('../camera/controllers/CameraController');
+    const camera = scene.camera || new Camera();
+    const cameraController = new CameraController(camera);
+    const cameraTransform = cameraController.getTransformStyle();
+
+    // Render using specific template frame structures for backward-compatible visuals
+    let contentHtml = '';
+    switch (templateId) {
+      case 'title_slide':
+        contentHtml = Renderer.renderTitleSlide(scene, renderTree);
+        break;
+      case 'concept_diagram':
+        contentHtml = Renderer.renderConceptDiagram(scene, renderTree);
+        break;
+      case 'cycle_template':
+        contentHtml = Renderer.renderCycleTemplate(scene, renderTree);
+        break;
+      case 'math_derivation':
+        contentHtml = Renderer.renderMathDerivation(scene, renderTree);
+        break;
+      case 'column_comparison':
+        contentHtml = Renderer.renderColumnComparison(scene, renderTree);
+        break;
+      case 'horizontal_timeline':
+        contentHtml = Renderer.renderHorizontalTimeline(scene, renderTree);
+        break;
+      case 'database_grid':
+        contentHtml = Renderer.renderDatabaseGrid(scene, renderTree);
+        break;
+      case 'venn_diagram':
+        contentHtml = Renderer.renderVennDiagram(scene, renderTree);
+        break;
+      case 'quiz_checkpoint':
+        contentHtml = Renderer.renderQuizCheckpoint(scene, renderTree);
+        break;
+      case 'illustrated_scene':
+        contentHtml = Renderer.renderIllustratedScene(scene, renderTree);
+        break;
+      case 'image_scene':
+        contentHtml = Renderer.renderImageScene(scene, renderTree);
+        break;
+      case 'general_scene':
+      default:
+        contentHtml = Renderer.renderGeneralScene(scene, renderTree);
+        break;
+    }
+
+    // Wrap the content inside the camera viewport container
+    return `
+      <div class="camera-viewport-wrapper" style="width: 100%; height: 100%; position: relative; overflow: hidden; ${cameraTransform}">
+        ${contentHtml}
+      </div>
+    `;
+  }
+
+  /**
+   * Asserts structural validations on the scene graph to prevent engine failures.
+   */
+  static validateScene(scene) {
+    if (!scene.nodes || !Array.isArray(scene.nodes)) {
+      throw new Error(`[Renderer Validation Error] Scene ${scene.sceneNo} has invalid or missing node array.`);
+    }
+
+    scene.traverse((node) => {
+      if (!node) {
+        throw new Error(`[Renderer Validation Error] Scene ${scene.sceneNo} contains a null node.`);
+      }
+      if (!node.component) {
+        throw new Error(`[Renderer Validation Error] Node '${node.id}' is missing a component instance.`);
+      }
+      // Check for valid component structure
+      const required = ['id', 'type', 'properties', 'style', 'children'];
+      for (const req of required) {
+        if (node.component[req] === undefined) {
+          throw new Error(`[Renderer Validation Error] Component '${node.component.id}' is missing required field '${req}'.`);
+        }
+      }
+    });
+  }
+
+  /* ====================================================
+     TEMPLATE LAYOUT RENDERERS (BACKWARD COMPATIBLE)
+     ==================================================== */
+
+  static renderTitleSlide(scene, renderTree) {
+    const sId = scene.sceneNo;
+    const titleNode = scene.findNode(`title_${sId}`);
+    const subtitleNode = scene.findNode(`subtitle_${sId}`);
+
+    const title = titleNode ? titleNode.component.properties.text : '';
+    const subtitle = subtitleNode ? subtitleNode.component.properties.text : '';
+
+    return `
+      <div class="title-slide-container" id="title-slide-${sId}">
+        <div class="icon-card" id="icon-card-${sId}">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="theme-stroke">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" id="icon-path-${sId}" />
+          </svg>
+        </div>
+        <h1 class="theme-text" id="title-text-${sId}" style="font-size: 56px; font-weight: 900; margin-bottom: 16px; text-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);">${title}</h1>
+        <p id="subtitle-text-${sId}" style="font-size: 22px; font-weight: 500; color: rgba(255, 255, 255, 0.7); text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3); max-width: 850px; text-align: center; line-height: 1.4;">${subtitle}</p>
+      </div>
+    `;
+  }
+
+  static renderConceptDiagram(scene, renderTree) {
+    const sId = scene.sceneNo;
+    const centerNode = scene.findNode(`center_${sId}`);
+    const leavesNode = scene.findNode(`leaves_${sId}`);
+    const leftTitleNode = scene.findNode(`left_title_${sId}`);
+    const bulletsNode = scene.findNode(`bullets_${sId}`);
+
+    const hasBullets = !!bulletsNode;
+    const leftTitle = leftTitleNode ? leftTitleNode.component.properties.text : '';
+    const bullets = bulletsNode ? bulletsNode.component.children.map(c => c.properties.text) : [];
+    const centerText = centerNode ? centerNode.component.properties.text : '';
+    const leafTexts = leavesNode ? leavesNode.component.children.map(c => c.properties.text) : [];
+
+    return `
+      <div class="concept-diagram-container" id="concept-diagram-${sId}">
+        ${hasBullets ? `
+        <div class="left-bullets-col">
+          <h2 class="theme-text" id="cd-left-title-${sId}" style="font-size: 38px; font-weight: 800; margin-bottom: 24px; letter-spacing: -1px;">${leftTitle}</h2>
+          <div style="display: flex; flex-direction: column; gap: 16px;" id="cd-bullets-list-${sId}">
+            ${bullets.map((b, bIdx) => `<div class="bullet-card theme-card-bg theme-card-border" id="cd-bullet-${sId}-${bIdx}">${b}</div>`).join('')}
+          </div>
+        </div>
+        ` : ''}
+        
+        <div class="mindmap-canvas" style="position: relative; width: ${hasBullets ? '55%' : '100%'}; height: 100%; display: flex; align-items: center; justify-content: center;">
+          <svg viewBox="0 0 1280 720" style="position: absolute; width: 1280px; height: 720px; top: 0; left: 0; z-index: 2; pointer-events: none;">
+            <g id="cd-lines-group-${sId}"></g>
+          </svg>
+          <div class="center-node theme-accent-bg" id="cd-center-${sId}" style="color: #090d16;">${centerText}</div>
+          <div id="cd-leaves-group-${sId}">
+            ${leafTexts.map((node, nIdx) => `<div class="leaf-node theme-card-border" id="cd-leaf-${sId}-${nIdx}">${node}</div>`).join('')}
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  static renderCycleTemplate(scene, renderTree) {
+    const sId = scene.sceneNo;
+    const titleNode = scene.findNode(`title_${sId}`);
+    const stagesNode = scene.findNode(`stages_${sId}`);
+
+    const title = titleNode ? titleNode.component.properties.text : '';
+    const stages = stagesNode ? stagesNode.component.children.map(c => c.properties.text) : [];
+
+    return `
+      <div class="cycle-container" id="cycle-${sId}">
+        <h2 class="theme-text" style="font-size: 36px; font-weight: 800; text-align: center; margin-bottom: 30px;" id="cycle-title-${sId}">${title}</h2>
+        <div class="cycle-canvas">
+          <svg class="cycle-svg">
+            <circle cx="200" cy="200" r="140" fill="none" stroke-width="4" id="cycle-circle-path-${sId}" class="theme-stroke" style="opacity: 0.35;"></circle>
+            <circle cx="200" cy="200" r="7" fill="white" id="cycle-orbit-dot-${sId}" class="theme-fill"></circle>
+          </svg>
+          <div id="cycle-stages-${sId}">
+            ${stages.map((stage, stIdx) => `
+              <div class="cycle-stage theme-card-bg theme-card-border" id="cycle-stage-${sId}-${stIdx}">
+                <div class="cycle-stage-badge theme-text">Step ${stIdx + 1}</div>
+                <div class="cycle-stage-label">${stage}</div>
+              </div>
+            `).join('')}
+          </div>
+          <div style="position: absolute; font-size: 12px; text-transform: uppercase; font-weight: 800; letter-spacing: 1px; color: rgba(255, 255, 255, 0.4);" id="cycle-center-label-${sId}">🔄 Cycle Flow</div>
+        </div>
+      </div>
+    `;
+  }
+
+  static renderMathDerivation(scene, renderTree) {
+    const sId = scene.sceneNo;
+    const titleNode = scene.findNode(`title_${sId}`);
+    const formulaNode = scene.findNode(`formula_${sId}`);
+    const stepsNode = scene.findNode(`steps_${sId}`);
+
+    const title = titleNode ? titleNode.component.properties.text : '';
+    const steps = stepsNode ? stepsNode.component.children.map(c => c.properties.text) : [];
+    const hasFormula = !!formulaNode;
+
+    return `
+      <div class="math-container" id="math-${sId}">
+        <h2 class="theme-text" style="font-size: 34px; font-weight: 800; margin-bottom: 24px;" id="math-title-${sId}">${title}</h2>
+        ${hasFormula ? `<div class="math-formula-board theme-card-border" id="math-formula-${sId}"></div>` : ''}
+        <div style="width: 85%; display: flex; flex-direction: column; gap: 12px;" id="math-steps-${sId}">
+          ${steps.map((step, stIdx) => `
+            <div class="math-step-card theme-card-bg theme-card-border" id="math-step-${sId}-${stIdx}">
+              <div class="math-step-badge theme-accent-bg" id="math-badge-${sId}-${stIdx}">${stIdx + 1}</div>
+              <div class="math-step-text" id="math-step-text-${sId}-${stIdx}">${step}</div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `;
+  }
+
+  static renderColumnComparison(scene, renderTree) {
+    const sId = scene.sceneNo;
+    const titleNode = scene.findNode(`title_${sId}`);
+    const leftColNode = scene.findNode(`left_col_${sId}`);
+    const rightColNode = scene.findNode(`right_col_${sId}`);
+
+    const title = titleNode ? titleNode.component.properties.text : 'Comparison';
+    
+    const leftHeader = leftColNode ? leftColNode.component.properties.header : '';
+    const leftBullets = leftColNode ? leftColNode.component.children.map(c => c.properties.text) : [];
+
+    const rightHeader = rightColNode ? rightColNode.component.properties.header : '';
+    const rightBullets = rightColNode ? rightColNode.component.children.map(c => c.properties.text) : [];
+
+    return `
+      <div class="comparison-container" id="comparison-${sId}">
+        <h2 class="theme-text" style="font-size: 34px; font-weight: 800; margin-bottom: 24px;" id="comparison-title-${sId}">${title}</h2>
+        <div class="comparison-grid">
+          <div class="comparison-column theme-card-bg theme-card-border" id="comparison-col-left-${sId}">
+            <div class="comparison-col-header theme-text theme-card-border" id="comparison-header-left-${sId}" style="border-bottom-color: rgba(255,255,255,0.1);">${leftHeader}</div>
+            <div id="comparison-bullets-left-${sId}">
+              ${leftBullets.map((b, bIdx) => `
+                <div class="comparison-bullet" id="comparison-bullet-l-${sId}-${bIdx}">
+                  <span class="comparison-bullet-dot theme-accent-bg"></span>
+                  <span>${b}</span>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+          
+          <div class="comparison-column theme-card-bg theme-card-border" id="comparison-col-right-${sId}">
+            <div class="comparison-col-header theme-text theme-card-border" id="comparison-header-right-${sId}" style="border-bottom-color: rgba(255,255,255,0.1);">${rightHeader}</div>
+            <div id="comparison-bullets-right-${sId}">
+              ${rightBullets.map((b, bIdx) => `
+                <div class="comparison-bullet" id="comparison-bullet-r-${sId}-${bIdx}">
+                  <span class="comparison-bullet-dot theme-accent-bg"></span>
+                  <span>${b}</span>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  static renderHorizontalTimeline(scene, renderTree) {
+    const sId = scene.sceneNo;
+    const titleNode = scene.findNode(`title_${sId}`);
+    const stagesNode = scene.findNode(`stages_${sId}`);
+
+    const title = titleNode ? titleNode.component.properties.text : '';
+    const stages = stagesNode ? stagesNode.component.children.map(c => ({
+      label: c.properties.text,
+      step_no: c.metadata.step_no || 1
+    })) : [];
+
+    return `
+      <div class="timeline-container" id="timeline-${sId}">
+        <h2 style="font-size: 36px; font-weight: 800; color: #ffffff; text-align: center; margin: 0 0 80px 0; text-transform: uppercase; letter-spacing: 1px; text-shadow: 0 4px 8px rgba(0,0,0,0.5);" class="theme-text" id="timeline-title-${sId}">${title}</h2>
+        <div class="timeline-track">
+          <svg class="timeline-svg">
+            <line x1="5%" y1="50%" x2="95%" y2="50%" stroke="rgba(255,255,255,0.06)" stroke-width="4" stroke-linecap="round"></line>
+            <line x1="5%" y1="50%" x2="5%" y2="50%" stroke-width="4" stroke-linecap="round" id="timeline-active-line-${sId}" class="theme-stroke"></line>
+          </svg>
+          
+          <div id="timeline-stages-${sId}">
+            ${stages.map((stage, stIdx) => `
+              <div class="timeline-stage" id="timeline-stage-${sId}-${stIdx}">
+                <div class="timeline-stage-circle theme-card-border">
+                  <div class="timeline-stage-badge theme-accent-bg">${stage.step_no}</div>
+                  <svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="theme-stroke">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" id="timeline-icon-${sId}-${stIdx}" />
+                  </svg>
+                </div>
+                <p class="timeline-stage-label">${stage.label}</p>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  static renderDatabaseGrid(scene, renderTree) {
+    const sId = scene.sceneNo;
+    const titleNode = scene.findNode(`title_${sId}`);
+    const headersNode = scene.findNode(`headers_${sId}`);
+    const rowsNode = scene.findNode(`rows_${sId}`);
+
+    const title = titleNode ? titleNode.component.properties.text : '';
+    const headers = headersNode ? headersNode.component.children.map(c => c.properties.text) : [];
+    
+    // Resolve matrix
+    const rows = [];
+    if (rowsNode) {
+      rowsNode.component.children.forEach((rowComp) => {
+        rows.push(rowComp.children.map(c => c.properties.text));
+      });
+    }
+
+    return `
+      <div class="database-container" id="db-${sId}">
+        <h2 class="theme-text" style="font-size: 34px; font-weight: 800; margin-bottom: 24px;" id="db-title-${sId}">${title}</h2>
+        <div class="database-grid-card theme-card-border" id="db-card-${sId}">
+          <table class="database-table">
+            <thead>
+              <tr id="db-head-row-${sId}">
+                ${headers.map((h, hIdx) => `<th id="db-th-${sId}-${hIdx}">${h}</th>`).join('')}
+              </tr>
+            </thead>
+            <tbody>
+              ${rows.map((row, rIdx) => `
+                <tr id="db-row-${sId}-${rIdx}">
+                  ${row.map((cell, cIdx) => `<td id="db-cell-${sId}-${rIdx}-${cIdx}">${cell}</td>`).join('')}
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    `;
+  }
+
+  static renderVennDiagram(scene, renderTree) {
+    const sId = scene.sceneNo;
+    const leftTitleNode = scene.findNode(`left_title_${sId}`);
+    const rightTitleNode = scene.findNode(`right_title_${sId}`);
+    
+    const leftNode = scene.findNode(`left_${sId}`);
+    const midNode = scene.findNode(`intersection_${sId}`);
+    const rightNode = scene.findNode(`right_${sId}`);
+
+    const leftTitle = leftTitleNode ? leftTitleNode.component.properties.text : 'A';
+    const rightTitle = rightTitleNode ? rightTitleNode.component.properties.text : 'B';
+
+    const leftItems = leftNode ? leftNode.component.children.map(c => c.properties.text) : [];
+    const midItems = midNode ? midNode.component.children.map(c => c.properties.text) : [];
+    const rightItems = rightNode ? rightNode.component.children.map(c => c.properties.text) : [];
+
+    return `
+      <div class="venn-container" id="venn-${sId}">
+        <div class="venn-headers">
+          <div class="theme-text" id="venn-header-left-${sId}">${leftTitle}</div>
+          <div style="color: #ffffff;">Comparison</div>
+          <div class="theme-text" id="venn-header-right-${sId}">${rightTitle}</div>
+        </div>
+        
+        <div class="venn-diagram-canvas">
+          <div class="venn-circle-left theme-card-bg theme-card-border" id="venn-circle-left-${sId}"></div>
+          <div class="venn-circle-right theme-card-bg theme-card-border" id="venn-circle-right-${sId}"></div>
+          
+          <div class="venn-content-left" id="venn-content-left-${sId}">
+            ${leftItems.map((item, iIdx) => `<div class="venn-item-card" id="venn-item-l-${sId}-${iIdx}">${item}</div>`).join('')}
+          </div>
+          
+          <div class="venn-content-middle" id="venn-content-middle-${sId}">
+            ${midItems.map((item, iIdx) => `<div class="venn-item-card theme-accent-border" id="venn-item-m-${sId}-${iIdx}" style="border: 1.5px dashed; font-weight: 700;">${item}</div>`).join('')}
+          </div>
+          
+          <div class="venn-content-right" id="venn-content-right-${sId}">
+            ${rightItems.map((item, iIdx) => `<div class="venn-item-card" id="venn-item-r-${sId}-${iIdx}">${item}</div>`).join('')}
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  static renderQuizCheckpoint(scene, renderTree) {
+    const sId = scene.sceneNo;
+    const questionNode = scene.findNode(`question_${sId}`);
+    const optionsNode = scene.findNode(`options_${sId}`);
+
+    const question = questionNode ? questionNode.component.properties.text : '';
+    const options = optionsNode ? optionsNode.component.children.map(c => c.properties.text) : [];
+
+    return `
+      <div class="quiz-container" id="quiz-${sId}">
+        <div class="quiz-card theme-card-border" id="quiz-card-${sId}">
+          <div class="quiz-question" id="quiz-question-${sId}">${question}</div>
+          <div class="quiz-options-list" id="quiz-options-${sId}">
+            ${options.map((optionText, oIdx) => `
+              <div class="quiz-option theme-card-bg theme-card-border" id="quiz-opt-${sId}-${oIdx}">
+                <div class="quiz-option-index theme-accent-bg" id="quiz-opt-idx-${sId}-${oIdx}">${String.fromCharCode(65 + oIdx)}</div>
+                <div class="quiz-option-text">${optionText}</div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  static renderIllustratedScene(scene, renderTree) {
+    const sId = scene.sceneNo;
+    const canvasNode = scene.findNode(`canvas_${sId}`);
+    const titleNode = scene.findNode(`title_${sId}`);
+    const canvasColor = (canvasNode && canvasNode.component.properties.color) || 'transparent';
+    const title = titleNode
+      ? titleNode.component.properties.text
+      : (scene.metadata && scene.metadata.title) || '';
+
+    // Delegate shape/path/circle/label rendering to the Render Tree (SVG context)
+    const canvasRtNode = renderTree.rootNodes.find(n => n.node.id === `canvas_${sId}`);
+    const svgContent = canvasRtNode ? canvasRtNode.render() : '';
+
+    return `
+      <div class="illustrated-canvas" id="ill-canvas-${sId}" style="background-color: ${canvasColor}; width: 100%; height: 100%; position: relative; overflow: hidden;">
+        ${title ? `<h2 class="theme-text" id="ill-title-${sId}" style="position: absolute; top: 28px; left: 48px; z-index: 20; font-size: 28px; font-weight: 800; margin: 0; text-shadow: 0 2px 8px rgba(0,0,0,0.5);">${title}</h2>` : ''}
+        ${svgContent}
+      </div>
+    `;
+  }
+
+  static renderImageScene(scene, renderTree) {
+    const sId = scene.sceneNo;
+    const imageNode = scene.findNode(`image_${sId}`);
+    const imageUrl = imageNode ? imageNode.component.properties.url : '';
+
+    return `
+      <div class="image-scene-container" id="img-scene-${sId}">
+        <img src="${imageUrl}" class="scene-image" id="img-el-${sId}" />
+        <svg viewBox="0 0 1280 720" style="position: absolute; width: 100%; height: 100%; z-index: 10; pointer-events: none;" id="img-svg-${sId}">
+          <g id="img-annotations-${sId}"></g>
+        </svg>
+      </div>
+    `;
+  }
+
+  static renderGeneralScene(scene, renderTree) {
+    const sId = scene.sceneNo;
+    const titleNode = scene.findNode(`title_${sId}`);
+    const title = titleNode ? titleNode.component.properties.text : (scene.metadata ? scene.metadata.title : '');
+
+    return `
+      <div class="general-scene-container" id="general-${sId}" style="width:100%; height:100%; position:relative;">
+        <h2 class="theme-text" style="font-size: 34px; font-weight: 800; position:absolute; top:40px; left:60px;" id="general-title-${sId}">${title}</h2>
+        <div id="general-assets-${sId}"></div>
+      </div>
+    `;
+  }
+}
+
+module.exports = Renderer;

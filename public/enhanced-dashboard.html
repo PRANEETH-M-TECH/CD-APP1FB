@@ -1,0 +1,1589 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Analytics - Chaduvu Guru</title>
+    <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/static/sidebar.css">
+    <link rel="stylesheet" href="/static/css/my-bag.css">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e8edf5 100%);
+        }
+
+        .stat-card {
+            transition: all 0.3s ease;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+        }
+
+        .gradient-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+        }
+
+        .filter-btn {
+            transition: all 0.2s ease;
+        }
+
+        .filter-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            animation: modalSlideIn 0.3s ease-out;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* Fullscreen Loading Overlay */
+        .loading-overlay {
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            background-size: 200% 200%;
+            animation: gradientShift 8s ease infinite;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.8s ease-out;
+        }
+
+        .loading-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        @keyframes gradientShift {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .loading-content {
+            text-align: center;
+            color: white;
+        }
+
+        .loading-icon {
+            font-size: 80px;
+            margin-bottom: 24px;
+            animation: bounce 1.5s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 6px solid rgba(255, 255, 255, 0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 24px auto;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .loading-message {
+            font-size: 14px;
+            opacity: 0.9;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 0.6;
+            }
+
+            50% {
+                opacity: 1;
+            }
+        }
+
+        .loading-dots {
+            display: inline-block;
+        }
+
+        .loading-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: white;
+            margin: 0 4px;
+            animation: dotPulse 1.4s ease-in-out infinite;
+        }
+
+        .loading-dot:nth-child(1) {
+            animation-delay: 0s;
+        }
+
+        .loading-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .loading-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes dotPulse {
+
+            0%,
+            100% {
+                opacity: 0.3;
+                transform: scale(0.8);
+            }
+
+            50% {
+                opacity: 1;
+                transform: scale(1.2);
+            }
+        }
+    </style>
+</head>
+
+<body class="min-h-screen">
+    <!-- Fullscreen Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay">
+        <div class="loading-content">
+            <div class="loading-icon">📊</div>
+            <h2 class="text-3xl font-bold mb-4">Loading Your Analytics...</h2>
+            <div class="loading-spinner"></div>
+            <p class="loading-message text-lg">
+                Preparing your insights
+                <span class="loading-dots">
+                    <span class="loading-dot"></span>
+                    <span class="loading-dot"></span>
+                    <span class="loading-dot"></span>
+                </span>
+            </p>
+            <p class="text-sm mt-4 opacity-75">Just a moment! 🚀</p>
+        </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div id="sidebar-container"></div>
+
+    <!-- My Bag Component -->
+
+    <!-- Bag Overlay -->
+    <div id="my-bag-overlay" class="my-bag-overlay" onclick="closeBag()"></div>
+
+    <!-- Bag Sidebar -->
+    <div id="my-bag-sidebar" class="my-bag-sidebar">
+        <!-- Header -->
+        <div class="bag-header">
+            <div class="bag-title">
+                <div class="bag-icon-wrapper">
+                    <span class="text-2xl">🎒</span>
+                </div>
+                <div>
+                    <h2 class="text-xl font-bold">My Bag</h2>
+                    <p class="text-xs opacity-80">Your Learning Collection</p>
+                </div>
+            </div>
+            <button onclick="closeBag()" class="bag-close-btn">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+            </button>
+        </div>
+
+        <!-- Content -->
+        <div class="bag-content">
+            <!-- Tabs -->
+            <div class="bag-tabs">
+                <button onclick="showBagTab('notebooks')" id="notebooks-tab" class="bag-tab active">
+                    <span>📚</span> Notebooks
+                </button>
+                <button onclick="showBagTab('saved')" id="saved-tab" class="bag-tab">
+                    <span>💾</span> Saved
+                </button>
+            </div>
+
+            <!-- Notebooks View -->
+            <div id="notebooks-view">
+                <button onclick="showCreateNotebookModal()" class="create-btn">
+                    <span>+</span> Create New Notebook
+                </button>
+                <div id="notebooks-grid" class="notebook-grid">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+
+            <!-- Saved Items View -->
+            <div id="saved-view" style="display: none;">
+                <button onclick="showCreateNoteModal()" class="create-btn">
+                    <span>+</span> Write a Note
+                </button>
+                <div class="form-group">
+                    <select id="notebook-filter" onchange="filterItems()" class="form-select">
+                        <option value="">All Notebooks</option>
+                    </select>
+                </div>
+                <div id="items-list" class="notebook-grid">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Notebook Modal -->
+    <div id="create-notebook-overlay" class="premium-modal-overlay">
+        <div id="create-notebook-modal" class="premium-modal">
+            <div class="modal-header">
+                <div class="modal-icon">📓</div>
+                <h3 class="modal-title">New Notebook</h3>
+                <p class="text-gray-500">Create a space for your notes</p>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Notebook Name</label>
+                <input id="notebook-name" type="text" class="form-input" placeholder="e.g., Science Notes">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Subject</label>
+                <select id="notebook-subject" class="form-select">
+                    <option value="english">📖 English</option>
+                    <option value="maths">🔢 Maths</option>
+                    <option value="science">🔬 Science</option>
+                    <option value="physics">⚛️ Physics</option>
+                    <option value="biology">🧬 Biology</option>
+                    <option value="social">🌍 Social</option>
+                    <option value="general">📚 General</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Color Theme</label>
+                <div class="color-options">
+                    <button onclick="selectColor('#6366f1')" data-color="#6366f1" class="color-btn selected"
+                        style="background: #6366f1"></button>
+                    <button onclick="selectColor('#10b981')" data-color="#10b981" class="color-btn"
+                        style="background: #10b981"></button>
+                    <button onclick="selectColor('#f59e0b')" data-color="#f59e0b" class="color-btn"
+                        style="background: #f59e0b"></button>
+                    <button onclick="selectColor('#ef4444')" data-color="#ef4444" class="color-btn"
+                        style="background: #ef4444"></button>
+                    <button onclick="selectColor('#8b5cf6')" data-color="#8b5cf6" class="color-btn"
+                        style="background: #8b5cf6"></button>
+                    <button onclick="selectColor('#ec4899')" data-color="#ec4899" class="color-btn"
+                        style="background: #ec4899"></button>
+                </div>
+                <input type="hidden" id="notebook-color" value="#6366f1">
+            </div>
+
+            <div class="modal-actions">
+                <button onclick="hideCreateNotebookModal()" class="btn-secondary">Cancel</button>
+                <button onclick="createNotebook()" class="btn-primary">Create Notebook</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Note Modal -->
+    <div id="create-note-modal"
+        class="fixed inset-0 bg-black/50 backdrop-blur-sm z-[1001] hidden flex items-center justify-center">
+        <div class="bg-white rounded-2xl p-8 w-full max-w-md shadow-2xl animate-bounce-in m-4">
+            <h3 class="text-2xl font-bold mb-6 text-gray-800 flex items-center gap-2">
+                <span>📝</span> Create Note
+            </h3>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Notebook</label>
+                    <select id="note-notebook"
+                        class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-purple-500"></select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Title</label>
+                    <input id="note-title" type="text" placeholder="Note Title"
+                        class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-purple-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Content</label>
+                    <textarea id="note-content" rows="4" placeholder="Write your note here..."
+                        class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-purple-500"></textarea>
+                </div>
+            </div>
+            <div class="flex gap-3 mt-6">
+                <button onclick="saveNote()"
+                    class="flex-1 bg-gradient-to-r from-purple-500 to-pink-500 text-white py-3 rounded-lg font-semibold hover:shadow-lg transition">Save
+                    Note</button>
+                <button onclick="hideCreateNoteModal()"
+                    class="bg-gray-100 text-gray-700 px-6 py-3 rounded-lg font-semibold hover:bg-gray-200 transition">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Topic Breakdown Modal -->
+    <div id="topic-modal" class="modal-overlay" onclick="closeTopicModal(event)">
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-4">
+                <h3 id="topic-modal-title" class="text-xl font-bold text-gray-800">Chapter Analysis</h3>
+                <button onclick="closeTopicModal(event)" class="text-gray-500 hover:text-gray-700">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                        </path>
+                    </svg>
+                </button>
+            </div>
+            <div id="topic-modal-content" class="space-y-4">
+                <!-- Populated by JS -->
+                <p class="text-center text-gray-500">Loading topic details...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stat Detail Modal -->
+    <div id="stat-detail-modal" class="modal-overlay" onclick="closeStatModal(event)">
+        <div class="modal-content" style="max-width: 700px;">
+            <div class="flex justify-between items-center mb-4">
+                <h3 id="stat-modal-title" class="text-2xl font-bold text-gray-800"></h3>
+                <button onclick="closeStatModal(event)" class="text-gray-500 hover:text-gray-700">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                        </path>
+                    </svg>
+                </button>
+            </div>
+            <div id="stat-modal-content" class="space-y-4">
+                <!-- Populated by JS -->
+                <p class="text-center text-gray-500">Loading details...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <div class="gradient-header text-white py-4 shadow-lg sticky top-0 z-30">
+        <div class="container mx-auto px-4 flex justify-between items-center">
+            <div>
+                <h1 class="text-2xl font-bold">📊 My Analytics Dashboard</h1>
+                <p id="welcome-msg" class="text-sm text-blue-100">Track your learning journey!</p>
+            </div>
+            <a href="/user" class="bg-white/20 hover:bg-white/30 px-4 py-2 rounded-lg transition">
+                ← Back to Study
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container mx-auto px-4 py-8 max-w-7xl">
+
+        <!-- Stats Cards Row -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div onclick="showQuestionDetails()"
+                class="stat-card p-6 border-l-4 border-indigo-500 cursor-pointer hover:scale-105 transition-transform">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-500 text-sm font-medium">Total Questions</p>
+                        <p id="total-queries" class="text-3xl font-bold text-indigo-600 mt-2">0</p>
+                        <p class="text-xs text-gray-400 mt-1">Click for details →</p>
+                    </div>
+                    <div class="text-4xl">💬</div>
+                </div>
+            </div>
+
+            <div onclick="showStreakDetails()"
+                class="stat-card p-6 border-l-4 border-orange-500 cursor-pointer hover:scale-105 transition-transform">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-500 text-sm font-medium">Learning Streak</p>
+                        <p id="streak" class="text-3xl font-bold text-orange-500 mt-2">0 🔥</p>
+                        <p class="text-xs text-gray-400 mt-1">Click for details →</p>
+                    </div>
+                    <div class="text-4xl">📅</div>
+                </div>
+            </div>
+
+            <div onclick="showSubjectsDetails()"
+                class="stat-card p-6 border-l-4 border-green-500 cursor-pointer hover:scale-105 transition-transform">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-500 text-sm font-medium">Subjects Explored</p>
+                        <p id="total-subjects" class="text-3xl font-bold text-green-600 mt-2">0</p>
+                        <p class="text-xs text-gray-400 mt-1">Click for details →</p>
+                    </div>
+                    <div class="text-4xl">📚</div>
+                </div>
+            </div>
+
+            <div onclick="showWeekDetails()"
+                class="stat-card p-6 border-l-4 border-purple-500 cursor-pointer hover:scale-105 transition-transform">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-500 text-sm font-medium">This Week</p>
+                        <p id="week-queries" class="text-3xl font-bold text-purple-600 mt-2">0</p>
+                        <p class="text-xs text-gray-400 mt-1">Click for details →</p>
+                    </div>
+                    <div class="text-4xl">📈</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- AI Feedback Section -->
+        <div class="stat-card p-6 mb-8 bg-gradient-to-r from-purple-500 to-pink-500 text-white">
+            <div class="flex items-start gap-4">
+                <div class="text-5xl">🤖</div>
+                <div class="flex-1">
+                    <h3 class="text-xl font-bold mb-2">Your Learning Buddy Says:</h3>
+                    <p id="ai-feedback" class="text-base mb-3">Loading your personalized feedback...</p>
+                    <p id="motivation-msg" class="text-sm opacity-90 italic"></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Subject Filter -->
+        <div class="stat-card p-6 mb-6">
+            <div class="flex items-center gap-4">
+                <div class="p-3 bg-indigo-50 rounded-lg text-indigo-600">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 4h18M3 4h18M3 4l6 8v5l6 3v-8l6-8" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </div>
+                <h3 class="text-lg font-bold text-gray-800">Filter Analytics:</h3>
+                <div class="relative flex-1 max-w-xs">
+                    <select id="subject-filter-dropdown" onchange="filterBySubject(this.value)"
+                        class="w-full appearance-none bg-gray-50 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded-xl leading-tight focus:outline-none focus:bg-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition cursor-pointer font-medium">
+                        <option value="all">📚 All Subjects</option>
+                    </select>
+                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500">
+                        <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                            <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Row -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            <!-- Chapter Analysis Chart -->
+            <div class="stat-card p-6">
+                <h3 class="text-xl font-bold mb-4 text-gray-800">📖 Chapter-wise Questions</h3>
+                <p class="text-sm text-gray-500 mb-4">Click on a bar to see topic details</p>
+                <div class="chart-container">
+                    <canvas id="chapter-chart"></canvas>
+                </div>
+            </div>
+
+            <!-- Weekly Activity Chart -->
+            <div class="stat-card p-6">
+                <h3 class="text-xl font-bold mb-4 text-gray-800">📅 Weekly Activity</h3>
+                <p class="text-sm text-gray-500 mb-4">Your last 7 days of learning</p>
+                <div class="chart-container">
+                    <canvas id="weekly-chart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detailed Statistics Table -->
+        <div class="stat-card p-6 mb-8">
+            <h3 class="text-xl font-bold mb-4 text-gray-800">📊 Detailed Analytics</h3>
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Chapter</th>
+                            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Subject</th>
+                            <th class="px-4 py-3 text-center text-xs font-semibold text-gray-600 uppercase">Questions
+                            </th>
+                            <th class="px-4 py-3 text-center text-xs font-semibold text-gray-600 uppercase">Last Asked
+                            </th>
+                            <th class="px-4 py-3 text-center text-xs font-semibold text-gray-600 uppercase">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="analytics-table" class="divide-y divide-gray-200">
+                        <tr>
+                            <td colspan="5" class="px-4 py-8 text-center text-gray-400">
+                                Loading analytics...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Topics to Practice More & Suggestions -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <div class="stat-card p-6">
+                <h3 class="text-xl font-bold mb-4 text-gray-800 flex items-center gap-2">
+                    <span>💪</span> Weak Areas & Practice
+                </h3>
+                <div id="weak-topics" class="space-y-3">
+                    <p class="text-gray-400 italic">Loading...</p>
+                </div>
+            </div>
+
+            <div class="stat-card p-6">
+                <h3 class="text-xl font-bold mb-4 text-gray-800 flex items-center gap-2">
+                    <span>💡</span> Personalized Suggestions
+                </h3>
+                <div id="suggestions" class="space-y-3">
+                    <p class="text-gray-400 italic">Loading...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Frequent Questions -->
+        <div class="stat-card p-6 mb-8">
+            <h3 class="text-xl font-bold mb-4 text-gray-800 flex items-center gap-2">
+                <span>❓</span> Frequently Asked Questions
+            </h3>
+            <div id="frequent-questions" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <p class="text-gray-400 italic col-span-2">Loading frequent questions...</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/firebase-config.js"></script>
+    <script src="/static/auth.js"></script>
+    <script src="/static/sidebar.js"></script>
+    <script src="/static/js/my-bag.js"></script>
+    <script>
+        let currentUser = null;
+        let userToken = null;
+        let currentSubjectFilter = 'all';
+        let dashboardData = null;
+        let chapterChart = null;
+        let weeklyChart = null;
+
+        // Enforce Auth
+        authManager.requireAuth();
+
+        // Auth Listener for Data Loading
+        firebase.auth().onAuthStateChanged(async (user) => {
+            if (user) {
+                currentUser = user;
+                userToken = await user.getIdToken();
+                document.getElementById('welcome-msg').textContent = `Welcome back, ${user.displayName || 'Student'}!`;
+
+                // Initialize sidebar
+                const userData = {
+                    name: user.displayName || 'Student',
+                    class: localStorage.getItem('userClass') || '8',
+                    email: user.email,
+                    studyStreak: 0
+                };
+                initializeSidebar(userData);
+
+                loadDashboard();
+            }
+            // No else needed, requireAuth handles redirection
+        });
+
+        // Load dashboard data
+        async function loadDashboard() {
+            try {
+                // Fetch main dashboard data
+                // Pass class_name for strict isolation
+                const userClass = localStorage.getItem('userClass') || '8';
+                const response = await fetch(`/api/dashboard/enhanced?uid=${currentUser.uid}&class_name=Class ${userClass}`, {
+                    headers: { 'Authorization': `Bearer ${userToken}` }
+                });
+                dashboardData = await response.json();
+
+                updateStats();
+                updateAIFeedback();
+                createSubjectFilters();
+                createCharts();
+                updateAnalyticsTable();
+
+                // Fetch enhanced data in parallel
+                loadEnhancedData();
+
+                // Check if analytics need initialization
+                checkAndInitializeAnalytics();
+
+                // Hide loading overlay after all core data is loaded
+                hideLoadingOverlay();
+
+            } catch (error) {
+                console.error('Dashboard load error:', error);
+                // Hide overlay even on error
+                hideLoadingOverlay();
+                alert('Error loading dashboard. Please refresh the page.');
+            }
+        }
+
+        // Hide loading overlay with smooth fade
+        function hideLoadingOverlay() {
+            const overlay = document.getElementById('loading-overlay');
+            if (overlay) {
+                overlay.classList.add('hidden');
+                // Remove from DOM after transition
+                setTimeout(() => {
+                    overlay.style.display = 'none';
+                }, 800);
+            }
+        }
+
+        // Check if user_analytics collection needs initialization
+        async function checkAndInitializeAnalytics() {
+            try {
+                // Try to fetch analytics summary
+                const response = await fetch(
+                    `/api/analytics/summary?uid=${currentUser.uid}`,
+                    { headers: { 'Authorization': `Bearer ${userToken}` } }
+                );
+                const analytics = await response.json();
+
+                // Check if we have dashboard data but no analytics
+                const hasQueries = dashboardData?.summary?.total_queries > 0;
+                const hasAnalytics = analytics.total_queries_all_time > 0;
+
+                if (hasQueries && !hasAnalytics) {
+                    console.log('[DASHBOARD] Detected queries without analytics. Initializing...');
+                    await initializeUserAnalytics();
+                }
+            } catch (error) {
+                console.error('[DASHBOARD] Error checking analytics:', error);
+            }
+        }
+
+        // Initialize user analytics from existing queries
+        async function initializeUserAnalytics() {
+            try {
+                console.log('[DASHBOARD] Calling analytics initialization endpoint');
+                const response = await fetch(
+                    `/api/analytics/initialize?uid=${currentUser.uid}`,
+                    {
+                        method: 'POST',
+                        headers: { 'Authorization': `Bearer ${userToken}` }
+                    }
+                );
+
+                const result = await response.json();
+                console.log('[DASHBOARD] Analytics initialized:', result);
+
+                if (result.queries_backfilled > 0) {
+                    // Show success message
+                    showNotification(
+                        `✅ Analytics initialized! ${result.queries_backfilled} questions processed.`,
+                        'success'
+                    );
+
+                    // Refresh stats to show updated data
+                    setTimeout(() => {
+                        updateStats();
+                    }, 1000);
+                }
+            } catch (error) {
+                console.error('[DASHBOARD] Failed to initialize analytics:', error);
+            }
+        }
+
+        // Show notification helper
+        function showNotification(message, type = 'info') {
+            const colors = {
+                success: 'bg-green-500',
+                error: 'bg-red-500',
+                info: 'bg-blue-500'
+            };
+
+            const notification = document.createElement('div');
+            notification.className = `fixed top-20 right-4 ${colors[type]} text-white px-6 py-3 rounded-lg shadow-lg z-50 animate-slide-in`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                notification.style.transition = 'opacity 0.3s';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        async function loadEnhancedData() {
+            try {
+                // 1. Weak Areas
+                fetch(`/api/dashboard/weak-areas?uid=${currentUser.uid}`, {
+                    headers: { 'Authorization': `Bearer ${userToken}` }
+                })
+                    .then(res => res.json())
+                    .then(data => updateWeakTopics(data));
+
+                // 2. Suggestions
+                fetch(`/api/dashboard/suggestions?uid=${currentUser.uid}`, {
+                    headers: { 'Authorization': `Bearer ${userToken}` }
+                })
+                    .then(res => res.json())
+                    .then(data => updateSuggestions(data));
+
+                // 3. Frequent Questions
+                fetch(`/api/dashboard/frequent-questions?uid=${currentUser.uid}`, {
+                    headers: { 'Authorization': `Bearer ${userToken}` }
+                })
+                    .then(res => res.json())
+                    .then(data => updateFrequentQuestions(data));
+
+            } catch (e) {
+                console.error("Error loading enhanced data:", e);
+            }
+        }
+
+        async function updateStats() {
+            try {
+                // Fetch analytics summary rebuilt from user_queries (single source of truth)
+                const response = await fetch(
+                    `/api/dashboard/summary?uid=${currentUser.uid}`,
+                    { headers: { 'Authorization': `Bearer ${userToken}` } }
+                );
+                const data = await response.json();
+
+                console.log('[DASHBOARD] Analytics summary from user_queries:', data);
+
+                // Update UI with LIFETIME totals
+                document.getElementById('total-queries').textContent = data.total_queries || 0;
+                document.getElementById('streak').textContent = `${data.streak || 0} 🔥`;
+                document.getElementById('total-subjects').textContent = data.subjects_explored || 0;
+
+                // Calculate this week total from weekly_activity
+                const thisWeek = Object.values(data.weekly_activity || {}).reduce((a, b) => a + b, 0);
+                document.getElementById('week-queries').textContent = thisWeek;
+
+                console.log('[DASHBOARD] Stats updated with lifetime data:', {
+                    total_queries: data.total_queries,
+                    streak: data.streak,
+                    subjects_explored: data.subjects_explored,
+                    this_week_total: thisWeek
+                });
+
+            } catch (error) {
+                console.error('[DASHBOARD] Error loading cumulative stats:', error);
+                // Fallback values
+                document.getElementById('total-queries').textContent = 0;
+                document.getElementById('streak').textContent = `0 🔥`;
+                document.getElementById('total-subjects').textContent = 0;
+                document.getElementById('week-queries').textContent = 0;
+            }
+        }
+
+        function updateAIFeedback() {
+            const feedback = dashboardData.ai_feedback || {};
+            document.getElementById('ai-feedback').textContent = feedback.overall_feedback || 'Keep learning! 🌟';
+            document.getElementById('motivation-msg').textContent = feedback.motivation_message || '';
+        }
+
+        function createSubjectFilters() {
+            // Standard subjects that should always be available
+            const standardSubjects = ['english', 'maths', 'science', 'physics', 'biology', 'social', 'hindi', 'telugu'];
+
+            // Get subjects from data
+            const dataSubjects = (dashboardData.summary?.top_subjects || []).map(s => s.subject.toLowerCase());
+
+            // Combine and unique
+            const allSubjects = [...new Set([...standardSubjects, ...dataSubjects])];
+
+            const dropdown = document.getElementById('subject-filter-dropdown');
+
+            // Clear existing options except "All Subjects"
+            while (dropdown.options.length > 1) {
+                dropdown.remove(1);
+            }
+
+            allSubjects.forEach(subject => {
+                const option = document.createElement('option');
+                option.value = subject;
+                // Add count if available in data
+                const dataSubj = (dashboardData.summary?.top_subjects || []).find(s => s.subject.toLowerCase() === subject);
+                const count = dataSubj ? `(${dataSubj.count})` : '';
+
+                option.textContent = `${getSubjectEmoji(subject)} ${capitalizeFirst(subject)} ${count}`;
+                dropdown.appendChild(option);
+            });
+        }
+
+        function filterBySubject(subject) {
+            currentSubjectFilter = subject;
+            // Update charts and table
+            createCharts();
+            updateAnalyticsTable();
+        }
+
+        function createCharts() {
+            const hotspots = dashboardData.chapter_hotspots || [];
+
+            // Filter by subject if needed
+            const filteredHotspots = currentSubjectFilter === 'all' ?
+                hotspots :
+                hotspots.filter(h => h.subject === currentSubjectFilter);
+
+            // Chapter Chart
+            const chapterLabels = filteredHotspots.map(h => h.chapter_name.substring(0, 20));
+            const chapterData = filteredHotspots.map(h => h.query_count);
+            const chapterFullNames = filteredHotspots.map(h => h.chapter_name);
+            const chapterSubjects = filteredHotspots.map(h => h.subject);
+
+            if (chapterChart) chapterChart.destroy();
+
+            const ctx1 = document.getElementById('chapter-chart');
+            chapterChart = new Chart(ctx1, {
+                type: 'bar',
+                data: {
+                    labels: chapterLabels,
+                    datasets: [{
+                        label: 'Questions Asked',
+                        data: chapterData,
+                        backgroundColor: 'rgba(102, 126, 234, 0.7)',
+                        borderColor: 'rgba(102, 126, 234, 1)',
+                        borderWidth: 2,
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                title: (items) => chapterFullNames[items[0].dataIndex]
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: { stepSize: 1 }
+                        }
+                    },
+                    onClick: (e, elements) => {
+                        if (elements.length > 0) {
+                            const index = elements[0].index;
+                            const chapterName = chapterFullNames[index];
+                            const subject = chapterSubjects[index];
+                            openTopicModal(chapterName, subject);
+                        }
+                    },
+                    onHover: (event, chartElement) => {
+                        event.native.target.style.cursor = chartElement[0] ? 'pointer' : 'default';
+                    }
+                }
+            });
+
+            // Weekly Activity Chart
+            const weeklyActivity = dashboardData.weekly_activity || {};
+            const dates = (weeklyActivity.dates || []).slice(-7).map(d => {
+                const date = new Date(d);
+                return date.toLocaleDateString('en-IN', { month: 'short', day: 'numeric' });
+            });
+            const counts = (weeklyActivity.counts || []).slice(-7);
+
+            if (weeklyChart) weeklyChart.destroy();
+
+            const ctx2 = document.getElementById('weekly-chart');
+            weeklyChart = new Chart(ctx2, {
+                type: 'line',
+                data: {
+                    labels: dates,
+                    datasets: [{
+                        label: 'Questions',
+                        data: counts,
+                        borderColor: 'rgba(16, 185, 129, 1)',
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 5,
+                        pointBackgroundColor: 'rgba(16, 185, 129, 1)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: { stepSize: 1 }
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateAnalyticsTable() {
+            const hotspots = dashboardData.chapter_hotspots || [];
+            const filteredHotspots = currentSubjectFilter === 'all' ?
+                hotspots :
+                hotspots.filter(h => h.subject === currentSubjectFilter);
+
+            const tbody = document.getElementById('analytics-table');
+
+            if (filteredHotspots.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="px-4 py-8 text-center text-gray-400">No data available for this filter</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = filteredHotspots.map(item => `
+                <tr class="hover:bg-gray-50 transition">
+                    <td class="px-4 py-3 font-medium text-gray-800">${item.chapter_name}</td>
+                    <td class="px-4 py-3 text-gray-600 capitalize">${item.subject}</td>
+                    <td class="px-4 py-3 text-center">
+                        <span class="px-3 py-1 rounded-full bg-indigo-100 text-indigo-700 font-semibold">
+                            ${item.query_count}
+                        </span>
+                    </td>
+                    <td class="px-4 py-3 text-center text-sm text-gray-500">${item.last_asked}</td>
+                    <td class="px-4 py-3 text-center">
+                        ${item.is_struggle_area ?
+                    '<span class="px-3 py-1 rounded-full bg-yellow-100 text-yellow-700 text-xs font-semibold">⚡ Focus Zone</span>' :
+                    '<span class="px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-semibold">✓ Good</span>'
+                }
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function updateWeakTopics(data) {
+            const container = document.getElementById('weak-topics');
+
+            // Handle both old format (from dashboardData) and new format (from API)
+            let weakTopics = [];
+            if (data && data.topics) {
+                weakTopics = data.topics;
+            } else if (dashboardData.ai_feedback?.weak_topics) {
+                weakTopics = dashboardData.ai_feedback.weak_topics.map(t => ({ topic: t, chapter: 'Unknown' }));
+            }
+
+            if (!weakTopics || weakTopics.length === 0) {
+                container.innerHTML = `
+                    <div class="p-4 bg-green-50 rounded-lg border border-green-100 flex items-center gap-3">
+                        <span class="text-2xl">🎉</span>
+                        <div>
+                            <p class="font-semibold text-green-800">Great job!</p>
+                            <p class="text-sm text-green-600">No weak areas detected yet.</p>
+                        </div>
+                    </div>`;
+                return;
+            }
+
+            container.innerHTML = weakTopics.map(item => `
+                <div class="flex items-start gap-3 p-3 bg-orange-50 rounded-lg border border-orange-100 hover:shadow-sm transition">
+                    <span class="text-xl mt-1">📌</span>
+                    <div>
+                        <p class="text-gray-800 font-medium">${item.topic || item}</p>
+                        ${item.chapter ? `<p class="text-xs text-gray-500">in ${item.chapter}</p>` : ''}
+                        ${item.queries ? `<p class="text-xs text-orange-600 font-medium mt-1">Asked ${item.queries} times</p>` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function updateSuggestions(data) {
+            const container = document.getElementById('suggestions');
+            const suggestions = data?.suggestions || dashboardData.ai_feedback?.suggestions || [];
+
+            if (suggestions.length === 0) {
+                container.innerHTML = `
+                    <div class="p-4 bg-blue-50 rounded-lg border border-blue-100 flex items-center gap-3">
+                        <span class="text-2xl">🌟</span>
+                        <div>
+                            <p class="font-semibold text-blue-800">Keep it up!</p>
+                            <p class="text-sm text-blue-600">Continue your learning journey.</p>
+                        </div>
+                    </div>`;
+                return;
+            }
+
+            container.innerHTML = suggestions.map(item => {
+                // Handle both string and object formats
+                const msg = typeof item === 'string' ? item : item.message;
+                const icon = item.icon || '✨';
+                const action = item.action ? `<p class="text-xs text-blue-600 font-medium mt-1">👉 ${item.action}</p>` : '';
+
+                return `
+                <div class="flex items-start gap-3 p-3 bg-blue-50 rounded-lg border border-blue-100 hover:shadow-sm transition">
+                    <span class="text-xl mt-1">${icon}</span>
+                    <div>
+                        <p class="text-gray-800">${msg}</p>
+                        ${action}
+                    </div>
+                </div>
+            `}).join('');
+        }
+
+        function updateFrequentQuestions(data) {
+            const container = document.getElementById('frequent-questions');
+            const questions = data?.questions || [];
+
+            if (questions.length === 0) {
+                container.innerHTML = '<p class="text-gray-400 italic col-span-2 text-center py-4">Start asking questions to see them here!</p>';
+                return;
+            }
+
+            container.innerHTML = questions.map(q => `
+                <div class="p-4 bg-gray-50 rounded-lg border border-gray-100 hover:bg-white hover:shadow-md transition group">
+                    <div class="flex justify-between items-start mb-2">
+                        <span class="text-xs font-semibold px-2 py-1 bg-indigo-100 text-indigo-700 rounded-full">
+                            ${q.subject ? capitalizeFirst(q.subject) : 'General'}
+                        </span>
+                        <span class="text-xs text-gray-500 flex items-center gap-1">
+                            <span class="w-2 h-2 rounded-full bg-green-500"></span>
+                            Asked ${q.count} times
+                        </span>
+                    </div>
+                    <p class="text-gray-800 font-medium line-clamp-2 mb-2 group-hover:text-indigo-600 transition">${q.query}</p>
+                    <p class="text-xs text-gray-500 truncate">in ${q.chapter || 'General'}</p>
+                </div>
+            `).join('');
+        }
+
+        // Modal Functions
+        async function openTopicModal(chapterName, subject) {
+            const modal = document.getElementById('topic-modal');
+            const content = document.getElementById('topic-modal-content');
+            const title = document.getElementById('topic-modal-title');
+
+            title.textContent = `${chapterName} - Topic Clusters`;
+            modal.style.display = 'flex';
+            content.innerHTML = '<div class="flex justify-center py-8"><div class="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div></div>';
+
+            try {
+                // Find chapter_id from hotspots
+                const hotspots = dashboardData.chapter_hotspots || [];
+                const chapterData = hotspots.find(h => h.chapter_name === chapterName && h.subject === subject);
+
+                if (!chapterData) {
+                    content.innerHTML = `
+                        <div class="text-center py-8">
+                            <p class="text-gray-500">Chapter data not found</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                console.log(`[TOPIC MODAL] Fetching clusters for chapter_id=${chapterData.chapter_id}, chapter_name=${chapterName}, subject=${subject}`);
+
+                // Call new LLM-based topic clustering endpoint with chapter_name for fallback matching
+                const response = await fetch(
+                    `/api/dashboard/topic-clusters?uid=${currentUser.uid}&subject=${subject}&chapter_id=${chapterData.chapter_id}&chapter_name=${encodeURIComponent(chapterName)}`,
+                    { headers: { 'Authorization': `Bearer ${userToken}` } }
+                );
+                const data = await response.json();
+
+                console.log(`[TOPIC MODAL] Received ${data.topics?.length || 0} topics`);
+
+                if (!data.topics || data.topics.length === 0) {
+                    content.innerHTML = `
+                        <div class="text-center py-8">
+                            <div class="text-6xl mb-4">🎯</div>
+                            <p class="text-gray-700 font-semibold mb-2">No Topics Generated Yet</p>
+                            <p class="text-sm text-gray-500 mb-4">Ask more questions about this chapter to see topic clusters!</p>
+                            <div class="bg-blue-50 border border-blue-100 rounded-lg p-4 text-left max-w-md mx-auto">
+                                <p class="text-sm text-blue-800">
+                                    <strong>💡 How it works:</strong> Our AI will analyze your questions and group them into meaningful topics.
+                                </p>
+                            </div>
+                        </div>
+                    `;
+                    return;
+                }
+
+                // Sort by query count
+                data.topics.sort((a, b) => b.query_count - a.query_count);
+
+                // Render topics with mastery and difficulty levels
+                content.innerHTML = `
+                    <div class="space-y-4">
+                        ${data.topics.map(topic => {
+                    const masteryPercent = Math.round(topic.mastery_level * 100);
+                    const difficultyPercent = Math.round(topic.difficulty * 100);
+
+                    const masteryColor = masteryPercent >= 70 ? 'green' : masteryPercent >= 40 ? 'yellow' : 'red';
+                    const masteryBg = {
+                        'green': 'bg-green-100 text-green-700',
+                        'yellow': 'bg-yellow-100 text-yellow-700',
+                        'red': 'bg-red-100 text-red-700'
+                    }[masteryColor];
+
+                    const masteryLabel = masteryPercent >= 70 ? 'Mastered' : masteryPercent >= 40 ? 'Developing' : 'Struggling';
+                    const masteryIcon = masteryPercent >= 70 ? '🌟' : masteryPercent >= 40 ? '📚' : '🎯';
+
+                    const difficultyLabel = difficultyPercent >= 70 ? 'Advanced' : difficultyPercent >= 40 ? 'Intermediate' : 'Basic';
+                    const difficultyColor = difficultyPercent >= 70 ? 'text-purple-600' : difficultyPercent >= 40 ? 'text-blue-600' : 'text-gray-600';
+
+                    return `
+                                <div class="p-5 bg-gradient-to-r from-white to-gray-50 rounded-xl border-2 border-gray-100 hover:border-indigo-200 hover:shadow-lg transition-all duration-300 group">
+                                    <div class="flex justify-between items-start mb-3">
+                                        <div class="flex-1">
+                                            <h4 class="font-bold text-lg text-gray-800 group-hover:text-indigo-600 transition">
+                                                ${topic.topic}
+                                            </h4>
+                                            <p class="text-sm text-gray-500 mt-1">${topic.query_count} ${topic.query_count === 1 ? 'question' : 'questions'} asked</p>
+                                        </div>
+                                        <div class="flex flex-col items-end gap-2">
+                                            <span class="px-3 py-1 ${masteryBg} rounded-full text-sm font-semibold flex items-center gap-1">
+                                                <span>${masteryIcon}</span>
+                                                <span>${masteryLabel}</span>
+                                            </span>
+                                            <span class="text-xs text-gray-400">${masteryPercent}% mastery</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Difficulty Badge -->
+                                    <div class="mb-3">
+                                        <span class="text-xs ${difficultyColor} font-semibold">
+                                            📊 Difficulty: ${difficultyLabel} (${difficultyPercent}%)
+                                        </span>
+                                    </div>
+                                    
+                                    ${topic.example_queries && topic.example_queries.length > 0 ? `
+                                        <div class="mt-3 p-3 bg-white rounded-lg border border-gray-100">
+                                            <p class="text-xs font-semibold text-gray-600 mb-2">Example questions:</p>
+                                            <div class="space-y-2">
+                                                ${topic.example_queries.map(q => `
+                                                    <p class="text-sm text-gray-700 italic pl-3 border-l-2 border-indigo-200">
+                                                        "${q}"
+                                                    </p>
+                                                `).join('')}
+                                            </div>
+                                        </div>
+                                    ` : ''}
+                                    
+                                    <!-- Mastery Progress Bar -->
+                                    <div class="mt-3">
+                                        <div class="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+                                            <div class="h-full bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full transition-all duration-500"
+                                                 style="width: ${masteryPercent}%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                }).join('')}
+                    </div>
+                    
+                    <div class="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-100">
+                        <p class="text-sm text-blue-800">
+                            <strong>💡 AI Insight:</strong> These ${data.topics.length} topics were automatically generated from your ${data.topics.reduce((sum, t) => sum + t.query_count, 0)} questions in <strong>${data.chapter}</strong> using advanced clustering. Topics are saved and will update as you ask more questions!
+                        </p>
+                    </div>
+                `;
+
+            } catch (error) {
+                console.error('[TOPIC MODAL] Error:', error);
+                content.innerHTML = `
+                    <div class="text-center py-8">
+                        <div class="text-5xl mb-4">⚠️</div>
+                        <p class="text-red-500 font-semibold">Failed to load topic analysis</p>
+                        <p class="text-sm text-gray-500 mt-2">Please try again later</p>
+                    </div>
+                `;
+            }
+        }
+
+        function closeTopicModal(event) {
+            if (event.target.id === 'topic-modal' || event.target.closest('button')) {
+                document.getElementById('topic-modal').style.display = 'none';
+            }
+        }
+
+        // Helper functions
+        function getSubjectEmoji(subject) {
+            const emojis = {
+                'english': '📖',
+                'maths': '🔢',
+                'mathematics': '🔢',
+                'science': '🔬',
+                'physics': '⚛️',
+                'biology': '🧬',
+                'social': '🌍',
+                'hindi': '📝',
+                'telugu': '📝'
+            };
+            return emojis[subject.toLowerCase()] || '📚';
+        }
+
+        function capitalizeFirst(str) {
+            return str.charAt(0).toUpperCase() + str.slice(1);
+        }
+
+        // --- STAT DETAIL MODAL FUNCTIONS ---
+
+        function closeStatModal(event) {
+            if (event.target.id === 'stat-detail-modal' || event.target.closest('button')) {
+                document.getElementById('stat-detail-modal').style.display = 'none';
+            }
+        }
+
+        async function showQuestionDetails() {
+            await fetchAndShowStatDetails('total_questions', '💬 Total Questions Breakdown');
+        }
+
+        async function showStreakDetails() {
+            await fetchAndShowStatDetails('learning_streak', '🔥 Learning Streak Details');
+        }
+
+        async function showSubjectsDetails() {
+            await fetchAndShowStatDetails('subjects_explored', '📚 Subjects Explored');
+        }
+
+        async function showWeekDetails() {
+            await fetchAndShowStatDetails('this_week', '📈 This Week\'s Activity');
+        }
+
+        async function fetchAndShowStatDetails(statType, title) {
+            const modal = document.getElementById('stat-detail-modal');
+            const titleEl = document.getElementById('stat-modal-title');
+            const content = document.getElementById('stat-modal-content');
+
+            titleEl.textContent = title;
+            content.innerHTML = '<p class="text-center text-gray-500">Loading details...</p>';
+            modal.style.display = 'flex';
+
+            try {
+                console.log(`[STAT MODAL] Fetching ${statType} for user ${currentUser.uid}`);
+                const response = await fetch(
+                    `/api/analytics/details/${statType}?uid=${currentUser.uid}`,
+                    { headers: { 'Authorization': `Bearer ${userToken}` } }
+                );
+
+                console.log(`[STAT MODAL] Response status: ${response.status}`);
+                const data = await response.json();
+                console.log(`[STAT MODAL] Response data:`, data);
+
+                if (data.error) {
+                    // Show friendly message instead of just error
+                    content.innerHTML = `
+                        <div class="text-center py-8">
+                            <div class="text-6xl mb-4">📊</div>
+                            <p class="text-lg font-semibold text-gray-700 mb-2">No Analytics Yet</p>
+                            <p class="text-gray-500 mb-4">Start asking questions to build your learning analytics!</p>
+                            <div class="bg-blue-50 border border-blue-100 rounded-lg p-4 text-left">
+                                <p class="text-sm text-blue-800">
+                                    <strong>💡 Tip:</strong> Your analytics will appear here once you:
+                                </p>
+                                <ul class="list-disc list-inside text-sm text-blue-700 mt-2 space-y-1">
+                                    <li>Ask questions in the study mode</li>
+                                    <li>Explore different subjects</li>
+                                    <li>Build your learning streak</li>
+                                </ul>
+                            </div>
+                        </div>
+                    `;
+                    return;
+                }
+
+                // Render content based on stat type
+                if (statType === 'total_questions') {
+                    content.innerHTML = renderTotalQuestionsContent(data);
+                } else if (statType === 'learning_streak') {
+                    content.innerHTML = renderStreakContent(data);
+                } else if (statType === 'subjects_explored') {
+                    content.innerHTML = renderSubjectsContent(data);
+                } else if (statType === 'this_week') {
+                    content.innerHTML = renderWeekContent(data);
+                }
+            } catch (error) {
+                console.error('[STAT MODAL] Error:', error);
+                content.innerHTML = `
+                    <div class="text-center py-8">
+                        <div class="text-5xl mb-4">⚠️</div>
+                        <p class="text-red-500 font-semibold">Failed to load details</p>
+                        <p class="text-sm text-gray-500 mt-2">Please try refreshing the page</p>
+                    </div>
+                `;
+            }
+        }
+
+        function renderTotalQuestionsContent(data) {
+            // Use subjects_count from aggregator
+            const bySubjectHtml = Object.entries(data.subjects_count || {})
+                .sort((a, b) => b[1] - a[1])
+                .map(([subject, count]) => `
+                    <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                        <span class="font-medium">${getSubjectEmoji(subject)} ${capitalizeFirst(subject)}</span>
+                        <span class="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full font-bold">${count}</span>
+                    </div>
+                `).join('');
+
+            // Use daily_activity for last 7 days
+            const today = new Date();
+            const last7Days = [];
+            for (let i = 6; i >= 0; i--) {
+                const date = new Date(today);
+                date.setDate(date.getDate() - i);
+                const dateStr = date.toISOString().split('T')[0];
+                last7Days.push({
+                    date: dateStr,
+                    count: data.daily_activity[dateStr] || 0
+                });
+            }
+
+            const last7DaysHtml = last7Days.map(day => {
+                const date = new Date(day.date);
+                const dayName = date.toLocaleDateString('en-IN', { weekday: 'short' });
+                const maxCount = Math.max(...last7Days.map(d => d.count), 1);
+                const barWidth = (day.count / maxCount) * 100;
+
+                return `
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs text-gray-600 w-12">${dayName}</span>
+                       <div class="flex-1 bg-gray-200 rounded-full h-6">
+                            <div class="bg-gradient-to-r from-indigo-500 to-purple-500 h-6 rounded-full flex items-center justify-end pr-2" 
+                                 style="width: ${barWidth}%">
+                                <span class="text-white text-xs font-bold">${day.count > 0 ? day.count : ''}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            return `
+                <div class="p-4 bg-indigo-50 rounded-lg mb-4">
+                    <p class="text-4xl font-bold text-indigo-600">${data.total_queries}</p>
+                    <p class="text-gray-600 mt-1">All-Time Total Questions</p>
+                </div>
+                
+                ${bySubjectHtml ? `
+                    <div class="mb-4">
+                        <h4 class="font-bold text-gray-700 mb-3">By Subject:</h4>
+                        <div class="space-y-2">${bySubjectHtml}</div>
+                    </div>
+                ` : ''}
+                
+                <div>
+                    <h4 class="font-bold text-gray-700 mb-3">Last 7 Days:</h4>
+                    <div class="space-y-2">${last7DaysHtml}</div>
+                </div>
+            `;
+        }
+
+        function renderStreakContent(data) {
+            // Generate 30-day calendar using daily_activity
+            const today = new Date();
+            const calendar = [];
+            for (let i = 29; i >= 0; i--) {
+                const date = new Date(today);
+                date.setDate(date.getDate() - i);
+                const dateStr = date.toISOString().split('T')[0];
+                const count = data.daily_activity[dateStr] || 0;
+                calendar.push({
+                    date: dateStr,
+                    active: count > 0,
+                    count: count,
+                    dayNum: date.getDate()
+                });
+            }
+
+            const calendarHtml = calendar.map(day => {
+                const bgColor = day.active ? 'bg-orange-500' : 'bg-gray-200';
+                const textColor = day.active ? 'text-white' : 'text-gray-400';
+
+                return `
+                    <div class="flex flex-col items-center">
+                        <div class="${bgColor} ${textColor} w-10 h-10 rounded-lg flex items-center justify-center font-bold text-sm" 
+                             title="${day.date}: ${day.count} queries">
+                            ${day.dayNum}
+                        </div>
+                        ${day.active ? `<span class="text-xs text-orange-600 mt-1">${day.count}</span>` : ''}
+                    </div>
+                `;
+            }).join('');
+
+            return `
+                <div class="p-4 bg-orange-50 rounded-lg mb-4">
+                    <p class="text-4xl font-bold text-orange-500">${data.streak} 🔥</p>
+                    <p class="text-gray-600 mt-1">Current Streak</p>
+                    <p class="text-sm text-gray-500 mt-2">Longest Streak: ${data.longest_streak} days 🏆</p>
+                </div>
+                
+                <div class="mb-4">
+                    <h4 class="font-bold text-gray-700 mb-3">Last 30 Days Calendar:</h4>
+                    <div class="grid grid-cols-7 gap-2">${calendarHtml}</div>
+                </div>
+                
+                <div class="p-3 bg-blue-50 rounded-lg">
+                    <p class="text-sm text-blue-800">
+                        💡 Study tomorrow to reach <strong>${data.streak + 1} days</strong> streak!
+                    </p>
+                </div>
+            `;
+        }
+
+        function renderSubjectsContent(data) {
+            // Build subject details from subjects_count and daily_activity
+            const subjectsDetail = Object.entries(data.subjects_count || {}).map(([subject, count]) => {
+                // Find last studied date from daily_activity
+                const dates = Object.keys(data.daily_activity || {}).sort().reverse();
+                const lastStudied = dates.find(date => {
+                    // This is simplified - in production you'd cross-reference with actual query data
+                    return data.daily_activity[date] > 0;
+                }) || null;
+
+                return {
+                    subject: subject,
+                    queries: count,
+                    last_studied: lastStudied
+                };
+            });
+
+            const subjectsHtml = subjectsDetail.map(subject => {
+                return `
+                    <div class="p-4 bg-gray-50 rounded-lg border border-gray-200">
+                        <div class="flex justify-between items-start mb-3">
+                            <div>
+                                <p class="font-bold text-lg">${getSubjectEmoji(subject.subject)} ${capitalizeFirst(subject.subject)}</p>
+                                <p class="text-sm text-gray-500">Last studied: ${subject.last_studied || 'Never'}</p>
+                            </div>
+                            <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full font-bold">${subject.queries}</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            return `
+                <div class="p-4 bg-green-50 rounded-lg mb-4">
+                    <p class="text-4xl font-bold text-green-600">${data.subjects_explored}</p>
+                    <p class="text-gray-600 mt-1">Subjects Explored</p>
+                </div>
+                
+                <div class="space-y-3">${subjectsHtml || '<p class="text-center text-gray-400">No subjects explored yet</p>'}</div>
+            `;
+        }
+
+        function renderWeekContent(data) {
+            // Use weekly_activity (last 7 days ordered oldest→newest)
+            const weeklyDates = Object.keys(data.weekly_activity || {}).sort();
+            const dailyBreakdown = weeklyDates.map(dateStr => {
+                const date = new Date(dateStr);
+                const dayName = date.toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric' });
+                return {
+                    day: dayName,
+                    date: dateStr,
+                    count: data.weekly_activity[dateStr]
+                };
+            });
+
+            const dailyHtml = dailyBreakdown.map(day => {
+                const maxCount = Math.max(...dailyBreakdown.map(d => d.count), 1);
+                const barWidth = (day.count / maxCount) * 100;
+
+                return `
+                    <div class="flex items-center gap-3">
+                        <span class="text-sm text-gray-600 w-16">${day.day}</span>
+                        <div class="flex-1 bg-gray-200 rounded-full h-8">
+                            <div class="bg-gradient-to-r from-purple-500 to-pink-500 h-8 rounded-full flex items-center justify-end pr-3" 
+                                 style="width: ${barWidth}%">
+                                <span class="text-white text-sm font-bold">${day.count > 0 ? day.count : ''}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            // Calculate this week total
+            const thisWeekTotal = Object.values(data.weekly_activity || {}).reduce((a, b) => a + b, 0);
+
+            // Get subjects this week from subjects_count
+            const subjectsThisWeek = Object.keys(data.subjects_count || {});
+
+            return `
+                <div class="p-4 bg-purple-50 rounded-lg mb-4">
+                    <p class="text-4xl font-bold text-purple-600">${thisWeekTotal}</p>
+                    <p class="text-gray-600 mt-1">Questions This Week</p>
+                </div>
+                
+                <div class="mb-4">
+                    <h4 class="font-bold text-gray-700 mb-3">Daily Breakdown:</h4>
+                    <div class="space-y-2">${dailyHtml}</div>
+                </div>
+                
+                
+                ${data.subjects_this_week && data.subjects_this_week.length > 0 ? `
+                    <div class="p-3 bg-blue-50 rounded-lg">
+                        <p class="text-sm font-bold text-blue-800 mb-2">Subjects This Week:</p>
+                        <div class="flex flex-wrap gap-2">
+                            ${data.subjects_this_week.map(s =>
+                `<span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm">${getSubjectEmoji(s)} ${capitalizeFirst(s)}</span>`
+            ).join('')}
+                        </div>
+                    </div>
+                ` : ''}
+            `;
+        }
+    </script>
+</body>
+
+</html>
