@@ -11,16 +11,22 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /app
 
+# Install lightweight CPU-only PyTorch (160MB instead of 2.5GB GPU bloat)
+RUN pip install --no-cache-dir torch --index-url https://download.pytorch.org/whl/cpu
+
 # Copy requirement manifests and install Python & Node dependencies
 COPY requirements.txt package.json ./
 RUN pip install --no-cache-dir -r requirements.txt
 RUN npm install
 
+# Pre-download SentenceTransformer model weights during build so server boots instantly (0s startup delay)
+RUN python -c "from sentence_transformers import SentenceTransformer; SentenceTransformer('all-MiniLM-L6-v2')"
+
 # Copy application source code
 COPY . .
 
-# Expose default port
-EXPOSE 7860
+# Expose Render standard port 10000
+EXPOSE 10000
 
-# Launch FastAPI using shell expansion for dynamic $PORT binding
-CMD ["sh", "-c", "uvicorn backend.app.main:app --host 0.0.0.0 --port ${PORT:-7860}"]
+# Launch FastAPI using dynamic $PORT (defaulting to 10000 for Render)
+CMD ["sh", "-c", "uvicorn backend.app.main:app --host 0.0.0.0 --port ${PORT:-10000}"]
