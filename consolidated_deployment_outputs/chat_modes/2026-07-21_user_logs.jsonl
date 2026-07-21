@@ -1,0 +1,1 @@
+{"timestamp": "2026-07-21T13:04:05.395953Z", "session_id": "sess_test123", "mode": "text_to_text", "user_query": "Explain Newton's Second Law of Motion", "subject": "Physics", "retrieved_rag_chunks": [{"chunk_id": "chunk_1", "text": "Force equals mass times acceleration.", "score": 0.95}], "llm_response": "F = m * a", "tts_audio_url": "", "execution_time_ms": 350}

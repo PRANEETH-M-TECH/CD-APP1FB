@@ -19,7 +19,7 @@ async def compile_hyperframes_html_fast(lesson_id: str, lesson_dir: str):
     Compiles lesson.json, templates, GSAP engine, camera transforms, and narration sync into index.html.
     Returns html_url relative path for instant browser playback.
     """
-    hf_dir = os.path.join(PROJECT_ROOT, "hyperframes_test_app")
+    hf_dir = os.path.join(PROJECT_ROOT, "hyperframes_engine")
     hf_outputs_dir = os.path.join(hf_dir, "outputs", lesson_id)
     os.makedirs(hf_outputs_dir, exist_ok=True)
 
@@ -95,7 +95,7 @@ async def render_hyperframes_video_stream(lesson_id: str, lesson_dir: str):
     Yields real-time progress dicts detailing each subsystem phase (SceneGraph, Pedagogy, Sync, Camera, Performance, Render).
     Returns (video_relative_url, execution_metrics).
     """
-    hf_dir = os.path.join(PROJECT_ROOT, "hyperframes_test_app")
+    hf_dir = os.path.join(PROJECT_ROOT, "hyperframes_engine")
     hf_outputs_dir = os.path.join(hf_dir, "outputs", lesson_id)
     os.makedirs(hf_outputs_dir, exist_ok=True)
     

@@ -316,6 +316,27 @@ async def generate_visual_lesson_stream(query: str, book_uuid: str, class_name: 
             logger.error(f"[VisualLearning] Hyperframes execution encountered error: {hf_err}", exc_info=True)
             yield f"data: {json.dumps({'type': 'progress', 'step': 'hyperframes_engine', 'status': 'warn', 'message': f'[Hyperframes Notice] Notice: {hf_err}'})}\n\n"
 
+            # Save visual learning output log bundle to consolidated_deployment_outputs/
+            try:
+                from backend.app.services.deployment_logger import save_visual_learning_log_bundle
+                user_req_payload = {
+                    "user_query": query,
+                    "book_uuid": book_uuid,
+                    "class_name": class_name,
+                    "subject": subject,
+                    "retrieved_context_length": len(context),
+                    "retrieved_context_preview": context[:500] if context else ""
+                }
+                source_html = os.path.join(lesson_dir, "index.html")
+                save_visual_learning_log_bundle(
+                    lesson_id=lesson_id,
+                    user_request_data=user_req_payload,
+                    storyboard_data=lesson_package,
+                    source_html_path=source_html
+                )
+            except Exception as log_err:
+                logger.error(f"[VisualLearning] Failed to log lesson output bundle: {log_err}")
+
         # Step 6: Launching lesson package with Hyperframes player
         yield f"data: {json.dumps({'type': 'progress', 'step': 'launching_lesson', 'status': 'complete', 'message': 'Launching Hyperframes player...'})}\n\n"
         await asyncio.sleep(0.2)

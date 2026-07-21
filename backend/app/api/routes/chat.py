@@ -25,6 +25,7 @@ from backend.app.prompts import styler as prompt_styler
 from backend.app.core.auth_middleware import get_user_id_or_default
 from backend.app.core.firebase.firebase_init import db
 from backend.app.core import firestore_service
+from backend.app.services.deployment_logger import save_chat_log_background
 
 logger = logging.getLogger(__name__)
 
@@ -342,6 +343,27 @@ async def query_engine(
         except Exception as e:
             print(f"[LOG] ✗ Error writing to ans.txt: {e}\n")
             
+        try:
+            rag_chunks = []
+            if "hybrid_results" in ans_txt_data and ans_txt_data["hybrid_results"]:
+                for score, doc in ans_txt_data["hybrid_results"][:5]:
+                    rag_chunks.append({
+                        "chunk_id": doc.get("chunk_id", "chunk_unknown"),
+                        "text": doc.get("text", "")[:200],
+                        "score": round(score, 3)
+                    })
+            save_chat_log_background(
+                user_query=query,
+                subject=subject,
+                mode="text_to_text",
+                session_id=None,
+                retrieved_rag_chunks=rag_chunks,
+                llm_response=full_answer,
+                execution_time_ms=int((time.time() - start) * 1000)
+            )
+        except Exception as log_err:
+            logger.error(f"[DeploymentLogger] Failed to log query_engine: {log_err}")
+
         from backend.app.utils.gemini_tracker import print_query_performance_report
         print_query_performance_report()
             
@@ -598,6 +620,28 @@ async def smart_query_engine(
                 "retrieved_chunks": chunks_summary
             }
             yield f"data: {json.dumps(metadata)}\n\n"
+            
+            try:
+                formatted_chunks = []
+                if hybrid_results:
+                    for score, doc in hybrid_results[:5]:
+                        formatted_chunks.append({
+                            "chunk_id": doc.get("chunk_id", "chunk_unknown"),
+                            "text": doc.get("text", "")[:200],
+                            "score": round(score, 3)
+                        })
+                save_chat_log_background(
+                    user_query=query,
+                    subject=subject,
+                    mode=mode if 'mode' in locals() else "text_to_text",
+                    session_id=session.get("session_id"),
+                    retrieved_rag_chunks=formatted_chunks,
+                    llm_response=full_answer,
+                    execution_time_ms=int((time.time() - start_time) * 1000)
+                )
+            except Exception as log_err:
+                logger.error(f"[DeploymentLogger] Failed to log smart_query_engine: {log_err}")
+
             yield "data: [DONE]\n\n"
             from backend.app.utils.gemini_tracker import print_query_performance_report
             print_query_performance_report()
