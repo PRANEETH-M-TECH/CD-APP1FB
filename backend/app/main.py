@@ -46,7 +46,7 @@ async def lifespan(app: FastAPI):
         print(f"[WARN] Qdrant initialization failed: {e}")
         print("[WARN] Server will continue without Qdrant (some features may be limited)")
     yield
-    # On shutdown (not used here, but good practice)
+    # On shutdown
 
 # Initialize FastAPI app with the lifespan manager
 app = FastAPI(lifespan=lifespan, title="CHADUVU-GURU API Backend", version="1.0.0")
@@ -73,15 +73,11 @@ app.include_router(tts_router)
 app.include_router(visual_learning_router)
 
 # --- STATIC FILE SERVING ---
-# backend/app/main.py is 3 levels deep:
-# 1 level: app
-# 2 levels: backend
-# 3 levels: workspace root
-MAIN_DIR = os.path.dirname(os.path.abspath(__file__))
-PROJECT_ROOT = os.path.abspath(os.path.join(MAIN_DIR, "..", ".."))
-
 PUBLIC_DIR = os.path.join(PROJECT_ROOT, "public")
 UPLOADS_DIR = os.path.join(PROJECT_ROOT, "uploads")
+
+os.makedirs(PUBLIC_DIR, exist_ok=True)
+os.makedirs(UPLOADS_DIR, exist_ok=True)
 
 # Mount static files directories
 app.mount("/static", StaticFiles(directory=PUBLIC_DIR), name="static")
@@ -100,34 +96,26 @@ async def enhanced_dashboard_page():
 async def admin_page():
     return FileResponse(os.path.join(PUBLIC_DIR, 'admin.html'))
 
-@app.get("/achievements")
-async def achievements_page():
-    return FileResponse(os.path.join(PUBLIC_DIR, 'achievements.html'))
+@app.get("/user")
+async def user_page():
+    return FileResponse(os.path.join(PUBLIC_DIR, 'user.html'))
+
+@app.get("/chapters")
+async def chapters_page():
+    return FileResponse(os.path.join(PUBLIC_DIR, 'chapters.html'))
 
 @app.get("/profile")
 async def profile_page():
     return FileResponse(os.path.join(PUBLIC_DIR, 'profile.html'))
 
-@app.get("/admin-login.html")
-async def admin_login():
-    return FileResponse(os.path.join(PUBLIC_DIR, 'admin-login.html'))
-
-@app.get("/mode-selection")
-async def mode_selection():
-    return FileResponse(os.path.join(PUBLIC_DIR, 'mode-selection.html'))
-
-@app.get("/user")
-async def user_page():
-    return FileResponse(os.path.join(PUBLIC_DIR, 'user.html'))
+@app.get("/achievements")
+async def achievements_page():
+    return FileResponse(os.path.join(PUBLIC_DIR, 'achievements.html'))
 
 @app.get("/dashboard")
 async def dashboard_page():
     return FileResponse(os.path.join(PUBLIC_DIR, 'dashboard.html'))
 
-@app.get("/admin-dashboard")
-async def admin_dashboard_page():
-    return FileResponse(os.path.join(PUBLIC_DIR, 'admin-dashboard.html'))
-
-@app.get("/chapters")
-async def chapters_page():
-    return FileResponse(os.path.join(PUBLIC_DIR, 'chapters.html'))
+@app.get("/mode-selection")
+async def mode_selection_page():
+    return FileResponse(os.path.join(PUBLIC_DIR, 'mode-selection.html'))

@@ -1,4 +1,5 @@
 import os
+import json
 import firebase_admin
 from firebase_admin import credentials, firestore
 from google.cloud import storage
@@ -9,40 +10,39 @@ BACKEND_DIR = os.path.dirname(FIREBASE_DIR)
 PROJECT_ROOT = os.path.dirname(BACKEND_DIR)
 SA_PATH = os.path.join(PROJECT_ROOT, "serviceAccountKey.json")
 
-if not os.path.exists(SA_PATH):
-    raise FileNotFoundError(
-        f"❌ Firebase service account key NOT found at: {SA_PATH}\n"
-        "1. Download your service account key from Firebase Console.\n"
-        "2. Rename it to 'serviceAccountKey.json'.\n"
-        "3. Place it in the project root directory.\n"
-        "(See 'serviceAccountKey.example.json' for the expected structure)"
-    )
+firebase_env_json = os.environ.get("FIREBASE_SERVICE_ACCOUNT_JSON") or os.environ.get("FIREBASE_CREDENTIALS")
 
-# Set environment variable
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = SA_PATH
-
-# Initialize Firebase Admin
 if not firebase_admin._apps:
-    try:
-        cred = credentials.Certificate(SA_PATH)
-        firebase_admin.initialize_app(cred)
-    except Exception as e:
-        raise RuntimeError(f"❌ Failed to initialize Firebase: {e}")
+    if firebase_env_json:
+        try:
+            cred_dict = json.loads(firebase_env_json)
+            cred = credentials.Certificate(cred_dict)
+            firebase_admin.initialize_app(cred)
+            print("[Firebase Success] Initialized Firebase Admin from environment variable.")
+        except Exception as e:
+            print(f"[Firebase Warning] Failed to initialize Firebase from env: {e}")
+    elif SA_PATH and os.path.exists(SA_PATH):
+        try:
+            os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = SA_PATH
+            cred = credentials.Certificate(SA_PATH)
+            firebase_admin.initialize_app(cred)
+            print(f"[Firebase Success] Initialized Firebase Admin from file: {SA_PATH}")
+        except Exception as e:
+            print(f"[Firebase Warning] Failed to initialize Firebase from file: {e}")
+    else:
+        print("[Firebase Warning] serviceAccountKey.json not found on disk & FIREBASE_SERVICE_ACCOUNT_JSON not set. Firebase Admin SDK skipped.")
 
-db = firestore.client()
+try:
+    db = firestore.client() if firebase_admin._apps else None
+except Exception as e:
+    print(f"[Firebase Warning] Could not initialize Firestore client: {e}")
+    db = None
 
 # Google Cloud Storage
 GCS_BUCKET = os.getenv("GCS_BUCKET_NAME")
-if not GCS_BUCKET:
-    raise ValueError("❌ GCS_BUCKET_NAME not found in .env file.")
-
 try:
-    gcs_client = storage.Client()
-    bucket = gcs_client.bucket(GCS_BUCKET)
+    gcs_client = storage.Client() if os.environ.get("GOOGLE_APPLICATION_CREDENTIALS") else None
+    bucket = gcs_client.bucket(GCS_BUCKET) if (gcs_client and GCS_BUCKET) else None
 except Exception as e:
-    print(f"⚠️ Warning: Could not connect to GCS bucket '{GCS_BUCKET}': {e}")
+    print(f"[GCS Warning] Cloud storage bucket initialization skipped: {e}")
     bucket = None
-
-print("[FIREBASE] Firebase Admin Initialized")
-if bucket:
-    print(f"[FIREBASE] Connected to Bucket: {GCS_BUCKET}")
