@@ -1,0 +1,246 @@
+{
+  "lesson_title": "The Amazing Journey of Wool: From Sheep to Sweater!",
+  "layout_mode": "timeline",
+  "theme": "Science",
+  "global_assets": [],
+  "connections": [],
+  "lesson_id": "vl_8e7f520f",
+  "scenes": [
+    {
+      "scene_no": 1,
+      "purpose": "To introduce the topic of wool making and set the stage for the lesson.",
+      "template_id": "title_slide",
+      "template_selection_reasoning": "The 'title_slide' template is exclusively used for the first scene to clearly present the lesson's title and a catchy subtitle, providing a clear introduction to the student.",
+      "camera": {
+        "zoom": 1.15,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "main_concept"
+      },
+      "teacher_script": "Hello, young explorers! Today, we're going on an exciting adventure to discover how the soft, warm wool we wear gets made. Get ready to learn the amazing journey of wool!",
+      "template_data": {
+        "title": "The Amazing Journey of Wool",
+        "subtitle": "From Sheep to Your Warm Sweater!"
+      },
+      "audio_url": "/uploads/visual_lessons/vl_8e7f520f/scene_1.wav"
+    },
+    {
+      "scene_no": 2,
+      "purpose": "To introduce the different animals from which wool is obtained, establishing the source of the material.",
+      "template_id": "taxonomy_tree",
+      "template_selection_reasoning": "A 'taxonomy_tree' is ideal here to show the hierarchical classification of different animals that provide wool. It visually organizes the various sources from a common root, making it easy for students to understand where wool comes from.",
+      "camera": {
+        "zoom": 1.0,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "root"
+      },
+      "teacher_script": "Wool isn't just from sheep! Many animals give us this wonderful fiber. Let's see which furry friends help keep us warm.",
+      "template_data": {
+        "title": "Where Does Wool Come From?",
+        "root": {
+          "label": "Wool-Bearing Animals",
+          "children": [
+            {
+              "label": "Sheep",
+              "children": [
+                {
+                  "label": "Merino Sheep",
+                  "children": []
+                }
+              ]
+            },
+            {
+              "label": "Goat",
+              "children": [
+                {
+                  "label": "Angora Goat",
+                  "children": []
+                },
+                {
+                  "label": "Cashmere Goat",
+                  "children": []
+                }
+              ]
+            },
+            {
+              "label": "Yak",
+              "children": []
+            },
+            {
+              "label": "Camel",
+              "children": []
+            }
+          ]
+        }
+      },
+      "audio_url": "/uploads/visual_lessons/vl_8e7f520f/scene_2.wav"
+    },
+    {
+      "scene_no": 3,
+      "purpose": "To provide a high-level overview of the sequential steps involved in processing wool, preparing the student for detailed explanations.",
+      "template_id": "cycle_template",
+      "template_selection_reasoning": "The 'cycle_template' is perfectly suited to illustrate a multi-step process like wool making. It shows the flow from one stage to the next in a clear, sequential manner, which is critical for understanding a 'process'.",
+      "camera": {
+        "zoom": 1.0,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "stage1"
+      },
+      "teacher_script": "The journey of wool involves several important steps. It's like a magical transformation! Let's look at the main stages of how wool goes from an animal to a comfy sweater.",
+      "template_data": {
+        "title": "The Main Steps of Wool Making",
+        "stages": [
+          "1. Shearing",
+          "2. Scouring",
+          "3. Sorting",
+          "4. Dyeing",
+          "5. Spinning",
+          "6. Weaving"
+        ]
+      },
+      "audio_url": "/uploads/visual_lessons/vl_8e7f520f/scene_3.wav"
+    },
+    {
+      "scene_no": 4,
+      "purpose": "To visually explain the first crucial step, shearing, by showing the contrast of the animal before and after the process.",
+      "template_id": "before_after_slider",
+      "template_selection_reasoning": "The 'before_after_slider' template is excellent for showing a transformation or change, which is exactly what shearing represents. It vividly contrasts the sheep 'before' its fleece is removed and 'after' the shearing, making the concept easy to grasp.",
+      "camera": {
+        "zoom": 1.0,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "before_state"
+      },
+      "teacher_script": "The very first step is called shearing. Imagine giving the sheep a gentle haircut! It's done without hurting the sheep, usually in warm weather.",
+      "template_data": {
+        "title": "Step 1: Shearing - A Gentle Haircut!",
+        "before": {
+          "label": "Before Shearing",
+          "bullets": [
+            "Sheep with thick, heavy fleece.",
+            "Keeps the sheep warm in winter."
+          ]
+        },
+        "after": {
+          "label": "After Shearing",
+          "bullets": [
+            "Fleece carefully removed.",
+            "Ready for washing and processing."
+          ]
+        }
+      },
+      "audio_url": "/uploads/visual_lessons/vl_8e7f520f/scene_4.wav"
+    },
+    {
+      "scene_no": 5,
+      "purpose": "To differentiate and explain the next two distinct steps: scouring (cleaning) and sorting (grading) of the raw wool.",
+      "template_id": "column_comparison",
+      "template_selection_reasoning": "A 'column_comparison' template is perfect for contrasting two distinct but sequential steps, Scouring and Sorting. It allows students to see the specific actions and purposes of each step side-by-side, enhancing clarity.",
+      "camera": {
+        "zoom": 1.0,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "left_col"
+      },
+      "teacher_script": "After shearing, the raw wool needs a good clean and then careful sorting. These steps make sure we get good quality wool ready for spinning.",
+      "template_data": {
+        "title": "Steps 2 & 3: Cleaning and Sorting the Fleece",
+        "left_col": {
+          "header": "2. Scouring (Washing)",
+          "bullets": [
+            "Washing the shorn fleece in large tanks.",
+            "Removes dirt, grease (lanolin), and sweat.",
+            "Makes the wool clean and bright."
+          ]
+        },
+        "right_col": {
+          "header": "3. Sorting (Grading)",
+          "bullets": [
+            "Separating wool based on texture and quality.",
+            "Finer wool for clothes, coarser for carpets.",
+            "Removes 'burrs' (small knots) from the wool."
+          ]
+        }
+      },
+      "audio_url": "/uploads/visual_lessons/vl_8e7f520f/scene_5.wav"
+    },
+    {
+      "scene_no": 6,
+      "purpose": "To summarize the final processing steps from cleaned wool to finished fabric in a structured, easy-to-read format.",
+      "template_id": "database_grid",
+      "template_selection_reasoning": "The 'database_grid' template is excellent for listing out multiple, sequential details like the final stages of wool processing. It provides a clear, tabular view with headers for 'Step', 'Action', and 'Result', making the information digestible and organized.",
+      "camera": {
+        "zoom": 1.0,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "main_table"
+      },
+      "teacher_script": "Once the wool is clean and sorted, it's time for some magic! It gets colored, spun into yarn, and then woven into the fabric we know.",
+      "template_data": {
+        "title": "Steps 4-6: From Fibre to Fabric",
+        "headers": [
+          "Step",
+          "Action",
+          "Result"
+        ],
+        "rows": [
+          [
+            "4. Dyeing",
+            "Cleaned wool fibres are dipped in coloured dyes.",
+            "Vibrant, colourful wool fibres."
+          ],
+          [
+            "5. Spinning",
+            "Coloured fibres are straightened and twisted tightly together.",
+            "Long, strong wool yarn (thread)."
+          ],
+          [
+            "6. Weaving/Knitting",
+            "Yarn is woven on looms or knitted into fabric.",
+            "Warm woollen cloth, sweaters, or blankets!"
+          ]
+        ]
+      },
+      "audio_url": "/uploads/visual_lessons/vl_8e7f520f/scene_6.wav"
+    },
+    {
+      "scene_no": 7,
+      "purpose": "To assess the student's understanding of the initial steps in the wool making process.",
+      "template_id": "quiz_checkpoint",
+      "template_selection_reasoning": "The 'quiz_checkpoint' template is essential for the final scene to actively engage the student and test their understanding of the lesson's core concepts. It helps reinforce learning through recall.",
+      "camera": {
+        "zoom": 1.0,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "question"
+      },
+      "teacher_script": "Great job learning about wool! Now, let's see if you can answer a quick question to test your knowledge.",
+      "template_data": {
+        "title": "Time for a Quick Check!",
+        "question": "What is the very first step in processing a sheep's fleece to make wool?",
+        "options": [
+          {
+            "label": "A. Dyeing the wool",
+            "is_correct": false
+          },
+          {
+            "label": "B. Shearing the sheep",
+            "is_correct": true
+          },
+          {
+            "label": "C. Spinning the yarn",
+            "is_correct": false
+          },
+          {
+            "label": "D. Weaving the fabric",
+            "is_correct": false
+          }
+        ],
+        "correct_answer_feedback": "That's right! Shearing is the first step to get the fleece.",
+        "incorrect_answer_feedback": "Not quite! Shearing is the very first step. Try again!"
+      },
+      "audio_url": "/uploads/visual_lessons/vl_8e7f520f/scene_7.wav"
+    }
+  ]
+}
