@@ -84,7 +84,20 @@ except Exception as e:
 
 # Mount static files directories
 app.mount("/static", StaticFiles(directory=PUBLIC_DIR), name="static")
-app.mount("/uploads", StaticFiles(directory=UPLOADS_DIR), name="uploads")
+
+TMP_UPLOADS_DIR = os.path.join("/tmp", "uploads")
+
+@app.get("/uploads/{file_path:path}")
+async def serve_upload_file(file_path: str):
+    local_path = os.path.join(UPLOADS_DIR, file_path)
+    if os.path.exists(local_path) and os.path.isfile(local_path):
+        return FileResponse(local_path)
+    
+    tmp_path = os.path.join(TMP_UPLOADS_DIR, file_path)
+    if os.path.exists(tmp_path) and os.path.isfile(tmp_path):
+        return FileResponse(tmp_path)
+        
+    raise HTTPException(status_code=404, detail="File not found")
 
 # --- HTML TEMPLATE ROUTING ---
 @app.api_route("/", methods=["GET", "HEAD"])

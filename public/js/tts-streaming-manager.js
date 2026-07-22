@@ -617,7 +617,7 @@ class StreamingAudioPipeline {
             audio_blob_url: null,
             status: 'pending',        // pending → fetching → ready → playing → done
             text_displayed: false,
-            display_allowed: false,
+            display_allowed: false,    // Synchronized text rendering - text displays when its audio chunk starts playing
             _createTime: performance.now()
         };
         this.fetchQueue.push(chunk);
@@ -706,12 +706,12 @@ class StreamingAudioPipeline {
 
         const controller = new AbortController();
         const timeoutId = setTimeout(() => {
-            console.warn(`[TTS] Fetch timeout (6s) reached for Chunk #${chunk_id}. Aborting request.`);
+            console.warn(`[TTS] Fetch timeout (25s) reached for Chunk #${chunk_id}. Aborting request.`);
             controller.abort();
-        }, 6000);
+        }, 25000);
 
         try {
-            const speaker = (window.ttsManager && window.ttsManager.voice) || 'anushka';
+            const speaker = (window.ttsManager && window.ttsManager.voice && window.ttsManager.voice !== 'default') ? window.ttsManager.voice : 'ritu';
             const language = (window.ttsManager && window.ttsManager.language) || 'en-IN';
 
             const response = await fetch('/api/tts', {

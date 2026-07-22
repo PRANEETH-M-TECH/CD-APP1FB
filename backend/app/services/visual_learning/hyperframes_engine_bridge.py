@@ -252,7 +252,19 @@ async def compile_hyperframes_html_fast(lesson_id: str, lesson_dir: str):
             except Exception as e:
                 logger.warning(f"[Hyperframes Bridge] shared/ copy warning: {e}")
 
-        return f"/uploads/visual_lessons/{lesson_id}/index.html"
+        # Backup index.html to Supabase Cloud Storage
+        from backend.app.core.supabase_storage import upload_file_to_supabase
+        cloud_html_url = upload_file_to_supabase(dest_html, f"{lesson_id}/index.html")
+        
+        # Always serve index.html via FastAPI route to guarantee text/html MIME type rendering in browser iframes
+        serving_url = f"/uploads/visual_lessons/{lesson_id}/index.html"
+        logger.info(f"[RENDER LOG] [ENGINE SUCCESS] Compiled index.html ready -> {serving_url} (Cloud Backup: {cloud_html_url})")
+        try:
+            print(f"[RENDER LOG] [ENGINE SUCCESS] Compiled index.html ready -> {serving_url}")
+        except Exception:
+            pass
+        return serving_url
+
     elif os.path.exists(dest_html):
         hf_shared = os.path.join(hf_dir, "shared")
         if os.path.exists(hf_shared):
@@ -260,7 +272,28 @@ async def compile_hyperframes_html_fast(lesson_id: str, lesson_dir: str):
                 shutil.copytree(hf_shared, os.path.join(lesson_dir, "shared"), dirs_exist_ok=True)
             except Exception:
                 pass
-        return f"/uploads/visual_lessons/{lesson_id}/index.html"
+        from backend.app.core.supabase_storage import upload_file_to_supabase
+        cloud_html_url = upload_file_to_supabase(dest_html, f"{lesson_id}/index.html")
+        serving_url = f"/uploads/visual_lessons/{lesson_id}/index.html"
+        try:
+            print(f"[RENDER LOG] [ENGINE SUCCESS] Using existing index.html -> {serving_url}")
+        except Exception:
+            pass
+        return serving_url
     else:
         # Fallback to pure Python compiler if Node execution was unavailable
-        return _compile_index_html_python_fallback(lesson_id, lesson_dir)
+        try:
+            print("[RENDER LOG] [ENGINE NOTICE] Node compiler unavailable. Executing Python HTML fallback compiler...")
+        except Exception:
+            pass
+        fallback_url = _compile_index_html_python_fallback(lesson_id, lesson_dir)
+        dest_fallback = os.path.join(lesson_dir, "index.html")
+        if os.path.exists(dest_fallback):
+            from backend.app.core.supabase_storage import upload_file_to_supabase
+            upload_file_to_supabase(dest_fallback, f"{lesson_id}/index.html")
+        serving_url = f"/uploads/visual_lessons/{lesson_id}/index.html"
+        try:
+            print(f"[RENDER LOG] [ENGINE SUCCESS] Python fallback HTML compiled -> {serving_url}")
+        except Exception:
+            pass
+        return serving_url

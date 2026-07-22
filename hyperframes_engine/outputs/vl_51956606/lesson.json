@@ -1,0 +1,316 @@
+{
+  "lesson_id": "vl_51956606",
+  "lesson_title": "The Power of Vitamin C: Fueling Your Body!",
+  "layout_mode": "timeline",
+  "theme": "Science",
+  "global_assets": [],
+  "connections": [],
+  "scenes": [
+    {
+      "scene_no": 1,
+      "purpose": "To introduce the lesson topic: Vitamin C and its importance in our diet.",
+      "template_id": "title_slide",
+      "template_selection_reasoning": "The 'title_slide' template is mandatory for the first scene to clearly present the lesson's title and a brief introduction, setting the stage for the student.",
+      "camera": {
+        "zoom": 1.1,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "title"
+      },
+      "teacher_script": "Hello, future biologists! Today, we're going to uncover the secrets of a vital nutrient: Vitamin C. Get ready to explore why it's so important and where we can find it in our daily meals!",
+      "template_data": {
+        "title": "The Power of Vitamin C: Fueling Your Body!",
+        "subtitle": "Discovering Essential Sources for a Healthy Life"
+      },
+      "audio_url": "https://oovmwkwsujujkvmoyffa.supabase.co/storage/v1/object/public/visual-lessons/vl_51956606/scene_1.wav"
+    },
+    {
+      "scene_no": 2,
+      "purpose": "To define Vitamin C and highlight its primary functions in the human body.",
+      "template_id": "concept_diagram",
+      "template_selection_reasoning": "The 'concept_diagram' template is ideal for introducing a central concept (Vitamin C) and branching out to its key attributes or functions. This visually organizes complex information into easily digestible parts, perfect for understanding a new biological concept.",
+      "camera": {
+        "zoom": 1.05,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "main_concept"
+      },
+      "teacher_script": "Vitamin C, also known as ascorbic acid, is an essential nutrient our bodies can't produce. It's a powerful antioxidant, crucial for protecting our cells and boosting our immune system. Think of it as your body's shield!",
+      "template_data": {
+        "title": "What is Vitamin C?",
+        "main_concept": {
+          "text": "Vitamin C (Ascorbic Acid)",
+          "color": "#FFD700"
+        },
+        "branches": [
+          {
+            "id": "branch1",
+            "text": "Essential Nutrient",
+            "color": "#FF6347",
+            "attributes": [
+              "Body cannot produce it",
+              "Must be obtained from diet"
+            ]
+          },
+          {
+            "id": "branch2",
+            "text": "Powerful Antioxidant",
+            "color": "#6A5ACD",
+            "attributes": [
+              "Protects cells from damage",
+              "Fights free radicals"
+            ]
+          },
+          {
+            "id": "branch3",
+            "text": "Immune System Support",
+            "color": "#3CB371",
+            "attributes": [
+              "Boosts white blood cell function",
+              "Helps fight infections"
+            ]
+          },
+          {
+            "id": "branch4",
+            "text": "Collagen Production",
+            "color": "#FF8C00",
+            "attributes": [
+              "Essential for healthy skin, bones, and blood vessels"
+            ]
+          }
+        ]
+      },
+      "audio_url": "https://oovmwkwsujujkvmoyffa.supabase.co/storage/v1/object/public/visual-lessons/vl_51956606/scene_2.wav"
+    },
+    {
+      "scene_no": 3,
+      "purpose": "To categorize the main types of foods that are rich in Vitamin C.",
+      "template_id": "column_comparison",
+      "template_selection_reasoning": "The 'column_comparison' template is effective here to clearly distinguish between the two primary categories of Vitamin C-rich foods: fruits and vegetables. This side-by-side presentation helps students quickly grasp the major sources.",
+      "camera": {
+        "zoom": 1.0,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "left_col"
+      },
+      "teacher_script": "So, where can we find this amazing nutrient? Generally, Vitamin C is abundant in two major food groups: fruits and vegetables. Let's look at some key characteristics of each.",
+      "template_data": {
+        "title": "Main Sources of Vitamin C",
+        "left_col": {
+          "header": "Fruits",
+          "bullets": [
+            "Often sweet or tart",
+            "Many can be eaten raw",
+            "Known for high water content",
+            "Examples: Citrus, Berries, Tropical Fruits"
+          ]
+        },
+        "right_col": {
+          "header": "Vegetables",
+          "bullets": [
+            "Diverse in taste and texture",
+            "Can be eaten raw or cooked",
+            "Often rich in fiber and other vitamins",
+            "Examples: Leafy Greens, Peppers, Cruciferous Veggies"
+          ]
+        }
+      },
+      "audio_url": "https://oovmwkwsujujkvmoyffa.supabase.co/storage/v1/object/public/visual-lessons/vl_51956606/scene_3.wav"
+    },
+    {
+      "scene_no": 4,
+      "purpose": "To provide specific examples of fruits that are excellent sources of Vitamin C.",
+      "template_id": "database_grid",
+      "template_selection_reasoning": "The 'database_grid' template is perfect for presenting a structured list of specific food items along with relevant details. This tabular format allows students to easily see multiple examples and their key characteristics, making the information clear and organized.",
+      "camera": {
+        "zoom": 1.0,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "table_data"
+      },
+      "teacher_script": "Let's dive into some specific examples! When we think of Vitamin C, citrus fruits often come to mind, but many other delicious fruits are packed with it too. Take a look at these powerhouses!",
+      "template_data": {
+        "title": "Fruits Rich in Vitamin C",
+        "headers": [
+          "Fruit",
+          "Vitamin C Content (per 100g approx.)",
+          "Key Benefit"
+        ],
+        "rows": [
+          [
+            "Orange",
+            "53 mg",
+            "Common and versatile"
+          ],
+          [
+            "Kiwi",
+            "93 mg",
+            "Excellent source, unique taste"
+          ],
+          [
+            "Strawberry",
+            "59 mg",
+            "Rich in antioxidants"
+          ],
+          [
+            "Guava",
+            "228 mg",
+            "One of the highest sources!"
+          ],
+          [
+            "Papaya",
+            "61 mg",
+            "Aids digestion"
+          ],
+          [
+            "Lemon",
+            "53 mg",
+            "Great for flavoring"
+          ]
+        ]
+      },
+      "audio_url": "https://oovmwkwsujujkvmoyffa.supabase.co/storage/v1/object/public/visual-lessons/vl_51956606/scene_4.wav"
+    },
+    {
+      "scene_no": 5,
+      "purpose": "To provide specific examples of vegetables that are excellent sources of Vitamin C, categorizing them further.",
+      "template_id": "taxonomy_tree",
+      "template_selection_reasoning": "To avoid using the 'database_grid' consecutively and to introduce a different way of organizing information, the 'taxonomy_tree' template is chosen. It allows for a hierarchical classification of vegetables, showing different types that are rich in Vitamin C, which is pedagogically distinct from a simple list.",
+      "camera": {
+        "zoom": 0.95,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "root"
+      },
+      "teacher_script": "Don't forget about vegetables! Many green and colorful veggies are fantastic sources of Vitamin C. Let's explore some of these categories and their star players.",
+      "template_data": {
+        "title": "Vegetables Rich in Vitamin C",
+        "root": {
+          "label": "Vitamin C Rich Vegetables",
+          "children": [
+            {
+              "label": "Bell Peppers",
+              "children": [
+                {
+                  "label": "Red Bell Pepper (128 mg/100g)"
+                },
+                {
+                  "label": "Green Bell Pepper (80 mg/100g)"
+                }
+              ]
+            },
+            {
+              "label": "Cruciferous Vegetables",
+              "children": [
+                {
+                  "label": "Broccoli (89 mg/100g)"
+                },
+                {
+                  "label": "Brussels Sprouts (85 mg/100g)"
+                },
+                {
+                  "label": "Cabbage (36 mg/100g)"
+                }
+              ]
+            },
+            {
+              "label": "Leafy Greens",
+              "children": [
+                {
+                  "label": "Kale (120 mg/100g)"
+                },
+                {
+                  "label": "Spinach (28 mg/100g)"
+                }
+              ]
+            },
+            {
+              "label": "Other Notable Veggies",
+              "children": [
+                {
+                  "label": "Tomato (13 mg/100g)"
+                },
+                {
+                  "label": "Potato (20 mg/100g)"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "audio_url": "https://oovmwkwsujujkvmoyffa.supabase.co/storage/v1/object/public/visual-lessons/vl_51956606/scene_5.wav"
+    },
+    {
+      "scene_no": 6,
+      "purpose": "To visually summarize the impact of adequate Vitamin C intake on health.",
+      "template_id": "before_after_slider",
+      "template_selection_reasoning": "The 'before_after_slider' template is an engaging way to illustrate the positive impact of Vitamin C. It visually contrasts the state of health with insufficient Vitamin C versus sufficient intake, reinforcing its importance in a memorable way.",
+      "camera": {
+        "zoom": 1.0,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "slider_container"
+      },
+      "teacher_script": "Now you know what foods contain Vitamin C, let's quickly visualize the difference it makes. A diet rich in Vitamin C can truly transform your body's ability to stay healthy and strong!",
+      "template_data": {
+        "title": "The Impact of Vitamin C: Before & After",
+        "before": {
+          "label": "Insufficient Vitamin C",
+          "bullets": [
+            "Weakened Immune System",
+            "Fatigue & Low Energy",
+            "Slow Wound Healing",
+            "Increased Susceptibility to Illness"
+          ]
+        },
+        "after": {
+          "label": "Sufficient Vitamin C",
+          "bullets": [
+            "Strong Immune Defense",
+            "Increased Energy & Vitality",
+            "Healthy Skin & Rapid Healing",
+            "Protection Against Chronic Diseases"
+          ]
+        }
+      },
+      "audio_url": "https://oovmwkwsujujkvmoyffa.supabase.co/storage/v1/object/public/visual-lessons/vl_51956606/scene_6.wav"
+    },
+    {
+      "scene_no": 7,
+      "purpose": "To assess the student's understanding of Vitamin C sources.",
+      "template_id": "quiz_checkpoint",
+      "template_selection_reasoning": "The 'quiz_checkpoint' template is mandatory for the final scene. It provides an active recall opportunity for students to test their understanding of the lesson's core content, reinforcing learning.",
+      "camera": {
+        "zoom": 1.0,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "question"
+      },
+      "teacher_script": "Great job today! To check your understanding, here's a quick question. Think about all the delicious foods we discussed!",
+      "template_data": {
+        "question": "Which of the following foods is NOT typically considered a primary source of Vitamin C?",
+        "options": [
+          {
+            "id": "optionA",
+            "text": "Oranges"
+          },
+          {
+            "id": "optionB",
+            "text": "Broccoli"
+          },
+          {
+            "id": "optionC",
+            "text": "Chicken Breast"
+          },
+          {
+            "id": "optionD",
+            "text": "Strawberries"
+          }
+        ],
+        "correct_option_id": "optionC",
+        "explanation": "While chicken breast is a great source of protein, it does not contain significant amounts of Vitamin C. Oranges, broccoli, and strawberries are all excellent sources of this essential vitamin."
+      },
+      "audio_url": "https://oovmwkwsujujkvmoyffa.supabase.co/storage/v1/object/public/visual-lessons/vl_51956606/scene_7.wav"
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "lesson_id": "test_vl_offline_001",
+  "lesson_title": "How Laws Are Made in India",
+  "layout_mode": "timeline",
+  "theme": "indigo",
+  "global_assets": [],
+  "connections": [],
+  "scenes": [
+    {
+      "scene_no": 1,
+      "purpose": "Introduce topic",
+      "template_id": "title_slide",
+      "teacher_script": "Welcome to Civics class! Today we learn about laws.",
+      "template_data": {
+        "title": "How Laws Are Made in India",
+        "subtitle": "Understanding Governance"
+      }
+    },
+    {
+      "scene_no": 2,
+      "purpose": "Show law making bodies",
+      "template_id": "taxonomy_tree",
+      "teacher_script": "The Parliament makes laws at central level.",
+      "template_data": {
+        "title": "Law Making Bodies",
+        "root": {
+          "label": "Parliament",
+          "children": []
+        }
+      }
+    }
+  ]
+}

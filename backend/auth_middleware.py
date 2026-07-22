@@ -20,6 +20,7 @@ async def auth_middleware(request: Request, call_next):
     
     # Skip auth for public endpoints
     public_paths = [
+        "/",
         "/static",
         "/uploads", 
         "/admin-login.html",

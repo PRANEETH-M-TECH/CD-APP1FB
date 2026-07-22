@@ -1,0 +1,208 @@
+{
+  "lesson_id": "vl_35913811",
+  "lesson_title": "The Power of Proteins: Building Blocks for Your Body",
+  "layout_mode": "timeline",
+  "theme": "Science",
+  "global_assets": [],
+  "connections": [],
+  "scenes": [
+    {
+      "scene_no": 1,
+      "purpose": "Introduce the lesson topic and spark student interest in proteins.",
+      "template_id": "title_slide",
+      "template_selection_reasoning": "The 'title_slide' template is the standard and most effective way to begin any lesson, clearly stating the topic and setting the stage for learning. It's mandatory for the first scene.",
+      "camera": {
+        "zoom": 1.1,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "main_concept"
+      },
+      "teacher_script": "Hello young scientists! Today, we're going to learn about a super important nutrient called proteins. They are like the building blocks of our body!",
+      "template_data": {
+        "title": "The Power of Proteins",
+        "subtitle": "Building Blocks for Your Body"
+      },
+      "audio_url": "https://oovmwkwsujujkvmoyffa.supabase.co/storage/v1/object/public/visual-lessons/vl_35913811/scene_1.wav"
+    },
+    {
+      "scene_no": 2,
+      "purpose": "Explain the main functions and importance of proteins in the human body.",
+      "template_id": "concept_diagram",
+      "template_selection_reasoning": "The 'concept_diagram' template is ideal for illustrating a central concept (Proteins) and branching out to its various key functions. This visual structure helps Class 6 students easily understand multiple benefits linked to a single topic.",
+      "camera": {
+        "zoom": 1.05,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "main_concept"
+      },
+      "teacher_script": "Proteins do many amazing things for us! They help us grow tall and strong, repair our body when we get hurt, and even fight off sickness.",
+      "template_data": {
+        "title": "Why Are Proteins Important?",
+        "main_concept": {
+          "text": "Proteins",
+          "color": "#FFD700"
+        },
+        "branches": [
+          {
+            "id": "growth",
+            "text": "Help in Growth",
+            "color": "#4CAF50",
+            "attributes": [
+              "Make muscles, hair, nails"
+            ]
+          },
+          {
+            "id": "repair",
+            "text": "Repair Body Tissues",
+            "color": "#2196F3",
+            "attributes": [
+              "Heal cuts, mend bones"
+            ]
+          },
+          {
+            "id": "energy",
+            "text": "Provide Energy",
+            "color": "#FF9800",
+            "attributes": [
+              "Fuel for daily activities"
+            ]
+          },
+          {
+            "id": "immunity",
+            "text": "Boost Immunity",
+            "color": "#9C27B0",
+            "attributes": [
+              "Fight off germs and sickness"
+            ]
+          }
+        ]
+      },
+      "audio_url": "https://oovmwkwsujujkvmoyffa.supabase.co/storage/v1/object/public/visual-lessons/vl_35913811/scene_2.wav"
+    },
+    {
+      "scene_no": 3,
+      "purpose": "Provide concrete examples of common protein-rich foods, categorized for clarity.",
+      "template_id": "database_grid",
+      "template_selection_reasoning": "The 'database_grid' template is perfect for presenting a list of diverse food examples in an organized, tabular format. This allows for clear categorization (e.g., animal vs. plant sources) which is beneficial for Class 6 students to grasp different sources of protein.",
+      "camera": {
+        "zoom": 0.95,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "main_concept"
+      },
+      "teacher_script": "Many delicious foods we eat every day are packed with proteins! Let's look at some examples from both plants and animals.",
+      "template_data": {
+        "title": "Foods Rich in Proteins",
+        "headers": [
+          "Food Item",
+          "Source Type",
+          "Key Benefit"
+        ],
+        "rows": [
+          [
+            "Milk",
+            "Animal",
+            "Bone health, growth"
+          ],
+          [
+            "Eggs",
+            "Animal",
+            "Muscle building, energy"
+          ],
+          [
+            "Chicken",
+            "Animal",
+            "Strong muscles"
+          ],
+          [
+            "Lentils (Dal)",
+            "Plant",
+            "Energy, growth"
+          ],
+          [
+            "Paneer (Cottage Cheese)",
+            "Animal",
+            "Calcium, protein"
+          ],
+          [
+            "Beans",
+            "Plant",
+            "Fiber, energy"
+          ]
+        ]
+      },
+      "audio_url": "https://oovmwkwsujujkvmoyffa.supabase.co/storage/v1/object/public/visual-lessons/vl_35913811/scene_3.wav"
+    },
+    {
+      "scene_no": 4,
+      "purpose": "Illustrate the negative consequences of not consuming enough protein, emphasizing its importance.",
+      "template_id": "before_after_slider",
+      "template_selection_reasoning": "The 'before_after_slider' template is excellent for showing a clear contrast between two states: a body with sufficient protein and one with a deficiency. This visual comparison effectively highlights the impact and reinforces the importance of adequate protein intake.",
+      "camera": {
+        "zoom": 1.0,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "main_concept"
+      },
+      "teacher_script": "Just like a house needs strong bricks, our body needs enough protein to stay strong and energetic. What happens if we don't get enough?",
+      "template_data": {
+        "title": "What Happens Without Enough Protein?",
+        "before": {
+          "label": "With Enough Protein",
+          "bullets": [
+            "Strong muscles",
+            "Good energy levels",
+            "Quick healing",
+            "Healthy hair and skin"
+          ]
+        },
+        "after": {
+          "label": "Without Enough Protein",
+          "bullets": [
+            "Weak muscles",
+            "Tiredness and low energy",
+            "Slow healing",
+            "Dull hair and skin"
+          ]
+        }
+      },
+      "audio_url": "https://oovmwkwsujujkvmoyffa.supabase.co/storage/v1/object/public/visual-lessons/vl_35913811/scene_4.wav"
+    },
+    {
+      "scene_no": 5,
+      "purpose": "Assess student understanding of the lesson through an interactive question.",
+      "template_id": "quiz_checkpoint",
+      "template_selection_reasoning": "The 'quiz_checkpoint' template is mandatory for the final scene. It provides an active recall opportunity for students, allowing them to test their comprehension and reinforce the key concepts learned in the lesson.",
+      "camera": {
+        "zoom": 1.1,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "main_concept"
+      },
+      "teacher_script": "Great job learning about proteins! Now, let's quickly check what you've understood with a fun question.",
+      "template_data": {
+        "question": "Which of these is NOT a main function of proteins in our body?",
+        "options": [
+          {
+            "text": "Helping in growth",
+            "is_correct": false
+          },
+          {
+            "text": "Repairing body tissues",
+            "is_correct": false
+          },
+          {
+            "text": "Making us feel tired",
+            "is_correct": true
+          },
+          {
+            "text": "Boosting immunity",
+            "is_correct": false
+          }
+        ],
+        "correct_answer_explanation": "Proteins actually help provide energy and prevent tiredness, they don't make us feel tired!"
+      },
+      "audio_url": "https://oovmwkwsujujkvmoyffa.supabase.co/storage/v1/object/public/visual-lessons/vl_35913811/scene_5.wav"
+    }
+  ]
+}

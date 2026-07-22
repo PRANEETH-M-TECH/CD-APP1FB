@@ -1,0 +1,216 @@
+{
+  "lesson_id": "vl_b0362959",
+  "lesson_title": "Magnets: Our Invisible Helpers!",
+  "layout_mode": "timeline",
+  "theme": "Science",
+  "global_assets": [],
+  "connections": [],
+  "scenes": [
+    {
+      "scene_no": 1,
+      "purpose": "Introduce the lesson topic and engage the student.",
+      "template_id": "title_slide",
+      "template_selection_reasoning": "The 'title_slide' template is specifically designed for the first scene to present the lesson's title and a brief introduction, setting the stage for the learning journey.",
+      "camera": {
+        "zoom": 1.1,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "main_concept"
+      },
+      "teacher_script": "Hello, young scientists! Today, we're going on an exciting journey to discover the amazing world of magnets and their different forms.",
+      "template_data": {
+        "title": "Magnets: Our Invisible Helpers!",
+        "subtitle": "Exploring Different Types of Magnets"
+      },
+      "audio_url": "https://oovmwkwsujujkvmoyffa.supabase.co/storage/v1/object/public/visual-lessons/vl_b0362959/scene_1.wav"
+    },
+    {
+      "scene_no": 2,
+      "purpose": "Define what a magnet is and introduce its basic properties, connecting to the textbook's activity.",
+      "template_id": "concept_diagram",
+      "template_selection_reasoning": "The 'concept_diagram' template is ideal here to visually represent 'Magnet' as a central concept and branch out to its key properties (attraction, poles, types). This helps the student grasp the fundamental idea before diving into specific types.",
+      "camera": {
+        "zoom": 1.15,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "main_concept"
+      },
+      "teacher_script": "A magnet is a special object that can pull certain metals like iron towards it. Every magnet has two ends, called poles, a North and a South pole.",
+      "template_data": {
+        "title": "What is a Magnet?",
+        "main_concept": {
+          "text": "Magnet",
+          "color": "#ef4444"
+        },
+        "branches": [
+          {
+            "id": "attraction",
+            "text": "Attracts Iron & Nickel",
+            "color": "#3b82f6",
+            "attributes": [
+              "Pulls objects like iron filings (as in your textbook!)"
+            ]
+          },
+          {
+            "id": "poles",
+            "text": "Has Two Poles",
+            "color": "#22c55e",
+            "attributes": [
+              "North Pole",
+              "South Pole"
+            ]
+          },
+          {
+            "id": "types",
+            "text": "Can be Natural or Artificial",
+            "color": "#f97316",
+            "attributes": [
+              "Found in nature",
+              "Man-made"
+            ]
+          }
+        ]
+      },
+      "audio_url": "https://oovmwkwsujujkvmoyffa.supabase.co/storage/v1/object/public/visual-lessons/vl_b0362959/scene_2.wav"
+    },
+    {
+      "scene_no": 3,
+      "purpose": "Distinguish between natural and artificial magnets with clear examples.",
+      "template_id": "column_comparison",
+      "template_selection_reasoning": "To clearly differentiate between 'Natural Magnets' and 'Artificial Magnets', the 'column_comparison' template is most effective. It allows for a side-by-side presentation of their characteristics and examples, making the contrast easy to understand for a Class 6 student.",
+      "camera": {
+        "zoom": 1.0,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "main_concept"
+      },
+      "teacher_script": "Magnets can be found naturally, like the lodestone, or they can be made by us, which we call artificial magnets. Let's see how they are different!",
+      "template_data": {
+        "title": "Natural vs. Artificial Magnets",
+        "left_col": {
+          "header": "Natural Magnets",
+          "bullets": [
+            "Found in nature",
+            "Example: Lodestone (Magnetite)",
+            "Often weaker",
+            "Irregular shapes"
+          ]
+        },
+        "right_col": {
+          "header": "Artificial Magnets",
+          "bullets": [
+            "Made by humans",
+            "Examples: Bar, Horseshoe, Disc magnets",
+            "Can be very strong",
+            "Made in various shapes and sizes"
+          ]
+        }
+      },
+      "audio_url": "https://oovmwkwsujujkvmoyffa.supabase.co/storage/v1/object/public/visual-lessons/vl_b0362959/scene_3.wav"
+    },
+    {
+      "scene_no": 4,
+      "purpose": "Show various common types of artificial magnets with their shapes and uses, fulfilling the 'examples and images' part of the query.",
+      "template_id": "database_grid",
+      "template_selection_reasoning": "The 'database_grid' template is perfect for presenting multiple examples of artificial magnets in a structured, tabular format. This allows for clear categorization by type, shape, and use, directly addressing the student's request for 'examples and images of magnets' in an organized way.",
+      "camera": {
+        "zoom": 0.9,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "main_concept"
+      },
+      "teacher_script": "Artificial magnets come in many shapes and sizes, each designed for a special job! Here are some common types you might have seen.",
+      "template_data": {
+        "title": "Common Artificial Magnets",
+        "headers": [
+          "Type of Magnet",
+          "Shape",
+          "Example Use"
+        ],
+        "rows": [
+          [
+            "Bar Magnet",
+            "Rectangular bar",
+            "Fridge magnets, compasses"
+          ],
+          [
+            "Horseshoe Magnet",
+            "U-shaped",
+            "Lifting heavy iron objects, toys"
+          ],
+          [
+            "Disc Magnet",
+            "Flat circular",
+            "Speakers, craft projects"
+          ],
+          [
+            "Cylindrical Magnet",
+            "Rod-shaped",
+            "Science experiments, small motors"
+          ],
+          [
+            "Ring Magnet",
+            "Circular with a hole",
+            "Speakers, magnetic stirrers"
+          ]
+        ]
+      },
+      "audio_url": "https://oovmwkwsujujkvmoyffa.supabase.co/storage/v1/object/public/visual-lessons/vl_b0362959/scene_4.wav"
+    },
+    {
+      "scene_no": 5,
+      "purpose": "Illustrate the concept of temporary magnetization, directly linking to the textbook's activity of making a nail magnetic.",
+      "template_id": "before_after_slider",
+      "template_selection_reasoning": "To explain how an ordinary iron nail can become a temporary magnet, as described in the textbook, the 'before_after_slider' template is highly effective. It visually demonstrates the change in state from 'not magnetic' to 'magnetic' after an action, making the concept clear and engaging.",
+      "camera": {
+        "zoom": 1.0,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "main_concept"
+      },
+      "teacher_script": "Remember the activity in your textbook? You can turn an ordinary iron nail into a temporary magnet just by rubbing it with a strong magnet! It's like magic!",
+      "template_data": {
+        "title": "Making a Temporary Magnet",
+        "before": {
+          "label": "Iron Nail (Before)",
+          "bullets": [
+            "An ordinary iron nail",
+            "Does not attract iron filings or pins"
+          ]
+        },
+        "after": {
+          "label": "Magnetized Nail (After)",
+          "bullets": [
+            "Nail after rubbing with a bar magnet",
+            "Now attracts iron filings or pins temporarily!"
+          ]
+        }
+      },
+      "audio_url": "https://oovmwkwsujujkvmoyffa.supabase.co/storage/v1/object/public/visual-lessons/vl_b0362959/scene_5.wav"
+    },
+    {
+      "scene_no": 6,
+      "purpose": "Assess the student's understanding of the different types of magnets learned.",
+      "template_id": "quiz_checkpoint",
+      "template_selection_reasoning": "The 'quiz_checkpoint' template is mandatory for the final scene. It serves as an active recall exercise, allowing the student to test their understanding of the key concepts, specifically identifying a natural magnet, which was covered in the lesson.",
+      "camera": {
+        "zoom": 1.0,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "main_concept"
+      },
+      "teacher_script": "Time for a quick check! Can you remember which magnet is a gift from nature itself?",
+      "template_data": {
+        "question": "Which type of magnet is found naturally in the Earth?",
+        "options": [
+          "Bar Magnet",
+          "Horseshoe Magnet",
+          "Lodestone",
+          "Disc Magnet"
+        ],
+        "correct_answer": "Lodestone"
+      },
+      "audio_url": "https://oovmwkwsujujkvmoyffa.supabase.co/storage/v1/object/public/visual-lessons/vl_b0362959/scene_6.wav"
+    }
+  ]
+}

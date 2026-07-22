@@ -1,0 +1,191 @@
+{
+  "lesson_id": "vl_6d5c06d0",
+  "lesson_title": "The Power of Proteins!",
+  "layout_mode": "timeline",
+  "theme": "Science",
+  "global_assets": [],
+  "connections": [],
+  "scenes": [
+    {
+      "scene_no": 1,
+      "purpose": "Introduce the lesson topic: the importance of proteins in our diet.",
+      "template_id": "title_slide",
+      "template_selection_reasoning": "This template is mandatory for the first scene to clearly present the lesson's title and a brief, engaging subtitle to the student.",
+      "camera": {
+        "zoom": 1.1,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "main_concept"
+      },
+      "teacher_script": "Hello young scientists! Today, we're going to explore a super important part of our food called Proteins. They are like tiny superheroes for our body!",
+      "template_data": {
+        "title": "The Power of Proteins!",
+        "subtitle": "Building Blocks for a Strong You!"
+      },
+      "audio_url": "https://oovmwkwsujujkvmoyffa.supabase.co/storage/v1/object/public/visual-lessons/vl_6d5c06d0/scene_1.wav"
+    },
+    {
+      "scene_no": 2,
+      "purpose": "Define proteins and highlight their primary functions in the body for a Class 6 student.",
+      "template_id": "concept_diagram",
+      "template_selection_reasoning": "The 'concept_diagram' template is excellent for introducing a central concept (Proteins) and then branching out to its key roles and characteristics in an easy-to-understand visual manner. It helps visualize the multi-faceted nature of proteins and their various benefits.",
+      "camera": {
+        "zoom": 1.05,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "main_concept"
+      },
+      "teacher_script": "So, what exactly are proteins? Think of them as the tiny building blocks that make up our entire body, from our muscles to our hair!",
+      "template_data": {
+        "title": "What are Proteins and What Do They Do?",
+        "main_concept": {
+          "text": "Proteins",
+          "color": "#FFD700"
+        },
+        "branches": [
+          {
+            "id": "branch1",
+            "text": "Body Builders",
+            "color": "#4CAF50",
+            "attributes": [
+              "Help muscles grow strong"
+            ]
+          },
+          {
+            "id": "branch2",
+            "text": "Repair Crew",
+            "color": "#2196F3",
+            "attributes": [
+              "Fix damaged cells and tissues"
+            ]
+          },
+          {
+            "id": "branch3",
+            "text": "Energy Boosters",
+            "color": "#FF9800",
+            "attributes": [
+              "Provide energy when needed"
+            ]
+          },
+          {
+            "id": "branch4",
+            "text": "Immunity Guards",
+            "color": "#9C27B0",
+            "attributes": [
+              "Help fight off sickness"
+            ]
+          }
+        ]
+      },
+      "audio_url": "https://oovmwkwsujujkvmoyffa.supabase.co/storage/v1/object/public/visual-lessons/vl_6d5c06d0/scene_2.wav"
+    },
+    {
+      "scene_no": 3,
+      "purpose": "Illustrate common food sources of proteins, categorizing them into plant-based and animal-based options.",
+      "template_id": "column_comparison",
+      "template_selection_reasoning": "The 'column_comparison' template is ideal here to clearly differentiate between two distinct categories of protein sources (plant vs. animal) side-by-side. This visual separation helps students easily grasp and recall different types of foods rich in protein, making the information organized and digestible.",
+      "camera": {
+        "zoom": 1.0,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "left_col"
+      },
+      "teacher_script": "Now that we know what proteins do, let's find out where we can get them! Proteins come from both plants and animals.",
+      "template_data": {
+        "title": "Where Do We Get Proteins?",
+        "left_col": {
+          "header": "Plant Sources",
+          "bullets": [
+            "Lentils (Dal)",
+            "Beans (Rajma, Chole)",
+            "Peanuts",
+            "Soybeans & Tofu",
+            "Nuts & Seeds"
+          ]
+        },
+        "right_col": {
+          "header": "Animal Sources",
+          "bullets": [
+            "Milk & Dairy Products",
+            "Eggs",
+            "Chicken",
+            "Fish",
+            "Meat"
+          ]
+        }
+      },
+      "audio_url": "https://oovmwkwsujujkvmoyffa.supabase.co/storage/v1/object/public/visual-lessons/vl_6d5c06d0/scene_3.wav"
+    },
+    {
+      "scene_no": 4,
+      "purpose": "Visually demonstrate the impact of adequate protein intake on a child's health and growth, showing a transformation.",
+      "template_id": "before_after_slider",
+      "template_selection_reasoning": "This template is perfect for showing a transformation or the positive effect of something over time. It can visually represent the 'before' (lack of protein, weak) and 'after' (adequate protein, strong and healthy) states, making the importance of proteins very clear and impactful for a Class 6 student.",
+      "camera": {
+        "zoom": 1.0,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "before"
+      },
+      "teacher_script": "Imagine your body without enough proteins. You might feel tired and not grow properly. But with enough proteins, you become strong and healthy!",
+      "template_data": {
+        "title": "The Magic of Proteins: Before & After",
+        "before": {
+          "label": "Without Enough Proteins",
+          "bullets": [
+            "Weak muscles",
+            "Slow growth",
+            "Tired easily",
+            "Gets sick often"
+          ]
+        },
+        "after": {
+          "label": "With Enough Proteins",
+          "bullets": [
+            "Strong muscles",
+            "Healthy growth",
+            "Full of energy",
+            "Stays healthy"
+          ]
+        }
+      },
+      "audio_url": "https://oovmwkwsujujkvmoyffa.supabase.co/storage/v1/object/public/visual-lessons/vl_6d5c06d0/scene_4.wav"
+    },
+    {
+      "scene_no": 5,
+      "purpose": "Assess the student's understanding of the importance of proteins through a quick question.",
+      "template_id": "quiz_checkpoint",
+      "template_selection_reasoning": "As per the instructions, the final scene MUST be a 'quiz_checkpoint' to provide an active recall opportunity and check the student's comprehension of the lesson in an interactive way.",
+      "camera": {
+        "zoom": 1.0,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "question"
+      },
+      "teacher_script": "Great job learning about proteins! Now, let's see if you can answer a quick question.",
+      "template_data": {
+        "question": "Which of these is a primary role of proteins in our body?",
+        "options": [
+          {
+            "text": "Making our bones soft",
+            "is_correct": false
+          },
+          {
+            "text": "Helping muscles grow and repair",
+            "is_correct": true
+          },
+          {
+            "text": "Making us feel sleepy",
+            "is_correct": false
+          },
+          {
+            "text": "Only giving us taste",
+            "is_correct": false
+          }
+        ],
+        "explanation": "Proteins are essential for building and repairing tissues, especially muscles, and for overall growth and strength."
+      },
+      "audio_url": "https://oovmwkwsujujkvmoyffa.supabase.co/storage/v1/object/public/visual-lessons/vl_6d5c06d0/scene_5.wav"
+    }
+  ]
+}

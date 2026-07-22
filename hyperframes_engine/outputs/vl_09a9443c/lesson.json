@@ -1,0 +1,193 @@
+{
+  "lesson_id": "vl_09a9443c",
+  "lesson_title": "Vitamin C: Unveiling Its Food Sources",
+  "layout_mode": "timeline",
+  "theme": "Science",
+  "global_assets": [],
+  "connections": [],
+  "scenes": [
+    {
+      "scene_no": 1,
+      "purpose": "To introduce the lesson topic: identifying foods rich in Vitamin C, and capture student interest.",
+      "template_id": "title_slide",
+      "template_selection_reasoning": "As per the guidelines, the 'title_slide' template is exclusively reserved for the first scene to clearly present the lesson's title and a brief overview, setting the stage for the learning journey.",
+      "camera": {
+        "zoom": 1.1,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "main_concept"
+      },
+      "teacher_script": "Hello, young scientists! Today, we're going on a delicious journey to discover a crucial nutrient: Vitamin C. Get ready to explore which foods are packed with this essential vitamin!",
+      "template_data": {
+        "title": "Vitamin C: Unveiling Its Food Sources",
+        "subtitle": "Discovering the Powerhouses of Health"
+      },
+      "audio_url": "https://oovmwkwsujujkvmoyffa.supabase.co/storage/v1/object/public/visual-lessons/vl_09a9443c/scene_1.wav"
+    },
+    {
+      "scene_no": 2,
+      "purpose": "To directly answer the student's query by listing specific, common food items that are excellent sources of Vitamin C.",
+      "template_id": "database_grid",
+      "template_selection_reasoning": "The 'database_grid' template is ideal here because it allows for the structured presentation of multiple food items, along with relevant categories and benefits, in a clear, tabular format. This directly addresses the 'what types of foods' question with concrete examples.",
+      "camera": {
+        "zoom": 1.05,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "main_concept"
+      },
+      "teacher_script": "Let's kick things off by looking at some of the most well-known foods bursting with Vitamin C. From juicy fruits to vibrant vegetables, the options are plentiful!",
+      "template_data": {
+        "title": "Top Vitamin C Powerhouses",
+        "headers": [
+          "Food Item",
+          "Category",
+          "Key Benefit"
+        ],
+        "rows": [
+          [
+            "Orange",
+            "Fruit",
+            "Immune booster"
+          ],
+          [
+            "Bell Pepper",
+            "Vegetable",
+            "Antioxidant-rich"
+          ],
+          [
+            "Kiwi",
+            "Fruit",
+            "Supports skin health"
+          ],
+          [
+            "Broccoli",
+            "Vegetable",
+            "Aids wound healing"
+          ],
+          [
+            "Strawberry",
+            "Fruit",
+            "Boosts iron absorption"
+          ]
+        ]
+      },
+      "audio_url": "https://oovmwkwsujujkvmoyffa.supabase.co/storage/v1/object/public/visual-lessons/vl_09a9443c/scene_2.wav"
+    },
+    {
+      "scene_no": 3,
+      "purpose": "To categorize the diverse food sources of Vitamin C into broader groups (fruits and vegetables) for a more organized understanding.",
+      "template_id": "taxonomy_tree",
+      "template_selection_reasoning": "A 'taxonomy_tree' template is perfectly suited for showing hierarchical classification. After listing specific foods, organizing them into major categories like 'Fruits' and 'Vegetables' provides a structural understanding of the 'types' of foods that contain Vitamin C, enhancing comprehension beyond just a list.",
+      "camera": {
+        "zoom": 0.95,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "main_concept"
+      },
+      "teacher_script": "While many foods contain Vitamin C, we can broadly group them into categories. This helps us understand the different 'types' of sources more clearly.",
+      "template_data": {
+        "title": "Categorizing Vitamin C Rich Foods",
+        "root": {
+          "label": "Vitamin C Rich Foods",
+          "children": [
+            {
+              "label": "Fruits",
+              "children": [
+                {
+                  "label": "Oranges"
+                },
+                {
+                  "label": "Kiwi"
+                },
+                {
+                  "label": "Strawberries"
+                },
+                {
+                  "label": "Guava"
+                }
+              ]
+            },
+            {
+              "label": "Vegetables",
+              "children": [
+                {
+                  "label": "Bell Peppers"
+                },
+                {
+                  "label": "Broccoli"
+                },
+                {
+                  "label": "Tomatoes"
+                },
+                {
+                  "label": "Cabbage"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "audio_url": "https://oovmwkwsujujkvmoyffa.supabase.co/storage/v1/object/public/visual-lessons/vl_09a9443c/scene_3.wav"
+    },
+    {
+      "scene_no": 4,
+      "purpose": "To illustrate a crucial characteristic of Vitamin C \u2013 its sensitivity to heat \u2013 by comparing the vitamin content in fresh vs. cooked foods.",
+      "template_id": "column_comparison",
+      "template_selection_reasoning": "The 'column_comparison' template is excellent for contrasting two distinct concepts or states side-by-side. Here, it effectively highlights the difference in Vitamin C content and preservation between fresh/raw foods and cooked/processed foods, which is a vital piece of information when discussing food sources.",
+      "camera": {
+        "zoom": 1.0,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "main_concept"
+      },
+      "teacher_script": "An important fact about Vitamin C is its sensitivity. How we prepare our food can significantly impact how much of this vital nutrient we actually consume.",
+      "template_data": {
+        "title": "Vitamin C: Fresh vs. Cooked",
+        "left_col": {
+          "header": "Fresh & Raw",
+          "bullets": [
+            "Highest Vitamin C content",
+            "Nutrients are best preserved",
+            "Examples: Raw salads, fresh fruit juices",
+            "Minimize exposure to heat and air"
+          ]
+        },
+        "right_col": {
+          "header": "Cooked & Processed",
+          "bullets": [
+            "Vitamin C can decrease significantly",
+            "Sensitive to heat, light, and water",
+            "Examples: Boiled vegetables, overcooked foods",
+            "Steaming or quick stir-frying is better"
+          ]
+        }
+      },
+      "audio_url": "https://oovmwkwsujujkvmoyffa.supabase.co/storage/v1/object/public/visual-lessons/vl_09a9443c/scene_4.wav"
+    },
+    {
+      "scene_no": 5,
+      "purpose": "To assess the student's understanding of key Vitamin C food sources learned during the lesson through an interactive question.",
+      "template_id": "quiz_checkpoint",
+      "template_selection_reasoning": "As per the mandate, the 'quiz_checkpoint' template is used for the final scene. It serves as an active recall mechanism, allowing students to test their comprehension of the lesson's main topic \u2013 the identification of Vitamin C rich foods.",
+      "camera": {
+        "zoom": 1.0,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "main_concept"
+      },
+      "teacher_script": "Now, let's test your knowledge! Which of the following foods is NOT typically known for being a rich source of Vitamin C?",
+      "template_data": {
+        "question": "Which of the following foods is NOT typically considered a rich source of Vitamin C?",
+        "options": [
+          "A) Orange",
+          "B) Broccoli",
+          "C) Milk",
+          "D) Bell Pepper"
+        ],
+        "correct_answer": "C",
+        "explanation": "That's right! While oranges, broccoli, and bell peppers are excellent sources of Vitamin C, milk is primarily known for its calcium and protein content, not Vitamin C."
+      },
+      "audio_url": "https://oovmwkwsujujkvmoyffa.supabase.co/storage/v1/object/public/visual-lessons/vl_09a9443c/scene_5.wav"
+    }
+  ]
+}

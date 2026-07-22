@@ -49,11 +49,36 @@ except Exception as e:
     print(f"[Firebase Warning] Could not initialize Firestore client: {e}")
     db = None
 
-# Google Cloud Storage
-GCS_BUCKET = os.getenv("GCS_BUCKET_NAME")
+# Google Cloud Storage / Firebase Storage
+GCS_BUCKET = os.getenv("GCS_BUCKET_NAME") or os.getenv("FIREBASE_STORAGE_BUCKET") or "chaduvu-guru.firebasestorage.app"
 try:
-    gcs_client = storage.Client() if os.environ.get("GOOGLE_APPLICATION_CREDENTIALS") else None
-    bucket = gcs_client.bucket(GCS_BUCKET) if (gcs_client and GCS_BUCKET) else None
+    if os.environ.get("GOOGLE_APPLICATION_CREDENTIALS"):
+        gcs_client = storage.Client()
+        bucket = gcs_client.bucket(GCS_BUCKET)
+    else:
+        gcs_client = None
+        bucket = None
 except Exception as e:
-    print(f"[GCS Warning] Cloud storage bucket initialization skipped: {e}")
+    print(f"[GCS Warning] Cloud storage bucket initialization notice: {e}")
+    gcs_client = None
     bucket = None
+
+def upload_file_to_firebase(local_path: str, destination_blob_name: str) -> str:
+    """
+    Safely uploads a local file to Firebase Storage if bucket exists.
+    Returns public CDN URL on success, or None if bucket is unavailable.
+    Outputs clear diagnostic logs for Render console monitoring.
+    """
+    if not (bucket and os.path.exists(local_path)):
+        return None
+    try:
+        blob = bucket.blob(destination_blob_name)
+        blob.upload_from_filename(local_path)
+        blob.make_public()
+        public_url = blob.public_url
+        print(f"✅ [RENDER LOG] [FIREBASE STORAGE SUCCESS] Uploaded {os.path.basename(local_path)} -> {public_url}")
+        return public_url
+    except Exception as upload_err:
+        print(f"⚠️ [RENDER LOG] [FIREBASE STORAGE NOTICE] Could not upload {os.path.basename(local_path)} to bucket '{GCS_BUCKET}': {upload_err}")
+        return None
+

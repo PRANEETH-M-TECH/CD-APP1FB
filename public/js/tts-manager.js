@@ -18,8 +18,8 @@
 class TTSManager {
     constructor() {
         // ── Defaults ────────────────────────────────────────────────────
-        this.model    = 'browser';   // active TTS model
-        this.voice    = 'default';  // active voice/speaker
+        this.model    = 'sarvam';   // active TTS model (Sarvam AI Bulbul v3)
+        this.voice    = 'ritu';     // active voice/speaker
         this.language = 'en-IN';    // active language code
 
         // ── State ────────────────────────────────────────────────────────

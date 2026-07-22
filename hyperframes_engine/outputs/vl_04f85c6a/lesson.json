@@ -1,0 +1,218 @@
+{
+  "lesson_id": "vl_04f85c6a",
+  "lesson_title": "Unveiling Vitamin C: Your Guide to Immunity-Boosting Foods",
+  "layout_mode": "timeline",
+  "theme": "Science",
+  "global_assets": [],
+  "connections": [],
+  "scenes": [
+    {
+      "scene_no": 1,
+      "purpose": "To introduce the topic of Vitamin C and its importance in our diet.",
+      "template_id": "title_slide",
+      "template_selection_reasoning": "The 'title_slide' template is exclusively designed for the first scene to clearly present the lesson's title and a brief introduction, setting the stage for the learning journey.",
+      "camera": {
+        "zoom": 1.1,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "main_concept"
+      },
+      "teacher_script": "Hello, future biologists! Today, we're diving into the world of Vitamin C, an essential nutrient for our health. We'll explore where to find this amazing vitamin in our daily diet.",
+      "template_data": {
+        "title": "Vitamin C: Essential Foods for a Healthy Body",
+        "subtitle": "Discovering the Power of Ascorbic Acid in Your Diet"
+      },
+      "audio_url": ""
+    },
+    {
+      "scene_no": 2,
+      "purpose": "To categorize common Vitamin C sources into two main groups: fruits and vegetables, highlighting key examples from each.",
+      "template_id": "column_comparison",
+      "template_selection_reasoning": "The 'column_comparison' template is ideal here to visually contrast and compare two distinct categories of Vitamin C sources \u2013 fruits and vegetables. This allows students to easily differentiate and recall examples from each group side-by-side, enhancing clarity and retention.",
+      "camera": {
+        "zoom": 1.05,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "main_concept"
+      },
+      "teacher_script": "Vitamin C is abundant in many natural foods, primarily fruits and vegetables. Let's look at some key examples from both categories.",
+      "template_data": {
+        "title": "Fruits vs. Vegetables: Vitamin C Powerhouses",
+        "left_col": {
+          "header": "Fruits Rich in Vitamin C",
+          "bullets": [
+            "Oranges & Citrus Fruits",
+            "Kiwis",
+            "Strawberries",
+            "Guavas",
+            "Papayas",
+            "Mangoes"
+          ]
+        },
+        "right_col": {
+          "header": "Vegetables Rich in Vitamin C",
+          "bullets": [
+            "Bell Peppers (all colors)",
+            "Broccoli",
+            "Brussels Sprouts",
+            "Tomatoes",
+            "Spinach",
+            "Potatoes"
+          ]
+        }
+      },
+      "audio_url": ""
+    },
+    {
+      "scene_no": 3,
+      "purpose": "To provide a more detailed and structured list of specific foods, reinforcing the concept with concrete examples.",
+      "template_id": "database_grid",
+      "template_selection_reasoning": "The 'database_grid' template is chosen to present a structured, tabular list of specific food items. This format is excellent for organizing multiple examples with additional attributes (like category), making it easy for students to scan and absorb detailed information about various Vitamin C sources.",
+      "camera": {
+        "zoom": 1.0,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "main_concept"
+      },
+      "teacher_script": "Beyond general categories, let's pinpoint some specific foods that are powerhouses of Vitamin C. You might be surprised by some of these!",
+      "template_data": {
+        "title": "Top Vitamin C Food Sources",
+        "headers": [
+          "Food Item",
+          "Category",
+          "Key Feature"
+        ],
+        "rows": [
+          [
+            "Orange",
+            "Fruit",
+            "Classic citrus source"
+          ],
+          [
+            "Red Bell Pepper",
+            "Vegetable",
+            "Higher Vitamin C than oranges"
+          ],
+          [
+            "Kiwi",
+            "Fruit",
+            "Small but mighty"
+          ],
+          [
+            "Broccoli",
+            "Vegetable",
+            "Also rich in fiber"
+          ],
+          [
+            "Strawberry",
+            "Fruit",
+            "Sweet and antioxidant-rich"
+          ],
+          [
+            "Guava",
+            "Fruit",
+            "One of the richest sources"
+          ]
+        ]
+      },
+      "audio_url": ""
+    },
+    {
+      "scene_no": 4,
+      "purpose": "To briefly explain the key benefits and functions of Vitamin C in the human body, connecting its consumption to overall health.",
+      "template_id": "concept_diagram",
+      "template_selection_reasoning": "The 'concept_diagram' template is selected to visually represent Vitamin C as a central concept and branch out to its various important functions and benefits. This helps students understand 'why' Vitamin C is important, creating a holistic understanding beyond just 'what' foods contain it. It effectively shows relationships and key attributes.",
+      "camera": {
+        "zoom": 1.15,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "main_concept"
+      },
+      "teacher_script": "So, why is Vitamin C so crucial? It plays several vital roles in our body, from boosting immunity to maintaining healthy skin.",
+      "template_data": {
+        "title": "Why is Vitamin C Important?",
+        "main_concept": {
+          "text": "Vitamin C (Ascorbic Acid)",
+          "color": "#FFD700"
+        },
+        "branches": [
+          {
+            "id": "immune_support",
+            "text": "Boosts Immune System",
+            "color": "#4CAF50",
+            "attributes": [
+              "Helps fight infections",
+              "Supports white blood cell function"
+            ]
+          },
+          {
+            "id": "antioxidant",
+            "text": "Powerful Antioxidant",
+            "color": "#2196F3",
+            "attributes": [
+              "Protects cells from damage",
+              "Combats free radicals"
+            ]
+          },
+          {
+            "id": "collagen",
+            "text": "Aids Collagen Production",
+            "color": "#9C27B0",
+            "attributes": [
+              "Essential for healthy skin, bones, and blood vessels",
+              "Supports wound healing"
+            ]
+          },
+          {
+            "id": "iron_absorption",
+            "text": "Enhances Iron Absorption",
+            "color": "#FF9800",
+            "attributes": [
+              "Especially non-heme iron from plant sources",
+              "Helps prevent anemia"
+            ]
+          }
+        ]
+      },
+      "audio_url": ""
+    },
+    {
+      "scene_no": 5,
+      "purpose": "To assess the student's understanding of Vitamin C sources through an interactive quiz question.",
+      "template_id": "quiz_checkpoint",
+      "template_selection_reasoning": "The 'quiz_checkpoint' template is mandatory for the final scene to actively engage the student and test their recall of the lesson's core content. It provides an immediate opportunity for self-assessment and reinforces learning.",
+      "camera": {
+        "zoom": 1.0,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "main_concept"
+      },
+      "teacher_script": "Time for a quick check! Based on what we've learned, can you identify which of these foods is a rich source of Vitamin C?",
+      "template_data": {
+        "title": "Quiz Time: Test Your Knowledge!",
+        "question": "Which of the following foods is known for its exceptionally high Vitamin C content?",
+        "options": [
+          {
+            "id": "option_a",
+            "text": "Banana"
+          },
+          {
+            "id": "option_b",
+            "text": "Apple"
+          },
+          {
+            "id": "option_c",
+            "text": "Guava"
+          },
+          {
+            "id": "option_d",
+            "text": "Cucumber"
+          }
+        ],
+        "correct_option_id": "option_c",
+        "explanation": "Guava is one of the richest sources of Vitamin C, often containing much more than citrus fruits like oranges. While bananas, apples, and cucumbers have some Vitamin C, their content is significantly lower."
+      },
+      "audio_url": ""
+    }
+  ]
+}

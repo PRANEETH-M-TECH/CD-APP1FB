@@ -1,0 +1,168 @@
+{
+  "lesson_id": "vl_af191ea1",
+  "lesson_title": "Understanding Simple Electric Circuits",
+  "layout_mode": "timeline",
+  "theme": "Science",
+  "global_assets": [],
+  "connections": [],
+  "scenes": [
+    {
+      "scene_no": 1,
+      "purpose": "Introduce the concept of simple electric circuits and set the stage for the lesson.",
+      "template_id": "title_slide",
+      "template_selection_reasoning": "The 'title_slide' template is mandatory for the first scene to clearly present the lesson's title and a brief introduction, preparing the student for the topic ahead.",
+      "camera": {
+        "zoom": 1.1,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "main_concept"
+      },
+      "teacher_script": "Hello, young scientists! Today, we're going to explore the amazing world of simple electric circuits. Have you ever wondered how a torch lights up? Let's find out!",
+      "template_data": {
+        "title": "Let's Explore Simple Electric Circuits!",
+        "subtitle": "Connecting the Dots of Electricity"
+      },
+      "audio_url": "/uploads/visual_lessons/vl_af191ea1/scene_1.wav"
+    },
+    {
+      "scene_no": 2,
+      "purpose": "Identify and explain the main components of a simple electric circuit.",
+      "template_id": "concept_diagram",
+      "template_selection_reasoning": "The 'concept_diagram' template is ideal for breaking down a main topic (Simple Electric Circuit) into its core components (Cell, Wire, Bulb, Switch) in a visually organized and easy-to-understand manner for Class 6 students. It clearly shows the parts that make up the whole.",
+      "camera": {
+        "zoom": 1.05,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "main_concept"
+      },
+      "teacher_script": "A simple circuit has four main parts: a cell for power, wires to connect, a bulb to show electricity, and a switch to control it. Each part is important!",
+      "template_data": {
+        "title": "Parts of a Simple Electric Circuit",
+        "main_concept": {
+          "text": "Simple Electric Circuit",
+          "color": "#FFD700"
+        },
+        "branches": [
+          {
+            "id": "cell",
+            "text": "Cell / Battery (Power Source)",
+            "color": "#FF6347",
+            "attributes": [
+              "Provides energy"
+            ]
+          },
+          {
+            "id": "wire",
+            "text": "Connecting Wires (Path)",
+            "color": "#4682B4",
+            "attributes": [
+              "Allows electricity to flow"
+            ]
+          },
+          {
+            "id": "bulb",
+            "text": "Bulb (Load)",
+            "color": "#32CD32",
+            "attributes": [
+              "Uses electricity",
+              "Glows when current flows"
+            ]
+          },
+          {
+            "id": "switch",
+            "text": "Switch (Controller)",
+            "color": "#8A2BE2",
+            "attributes": [
+              "Opens or closes the circuit"
+            ]
+          }
+        ]
+      },
+      "audio_url": "/uploads/visual_lessons/vl_af191ea1/scene_2.wav"
+    },
+    {
+      "scene_no": 3,
+      "purpose": "Illustrate the continuous flow of electricity in a closed circuit.",
+      "template_id": "cycle_template",
+      "template_selection_reasoning": "The 'cycle_template' is chosen to illustrate the continuous flow of electricity in a closed circuit. It visually represents the sequential path from the power source, through the load, and back, which is crucial for understanding how a circuit functions.",
+      "camera": {
+        "zoom": 1.0,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "stages"
+      },
+      "teacher_script": "Electricity needs a complete, unbroken path to flow. It starts from the cell, travels through the wires, lights up the bulb, and then returns to the cell to complete its journey!",
+      "template_data": {
+        "title": "How Electricity Flows in a Circuit",
+        "stages": [
+          "1. Cell provides energy",
+          "2. Electricity flows through wire",
+          "3. Bulb lights up (uses energy)",
+          "4. Electricity returns to cell",
+          "5. Cycle repeats!"
+        ]
+      },
+      "audio_url": "/uploads/visual_lessons/vl_af191ea1/scene_3.wav"
+    },
+    {
+      "scene_no": 4,
+      "purpose": "Differentiate between an open circuit (no flow) and a closed circuit (flow).",
+      "template_id": "column_comparison",
+      "template_selection_reasoning": "The 'column_comparison' template is perfect for contrasting two distinct states: an 'Open Circuit' where electricity doesn't flow and a 'Closed Circuit' where it does. This side-by-side view helps students clearly see the differences and understand the conditions for a bulb to glow, linking to the 'Electric bulb on and off' concept from the textbook.",
+      "camera": {
+        "zoom": 1.0,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "main_concept"
+      },
+      "teacher_script": "Think of a circuit like a road for tiny electric cars. If the road is complete, the cars can drive and light up the bulb. If there's a break, they stop, and the bulb stays off!",
+      "template_data": {
+        "title": "Open vs. Closed Circuits",
+        "left_col": {
+          "header": "Closed Circuit (Switch ON)",
+          "bullets": [
+            "Electricity flows",
+            "Path is complete",
+            "Bulb glows brightly",
+            "Example: Light switch ON"
+          ]
+        },
+        "right_col": {
+          "header": "Open Circuit (Switch OFF)",
+          "bullets": [
+            "Electricity does NOT flow",
+            "Path is broken",
+            "Bulb does NOT glow",
+            "Example: Light switch OFF"
+          ]
+        }
+      },
+      "audio_url": "/uploads/visual_lessons/vl_af191ea1/scene_4.wav"
+    },
+    {
+      "scene_no": 5,
+      "purpose": "Assess the student's understanding of the energy source in a simple circuit.",
+      "template_id": "quiz_checkpoint",
+      "template_selection_reasoning": "The 'quiz_checkpoint' template is a mandatory choice for the final scene to effectively test the student's comprehension of a key concept taught in the lesson, ensuring active recall and reinforcing learning.",
+      "camera": {
+        "zoom": 1.1,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "question"
+      },
+      "teacher_script": "Great job learning about circuits! Now, let's see if you can answer this question. Which part gives the energy?",
+      "template_data": {
+        "question": "Which part of a simple electric circuit provides the energy to make the bulb glow?",
+        "options": [
+          "The connecting wire",
+          "The electric bulb",
+          "The switch",
+          "The cell or battery"
+        ],
+        "correct_answer": "The cell or battery",
+        "explanation": "The cell or battery is the power source that provides the electrical energy for the circuit."
+      },
+      "audio_url": "/uploads/visual_lessons/vl_af191ea1/scene_5.wav"
+    }
+  ]
+}

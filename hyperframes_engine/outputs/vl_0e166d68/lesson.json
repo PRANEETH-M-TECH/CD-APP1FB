@@ -1,0 +1,195 @@
+{
+  "lesson_id": "vl_0e166d68",
+  "lesson_title": "Understanding a Simple Electric Circuit",
+  "layout_mode": "timeline",
+  "theme": "Science",
+  "global_assets": [],
+  "connections": [],
+  "scenes": [
+    {
+      "scene_no": 1,
+      "purpose": "Introduce the concept of electricity and a simple electric circuit to Class 6 students.",
+      "template_id": "title_slide",
+      "template_selection_reasoning": "The 'title_slide' template is mandatory for the first scene to clearly present the lesson's title and topic, setting the stage for the learning journey.",
+      "camera": {
+        "zoom": 1.1,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "main_concept"
+      },
+      "teacher_script": "Hello, young scientists! Have you ever wondered how a torch lights up or how your toys move? It's all thanks to electricity! Today, we'll explore a simple electric circuit.",
+      "template_data": {
+        "title": "What is a Simple Electric Circuit?",
+        "subtitle": "The Path of Electricity"
+      },
+      "audio_url": "/uploads/visual_lessons/vl_0e166d68/scene_1.wav"
+    },
+    {
+      "scene_no": 2,
+      "purpose": "Identify and visually represent the basic components required to form a simple electric circuit.",
+      "template_id": "concept_diagram",
+      "template_selection_reasoning": "The 'concept_diagram' template is ideal for breaking down a main concept (Simple Electric Circuit) into its core components. It visually shows how different parts contribute to the whole, which is excellent for introducing new vocabulary and their relationships.",
+      "camera": {
+        "zoom": 1.0,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "main_concept"
+      },
+      "teacher_script": "A simple electric circuit needs a few key parts to work. Think of them as a team! Let's meet the members of this team.",
+      "template_data": {
+        "title": "Parts of a Simple Electric Circuit",
+        "main_concept": {
+          "text": "Simple Electric Circuit",
+          "color": "#4CAF50"
+        },
+        "branches": [
+          {
+            "id": "source",
+            "text": "Power Source (Battery)",
+            "color": "#FFC107",
+            "attributes": []
+          },
+          {
+            "id": "conductor",
+            "text": "Connecting Wires",
+            "color": "#2196F3",
+            "attributes": []
+          },
+          {
+            "id": "load",
+            "text": "Load (Bulb)",
+            "color": "#F44336",
+            "attributes": []
+          },
+          {
+            "id": "control",
+            "text": "Switch",
+            "color": "#9C27B0",
+            "attributes": []
+          }
+        ]
+      },
+      "audio_url": "/uploads/visual_lessons/vl_0e166d68/scene_2.wav"
+    },
+    {
+      "scene_no": 3,
+      "purpose": "Explain the individual function of each component within the circuit in a clear, structured manner.",
+      "template_id": "database_grid",
+      "template_selection_reasoning": "The 'database_grid' template is perfect for presenting structured information about multiple items (circuit components) and their corresponding properties (functions). It allows for a clear, tabular comparison and explanation of each part's role.",
+      "camera": {
+        "zoom": 1.05,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "main_table"
+      },
+      "teacher_script": "Each part in our circuit has a special job. Let's see what each one does to help the electricity flow and make things happen!",
+      "template_data": {
+        "title": "What Does Each Part Do?",
+        "headers": [
+          "Component",
+          "Function"
+        ],
+        "rows": [
+          [
+            "Power Source (Battery)",
+            "Provides the electrical energy (push) for the current to flow."
+          ],
+          [
+            "Connecting Wires",
+            "Act as paths for electricity to travel from one component to another."
+          ],
+          [
+            "Load (Bulb)",
+            "Uses the electrical energy and converts it into light and heat."
+          ],
+          [
+            "Switch",
+            "Controls the flow of electricity by making or breaking the circuit."
+          ]
+        ]
+      },
+      "audio_url": "/uploads/visual_lessons/vl_0e166d68/scene_3.wav"
+    },
+    {
+      "scene_no": 4,
+      "purpose": "Illustrate the continuous flow of electricity in a closed circuit, showing the sequence of events.",
+      "template_id": "cycle_template",
+      "template_selection_reasoning": "The 'cycle_template' is ideal for demonstrating a continuous process, like the flow of electricity in a circuit. It visually represents the sequential movement from one component to the next, emphasizing the 'loop' nature of a complete circuit.",
+      "camera": {
+        "zoom": 1.0,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "cycle_diagram"
+      },
+      "teacher_script": "Imagine electricity as tiny runners! They start from the battery, run through the wires, light up the bulb, and then return to the battery to start again. This creates a continuous loop!",
+      "template_data": {
+        "title": "How Electricity Flows in a Circuit",
+        "stages": [
+          "1. Battery provides energy",
+          "2. Wires carry electricity",
+          "3. Bulb glows brightly",
+          "4. Electricity returns to battery"
+        ]
+      },
+      "audio_url": "/uploads/visual_lessons/vl_0e166d68/scene_4.wav"
+    },
+    {
+      "scene_no": 5,
+      "purpose": "Explain the difference between an 'open' and 'closed' circuit and their practical implications.",
+      "template_id": "before_after_slider",
+      "template_selection_reasoning": "The 'before_after_slider' template is excellent for visually contrasting two states or conditions, such as an 'open' circuit (before) and a 'closed' circuit (after). It clearly shows the cause-and-effect relationship of the switch's position on the bulb's state.",
+      "camera": {
+        "zoom": 1.1,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "slider_comparison"
+      },
+      "teacher_script": "A circuit can be either 'open' or 'closed'. Think of it like a bridge! When the bridge is down, cars can cross. When it's up, they can't. Let's see what happens with our bulb!",
+      "template_data": {
+        "title": "Open vs. Closed Circuit",
+        "before": {
+          "label": "Open Circuit (Switch OFF)",
+          "bullets": [
+            "Path is broken",
+            "Electricity cannot flow",
+            "Bulb does NOT glow"
+          ]
+        },
+        "after": {
+          "label": "Closed Circuit (Switch ON)",
+          "bullets": [
+            "Path is complete",
+            "Electricity flows easily",
+            "Bulb GLOWS brightly"
+          ]
+        }
+      },
+      "audio_url": "/uploads/visual_lessons/vl_0e166d68/scene_5.wav"
+    },
+    {
+      "scene_no": 6,
+      "purpose": "Assess the student's understanding of how a simple electric circuit works and what happens when it's incomplete.",
+      "template_id": "quiz_checkpoint",
+      "template_selection_reasoning": "The 'quiz_checkpoint' template is essential for the final scene to actively engage the student and check their comprehension of the lesson's core concepts. It provides an opportunity for recall and reinforces learning.",
+      "camera": {
+        "zoom": 1.15,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "question_area"
+      },
+      "teacher_script": "Great job learning about electric circuits! Now, let's test your knowledge with a fun question. Think carefully!",
+      "template_data": {
+        "question": "What happens if one of the connecting wires breaks in a simple electric circuit?",
+        "options": [
+          "A) The bulb glows brighter.",
+          "B) The bulb stops glowing.",
+          "C) The battery gets stronger.",
+          "D) The switch automatically turns off."
+        ],
+        "correct_answer": "B) The bulb stops glowing.",
+        "explanation": "If a wire breaks, the path for electricity becomes incomplete (an open circuit), so electricity cannot flow, and the bulb will not glow."
+      },
+      "audio_url": "/uploads/visual_lessons/vl_0e166d68/scene_6.wav"
+    }
+  ]
+}

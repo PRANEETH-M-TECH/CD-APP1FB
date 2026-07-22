@@ -122,48 +122,47 @@ async def generate_visual_lesson_stream(query: str, book_uuid: str, class_name: 
         
         prompt = get_visual_lesson_prompt(class_name, subject, query, context)
         client = qdrant.gemini_client
-        model_name = qdrant.generation_model_name
         
         if not client:
             raise RuntimeError("Gemini Client is not initialized in qdrant_service.")
             
-        logger.info(f"[VisualLearning] Sending storyboard prompt to Gemini ({model_name})...")
+        target_model = "gemini-2.5-flash"
+        logger.info(f"[VisualLearning] Sending storyboard prompt to Gemini ({target_model})...")
         
-        # Automatic multi-model fallback chain prioritizing gemini-2.5-flash
-        model_candidates = ["gemini-2.5-flash", model_name, "gemini-2.0-flash", "gemini-1.5-flash"]
-        models_to_try = []
-        for m in model_candidates:
-            if m not in models_to_try:
-                models_to_try.append(m)
-
         response_text = None
-        for m_name in models_to_try:
+        last_error = None
+        
+        # Retry loop for gemini-2.5-flash to gracefully handle temporary 429 rate limits
+        for attempt in range(1, 4):
             try:
-                logger.info(f"[VisualLearning] Attempting storyboard generation with model '{m_name}'...")
-                try:
-                    from google.genai import types
-                    gen_config = types.GenerateContentConfig(
-                        response_mime_type="application/json",
-                        temperature=0.2
-                    )
-                    response = client.models.generate_content(
-                        model=m_name,
-                        contents=prompt,
-                        config=gen_config
-                    )
-                except Exception:
-                    response = client.models.generate_content(
-                        model=m_name,
-                        contents=prompt
-                    )
-                response_text = response.text.strip()
-                logger.info(f"[VisualLearning] Received Gemini response text using '{m_name}' (length: {len(response_text)})")
-                break
+                logger.info(f"[VisualLearning] Generating storyboard with '{target_model}' (Attempt {attempt}/3)...")
+                from google.genai import types
+                gen_config = types.GenerateContentConfig(
+                    response_mime_type="application/json",
+                    temperature=0.2
+                )
+                response = client.models.generate_content(
+                    model=target_model,
+                    contents=prompt,
+                    config=gen_config
+                )
+                if response and response.text:
+                    response_text = response.text.strip()
+                    logger.info(f"[VisualLearning] Successfully received response from '{target_model}' (length: {len(response_text)})")
+                    break
             except Exception as m_err:
-                logger.warning(f"[VisualLearning] Model '{m_name}' failed: {m_err}. Trying next candidate...")
+                last_error = m_err
+                err_str = str(m_err)
+                if "429" in err_str or "RESOURCE_EXHAUSTED" in err_str:
+                    logger.warning(f"[VisualLearning] Rate limit 429 hit on '{target_model}'. Backing off 3s before retry {attempt+1}...")
+                    print(f"[RENDER LOG] [NOTICE] Gemini API rate limit hit. Pausing 3s before retry {attempt+1}...")
+                    await asyncio.sleep(3.0)
+                else:
+                    logger.warning(f"[VisualLearning] Model '{target_model}' attempt {attempt} notice: {m_err}")
+                    await asyncio.sleep(1.0)
 
         if not response_text:
-            raise RuntimeError("All Gemini model candidates failed to generate storyboard.")
+            raise RuntimeError(f"Failed to generate storyboard with {target_model}: {last_error}")
         
         try:
             blueprint = clean_and_parse_json(response_text)
@@ -177,6 +176,7 @@ async def generate_visual_lesson_stream(query: str, book_uuid: str, class_name: 
             clips = []
             for idx, item in enumerate(raw_clips, 1):
                 if isinstance(item, dict):
+                    item["scene_no"] = idx
                     clips.append(item)
                 elif isinstance(item, str):
                     clips.append({
@@ -262,6 +262,10 @@ async def generate_visual_lesson_stream(query: str, book_uuid: str, class_name: 
         output_dir = os.path.join(PROJECT_ROOT, "uploads", "visual_lessons", lesson_id)
         try:
             os.makedirs(output_dir, exist_ok=True)
+            test_file = os.path.join(output_dir, ".write_test")
+            with open(test_file, "w") as f:
+                f.write("1")
+            os.remove(test_file)
         except Exception:
             output_dir = os.path.join("/tmp", "uploads", "visual_lessons", lesson_id)
             os.makedirs(output_dir, exist_ok=True)
@@ -319,8 +323,24 @@ async def generate_visual_lesson_stream(query: str, book_uuid: str, class_name: 
             "lesson": lesson_package,
             "lesson_package": lesson_package
         }
+
+        try:
+            print("\n======================================================================")
+            print(f"🎉 [RENDER LOG] [VISUAL LEARNING PIPELINE SUCCESS]")
+            print(f"   Lesson ID: {lesson_id}")
+            print(f"   Title: '{lesson_package['lesson_title']}'")
+            print(f"   Scenes: {len(processed_scenes)}")
+            print(f"   Compiled Player URL: {compiled_url}")
+            print("======================================================================\n")
+        except Exception:
+            print(f"[RENDER LOG] [VISUAL LEARNING PIPELINE SUCCESS] Lesson ID: {lesson_id} | URL: {compiled_url}")
+
         yield f"data: {json.dumps(ready_payload)}\n\n"
         
     except Exception as e:
         logger.error(f"[VisualLearning] Failed to stream visual lesson storyboard: {e}", exc_info=True)
+        try:
+            print(f"\n❌ [RENDER LOG] [VISUAL LEARNING PIPELINE ERROR]: {e}\n")
+        except Exception:
+            print(f"[RENDER LOG] [VISUAL LEARNING PIPELINE ERROR]: {e}")
         yield f"data: {json.dumps({'type': 'error', 'message': str(e)})}\n\n"

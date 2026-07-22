@@ -55,7 +55,15 @@ async def generate_slide_audio(slides: list, lesson_id: str) -> list:
     MAIN_DIR = os.path.dirname(os.path.abspath(__file__))
     PROJECT_ROOT = os.path.abspath(os.path.join(MAIN_DIR, "..", "..", "..", ".."))
     lesson_dir = os.path.join(PROJECT_ROOT, "uploads", "visual_lessons", lesson_id)
-    os.makedirs(lesson_dir, exist_ok=True)
+    try:
+        os.makedirs(lesson_dir, exist_ok=True)
+        test_file = os.path.join(lesson_dir, ".write_test")
+        with open(test_file, "w") as f:
+            f.write("1")
+        os.remove(test_file)
+    except Exception:
+        lesson_dir = os.path.join("/tmp", "uploads", "visual_lessons", lesson_id)
+        os.makedirs(lesson_dir, exist_ok=True)
     
     api_key = os.getenv("SARVAM_API_KEY", "")
     
@@ -63,8 +71,10 @@ async def generate_slide_audio(slides: list, lesson_id: str) -> list:
     dummy_wav_b64 = "UklGRigAAABXQVZFZm10IBAAAAABAAEAESsAACJWAAACABAAZGF0YQQAAAAAAA=="
     audio_urls = []
     
-    for slide in slides:
-        slide_no = slide.get("scene_no", slide.get("slide_no", 1))
+    for slide_idx, slide in enumerate(slides, 1):
+        slide_no = slide.get("scene_no", slide_idx)
+        if not isinstance(slide_no, int):
+            slide_no = slide_idx
         text = slide.get("teacher_script", "").strip()
         if not text:
             text = f"Scene {slide_no}."
@@ -128,16 +138,31 @@ async def generate_slide_audio(slides: list, lesson_id: str) -> list:
             with open(wav_path, "wb") as f:
                 f.write(all_audio_bytes)
                 
-            audio_urls.append(f"/uploads/visual_lessons/{lesson_id}/{wav_filename}")
-            logger.info(f"[AudioGen] Successfully generated audio for scene {slide_no} | Size: {len(all_audio_bytes)} bytes | Saved: {wav_filename}")
-            print(f"✅ [AudioGen SUCCESS] Mapped audio file: {wav_filename}")
+            # Upload to Supabase Cloud Storage (with local fallback)
+            from backend.app.core.supabase_storage import upload_file_to_supabase
+            cloud_audio_url = upload_file_to_supabase(wav_path, f"{lesson_id}/{wav_filename}")
+            final_audio_url = cloud_audio_url or f"/uploads/visual_lessons/{lesson_id}/{wav_filename}"
+            audio_urls.append(final_audio_url)
+            
+            logger.info(f"[RENDER LOG] [AUDIO TTS SUCCESS] Scene {slide_no} audio ready ({len(all_audio_bytes)} bytes) -> {final_audio_url}")
+            try:
+                print(f"[RENDER LOG] [AUDIO TTS SUCCESS] Scene {slide_no} audio ready ({len(all_audio_bytes)} bytes) -> {final_audio_url}")
+            except Exception:
+                pass
             
         except Exception as e:
             logger.warning(f"[AudioGen] Notice/fallback generating audio for scene {slide_no}: {e}")
             try:
+                print(f"[RENDER LOG] [AUDIO TTS NOTICE] Scene {slide_no} using silent fallback audio: {e}")
+            except Exception:
+                pass
+            try:
                 with open(wav_path, "wb") as f:
                     f.write(base64.b64decode(dummy_wav_b64))
-                audio_urls.append(f"/uploads/visual_lessons/{lesson_id}/{wav_filename}")
+                from backend.app.core.supabase_storage import upload_file_to_supabase
+                cloud_audio_url = upload_file_to_supabase(wav_path, f"{lesson_id}/{wav_filename}")
+                final_audio_url = cloud_audio_url or f"/uploads/visual_lessons/{lesson_id}/{wav_filename}"
+                audio_urls.append(final_audio_url)
             except Exception as write_err:
                 logger.error(f"[AudioGen] Failed writing fallback audio: {write_err}")
                 audio_urls.append(None)
