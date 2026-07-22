@@ -328,7 +328,6 @@ class StreamingAudioPipeline {
     /**
      * Force-flush remaining buffer as the final chunk.
      * Call when the Gemini stream emits [DONE].
-     */
     flush() {
         if (!this.isActive) return;
         const remaining = this.textBuffer.trim();
@@ -339,8 +338,17 @@ class StreamingAudioPipeline {
         this.streamCompleted = true;
         console.log('[STREAM] Gemini Stream Ended — final flush complete');
         
-        // Trigger render queue process just in case
+        // Ensure all remaining queued text chunks display immediately upon stream completion
+        if (this.renderQueue) {
+            this.renderQueue.forEach(c => c.display_allowed = true);
+        }
+        if (this.deliveryQueue) {
+            this.deliveryQueue.forEach(c => c.display_allowed = true);
+        }
+
+        // Trigger render and playback processing
         this._processRenderQueue();
+        this._processPlaybackQueue();
     }
 
     stop() {
@@ -781,9 +789,9 @@ class StreamingAudioPipeline {
             while (this.renderQueue.length > 0) {
                 const chunk = this.renderQueue[0];
                 
-                // If we are paused, we allow displaying all remaining chunks immediately (flush mode)
+                // If we are paused, or if streamCompleted is true, display all remaining chunks immediately
                 // Otherwise, we only display the chunk if display_allowed is true
-                if (!this.isPaused && !chunk.display_allowed) {
+                if (!this.isPaused && !this.streamCompleted && !chunk.display_allowed) {
                     break;
                 }
 

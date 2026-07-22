@@ -260,7 +260,11 @@ async def generate_visual_lesson_stream(query: str, book_uuid: str, class_name: 
         MAIN_DIR = os.path.dirname(os.path.abspath(__file__))
         PROJECT_ROOT = os.path.abspath(os.path.join(MAIN_DIR, "..", "..", "..", ".."))
         output_dir = os.path.join(PROJECT_ROOT, "uploads", "visual_lessons", lesson_id)
-        os.makedirs(output_dir, exist_ok=True)
+        try:
+            os.makedirs(output_dir, exist_ok=True)
+        except Exception:
+            output_dir = os.path.join("/tmp", "uploads", "visual_lessons", lesson_id)
+            os.makedirs(output_dir, exist_ok=True)
         
         lesson_package = {
             "lesson_id": lesson_id,
@@ -283,9 +287,15 @@ async def generate_visual_lesson_stream(query: str, book_uuid: str, class_name: 
             compiled_url = await compile_hyperframes_html_fast(lesson_id, output_dir)
         except Exception as compile_err:
             logger.warning(f"[VisualLearning] Engine bridge compilation notice: {compile_err}")
-            compiled_url = f"/uploads/visual_lessons/{lesson_id}/index.html"
+            compiled_url = None
+
+        # Verify whether index.html actually exists on disk before setting html_url
+        expected_index_path = os.path.join(output_dir, "index.html")
+        if not (compiled_url and os.path.exists(expected_index_path)):
+            logger.warning(f"[VisualLearning] index.html not found on disk at {expected_index_path}. Falling back to client-side slide renderer.")
+            compiled_url = None
             
-        # Attach URLs explicitly for Hyperframes iframe mounting (video_url is set to None so frontend triggers iframe player)
+        # Attach URLs explicitly for Hyperframes player mounting
         lesson_package["html_url"] = compiled_url
         lesson_package["interactive_url"] = compiled_url
         lesson_package["video_url"] = None

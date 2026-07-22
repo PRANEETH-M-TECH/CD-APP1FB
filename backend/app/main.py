@@ -76,15 +76,18 @@ app.include_router(visual_learning_router)
 PUBLIC_DIR = os.path.join(PROJECT_ROOT, "public")
 UPLOADS_DIR = os.path.join(PROJECT_ROOT, "uploads")
 
-os.makedirs(PUBLIC_DIR, exist_ok=True)
-os.makedirs(UPLOADS_DIR, exist_ok=True)
+try:
+    os.makedirs(PUBLIC_DIR, exist_ok=True)
+    os.makedirs(UPLOADS_DIR, exist_ok=True)
+except Exception as e:
+    logger.warning(f"Static directory creation notice: {e}")
 
 # Mount static files directories
 app.mount("/static", StaticFiles(directory=PUBLIC_DIR), name="static")
 app.mount("/uploads", StaticFiles(directory=UPLOADS_DIR), name="uploads")
 
 # --- HTML TEMPLATE ROUTING ---
-@app.get("/")
+@app.api_route("/", methods=["GET", "HEAD"])
 async def read_root():
     return FileResponse(os.path.join(PUBLIC_DIR, 'index.html'))
 

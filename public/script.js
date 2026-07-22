@@ -920,7 +920,14 @@ function setupUserPage() {
 
         source.onerror = function (error) {
             console.error('EventSource failed:', error);
-            contentDiv.innerHTML = `<p class="error-message">Connection error. Please try again.</p>`;
+            if (_isAudioOutputMode && window.ttsPipeline) {
+                window.ttsPipeline.flush();
+            }
+            if (!fullResponse && (contentDiv.innerHTML === '...' || contentDiv.innerHTML.includes('...'))) {
+                contentDiv.innerHTML = `<p class="error-message">Connection error. Please try again.</p>`;
+            } else if (fullResponse) {
+                contentDiv.innerHTML = marked.parse(fullResponse);
+            }
             if (window.answerPreferenceManager && window.answerPreferenceManager.currentMode === 'audio_audio') {
                 window.answerPreferenceManager.setVoicePanelState('idle');
             }

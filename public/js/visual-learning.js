@@ -795,6 +795,13 @@ class VisualLearningController {
 
         const iframe = document.getElementById('vl-html-iframe');
         if (iframe) {
+            iframe.onerror = () => {
+                console.warn("[VisualLearning] iframe failed to load. Falling back to client-side slide player.");
+                if (this.lessonPackage) {
+                    this.lessonPackage.html_url = null;
+                    this.launchPlayer();
+                }
+            };
             iframe.onload = () => {
                 console.log("6. iframe.onload fired");
                 requestAnimationFrame(() => this.scaleIframe());
@@ -803,6 +810,15 @@ class VisualLearningController {
                 try {
                     const doc = iframe.contentDocument || iframe.contentWindow.document;
                     if (doc) {
+                        // If Vercel redirected to root page (405 / error page), fall back to client-side player
+                        if (doc.title && (doc.title.includes('404') || doc.title.includes('Error') || doc.location.pathname === '/')) {
+                            console.warn("[VisualLearning] iframe loaded redirect/error page. Falling back to client-side slide player.");
+                            if (this.lessonPackage) {
+                                this.lessonPackage.html_url = null;
+                                this.launchPlayer();
+                            }
+                            return;
+                        }
                         const style = doc.createElement('style');
                         style.textContent = '.subtitles-container { display: none !important; }';
                         doc.head.appendChild(style);

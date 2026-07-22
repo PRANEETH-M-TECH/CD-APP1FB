@@ -522,9 +522,16 @@ async def smart_query_engine(
             )
             
             for chunk in response_stream:
-                if chunk.text:
-                    full_answer += chunk.text
-                    yield f"data: {json.dumps({'display_text': chunk.text})}\n\n"
+                text_val = None
+                try:
+                    if hasattr(chunk, "text") and chunk.text:
+                        text_val = chunk.text
+                except Exception:
+                    text_val = None
+                
+                if text_val:
+                    full_answer += text_val
+                    yield f"data: {json.dumps({'display_text': text_val})}\n\n"
                     await asyncio.sleep(0)
 
             follow_ups = []
