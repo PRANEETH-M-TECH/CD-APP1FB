@@ -49,6 +49,7 @@ wheels/
 
 # ============ USER DATA & UPLOADS ============
 uploads/
+hyperframes_engine/outputs/
 *.pdf
 chapterdata/chap_extraction.json
 temp/

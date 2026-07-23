@@ -217,7 +217,7 @@ async def compile_hyperframes_html_fast(lesson_id: str, lesson_dir: str):
         cmd = ["node", "run-storyboard.js", lesson_json_rel, "compile"]
         return subprocess.run(
             cmd, cwd=hf_dir, capture_output=True, text=True,
-            encoding='utf-8', errors='replace', shell=False
+            encoding='utf-8', errors='replace', shell=False, timeout=5
         )
 
     try:
@@ -228,6 +228,8 @@ async def compile_hyperframes_html_fast(lesson_id: str, lesson_dir: str):
             logger.warning(f"[Hyperframes Compiler Notice] Exit code {res.returncode}: {res.stderr}")
         else:
             logger.info(f"[Hyperframes Compiler] Compilation succeeded (exit 0)")
+    except subprocess.TimeoutExpired:
+        logger.warning(f"[Hyperframes Compiler Notice] Node compiler execution timed out (>5s). Falling back to instant Python HTML generator.")
     except Exception as e:
         logger.error(f"[Hyperframes Compiler Error] {e}")
 

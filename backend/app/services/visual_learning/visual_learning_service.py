@@ -235,12 +235,31 @@ async def generate_visual_lesson_stream(query: str, book_uuid: str, class_name: 
         yield f"data: {json.dumps({'type': 'progress', 'step': 'generating_visuals', 'status': 'complete', 'message': 'Scene visual templates assembled.'})}\n\n"
 
         # Step 4: Synthesize Voice Narration Audio
-        yield f"data: {json.dumps({'type': 'progress', 'step': 'creating_narration', 'status': 'in_progress', 'message': 'Synthesizing AI teacher voiceover narration...'})}\n\n"
-        await asyncio.sleep(0.3)
-        
         processed_scenes = clips
+        total_clips = len(processed_scenes)
+        yield f"data: {json.dumps({'type': 'progress', 'step': 'creating_narration', 'status': 'in_progress', 'message': f'Synthesizing AI voiceover narration (0/{total_clips})...'})}\n\n"
+        await asyncio.sleep(0.1)
+        
+        progress_queue = asyncio.Queue()
+
+        async def _on_audio_progress(slide_no: int, total_slides: int):
+            await progress_queue.put((slide_no, total_slides))
+
         try:
-            audio_urls = await generate_slide_audio(clips, lesson_id)
+            audio_task = asyncio.create_task(
+                generate_slide_audio(clips, lesson_id, progress_callback=_on_audio_progress)
+            )
+
+            completed_count = 0
+            while completed_count < total_clips and not audio_task.done():
+                try:
+                    s_no, total_s = await asyncio.wait_for(progress_queue.get(), timeout=1.5)
+                    completed_count += 1
+                    yield f"data: {json.dumps({'type': 'progress', 'step': 'creating_narration', 'status': 'in_progress', 'message': f'Synthesizing AI voiceovers ({completed_count}/{total_clips} ready)...'})}\n\n"
+                except asyncio.TimeoutError:
+                    yield f"data: {json.dumps({'type': 'progress', 'step': 'creating_narration', 'status': 'in_progress', 'message': f'Synthesizing AI voiceovers ({completed_count}/{total_clips} ready)...'})}\n\n"
+
+            audio_urls = await audio_task
             for idx, scene in enumerate(processed_scenes):
                 if idx < len(audio_urls):
                     scene["audio_url"] = audio_urls[idx]

@@ -1,5 +1,8 @@
 FROM python:3.11-slim
 
+# Force unbuffered Python stdout/stderr for real-time log streaming on Render
+ENV PYTHONUNBUFFERED=1
+
 # Install system dependencies & Node.js for Hyperframes compilation
 RUN apt-get update && apt-get install -y \
     curl \
