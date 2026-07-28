@@ -14,16 +14,15 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /app
 
-# Install lightweight CPU-only PyTorch (160MB instead of 2.5GB GPU bloat)
-RUN pip install --no-cache-dir torch --index-url https://download.pytorch.org/whl/cpu
+
 
 # Copy requirement manifests and install Python & Node dependencies
 COPY requirements.txt package.json ./
 RUN pip install --no-cache-dir -r requirements.txt
 RUN npm install
 
-# Pre-download SentenceTransformer model weights during build so server boots instantly (0s startup delay)
-RUN python -c "from sentence_transformers import SentenceTransformer; SentenceTransformer('all-MiniLM-L6-v2')"
+# Pre-download fastembed model weights during build so server boots instantly (0s startup delay)
+RUN python -c "from fastembed import TextEmbedding; TextEmbedding(model_name='sentence-transformers/all-MiniLM-L6-v2')"
 
 # Copy application source code
 COPY . .

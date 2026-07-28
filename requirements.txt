@@ -12,7 +12,7 @@ rank-bm25
 websockets
 cachetools
 redis
-sentence-transformers
+fastembed
 langchain-text-splitters
 numpy
 requests

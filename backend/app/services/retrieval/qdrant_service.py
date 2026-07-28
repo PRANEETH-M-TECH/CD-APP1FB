@@ -11,7 +11,7 @@ from qdrant_client import QdrantClient as QC, models
 from google import genai
 from google.genai import types
 from pypdf import PdfReader
-from sentence_transformers import SentenceTransformer
+import numpy as np
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from rank_bm25 import BM25Okapi
 
@@ -23,11 +23,34 @@ EMBEDDING_MODEL = "all-MiniLM-L6-v2"
 
 # --- GLOBALS (initialized by initialize()) ---
 client: Optional[QC] = None
-local_embedder: Optional[SentenceTransformer] = None
+local_embedder = None
 gemini_client: Optional[genai.Client] = None
 generation_model_name: str = os.environ.get("GEMINI_MODEL_NAME", "gemini-3.6-flash")
 bm25_indices: Dict[str, BM25Okapi] = {}
 book_corpus: Dict[str, List[Dict]] = {}
+
+
+class FastEmbedWrapper:
+    def __init__(self, model_name: str):
+        from fastembed import TextEmbedding
+        full_model_name = model_name
+        if "/" not in model_name:
+            full_model_name = f"sentence-transformers/{model_name}"
+        self.model = TextEmbedding(model_name=full_model_name)
+        self.model_name = model_name
+
+    def encode(self, texts):
+        if isinstance(texts, str):
+            res = list(self.model.embed([texts]))[0]
+            return np.array(res, dtype=np.float32)
+        else:
+            res_list = list(self.model.embed(texts))
+            return np.array(res_list, dtype=np.float32)
+
+    def get_sentence_embedding_dimension(self) -> int:
+        if "all-MiniLM-L6-v2" in self.model_name:
+            return 384
+        return 384
 
 
 def initialize():
@@ -37,7 +60,7 @@ def initialize():
     """
     global client, local_embedder, gemini_client, generation_model_name
 
-    local_embedder = SentenceTransformer(EMBEDDING_MODEL)
+    local_embedder = FastEmbedWrapper(EMBEDDING_MODEL)
 
     api_key = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")
     print(f"[DEBUG KEY] Loaded API key: {api_key[:10] if api_key else 'None'}... (len: {len(api_key) if api_key else 0})")
