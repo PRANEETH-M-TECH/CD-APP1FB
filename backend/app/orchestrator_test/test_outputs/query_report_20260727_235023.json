@@ -1,0 +1,162 @@
+{
+  "timestamp": "2026-07-27T23:50:23.610215",
+  "execution_time_seconds": 15.6,
+  "authenticated_student": {
+    "uid": "student8_id",
+    "name": "Sonu",
+    "class": 8,
+    "board": "CBSE",
+    "role": "student"
+  },
+  "raw_user_query": "Explain about the rule of nizams in India?",
+  "orchestrator_output": {
+    "is_authorized": true,
+    "refusal_reason": null,
+    "classification": "GENERAL_KNOWLEDGE",
+    "reformulated_query": "Rule of Nizams in India",
+    "matched_subject": null,
+    "matched_chapter": null,
+    "complexity_level": 3,
+    "format_decision": "VIDEO_REQUIRED",
+    "text_narration": "The Nizams were powerful rulers who governed the princely state of Hyderabad in India for over two centuries. They were known for their rich culture, grand architecture, and significant influence on Deccan history.The Nizams' rule began in the early 18th century, after the decline of the mighty Mughal Empire. As the Mughal power weakened, many regional governors, like Mir Qamar-ud-din Khan, who was the Mughal viceroy of the Deccan, declared their independence. He established the Asaf Jahi dynasty and became the first Nizam of Hyderabad.The Nizams ruled from Hyderabad, which became a prominent center of art, culture, and education. They developed a unique administrative system, patronized Urdu and Persian literature, and built magnificent structures like the Falaknuma Palace and Chowmahalla Palace. Their rule saw a blend of various cultures, creating a vibrant society.During the British Raj, the Nizams maintained a semi-independent status as a princely state, often aligning with the British. After India gained independence in 1947, Hyderabad initially resisted joining the Indian Union. However, through 'Operation Polo' in 1948, the state was integrated into India, bringing an end to the Nizam's rule.",
+    "video_storyboard": {
+      "lesson_title": "The Rule of the Nizams of Hyderabad",
+      "layout_mode": "timeline",
+      "theme": "History",
+      "global_assets": [],
+      "connections": [],
+      "scenes": [
+        {
+          "scene_no": 1,
+          "purpose": "Introduce the topic of Nizams of Hyderabad.",
+          "template_id": "title_slide",
+          "template_selection_reasoning": "Best for introducing the lesson title and main concept.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "The Nizams were powerful rulers who governed the princely state of Hyderabad in India for over two centuries. They were known for their rich culture, grand architecture, and significant influence on Deccan history.",
+          "template_data": {
+            "title": "The Nizams of Hyderabad",
+            "subtitle": "Rulers of the Deccan"
+          }
+        },
+        {
+          "scene_no": 2,
+          "purpose": "Explain how the Nizams came to power after the decline of the Mughal Empire.",
+          "template_id": "concept_diagram",
+          "template_selection_reasoning": "Suitable for illustrating a transition of power and the establishment of a new dynasty.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "The Nizams' rule began in the early 18th century, after the decline of the mighty Mughal Empire. As the Mughal power weakened, many regional governors, like Mir Qamar-ud-din Khan, who was the Mughal viceroy of the Deccan, declared their independence. He established the Asaf Jahi dynasty and became the first Nizam of Hyderabad.",
+          "template_data": {
+            "title": "Rise of the Asaf Jahi Dynasty",
+            "diagram_type": "flow",
+            "nodes": [
+              {
+                "id": "mughal_decline",
+                "label": "Decline of Mughal Empire"
+              },
+              {
+                "id": "mir_qamaruddin",
+                "label": "Mir Qamar-ud-din Khan (Mughal Viceroy)"
+              },
+              {
+                "id": "asaf_jahi",
+                "label": "Establishment of Asaf Jahi Dynasty (Nizams)"
+              }
+            ],
+            "edges": [
+              {
+                "source": "mughal_decline",
+                "target": "mir_qamaruddin",
+                "label": "Led to regional independence"
+              },
+              {
+                "source": "mir_qamaruddin",
+                "target": "asaf_jahi",
+                "label": "Declared independence, became 1st Nizam"
+              }
+            ]
+          }
+        },
+        {
+          "scene_no": 3,
+          "purpose": "Describe their administration, capital, and cultural contributions.",
+          "template_id": "database_grid",
+          "template_selection_reasoning": "Effective for presenting key features and contributions in a structured list.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "The Nizams ruled from Hyderabad, which became a prominent center of art, culture, and education. They developed a unique administrative system, patronized Urdu and Persian literature, and built magnificent structures like the Falaknuma Palace and Chowmahalla Palace. Their rule saw a blend of various cultures, creating a vibrant society.",
+          "template_data": {
+            "title": "Key Aspects of Nizam Rule",
+            "headers": [
+              "Aspect",
+              "Description"
+            ],
+            "rows": [
+              [
+                "Capital",
+                "Hyderabad (center of art, culture, education)"
+              ],
+              [
+                "Administration",
+                "Unique system, blend of Mughal and local practices"
+              ],
+              [
+                "Culture",
+                "Patronized Urdu & Persian literature, vibrant blend of cultures"
+              ],
+              [
+                "Architecture",
+                "Built Falaknuma Palace, Chowmahalla Palace, etc."
+              ]
+            ]
+          }
+        },
+        {
+          "scene_no": 4,
+          "purpose": "Explain their interaction with the British and the eventual integration into India.",
+          "template_id": "timeline",
+          "template_selection_reasoning": "Ideal for showing a sequence of historical events and their progression.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "During the British Raj, the Nizams maintained a semi-independent status as a princely state, often aligning with the British. After India gained independence in 1947, Hyderabad initially resisted joining the Indian Union. However, through 'Operation Polo' in 1948, the state was integrated into India, bringing an end to the Nizam's rule.",
+          "template_data": {
+            "title": "Nizams and Modern India",
+            "events": [
+              {
+                "year": "18th-20th Century",
+                "description": "Nizams rule Hyderabad as a princely state under British paramountcy."
+              },
+              {
+                "year": "1947",
+                "description": "India gains independence; Hyderabad initially resists joining the Indian Union."
+              },
+              {
+                "year": "1948",
+                "description": "'Operation Polo' leads to Hyderabad's integration into India, ending Nizam rule."
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "rag_retrieval_executed": false,
+  "retrieved_top10_chunks": []
+}

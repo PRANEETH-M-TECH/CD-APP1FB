@@ -1,0 +1,62 @@
+{
+  "timestamp": "2026-07-26T03:35:51.942364",
+  "execution_time_seconds": 9.61,
+  "authenticated_student": {
+    "uid": "JvahIkE8ROXgHWIGyirulv9O3w92",
+    "email": "student7@cg.com",
+    "name": "Praneeth",
+    "class": 7,
+    "board": "CBSE",
+    "role": "student"
+  },
+  "raw_user_query": "How do plants make their food?",
+  "orchestrator_output": {
+    "is_authorized": true,
+    "refusal_reason": null,
+    "classification": "CURRICULUM",
+    "reformulated_query": "Praneeth, how do plants make their food using the process of photosynthesis?",
+    "matched_subject": "Science",
+    "matched_chapter": "Nutrition in Plants",
+    "complexity_level": 2,
+    "format_decision": "VIDEO_REQUIRED",
+    "text_narration": "Namaste Praneeth! Plants are like little chefs, making their own food! This amazing process is called photosynthesis. They need sunlight, water, carbon dioxide from the air, and a special green pigment called chlorophyll. Inside the leaves, chlorophyll acts like a tiny solar panel, capturing energy from sunlight. This solar energy is crucial for the entire food-making process. Water is absorbed by the roots from the soil and transported to the leaves. Carbon dioxide enters the leaves through tiny pores called stomata, mostly found on the underside of the leaves. With sunlight's energy, water, and carbon dioxide, the plant \"cooks\" its food – a type of sugar called glucose. As a wonderful byproduct, it also releases oxygen into the air, which we breathe!",
+    "video_storyboard": [
+      {
+        "scene_number": 1,
+        "scene_title": "Plants' Food Factory",
+        "narration_text": "Namaste Praneeth! Plants are like little chefs, making their own food! This amazing process is called photosynthesis. They need sunlight, water, carbon dioxide from the air, and a special green pigment called chlorophyll.",
+        "animation_visual_prompt": "An animated plant with roots in soil. Sun shining brightly above. Arrows indicating water being absorbed by roots, carbon dioxide entering leaves from the air, and sunlight falling on the leaves. Highlight the green color of the leaves representing chlorophyll.",
+        "estimated_duration_seconds": 10
+      },
+      {
+        "scene_number": 2,
+        "scene_title": "Sunlight's Energy",
+        "narration_text": "Inside the leaves, chlorophyll acts like a tiny solar panel, capturing energy from sunlight. This solar energy is crucial for the entire food-making process.",
+        "animation_visual_prompt": "A close-up, magnified view of a plant leaf. Show green chlorophyll molecules within the leaf cells actively absorbing and converting sunlight energy. Illustrate light rays being 'trapped' by the chlorophyll.",
+        "estimated_duration_seconds": 8
+      },
+      {
+        "scene_number": 3,
+        "scene_title": "Water & Air Intake",
+        "narration_text": "Water is absorbed by the roots from the soil and transported to the leaves. Carbon dioxide enters the leaves through tiny pores called stomata, mostly found on the underside of the leaves.",
+        "animation_visual_prompt": "Show plant roots absorbing water from the soil, with water moving upwards through the stem to the leaves. Then, zoom into the underside of a leaf, showing tiny pores (stomata) opening and carbon dioxide molecules entering.",
+        "estimated_duration_seconds": 10
+      },
+      {
+        "scene_number": 4,
+        "scene_title": "Making Glucose & Oxygen",
+        "narration_text": "With sunlight's energy, water, and carbon dioxide, the plant \"cooks\" its food – a type of sugar called glucose. As a wonderful byproduct, it also releases oxygen into the air, which we breathe!",
+        "animation_visual_prompt": "Inside the leaf, visually represent the chemical reaction: sunlight, water, and carbon dioxide combining to form glucose (sugar molecules) and oxygen. Show oxygen bubbles being released from the leaf into the atmosphere.",
+        "estimated_duration_seconds": 12
+      }
+    ]
+  },
+  "rag_retrieval_executed": true,
+  "retrieved_top10_chunks": [
+    {
+      "chunk_index": 1,
+      "score": 1.0,
+      "content_snippet": "NCERT Class Textbook Context"
+    }
+  ]
+}

@@ -1,0 +1,179 @@
+{
+  "timestamp": "2026-07-26T17:04:19.176592",
+  "execution_time_seconds": 16.14,
+  "authenticated_student": {
+    "uid": "n1kWaoB6SPcSwb5IzP46vbdSjG92",
+    "email": "student8@cg.com",
+    "name": "Sonu",
+    "class": 8,
+    "board": "CBSE",
+    "role": "student"
+  },
+  "raw_user_query": "How did the British establish their empire in India and what was the role of the East India Company?",
+  "orchestrator_output": {
+    "is_authorized": true,
+    "refusal_reason": null,
+    "classification": "CURRICULUM",
+    "reformulated_query": "How did the British establish their empire in India and what was the role of the East India Company Class 8",
+    "matched_subject": "Social",
+    "matched_chapter": "Establishment of the British Empire in India",
+    "complexity_level": 2,
+    "format_decision": "VIDEO_REQUIRED",
+    "text_narration": "Namaste Sonu! Today, we'll explore how the British established their vast empire in India, focusing on the crucial role played by the East India Company.It all began with the British East India Company, which arrived in India in the early 17th century, primarily for trade. They were interested in Indian spices, textiles, and other goods.Soon, the Company started interfering in Indian politics. Key battles like the Battle of Plassey in 1757 and the Battle of Buxar in 1764 gave them significant control over territories and revenues, especially in Bengal.Through various policies like the Subsidiary Alliance and the Doctrine of Lapse, the Company gradually annexed more Indian states. They also established their own administrative and judicial systems, slowly replacing local rulers.The Sepoy Mutiny of 1857 was a major turning point. After this revolt, the British Crown took direct control of India, ending the East India Company's rule and officially establishing the British Raj.Can you recall which major event led to the end of the East India Company's rule in India?",
+    "video_storyboard": {
+      "lesson_title": "The British Empire in India: Role of the East India Company",
+      "layout_mode": "timeline",
+      "theme": "History",
+      "global_assets": [],
+      "connections": [],
+      "scenes": [
+        {
+          "scene_no": 1,
+          "purpose": "Introduce the topic of British Empire establishment and East India Company's role.",
+          "template_id": "title_slide",
+          "template_selection_reasoning": "Standard opening for any lesson, clearly stating the topic.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "Namaste Sonu! Today, we'll explore how the British established their vast empire in India, focusing on the crucial role played by the East India Company.",
+          "template_data": {
+            "title": "The British Empire in India",
+            "subtitle": "Role of the East India Company",
+            "image_url": "https://example.com/british_flag_india.png"
+          }
+        },
+        {
+          "scene_no": 2,
+          "purpose": "Explain the initial arrival and trade motives of the East India Company.",
+          "template_id": "geo_marker",
+          "template_selection_reasoning": "To visually represent the arrival and initial trade routes of the Company in India.",
+          "camera": {
+            "zoom": 1.2,
+            "pan_x": 0.5,
+            "pan_y": 0.3,
+            "target_node": "India"
+          },
+          "teacher_script": "It all began with the British East India Company, which arrived in India in the early 17th century, primarily for trade. They were interested in Indian spices, textiles, and other goods.",
+          "template_data": {
+            "map_image_url": "https://example.com/india_trade_routes.png",
+            "markers": [
+              {
+                "id": "marker1",
+                "lat": 20.5937,
+                "lon": 78.9629,
+                "label": "India",
+                "description": "Arrival of East India Company for trade"
+              }
+            ]
+          }
+        },
+        {
+          "scene_no": 3,
+          "purpose": "Illustrate the transition from trade to political power through key battles.",
+          "template_id": "timeline_event",
+          "template_selection_reasoning": "To show the chronological progression of key battles that led to the Company's political dominance.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "Soon, the Company started interfering in Indian politics. Key battles like the Battle of Plassey in 1757 and the Battle of Buxar in 1764 gave them significant control over territories and revenues, especially in Bengal.",
+          "template_data": {
+            "events": [
+              {
+                "year": "1757",
+                "title": "Battle of Plassey",
+                "description": "Company gains control over Bengal"
+              },
+              {
+                "year": "1764",
+                "title": "Battle of Buxar",
+                "description": "Further consolidation of power and revenue rights"
+              }
+            ],
+            "timeline_label": "Key Battles for Control"
+          }
+        },
+        {
+          "scene_no": 4,
+          "purpose": "Explain the methods used by the Company for expansion and administration.",
+          "template_id": "concept_diagram",
+          "template_selection_reasoning": "To visually represent the interconnected policies and their impact on territorial expansion.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "Through various policies like the Subsidiary Alliance and the Doctrine of Lapse, the Company gradually annexed more Indian states. They also established their own administrative and judicial systems, slowly replacing local rulers.",
+          "template_data": {
+            "main_concept": "Company's Expansion Policies",
+            "sub_concepts": [
+              {
+                "name": "Subsidiary Alliance",
+                "description": "Indian rulers had to accept British forces and pay for their maintenance."
+              },
+              {
+                "name": "Doctrine of Lapse",
+                "description": "If an Indian ruler died without a natural male heir, his kingdom would be annexed."
+              }
+            ],
+            "diagram_type": "flowchart"
+          }
+        },
+        {
+          "scene_no": 5,
+          "purpose": "Conclude with the end of Company rule and the beginning of direct British Raj.",
+          "template_id": "quiz_checkpoint",
+          "template_selection_reasoning": "To reinforce the key turning point in the establishment of the British Empire.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "The Sepoy Mutiny of 1857 was a major turning point. After this revolt, the British Crown took direct control of India, ending the East India Company's rule and officially establishing the British Raj.Can you recall which major event led to the end of the East India Company's rule in India?",
+          "template_data": {
+            "question": "Which major event led to the end of the East India Company's rule in India?",
+            "options": [
+              "Battle of Plassey",
+              "Battle of Buxar",
+              "Sepoy Mutiny of 1857",
+              "Arrival of Vasco da Gama"
+            ],
+            "correct_answer": "Sepoy Mutiny of 1857",
+            "explanation": "The Sepoy Mutiny (or First War of Indian Independence) of 1857 directly led to the British Crown taking over administration from the East India Company."
+          }
+        }
+      ]
+    }
+  },
+  "rag_retrieval_executed": true,
+  "retrieved_top10_chunks": [
+    {
+      "chunk_index": 1,
+      "score": 0.0,
+      "book_name": "",
+      "chapter_name": "",
+      "content_snippet": "..."
+    },
+    {
+      "chunk_index": 2,
+      "score": 0.0,
+      "book_name": "",
+      "chapter_name": "",
+      "content_snippet": "..."
+    },
+    {
+      "chunk_index": 3,
+      "score": 0.0,
+      "book_name": "",
+      "chapter_name": "",
+      "content_snippet": "..."
+    }
+  ]
+}

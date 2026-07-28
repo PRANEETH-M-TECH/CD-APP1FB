@@ -1,4 +1,7 @@
-document.addEventListener('DOMContentLoaded', () => {
+function initApp() {
+    // Always register the global submit function first (safe, lazy DOM lookups)
+    setupChatSubmitGlobal();
+
     // Check which page we are on and run the appropriate setup function
     if (document.getElementById('admin-form')) {
         setupAdminPage();
@@ -7,6 +10,13 @@ document.addEventListener('DOMContentLoaded', () => {
     } else if (document.getElementById('user-query-form')) {
         setupUserPage();
     }
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initApp);
+} else {
+    initApp();
+}
 
     // Global visibility change handler to stop TTS (cloud + browser)
     // IMPORTANT: Do NOT stop if an SSE stream is actively running.
@@ -35,7 +45,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     });
-});
 
 /**
  * Sets up the main admin page (uploading class, subject, and PDF).
@@ -317,6 +326,432 @@ function setupChaptersPage() {
 }
 
 /**
+ * Lightweight global chat setup — registers window.submitSmartQuery
+ * using lazy DOM lookups so it works on the premium user.html page
+ * without depending on PDF/viewer elements that no longer exist.
+ */
+function setupChatSubmitGlobal() {
+    // State variables (module-level, shared across calls)
+    let _sessionId = null;
+    let _turnCount = 0;
+    let _isFirstQuery = true;
+
+    window.submitSmartQuery = async function(query, isClickedFollowup = false) {
+        // Lazy DOM lookups at call time
+        const chatHistory = document.getElementById('chat-history') || document.getElementById('chat-container');
+        const submitButton = document.getElementById('submit-query-btn');
+        const listChaptersBtn = document.getElementById('list-chapters-btn');
+
+        if (!chatHistory) {
+            console.error('[submitSmartQuery] No chat container found (chat-history or chat-container)');
+            return;
+        }
+
+        if (_isFirstQuery) {
+            chatHistory.innerHTML = '';
+            _isFirstQuery = false;
+        }
+
+        // Show user bubble
+        const userRow = document.createElement('div');
+        userRow.className = 'chat-bubble-row chat-bubble-row--user';
+        const now = new Date();
+        const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        userRow.innerHTML = `<div class="user-bubble-card"><div>${query}</div><div class="user-bubble-meta">${timeStr}</div></div>`;
+        chatHistory.appendChild(userRow);
+        chatHistory.scrollTop = chatHistory.scrollHeight;
+
+        if (submitButton) submitButton.setAttribute('disabled', 'true');
+        if (listChaptersBtn) listChaptersBtn.classList.add('hidden');
+        const currentTurn = _turnCount;
+
+        // Show AI loading card — using the existing styled classes from conversation.css
+        const aiRow = document.createElement('div');
+        aiRow.className = 'chat-bubble-row chat-bubble-row--ai fade-in';
+        aiRow.innerHTML = `
+            <div class="ai-response-card" id="ai-card-global-${currentTurn}">
+                <div class="ai-card-top">
+                    <span class="ai-card-title">CHADUVU GURU ASSISTANT</span>
+                    <span class="intent-badge-pill" id="intent-badge-${currentTurn}"></span>
+                </div>
+                <div class="ai-text-content" id="ai-content-${currentTurn}">
+                    <span class="thinking-anim"><span></span><span></span><span></span></span>
+                </div>
+                <div id="video-mount-${currentTurn}"></div>
+            </div>`;
+        chatHistory.appendChild(aiRow);
+        chatHistory.scrollTop = chatHistory.scrollHeight;
+        const contentDiv = document.getElementById(`ai-content-${currentTurn}`);
+
+        // Build request
+        const studentClass = window.currentUserClass || "8";
+        const selectedBook = window.selectedBook;
+        const params = new URLSearchParams({
+            book_uuid: selectedBook ? selectedBook.id : "global",
+            query: query,
+            class_name: selectedBook ? selectedBook.class_name : studentClass,
+            subject: selectedBook ? selectedBook.subject : "all",
+            is_clicked_followup: isClickedFollowup.toString()
+        });
+        if (_sessionId) params.append('session_id', _sessionId);
+
+        // Attach auth token with non-blocking timeout
+        try {
+            if (typeof firebase !== 'undefined' && firebase.auth) {
+                const user = firebase.auth().currentUser;
+                if (user) {
+                    const tokenPromise = user.getIdToken();
+                    const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject('timeout'), 500));
+                    const token = await Promise.race([tokenPromise, timeoutPromise]);
+                    if (token) params.append('token', token);
+                }
+            }
+        } catch(e) {
+            console.warn('[submitSmartQuery] Token retrieval skipped or timed out:', e);
+        }
+
+        // Audio Output & Teacher Reading Chunk Streaming Setup
+        const _isAudioOutputMode = true; // Always enable TTS audio pipeline for Teacher Reading Mode
+        const useStreamingAudio = _isAudioOutputMode && window.ttsPipeline;
+        let fullText = '';
+
+        let bufferedLessonReadyGlobal = null;
+
+        if (useStreamingAudio) {
+            window.ttsPipeline.onDisplayChunk = function(textChunk, chunkId) {
+                fullText += textChunk;
+                if (contentDiv) {
+                    contentDiv.innerHTML = (typeof marked !== 'undefined') ? marked.parse(fullText) : fullText;
+                    const isNearBottom = (chatHistory.scrollHeight - chatHistory.scrollTop - chatHistory.clientHeight) < 100;
+                    if (isNearBottom) chatHistory.scrollTop = chatHistory.scrollHeight;
+                }
+            };
+            window.ttsPipeline.onComplete = function() {
+                console.log('[PLAYBACK-GLOBAL] All Teacher Reading chunks complete.');
+                if (bufferedLessonReadyGlobal) {
+                    console.log('[PLAYBACK-GLOBAL] Mounting video lesson player now.');
+                    mountVideoLessonGlobal(currentTurn, bufferedLessonReadyGlobal);
+                    bufferedLessonReadyGlobal = null;
+                }
+            };
+            if (window.playbackController) {
+                const cardEl = document.getElementById(`ai-card-global-${currentTurn}`);
+                const speakBtn = cardEl ? cardEl.querySelector('.tts-audio-btn') : null;
+                window.playbackController.startPipeline(speakBtn);
+            } else {
+                window.ttsPipeline.start();
+            }
+            console.log('[STREAM] Teacher Reading Mode (TTS + Chunk Streaming) started.');
+        }
+
+        console.log(`[submitSmartQuery] Opening SSE: /api/smart_query?${params.toString()}`);
+        const source = new EventSource(`/api/smart_query?${params.toString()}`);
+
+        source.onmessage = function(event) {
+            if (event.data === '[DONE]') {
+                source.close();
+                if (useStreamingAudio) {
+                    window.ttsPipeline.flush();
+                }
+                if (submitButton) submitButton.removeAttribute('disabled');
+                if (listChaptersBtn) listChaptersBtn.classList.remove('hidden');
+                _turnCount++;
+                chatHistory.scrollTop = chatHistory.scrollHeight;
+                return;
+            }
+            try {
+                const data = JSON.parse(event.data);
+
+                if (data.type === 'intent') {
+                    const badge = document.getElementById(`intent-badge-${currentTurn}`);
+                    if (badge) {
+                        badge.textContent = (data.intent || '').replace(/_/g, ' ');
+                        badge.className = `intent-badge-pill intent-pill-${(data.intent || '').toLowerCase()}`;
+                    }
+                    // Apply subject theming
+                    const card = document.getElementById(`ai-card-global-${currentTurn}`);
+                    const subject = (data.subject || '').toLowerCase();
+                    if (card) {
+                        if (subject.includes('math')) card.classList.add('subject-math');
+                        else if (subject.includes('science')) card.classList.add('subject-science');
+                        else if (subject.includes('social') || subject.includes('history')) card.classList.add('subject-social');
+                        else if (subject.includes('english')) card.classList.add('subject-english');
+                        else card.classList.add('subject-gk');
+                    }
+                } else if (data.display_text) {
+                    if (useStreamingAudio) {
+                        window.ttsPipeline.pushToken(data.display_text);
+                    } else {
+                        fullText += data.display_text;
+                        if (contentDiv) {
+                            if (typeof marked !== 'undefined') {
+                                contentDiv.innerHTML = marked.parse(fullText);
+                            } else {
+                                contentDiv.textContent = fullText;
+                            }
+                            chatHistory.scrollTop = chatHistory.scrollHeight;
+                        }
+                    }
+                } else if (data.type === 'session') {
+                    _sessionId = data.session_id || _sessionId;
+                } else if (data.type === 'lesson_ready') {
+                    if (window.ttsPipeline && window.ttsPipeline.isActive && !window.ttsPipeline.streamCompleted) {
+                        console.log('[submitSmartQuery Global] Video ready during Teacher Reading! Buffering video mount.');
+                        bufferedLessonReadyGlobal = data;
+                    } else {
+                        mountVideoLessonGlobal(currentTurn, data);
+                    }
+                } else if (data.error) {
+                    if (contentDiv) contentDiv.innerHTML = `<span style="color:#ff6b6b">Error: ${data.error}</span>`;
+                    source.close();
+                    if (submitButton) submitButton.removeAttribute('disabled');
+                }
+            } catch(e) {
+                console.error('[submitSmartQuery] Parse error:', e, event.data);
+            }
+        };
+
+        source.onerror = function(e) {
+            console.error('[submitSmartQuery] EventSource error:', e);
+            source.close();
+            if (submitButton) submitButton.removeAttribute('disabled');
+            if (contentDiv && !fullText) {
+                contentDiv.innerHTML = '<span style="color:#ff6b6b">Connection error. Please try again.</span>';
+            }
+        };
+
+        function mountVideoLessonGlobal(turnId, data) {
+            const mount = document.getElementById(`video-mount-${turnId}`);
+            if (mount && data.interactive_url) {
+                const playerId = `hf-player-${turnId}`;
+                const iframeId  = `hf-iframe-${turnId}`;
+                const progId    = `hf-prog-${turnId}`;
+                const timeId    = `hf-time-${turnId}`;
+                const sceneId   = `hf-scene-${turnId}`;
+
+                mount.innerHTML = `
+<div class="hf-player-shell" id="${playerId}">
+  <!-- Viewport: scales the 1280×720 Hyperframes canvas to fit any width -->
+  <div class="hf-viewport-wrapper" id="hf-viewport-${turnId}">
+    <div class="hf-scale-box" id="hf-scalebox-${turnId}">
+      <iframe id="${iframeId}"
+        src="${data.interactive_url}"
+        class="hf-iframe"
+        allow="autoplay"
+        allowfullscreen>
+      </iframe>
+    </div>
+  </div>
+
+  <!-- Controls Bar -->
+  <div class="hf-controls">
+    <div class="hf-controls-left">
+      <button class="hf-btn" id="hf-restart-${turnId}" title="Restart" onclick="hfCmd('${iframeId}','RESTART')">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M1 4v6h6"/><path d="M3.51 15a9 9 0 1 0 .49-3.5"/></svg>
+      </button>
+      <button class="hf-btn hf-playpause" id="hf-pp-${turnId}" title="Play/Pause" onclick="hfTogglePlay('${iframeId}','${turnId}')">
+        <svg class="icon-play" width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+        <svg class="icon-pause" width="15" height="15" viewBox="0 0 24 24" fill="currentColor" style="display:none"><rect x="6" y="3" width="4" height="18"/><rect x="14" y="3" width="4" height="18"/></svg>
+      </button>
+    </div>
+
+    <div class="hf-controls-center">
+      <!-- Progress bar -->
+      <span class="hf-time" id="${timeId}">0:00</span>
+      <div class="hf-progress-track" id="hf-track-${turnId}"
+        onclick="hfSeekClick(event,'${iframeId}','hf-track-${turnId}','hf-ppstate-${turnId}')">
+        <div class="hf-progress-fill" id="${progId}" style="width:0%"></div>
+        <div class="hf-progress-thumb" id="hf-thumb-${turnId}" style="left:0%"></div>
+      </div>
+      <span class="hf-time" id="hf-dur-${turnId}">--:--</span>
+    </div>
+
+    <div class="hf-controls-right">
+      <select class="hf-speed-select" title="Playback Speed"
+        onchange="hfCmd('${iframeId}','SET_PLAYBACK_RATE',{rate:parseFloat(this.value)})">
+        <option value="0.75">0.75×</option>
+        <option value="1" selected>1×</option>
+        <option value="1.25">1.25×</option>
+        <option value="1.5">1.5×</option>
+        <option value="2">2×</option>
+      </select>
+      <button class="hf-btn hf-mute" id="hf-mute-${turnId}" title="Mute/Unmute"
+        onclick="hfToggleMute('${iframeId}','${turnId}')">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+      </button>
+      <button class="hf-btn" title="Fullscreen" onclick="hfFullscreen('${playerId}')">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+      </button>
+      <span class="hf-scene-counter" id="${sceneId}">Scene —</span>
+    </div>
+  </div>
+</div>`;
+
+                // Hidden state element
+                const stateEl = document.createElement('span');
+                stateEl.id = `hf-ppstate-${turnId}`;
+                stateEl.dataset.playing = '0';
+                stateEl.dataset.muted = '0';
+                stateEl.dataset.duration = '0';
+                stateEl.style.display = 'none';
+                mount.appendChild(stateEl);
+
+                // Scale the 1280×720 iframe to fill the container responsively
+                requestAnimationFrame(() => {
+                    hfScaleViewport(`hf-viewport-${turnId}`, `hf-scalebox-${turnId}`);
+                });
+
+                // Listen for postMessage events from this iframe using turnId
+                window.addEventListener('message', function hfListener(e) {
+                    if (!e.data || e.data.source !== 'HYPERFRAMES_ENGINE') return;
+                    const ppBtn   = document.getElementById(`hf-pp-${turnId}`);
+                    const prog    = document.getElementById(progId);
+                    const thumb   = document.getElementById(`hf-thumb-${turnId}`);
+                    const timeEl  = document.getElementById(timeId);
+                    const durEl   = document.getElementById(`hf-dur-${turnId}`);
+                    const sceneEl = document.getElementById(sceneId);
+                    const state   = document.getElementById(`hf-ppstate-${turnId}`);
+
+                    if (e.data.type === 'PLAYING') {
+                        if (ppBtn) { ppBtn.querySelector('.icon-play').style.display='none'; ppBtn.querySelector('.icon-pause').style.display=''; }
+                        if (state) state.dataset.playing = '1';
+                    } else if (e.data.type === 'PAUSED') {
+                        if (ppBtn) { ppBtn.querySelector('.icon-play').style.display=''; ppBtn.querySelector('.icon-pause').style.display='none'; }
+                        if (state) state.dataset.playing = '0';
+                    } else if (e.data.type === 'CURRENT_TIME') {
+                        const cur = e.data.currentTime || 0;
+                        const dur = e.data.duration || 0;
+                        if (state) state.dataset.duration = dur;
+                        const pct = dur > 0 ? (cur/dur*100).toFixed(1) : 0;
+                        if (prog)  prog.style.width = pct + '%';
+                        if (thumb) thumb.style.left = pct + '%';
+                        if (timeEl) timeEl.textContent = hfFmtTime(cur);
+                        if (durEl && dur > 0) durEl.textContent = hfFmtTime(dur);
+                    } else if (e.data.type === 'SCENE_CHANGED' || e.data.sceneNo !== undefined) {
+                        if (sceneEl) sceneEl.textContent = `Scene ${e.data.sceneNo || e.data.currentScene || ''}`;
+                    }
+                });
+
+                chatHistory.scrollTop = chatHistory.scrollHeight;
+                console.log('[submitSmartQuery] Hyperframes player mounted:', data.interactive_url);
+            }
+        }
+    };
+
+    console.log('[setupChatSubmitGlobal] window.submitSmartQuery registered successfully.');
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   HYPERFRAMES PLAYER GLOBAL HELPERS
+   Used by onclick handlers generated inside setupChatSubmitGlobal
+   ───────────────────────────────────────────────────────────────────────── */
+
+/** Send a postMessage command to a Hyperframes iframe */
+function hfCmd(iframeId, command, extra = {}) {
+    const iframe = document.getElementById(iframeId);
+    if (!iframe || !iframe.contentWindow) return;
+    iframe.contentWindow.postMessage({ target: 'HYPERFRAMES_ENGINE', command, ...extra }, '*');
+}
+
+/** Toggle play/pause */
+function hfTogglePlay(iframeId, turnId) {
+    const state = document.getElementById(`hf-ppstate-${turnId}`);
+    const isPlaying = state && state.dataset.playing === '1';
+    hfCmd(iframeId, isPlaying ? 'PAUSE' : 'PLAY');
+}
+
+/** Toggle mute */
+function hfToggleMute(iframeId, turnId) {
+    const state = document.getElementById(`hf-ppstate-${turnId}`);
+    const isMuted = state && state.dataset.muted === '1';
+    const nextMuted = !isMuted;
+    if (state) state.dataset.muted = nextMuted ? '1' : '0';
+    hfCmd(iframeId, 'TOGGLE_MUTE', { isMuted: nextMuted });
+    const btn = document.getElementById(`hf-mute-${turnId}`);
+    if (btn) btn.style.opacity = nextMuted ? '0.4' : '1';
+}
+
+/** Seek on click on the progress track */
+function hfSeekClick(e, iframeId, trackId, stateId) {
+    const track = document.getElementById(trackId);
+    if (!track) return;
+    const state = document.getElementById(stateId);
+    const dur = parseFloat((state && state.dataset.duration) || '0');
+    if (!dur) return;
+    const rect = track.getBoundingClientRect();
+    const pct  = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+    hfCmd(iframeId, 'SEEK', { targetTime: pct * dur });
+}
+
+/** Scale the 1280×720 iframe to fill the viewport wrapper using CSS transform */
+function hfScaleViewport(wrapperId, scaleBoxId) {
+    const wrapper  = document.getElementById(wrapperId);
+    const scalebox = document.getElementById(scaleBoxId);
+    if (!wrapper || !scalebox) return;
+
+    const isFS = !!(document.fullscreenElement);
+    const nativeW = 1280, nativeH = 720;
+
+    if (isFS) {
+        const maxW = window.innerWidth;
+        const maxH = window.innerHeight - 52; // Subtract control bar height
+        const scale = Math.min(maxW / nativeW, maxH / nativeH);
+        const scaledH = nativeH * scale;
+        
+        wrapper.style.height = scaledH + 'px';
+        wrapper.style.display = 'flex';
+        wrapper.style.justifyContent = 'center';
+        wrapper.style.alignItems = 'center';
+
+        scalebox.style.transform = `scale(${scale})`;
+        scalebox.style.transformOrigin = 'center center';
+        scalebox.style.width  = nativeW + 'px';
+        scalebox.style.height = nativeH + 'px';
+    } else {
+        const containerW = wrapper.clientWidth || 800;
+        const scale = containerW / nativeW;
+        const scaledH = nativeH * scale;
+
+        wrapper.style.height = scaledH + 'px';
+        wrapper.style.display = 'block';
+
+        scalebox.style.transform = `scale(${scale})`;
+        scalebox.style.transformOrigin = 'top left';
+        scalebox.style.width  = nativeW + 'px';
+        scalebox.style.height = nativeH + 'px';
+    }
+}
+
+/** Re-scale all Hyperframes players on window resize or fullscreen change */
+window.addEventListener('resize', hfRescaleAllPlayers);
+document.addEventListener('fullscreenchange', hfRescaleAllPlayers);
+
+function hfRescaleAllPlayers() {
+    document.querySelectorAll('[id^="hf-viewport-"]').forEach(wrapper => {
+        const suffix = wrapper.id.replace('hf-viewport-', '');
+        hfScaleViewport(`hf-viewport-${suffix}`, `hf-scalebox-${suffix}`);
+    });
+}
+
+/** Format seconds to M:SS */
+function hfFmtTime(seconds) {
+    const s = Math.floor(seconds);
+    const m = Math.floor(s / 60);
+    return `${m}:${String(s % 60).padStart(2, '0')}`;
+}
+
+/** Fullscreen the player shell */
+function hfFullscreen(playerId) {
+    const el = document.getElementById(playerId);
+    if (!el) return;
+    if (document.fullscreenElement) {
+        document.exitFullscreen();
+    } else {
+        el.requestFullscreen && el.requestFullscreen();
+    }
+}
+
+/**
  * Sets up the main user query page wizard.
  */
 function setupUserPage() {
@@ -331,7 +766,7 @@ function setupUserPage() {
     const pageCountEl = document.getElementById('page-count-user');
     const prevPageBtn = document.getElementById('prev-page-user');
     const nextPageBtn = document.getElementById('next-page-user');
-    const chatHistory = document.getElementById('chat-history');
+    const chatHistory = document.getElementById('chat-history') || document.getElementById('chat-container');
     const queryForm = document.getElementById('user-query-form');
     const queryText = document.getElementById('query-text');
     const submitButton = document.getElementById('submit-query-btn');
@@ -379,12 +814,18 @@ function setupUserPage() {
         });
     }
 
-    subjectSelect.addEventListener('change', () => loadBook());
-    queryForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        handleQuerySubmit();
-    });
-    listChaptersBtn.addEventListener('click', () => handleListChapters());
+    if (subjectSelect) {
+        subjectSelect.addEventListener('change', () => loadBook());
+    }
+    if (queryForm) {
+        queryForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            handleQuerySubmit();
+        });
+    }
+    if (listChaptersBtn) {
+        listChaptersBtn.addEventListener('click', () => handleListChapters());
+    }
 
     // Page navigation buttons (Previous and Next only)
     const pageInput = document.getElementById('page-input-user');
@@ -413,6 +854,7 @@ function setupUserPage() {
 
     // --- Voice Search Setup ---
     function setupSimpleVoiceSearch() {
+        if (!voiceSearchBtn) return;
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
         if (!SpeechRecognition) {
             voiceSearchBtn.disabled = true;
@@ -587,7 +1029,7 @@ function setupUserPage() {
 
             queryText.disabled = false;
             submitButton.disabled = false;
-            voiceSearchBtn.disabled = false;  // Enable voice button
+            if (voiceSearchBtn) voiceSearchBtn.disabled = false;  // Enable voice button
             listChaptersBtn.classList.remove('hidden');
             if (conversationalModeBtn) {
                 conversationalModeBtn.disabled = false;
@@ -695,16 +1137,28 @@ function setupUserPage() {
     }
 
     function addUserMessage(text) {
-        const messageEl = document.createElement('div');
-        messageEl.className = 'user-message p-3 bg-blue-100 rounded-lg self-end max-w-xl fade-in';
-        messageEl.textContent = text;
-        chatHistory.appendChild(messageEl);
+        const row = document.createElement('div');
+        row.className = 'chat-bubble-row chat-bubble-row--user';
+        const now = new Date();
+        const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+        const escaped = (text || '').replace(/[&<>'"]/g, 
+            tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+        );
+
+        row.innerHTML = `
+            <div class="user-bubble-card">
+                <div>${escaped}</div>
+                <div class="user-bubble-meta">${timeStr}</div>
+            </div>
+        `;
+        chatHistory.appendChild(row);
         chatHistory.scrollTop = chatHistory.scrollHeight;
     }
 
     async function handleQuerySubmit() {
         const query = queryText.value.trim();
-        if (!query || !selectedBook) return;
+        if (!query) return;
 
         const currentMode = window.answerPreferenceManager ? window.answerPreferenceManager.currentMode : 'text_text';
         if (currentMode === 'visual_learning') {
@@ -715,226 +1169,9 @@ function setupUserPage() {
             }
         } else {
             // Use the new smart query system
-            await submitSmartQuery(query, false);
+            // Legacy handleQuerySubmit redirects to the unified global window.submitSmartQuery
+            await window.submitSmartQuery(query, false);
         }
-
-        queryText.value = '';
-        queryText.style.height = 'auto'; // Reset height
-    }
-
-    /**
-     * Smart Query Submission with Conversational Context
-     * Connects to /api/smart_query endpoint with session management
-     */
-    async function submitSmartQuery(query, isClickedFollowup = false) {
-        if (!selectedBook) return;
-
-        if (isFirstQuery) {
-            chatHistory.innerHTML = '';
-            isFirstQuery = false;
-        }
-
-        // Add user message
-        addUserMessage(query);
-        submitButton.setAttribute('disabled', 'true');
-        listChaptersBtn.classList.add('hidden');
-
-        // Create AI message card with loading state
-        let intentType = 'independent';
-        let followups = [];
-        let bufferedFollowups = null;
-        let fullResponse = "";
-        let fullReadText = "";
-
-        const thinkingCard = createAIMessageCard(turnCount + 1, 'loading');
-        chatHistory.appendChild(thinkingCard);
-        const contentDiv = thinkingCard.querySelector('.markdown-content');
-        contentDiv.innerHTML = marked.parse('...');
-
-        // Build request URL
-        const params = new URLSearchParams({
-            book_uuid: selectedBook.id,
-            query: query,
-            class_name: selectedBook.class_name,
-            subject: selectedBook.subject,
-            is_clicked_followup: isClickedFollowup.toString()
-        });
-
-        if (currentSessionId) {
-            params.append('session_id', currentSessionId);
-        }
-
-        // Add Auth Token for Analytics
-        const user = firebase.auth().currentUser;
-        if (user) {
-            try {
-                const token = await user.getIdToken();
-                params.append('token', token);
-            } catch (e) {
-                console.error("Error getting auth token:", e);
-            }
-        }
-
-        // ── Answer Preference: start streaming pipeline for audio-output modes ──
-        const _isAudioOutputMode = window.answerPreferenceManager &&
-            window.answerPreferenceManager.isAudioOutputMode();
-        if (_isAudioOutputMode && window.ttsPipeline) {
-            // Wire display callback: appends text to the contentDiv as chunks arrive
-            window.ttsPipeline.onDisplayChunk = function(textChunk, chunkId) {
-                fullResponse += textChunk;
-                contentDiv.innerHTML = marked.parse(fullResponse);
-                const isNearBottom = (chatHistory.scrollHeight - chatHistory.scrollTop - chatHistory.clientHeight) < 100;
-                if (isNearBottom) chatHistory.scrollTop = chatHistory.scrollHeight;
-            };
-            window.ttsPipeline.onRenderComplete = function() {
-                console.log('[RENDER] Text rendering complete.');
-                if (bufferedFollowups) {
-                    addFollowUpsUI(thinkingCard, bufferedFollowups);
-                }
-            };
-            window.ttsPipeline.onComplete = function() {
-                console.log('[PLAYBACK] All chunks complete for this query.');
-                if (window.playbackController && window.playbackController.currentEngine === 'pipeline') {
-                    window.playbackController.setState({
-                        isPlaying: false,
-                        isPaused: false,
-                        isStopped: true,
-                        currentNarrationId: null,
-                        currentEngine: null,
-                        playbackStatus: 'idle'
-                    });
-                }
-            };
-            const speakBtn = thinkingCard.querySelector('.speak-btn');
-            if (window.playbackController) {
-                window.playbackController.startPipeline(speakBtn);
-            } else {
-                window.ttsPipeline.start();
-            }
-            console.log('[STREAM] Gemini Stream Started (audio-output mode: ' + window.answerPreferenceManager.currentMode + ')');
-        }
-
-        const source = new EventSource(`/api/smart_query?${params.toString()}`);
-
-        source.onopen = function () {
-            console.log('[EventSource] Connection opened.');
-            if (_isAudioOutputMode && window.ttsPipeline && !window.ttsPipeline.isActive) {
-                console.warn('[EventSource] open: Pipeline was inactive, forcing isActive=true to resume.');
-                window.ttsPipeline.isActive = true;
-            }
-        };
-
-        source.onmessage = function (event) {
-            if (event.data === "[DONE]") {
-                source.close();
-                submitButton.removeAttribute('disabled');
-                listChaptersBtn.classList.remove('hidden');
-
-                // Update turn counter and UI
-                turnCount++;
-                const headerEl = thinkingCard.querySelector('.ai-card-header');
-                if (headerEl) {
-                    const turnIndicator = headerEl.querySelector('.turn-indicator');
-                    if (turnIndicator) {
-                        turnIndicator.textContent = `Turn ${turnCount} of ${turnCount}`;
-                    }
-                }
-
-                // ── Answer Preference: flush streaming pipeline on stream end ──
-                if (_isAudioOutputMode && window.ttsPipeline) {
-                    window.ttsPipeline.flush();
-                } else {
-                    // For non-audio modes, render follow-ups immediately upon completed answer text stream
-                    if (bufferedFollowups) {
-                        addFollowUpsUI(thinkingCard, bufferedFollowups);
-                    }
-                }
-
-                chatHistory.scrollTop = chatHistory.scrollHeight;
-                return;
-            }
-
-            try {
-                const data = JSON.parse(event.data);
-
-                if (data.type === 'intent') {
-                    const intentType = data.intent || 'unknown';
-                    updateIntentBadge(thinkingCard, intentType);
-                }
-
-                if (data.type === 'followups') {
-                    bufferedFollowups = data.followups || [];
-                    currentFollowUps = bufferedFollowups;
-                    // Do NOT render follow-up suggestions yet! They will be rendered post-learning.
-                }
-
-                if (data.type === 'metadata') {
-                    if (data.session_id) {
-                        currentSessionId = data.session_id;
-                    }
-                    if (data.turn) {
-                        turnCount = data.turn;
-                    }
-                }
-
-                if (data.display_text) {
-                    // ── Answer Preference: audio-output modes delegate text display
-                    //    to the StreamingAudioPipeline (which syncs text with audio).
-                    //    Text-output modes continue to render directly as before.
-                    if (_isAudioOutputMode && window.ttsPipeline) {
-                        // Pipeline onDisplayChunk callback handles the DOM update
-                        window.ttsPipeline.pushToken(data.display_text);
-                    } else {
-                        // Existing behavior — unchanged for text_text and audio_text
-                        fullResponse += data.display_text;
-                        contentDiv.innerHTML = marked.parse(fullResponse);
-
-                        // Only scroll if displaying content (NOT for follow-ups)
-                        // Check if user is near bottom before scrolling
-                        const isNearBottom = (chatHistory.scrollHeight - chatHistory.scrollTop - chatHistory.clientHeight) < 100;
-                        if (isNearBottom) {
-                            chatHistory.scrollTop = chatHistory.scrollHeight;
-                        }
-                    }
-                }
-
-                if (data.read_text) {
-                    fullReadText += data.read_text;
-                }
-
-                if (data.error) {
-                    contentDiv.innerHTML = `<p class="error-message">Error: ${data.error}</p>`;
-                    // Stop pipeline if running
-                    if (_isAudioOutputMode && window.ttsPipeline) {
-                        window.ttsPipeline.stop();
-                    }
-                    source.close();
-                    submitButton.removeAttribute('disabled');
-                    listChaptersBtn.classList.remove('hidden');
-                }
-
-            } catch (e) {
-                console.error('Error parsing SSE data:', e, event.data);
-            }
-        };
-
-        source.onerror = function (error) {
-            console.error('EventSource failed:', error);
-            if (_isAudioOutputMode && window.ttsPipeline) {
-                window.ttsPipeline.flush();
-            }
-            if (!fullResponse && (contentDiv.innerHTML === '...' || contentDiv.innerHTML.includes('...'))) {
-                contentDiv.innerHTML = `<p class="error-message">Connection error. Please try again.</p>`;
-            } else if (fullResponse) {
-                contentDiv.innerHTML = marked.parse(fullResponse);
-            }
-            if (window.answerPreferenceManager && window.answerPreferenceManager.currentMode === 'audio_audio') {
-                window.answerPreferenceManager.setVoicePanelState('idle');
-            }
-            source.close();
-            submitButton.removeAttribute('disabled');
-            listChaptersBtn.classList.remove('hidden');
-        };
     }
 
     /**
@@ -1137,10 +1374,7 @@ function setupUserPage() {
     // if the user had typed it and clicked Send.
     window.submitSmartQueryFromMic = function(transcript) {
         console.log('[MODE] submitSmartQueryFromMic called with:', transcript);
-        if (!selectedBook) {
-            console.warn('[MODE] No book selected — mic query ignored.');
-            return;
-        }
+        if (!transcript) return;
         const currentMode = window.answerPreferenceManager ? window.answerPreferenceManager.currentMode : 'text_text';
         if (currentMode === 'visual_learning') {
             if (window.VisualLearningRenderer) {
@@ -1586,3 +1820,192 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+// Global registry for chat player states
+window.chatPlayers = {};
+
+window.showVideoProgressUI = function(cardElement, data) {
+    let progressContainer = cardElement.querySelector('.vl-progress-container');
+    if (!progressContainer) {
+        progressContainer = document.createElement('div');
+        progressContainer.className = 'vl-progress-container';
+        progressContainer.style.marginTop = '12px';
+        progressContainer.style.padding = '12px';
+        progressContainer.style.background = 'rgba(255,255,255,0.05)';
+        progressContainer.style.borderRadius = '8px';
+        progressContainer.style.border = '1px solid rgba(255,255,255,0.1)';
+        progressContainer.innerHTML = `
+            <div style="display:flex; justify-content:space-between; margin-bottom:6px; font-size:12px; color:#94a3b8;">
+                <span class="progress-step-msg">Preparing lesson generation...</span>
+                <span class="progress-pct">10%</span>
+            </div>
+            <div style="width:100%; height:6px; background:#1e293b; border-radius:3px; overflow:hidden;">
+                <div class="progress-bar-fill" style="width:10%; height:100%; background:#10b981; transition:width 0.4s ease;"></div>
+            </div>
+        `;
+        const contentDiv = cardElement.querySelector('.markdown-content');
+        if (contentDiv) {
+            contentDiv.after(progressContainer);
+        } else {
+            cardElement.appendChild(progressContainer);
+        }
+    }
+
+    const step = data.step || '';
+    const message = data.message || 'Creating your visual lesson...';
+    let pct = '10%';
+    if (step === 'understanding_topic') pct = '15%';
+    else if (step === 'designing_lesson') pct = '35%';
+    else if (step === 'generating_visuals') pct = '55%';
+    else if (step === 'creating_narration') pct = '75%';
+    else if (step === 'hyperframes_engine') pct = '90%';
+    else if (step === 'launching_lesson') pct = '100%';
+
+    const stepMsg = progressContainer.querySelector('.progress-step-msg');
+    const progressPct = progressContainer.querySelector('.progress-pct');
+    const barFill = progressContainer.querySelector('.progress-bar-fill');
+
+    if (stepMsg) stepMsg.textContent = message;
+    if (progressPct) progressPct.textContent = pct;
+    if (barFill) barFill.style.width = pct;
+};
+
+window.renderCustomVideoPlayer = function(cardElement, data) {
+    // Remove progress bar if exists
+    const progressContainer = cardElement.querySelector('.vl-progress-container');
+    if (progressContainer) {
+        progressContainer.remove();
+    }
+
+    const htmlUrl = data.html_url || data.interactive_url;
+    // Extract lessonId from htmlUrl
+    let lessonId = 'vl_unknown';
+    if (htmlUrl) {
+        const parts = htmlUrl.split('/');
+        if (parts.length >= 3) {
+            lessonId = parts[parts.length - 2];
+        }
+    }
+    
+    // Check if player is already mounted
+    if (cardElement.querySelector(`.custom-youtube-player`)) return;
+
+    const playerDiv = document.createElement('div');
+    playerDiv.className = 'custom-youtube-player';
+
+    // Add state tracker
+    window.chatPlayers[lessonId] = {
+        currentTime: 0,
+        duration: 0,
+        isPlaying: true
+    };
+
+    playerDiv.innerHTML = `
+        <iframe class="custom-player-iframe" id="vl-chat-iframe-${lessonId}" src="${htmlUrl}"></iframe>
+        <div class="custom-player-controls">
+            <div class="custom-player-left-group">
+                <button class="player-play-btn" onclick="toggleChatPlayerPlay('${lessonId}')">⏸ Pause</button>
+                <button onclick="seekChatPlayer('${lessonId}', -10)">⏪ Seek -10s</button>
+                <button onclick="seekChatPlayer('${lessonId}', 10)">Seek +10s ⏩</button>
+            </div>
+            <div class="custom-player-right-group">
+                <select onchange="changeChatPlayerSpeed('${lessonId}', this.value)" style="color: #fff; background: rgba(0,0,0,0.6); padding: 4px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.2);">
+                    <option value="0.5">0.5x</option>
+                    <option value="1.0" selected>1.0x</option>
+                    <option value="1.25">1.25x</option>
+                    <option value="1.5">1.5x</option>
+                    <option value="2.0">2.0x</option>
+                </select>
+                <button onclick="toggleChatPlayerFullscreen('${lessonId}')">⛶ Fullscreen</button>
+            </div>
+        </div>
+    `;
+
+    const contentDiv = cardElement.querySelector('.markdown-content');
+    if (contentDiv) {
+        contentDiv.after(playerDiv);
+    } else {
+        cardElement.appendChild(playerDiv);
+    }
+};
+
+window.toggleChatPlayerPlay = function(lessonId) {
+    const iframe = document.getElementById(`vl-chat-iframe-${lessonId}`);
+    if (!iframe || !iframe.contentWindow) return;
+    const btn = iframe.parentNode.querySelector('.player-play-btn');
+    const playerState = window.chatPlayers[lessonId];
+    if (playerState.isPlaying) {
+        iframe.contentWindow.postMessage({ target: 'HYPERFRAMES_ENGINE', command: 'PAUSE' }, '*');
+        btn.innerHTML = '▶ Play';
+        playerState.isPlaying = false;
+    } else {
+        iframe.contentWindow.postMessage({ target: 'HYPERFRAMES_ENGINE', command: 'PLAY' }, '*');
+        btn.innerHTML = '⏸ Pause';
+        playerState.isPlaying = true;
+    }
+};
+
+window.seekChatPlayer = function(lessonId, offset) {
+    const iframe = document.getElementById(`vl-chat-iframe-${lessonId}`);
+    if (!iframe || !iframe.contentWindow) return;
+    const playerState = window.chatPlayers[lessonId];
+    const target = Math.max(0, Math.min(playerState.duration || 300, (playerState.currentTime || 0) + offset));
+    iframe.contentWindow.postMessage({ target: 'HYPERFRAMES_ENGINE', command: 'SEEK', targetTime: target }, '*');
+};
+
+window.changeChatPlayerSpeed = function(lessonId, speed) {
+    const iframe = document.getElementById(`vl-chat-iframe-${lessonId}`);
+    if (!iframe || !iframe.contentWindow) return;
+    iframe.contentWindow.postMessage({ target: 'HYPERFRAMES_ENGINE', command: 'SET_PLAYBACK_RATE', rate: parseFloat(speed) }, '*');
+};
+
+window.toggleChatPlayerFullscreen = function(lessonId) {
+    const iframe = document.getElementById(`vl-chat-iframe-${lessonId}`);
+    if (!iframe) return;
+    const container = iframe.parentNode;
+    if (!document.fullscreenElement) {
+        if (container.requestFullscreen) {
+            container.requestFullscreen();
+        }
+    } else {
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        }
+    }
+};
+
+// Global cross-document listener to receive time updates and playback state from hyperframes engines
+window.addEventListener('message', (e) => {
+    const data = e.data;
+    if (!data || data.source !== 'HYPERFRAMES_ENGINE') return;
+
+    const iframes = document.querySelectorAll('.custom-player-iframe');
+    let lessonId = null;
+    let targetIframe = null;
+    iframes.forEach(iframe => {
+        if (iframe.contentWindow === e.source) {
+            targetIframe = iframe;
+            lessonId = iframe.id.replace('vl-chat-iframe-', '');
+        }
+    });
+
+    if (!lessonId || !window.chatPlayers[lessonId]) return;
+
+    if (data.type === 'CURRENT_TIME') {
+        window.chatPlayers[lessonId].currentTime = data.currentTime;
+        window.chatPlayers[lessonId].duration = data.duration;
+    } else if (data.type === 'PLAYING') {
+        window.chatPlayers[lessonId].isPlaying = true;
+        const btn = targetIframe.parentNode.querySelector('.player-play-btn');
+        if (btn) btn.innerHTML = '⏸ Pause';
+    }
+});
+
+// Immediately register setupChatSubmitGlobal on script load (top-level scope)
+try {
+    setupChatSubmitGlobal();
+    console.log('[script.js] setupChatSubmitGlobal executed at script load time.');
+} catch (e) {
+    console.warn('[script.js] Initial setupChatSubmitGlobal error:', e);
+}
+

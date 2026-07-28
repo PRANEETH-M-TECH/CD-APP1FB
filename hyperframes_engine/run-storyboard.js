@@ -435,6 +435,7 @@ function generateMasterHtml(storyboard, lessonDir, callback) {
 
     /* Subtitles banner */
     .subtitles-container {
+      display: none !important;
       position: absolute;
       bottom: 45px;
       left: 8%;

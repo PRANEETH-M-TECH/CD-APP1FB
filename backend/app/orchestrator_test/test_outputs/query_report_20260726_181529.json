@@ -1,0 +1,242 @@
+{
+  "timestamp": "2026-07-26T18:15:29.476132",
+  "execution_time_seconds": 21.72,
+  "authenticated_student": {
+    "uid": "anonymous",
+    "email": "anonymous@cg.com",
+    "name": "Sonu",
+    "class": 8,
+    "board": "CBSE",
+    "role": "student"
+  },
+  "raw_user_query": "What is photosynthesis",
+  "orchestrator_output": {
+    "is_authorized": true,
+    "refusal_reason": null,
+    "classification": "GENERAL_KNOWLEDGE",
+    "reformulated_query": "Photosynthesis definition and process",
+    "matched_subject": null,
+    "matched_chapter": null,
+    "complexity_level": 2,
+    "format_decision": "VIDEO_REQUIRED",
+    "text_narration": "Namaste Sonu! Today, we're going to learn about a super important process called Photosynthesis. It's how plants make their own food, just like how your mom cooks delicious meals for you!So, what exactly is photosynthesis? It's a process used by green plants and some other organisms to convert light energy into chemical energy, which is stored in food. Think of plants as tiny chefs, and sunlight as their cooking gas!Just like cooking needs ingredients, plants need a few things for photosynthesis. They are: Carbon Dioxide from the air, Water from the soil, and Sunlight. And there's a special green pigment called Chlorophyll inside the leaves that captures the sunlight.Now, let's see how it all comes together! The plant takes in carbon dioxide through tiny pores on its leaves called stomata. Water is absorbed by the roots. Inside the leaves, chlorophyll traps sunlight. Using this energy, water and carbon dioxide are converted into glucose, which is the plant's food, and oxygen is released as a byproduct.So, what do plants get from all this hard work? They get Glucose, which is their food, giving them energy to grow. And for us, they give out Oxygen, which is essential for us to breathe! Isn't that amazing?Photosynthesis is super important for life on Earth. It provides food for almost all living things, either directly (like eating plants) or indirectly (like eating animals that eat plants). And it keeps the air fresh by producing oxygen and absorbing carbon dioxide. It's a true life-giver!Alright, Sonu, let's quickly check your understanding! Which gas do plants take in from the air for photosynthesis?",
+    "video_storyboard": {
+      "lesson_title": "Understanding Photosynthesis: How Plants Make Food",
+      "layout_mode": "timeline",
+      "theme": "Science",
+      "global_assets": [],
+      "connections": [],
+      "scenes": [
+        {
+          "scene_no": 1,
+          "purpose": "Introduce the topic.",
+          "template_id": "title_slide",
+          "template_selection_reasoning": "First scene must be a title slide to introduce the lesson.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "Namaste Sonu! Today, we're going to learn about a super important process called Photosynthesis. It's how plants make their own food, just like how your mom cooks delicious meals for you!",
+          "template_data": {
+            "title": "Understanding Photosynthesis",
+            "subtitle": "How Plants Make Their Own Food"
+          }
+        },
+        {
+          "scene_no": 2,
+          "purpose": "Define photosynthesis and introduce key components.",
+          "template_id": "concept_diagram",
+          "template_selection_reasoning": "To visually represent the core concept and its transformation.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "So, what exactly is photosynthesis? It's a process used by green plants and some other organisms to convert light energy into chemical energy, which is stored in food. Think of plants as tiny chefs, and sunlight as their cooking gas!",
+          "template_data": {
+            "main_concept": "Photosynthesis",
+            "sub_concepts": [
+              "Light Energy",
+              "Chemical Energy (Food)"
+            ],
+            "diagram_type": "flow",
+            "connections": [
+              {
+                "from": "Light Energy",
+                "to": "Photosynthesis"
+              },
+              {
+                "from": "Photosynthesis",
+                "to": "Chemical Energy (Food)"
+              }
+            ]
+          }
+        },
+        {
+          "scene_no": 3,
+          "purpose": "List the raw materials needed.",
+          "template_id": "database_grid",
+          "template_selection_reasoning": "To clearly list and categorize the ingredients required for photosynthesis.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "Just like cooking needs ingredients, plants need a few things for photosynthesis. They are: Carbon Dioxide from the air, Water from the soil, and Sunlight. And there's a special green pigment called Chlorophyll inside the leaves that captures the sunlight.",
+          "template_data": {
+            "title": "Ingredients for Plant Food",
+            "headers": [
+              "Ingredient",
+              "Source"
+            ],
+            "rows": [
+              [
+                "Carbon Dioxide",
+                "Air"
+              ],
+              [
+                "Water",
+                "Soil"
+              ],
+              [
+                "Sunlight",
+                "Sun"
+              ],
+              [
+                "Chlorophyll",
+                "Inside Leaves"
+              ]
+            ]
+          }
+        },
+        {
+          "scene_no": 4,
+          "purpose": "Explain the steps of the process.",
+          "template_id": "cycle_template",
+          "template_selection_reasoning": "To illustrate the sequential steps involved in the photosynthesis process.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "Now, let's see how it all comes together! The plant takes in carbon dioxide through tiny pores on its leaves called stomata. Water is absorbed by the roots. Inside the leaves, chlorophyll traps sunlight. Using this energy, water and carbon dioxide are converted into glucose, which is the plant's food, and oxygen is released as a byproduct.",
+          "template_data": {
+            "title": "The Photosynthesis Cycle",
+            "steps": [
+              {
+                "name": "Water Absorption",
+                "description": "Roots absorb water from soil"
+              },
+              {
+                "name": "CO2 Intake",
+                "description": "Leaves take in carbon dioxide from air"
+              },
+              {
+                "name": "Sunlight Capture",
+                "description": "Chlorophyll in leaves traps sunlight"
+              },
+              {
+                "name": "Food Production",
+                "description": "Water + CO2 + Sunlight = Glucose (Food) + Oxygen"
+              }
+            ]
+          }
+        },
+        {
+          "scene_no": 5,
+          "purpose": "Highlight the outputs.",
+          "template_id": "concept_diagram",
+          "template_selection_reasoning": "To visually represent the main products resulting from photosynthesis.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "So, what do plants get from all this hard work? They get Glucose, which is their food, giving them energy to grow. And for us, they give out Oxygen, which is essential for us to breathe! Isn't that amazing?",
+          "template_data": {
+            "main_concept": "Products of Photosynthesis",
+            "sub_concepts": [
+              "Glucose (Plant Food)",
+              "Oxygen (Released into Air)"
+            ],
+            "diagram_type": "flow",
+            "connections": [
+              {
+                "from": "Photosynthesis",
+                "to": "Glucose (Plant Food)"
+              },
+              {
+                "from": "Photosynthesis",
+                "to": "Oxygen (Released into Air)"
+              }
+            ]
+          }
+        },
+        {
+          "scene_no": 6,
+          "purpose": "Emphasize the significance.",
+          "template_id": "column_comparison",
+          "template_selection_reasoning": "To compare the benefits of photosynthesis for different life forms.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "Photosynthesis is super important for life on Earth. It provides food for almost all living things, either directly (like eating plants) or indirectly (like eating animals that eat plants). And it keeps the air fresh by producing oxygen and absorbing carbon dioxide. It's a true life-giver!",
+          "template_data": {
+            "title": "Why Photosynthesis Matters",
+            "columns": [
+              {
+                "header": "For Plants",
+                "items": [
+                  "Makes their own food",
+                  "Helps them grow"
+                ]
+              },
+              {
+                "header": "For Animals & Humans",
+                "items": [
+                  "Provides food (directly/indirectly)",
+                  "Produces oxygen to breathe"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "scene_no": 7,
+          "purpose": "Test understanding.",
+          "template_id": "quiz_checkpoint",
+          "template_selection_reasoning": "To conclude the lesson with a comprehension check for the student.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "Alright, Sonu, let's quickly check your understanding! Which gas do plants take in from the air for photosynthesis?",
+          "template_data": {
+            "question": "Which gas do plants take in from the air for photosynthesis?",
+            "options": [
+              "Oxygen",
+              "Nitrogen",
+              "Carbon Dioxide",
+              "Hydrogen"
+            ],
+            "correct_answer": "Carbon Dioxide",
+            "explanation": "Plants take in Carbon Dioxide from the air, along with water and sunlight, to make their food during photosynthesis."
+          }
+        }
+      ]
+    }
+  },
+  "rag_retrieval_executed": false,
+  "retrieved_top10_chunks": []
+}

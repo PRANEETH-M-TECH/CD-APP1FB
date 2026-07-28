@@ -813,6 +813,298 @@
     #live-transcript-overlay {
       transition: opacity 0.3s ease;
     }
+
+    /* ═══════════════════════════════════════════════════════════
+       AI CHAT CARD — intent badge + subject theming
+       ═══════════════════════════════════════════════════════════ */
+
+    /* Thinking animation */
+    .thinking-anim {
+      display: inline-flex;
+      gap: 4px;
+      align-items: center;
+      padding: 4px 0;
+    }
+    .thinking-anim span {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #14B8A6;
+      animation: bounce-dot 1.2s infinite ease-in-out;
+    }
+    .thinking-anim span:nth-child(2) { animation-delay: 0.2s; }
+    .thinking-anim span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes bounce-dot {
+      0%, 80%, 100% { transform: translateY(0); opacity: 0.5; }
+      40%            { transform: translateY(-6px); opacity: 1; }
+    }
+
+    /* Intent badge pill */
+    .intent-badge-pill {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 999px;
+      background: rgba(20, 184, 166, 0.15);
+      color: #14B8A6;
+      border: 1px solid rgba(20, 184, 166, 0.4);
+    }
+    .intent-pill-curriculum      { background: rgba(16,185,129,0.15); color: #10B981; border-color: rgba(16,185,129,0.4); }
+    .intent-pill-general_knowledge { background: rgba(99,102,241,0.15); color: #818CF8; border-color: rgba(99,102,241,0.4); }
+    .intent-pill-video_required  { background: rgba(245,158,11,0.15); color: #FBBF24; border-color: rgba(245,158,11,0.4); }
+    .intent-pill-unknown         { background: rgba(148,163,184,0.1); color: #94A3B8; border-color: rgba(148,163,184,0.3); }
+
+    /* Subject-specific card accents */
+    .ai-response-card.subject-math {
+      border-color: rgba(99,102,241,0.5) !important;
+      background: linear-gradient(135deg, rgba(10,12,35,0.9) 0%, rgba(15,34,32,0.75) 100%) !important;
+      box-shadow: 0 8px 32px rgba(99,102,241,0.15), 0 0 0 1px rgba(99,102,241,0.3) !important;
+    }
+    .ai-response-card.subject-science {
+      border-color: rgba(16,185,129,0.5) !important;
+      background: linear-gradient(135deg, rgba(5,28,18,0.9) 0%, rgba(15,34,32,0.75) 100%) !important;
+      box-shadow: 0 8px 32px rgba(16,185,129,0.15), 0 0 0 1px rgba(16,185,129,0.3) !important;
+    }
+    .ai-response-card.subject-social {
+      border-color: rgba(245,158,11,0.5) !important;
+      background: linear-gradient(135deg, rgba(28,18,5,0.9) 0%, rgba(15,34,32,0.75) 100%) !important;
+      box-shadow: 0 8px 32px rgba(245,158,11,0.15), 0 0 0 1px rgba(245,158,11,0.3) !important;
+    }
+    .ai-response-card.subject-english {
+      border-color: rgba(167,139,250,0.5) !important;
+      background: linear-gradient(135deg, rgba(20,10,35,0.9) 0%, rgba(15,34,32,0.75) 100%) !important;
+      box-shadow: 0 8px 32px rgba(167,139,250,0.15), 0 0 0 1px rgba(167,139,250,0.3) !important;
+    }
+    .ai-response-card.subject-gk {
+      border-color: rgba(20,184,166,0.5) !important;
+      background: linear-gradient(135deg, rgba(5,22,28,0.9) 0%, rgba(15,34,32,0.75) 100%) !important;
+      box-shadow: 0 8px 32px rgba(20,184,166,0.15), 0 0 0 1px rgba(20,184,166,0.3) !important;
+    }
+
+    /* AI text content — high contrast readable text */
+    .ai-text-content {
+      font-size: 14.5px;
+      line-height: 1.75;
+      color: #E2E8F0;
+      margin-top: 8px;
+    }
+    .ai-text-content p   { margin: 0 0 10px; color: #E2E8F0; }
+    .ai-text-content h1,
+    .ai-text-content h2,
+    .ai-text-content h3 { color: #F1F5F9; font-weight: 700; margin: 14px 0 6px; }
+    .ai-text-content strong { color: #FFFFFF; font-weight: 600; }
+    .ai-text-content em { color: #CBD5E1; font-style: italic; }
+    .ai-text-content ul,
+    .ai-text-content ol  { padding-left: 20px; color: #CBD5E1; }
+    .ai-text-content li  { margin-bottom: 4px; color: #E2E8F0; }
+    .ai-text-content code {
+      background: rgba(255,255,255,0.08);
+      color: #7DD3FC;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 13px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .ai-text-content pre {
+      background: rgba(0,0,0,0.4);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px;
+      padding: 12px;
+      overflow-x: auto;
+    }
+    .ai-text-content pre code { background: none; padding: 0; }
+    .ai-text-content blockquote {
+      border-left: 3px solid #14B8A6;
+      margin: 8px 0;
+      padding: 4px 12px;
+      color: #94A3B8;
+      font-style: italic;
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       HYPERFRAMES PLAYER SHELL
+       ═══════════════════════════════════════════════════════════ */
+
+    .hf-player-shell {
+      margin-top: 14px;
+      border-radius: 14px;
+      overflow: hidden;
+      background: #000;
+      border: 1px solid rgba(20, 184, 166, 0.25);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+    }
+
+    /* Viewport: clips and sizes the scaled canvas */
+    .hf-viewport-wrapper {
+      position: relative;
+      width: 100%;
+      overflow: hidden;
+      background: #000;
+    }
+
+    /* The scale-box holds the raw 1280×720 iframe */
+    .hf-scale-box {
+      position: relative;
+    }
+
+    .hf-iframe {
+      width: 1280px;
+      height: 720px;
+      border: none;
+      display: block;
+    }
+
+    /* Subtitle overlay at bottom of the video */
+    .hf-subtitle-bar {
+      position: absolute;
+      bottom: 10px;
+      left: 5%;
+      right: 5%;
+      text-align: center;
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 1.4;
+      color: #fff;
+      text-shadow: 0 2px 6px rgba(0,0,0,0.9), 1px 1px 0 #000, -1px -1px 0 #000;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+      z-index: 10;
+      padding: 6px 12px;
+      background: rgba(0,0,0,0.35);
+      border-radius: 8px;
+      backdrop-filter: blur(4px);
+    }
+
+    /* Controls bar */
+    .hf-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      background: rgba(7, 16, 18, 0.95);
+      backdrop-filter: blur(16px);
+      border-top: 1px solid rgba(255,255,255,0.07);
+    }
+
+    .hf-controls-left  { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+    .hf-controls-center { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0; }
+    .hf-controls-right  { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+
+    /* Icon buttons */
+    .hf-btn {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: #E2E8F0;
+      border-radius: 8px;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.18s, color 0.18s, transform 0.1s;
+    }
+    .hf-btn:hover {
+      background: rgba(20,184,166,0.2);
+      color: #14B8A6;
+      border-color: rgba(20,184,166,0.4);
+      transform: scale(1.08);
+    }
+    .hf-btn:active { transform: scale(0.96); }
+
+    /* Progress bar */
+    .hf-progress-track {
+      flex: 1;
+      height: 5px;
+      background: rgba(255,255,255,0.12);
+      border-radius: 3px;
+      position: relative;
+      cursor: pointer;
+      transition: height 0.15s;
+    }
+    .hf-progress-track:hover { height: 7px; }
+    .hf-progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #10B981, #14B8A6);
+      border-radius: 3px;
+      pointer-events: none;
+    }
+    .hf-progress-thumb {
+      position: absolute;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+      background: #14B8A6;
+      border: 2px solid #fff;
+      box-shadow: 0 0 6px rgba(20,184,166,0.8);
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.15s;
+    }
+    .hf-progress-track:hover .hf-progress-thumb { opacity: 1; }
+
+    /* Time display */
+    .hf-time {
+      font-size: 11px;
+      font-weight: 600;
+      color: #94A3B8;
+      font-variant-numeric: tabular-nums;
+      min-width: 34px;
+      text-align: center;
+    }
+
+    /* Speed selector */
+    .hf-speed-select {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: #CBD5E1;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 6px;
+      cursor: pointer;
+      outline: none;
+    }
+    .hf-speed-select:hover { border-color: rgba(20,184,166,0.4); }
+
+    /* Scene counter */
+    .hf-scene-counter {
+      font-size: 10px;
+      font-weight: 700;
+      color: #64748B;
+      letter-spacing: 0.5px;
+      white-space: nowrap;
+    }
+
+    /* Fullscreen mode */
+    .hf-player-shell:fullscreen {
+      background: #000;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      width: 100vw;
+      height: 100vh;
+      margin: 0;
+      border-radius: 0;
+    }
+    .hf-player-shell:fullscreen .hf-viewport-wrapper {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      overflow: hidden;
+    }
+    .hf-player-shell:fullscreen .hf-iframe {
+      width: 1280px;
+      height: 720px;
+    }
   </style>
   <!-- Quill Theme -->
   <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
@@ -820,515 +1112,121 @@
   <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 </head>
 
-<body class="flex text-gray-800 user-page-body">
-  <!-- Sidebar -->
-  <div id="sidebar-container"></div>
+<body class="dark-canvas-body">
+  <!-- Main Viewport Container -->
+  <div class="dark-app-viewport">
+    
+    <!-- 🔝 1. Top Header Bar -->
+    <header class="dark-top-header">
+      <!-- Left Zone: Empty Spacing / Reserved -->
+      <div class="header-left-zone"></div>
 
-  <div class="user-app-container flex flex-col md:flex-row h-screen relative">
-    <!-- Left Pane (Book Viewer) -->
-    <div id="left-pane" class="left-pane w-1/2 flex flex-col transition-all duration-300 relative overflow-hidden">
+      <!-- Center Zone: Live Date & Time -->
+      <div id="header-datetime" class="header-center-zone">Loading date & time...</div>
 
-      <!-- Compact Top Bar - Subject dropdown and toggle -->
-      <div class="flex items-center justify-between px-4 py-2 bg-white border-b border-gray-200">
-        <!-- Subject Selector - Compact -->
-        <div class="flex items-center gap-2">
-          <label for="subject-select" class="text-sm font-medium text-gray-700 whitespace-nowrap">📚 Subject:</label>
-          <select id="subject-select"
-            class="text-sm border border-gray-300 rounded-lg px-3 py-1.5 bg-white focus:border-blue-500 focus:ring-1 focus:ring-blue-200 transition-all cursor-pointer">
-            <option disabled selected>Choose subject...</option>
-            <!-- Options will be populated dynamically based on user's class -->
-          </select>
+      <!-- Right Zone: Action Cluster -->
+      <div class="header-right-zone">
+        <!-- 📝 Mock Test Button -->
+        <button type="button" id="mock-test-btn" class="hdr-action-btn" title="Mock Test (Phase 2)">
+          <span>📝</span> Mock Test
+        </button>
+
+        <!-- 📜 History Button -->
+        <button type="button" id="history-btn" class="hdr-action-btn" title="Chat History">
+          <span>📜</span> History
+        </button>
+
+        <!-- 🔥 Day Streak Counter -->
+        <div id="streak-badge" class="hdr-streak-badge">
+          🔥 <span id="streak-count">12</span> Day Streak
         </div>
 
-        <!-- Collapse/Expand Toggle Button -->
-        <button id="toggle-left-pane-btn" title="Hide/Show PDF Viewer"
-          class="bg-blue-600 hover:bg-blue-700 text-white shadow-md p-2 rounded-lg transition-all duration-300 flex-shrink-0">
-          <svg id="left-pane-toggle-icon" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
-            viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        <!-- 👤 Profile Dropdown Component -->
+        <div class="profile-card-container">
+          <div id="profile-card-trigger" class="profile-card-trigger" onclick="toggleProfileDropdown(event)">
+            <div class="profile-avatar" id="profile-avatar-letter">👤</div>
+            <div class="profile-info">
+              <span id="profile-user-name" class="profile-name">Loading...</span>
+              <span id="profile-user-grade" class="profile-grade">Class... ▼</span>
+            </div>
+          </div>
+
+          <!-- Profile Dropdown Menu (Strict 3-Item Top Level) -->
+          <div id="profile-dropdown-menu" class="profile-dropdown-menu">
+            <div class="dropdown-header-item" id="dropdown-user-header">Student Account</div>
+            <div class="dropdown-item" onclick="openAdditionalSettings()">
+              <span>⚙️ Additional Settings</span>
+              <span>►</span>
+            </div>
+            <div class="dropdown-item dropdown-item--danger" onclick="handleLogout()" style="cursor:pointer;">
+              <span>🚪 Logout / Home</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- ⚙️ Additional Settings Nested Modal / Sub-menu Drawer -->
+    <div id="additional-settings-modal" class="additional-settings-modal" onclick="if(event.target===this) closeAdditionalSettings()">
+      <div class="additional-settings-card">
+        <div class="settings-modal-header">
+          <span class="settings-modal-title">⚙️ Additional Settings</span>
+          <button type="button" class="settings-close-btn" onclick="closeAdditionalSettings()">✕</button>
+        </div>
+        <a href="/dashboard.html" class="subnav-link">
+          <span>📊</span> My Dashboard
+        </a>
+        <a href="/my-bag-component.html" class="subnav-link">
+          <span>🎒</span> My Bag
+        </a>
+        <a href="/profile.html" class="subnav-link">
+          <span>👤</span> My Profile
+        </a>
+        <a href="/achievements.html" class="subnav-link">
+          <span>🏆</span> Achievements
+        </a>
+      </div>
+    </div>
+
+    <!-- 💬 2. Main Conversation Canvas -->
+    <main id="chat-container" class="dark-chat-container">
+      <!-- Welcome Initial Greeting Card -->
+      <div class="chat-bubble-row chat-bubble-row--ai">
+        <div class="ai-response-card">
+          <div class="ai-card-top">
+            <span class="ai-card-title">🤖 CHADUVU GURU ASSISTANT</span>
+            <button type="button" class="tts-audio-btn" title="Replay Voice Greeting" onclick="playTTSGreeting()">🔊</button>
+          </div>
+          <div class="ai-text-content" id="welcome-greeting-text">
+            Welcome to Chaduvu Guru! Loading your personalized curriculum...
+          </div>
+        </div>
+      </div>
+
+      <!-- Messages stream dynamically inserted here -->
+    </main>
+
+    <!-- ⌨️ 3. Bottom Interactive Input Bar -->
+    <footer class="dark-input-bar">
+      <div class="input-bar-inner">
+        <!-- Text Input -->
+        <input type="text" id="query-text" class="text-input-field" placeholder="Ask anything..." onkeydown="if(event.key==='Enter'){handleUserSubmit();}" />
+        
+        <!-- Glowing Mic Button -->
+        <button type="button" id="mic-btn" class="glowing-mic-btn" title="Ask by Voice" onclick="toggleMicRecording()">
+          <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+          </svg>
+        </button>
+
+        <!-- Send Button -->
+        <button type="button" id="submit-query-btn" class="send-btn-new" title="Send Question" onclick="handleUserSubmit()">
+          <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
           </svg>
         </button>
       </div>
-
-      <!-- PDF Viewer - Full Space -->
-      <div id="book-viewer-container" class="flex-1 flex flex-col bg-gray-50">
-        <!-- Modern Page Navigation Header -->
-        <!-- PDF Page Navigation - Simplified -->
-        <div id="pdf-viewer-header-user"
-          class="flex items-center justify-center gap-3 px-4 py-3 bg-white/80 backdrop-blur-md rounded-2xl shadow-lg border border-gray-100">
-
-          <!-- Previous Page -->
-          <button id="prev-page-user"
-            class="nav-icon-btn flex items-center justify-center w-10 h-10 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-blue-500">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-            </svg>
-          </button>
-
-          <!-- Page Number Input -->
-          <div class="flex items-center gap-2">
-            <span class="text-sm font-medium text-gray-600">Page</span>
-            <input id="page-input-user" type="number" min="1" value="1"
-              onkeypress="if(event.key==='Enter') jumpToPageInput()"
-              class="w-16 px-2 py-1.5 text-center border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
-            <span class="text-sm text-gray-500">/ <span id="page-count-user">0</span></span>
-          </div>
-
-          <!-- Next Page -->
-          <button id="next-page-user"
-            class="nav-icon-btn flex items-center justify-center w-10 h-10 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-all disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-blue-500">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-            </svg>
-          </button>
-
-        </div>
-        <div id="pdf-render-area-user">
-          <canvas id="pdf-canvas-user"></canvas>
-        </div>
-        <div id="viewer-placeholder" class="text-gray-500 text-sm italic text-center mt-2">
-          <p>Select a class and subject to view a book.</p>
-        </div>
-        <div id="pdf-loading-user" class="text-gray-500 text-sm italic mt-2 hidden">
-          <p>Loading Book...</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Inline Notebook Editor (Hidden by default) -->
-    <div id="inline-notebook-container" style="display: none;" class="flex-1 flex flex-col bg-white">
-      <!-- Enhanced Header -->
-      <div class="notebook-header-enhanced">
-        <!-- Top Row: Main Navigation -->
-        <div class="notebook-header-row-top">
-          <button onclick="closeInlineNotebook()" class="back-to-book-btn-new">
-            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-            </svg>
-            Back to Book
-          </button>
-
-          <div class="notebook-title-section">
-            <span class="notebook-emoji">📓</span>
-            <h3 id="inline-notebook-title" class="notebook-title-text">My Notebook</h3>
-          </div>
-
-          <div class="notebook-actions-top">
-            <button onclick="openInMyBag()" class="my-bag-btn" title="Open in My Bag">
-              <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-              </svg>
-              My Bag
-            </button>
-            <button onclick="toggleFullscreen()" id="fullscreen-toggle-btn" class="fullscreen-btn"
-              title="Expand notebook">
-              <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
-              </svg>
-            </button>
-          </div>
-        </div>
-
-        <!-- Bottom Row: Page Controls -->
-        <div class="notebook-header-row-bottom">
-          <div class="page-controls-left">
-            <button id="prev-page-btn-header" onclick="prevInlinePage()" class="page-nav-btn" title="Previous Page">
-              <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-              </svg>
-            </button>
-
-            <span class="page-counter-display">
-              Page <span id="current-page-num-header" class="page-num-current">1</span> of <span
-                id="total-pages-num-header" class="page-num-total">1</span>
-            </span>
-
-            <button id="next-page-btn-header" onclick="nextInlinePage()" class="page-nav-btn" title="Next Page">
-              <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-              </svg>
-            </button>
-          </div>
-
-          <div class="page-controls-right">
-            <button onclick="addInlinePage()" class="add-page-btn" title="Add New Page">
-              <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-              </svg>
-              Add Page
-            </button>
-
-            <button onclick="deleteInlinePage()" class="delete-page-btn" title="Delete Current Page">
-              <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-              </svg>
-            </button>
-
-            <div class="save-section">
-              <span id="save-status" class="save-status-text">Saved</span>
-              <button onclick="saveInlinePage()" class="save-inline-btn-new">
-                <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
-                </svg>
-                Save
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Editor -->
-      <div id="inline-editor-wrapper">
-        <div id="inline-editor"></div>
-      </div>
-    </div>
-
-    <!-- Right Pane (Chat Area) - Fixed Layout -->
-    <div id="right-pane" class="right-pane w-1/2 flex flex-col" style="height: calc(100vh - 5rem); overflow: hidden; background-color: #fcfcfc;">
-
-      <!-- ═══ Unified AI Control Header ═══════════════════════════════════ -->
-      <div class="ai-control-header border-b border-gray-200 bg-white">
-        
-        <!-- Row 1: Visual Inverted Premium Header (Mode is Hero on left, Brand is Secondary on right) -->
-        <div class="ai-ctrl-row ai-ctrl-row--top flex items-center justify-between py-3 px-4">
-          
-          <!-- Left: Hero Mode Selector -->
-          <div class="flex flex-col gap-1">
-            <span class="text-[9px] font-bold text-gray-400 uppercase tracking-wider leading-none">Learning Mode</span>
-            <button type="button" id="learning-mode-trigger" class="flex items-center gap-1.5 px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 text-indigo-700 text-xs font-bold rounded-xl shadow-sm transition-all cursor-pointer">
-              <span id="trigger-mode-icon">📖</span>
-              <span id="trigger-mode-text">Reading Mode</span>
-              <span class="text-[8px] opacity-60 font-normal ml-0.5">▼</span>
-            </button>
-          </div>
-
-          <!-- Right: Secondary Brand and Connection Status -->
-          <div class="flex items-center gap-3">
-            <div class="text-right flex flex-col justify-center">
-              <span class="text-[10px] font-bold text-slate-500 tracking-tight leading-none">AI Study Companion</span>
-              <span class="text-[9px] text-slate-400 font-medium leading-normal mt-0.5">Personalized Learning</span>
-            </div>
-
-            <div class="w-px h-6 bg-gray-200 flex-shrink-0"></div>
-
-            <!-- TTS live status dot (kept for JS compatibility) -->
-            <div class="flex items-center gap-1" title="TTS Connection Status">
-              <div class="relative flex h-1.5 w-1.5">
-                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" id="tts-ping-dot"></span>
-                <span id="tts-status-dot" class="relative inline-flex rounded-full h-1.5 w-1.5 bg-green-500"></span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Hidden selector and badge kept for JS state tracking compatibility -->
-        <select id="answer-preference-select" style="display:none;" title="Hidden Answer Preference select element">
-          <option value="text_text">📖 Reading</option>
-          <option value="text_audio">🎧 Tutor</option>
-          <option value="audio_text">🎙️ Voice Query</option>
-          <option value="audio_audio">🧑🏫 AI Voice</option>
-          <option value="visual_learning">🎬 Visual Learning</option>
-        </select>
-        <span id="active-mode-badge" style="display:none;"></span>
-      </div>
-      <!-- ════════════════════════════════════════════════════════════════ -->
-
-      <!-- Visual Learning Player (replaces chat area when active) -->
-      <div id="visual-learning-container" style="display: none; flex-direction: column; flex: 1; overflow: hidden;">
-        <!-- Landing View -->
-        <div id="vl-landing-view" class="flex flex-col items-center justify-center h-full p-8 text-center" style="background: radial-gradient(circle at center, #1e1b4b 0%, #0f172a 100%);">
-          <div class="text-6xl mb-4 animate-bounce">🎬</div>
-          <h3 class="text-xl font-bold text-indigo-300 mb-2">Visual Learning Mode</h3>
-          <p class="text-xs text-slate-400 max-w-sm leading-relaxed mb-4">
-            Type a query at the bottom to watch an interactive, AI-generated animated lesson with scenes and teacher voice narration.
-          </p>
-          <div class="px-4 py-2 bg-indigo-950/50 border border-indigo-800/40 rounded-xl text-[11px] text-indigo-300/80 max-w-xs leading-normal">
-            💡 "Explain the Water Cycle" or "How do magnets work?" make great lessons!
-          </div>
-        </div>
-
-        <!-- Loading Screen -->
-        <div id="vl-loading-screen" style="display: none;">
-          <h2 class="text-xl font-bold mb-6 text-indigo-300 text-center" id="vl-loading-title">🎬 Creating Animated Lesson...</h2>
-          <div class="vl-loader-animation" id="vl-loading-spinner">
-            <div class="vl-loader-ring outer"></div>
-            <div class="vl-loader-ring middle"></div>
-            <div class="vl-loader-ring inner"></div>
-          </div>
-          <div class="vl-loading-steps" id="vl-loading-steps-container">
-            <div class="vl-loading-step" id="vl-step-understanding_topic">
-              <span class="vl-step-check">1</span>
-              <span>Understanding Topic</span>
-            </div>
-            <div class="vl-loading-step" id="vl-step-designing_lesson">
-              <span class="vl-step-check">2</span>
-              <span>Designing Storyboard Scenes</span>
-            </div>
-            <div class="vl-loading-step" id="vl-step-generating_visuals">
-              <span class="vl-step-check">3</span>
-              <span>Retrieving Animated Scene Assets</span>
-            </div>
-            <div class="vl-loading-step" id="vl-step-creating_narration">
-              <span class="vl-step-check">4</span>
-              <span>Synthesizing Voice Narration</span>
-            </div>
-            <div class="vl-loading-step" id="vl-step-hyperframes_engine">
-              <span class="vl-step-check">5</span>
-              <span>Hyperframes Rendering Engine</span>
-            </div>
-            <div class="vl-loading-step" id="vl-step-launching_lesson">
-              <span class="vl-step-check">6</span>
-              <span>Launching Media Player</span>
-            </div>
-          </div>
-
-          <!-- Hyperframes Subsystem Detailed Stream Log Display -->
-          <div id="vl-engine-log-box" class="mt-4 p-3 bg-slate-900/80 border border-slate-800 rounded-xl text-left max-w-md w-full font-mono text-[11px] text-slate-300 space-y-1">
-             <div class="text-[10px] text-indigo-400 font-bold uppercase tracking-wider mb-1">⚡ Hyperframes Engine Stream Log:</div>
-             <div id="vl-engine-log-text" class="text-slate-400 truncate">Initializing Hyperframes Pipeline...</div>
-          </div>
-
-          <!-- Error Alert UI inside loading screen -->
-          <div id="vl-error-container" class="hidden mt-6 p-5 bg-red-950/40 border border-red-800/40 rounded-2xl text-center max-w-sm flex flex-col items-center justify-center">
-             <div class="text-red-400 font-bold text-base mb-2">⚠️ Something went wrong</div>
-             <p id="vl-error-message" class="text-[11px] text-red-300/80 mb-4 leading-relaxed"></p>
-             <button id="vl-error-exit-btn" class="px-4 py-2 bg-red-800/60 hover:bg-red-700 text-white rounded-xl text-xs font-bold transition-all cursor-pointer">Go Back</button>
-          </div>
-        </div>
-
-        <!-- Lesson Player (Coursera / YouTube-inspired Educational Video Player) -->
-        <div id="vl-player" style="display: none;">
-          <!-- Component 1: Header Bar -->
-          <div id="vl-header" class="vl-header-bar">
-            <div class="vl-header-left">
-              <span class="vl-header-badge">🎬 VISUAL LEARNING ENGINE</span>
-              <h2 id="vl-header-title" class="vl-header-title">AI Animated Lesson</h2>
-            </div>
-            <div class="vl-header-right">
-              <button id="vl-notes-toggle-btn" class="vl-header-action-btn" title="Toggle Lesson Script & Scenes">📖 Notes & Script</button>
-              <button id="vl-exit-btn" class="vl-header-close-btn" title="Exit Visual Learning">✕</button>
-            </div>
-          </div>
-
-          <div class="vl-player-stage-column">
-            <!-- Component 2: Video Player Container (16:9 Aspect Ratio) -->
-            <div id="vl-video-container">
-              <div id="vl-main">
-                <div id="vl-canvas">
-                  <!-- Hyperframes iframe or canvas presentation mounted here -->
-                </div>
-              </div>
-            </div>
-
-            <!-- Component 3: Player Controls (Directly BELOW Video Container) -->
-            <div id="vl-controls">
-              <!-- Integrated Progress / Seek Bar -->
-              <div class="vl-progress-bar-container" title="Click to Seek">
-                <div id="vl-progress-bar-fill" class="vl-progress-bar-fill"></div>
-              </div>
-
-              <div class="vl-controls-row">
-                <!-- Left Controls Group -->
-                <div class="vl-control-group left">
-                  <button id="vl-play-pause-btn" class="vl-control-btn vl-play-btn" title="Play / Pause">
-                    <span class="vl-btn-icon">▶</span>
-                  </button>
-                  <button id="vl-prev-btn" class="vl-control-btn" title="Previous Scene">
-                    <span class="vl-btn-icon">⏮</span>
-                  </button>
-                  <button id="vl-next-btn" class="vl-control-btn" title="Next Scene">
-                    <span class="vl-btn-icon">⏭</span>
-                  </button>
-                  <button id="vl-replay-btn" class="vl-control-btn" title="Replay Lesson">
-                    <span class="vl-btn-icon">🔄</span>
-                  </button>
-                  <div class="vl-time-display">
-                    <span id="vl-progress-text">Scene 1 / 4 • 0:00 / 0:00</span>
-                  </div>
-                </div>
-
-                <!-- Right Controls Group -->
-                <div class="vl-control-group right">
-                  <button id="vl-mute-btn" class="vl-control-btn" title="Mute / Unmute">
-                    <span id="vl-mute-icon" class="vl-btn-icon">🔊</span>
-                  </button>
-                  <button id="vl-speed-btn" class="vl-control-btn vl-pill-btn" title="Playback Speed">
-                    <span>1.0x</span>
-                  </button>
-                  <button id="vl-notes-btn" class="vl-control-btn" title="Toggle Lesson Script & Scenes">
-                    <span class="vl-btn-icon">📖</span>
-                  </button>
-                  <button id="vl-fullscreen-btn" class="vl-control-btn" title="Toggle Fullscreen">
-                    <span class="vl-btn-icon">⛶</span>
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <!-- Component 4: Subtitle Panel (Below Player Controls) -->
-            <div id="vl-subtitle-panel">
-              <div class="vl-subtitle-badge">
-                <span class="vl-subtitle-avatar">🎙️</span>
-                <span class="vl-subtitle-speaker">AI Tutor</span>
-              </div>
-              <div id="vl-subtitle-text" class="vl-subtitle-text">
-                Teacher narration script will display here smoothly as the visual presentation plays...
-              </div>
-            </div>
-
-            <!-- Component 5: Future AI Tools (Placeholder Component) -->
-            <div id="vl-future-ai-tools">
-              <div class="vl-ai-tools-header">
-                <span class="vl-ai-tools-title">✨ AI Interactive Learning Suite</span>
-                <span class="vl-ai-tools-badge">Next Gen</span>
-              </div>
-              <div class="vl-ai-tools-chips">
-                <button type="button" class="vl-ai-chip" title="AI will re-explain current scene with simpler real-world analogies">
-                  <span class="chip-icon">🤖</span> AI Explain Scene
-                </button>
-                <button type="button" class="vl-ai-chip" title="Ask AI Tutor a doubt about this specific visual frame">
-                  <span class="chip-icon">💡</span> AI Ask Doubt
-                </button>
-                <button type="button" class="vl-ai-chip" title="Download AI-generated summary notes for this lesson">
-                  <span class="chip-icon">📝</span> Download Notes
-                </button>
-                <button type="button" class="vl-ai-chip" title="Toggle full interactive lesson transcript">
-                  <span class="chip-icon">📜</span> Transcript
-                </button>
-                <button type="button" class="vl-ai-chip" title="Save current timestamp to your study bookmarks">
-                  <span class="chip-icon">🔖</span> Bookmark Frame
-                </button>
-                <button type="button" class="vl-ai-chip" title="Replay voice narration with custom voice style">
-                  <span class="chip-icon">🎧</span> Voice Accent
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <!-- Notes Slide-out Drawer Panel -->
-          <div id="vl-notes-overlay">
-            <div class="vl-notes-header">
-              <div class="vl-drawer-tabs flex gap-2">
-                <button type="button" id="vl-tab-script" class="vl-drawer-tab active">📖 Script</button>
-                <button type="button" id="vl-tab-outline" class="vl-drawer-tab">📋 Scenes</button>
-              </div>
-              <button id="vl-close-notes-btn" class="text-white opacity-60 hover:opacity-100 font-bold text-lg">&times;</button>
-            </div>
-            <div id="vl-drawer-script-content" class="vl-drawer-content active">
-              <div id="vl-notes-body" class="vl-notes-body"></div>
-            </div>
-            <div id="vl-drawer-outline-content" class="vl-drawer-content" style="display: none;">
-              <div id="vl-slides-list" class="vl-outline-list"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Chat History (Scrollable - Flex-1 to consume empty space) -->
-      <div id="chat-container" class="flex-1 overflow-y-auto">
-        <div class="p-4">
-          <canvas id="voice-waveform" class="hidden w-full h-32"></canvas>
-          <div id="chat-history">
-            <div class="ai-card fade-in">
-              <div class="flex justify-between items-center mb-2">
-                <h2 class="font-semibold text-gray-700">🤖 Welcome</h2>
-                <button class="copy-btn" onclick="copyMessage(this)">📋</button>
-              </div>
-              <div class="markdown-content">
-                <p>Welcome! I am <strong>Chaduvu Guru</strong>, your personal AI study assistant. Please select a book
-                  on
-                  the left to begin.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Sticky Follow-up Panel -->
-      <div id="followup-sticky-panel" class="hidden">
-        <div class="followup-sticky-header">
-          <span class="followup-sticky-title">💡 Quick Follow-ups</span>
-          <button id="toggle-followup-btn" onclick="toggleFollowupPanel()" aria-label="Toggle follow-up panel">
-            <svg class="followup-toggle-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-              stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-            </svg>
-          </button>
-        </div>
-        <div id="followup-sticky-content" class="followup-sticky-content">
-          <!-- Follow-up chips will be inserted here -->
-        </div>
-      </div>
-
-      <!-- Bottom Section - Fixed at bottom -->
-      <div class="flex-shrink-0 bg-white">
-
-        <!-- Voice Interaction Panel (AI Voice Mode Flagship UI) -->
-        <div id="voice-interaction-panel" style="display: none; padding: 1rem;" class="border-t border-gray-100 bg-white">
-          <div class="flex flex-col items-center justify-center text-center gap-2">
-            <button type="button" id="voice-panel-mic" class="voice-panel-mic-btn-compact" title="Ask by Voice">
-              <span id="voice-panel-icon" class="text-xl">🎤</span>
-            </button>
-            <div class="flex flex-col gap-0.5">
-              <span id="voice-panel-status" class="text-xs font-bold text-slate-700">Ask by Voice</span>
-              <span id="voice-panel-subtitle" class="text-[10px] text-slate-500 font-medium">Ask anything from this textbook</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Chat Input (Always visible at bottom) -->
-        <div id="chat-input-container" class="chat-input-container">
-          <!-- Text input row -->
-          <form id="user-query-form" class="chat-input-form">
-            <textarea id="query-text"
-              placeholder="Ask a question about the selected book..."
-              required disabled
-              class="chat-input-textarea"
-              onkeydown="if(event.key==='Enter' && !event.shiftKey){event.preventDefault();document.getElementById('user-query-form').requestSubmit();}"></textarea>
-
-            <!-- Inline action buttons (All input controls embedded inside container, no floating buttons) -->
-            <div class="chat-input-actions">
-              <!-- Settings overlay trigger -->
-              <button type="button" id="settings-overlay-trigger" title="Voice & Learning Settings" class="chat-action-btn chat-action-btn--settings">
-                <span class="settings-icon">⚙️</span>
-              </button>
-
-              <!-- Voice search (text-input modes) -->
-              <button type="button" id="voice-search-btn" title="Voice Input" disabled class="chat-action-btn chat-action-btn--mic">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
-                </svg>
-              </button>
-
-              <!-- Preference voice search (audio-input modes) -->
-              <button type="button" id="pref-mic-btn" title="Speak your question" class="chat-action-btn chat-action-btn--pref-mic" style="display: none;">
-                <span class="pref-mic-icon">🎙️</span>
-              </button>
-
-              <!-- Send -->
-              <button type="submit" id="submit-query-btn" title="Send" disabled class="chat-action-btn chat-action-btn--send">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <line x1="22" y1="2" x2="11" y2="13"></line>
-                  <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-                </svg>
-              </button>
-            </div>
-          </form>
-
-          <!-- Preference mic status wrapper (integrated inline status) -->
-          <div id="pref-mic-wrapper" style="display:none; padding: 6px 12px 0;" class="pref-mic-status-wrapper">
-            <span id="pref-mic-status" class="text-xs text-indigo-600 font-semibold animate-pulse"></span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+    </footer>
 
   <div id="voice-status" class="text-sm text-gray-500 hidden absolute right-24 top-4 bg-white px-2 py-1 rounded shadow">
     Recording...
@@ -1346,8 +1244,9 @@
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
-  <!-- Firebase config -->
+  <!-- Firebase config & Auth -->
   <script src="/static/firebase-config.js"></script>
+  <script src="/static/auth.js"></script>
 
   <!-- Sidebar -->
   <link rel="stylesheet" href="/static/sidebar.css">
@@ -1358,18 +1257,18 @@
   <script src="/static/profile-dropdown.js"></script>
 
   <!-- TTS Manager (load FIRST so it's ready when script.js runs) -->
-  <script src="/static/js/tts-manager.js?v=102"></script>
+  <script src="/static/js/tts-manager.js?v=115"></script>
 
   <!-- Answer Preference: Streaming TTS Pipeline (load before script.js) -->
-  <script src="/static/js/tts-streaming-manager.js?v=102"></script>
+  <script src="/static/js/tts-streaming-manager.js?v=115"></script>
 
   <!-- Main script -->
-  <script src="/static/script.js?v=102"></script>
-  <script src="/static/conversation.js?v=102"></script>
-  <script src="/static/save-selection.js"></script>
+  <script src="/static/script.js?v=115"></script>
+  <script src="/static/conversation.js?v=115"></script>
+  <script src="/static/save-selection.js?v=115"></script>
 
   <!-- Answer Preference Manager (load after script.js so submitSmartQueryFromMic is defined first) -->
-  <script src="/static/js/answer-preference-manager.js?v=102"></script>
+  <script src="/static/js/answer-preference-manager.js?v=115"></script>
   
   <!-- GSAP & Lottie libraries for Visual Learning V1 -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
@@ -1530,8 +1429,13 @@
 
   <!-- New script for 'List Chapters' and 'Summarize' button functionality -->
   <script>
+    function getChatContainerEl() {
+      return document.getElementById('chat-history') || document.getElementById('chat-container');
+    }
+
     function addMessageToChat({ role, content }) {
-      const chatHistory = document.getElementById('chat-history');
+      const chatHistory = getChatContainerEl();
+      if (!chatHistory) return;
       const messageElement = document.createElement('div');
 
       const isAI = role === 'ai';
@@ -1567,7 +1471,8 @@
 
     // The speakMessage function is now correctly handled globally by script.js and tts-manager.js
     function showThinkingIndicator() {
-      const chatHistory = document.getElementById('chat-history');
+      const chatHistory = getChatContainerEl();
+      if (!chatHistory) return;
       const thinkingElement = document.createElement('div');
       thinkingElement.id = 'thinking-indicator';
       thinkingElement.className = 'flex items-start gap-3 my-4';
@@ -1604,7 +1509,7 @@
 
           // Get class from user profile (stored in window.currentUserClass)
           const selectedClass = window.currentUserClass;
-          const selectedSubject = subjectSelect.value;
+          const selectedSubject = subjectSelect ? subjectSelect.value : '';
 
           if (!selectedClass) {
             alert('Class information not loaded. Please refresh the page.');
@@ -1616,7 +1521,8 @@
           }
 
           // Clear previous chat history before adding new messages
-          document.getElementById('chat-history').innerHTML = '';
+          const chatEl = getChatContainerEl();
+          if (chatEl) chatEl.innerHTML = '';
 
           showThinkingIndicator();
 
@@ -1657,7 +1563,7 @@
 
           // Get class from user profile (stored in window.currentUserClass)
           const selectedClass = window.currentUserClass;
-          const selectedSubject = subjectSelect.value;
+          const selectedSubject = subjectSelect ? subjectSelect.value : '';
 
           if (!selectedClass) {
             alert('Class information not loaded. Please refresh the page.');
@@ -1669,7 +1575,8 @@
           }
 
           // Clear previous chat history before adding new messages
-          document.getElementById('chat-history').innerHTML = '';
+          const chatEl = getChatContainerEl();
+          if (chatEl) chatEl.innerHTML = '';
 
           showThinkingIndicator();
 
@@ -1742,13 +1649,27 @@
         });
       }
 
-      document.getElementById('chat-history').addEventListener('click', async (event) => {
-        if (event.target.id === 'get-summary-btn') {
-          const chapterSelect = document.getElementById('chapter-summary-select');
-          const selectedChapter = chapterSelect.value;
+      const chatContainerEl = getChatContainerEl();
+      if (chatContainerEl) {
+        chatContainerEl.addEventListener('click', async (event) => {
+          if (event.target.id === 'get-summary-btn') {
+            const chapterSelect = document.getElementById('chapter-summary-select');
+            const selectedChapter = chapterSelect ? chapterSelect.value : '';
 
-          if (!selectedChapter || selectedChapter === 'Select a chapter...') {
-            alert('Please select a chapter first.');
+            if (!selectedChapter || selectedChapter === 'Select a chapter...') {
+              alert('Please select a chapter first.');
+              return;
+            }
+
+            const subjectSelect = document.getElementById('subject-select');
+            // Get class from user profile (stored in window.currentUserClass)
+            const selectedClass = window.currentUserClass;
+            const selectedSubject = subjectSelect ? subjectSelect.value : '';
+
+            showThinkingIndicator();
+          }
+        });
+      }
             return;
           }
 

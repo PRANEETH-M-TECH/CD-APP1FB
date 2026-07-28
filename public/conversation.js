@@ -1179,4 +1179,265 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
     }
+
+    // Initialize Phase 1 UI Component Handlers
+    initPhase1UI();
 });
+
+/* ==========================================================================
+   PHASE 1 GLOBAL CLIENT HANDLERS & NAVIGATION LOGIC
+   ========================================================================== */
+
+function initPhase1UI() {
+    // 👤 0. Sync Authenticated User Profile
+    syncAuthenticatedUserProfile();
+    if (typeof firebase !== 'undefined' && firebase.auth) {
+        firebase.auth().onAuthStateChanged(() => {
+            syncAuthenticatedUserProfile();
+        });
+    }
+
+    // 🕒 1. Live Date & Time Clock
+    updateLiveDateTime();
+    setInterval(updateLiveDateTime, 1000);
+
+    // 🔊 2. TTS Greeting on Fresh Login Load
+    setTimeout(() => {
+        syncAuthenticatedUserProfile();
+        playTTSGreeting();
+    }, 800);
+}
+
+function syncAuthenticatedUserProfile() {
+    let name = localStorage.getItem('userName') || (window.authManager && window.authManager.userData ? window.authManager.userData.name : '') || 'Student';
+    let userClass = localStorage.getItem('userClass') || (window.authManager && window.authManager.userData ? window.authManager.userData.class : '') || '7';
+
+    const avatarEl = document.getElementById('profile-avatar-letter');
+    const nameEl = document.getElementById('profile-user-name');
+    const gradeEl = document.getElementById('profile-user-grade');
+    const headerEl = document.getElementById('dropdown-user-header');
+    const greetingEl = document.getElementById('welcome-greeting-text');
+
+    if (avatarEl) avatarEl.textContent = name.charAt(0).toUpperCase();
+    if (nameEl) nameEl.textContent = name;
+    if (gradeEl) gradeEl.textContent = `Class ${userClass} ▼`;
+    if (headerEl) headerEl.textContent = `${name} - Class ${userClass}`;
+    if (greetingEl) {
+        greetingEl.innerHTML = `Hey <strong>${name}</strong>! Welcome to Chaduvu Guru. I am your personal AI study partner. I am ready to explain any topic from your Class ${userClass} curriculum!`;
+    }
+}
+
+function updateLiveDateTime() {
+    const el = document.getElementById('header-datetime');
+    if (!el) return;
+    const now = new Date();
+    const options = { weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+    el.textContent = now.toLocaleDateString('en-US', options).replace(',', ' •');
+}
+
+/* Profile Dropdown & Additional Settings Nested Navigation */
+function toggleProfileDropdown(event) {
+    if (event && event.stopPropagation) {
+        event.stopPropagation();
+    }
+    const menu = document.getElementById('profile-dropdown-menu');
+    if (menu) {
+        menu.classList.toggle('active');
+        menu.classList.toggle('visible');
+    }
+}
+
+function openAdditionalSettings() {
+    const menu = document.getElementById('profile-dropdown-menu');
+    if (menu) menu.classList.remove('active');
+    
+    const modal = document.getElementById('additional-settings-modal');
+    if (modal) {
+        modal.classList.add('active');
+    }
+}
+
+function closeAdditionalSettings() {
+    const modal = document.getElementById('additional-settings-modal');
+    if (modal) {
+        modal.classList.remove('active');
+    }
+}
+
+// Close dropdown on outside click
+document.addEventListener('click', (e) => {
+    const card = document.getElementById('profile-card-trigger');
+    const menu = document.getElementById('profile-dropdown-menu');
+    if (menu && card && !card.contains(e.target) && !menu.contains(e.target)) {
+        menu.classList.remove('active');
+    }
+});
+
+/* Speech-to-Text & Auto-Silence Timer */
+let isMicRecording = false;
+let sttRecognition = null;
+let silenceTimer = null;
+
+function toggleMicRecording() {
+    const micBtn = document.getElementById('mic-btn');
+    const queryInput = document.getElementById('query-text');
+
+    if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+        alert('Voice input is not supported in this browser. Please use Chrome or Edge.');
+        return;
+    }
+
+    if (isMicRecording) {
+        stopMicRecording();
+    } else {
+        startMicRecording();
+    }
+}
+
+function startMicRecording() {
+    const micBtn = document.getElementById('mic-btn');
+    const queryInput = document.getElementById('query-text');
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    
+    sttRecognition = new SpeechRecognition();
+    sttRecognition.continuous = true;
+    sttRecognition.interimResults = true;
+    sttRecognition.lang = 'en-IN';
+
+    sttRecognition.onstart = () => {
+        isMicRecording = true;
+        if (micBtn) micBtn.classList.add('recording');
+        if (queryInput) queryInput.placeholder = 'Listening... Speak now...';
+    };
+
+    sttRecognition.onresult = (event) => {
+        let transcript = '';
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+            transcript += event.results[i][0].transcript;
+        }
+        if (queryInput) queryInput.value = transcript;
+
+        // Reset 2-second silence timer for auto-submit
+        clearTimeout(silenceTimer);
+        silenceTimer = setTimeout(() => {
+            if (queryInput && queryInput.value.trim().length > 0) {
+                stopMicRecording();
+                handleUserSubmit();
+            }
+        }, 2000);
+    };
+
+    sttRecognition.onerror = (err) => {
+        console.error('[STT Error]', err);
+        stopMicRecording();
+    };
+
+    sttRecognition.onend = () => {
+        stopMicRecording();
+    };
+
+    sttRecognition.start();
+}
+
+function stopMicRecording() {
+    isMicRecording = false;
+    clearTimeout(silenceTimer);
+    const micBtn = document.getElementById('mic-btn');
+    const queryInput = document.getElementById('query-text');
+    if (micBtn) micBtn.classList.remove('recording');
+    if (queryInput) queryInput.placeholder = 'Ask anything...';
+    if (sttRecognition) {
+        try { sttRecognition.stop(); } catch(e) {}
+    }
+}
+
+/* Sarvam TTS Greeting Out-loud */
+function playTTSGreeting() {
+    const textEl = document.getElementById('welcome-greeting-text');
+    const text = textEl ? textEl.innerText : 'Welcome to Chaduvu Guru!';
+
+    if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.rate = 1.0;
+        utterance.pitch = 1.0;
+        window.speechSynthesis.speak(utterance);
+    }
+}
+
+/* User Submission Handler */
+window.handleUserSubmit = function handleUserSubmit() {
+    const input = document.getElementById('query-text');
+    if (!input) return;
+    const query = input.value.trim();
+    if (!query) return;
+
+    // Call the real unified Orchestrator submit function from script.js
+    if (typeof window.submitSmartQuery === 'function') {
+        input.value = '';
+        window.submitSmartQuery(query, false);
+    } else {
+        console.warn('[handleUserSubmit] window.submitSmartQuery not ready yet, retrying...');
+        setTimeout(() => {
+            if (typeof window.submitSmartQuery === 'function') {
+                input.value = '';
+                window.submitSmartQuery(query, false);
+            } else {
+                console.error('[handleUserSubmit] Critical Error: window.submitSmartQuery is unavailable.');
+            }
+        }, 150);
+    }
+};
+
+function appendUserMessage(text) {
+    const container = document.getElementById('chat-container');
+    if (!container) return;
+
+    const row = document.createElement('div');
+    row.className = 'chat-bubble-row chat-bubble-row--user';
+    const now = new Date();
+    const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+    row.innerHTML = `
+        <div class="user-bubble-card">
+            <div>${escapeHtml(text)}</div>
+            <div class="user-bubble-meta">${timeStr}</div>
+        </div>
+    `;
+    container.appendChild(row);
+    container.scrollTop = container.scrollHeight;
+}
+
+function appendAIMessage(text) {
+    const container = document.getElementById('chat-container');
+    if (!container) return;
+
+    const row = document.createElement('div');
+    row.className = 'chat-bubble-row chat-bubble-row--ai';
+
+    row.innerHTML = `
+        <div class="ai-response-card">
+            <div class="ai-card-top">
+                <span class="ai-card-title">🤖 CHADUVU GURU ASSISTANT</span>
+                <button type="button" class="tts-audio-btn" onclick="speakText('${escapeHtml(text)}')">🔊</button>
+            </div>
+            <div class="ai-text-content">${escapeHtml(text)}</div>
+        </div>
+    `;
+    container.appendChild(row);
+    container.scrollTop = container.scrollHeight;
+}
+
+function speakText(text) {
+    if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        window.speechSynthesis.speak(utterance);
+    }
+}
+
+function escapeHtml(str) {
+    return str.replace(/[&<>'"]/g, 
+        tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+    );
+}

@@ -1,0 +1,197 @@
+{
+  "timestamp": "2026-07-26T17:03:05.774986",
+  "execution_time_seconds": 16.33,
+  "authenticated_student": {
+    "uid": "n1kWaoB6SPcSwb5IzP46vbdSjG92",
+    "email": "student8@cg.com",
+    "name": "Sonu",
+    "class": 8,
+    "board": "CBSE",
+    "role": "student"
+  },
+  "raw_user_query": "How did the British establish their empire in India?",
+  "orchestrator_output": {
+    "is_authorized": true,
+    "refusal_reason": null,
+    "classification": "CURRICULUM",
+    "reformulated_query": "How did the British establish their empire in India?",
+    "matched_subject": "Social",
+    "matched_chapter": "Establishment of the British Empire in India",
+    "complexity_level": 3,
+    "format_decision": "VIDEO_REQUIRED",
+    "text_narration": "Namaste, Sonu! Today, we'll explore how the British gradually established their vast empire in India. It's a fascinating and important part of our history.It all began with trade! The British East India Company came to India in the early 17th century, primarily to trade in spices, textiles, and other goods. They set up trading posts, called 'factories', in places like Surat, Madras, and Calcutta, seeking permission from Mughal rulers.Over time, the Company started getting involved in Indian politics. They took advantage of the weakening Mughal Empire and rivalries among Indian rulers. Key battles like the Battle of Plassey in 1757 and the Battle of Buxar in 1764 gave them significant control over Bengal, a rich province. They also signed treaties and used subsidiary alliances to control more territories.Through policies like the 'Doctrine of Lapse' and direct annexations, the British expanded their territories rapidly. They defeated powerful Indian kingdoms like the Marathas, Sikhs, and Mysore. By the mid-19th century, a large part of India was under their direct or indirect control, leading to the formal establishment of the British Raj after the Revolt of 1857.So, Sonu, the British started as traders and slowly gained political and military power, eventually establishing their empire. It was a long and complex process involving trade, wars, treaties, and clever political strategies. Now, let's quickly check your understanding!",
+    "video_storyboard": {
+      "lesson_title": "How the British Empire was Established in India",
+      "layout_mode": "timeline",
+      "theme": "History",
+      "global_assets": [],
+      "connections": [],
+      "scenes": [
+        {
+          "scene_no": 1,
+          "purpose": "Introduce the topic of British empire establishment in India.",
+          "template_id": "title_slide",
+          "template_selection_reasoning": "Standard opening for any lesson, clearly states the topic.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "Namaste, Sonu! Today, we'll explore how the British gradually established their vast empire in India. It's a fascinating and important part of our history.",
+          "template_data": {
+            "title": "The British Empire in India",
+            "subtitle": "From Traders to Rulers"
+          }
+        },
+        {
+          "scene_no": 2,
+          "purpose": "Explain the initial entry of the British as traders.",
+          "template_id": "geo_marker",
+          "template_selection_reasoning": "Visualizing initial trading posts on a map helps understand their early presence.",
+          "camera": {
+            "zoom": 1.2,
+            "pan_x": 0.3,
+            "pan_y": 0.2,
+            "target_node": "India"
+          },
+          "teacher_script": "It all began with trade! The British East India Company came to India in the early 17th century, primarily to trade in spices, textiles, and other goods. They set up trading posts, called 'factories', in places like Surat, Madras, and Calcutta, seeking permission from Mughal rulers.",
+          "template_data": {
+            "map_image": "map_of_india_17th_century.png",
+            "markers": [
+              {
+                "location": "Surat",
+                "description": "First British trading post"
+              },
+              {
+                "location": "Madras",
+                "description": "Fort St. George"
+              },
+              {
+                "location": "Calcutta",
+                "description": "Fort William"
+              }
+            ],
+            "title": "Early Trade and the East India Company"
+          }
+        },
+        {
+          "scene_no": 3,
+          "purpose": "Describe the transition from trade to political dominance through battles and treaties.",
+          "template_id": "timeline",
+          "template_selection_reasoning": "A timeline is ideal for showing a sequence of historical events that led to increased British power.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "Over time, the Company started getting involved in Indian politics. They took advantage of the weakening Mughal Empire and rivalries among Indian rulers. Key battles like the Battle of Plassey in 1757 and the Battle of Buxar in 1764 gave them significant control over Bengal, a rich province. They also signed treaties and used subsidiary alliances to control more territories.",
+          "template_data": {
+            "title": "From Trade to Political Power",
+            "events": [
+              {
+                "year": "1757",
+                "description": "Battle of Plassey (Control over Bengal)"
+              },
+              {
+                "year": "1764",
+                "description": "Battle of Buxar (Diwani rights for Bengal, Bihar, Odisha)"
+              },
+              {
+                "year": "Late 18th Century",
+                "description": "Introduction of Subsidiary Alliances"
+              }
+            ]
+          }
+        },
+        {
+          "scene_no": 4,
+          "purpose": "Explain the methods of annexation and consolidation of British rule.",
+          "template_id": "database_grid",
+          "template_selection_reasoning": "A grid can effectively list and describe different policies and annexations used by the British.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "Through policies like the 'Doctrine of Lapse' and direct annexations, the British expanded their territories rapidly. They defeated powerful Indian kingdoms like the Marathas, Sikhs, and Mysore. By the mid-19th century, a large part of India was under their direct or indirect control, leading to the formal establishment of the British Raj after the Revolt of 1857.",
+          "template_data": {
+            "title": "Expansion and Consolidation",
+            "headers": [
+              "Method",
+              "Description",
+              "Example"
+            ],
+            "rows": [
+              [
+                "Doctrine of Lapse",
+                "Annexing states if rulers died without a natural male heir.",
+                "Jhansi, Satara"
+              ],
+              [
+                "Direct Annexation",
+                "Conquering kingdoms through warfare.",
+                "Mysore, Maratha territories"
+              ],
+              [
+                "Subsidiary Alliance",
+                "Indian rulers had to accept British forces and pay for their maintenance.",
+                "Hyderabad, Awadh"
+              ]
+            ]
+          }
+        },
+        {
+          "scene_no": 5,
+          "purpose": "Conclude the lesson and test student comprehension.",
+          "template_id": "quiz_checkpoint",
+          "template_selection_reasoning": "A quiz checkpoint helps reinforce learning and check understanding at the end of the lesson.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "So, Sonu, the British started as traders and slowly gained political and military power, eventually establishing their empire. It was a long and complex process involving trade, wars, treaties, and clever political strategies. Now, let's quickly check your understanding!",
+          "template_data": {
+            "question": "Which battle marked a significant turning point for the British East India Company's political control in Bengal?",
+            "options": [
+              "Battle of Panipat",
+              "Battle of Buxar",
+              "Battle of Plassey",
+              "Battle of Seringapatam"
+            ],
+            "correct_answer": "Battle of Plassey",
+            "explanation": "The Battle of Plassey in 1757 was crucial as it gave the British East India Company significant political and economic control over Bengal, a very rich province."
+          }
+        }
+      ]
+    }
+  },
+  "rag_retrieval_executed": true,
+  "retrieved_top10_chunks": [
+    {
+      "chunk_index": 1,
+      "score": 0.0,
+      "book_name": "",
+      "chapter_name": "",
+      "content_snippet": "..."
+    },
+    {
+      "chunk_index": 2,
+      "score": 0.0,
+      "book_name": "",
+      "chapter_name": "",
+      "content_snippet": "..."
+    },
+    {
+      "chunk_index": 3,
+      "score": 0.0,
+      "book_name": "",
+      "chapter_name": "",
+      "content_snippet": "..."
+    }
+  ]
+}

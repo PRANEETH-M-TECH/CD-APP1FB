@@ -1,0 +1,223 @@
+{
+  "timestamp": "2026-07-26T17:43:10.371625",
+  "execution_time_seconds": 23.21,
+  "authenticated_student": {
+    "uid": "student8_id",
+    "email": "anonymous@cg.com",
+    "name": "Sonu",
+    "class": 8,
+    "board": "CBSE",
+    "role": "student"
+  },
+  "raw_user_query": "How did the British establish their empire in India?",
+  "orchestrator_output": {
+    "is_authorized": true,
+    "refusal_reason": null,
+    "classification": "CURRICULUM",
+    "reformulated_query": "Establishment of the British Empire in India",
+    "matched_subject": "Social",
+    "matched_chapter": "Establishment of the British Empire in India",
+    "complexity_level": 4,
+    "format_decision": "VIDEO_REQUIRED",
+    "text_narration": "Namaste, Sonu! Today, we're going to explore a very important chapter in Indian history: how the British established their vast empire in our country. It's a story of trade, power, and significant changes that shaped India for centuries. It all began with the British East India Company, which came to India in the early 17th century primarily for trade. They were interested in spices, textiles, and other valuable goods. They set up trading posts, called 'factories', in places like Surat, Madras, and Calcutta. Slowly, they started interfering in local politics, taking advantage of the declining Mughal Empire and rivalries among Indian rulers. The turning point came with key battles. The Battle of Plassey in 1757, where Robert Clive defeated Siraj-ud-Daulah, the Nawab of Bengal, was a huge victory. It gave the British control over Bengal's vast resources. Then, the Battle of Buxar in 1764 further solidified their power, granting them the Diwani rights (right to collect revenue) of Bengal, Bihar, and Odisha. These victories marked the beginning of their territorial expansion. Beyond battles, the British used clever political strategies. The Subsidiary Alliance, introduced by Lord Wellesley, forced Indian rulers to accept British troops in their states and pay for them, losing their independence. The Doctrine of Lapse, introduced by Lord Dalhousie, stated that if an Indian ruler died without a natural male heir, their kingdom would be annexed by the British. These policies helped them absorb many princely states without direct warfare. So, through a combination of superior military power, economic control, political manipulation, and exploiting internal divisions among Indian rulers, the British East India Company gradually transformed from a trading company into a powerful political entity. By the mid-19th century, they had established a vast empire that covered most of India, marking a new era in our history.",
+    "video_storyboard": {
+      "lesson_title": "How the British Empire Rose in India",
+      "layout_mode": "timeline",
+      "theme": "History",
+      "global_assets": [],
+      "connections": [],
+      "scenes": [
+        {
+          "scene_no": 1,
+          "purpose": "Introduce the topic of British empire establishment in India.",
+          "template_id": "title_slide",
+          "template_selection_reasoning": "Best for introducing the lesson title and subtitle.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "Namaste, Sonu! Today, we're going to explore a very important chapter in Indian history: how the British established their vast empire in our country. It's a story of trade, power, and significant changes that shaped India for centuries.",
+          "template_data": {
+            "title": "The Rise of the British Empire in India",
+            "subtitle": "From Traders to Rulers"
+          }
+        },
+        {
+          "scene_no": 2,
+          "purpose": "Explain the initial entry of the British East India Company and their shift from trade to political influence.",
+          "template_id": "geo_marker",
+          "template_selection_reasoning": "To visually represent the locations of early British trading posts and influence.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "It all began with the British East India Company, which came to India in the early 17th century primarily for trade. They were interested in spices, textiles, and other valuable goods. They set up trading posts, called 'factories', in places like Surat, Madras, and Calcutta. Slowly, they started interfering in local politics, taking advantage of the declining Mughal Empire and rivalries among Indian rulers.",
+          "template_data": {
+            "map_type": "india_political",
+            "markers": [
+              {
+                "lat": 21.1702,
+                "lon": 72.8311,
+                "label": "Surat (First Factory)"
+              },
+              {
+                "lat": 13.0827,
+                "lon": 80.2707,
+                "label": "Madras (Chennai)"
+              },
+              {
+                "lat": 22.5726,
+                "lon": 88.3639,
+                "label": "Calcutta (Kolkata)"
+              }
+            ],
+            "title": "Early British Presence: Trade and Influence"
+          }
+        },
+        {
+          "scene_no": 3,
+          "purpose": "Highlight crucial military victories that led to territorial expansion.",
+          "template_id": "timeline",
+          "template_selection_reasoning": "To show the chronological sequence of important battles and their outcomes.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "The turning point came with key battles. The Battle of Plassey in 1757, where Robert Clive defeated Siraj-ud-Daulah, the Nawab of Bengal, was a huge victory. It gave the British control over Bengal's vast resources. Then, the Battle of Buxar in 1764 further solidified their power, granting them the Diwani rights (right to collect revenue) of Bengal, Bihar, and Odisha. These victories marked the beginning of their territorial expansion.",
+          "template_data": {
+            "events": [
+              {
+                "year": "1757",
+                "description": "Battle of Plassey (Bengal)"
+              },
+              {
+                "year": "1764",
+                "description": "Battle of Buxar (Diwani Rights)"
+              }
+            ],
+            "title": "Crucial Battles: Paving the Way for Empire"
+          }
+        },
+        {
+          "scene_no": 4,
+          "purpose": "Explain the non-military political strategies used for expansion.",
+          "template_id": "column_comparison",
+          "template_selection_reasoning": "To compare and contrast the two major political strategies: Subsidiary Alliance and Doctrine of Lapse.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "Beyond battles, the British used clever political strategies. The Subsidiary Alliance, introduced by Lord Wellesley, forced Indian rulers to accept British troops in their states and pay for them, losing their independence. The Doctrine of Lapse, introduced by Lord Dalhousie, stated that if an Indian ruler died without a natural male heir, their kingdom would be annexed by the British. These policies helped them absorb many princely states without direct warfare.",
+          "template_data": {
+            "columns": [
+              {
+                "title": "Subsidiary Alliance",
+                "points": [
+                  "Introduced by Lord Wellesley",
+                  "Indian rulers had to accept British army",
+                  "Lost control over foreign affairs",
+                  "Paid for British troops"
+                ]
+              },
+              {
+                "title": "Doctrine of Lapse",
+                "points": [
+                  "Introduced by Lord Dalhousie",
+                  "States annexed if ruler died without natural male heir",
+                  "No adoption allowed without British approval",
+                  "Examples: Satara, Jhansi, Nagpur"
+                ]
+              }
+            ],
+            "title": "Clever Strategies: Subsidiary Alliance & Doctrine of Lapse"
+          }
+        },
+        {
+          "scene_no": 5,
+          "purpose": "Summarize how various factors led to the consolidation of the British Empire.",
+          "template_id": "concept_diagram",
+          "template_selection_reasoning": "To visually represent the interconnected factors that contributed to the establishment of the British Empire.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "So, through a combination of superior military power, economic control, political manipulation, and exploiting internal divisions among Indian rulers, the British East India Company gradually transformed from a trading company into a powerful political entity. By the mid-19th century, they had established a vast empire that covered most of India, marking a new era in our history.",
+          "template_data": {
+            "main_concept": "British Empire in India",
+            "sub_concepts": [
+              {
+                "name": "Military Superiority",
+                "description": "Victories in key battles"
+              },
+              {
+                "name": "Economic Control",
+                "description": "Control over trade & revenue"
+              },
+              {
+                "name": "Political Strategies",
+                "description": "Subsidiary Alliance, Doctrine of Lapse"
+              },
+              {
+                "name": "Exploiting Divisions",
+                "description": "Weakness of Indian rulers"
+              }
+            ],
+            "connections": [
+              {
+                "from": "Military Superiority",
+                "to": "British Empire in India"
+              },
+              {
+                "from": "Economic Control",
+                "to": "British Empire in India"
+              },
+              {
+                "from": "Political Strategies",
+                "to": "British Empire in India"
+              },
+              {
+                "from": "Exploiting Divisions",
+                "to": "British Empire in India"
+              }
+            ],
+            "title": "How the Empire Was Consolidated"
+          }
+        }
+      ]
+    }
+  },
+  "rag_retrieval_executed": true,
+  "retrieved_top10_chunks": [
+    {
+      "chunk_index": 1,
+      "score": 0.0,
+      "book_name": "",
+      "chapter_name": "",
+      "content_snippet": "..."
+    },
+    {
+      "chunk_index": 2,
+      "score": 0.0,
+      "book_name": "",
+      "chapter_name": "",
+      "content_snippet": "..."
+    },
+    {
+      "chunk_index": 3,
+      "score": 0.0,
+      "book_name": "",
+      "chapter_name": "",
+      "content_snippet": "..."
+    }
+  ]
+}

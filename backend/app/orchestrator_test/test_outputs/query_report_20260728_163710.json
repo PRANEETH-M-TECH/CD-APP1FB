@@ -1,0 +1,27 @@
+{
+  "timestamp": "2026-07-28T16:37:10.063554",
+  "execution_time_seconds": 11.21,
+  "authenticated_student": {
+    "uid": "anonymous",
+    "email": "anonymous@cg.com",
+    "name": "Sonu",
+    "class": 8,
+    "board": "CBSE",
+    "role": "student"
+  },
+  "raw_user_query": "explain about the protest going on in India with the name of BJP",
+  "orchestrator_output": {
+    "is_authorized": true,
+    "refusal_reason": null,
+    "classification": "GENERAL_KNOWLEDGE",
+    "reformulated_query": "Current protests in India involving BJP as of July 2026",
+    "matched_subject": null,
+    "matched_chapter": null,
+    "complexity_level": 1,
+    "format_decision": "QUICK_ANSWER",
+    "text_narration": "Sonu, there have been a couple of significant protest movements in India recently. One major protest, led by the 'Cockroach Janata Party' (CJP), took place primarily at Jantar Mantar in New Delhi from June 6 to July 25, 2026. This movement was mainly driven by students and young people who were upset about the 2026 NEET exam paper leak and other issues with the education system, demanding reforms and the resignation of the Union Education Minister, Dharmendra Pradhan. The protests were successful, and Dharmendra Pradhan resigned on July 25, 2026, after which the CJP called off their demonstrations. \n\nCurrently, another online campaign called the 'E20 Janta Party' is gaining attention. This group is protesting against the government's policy of blending ethanol with petrol (E20 fuel). They are asking for motorists to have the choice between pure petrol and E20 fuel, more transparency, and independent studies on how different fuel blends affect vehicles. This movement is also calling for the resignation of Union Road Transport Minister Nitin Gadkari and has a protest planned for August 4th.",
+    "video_storyboard": null
+  },
+  "rag_retrieval_executed": false,
+  "retrieved_top10_chunks": []
+}

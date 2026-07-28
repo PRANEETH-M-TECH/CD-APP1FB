@@ -1,0 +1,227 @@
+{
+  "timestamp": "2026-07-27T16:53:27.677689",
+  "execution_time_seconds": 18.92,
+  "authenticated_student": {
+    "uid": "anonymous",
+    "email": "anonymous@cg.com",
+    "name": "Sonu",
+    "class": 8,
+    "board": "CBSE",
+    "role": "student"
+  },
+  "raw_user_query": "Explain about like and unlike fractions?",
+  "orchestrator_output": {
+    "is_authorized": true,
+    "refusal_reason": null,
+    "classification": "GENERAL_KNOWLEDGE",
+    "reformulated_query": "Explain like and unlike fractions for Class 8",
+    "matched_subject": null,
+    "matched_chapter": null,
+    "complexity_level": 2,
+    "format_decision": "VIDEO_REQUIRED",
+    "text_narration": "Namaste Sonu! Today, we're going to understand a very important concept in Maths: Like and Unlike Fractions. Let's make it super clear!Before we dive in, let's quickly remember what a fraction is. A fraction represents a part of a whole. For example, if you cut a pizza into 4 equal slices and take 1, you have 1/4th of the pizza. The top number is the numerator, and the bottom number is the denominator.Now, let's talk about Like Fractions. These are fractions that have the SAME denominator. Think of it like this: if you have different pieces of cake, but all the cakes were cut into the same number of slices, say 8 slices each. So, 1/8, 3/8, 5/8 are all like fractions because their denominator is 8.On the other hand, Unlike Fractions are fractions that have DIFFERENT denominators. Imagine you have a pizza cut into 4 slices (1/4) and another pizza cut into 8 slices (3/8). Here, 1/4 and 3/8 are unlike fractions because their denominators, 4 and 8, are different. We often need to make them 'like' to add or subtract them!Understanding like and unlike fractions is super important because it helps us compare, add, and subtract fractions correctly. You'll use this a lot in higher classes too! Here's a quick question for you:",
+    "video_storyboard": {
+      "lesson_title": "Understanding Like and Unlike Fractions",
+      "layout_mode": "timeline",
+      "theme": "Math",
+      "global_assets": [],
+      "connections": [],
+      "scenes": [
+        {
+          "scene_no": 1,
+          "purpose": "Introduce the topic of like and unlike fractions.",
+          "template_id": "title_slide",
+          "template_selection_reasoning": "Best for introducing the lesson title and a brief overview.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "Namaste Sonu! Today, we're going to understand a very important concept in Maths: Like and Unlike Fractions. Let's make it super clear!",
+          "template_data": {
+            "title": "Like and Unlike Fractions",
+            "subtitle": "Understanding the Basics for Class 8"
+          }
+        },
+        {
+          "scene_no": 2,
+          "purpose": "Briefly recap what a fraction is before diving into types.",
+          "template_id": "concept_diagram",
+          "template_selection_reasoning": "Visual representation of a fraction (part of a whole) is best explained with a concept diagram.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "Before we dive in, let's quickly remember what a fraction is. A fraction represents a part of a whole. For example, if you cut a pizza into 4 equal slices and take 1, you have 1/4th of the pizza. The top number is the numerator, and the bottom number is the denominator.",
+          "template_data": {
+            "diagram_title": "What is a Fraction?",
+            "diagram_description": "A fraction shows parts of a whole.",
+            "nodes": [
+              {
+                "id": "whole_pizza",
+                "label": "Whole Pizza",
+                "type": "shape",
+                "shape": "circle",
+                "color": "#FFDDC1"
+              },
+              {
+                "id": "divided_pizza",
+                "label": "Pizza divided into 4 parts",
+                "type": "shape",
+                "shape": "circle_divided",
+                "divisions": 4,
+                "highlighted_divisions": 1,
+                "color": "#FFDDC1"
+              },
+              {
+                "id": "fraction_text",
+                "label": "1/4",
+                "type": "text",
+                "font_size": 36
+              }
+            ],
+            "connections": [
+              {
+                "from": "whole_pizza",
+                "to": "divided_pizza",
+                "label": "divided into"
+              },
+              {
+                "from": "divided_pizza",
+                "to": "fraction_text",
+                "label": "represents"
+              }
+            ]
+          }
+        },
+        {
+          "scene_no": 3,
+          "purpose": "Define and illustrate like fractions with examples.",
+          "template_id": "column_comparison",
+          "template_selection_reasoning": "Comparing multiple fractions with the same denominator is clearly shown using a column comparison.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "Now, let's talk about Like Fractions. These are fractions that have the SAME denominator. Think of it like this: if you have different pieces of cake, but all the cakes were cut into the same number of slices, say 8 slices each. So, 1/8, 3/8, 5/8 are all like fractions because their denominator is 8.",
+          "template_data": {
+            "title": "Like Fractions",
+            "description": "Fractions with the same denominator.",
+            "columns": [
+              {
+                "header": "Fraction 1",
+                "content": "1/8",
+                "highlight_parts": [
+                  {
+                    "type": "denominator",
+                    "color": "#FF6347"
+                  }
+                ]
+              },
+              {
+                "header": "Fraction 2",
+                "content": "3/8",
+                "highlight_parts": [
+                  {
+                    "type": "denominator",
+                    "color": "#FF6347"
+                  }
+                ]
+              },
+              {
+                "header": "Fraction 3",
+                "content": "5/8",
+                "highlight_parts": [
+                  {
+                    "type": "denominator",
+                    "color": "#FF6347"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "scene_no": 4,
+          "purpose": "Define and illustrate unlike fractions with examples.",
+          "template_id": "column_comparison",
+          "template_selection_reasoning": "Comparing multiple fractions with different denominators is clearly shown using a column comparison.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "On the other hand, Unlike Fractions are fractions that have DIFFERENT denominators. Imagine you have a pizza cut into 4 slices (1/4) and another pizza cut into 8 slices (3/8). Here, 1/4 and 3/8 are unlike fractions because their denominators, 4 and 8, are different. We often need to make them 'like' to add or subtract them!",
+          "template_data": {
+            "title": "Unlike Fractions",
+            "description": "Fractions with different denominators.",
+            "columns": [
+              {
+                "header": "Fraction 1",
+                "content": "1/4",
+                "highlight_parts": [
+                  {
+                    "type": "denominator",
+                    "color": "#4682B4"
+                  }
+                ]
+              },
+              {
+                "header": "Fraction 2",
+                "content": "3/8",
+                "highlight_parts": [
+                  {
+                    "type": "denominator",
+                    "color": "#32CD32"
+                  }
+                ]
+              },
+              {
+                "header": "Fraction 3",
+                "content": "2/5",
+                "highlight_parts": [
+                  {
+                    "type": "denominator",
+                    "color": "#DAA520"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "scene_no": 5,
+          "purpose": "Summarize the importance and test understanding with a quick question.",
+          "template_id": "quiz_checkpoint",
+          "template_selection_reasoning": "A quiz checkpoint is excellent for reinforcing learning and checking comprehension.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "Understanding like and unlike fractions is super important because it helps us compare, add, and subtract fractions correctly. You'll use this a lot in higher classes too! Here's a quick question for you:",
+          "template_data": {
+            "question": "Which of these pairs are 'Like Fractions'?",
+            "options": [
+              "A) 1/2 and 1/3",
+              "B) 2/5 and 3/5",
+              "C) 3/4 and 5/6",
+              "D) 1/7 and 2/9"
+            ],
+            "correct_answer": "B) 2/5 and 3/5",
+            "explanation": "Correct! Like fractions have the same denominator. In option B, both fractions have 5 as their denominator."
+          }
+        }
+      ]
+    }
+  },
+  "rag_retrieval_executed": false,
+  "retrieved_top10_chunks": []
+}

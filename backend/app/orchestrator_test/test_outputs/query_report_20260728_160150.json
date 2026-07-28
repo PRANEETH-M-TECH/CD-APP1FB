@@ -1,0 +1,25 @@
+{
+  "timestamp": "2026-07-28T16:01:50.918718",
+  "execution_time_seconds": 9.15,
+  "authenticated_student": {
+    "uid": "test_user",
+    "name": "Sonu",
+    "class": 8,
+    "board": "CBSE"
+  },
+  "raw_user_query": "which country has won FIFA Worldcup-2026?",
+  "orchestrator_output": {
+    "is_authorized": true,
+    "refusal_reason": null,
+    "classification": "GENERAL_KNOWLEDGE",
+    "reformulated_query": "Which country won the FIFA World Cup 2026?",
+    "matched_subject": null,
+    "matched_chapter": null,
+    "complexity_level": 1,
+    "format_decision": "QUICK_ANSWER",
+    "text_narration": "Spain won the FIFA World Cup 2026! They defeated Argentina 1-0 in the final match, which was held on July 19, 2026, at MetLife Stadium in East Rutherford, New Jersey. The winning goal was scored by Ferran Torres in extra time.",
+    "video_storyboard": null
+  },
+  "rag_retrieval_executed": false,
+  "retrieved_top10_chunks": []
+}

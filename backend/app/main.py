@@ -20,7 +20,7 @@ load_dotenv(dotenv_path=env_path, override=True)
 
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, RedirectResponse
 from fastapi.middleware.cors import CORSMiddleware
 
 from backend.app.services.retrieval import qdrant_service as qdrant
@@ -135,3 +135,15 @@ async def dashboard_page():
 @app.get("/mode-selection")
 async def mode_selection_page():
     return FileResponse(os.path.join(PUBLIC_DIR, 'mode-selection.html'))
+
+@app.get("/logout")
+async def logout_page():
+    """Client-side Firebase logout is handled by JS. This route just redirects back to home."""
+    return RedirectResponse(url="/", status_code=302)
+
+@app.get("/favicon.ico", include_in_schema=False)
+async def favicon():
+    favicon_path = os.path.join(PUBLIC_DIR, 'favicon.ico')
+    if os.path.exists(favicon_path):
+        return FileResponse(favicon_path)
+    return FileResponse(os.path.join(PUBLIC_DIR, 'index.html'), status_code=204)

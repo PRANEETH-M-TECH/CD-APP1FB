@@ -1,0 +1,260 @@
+{
+  "timestamp": "2026-07-26T23:49:25.297592",
+  "execution_time_seconds": 20.95,
+  "authenticated_student": {
+    "uid": "anonymous",
+    "email": "anonymous@cg.com",
+    "name": "Sonu",
+    "class": 8,
+    "board": "CBSE",
+    "role": "student"
+  },
+  "raw_user_query": "Explain about the process of paper making?",
+  "orchestrator_output": {
+    "is_authorized": true,
+    "refusal_reason": null,
+    "classification": "CURRICULUM",
+    "reformulated_query": "Process of paper making",
+    "matched_subject": "Class 8 Social",
+    "matched_chapter": "Production in a Factory - A Paper Mill",
+    "complexity_level": 3,
+    "format_decision": "VIDEO_REQUIRED",
+    "text_narration": "Namaste, Sonu! Today, let's explore something we use every day – paper! Have you ever wondered how those crisp pages in your textbooks and notebooks are made? It's a fascinating journey, and we'll discover it together! Our journey begins with trees! Wood, especially from fast-growing trees like eucalyptus or bamboo, is the main raw material. These trees are harvested and then transported to the paper mill. Sometimes, recycled paper is also used to make new paper, which is great for our environment! Once at the mill, the wood is debarked and chipped into small pieces. These chips are then cooked with chemicals or ground mechanically to separate the wood fibres. This process creates a thick, watery mixture called 'pulp' – the basic ingredient for paper! The pulp is then mixed with a lot of water and spread evenly onto a large, fast-moving screen. As the water drains away, the fibres interlock, forming a wet, continuous sheet of paper. Imagine a giant sieve separating water from the fibres! This wet sheet then passes through a series of heated rollers that press out the remaining water and dry it completely. Finally, the paper is smoothed, sometimes coated for better print quality, and then rolled into huge reels, ready to be cut into different sizes for our books and copies! So, Sonu, that's how paper is made! It's a wonderful example of how raw materials are transformed into useful products in a factory. Keep exploring and asking questions!",
+    "video_storyboard": {
+      "lesson_title": "The Journey of Paper: From Tree to Textbook",
+      "layout_mode": "timeline",
+      "theme": "General",
+      "global_assets": [],
+      "connections": [],
+      "scenes": [
+        {
+          "scene_no": 1,
+          "purpose": "Introduce the lesson and topic.",
+          "template_id": "title_slide",
+          "template_selection_reasoning": "Standard opening for any lesson.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "Namaste, Sonu! Today, let's explore something we use every day – paper! Have you ever wondered how those crisp pages in your textbooks and notebooks are made? It's a fascinating journey, and we'll discover it together!",
+          "template_data": {
+            "title": "The Journey of Paper: From Tree to Textbook",
+            "subtitle": "Understanding the Paper Making Process"
+          }
+        },
+        {
+          "scene_no": 2,
+          "purpose": "Explain the primary raw materials for paper.",
+          "template_id": "concept_diagram",
+          "template_selection_reasoning": "To visually represent the initial raw materials and their source.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "Our journey begins with trees! Wood, especially from fast-growing trees like eucalyptus or bamboo, is the main raw material. These trees are harvested and then transported to the paper mill. Sometimes, recycled paper is also used to make new paper, which is great for our environment!",
+          "template_data": {
+            "title": "Starting with Nature's Bounty: Raw Materials",
+            "diagram_nodes": [
+              {
+                "id": "trees",
+                "label": "Trees (Wood Pulp)"
+              },
+              {
+                "id": "recycled_paper",
+                "label": "Recycled Paper"
+              },
+              {
+                "id": "mill",
+                "label": "Paper Mill"
+              }
+            ],
+            "diagram_edges": [
+              {
+                "from": "trees",
+                "to": "mill"
+              },
+              {
+                "from": "recycled_paper",
+                "to": "mill"
+              }
+            ]
+          }
+        },
+        {
+          "scene_no": 3,
+          "purpose": "Describe the process of converting wood into pulp.",
+          "template_id": "cycle_template",
+          "template_selection_reasoning": "To illustrate the sequential steps involved in creating pulp from wood chips.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "Once at the mill, the wood is debarked and chipped into small pieces. These chips are then cooked with chemicals or ground mechanically to separate the wood fibres. This process creates a thick, watery mixture called 'pulp' – the basic ingredient for paper!",
+          "template_data": {
+            "title": "From Wood Chips to Pulp: The Heart of Paper Making",
+            "cycle_steps": [
+              {
+                "step": 1,
+                "description": "Debarking & Chipping Wood"
+              },
+              {
+                "step": 2,
+                "description": "Cooking/Grinding (Chemical/Mechanical)"
+              },
+              {
+                "step": 3,
+                "description": "Washing & Bleaching Fibres"
+              },
+              {
+                "step": 4,
+                "description": "Result: Wood Pulp"
+              }
+            ]
+          }
+        },
+        {
+          "scene_no": 4,
+          "purpose": "Explain how the pulp is formed into a wet sheet.",
+          "template_id": "concept_diagram",
+          "template_selection_reasoning": "To visually represent the transformation of liquid pulp into a flat, wet sheet.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "The pulp is then mixed with a lot of water and spread evenly onto a large, fast-moving screen. As the water drains away, the fibres interlock, forming a wet, continuous sheet of paper. Imagine a giant sieve separating water from the fibres!",
+          "template_data": {
+            "title": "Spreading the Fibres: Forming the Paper Sheet",
+            "diagram_nodes": [
+              {
+                "id": "pulp_water",
+                "label": "Pulp & Water Mixture"
+              },
+              {
+                "id": "moving_screen",
+                "label": "Moving Screen (Water Drains)"
+              },
+              {
+                "id": "wet_sheet",
+                "label": "Wet Paper Sheet"
+              }
+            ],
+            "diagram_edges": [
+              {
+                "from": "pulp_water",
+                "to": "moving_screen"
+              },
+              {
+                "from": "moving_screen",
+                "to": "wet_sheet"
+              }
+            ]
+          }
+        },
+        {
+          "scene_no": 5,
+          "purpose": "Detail the final steps of drying, pressing, and rolling the paper.",
+          "template_id": "concept_diagram",
+          "template_selection_reasoning": "To show the sequential finishing steps of paper production.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "This wet sheet then passes through a series of heated rollers that press out the remaining water and dry it completely. Finally, the paper is smoothed, sometimes coated for better print quality, and then rolled into huge reels, ready to be cut into different sizes for our books and copies!",
+          "template_data": {
+            "title": "The Final Touch: Drying, Pressing, and Rolling",
+            "diagram_nodes": [
+              {
+                "id": "wet_sheet",
+                "label": "Wet Paper Sheet"
+              },
+              {
+                "id": "heated_rollers",
+                "label": "Heated Rollers (Drying)"
+              },
+              {
+                "id": "calendering",
+                "label": "Pressing & Smoothing"
+              },
+              {
+                "id": "reels",
+                "label": "Giant Paper Reels"
+              }
+            ],
+            "diagram_edges": [
+              {
+                "from": "wet_sheet",
+                "to": "heated_rollers"
+              },
+              {
+                "from": "heated_rollers",
+                "to": "calendering"
+              },
+              {
+                "from": "calendering",
+                "to": "reels"
+              }
+            ]
+          }
+        },
+        {
+          "scene_no": 6,
+          "purpose": "Conclude the lesson and test comprehension.",
+          "template_id": "quiz_checkpoint",
+          "template_selection_reasoning": "To reinforce learning and engage the student with a quick question.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "So, Sonu, that's how paper is made! It's a wonderful example of how raw materials are transformed into useful products in a factory. Keep exploring and asking questions!",
+          "template_data": {
+            "question": "What is the main raw material used to make paper?",
+            "options": [
+              "Plastic",
+              "Metal",
+              "Wood Pulp",
+              "Cotton"
+            ],
+            "correct_answer": "Wood Pulp",
+            "explanation": "Wood pulp, primarily from trees, is the main raw material for paper. Recycled paper is also used to make new paper."
+          }
+        }
+      ]
+    }
+  },
+  "rag_retrieval_executed": true,
+  "retrieved_top10_chunks": [
+    {
+      "chunk_index": 1,
+      "score": 0.0,
+      "book_name": "",
+      "chapter_name": "",
+      "content_snippet": "..."
+    },
+    {
+      "chunk_index": 2,
+      "score": 0.0,
+      "book_name": "",
+      "chapter_name": "",
+      "content_snippet": "..."
+    },
+    {
+      "chunk_index": 3,
+      "score": 0.0,
+      "book_name": "",
+      "chapter_name": "",
+      "content_snippet": "..."
+    }
+  ]
+}

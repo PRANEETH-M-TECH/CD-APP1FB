@@ -1,0 +1,185 @@
+{
+  "timestamp": "2026-07-27T16:40:11.569930",
+  "execution_time_seconds": 16.89,
+  "authenticated_student": {
+    "uid": "anonymous",
+    "email": "anonymous@cg.com",
+    "name": "Sonu",
+    "class": 8,
+    "board": "CBSE",
+    "role": "student"
+  },
+  "raw_user_query": "What is the impact of the papers useage on the forests?",
+  "orchestrator_output": {
+    "is_authorized": true,
+    "refusal_reason": null,
+    "classification": "CURRICULUM",
+    "reformulated_query": "Impact of paper usage on forests",
+    "matched_subject": "Class 8 Social",
+    "matched_chapter": "Production in a Factory - A Paper Mill",
+    "complexity_level": 2,
+    "format_decision": "VIDEO_REQUIRED",
+    "text_narration": "Namaste, Sonu! Today, let's understand the important connection between the paper we use every day and our precious forests. We'll explore how our paper usage impacts these green lungs of our planet. Did you know that most paper is made from wood pulp? This means that for every sheet of paper, trees are cut down. Forests are vital for our environment, providing oxygen, homes for animals, and helping regulate climate. The biggest impact of high paper usage is deforestation. When too many trees are cut down without being replanted, forests shrink. This leads to loss of habitat for animals, soil erosion, and contributes to climate change. Besides deforestation, paper production also uses a lot of water and energy. The chemicals used in paper mills can sometimes pollute water bodies if not treated properly. So, it's not just about cutting trees, but also the resources used in making paper. So, what can we, as responsible citizens, do to help? Reducing, reusing, and recycling paper are simple yet powerful steps. Every small effort counts towards protecting our forests!",
+    "video_storyboard": {
+      "lesson_title": "Paper Usage and Our Forests",
+      "layout_mode": "timeline",
+      "theme": "General",
+      "global_assets": [],
+      "connections": [],
+      "scenes": [
+        {
+          "scene_no": 1,
+          "purpose": "Introduce the topic of paper usage and its impact on forests.",
+          "template_id": "title_slide",
+          "template_selection_reasoning": "Standard opening for any lesson, clearly states the topic.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "Namaste, Sonu! Today, let's understand the important connection between the paper we use every day and our precious forests. We'll explore how our paper usage impacts these green lungs of our planet.",
+          "template_data": {
+            "title": "Paper Usage and Our Forests",
+            "subtitle": "Understanding the Impact on Our Environment"
+          }
+        },
+        {
+          "scene_no": 2,
+          "purpose": "Explain the source of paper and the initial link to forests.",
+          "template_id": "concept_diagram",
+          "template_selection_reasoning": "Visually represents the process from trees to paper, making the connection clear.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "Did you know that most paper is made from wood pulp? This means that for every sheet of paper, trees are cut down. Forests are vital for our environment, providing oxygen, homes for animals, and helping regulate climate.",
+          "template_data": {
+            "title": "Where Does Paper Come From?",
+            "diagram_elements": [
+              {
+                "type": "image",
+                "asset_id": "forest_trees",
+                "label": "Forests (Source of Wood)"
+              },
+              {
+                "type": "arrow",
+                "direction": "right"
+              },
+              {
+                "type": "image",
+                "asset_id": "paper_mill",
+                "label": "Paper Mill (Processing)"
+              },
+              {
+                "type": "arrow",
+                "direction": "right"
+              },
+              {
+                "type": "image",
+                "asset_id": "paper_products",
+                "label": "Paper Products (Usage)"
+              }
+            ]
+          }
+        },
+        {
+          "scene_no": 3,
+          "purpose": "Highlight deforestation as the primary negative impact.",
+          "template_id": "before_after_slider",
+          "template_selection_reasoning": "Effectively shows the visual change and impact of deforestation.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "The biggest impact of high paper usage is deforestation. When too many trees are cut down without being replanted, forests shrink. This leads to loss of habitat for animals, soil erosion, and contributes to climate change.",
+          "template_data": {
+            "title": "The Impact: Deforestation",
+            "before_image_asset_id": "lush_forest",
+            "before_label": "Before: Lush Forest",
+            "after_image_asset_id": "deforested_land",
+            "after_label": "After: Deforested Land"
+          }
+        },
+        {
+          "scene_no": 4,
+          "purpose": "Discuss other environmental impacts related to paper production.",
+          "template_id": "column_comparison",
+          "template_selection_reasoning": "Allows for a clear comparison of different types of environmental impacts.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "Besides deforestation, paper production also uses a lot of water and energy. The chemicals used in paper mills can sometimes pollute water bodies if not treated properly. So, it's not just about cutting trees, but also the resources used in making paper.",
+          "template_data": {
+            "title": "Beyond Deforestation: Other Impacts",
+            "column_1_title": "Resource Consumption",
+            "column_1_items": [
+              "High Water Usage",
+              "Energy Intensive Production"
+            ],
+            "column_2_title": "Environmental Pollution",
+            "column_2_items": [
+              "Water Pollution (from chemicals)",
+              "Air Pollution (from factories)"
+            ]
+          }
+        },
+        {
+          "scene_no": 5,
+          "purpose": "Encourage responsible paper usage and test comprehension.",
+          "template_id": "quiz_checkpoint",
+          "template_selection_reasoning": "Engages the student and reinforces learning about solutions.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "So, what can we, as responsible citizens, do to help? Reducing, reusing, and recycling paper are simple yet powerful steps. Every small effort counts towards protecting our forests!",
+          "template_data": {
+            "question": "Which of these is NOT a way to reduce the negative impact of paper usage on forests?",
+            "options": [
+              "Recycling old newspapers",
+              "Using both sides of a paper",
+              "Buying new paper frequently",
+              "Using digital documents"
+            ],
+            "correct_answer": "Buying new paper frequently",
+            "explanation": "Buying new paper frequently increases demand, leading to more trees being cut down. Recycling, reusing, and going digital all help reduce the impact."
+          }
+        }
+      ]
+    }
+  },
+  "rag_retrieval_executed": true,
+  "retrieved_top10_chunks": [
+    {
+      "chunk_index": 1,
+      "score": 0.0,
+      "book_name": "",
+      "chapter_name": "",
+      "content_snippet": "..."
+    },
+    {
+      "chunk_index": 2,
+      "score": 0.0,
+      "book_name": "",
+      "chapter_name": "",
+      "content_snippet": "..."
+    },
+    {
+      "chunk_index": 3,
+      "score": 0.0,
+      "book_name": "",
+      "chapter_name": "",
+      "content_snippet": "..."
+    }
+  ]
+}

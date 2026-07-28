@@ -1,0 +1,174 @@
+{
+  "timestamp": "2026-07-27T00:18:17.533340",
+  "execution_time_seconds": 23.19,
+  "authenticated_student": {
+    "uid": "anonymous",
+    "email": "anonymous@cg.com",
+    "name": "Sonu",
+    "class": 8,
+    "board": "CBSE",
+    "role": "student"
+  },
+  "raw_user_query": "explain about Peninsulas, Islands, Bays and Gulf?",
+  "orchestrator_output": {
+    "is_authorized": true,
+    "refusal_reason": null,
+    "classification": "CURRICULUM",
+    "reformulated_query": "Explain peninsulas, islands, bays, and gulfs for Class 8.",
+    "matched_subject": "Social",
+    "matched_chapter": "Reading Maps of Different kinds",
+    "complexity_level": 2,
+    "format_decision": "VIDEO_REQUIRED",
+    "text_narration": "Namaste, Sonu! Today, we're going to explore some interesting land and water features that you often see on maps: Peninsulas, Islands, Bays, and Gulfs. Let's understand each one clearly!First, let's talk about a Peninsula. Imagine a piece of land that is surrounded by water on three sides, but still connected to a larger landmass on one side. Our own India is a perfect example of a peninsula, with the Arabian Sea, Indian Ocean, and Bay of Bengal surrounding it on three sides!Next, we have an Island. This is a piece of land that is completely surrounded by water from all sides. Think of the Andaman and Nicobar Islands or Lakshadweep in India. They are beautiful examples of islands!Now, let's look at water bodies. A Bay is a body of water partially enclosed by land, usually smaller than a gulf. Our very own Bay of Bengal is a large bay, but smaller bays can be found along coastlines, like the Mumbai Bay.Finally, we have a Gulf. A Gulf is a large inlet of the sea that is almost surrounded by land, often larger and more deeply indented than a bay. In India, we have the Gulf of Kutch and the Gulf of Khambhat (Cambay) in Gujarat, which are important for trade and fishing.",
+    "video_storyboard": {
+      "lesson_title": "Understanding Land and Water Features",
+      "layout_mode": "timeline",
+      "theme": "Geography",
+      "global_assets": [],
+      "connections": [],
+      "scenes": [
+        {
+          "scene_no": 1,
+          "purpose": "Introduce the topic of geographical features.",
+          "template_id": "title_slide",
+          "template_selection_reasoning": "Best for introducing the lesson title and main concepts.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "Namaste, Sonu! Today, we're going to explore some interesting land and water features that you often see on maps: Peninsulas, Islands, Bays, and Gulfs. Let's understand each one clearly!",
+          "template_data": {
+            "title": "Exploring Land & Water Features",
+            "subtitle": "Peninsulas, Islands, Bays, and Gulfs"
+          }
+        },
+        {
+          "scene_no": 2,
+          "purpose": "Define and provide an example of a Peninsula.",
+          "template_id": "geo_marker",
+          "template_selection_reasoning": "Ideal for showing a geographical feature on a map with a specific location.",
+          "camera": {
+            "zoom": 1.2,
+            "pan_x": 0.5,
+            "pan_y": 0.3,
+            "target_node": "Indian Peninsula"
+          },
+          "teacher_script": "First, let's talk about a Peninsula. Imagine a piece of land that is surrounded by water on three sides, but still connected to a larger landmass on one side. Our own India is a perfect example of a peninsula, with the Arabian Sea, Indian Ocean, and Bay of Bengal surrounding it on three sides!",
+          "template_data": {
+            "title": "What is a Peninsula?",
+            "description": "A piece of land surrounded by water on three sides, connected to a larger landmass.",
+            "image_url": "https://example.com/map_of_india_peninsula.png",
+            "markers": [
+              {
+                "lat": 20.5937,
+                "lon": 78.9629,
+                "label": "Indian Peninsula"
+              }
+            ]
+          }
+        },
+        {
+          "scene_no": 3,
+          "purpose": "Define and provide an example of an Island.",
+          "template_id": "geo_marker",
+          "template_selection_reasoning": "Suitable for illustrating a landmass completely surrounded by water with a map example.",
+          "camera": {
+            "zoom": 1.5,
+            "pan_x": 0.7,
+            "pan_y": 0.2,
+            "target_node": "Andaman & Nicobar Islands"
+          },
+          "teacher_script": "Next, we have an Island. This is a piece of land that is completely surrounded by water from all sides. Think of the Andaman and Nicobar Islands or Lakshadweep in India. They are beautiful examples of islands!",
+          "template_data": {
+            "title": "What is an Island?",
+            "description": "A piece of land completely surrounded by water from all sides.",
+            "image_url": "https://example.com/map_of_andaman_nicobar.png",
+            "markers": [
+              {
+                "lat": 11.7401,
+                "lon": 92.6586,
+                "label": "Andaman & Nicobar Islands"
+              }
+            ]
+          }
+        },
+        {
+          "scene_no": 4,
+          "purpose": "Define and provide an example of a Bay.",
+          "template_id": "geo_marker",
+          "template_selection_reasoning": "Effective for showing a water body partially enclosed by land on a map.",
+          "camera": {
+            "zoom": 1.3,
+            "pan_x": 0.4,
+            "pan_y": 0.6,
+            "target_node": "Bay of Bengal"
+          },
+          "teacher_script": "Now, let's look at water bodies. A Bay is a body of water partially enclosed by land, usually smaller than a gulf. Our very own Bay of Bengal is a large bay, but smaller bays can be found along coastlines, like the Mumbai Bay.",
+          "template_data": {
+            "title": "What is a Bay?",
+            "description": "A body of water partially enclosed by land, usually smaller than a gulf.",
+            "image_url": "https://example.com/map_of_bay_of_bengal.png",
+            "markers": [
+              {
+                "lat": 15.0,
+                "lon": 85.0,
+                "label": "Bay of Bengal"
+              }
+            ]
+          }
+        },
+        {
+          "scene_no": 5,
+          "purpose": "Define and provide an example of a Gulf.",
+          "template_id": "geo_marker",
+          "template_selection_reasoning": "Good for illustrating a larger, more indented water body on a map.",
+          "camera": {
+            "zoom": 1.4,
+            "pan_x": 0.6,
+            "pan_y": 0.4,
+            "target_node": "Gulf of Kutch"
+          },
+          "teacher_script": "Finally, we have a Gulf. A Gulf is a large inlet of the sea that is almost surrounded by land, often larger and more deeply indented than a bay. In India, we have the Gulf of Kutch and the Gulf of Khambhat (Cambay) in Gujarat, which are important for trade and fishing.",
+          "template_data": {
+            "title": "What is a Gulf?",
+            "description": "A large inlet of the sea almost surrounded by land, often larger and more deeply indented than a bay.",
+            "image_url": "https://example.com/map_of_gulf_of_kutch.png",
+            "markers": [
+              {
+                "lat": 22.8,
+                "lon": 69.5,
+                "label": "Gulf of Kutch"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "rag_retrieval_executed": true,
+  "retrieved_top10_chunks": [
+    {
+      "chunk_index": 1,
+      "score": 0.0,
+      "book_name": "",
+      "chapter_name": "",
+      "content_snippet": "..."
+    },
+    {
+      "chunk_index": 2,
+      "score": 0.0,
+      "book_name": "",
+      "chapter_name": "",
+      "content_snippet": "..."
+    },
+    {
+      "chunk_index": 3,
+      "score": 0.0,
+      "book_name": "",
+      "chapter_name": "",
+      "content_snippet": "..."
+    }
+  ]
+}

@@ -1,0 +1,71 @@
+==================================================
+      CHADUVU GURU - DATABASE & VECTOR INVENTORY  
+==================================================
+
+1. FIRESTORE DATABASE INVENTORY:
+   Total Books in Firestore: 0
+   Total Chapter Records in Firestore: 0
+
+2. QDRANT VECTOR COLLECTION INVENTORY:
+   Total Indexed Chunk Points Scrolled in Qdrant: 500
+
+   [CLASS / GRADE IN QDRANT]: Unknown
+      - Subject: Unknown
+        * Book/Source: 02388bd2e1e88738b9ce21a5d1c7ce9b | Chapter: CHANGES AROUND US
+        * Book/Source: 02388bd2e1e88738b9ce21a5d1c7ce9b | Chapter: FIBRE TO FABRIC
+        * Book/Source: 02388bd2e1e88738b9ce21a5d1c7ce9b | Chapter: HABITAT
+        * Book/Source: 02388bd2e1e88738b9ce21a5d1c7ce9b | Chapter: LEARNING HOW TO MEASURE
+        * Book/Source: 02388bd2e1e88738b9ce21a5d1c7ce9b | Chapter: LIGHT, SHADOWS AND IMAGES
+        * Book/Source: 02388bd2e1e88738b9ce21a5d1c7ce9b | Chapter: LIVING AND NON LIVING
+        * Book/Source: 02388bd2e1e88738b9ce21a5d1c7ce9b | Chapter: MATERIALS AND THINGS
+        * Book/Source: 02388bd2e1e88738b9ce21a5d1c7ce9b | Chapter: MOVEMENTS IN ANIMALS
+        * Book/Source: 02388bd2e1e88738b9ce21a5d1c7ce9b | Chapter: OUR FOOD
+        * Book/Source: 02388bd2e1e88738b9ce21a5d1c7ce9b | Chapter: PLANTS: PARTS AND FUNCTIONS
+        * Book/Source: 02388bd2e1e88738b9ce21a5d1c7ce9b | Chapter: PLAYING WITH MAGNETS
+        * Book/Source: 02388bd2e1e88738b9ce21a5d1c7ce9b | Chapter: RAIN: WHERE DOES IT COME FROM?
+        * Book/Source: 02388bd2e1e88738b9ce21a5d1c7ce9b | Chapter: SEPARATION OF SUBSTANCES
+        * Book/Source: 02388bd2e1e88738b9ce21a5d1c7ce9b | Chapter: SIMPLE ELECTRIC CIRCUITS
+        * Book/Source: 02388bd2e1e88738b9ce21a5d1c7ce9b | Chapter: WATER IN OUR LIFE
+        * Book/Source: 02388bd2e1e88738b9ce21a5d1c7ce9b | Chapter: WHAT DO ANIMALS EAT?
+        * Book/Source: b250da676f2f0c2a2b1423a27ae133c1a32829112733470fc683ceab06193ba0 | Chapter: Abolition of Zamindari System
+        * Book/Source: b250da676f2f0c2a2b1423a27ae133c1a32829112733470fc683ceab06193ba0 | Chapter: Africa
+        * Book/Source: b250da676f2f0c2a2b1423a27ae133c1a32829112733470fc683ceab06193ba0 | Chapter: Caste Discrimination and the Struggle for Equalities
+        * Book/Source: b250da676f2f0c2a2b1423a27ae133c1a32829112733470fc683ceab06193ba0 | Chapter: Devotional Paths to the Divine
+        * Book/Source: b250da676f2f0c2a2b1423a27ae133c1a32829112733470fc683ceab06193ba0 | Chapter: Earth Movements and Seasons
+        * Book/Source: b250da676f2f0c2a2b1423a27ae133c1a32829112733470fc683ceab06193ba0 | Chapter: Energy from the Sun
+        * Book/Source: b250da676f2f0c2a2b1423a27ae133c1a32829112733470fc683ceab06193ba0 | Chapter: Establishment of the British Empire in India
+        * Book/Source: b250da676f2f0c2a2b1423a27ae133c1a32829112733470fc683ceab06193ba0 | Chapter: Europe
+        * Book/Source: b250da676f2f0c2a2b1423a27ae133c1a32829112733470fc683ceab06193ba0 | Chapter: Folk - Religion
+        * Book/Source: b250da676f2f0c2a2b1423a27ae133c1a32829112733470fc683ceab06193ba0 | Chapter: Forests:Using and Protecting
+        * Book/Source: b250da676f2f0c2a2b1423a27ae133c1a32829112733470fc683ceab06193ba0 | Chapter: Freedom Movement in Hyderabad State
+        * Book/Source: b250da676f2f0c2a2b1423a27ae133c1a32829112733470fc683ceab06193ba0 | Chapter: Handicrafts and Handlooms
+        * Book/Source: b250da676f2f0c2a2b1423a27ae133c1a32829112733470fc683ceab06193ba0 | Chapter: Impact of Technology on Livelihoods
+        * Book/Source: b250da676f2f0c2a2b1423a27ae133c1a32829112733470fc683ceab06193ba0 | Chapter: Implementation of Laws in the District
+        * Book/Source: b250da676f2f0c2a2b1423a27ae133c1a32829112733470fc683ceab06193ba0 | Chapter: Importance of Transport System
+        * Book/Source: b250da676f2f0c2a2b1423a27ae133c1a32829112733470fc683ceab06193ba0 | Chapter: Industrial Revolution
+        * Book/Source: b250da676f2f0c2a2b1423a27ae133c1a32829112733470fc683ceab06193ba0 | Chapter: Landlords and Tenants under the British and the Nizam
+        * Book/Source: b250da676f2f0c2a2b1423a27ae133c1a32829112733470fc683ceab06193ba0 | Chapter: Law and Justice - A Case Study
+        * Book/Source: b250da676f2f0c2a2b1423a27ae133c1a32829112733470fc683ceab06193ba0 | Chapter: Livelihood and Struggles of Urban Workers
+        * Book/Source: b250da676f2f0c2a2b1423a27ae133c1a32829112733470fc683ceab06193ba0 | Chapter: Making of Laws in the State Assembly
+        * Book/Source: b250da676f2f0c2a2b1423a27ae133c1a32829112733470fc683ceab06193ba0 | Chapter: Minerals and Mining
+        * Book/Source: b250da676f2f0c2a2b1423a27ae133c1a32829112733470fc683ceab06193ba0 | Chapter: Money and Banking
+        * Book/Source: b250da676f2f0c2a2b1423a27ae133c1a32829112733470fc683ceab06193ba0 | Chapter: Mughal Empire
+        * Book/Source: b250da676f2f0c2a2b1423a27ae133c1a32829112733470fc683ceab06193ba0 | Chapter: National Movement - The Early Phase 1885-1919
+        * Book/Source: b250da676f2f0c2a2b1423a27ae133c1a32829112733470fc683ceab06193ba0 | Chapter: National Movement - The Last Phase 1919-1947
+        * Book/Source: b250da676f2f0c2a2b1423a27ae133c1a32829112733470fc683ceab06193ba0 | Chapter: New Kings and Kingdoms
+        * Book/Source: b250da676f2f0c2a2b1423a27ae133c1a32829112733470fc683ceab06193ba0 | Chapter: Oceans and Fishing
+        * Book/Source: b250da676f2f0c2a2b1423a27ae133c1a32829112733470fc683ceab06193ba0 | Chapter: Parliament and Central Government
+        * Book/Source: b250da676f2f0c2a2b1423a27ae133c1a32829112733470fc683ceab06193ba0 | Chapter: Production in a Factory - A Paper Mill
+        * Book/Source: b250da676f2f0c2a2b1423a27ae133c1a32829112733470fc683ceab06193ba0 | Chapter: Public Health and the Government
+        * Book/Source: b250da676f2f0c2a2b1423a27ae133c1a32829112733470fc683ceab06193ba0 | Chapter: Rain and Rivers
+        * Book/Source: b250da676f2f0c2a2b1423a27ae133c1a32829112733470fc683ceab06193ba0 | Chapter: Reading Maps of Different kinds
+        * Book/Source: b250da676f2f0c2a2b1423a27ae133c1a32829112733470fc683ceab06193ba0 | Chapter: Reading and Analysis of Maps
+        * Book/Source: b250da676f2f0c2a2b1423a27ae133c1a32829112733470fc683ceab06193ba0 | Chapter: Rulers and Buildings
+        * Book/Source: b250da676f2f0c2a2b1423a27ae133c1a32829112733470fc683ceab06193ba0 | Chapter: Tanks and Ground Water
+        * Book/Source: b250da676f2f0c2a2b1423a27ae133c1a32829112733470fc683ceab06193ba0 | Chapter: The Indian Constitution
+        * Book/Source: b250da676f2f0c2a2b1423a27ae133c1a32829112733470fc683ceab06193ba0 | Chapter: The Kakatiyas - Emergence of a Regional Kingdom
+        * Book/Source: b250da676f2f0c2a2b1423a27ae133c1a32829112733470fc683ceab06193ba0 | Chapter: The Kings of Vijayanagara
+        * Book/Source: b250da676f2f0c2a2b1423a27ae133c1a32829112733470fc683ceab06193ba0 | Chapter: The Polar Regions
+        * Book/Source: b250da676f2f0c2a2b1423a27ae133c1a32829112733470fc683ceab06193ba0 | Chapter: Understanding Poverty
+
+==================================================

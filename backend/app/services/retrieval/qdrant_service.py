@@ -97,8 +97,8 @@ def initialize():
         else:
             print(f"[Qdrant] Collection '{COLLECTION_NAME}' already exists. Preserving existing data.")
     except Exception as e:
-        print(f"[Qdrant] Error checking/creating collection: {e}")
-        raise e
+        print(f"[Qdrant] Warning: Could not verify/create collection at startup (will retry on first request): {e}")
+        # Do NOT re-raise — a transient network timeout must not crash the server process.
 
 
 def get_or_build_bm25_index(book_uuid: str) -> Optional[BM25Okapi]:
