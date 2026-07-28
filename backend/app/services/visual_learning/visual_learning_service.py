@@ -80,7 +80,7 @@ def clean_and_parse_json(response_text: str) -> dict:
     
     return json.loads(cleaned_text)
 
-async def generate_visual_lesson_stream(query: str, book_uuid: str, class_name: str, subject: str):
+async def generate_visual_lesson_stream(query: str, book_uuid: str, class_name: str, subject: str, precomputed_storyboard: dict = None):
     """
     Main pipeline to generate a visual lesson storyboard.
     Streams progress states synchronized with frontend UI steps, compiles Hyperframes composition,
@@ -93,85 +93,97 @@ async def generate_visual_lesson_stream(query: str, book_uuid: str, class_name: 
     print("======================================================================\n")
     
     try:
-        # Step 1: Retrieve context from book using hybrid search
-        yield f"data: {json.dumps({'type': 'progress', 'step': 'understanding_topic', 'status': 'in_progress', 'message': 'Retrieving relevant textbook context...'})}\n\n"
-        await asyncio.sleep(0.3)
-        
-        context = ""
-        try:
-            hybrid_results, _, _ = qdrant.hybrid_search(
-                book_uuid=book_uuid,
-                query=query,
-                keywords=[],
-                conceptual_score=0.5,
-                metadata_filters=None
-            )
-            if hybrid_results:
-                context = "\n\n---\n\n".join([doc["text"] for score, doc in hybrid_results[:5]])
-                logger.info(f"[VisualLearning] Retrieved {len(hybrid_results)} chunks for context.")
-            else:
-                logger.warning("[VisualLearning] No chunks retrieved. Using query context only.")
-        except Exception as e:
-            logger.error(f"[VisualLearning] Hybrid search failed: {e}")
-            
-        yield f"data: {json.dumps({'type': 'progress', 'step': 'understanding_topic', 'status': 'complete', 'message': 'Textbook context analyzed.'})}\n\n"
-        
-        # Step 2: Design lesson storyboard blueprint with Gemini
-        yield f"data: {json.dumps({'type': 'progress', 'step': 'designing_lesson', 'status': 'in_progress', 'message': 'Creating storyboard and scene animations...'})}\n\n"
-        await asyncio.sleep(0.3)
-        
-        prompt = get_visual_lesson_prompt(class_name, subject, query, context)
-        client = qdrant.gemini_client
-        
-        if not client:
-            raise RuntimeError("Gemini Client is not initialized in qdrant_service.")
-            
-        target_model = "gemini-2.5-flash"
-        logger.info(f"[VisualLearning] Sending storyboard prompt to Gemini ({target_model})...")
-        
-        response_text = None
-        last_error = None
-        
-        # Retry loop for gemini-2.5-flash to gracefully handle temporary 429 rate limits
-        for attempt in range(1, 4):
-            try:
-                logger.info(f"[VisualLearning] Generating storyboard with '{target_model}' (Attempt {attempt}/3)...")
-                from google.genai import types
-                gen_config = types.GenerateContentConfig(
-                    response_mime_type="application/json",
-                    temperature=0.2
-                )
-                response = client.models.generate_content(
-                    model=target_model,
-                    contents=prompt,
-                    config=gen_config
-                )
-                if response and response.text:
-                    response_text = response.text.strip()
-                    logger.info(f"[VisualLearning] Successfully received response from '{target_model}' (length: {len(response_text)})")
-                    break
-            except Exception as m_err:
-                last_error = m_err
-                err_str = str(m_err)
-                if "429" in err_str or "RESOURCE_EXHAUSTED" in err_str:
-                    logger.warning(f"[VisualLearning] Rate limit 429 hit on '{target_model}'. Backing off 3s before retry {attempt+1}...")
-                    print(f"[RENDER LOG] [NOTICE] Gemini API rate limit hit. Pausing 3s before retry {attempt+1}...")
-                    await asyncio.sleep(3.0)
-                else:
-                    logger.warning(f"[VisualLearning] Model '{target_model}' attempt {attempt} notice: {m_err}")
-                    await asyncio.sleep(1.0)
-
-        if not response_text:
-            raise RuntimeError(f"Failed to generate storyboard with {target_model}: {last_error}")
-        
-        try:
-            blueprint = clean_and_parse_json(response_text)
+        if precomputed_storyboard:
+            yield f"data: {json.dumps({'type': 'progress', 'step': 'understanding_topic', 'status': 'complete', 'message': 'Using designed storyboard blueprint.'})}\n\n"
+            await asyncio.sleep(0.1)
+            yield f"data: {json.dumps({'type': 'progress', 'step': 'designing_lesson', 'status': 'complete', 'message': 'Storyboard animations configured.'})}\n\n"
+            await asyncio.sleep(0.1)
+            blueprint = precomputed_storyboard
             raw_clips = blueprint.get("clips", blueprint.get("scenes", []))
             global_assets = blueprint.get("global_assets", [])
             connections = blueprint.get("connections", [])
             layout_mode = blueprint.get("layout_mode", "timeline")
             theme = blueprint.get("theme", "indigo")
+        else:
+            # Step 1: Retrieve context from book using hybrid search
+            yield f"data: {json.dumps({'type': 'progress', 'step': 'understanding_topic', 'status': 'in_progress', 'message': 'Retrieving relevant textbook context...'})}\n\n"
+            await asyncio.sleep(0.3)
             
+            context = ""
+            try:
+                hybrid_results, _, _ = qdrant.hybrid_search(
+                    book_uuid=book_uuid,
+                    query=query,
+                    keywords=[],
+                    conceptual_score=0.5,
+                    metadata_filters=None
+                )
+                if hybrid_results:
+                    context = "\n\n---\n\n".join([doc["text"] for score, doc in hybrid_results[:5]])
+                    logger.info(f"[VisualLearning] Retrieved {len(hybrid_results)} chunks for context.")
+                else:
+                    logger.warning("[VisualLearning] No chunks retrieved. Using query context only.")
+            except Exception as e:
+                logger.error(f"[VisualLearning] Hybrid search failed: {e}")
+                
+            yield f"data: {json.dumps({'type': 'progress', 'step': 'understanding_topic', 'status': 'complete', 'message': 'Textbook context analyzed.'})}\n\n"
+            
+            # Step 2: Design lesson storyboard blueprint with Gemini
+            yield f"data: {json.dumps({'type': 'progress', 'step': 'designing_lesson', 'status': 'in_progress', 'message': 'Creating storyboard and scene animations...'})}\n\n"
+            await asyncio.sleep(0.3)
+            
+            prompt = get_visual_lesson_prompt(class_name, subject, query, context)
+            client = qdrant.gemini_client
+            
+            if not client:
+                raise RuntimeError("Gemini Client is not initialized in qdrant_service.")
+                
+            candidate_models = [
+                os.environ.get("GEMINI_MODEL_NAME", "gemini-3.5-flash"),
+                "gemini-3.5-flash"
+            ]
+            candidate_models = list(dict.fromkeys(candidate_models))
+
+            response_text = None
+            last_error = None
+
+            for target_model in candidate_models:
+                try:
+                    logger.info(f"[VisualLearning] Generating storyboard with '{target_model}'...")
+                    from google.genai import types
+                    gen_config = types.GenerateContentConfig(
+                        response_mime_type="application/json",
+                        temperature=0.2
+                    )
+                    response = client.models.generate_content(
+                        model=target_model,
+                        contents=prompt,
+                        config=gen_config
+                    )
+                    if response and response.text:
+                        response_text = response.text.strip()
+                        logger.info(f"[VisualLearning] Successfully received response from '{target_model}' (length: {len(response_text)})")
+                        break
+                except Exception as m_err:
+                    last_error = m_err
+                    logger.warning(f"[VisualLearning] Model '{target_model}' failed: {m_err}. Trying fallback model...")
+                    await asyncio.sleep(1.0)
+
+            if not response_text:
+                raise RuntimeError(f"Failed to generate storyboard with {target_model}: {last_error}")
+            
+            try:
+                blueprint = clean_and_parse_json(response_text)
+                raw_clips = blueprint.get("clips", blueprint.get("scenes", []))
+                global_assets = blueprint.get("global_assets", [])
+                connections = blueprint.get("connections", [])
+                layout_mode = blueprint.get("layout_mode", "timeline")
+                theme = blueprint.get("theme", "indigo")
+            except Exception as e:
+                logger.error(f"[VisualLearning] Failed to clean/parse JSON storyboard: {e}")
+                raise
+        
+        try:    
             # Robust Clip Normalization (Guarantees dict object structure for every scene)
             clips = []
             for idx, item in enumerate(raw_clips, 1):
@@ -191,7 +203,7 @@ async def generate_visual_lesson_stream(query: str, book_uuid: str, class_name: 
             valid_templates = [
                 'title_slide', 'concept_diagram', 'cycle_template', 'math_derivation',
                 'venn_diagram', 'taxonomy_tree', 'cartesian_grid', 'column_comparison',
-                'geo_marker', 'database_grid', 'before_after_slider', 'quiz_checkpoint'
+                'geo_marker', 'database_grid', 'before_after_slider'
             ]
             
             print("\n----------------------------------------------------------------------")
@@ -209,15 +221,16 @@ async def generate_visual_lesson_stream(query: str, book_uuid: str, class_name: 
                 print(f"   Scene {idx}: [{tid}] {status_icon}")
                 print(f"           Reasoning: {reasoning[:90]}...")
             
-            # Enforce non-consecutive duplicate rule & title_slide rule
+            # Enforce non-consecutive duplicate rule & title_slide rule & no quiz rule
             for idx in range(len(clips)):
                 if idx == 0:
                     clips[idx]["template_id"] = "title_slide"
                 else:
-                    if clips[idx].get("template_id") == "title_slide":
+                    if clips[idx].get("template_id") in ["title_slide", "quiz_checkpoint"]:
                         clips[idx]["template_id"] = "concept_diagram"
+                        print(f"   [AUDIT REPAIR] Swapped disallowed template in Scene {idx+1} to 'concept_diagram'")
                     if clips[idx].get("template_id") == clips[idx-1].get("template_id"):
-                        alt_templates = [t for t in valid_templates if t not in [clips[idx-1].get("template_id"), 'title_slide']]
+                        alt_templates = [t for t in valid_templates if t not in [clips[idx-1].get("template_id"), 'title_slide', 'quiz_checkpoint']]
                         clips[idx]["template_id"] = alt_templates[0]
                         print(f"   [AUDIT REPAIR] Swapped consecutive duplicate template in Scene {idx+1} to '{clips[idx]['template_id']}'")
             

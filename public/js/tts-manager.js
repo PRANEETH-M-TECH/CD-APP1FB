@@ -44,10 +44,12 @@ class TTSManager {
     _loadPreferences() {
         try {
             const saved = JSON.parse(localStorage.getItem('tts_preferences') || '{}');
-            if (saved.model)    this.model    = saved.model;
+            if (saved.model && saved.model !== 'browser') this.model = saved.model;
+            else this.model = 'sarvam';
             if (saved.voice)    this.voice    = saved.voice;
             if (saved.language) this.language = saved.language;
         } catch (e) {
+            this.model = 'sarvam';
             console.warn('[TTSManager] Could not load preferences:', e);
         }
     }

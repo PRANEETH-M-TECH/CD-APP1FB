@@ -25,6 +25,8 @@ from backend.app.prompts import styler as prompt_styler
 from backend.app.core.auth_middleware import get_user_id_or_default
 from backend.app.core.firebase.firebase_init import db
 from backend.app.core import firestore_service
+from backend.app.core.firestore_service import check_global_query_cache, save_to_global_query_cache
+from backend.app.orchestrator_test.test_runner import run_orchestrator_pipeline
 from backend.app.services.deployment_logger import save_chat_log_background
 
 logger = logging.getLogger(__name__)
@@ -383,277 +385,209 @@ async def smart_query_engine(
     """
     Smart query endpoint with conversational context, using an action-based routing model.
     """
+    # Resolve FastAPI Query default objects if called programmatically
+    if hasattr(session_id, "__class__") and session_id.__class__.__name__ == "Query":
+        session_id = None
+    if hasattr(is_clicked_followup, "__class__") and is_clicked_followup.__class__.__name__ == "Query":
+        is_clicked_followup = False
+    if hasattr(book_uuid, "__class__") and book_uuid.__class__.__name__ == "Query":
+        book_uuid = ""
+    if hasattr(query, "__class__") and query.__class__.__name__ == "Query":
+        query = ""
+    if hasattr(class_name, "__class__") and class_name.__class__.__name__ == "Query":
+        class_name = ""
+    if hasattr(subject, "__class__") and subject.__class__.__name__ == "Query":
+        subject = ""
+
     async def event_generator():
         from backend.app.utils.gemini_tracker import request_stats
         request_stats.set({"calls": [], "start_time": time.time(), "query": query})
         uid = get_user_id_or_default(request)
         start_time = time.time()
         print(f"\n============================================================")
-        print(f"USER QUESTION: '{query}'")
+        print(f"USER QUESTION (ORCHESTRATOR PATH): '{query}'")
         print(f"============================================================")
 
         try:
+            # 1. Load summary list for grade mapping
             session = session_manager.get_or_create_session(book_uuid, session_id)
-            active_context_window = session["active_context_window"]
             
-            last_action = None
-            if active_context_window:
-                last_action = active_context_window[-1].get("intent_type")
-            
-            action_details = determine_next_action(
-                current_query=query,
-                conversation_window=active_context_window,
-                gemini_client=qdrant.gemini_client,
-                generation_model_name=qdrant.generation_model_name,
-                embedder=qdrant.local_embedder,
-                is_clicked_followup=is_clicked_followup,
-                last_action=last_action
-            )
-            action = action_details.get("action")
-            reason = action_details.get("reason", "No reason provided.")
-            similarity_score = action_details.get("similarity_score", 0.0)
-            tier = action_details.get("tier", "UNKNOWN")
-            
-            print(f"\nINTENT CLASSIFIER DECISION: Tier {tier} | Action {action}")
-            yield f"data: {json.dumps({'type': 'intent', 'intent': action})}\n\n"
+            # Get authenticated student profile from Firestore
+            student_profile = {
+                "uid": uid,
+                "email": "anonymous@cg.com",
+                "name": "Sonu",
+                "class": 8,
+                "board": "CBSE",
+                "role": "student"
+            }
+            if uid and uid != "anonymous":
+                user_doc = db.collection("users").document(uid).get()
+                if user_doc.exists:
+                    udata = user_doc.to_dict()
+                    # Strip all string fields fetched during auth
+                    student_profile = {
+                        "uid": uid,
+                        "email": str(udata.get("email", "")).strip(),
+                        "name": str(udata.get("name", "Sonu")).strip(),
+                        "class": int(udata.get("class", 8)) if udata.get("class") is not None else 8,
+                        "board": str(udata.get("board", "CBSE")).strip(),
+                        "role": str(udata.get("role", "student")).strip()
+                    }
 
-            context = ""
-            hybrid_results = []
-            reformulated_query = query
-            keywords = []
-            full_answer = ""
-
-            if action == "RETRIEVE_NEW_CONTEXT":
-                new_topic_name = action_details.get("new_topic_name", "New Topic")
-                session_manager.start_new_topic(session['session_id'], new_topic_name)
-
-                summary_doc = load_summary_from_firestore(class_name, subject)
-                chapters = summary_doc.get("chapters", [])
+            # 2. Check global cache hit
+            cached = check_global_query_cache(query, student_profile["class"], subject)
+            if cached:
+                out = cached["orchestrator_output"]
+                interactive_url = cached.get("interactive_url")
                 
-                reform = reformulate_with_llm(query, class_name, subject, chapters)
-                reformulated_query = reform.get("reformulated_query", query)
-                keywords = reform.get("keywords", [])
-                chapter_ranking = reform.get("chapter_ranking", [])
-                conceptual_score = reform.get("conceptual_score", 0.5)
+                classification = out.get("classification", "CURRICULUM")
+                matched_subject = out.get("matched_subject")
+                matched_chapter = out.get("matched_chapter")
+                format_decision = out.get("format_decision", "QUICK_ANSWER")
+
+                print(f"[CACHE HIT] Reusing cached query payload. Format: {format_decision}")
+                yield f"data: {json.dumps({'type': 'intent', 'intent': classification, 'subject': matched_subject, 'chapter': matched_chapter, 'format': format_decision})}\n\n"
                 
-                cleaned_keywords = []
-                for kw in keywords:
-                    if isinstance(kw, dict):
-                        cleaned_keywords.append({"keyword": kw.get("keyword", ""), "importance": kw.get("importance", 0.5)})
-                    else:
-                        cleaned_keywords.append({"keyword": str(kw), "importance": 0.5})
+                # Stream pre-cached text_narration sentence-by-sentence for synchronized TTS pipeline
+                text_script = out.get("text_narration") or ""
+                import re
+                cached_sentences = [s.strip() for s in re.split(r'(?<=[.!?।])\s+', text_script) if s.strip()]
+                if not cached_sentences:
+                    cached_sentences = [text_script]
 
-                top_chapter_names = [ch["chapter_name"] for ch in chapter_ranking[:5]] if chapter_ranking else []
-                hybrid_results, _, _ = qdrant.hybrid_search(
-                    book_uuid=book_uuid,
-                    query=reformulated_query,
-                    keywords=cleaned_keywords,
-                    conceptual_score=conceptual_score,
-                    metadata_filters={"chapter_names": top_chapter_names} if top_chapter_names else {}
-                )
-                context = "\n\n---\n\n".join([doc["text"] for score, doc in hybrid_results[:10]])
-                session_manager.update_topic_chunks(session['session_id'], hybrid_results)
-
-            elif action == "USE_CACHED_CONTEXT":
-                cached_chunks = session_manager.get_current_topic_chunks(session['session_id'])
-                if cached_chunks:
-                    hybrid_results = cached_chunks
-                    context = "\n\n---\n\n".join([doc["text"] for score, doc in hybrid_results[:10]])
-                else:
-                    action = "RETRIEVE_NEW_CONTEXT"
-                    summary_doc = load_summary_from_firestore(class_name, subject)
-                    chapters = summary_doc.get("chapters", [])
-                    reform = reformulate_with_llm(query, class_name, subject, chapters)
-                    reformulated_query = reform.get("reformulated_query", query)
-                    keywords = reform.get("keywords", [])
-                    chapter_ranking = reform.get("chapter_ranking", [])
+                for s in cached_sentences:
+                    yield f"data: {json.dumps({'display_text': s + ' '})}\n\n"
+                    await asyncio.sleep(0.05)
+                
+                # If a video lesson is ready, yield metadata details
+                if format_decision == "VIDEO_REQUIRED" and interactive_url:
+                    yield f"data: {json.dumps({'type': 'progress', 'step': 'launching_lesson', 'status': 'complete', 'message': 'Pre-rendered lesson loaded from cache!'})}\n\n"
+                    await asyncio.sleep(0.5)
                     
-                    cleaned_keywords = []
-                    for kw in keywords:
-                        if isinstance(kw, dict):
-                            cleaned_keywords.append({"keyword": kw.get("keyword", ""), "importance": kw.get("importance", 0.5)})
-                        else:
-                            cleaned_keywords.append({"keyword": str(kw), "importance": 0.5})
-
-                    top_chapter_names = [ch["chapter_name"] for ch in chapter_ranking[:5]] if chapter_ranking else []
-                    hybrid_results, _, _ = qdrant.hybrid_search(
-                        book_uuid=book_uuid, query=reformulated_query, keywords=cleaned_keywords,
-                        metadata_filters={"chapter_names": top_chapter_names} if top_chapter_names else {}
-                    )
-                    context = "\n\n---\n\n".join([doc["text"] for score, doc in hybrid_results[:10]])
-                    session_manager.update_topic_chunks(session['session_id'], hybrid_results)
-
-                reform = context_aware_reformulate(query, active_context_window)
-                reformulated_query = reform.get("reformulated_query", query)
-
-            if action in ["RETRIEVE_NEW_CONTEXT", "USE_CACHED_CONTEXT"]:
-                conversation_context = "\n\nPREVIOUS CONVERSATION HISTORY:\n"
-                for turn in session.get("full_history", [])[-3:]:
-                    conversation_context += f"Q: {turn['query']}\nA: {turn.get('answer', 'N/A')[:200]}...\n\n"
-
-                final_prompt = prompt_styler.get_answer_prompt(
-                    class_name=class_name,
-                    subject=subject,
-                    query=reformulated_query,
-                    context=context,
-                    conversation_context=conversation_context,
-                    action=action
-                )
-            else: # ANSWER_FROM_HISTORY
-                context_summary = ""
-                for turn in session.get("full_history", []):
-                    answer_preview = turn.get('answer', '')[:200]
-                    if len(turn.get('answer', '')) > 200:
-                        answer_preview += "..."
-                    context_summary += f"Q: {turn['query']}\nA: {answer_preview}\n\n"
+                    ready_payload = {
+                        "type": "lesson_ready",
+                        "lesson_id": interactive_url.split("/")[-2] if "/" in interactive_url else "cached",
+                        "lesson_title": out.get("video_storyboard", {}).get("lesson_title", "Cached Lesson"),
+                        "interactive_url": interactive_url,
+                        "html_url": interactive_url,
+                        "video_url": None,
+                        "scene_count": len(out.get("video_storyboard", {}).get("scenes", [])) if isinstance(out.get("video_storyboard"), dict) else 0,
+                        "lesson": out.get("video_storyboard"),
+                        "lesson_package": out.get("video_storyboard")
+                    }
+                    yield f"data: {json.dumps(ready_payload)}\n\n"
                 
-                final_prompt = prompt_styler.get_answer_prompt(
-                    class_name=class_name,
-                    subject=subject,
+                yield "data: [DONE]\n\n"
+                return
+
+            # 3. Cache Miss: Run Orchestrator Pipeline
+            # Run in thread executor so the async event loop is NOT blocked during LLM calls
+            print(f"[CACHE MISS] Calling single-pass Orchestrator Agent...")
+            loop = asyncio.get_event_loop()
+            report = await loop.run_in_executor(
+                None,  # uses the default ThreadPoolExecutor
+                run_orchestrator_pipeline,
+                query,
+                student_profile
+            )
+            out = report.get("orchestrator_output", {})
+
+
+            classification = out.get("classification", "CURRICULUM")
+            matched_subject = out.get("matched_subject")
+            matched_chapter = out.get("matched_chapter")
+            format_decision = out.get("format_decision", "QUICK_ANSWER")
+            text_script = out.get("text_narration") or ""
+
+            # Check Child Safety Refusal
+            if not out.get("is_authorized", True):
+                refusal = out.get("refusal_reason") or "I cannot answer this query."
+                yield f"data: {json.dumps({'type': 'intent', 'intent': 'UNAUTHORIZED', 'format': 'QUICK_ANSWER'})}\n\n"
+                words = refusal.split(" ")
+                for w in words:
+                    yield f"data: {json.dumps({'display_text': w + ' '})}\n\n"
+                    await asyncio.sleep(0.01)
+                yield "data: [DONE]\n\n"
+                return
+
+            # Yield classification intent (this tells frontend about subject/chapter metadata for backgrounds)
+            yield f"data: {json.dumps({'type': 'intent', 'intent': classification, 'subject': matched_subject, 'chapter': matched_chapter, 'format': format_decision})}\n\n"
+
+            # Stream text narration sentence-by-sentence so TTS pipeline receives clean scene/sentence chunks
+            import re
+            sentences = [s.strip() for s in re.split(r'(?<=[.!?।])\s+', text_script) if s.strip()]
+            if not sentences:
+                sentences = [text_script]
+
+            for s in sentences:
+                yield f"data: {json.dumps({'display_text': s + ' '})}\n\n"
+                await asyncio.sleep(0.05)
+
+            # If format decision is video required, compile the video lesson asynchronously in the background
+            interactive_url = None
+            if format_decision == "VIDEO_REQUIRED":
+                print("[ORCHESTRATOR] Starting background Hyperframes video generation...")
+                from backend.app.services.visual_learning.visual_learning_service import generate_visual_lesson_stream
+                
+                # Fetch pre-compiled storyboard from orchestrator agent result
+                storyboard_payload = out.get("video_storyboard")
+                
+                # We feed the pre-computed storyboard directly to visual_learning_stream
+                visual_stream = generate_visual_lesson_stream(
                     query=query,
-                    context="",
-                    conversation_context=context_summary,
-                    action=action
-                )
-
-            response_stream = qdrant.gemini_client.models.generate_content_stream(
-                model=qdrant.generation_model_name,
-                contents=final_prompt
-            )
-            
-            for chunk in response_stream:
-                text_val = None
-                try:
-                    if hasattr(chunk, "text") and chunk.text:
-                        text_val = chunk.text
-                except Exception:
-                    text_val = None
-                
-                if text_val:
-                    full_answer += text_val
-                    yield f"data: {json.dumps({'display_text': text_val})}\n\n"
-                    await asyncio.sleep(0)
-
-            follow_ups = []
-            if action != "ANSWER_FROM_HISTORY":
-                follow_ups = generate_smart_followups(reformulated_query, full_answer, hybrid_results[:5])
-            
-            yield f"data: {json.dumps({'type': 'followups', 'followups': follow_ups})}\n\n"
-
-            turn_data = {
-                "query": query, "reformulated": reformulated_query, "answer": full_answer,
-                "intent_type": action, "is_clicked_followup": is_clicked_followup,
-                "tier": tier, "similarity_score": similarity_score,
-                "follow_ups": follow_ups, "timestamp": datetime.datetime.now().isoformat()
-            }
-            if action == "RETRIEVE_NEW_CONTEXT":
-                 turn_data["context_cache"] = {"retrieved_chunks": hybrid_results, "context": context, "keywords": keywords}
-
-            session_manager.add_turn(session["session_id"], turn_data)
-            
-            try:
-                chapter_id = None
-                chapter_name = "Unknown"
-                if hybrid_results and len(hybrid_results) > 0:
-                    first_chunk = hybrid_results[0][1]
-                    chapter_id = first_chunk.get("chapter_id")
-                    chapter_name = first_chunk.get("chapter_name", "Unknown")
-                
-                mode = "text"
-                if request and hasattr(request, "headers"):
-                    if request.headers.get("X-Client-Mode") == "voice":
-                        mode = "voice"
-                
-                analytics_service.log_query(
-                    uid=uid, class_name=class_name, subject=subject, chapter_id=chapter_id,
-                    chapter_name=chapter_name, query=query, reformulated_query=reformulated_query,
-                    mode=mode, llm_action=action, answer_length=len(full_answer)
-                )
-                
-                analytics_service.update_user_stats(uid=uid, subject=subject, chapter_id=chapter_id, class_name=class_name)
-                
-                if chapter_id:
-                    analytics_service.update_chapter_stats(class_name=class_name, subject=subject, chapter_id=chapter_id, chapter_name=chapter_name, uid=uid)
-                    topics_to_track = keywords if keywords else [reformulated_query[:50]]
-                    enhanced_analytics.track_topic_analytics(
-                        uid=uid, subject=subject, chapter_id=chapter_id, chapter_name=chapter_name,
-                        topics=topics_to_track, difficulty_score=0.5
-                    )
-                    
-                    enhanced_analytics.update_frequent_questions(uid=uid, query=query, chapter_name=chapter_name, subject=subject)
-                
-                track_cumulative_analytics(uid=uid, query=query, subject=subject, chapter_name=chapter_name)
-                
-            except Exception as analytics_error:
-                logger.error(f"[ANALYTICS] Analytics logging failed: {analytics_error}")
-
-            try:
-                mistake_metadata = {"patterns": [], "confusion_topics": [], "recommended_tasks": []}
-                analytics_service.update_mistake_patterns(
-                    uid=uid, patterns=mistake_metadata["patterns"],
-                    confusion_topics=mistake_metadata["confusion_topics"],
-                    recommended_tasks=mistake_metadata["recommended_tasks"]
-                )
-            except Exception as e:
-                pass
-
-            updated_history = session_manager.get_full_history(session["session_id"])
-            current_turn_number = len(updated_history)
-            
-            chunks_summary = []
-            if hybrid_results:
-                for score, doc in hybrid_results[:5]:
-                    chunks_summary.append({
-                        "chapter_name": doc.get("chapter_name", "Unknown"),
-                        "relevance_score": round(score, 3),
-                        "text_preview": doc.get("text", "")[:150] + "...",
-                        "pdf_pages": f"{doc.get('pdf_startpg', '?')}-{doc.get('pdf_endpg', '?')}",
-                        "chapter_pages": f"{doc.get('chpstpage', '?')}-{doc.get('chpendpage', '?')}"
-                    })
-            
-            cache_hit = (action == "USE_CACHED_CONTEXT")
-            metadata = {
-                "type": "metadata",
-                "turn": current_turn_number,
-                "session_id": session["session_id"],
-                "intent_type": action,
-                "topic_change": action == "RETRIEVE_NEW_CONTEXT",
-                "cache_info": {
-                    "cache_hit": cache_hit,
-                    "similarity_score": round(similarity_score, 3),
-                    "chunks_reused": len(hybrid_results) if cache_hit else 0,
-                    "retrieval_time_saved_ms": 1500 if cache_hit else 0
-                },
-                "retrieved_chunks": chunks_summary
-            }
-            yield f"data: {json.dumps(metadata)}\n\n"
-            
-            try:
-                formatted_chunks = []
-                if hybrid_results:
-                    for score, doc in hybrid_results[:5]:
-                        formatted_chunks.append({
-                            "chunk_id": doc.get("chunk_id", "chunk_unknown"),
-                            "text": doc.get("text", "")[:200],
-                            "score": round(score, 3)
-                        })
-                save_chat_log_background(
-                    user_query=query,
+                    book_uuid=book_uuid,
+                    class_name=str(student_profile["class"]),
                     subject=subject,
-                    mode=mode if 'mode' in locals() else "text_to_text",
-                    session_id=session.get("session_id"),
-                    retrieved_rag_chunks=formatted_chunks,
-                    llm_response=full_answer,
-                    execution_time_ms=int((time.time() - start_time) * 1000)
+                    precomputed_storyboard=storyboard_payload
                 )
-            except Exception as log_err:
-                logger.error(f"[DeploymentLogger] Failed to log smart_query_engine: {log_err}")
+
+                async for sse_chunk in visual_stream:
+                    # Strip 'data: ' prefix if present and parse
+                    raw_data = sse_chunk.strip()
+                    if raw_data.startswith("data: "):
+                        raw_data = raw_data[6:]
+                    
+                    try:
+                        chunk_json = json.loads(raw_data)
+                        
+                        # Forward progress steps to frontend
+                        if chunk_json.get("type") == "progress":
+                            yield f"data: {json.dumps(chunk_json)}\n\n"
+                        
+                        # Handle ready payload
+                        if chunk_json.get("type") == "lesson_ready":
+                            interactive_url = chunk_json.get("interactive_url")
+                            yield f"data: {json.dumps(chunk_json)}\n\n"
+                    except Exception as json_err:
+                        logger.error(f"[SSE FORWARD] Parse error: {json_err} on raw: {raw_data}")
+
+            # Register compiled query results to the global cache
+            save_to_global_query_cache(
+                raw_query=query,
+                class_name=student_profile["class"],
+                subject=subject,
+                orchestrator_output=out,
+                interactive_url=interactive_url
+            )
+
+            # Save query turn to standard chat session manager
+            turn_data = {
+                "query": query,
+                "reformulated": out.get("reformulated_query", query),
+                "answer": text_script,
+                "intent_type": classification,
+                "is_clicked_followup": is_clicked_followup,
+                "timestamp": datetime.datetime.now().isoformat()
+            }
+            session_manager.add_turn(session["session_id"], turn_data)
 
             yield "data: [DONE]\n\n"
             from backend.app.utils.gemini_tracker import print_query_performance_report
             print_query_performance_report()
-            
+
         except Exception as e:
+            logger.error(f"[ORCHESTRATE ROUTE ERROR] Failed: {e}", exc_info=True)
             yield f"data: {json.dumps({'error': str(e)})}\n\n"
             from backend.app.utils.gemini_tracker import print_query_performance_report
             print_query_performance_report()

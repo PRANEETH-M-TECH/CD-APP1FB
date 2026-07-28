@@ -1,0 +1,208 @@
+{
+  "timestamp": "2026-07-28T00:45:25.665525",
+  "execution_time_seconds": 14.71,
+  "authenticated_student": {
+    "uid": "anonymous",
+    "email": "anonymous@cg.com",
+    "name": "Sonu",
+    "class": 8,
+    "board": "CBSE",
+    "role": "student"
+  },
+  "raw_user_query": "explain about the pollution that is caused by this paper factories",
+  "orchestrator_output": {
+    "is_authorized": true,
+    "refusal_reason": null,
+    "classification": "CURRICULUM",
+    "reformulated_query": "Pollution caused by paper factories",
+    "matched_subject": "Class 8 Social",
+    "matched_chapter": "Production in a Factory - A Paper Mill",
+    "complexity_level": 3,
+    "format_decision": "VIDEO_REQUIRED",
+    "text_narration": "Paper factories, while essential for making paper, can unfortunately cause various types of pollution if not managed properly. Let's understand these impacts.One major concern is water pollution. Paper mills use a lot of water and release wastewater containing harmful chemicals like chlorine, dyes, and organic matter. This can severely harm aquatic life and make water unsafe for human use.Next, we have air pollution. Factories burn fuel to generate energy, releasing smoke, particulate matter, and gases like sulfur dioxide and nitrogen oxides. The chemical processes involved in pulping and bleaching also release volatile organic compounds, contributing to smog and respiratory problems.Paper production also generates a significant amount of solid waste. This includes wood waste, sludge from wastewater treatment, and chemical residues. Improper disposal of this waste can contaminate soil and groundwater.So, paper factories can impact our environment through water, air, and solid waste pollution. However, modern paper mills are adopting better technologies like closed-loop systems, advanced wastewater treatment, and using renewable energy to reduce their environmental footprint and make paper production more sustainable.",
+    "video_storyboard": {
+      "lesson_title": "Pollution from Paper Factories",
+      "layout_mode": "timeline",
+      "theme": "General",
+      "global_assets": [],
+      "connections": [],
+      "scenes": [
+        {
+          "scene_no": 1,
+          "purpose": "Introduce the topic of pollution from paper factories.",
+          "template_id": "title_slide",
+          "template_selection_reasoning": "Best for introducing the lesson topic.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "Paper factories, while essential for making paper, can unfortunately cause various types of pollution if not managed properly. Let's understand these impacts.",
+          "template_data": {
+            "title": "Pollution from Paper Factories",
+            "subtitle": "Understanding Environmental Impact"
+          }
+        },
+        {
+          "scene_no": 2,
+          "purpose": "Explain water pollution from paper mills.",
+          "template_id": "concept_diagram",
+          "template_selection_reasoning": "Visually represents the discharge of pollutants into water bodies.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "One major concern is water pollution. Paper mills use a lot of water and release wastewater containing harmful chemicals like chlorine, dyes, and organic matter. This can severely harm aquatic life and make water unsafe for human use.",
+          "template_data": {
+            "diagram_title": "Water Pollution",
+            "main_concept": {
+              "text": "Paper Mill Wastewater",
+              "image_url": "https://example.com/paper_mill_water_discharge.png"
+            },
+            "sub_concepts": [
+              {
+                "text": "Harmful Chemicals (Chlorine, Dyes)",
+                "icon": "chemical_icon"
+              },
+              {
+                "text": "Organic Matter",
+                "icon": "organic_icon"
+              },
+              {
+                "text": "Impact on Aquatic Life",
+                "icon": "fish_dead_icon"
+              }
+            ]
+          }
+        },
+        {
+          "scene_no": 3,
+          "purpose": "Explain air pollution from paper mills.",
+          "template_id": "concept_diagram",
+          "template_selection_reasoning": "Visually represents emissions from factory chimneys.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "Next, we have air pollution. Factories burn fuel to generate energy, releasing smoke, particulate matter, and gases like sulfur dioxide and nitrogen oxides. The chemical processes involved in pulping and bleaching also release volatile organic compounds, contributing to smog and respiratory problems.",
+          "template_data": {
+            "diagram_title": "Air Pollution",
+            "main_concept": {
+              "text": "Factory Emissions",
+              "image_url": "https://example.com/paper_mill_air_emissions.png"
+            },
+            "sub_concepts": [
+              {
+                "text": "Smoke & Particulate Matter",
+                "icon": "smoke_icon"
+              },
+              {
+                "text": "Sulfur Dioxide, Nitrogen Oxides",
+                "icon": "gas_icon"
+              },
+              {
+                "text": "Volatile Organic Compounds (VOCs)",
+                "icon": "chemical_vapor_icon"
+              }
+            ]
+          }
+        },
+        {
+          "scene_no": 4,
+          "purpose": "Explain solid waste pollution from paper mills.",
+          "template_id": "database_grid",
+          "template_selection_reasoning": "Good for listing and categorizing different types of solid waste.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "Paper production also generates a significant amount of solid waste. This includes wood waste, sludge from wastewater treatment, and chemical residues. Improper disposal of this waste can contaminate soil and groundwater.",
+          "template_data": {
+            "grid_title": "Solid Waste from Paper Mills",
+            "headers": [
+              "Waste Type",
+              "Description",
+              "Impact"
+            ],
+            "rows": [
+              [
+                "Wood Waste",
+                "Leftover wood chips, bark",
+                "Landfill burden"
+              ],
+              [
+                "Sludge",
+                "By-product of wastewater treatment",
+                "Soil & groundwater contamination"
+              ],
+              [
+                "Chemical Residues",
+                "Leftover chemicals from processes",
+                "Toxic contamination"
+              ]
+            ]
+          }
+        },
+        {
+          "scene_no": 5,
+          "purpose": "Summarize the overall impact and mention solutions.",
+          "template_id": "column_comparison",
+          "template_selection_reasoning": "Allows for a clear comparison between the problems and the solutions/improvements.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "So, paper factories can impact our environment through water, air, and solid waste pollution. However, modern paper mills are adopting better technologies like closed-loop systems, advanced wastewater treatment, and using renewable energy to reduce their environmental footprint and make paper production more sustainable.",
+          "template_data": {
+            "title": "Towards Sustainable Paper Production",
+            "column1_title": "Challenges",
+            "column2_title": "Solutions",
+            "column1_items": [
+              "Water Pollution",
+              "Air Pollution",
+              "Solid Waste"
+            ],
+            "column2_items": [
+              "Closed-loop systems",
+              "Advanced wastewater treatment",
+              "Renewable energy, Waste recycling"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "rag_retrieval_executed": true,
+  "retrieved_top10_chunks": [
+    {
+      "chunk_index": 1,
+      "score": 0.0,
+      "book_name": "",
+      "chapter_name": "",
+      "content_snippet": "..."
+    },
+    {
+      "chunk_index": 2,
+      "score": 0.0,
+      "book_name": "",
+      "chapter_name": "",
+      "content_snippet": "..."
+    },
+    {
+      "chunk_index": 3,
+      "score": 0.0,
+      "book_name": "",
+      "chapter_name": "",
+      "content_snippet": "..."
+    }
+  ]
+}

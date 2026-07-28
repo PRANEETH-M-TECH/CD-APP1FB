@@ -114,6 +114,7 @@ def _compile_index_html_python_fallback(lesson_id: str, lesson_dir: str) -> str:
     }}
 
     .subtitles-container {{
+      display: none !important;
       position: absolute;
       bottom: 40px;
       left: 8%;

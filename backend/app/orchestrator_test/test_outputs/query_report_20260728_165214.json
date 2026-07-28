@@ -1,0 +1,179 @@
+{
+  "timestamp": "2026-07-28T16:52:14.059546",
+  "execution_time_seconds": 51.34,
+  "authenticated_student": {
+    "uid": "anonymous",
+    "email": "anonymous@cg.com",
+    "name": "Sonu",
+    "class": 8,
+    "board": "CBSE",
+    "role": "student"
+  },
+  "raw_user_query": "explain about the cjp party and their product",
+  "orchestrator_output": {
+    "is_authorized": true,
+    "refusal_reason": null,
+    "classification": "GENERAL_KNOWLEDGE",
+    "reformulated_query": "Cockroach Janta Party CJP origin manifesto and merchandise products",
+    "matched_subject": null,
+    "matched_chapter": null,
+    "complexity_level": 3,
+    "format_decision": "VIDEO_REQUIRED",
+    "text_narration": "The Cockroach Janta Party, or CJP, is a viral satirical youth movement in India that emerged in May 2026. It started as an online joke but quickly transformed into a massive social media phenomenon representing the frustrations of young, unemployed, and educated citizens. The movement was triggered on May 15, 2026, when the Chief Justice of India, Surya Kant, made a remark comparing certain activists and unemployed youth with fake degrees to cockroaches and parasites. In response, a 30-year-old communications strategist named Abhijeet Dipke launched the Cockroach Janta Party on social media as a satirical protest. Within just 72 hours, the movement gained over two million followers, turning a moment of mockery into a powerful youth identity. While CJP uses humor and self-deprecation, calling itself the voice of the lazy and unemployed, it addresses serious systemic issues. Their five-point manifesto demands strict action against exam paper leaks like the NEET scandal, reforms in youth employment, 50 percent reservation for women in politics, freedom of the press, and a ban on post-retirement political rewards for judges. To support the movement and spread their message, CJP launched various products and merchandise. These include streetwear like oversized t-shirts and hoodies with slogans like 'Main Bhi Cockroach' and 'Unemployed but Immortal'. They also offer physical items like witty sticker packs, posters, and headbands, alongside digital products like personalized CJP member badges to fund their legal defense and campaign efforts.",
+    "video_storyboard": {
+      "lesson_title": "The Cockroach Janta Party (CJP) & Its Merchandise",
+      "layout_mode": "timeline",
+      "theme": "Civics",
+      "global_assets": [],
+      "connections": [],
+      "scenes": [
+        {
+          "scene_no": 1,
+          "purpose": "Introduce the Cockroach Janta Party (CJP) as a viral satirical youth movement in India.",
+          "template_id": "title_slide",
+          "template_selection_reasoning": "Standard title slide to introduce the lesson topic clearly.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": "title"
+          },
+          "teacher_script": "The Cockroach Janta Party, or CJP, is a viral satirical youth movement in India that emerged in May 2026. It started as an online joke but quickly transformed into a massive social media phenomenon representing the frustrations of young, unemployed, and educated citizens.",
+          "template_data": {
+            "title": "The Cockroach Janta Party (CJP)",
+            "subtitle": "India's Viral Satirical Youth Movement Explained",
+            "key_points": [
+              "Founded on May 16, 2026",
+              "Started as a satirical response to a public remark",
+              "Grew into a massive online and offline youth protest"
+            ]
+          }
+        },
+        {
+          "scene_no": 2,
+          "purpose": "Explain the origin of the CJP and the trigger behind it.",
+          "template_id": "before_after_slider",
+          "template_selection_reasoning": "Perfect for showing the transition from a single remark to a massive viral movement.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": "slider"
+          },
+          "teacher_script": "The movement was triggered on May 15, 2026, when the Chief Justice of India, Surya Kant, made a remark comparing certain activists and unemployed youth with fake degrees to cockroaches and parasites. In response, a 30-year-old communications strategist named Abhijeet Dipke launched the Cockroach Janta Party on social media as a satirical protest. Within just 72 hours, the movement gained over two million followers, turning a moment of mockery into a powerful youth identity.",
+          "template_data": {
+            "heading": "From a Remark to a Movement",
+            "before_label": "The Trigger (May 15, 2026)",
+            "before_description": "Chief Justice of India refers to individuals with fake degrees as 'cockroaches' during a court hearing.",
+            "after_label": "The Response (May 16, 2026 onwards)",
+            "after_description": "Abhijeet Dipke launches CJP as a satirical party, gaining millions of Gen Z followers overnight."
+          }
+        },
+        {
+          "scene_no": 3,
+          "purpose": "Explain the core demands and manifesto of the CJP.",
+          "template_id": "database_grid",
+          "template_selection_reasoning": "Ideal for listing the key pillars of the CJP's 5-point manifesto.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": "grid"
+          },
+          "teacher_script": "While CJP uses humor and self-deprecation, calling itself the voice of the lazy and unemployed, it addresses serious systemic issues. Their five-point manifesto demands strict action against exam paper leaks like the NEET scandal, reforms in youth employment, 50 percent reservation for women in politics, freedom of the press, and a ban on post-retirement political rewards for judges.",
+          "template_data": {
+            "title": "The CJP 5-Point Manifesto",
+            "headers": [
+              "Pillar",
+              "Core Demand",
+              "Target Issue"
+            ],
+            "rows": [
+              [
+                "Exam Integrity",
+                "Strict laws and digital exams to stop paper leaks",
+                "NEET & State Exam Scandals"
+              ],
+              [
+                "Employment",
+                "Creation of jobs and district startup funds",
+                "Youth Unemployment Crisis"
+              ],
+              [
+                "Gender Equality",
+                "50% reservation for women in political offices",
+                "Underrepresentation of Women"
+              ],
+              [
+                "Judicial Reform",
+                "Ban on post-retirement political rewards for judges",
+                "Judicial Independence"
+              ],
+              [
+                "Press Freedom",
+                "Protection of journalists and media licensing reforms",
+                "Media Accountability"
+              ]
+            ]
+          }
+        },
+        {
+          "scene_no": 4,
+          "purpose": "Explain the products and merchandise of the CJP.",
+          "template_id": "taxonomy_tree",
+          "template_selection_reasoning": "Great for categorizing the different types of products and merchandise offered by the CJP.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": "tree"
+          },
+          "teacher_script": "To support the movement and spread their message, CJP launched various products and merchandise. These include streetwear like oversized t-shirts and hoodies with slogans like 'Main Bhi Cockroach' and 'Unemployed but Immortal'. They also offer physical items like witty sticker packs, posters, and headbands, alongside digital products like personalized CJP member badges to fund their legal defense and campaign efforts.",
+          "template_data": {
+            "title": "CJP Merchandise & Products",
+            "root": {
+              "name": "CJP Products",
+              "children": [
+                {
+                  "name": "Apparel (Streetwear)",
+                  "children": [
+                    {
+                      "name": "Oversized T-Shirts ('Main Bhi Cockroach')"
+                    },
+                    {
+                      "name": "Premium Hoodies & Crop Tops"
+                    }
+                  ]
+                },
+                {
+                  "name": "Accessories & Decor",
+                  "children": [
+                    {
+                      "name": "Witty Sticker Packs"
+                    },
+                    {
+                      "name": "Satirical Wall Posters"
+                    },
+                    {
+                      "name": "Polyspandex Headbands"
+                    }
+                  ]
+                },
+                {
+                  "name": "Digital Goods",
+                  "children": [
+                    {
+                      "name": "Personalized CJP Member Badges"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "rag_retrieval_executed": false,
+  "retrieved_top10_chunks": []
+}

@@ -1,0 +1,133 @@
+{
+  "timestamp": "2026-07-27T17:05:19.990063",
+  "execution_time_seconds": 15.75,
+  "authenticated_student": {
+    "uid": "anonymous",
+    "email": "anonymous@cg.com",
+    "name": "Sonu",
+    "class": 8,
+    "board": "CBSE",
+    "role": "student"
+  },
+  "raw_user_query": "Can you explain me about nuclear capacitors?",
+  "orchestrator_output": {
+    "is_authorized": true,
+    "refusal_reason": null,
+    "classification": "GENERAL_KNOWLEDGE",
+    "reformulated_query": "What are nuclear capacitors?",
+    "matched_subject": null,
+    "matched_chapter": null,
+    "complexity_level": 2,
+    "format_decision": "VIDEO_REQUIRED",
+    "text_narration": "Hello Sonu! Today, let's explore what capacitors are and understand why 'nuclear capacitors' isn't a common term we use in science.First, let's talk about a capacitor. Imagine it like a small battery that can store electrical energy for a short time and then release it quickly. It's made of two metal plates separated by an insulating material. You find them in many electronic devices, like your phone's camera flash!Now, what does 'nuclear' mean? In science, 'nuclear' usually refers to the nucleus of an atom, and often to nuclear energy, which is released from atomic reactions. This is how nuclear power plants generate electricity, but it's a very different process from how a capacitor works.So, while capacitors store electrical energy and 'nuclear' relates to atomic energy, a 'nuclear capacitor' isn't a common or standard device in science or engineering. It's possible the term might be used in very advanced, theoretical research, or it could be confused with concepts like 'nuclear batteries' which use radioactive decay to produce electricity, but these are different from how a regular capacitor functions. For your Class 8 studies, focus on understanding what a regular capacitor is!",
+    "video_storyboard": {
+      "lesson_title": "Understanding Capacitors and 'Nuclear Capacitors'",
+      "layout_mode": "timeline",
+      "theme": "Science",
+      "global_assets": [],
+      "connections": [],
+      "scenes": [
+        {
+          "scene_no": 1,
+          "purpose": "Introduce the topic and set the context for clarification.",
+          "template_id": "title_slide",
+          "template_selection_reasoning": "Standard opening for any video lesson.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "Hello Sonu! Today, let's explore what capacitors are and understand why 'nuclear capacitors' isn't a common term we use in science.",
+          "template_data": {
+            "title": "Capacitors and 'Nuclear Capacitors'",
+            "subtitle": "Clarifying a scientific term for Class 8"
+          }
+        },
+        {
+          "scene_no": 2,
+          "purpose": "Explain the basic concept of a capacitor with a relatable example.",
+          "template_id": "concept_diagram",
+          "template_selection_reasoning": "A diagram helps visualize the components and function of a capacitor.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "First, let's talk about a capacitor. Imagine it like a small battery that can store electrical energy for a short time and then release it quickly. It's made of two metal plates separated by an insulating material. You find them in many electronic devices, like your phone's camera flash!",
+          "template_data": {
+            "diagram_type": "capacitor_basic",
+            "main_point": "Capacitors store electrical energy.",
+            "labels": [
+              {
+                "text": "Metal Plates",
+                "position": "top_left"
+              },
+              {
+                "text": "Insulator (Dielectric)",
+                "position": "center"
+              },
+              {
+                "text": "Stores Charge",
+                "position": "bottom_right"
+              }
+            ]
+          }
+        },
+        {
+          "scene_no": 3,
+          "purpose": "Define 'nuclear' in a scientific context for a Class 8 student.",
+          "template_id": "concept_diagram",
+          "template_selection_reasoning": "A simple diagram or icon can represent the concept of nuclear energy.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "Now, what does 'nuclear' mean? In science, 'nuclear' usually refers to the nucleus of an atom, and often to nuclear energy, which is released from atomic reactions. This is how nuclear power plants generate electricity, but it's a very different process from how a capacitor works.",
+          "template_data": {
+            "diagram_type": "atom_or_power_plant_icon",
+            "main_point": "'Nuclear' relates to atomic nuclei and energy.",
+            "labels": [
+              {
+                "text": "Atom's Nucleus",
+                "position": "top_center"
+              },
+              {
+                "text": "Nuclear Energy",
+                "position": "bottom_center"
+              }
+            ]
+          }
+        },
+        {
+          "scene_no": 4,
+          "purpose": "Clarify that 'nuclear capacitor' is not a standard term and distinguish it from related concepts.",
+          "template_id": "concept_diagram",
+          "template_selection_reasoning": "A text-focused concept diagram is suitable for explaining a distinction and clarifying a term.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "So, while capacitors store electrical energy and 'nuclear' relates to atomic energy, a 'nuclear capacitor' isn't a common or standard device in science or engineering. It's possible the term might be used in very advanced, theoretical research, or it could be confused with concepts like 'nuclear batteries' which use radioactive decay to produce electricity, but these are different from how a regular capacitor functions. For your Class 8 studies, focus on understanding what a regular capacitor is!",
+          "template_data": {
+            "diagram_type": "text_explanation",
+            "main_point": "'Nuclear Capacitor' is not a standard term.",
+            "points": [
+              "Capacitors store electrical charge.",
+              "Nuclear energy comes from atomic reactions.",
+              "These are generally separate concepts in common use.",
+              "May be confused with 'nuclear batteries' (different function)."
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "rag_retrieval_executed": false,
+  "retrieved_top10_chunks": []
+}

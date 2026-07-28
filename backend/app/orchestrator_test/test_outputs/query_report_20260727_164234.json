@@ -1,0 +1,222 @@
+{
+  "timestamp": "2026-07-27T16:42:34.794443",
+  "execution_time_seconds": 16.93,
+  "authenticated_student": {
+    "uid": "anonymous",
+    "email": "anonymous@cg.com",
+    "name": "Sonu",
+    "class": 8,
+    "board": "CBSE",
+    "role": "student"
+  },
+  "raw_user_query": "Are there any alternatives to reduce the paper useage and reduce the impact of deforestation?",
+  "orchestrator_output": {
+    "is_authorized": true,
+    "refusal_reason": null,
+    "classification": "CURRICULUM",
+    "reformulated_query": "Methods to reduce paper consumption and deforestation impact",
+    "matched_subject": "Social",
+    "matched_chapter": "Production in a Factory - A Paper Mill",
+    "complexity_level": 2,
+    "format_decision": "VIDEO_REQUIRED",
+    "text_narration": "Hello Sonu! Today, let's explore how we can reduce paper usage and protect our precious forests. It's a very important topic for our environment!Did you know that making paper often means cutting down many trees? This leads to deforestation, which harms our environment by affecting wildlife and even changing weather patterns. It's a big challenge!But don't worry, Sonu, we have many smart alternatives! We can use digital documents, e-books, and online notes instead of printing everything. This saves a lot of paper!Another powerful way is to follow the '3 R's': Reduce, Reuse, Recycle. Reduce the paper you use, reuse old notebooks or paper for rough work, and always recycle used paper so it can be made into new products!Also, choosing paper made from recycled materials or sustainably managed forests helps a lot. Every small step we take makes a big difference in protecting our planet. Now, a quick question for you!",
+    "video_storyboard": {
+      "lesson_title": "Reducing Paper Use and Deforestation",
+      "layout_mode": "timeline",
+      "theme": "Social",
+      "global_assets": [],
+      "connections": [],
+      "scenes": [
+        {
+          "scene_no": 1,
+          "purpose": "Introduce the topic of reducing paper usage and its link to deforestation.",
+          "template_id": "title_slide",
+          "template_selection_reasoning": "Best for introducing the lesson title and setting the context.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "Hello Sonu! Today, let's explore how we can reduce paper usage and protect our precious forests. It's a very important topic for our environment!",
+          "template_data": {
+            "title": "Saving Trees, Saving Paper!",
+            "subtitle": "Alternatives to Reduce Paper Use and Deforestation",
+            "icon_asset": {
+              "asset_id": "tree_and_paper_icon",
+              "asset_url": "https://example.com/tree_paper_icon.png"
+            }
+          }
+        },
+        {
+          "scene_no": 2,
+          "purpose": "Explain the problem: how paper production leads to deforestation.",
+          "template_id": "concept_diagram",
+          "template_selection_reasoning": "Visually represents the cause-and-effect relationship between paper production and deforestation.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": "deforestation_impact"
+          },
+          "teacher_script": "Did you know that making paper often means cutting down many trees? This leads to deforestation, which harms our environment by affecting wildlife and even changing weather patterns. It's a big challenge!",
+          "template_data": {
+            "diagram_title": "Paper Production & Deforestation",
+            "nodes": [
+              {
+                "id": "trees",
+                "label": "Trees",
+                "description": "Source of wood pulp"
+              },
+              {
+                "id": "paper_mill",
+                "label": "Paper Mill",
+                "description": "Processes wood into paper"
+              },
+              {
+                "id": "paper_products",
+                "label": "Paper Products",
+                "description": "Notebooks, books, packaging"
+              },
+              {
+                "id": "deforestation_impact",
+                "label": "Deforestation",
+                "description": "Loss of forests, habitat, climate change"
+              }
+            ],
+            "edges": [
+              {
+                "source": "trees",
+                "target": "paper_mill",
+                "label": "Cut for pulp"
+              },
+              {
+                "source": "paper_mill",
+                "target": "paper_products",
+                "label": "Manufactures"
+              },
+              {
+                "source": "paper_products",
+                "target": "deforestation_impact",
+                "label": "Increased demand leads to"
+              }
+            ]
+          }
+        },
+        {
+          "scene_no": 3,
+          "purpose": "Introduce digital alternatives to paper.",
+          "template_id": "column_comparison",
+          "template_selection_reasoning": "Effectively compares traditional paper use with modern digital alternatives.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "But don't worry, Sonu, we have many smart alternatives! We can use digital documents, e-books, and online notes instead of printing everything. This saves a lot of paper!",
+          "template_data": {
+            "title": "Paper vs. Digital: Smart Choices",
+            "column_1_title": "Traditional Paper Use",
+            "column_2_title": "Digital Alternatives",
+            "rows": [
+              {
+                "item_1": "Printed notes & assignments",
+                "item_2": "Online documents, PDFs"
+              },
+              {
+                "item_1": "Textbooks & notebooks",
+                "item_2": "E-books & digital notebooks"
+              },
+              {
+                "item_1": "Letters & bills",
+                "item_2": "Emails & e-statements"
+              }
+            ]
+          }
+        },
+        {
+          "scene_no": 4,
+          "purpose": "Explain the 'Reduce, Reuse, Recycle' principle for paper.",
+          "template_id": "cycle_template",
+          "template_selection_reasoning": "Visually represents the continuous process of the 3 R's.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "Another powerful way is to follow the '3 R's': Reduce, Reuse, Recycle. Reduce the paper you use, reuse old notebooks or paper for rough work, and always recycle used paper so it can be made into new products!",
+          "template_data": {
+            "cycle_title": "The 3 R's for Paper",
+            "steps": [
+              {
+                "step_no": 1,
+                "title": "Reduce",
+                "description": "Use less paper overall. Think before you print!"
+              },
+              {
+                "step_no": 2,
+                "title": "Reuse",
+                "description": "Use both sides of paper, use old notebooks for rough work."
+              },
+              {
+                "step_no": 3,
+                "title": "Recycle",
+                "description": "Send used paper to recycling centers to make new products."
+              }
+            ]
+          }
+        },
+        {
+          "scene_no": 5,
+          "purpose": "Conclude with sustainable choices and a quick comprehension check.",
+          "template_id": "quiz_checkpoint",
+          "template_selection_reasoning": "Allows for a quick check of understanding at the end of the lesson.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "Also, choosing paper made from recycled materials or sustainably managed forests helps a lot. Every small step we take makes a big difference in protecting our planet. Now, a quick question for you!",
+          "template_data": {
+            "quiz_question": "Which of these is NOT a way to reduce paper usage?",
+            "options": [
+              "Using e-books for reading",
+              "Recycling old newspapers",
+              "Printing all your notes and assignments",
+              "Using both sides of a sheet of paper"
+            ],
+            "correct_answer": "Printing all your notes and assignments",
+            "explanation": "Printing all notes increases paper usage, while the other options help reduce it or promote recycling."
+          }
+        }
+      ]
+    }
+  },
+  "rag_retrieval_executed": true,
+  "retrieved_top10_chunks": [
+    {
+      "chunk_index": 1,
+      "score": 0.0,
+      "book_name": "",
+      "chapter_name": "",
+      "content_snippet": "..."
+    },
+    {
+      "chunk_index": 2,
+      "score": 0.0,
+      "book_name": "",
+      "chapter_name": "",
+      "content_snippet": "..."
+    },
+    {
+      "chunk_index": 3,
+      "score": 0.0,
+      "book_name": "",
+      "chapter_name": "",
+      "content_snippet": "..."
+    }
+  ]
+}

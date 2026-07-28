@@ -1,0 +1,170 @@
+{
+  "timestamp": "2026-07-26T16:41:24.718799",
+  "execution_time_seconds": 17.73,
+  "authenticated_student": {
+    "uid": "n1kWaoB6SPcSwb5IzP46vbdSjG92",
+    "email": "student8@cg.com",
+    "name": "Sonu",
+    "class": 8,
+    "board": "CBSE",
+    "role": "student"
+  },
+  "raw_user_query": "Explain about the rule of Rani Rudramadevi?",
+  "orchestrator_output": {
+    "is_authorized": true,
+    "refusal_reason": null,
+    "classification": "CURRICULUM",
+    "reformulated_query": "Reign and administration of Rani Rudramadevi Kakatiya dynasty",
+    "matched_subject": "Class 8 Social",
+    "matched_chapter": "The Kakatiyas - Emergence of a Regional Kingdom",
+    "complexity_level": 3,
+    "format_decision": "VIDEO_REQUIRED",
+    "text_narration": "Namaste Sonu! Today, let's learn about one of India's most remarkable queens, Rani Rudramadevi, who ruled the Kakatiya kingdom in South India. Rani Rudramadevi was unique because she ruled as a queen in a time when kings usually held power. She even adopted a male name to rule effectively and faced many challenges from nobles and neighbouring kingdoms. Despite the challenges, Rani Rudramadevi was a strong and capable ruler. She maintained peace, encouraged trade, and strengthened her kingdom's defenses, leaving a lasting legacy. Her reign is a shining example of women's leadership in Indian history. Rani Rudramadevi proved that a queen could be as powerful and effective as any king.",
+    "video_storyboard": [
+      {
+        "scene_no": 1,
+        "purpose": "Introduce Rani Rudramadevi and her significance as a Kakatiya ruler.",
+        "template_id": "title_slide",
+        "template_selection_reasoning": "To provide a clear introduction to the topic and the main historical figure.",
+        "camera": {
+          "zoom": 1.1,
+          "pan_x": 0,
+          "pan_y": 0,
+          "target_node": "main_concept"
+        },
+        "teacher_script": "Namaste Sonu! Today, let's learn about one of India's most remarkable queens, Rani Rudramadevi, who ruled the Kakatiya kingdom in South India.",
+        "template_data": {
+          "title": "Rani Rudramadevi: The Warrior Queen",
+          "main_concept": {
+            "text": "Kakatiya Dynasty",
+            "image_url": "kakatiya_emblem.png"
+          }
+        }
+      },
+      {
+        "scene_no": 2,
+        "purpose": "Explain how she came to power and the initial difficulties she faced.",
+        "template_id": "concept_diagram",
+        "template_selection_reasoning": "To visually represent the challenges and unique aspects of her ascension to power.",
+        "camera": {
+          "zoom": 1.1,
+          "pan_x": 0,
+          "pan_y": 0,
+          "target_node": "main_concept"
+        },
+        "teacher_script": "Rani Rudramadevi was unique because she ruled as a queen in a time when kings usually held power. She even adopted a male name to rule effectively and faced many challenges from nobles and neighbouring kingdoms.",
+        "template_data": {
+          "main_concept": {
+            "text": "Rani Rudramadevi's Ascension",
+            "image_url": "rudramadevi_portrait.png"
+          },
+          "branches": [
+            {
+              "text": "Ruled as a Queen",
+              "icon": "crown_icon.png"
+            },
+            {
+              "text": "Adopted Male Name (Rudradeva)",
+              "icon": "scroll_icon.png"
+            },
+            {
+              "text": "Challenges from Nobles & Neighbours",
+              "icon": "conflict_icon.png"
+            }
+          ]
+        }
+      },
+      {
+        "scene_no": 3,
+        "purpose": "Detail her administrative policies and key achievements.",
+        "template_id": "column_comparison",
+        "template_selection_reasoning": "To clearly list and compare her contributions in different areas of governance.",
+        "camera": {
+          "zoom": 1.1,
+          "pan_x": 0,
+          "pan_y": 0,
+          "target_node": "main_concept"
+        },
+        "teacher_script": "Despite the challenges, Rani Rudramadevi was a strong and capable ruler. She maintained peace, encouraged trade, and strengthened her kingdom's defenses, leaving a lasting legacy.",
+        "template_data": {
+          "title": "Rani Rudramadevi's Rule",
+          "columns": [
+            {
+              "header": "Administration",
+              "items": [
+                "Maintained Peace & Order",
+                "Encouraged Trade & Agriculture",
+                "Supported Local Governance"
+              ]
+            },
+            {
+              "header": "Achievements",
+              "items": [
+                "Strengthened Fortifications",
+                "Successfully Defended Kingdom",
+                "Patronized Art & Architecture"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "scene_no": 4,
+        "purpose": "Summarize her importance and lasting impact in Indian history.",
+        "template_id": "concept_diagram",
+        "template_selection_reasoning": "To illustrate the broader impact and legacy of her reign.",
+        "camera": {
+          "zoom": 1.1,
+          "pan_x": 0,
+          "pan_y": 0,
+          "target_node": "main_concept"
+        },
+        "teacher_script": "Her reign is a shining example of women's leadership in Indian history. Rani Rudramadevi proved that a queen could be as powerful and effective as any king.",
+        "template_data": {
+          "main_concept": {
+            "text": "Rani Rudramadevi's Legacy",
+            "image_url": "india_map_kakatiya.png"
+          },
+          "branches": [
+            {
+              "text": "Symbol of Women's Leadership",
+              "icon": "woman_icon.png"
+            },
+            {
+              "text": "Strong Kakatiya Rule",
+              "icon": "fortress_icon.png"
+            },
+            {
+              "text": "Inspiration for Future Generations",
+              "icon": "lightbulb_icon.png"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "rag_retrieval_executed": true,
+  "retrieved_top10_chunks": [
+    {
+      "chunk_index": 1,
+      "score": 0.0,
+      "book_name": "",
+      "chapter_name": "",
+      "content_snippet": "..."
+    },
+    {
+      "chunk_index": 2,
+      "score": 0.0,
+      "book_name": "",
+      "chapter_name": "",
+      "content_snippet": "..."
+    },
+    {
+      "chunk_index": 3,
+      "score": 0.0,
+      "book_name": "",
+      "chapter_name": "",
+      "content_snippet": "..."
+    }
+  ]
+}

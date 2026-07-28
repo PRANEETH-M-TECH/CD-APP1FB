@@ -338,14 +338,6 @@ class StreamingAudioPipeline {
         this.streamCompleted = true;
         console.log('[STREAM] Gemini Stream Ended — final flush complete');
         
-        // Ensure all remaining queued text chunks display immediately upon stream completion
-        if (this.renderQueue) {
-            this.renderQueue.forEach(c => c.display_allowed = true);
-        }
-        if (this.deliveryQueue) {
-            this.deliveryQueue.forEach(c => c.display_allowed = true);
-        }
-
         // Trigger render and playback processing
         this._processRenderQueue();
         this._processPlaybackQueue();
@@ -667,8 +659,8 @@ class StreamingAudioPipeline {
         const { chunk_id, text_chunk } = chunk;
         const fetchStart = performance.now();
 
-        // Get current TTS settings from ttsManager if available
-        const model = (window.ttsManager && window.ttsManager.model) || 'sarvam';
+        // Always use Sarvam Cloud TTS for streaming pipeline to guarantee audio playback and prevent browser autoplay blocking
+        const model = 'sarvam';
 
         if (model === 'browser') {
             console.log(`[TTS] Using Browser TTS for Chunk #${chunk_id}`);
@@ -789,9 +781,8 @@ class StreamingAudioPipeline {
             while (this.renderQueue.length > 0) {
                 const chunk = this.renderQueue[0];
                 
-                // If we are paused, or if streamCompleted is true, display all remaining chunks immediately
-                // Otherwise, we only display the chunk if display_allowed is true
-                if (!this.isPaused && !this.streamCompleted && !chunk.display_allowed) {
+                // Synchronized text rendering: display chunk text only when display_allowed is true (unlocked when TTS audio starts playing)
+                if (!this.isPaused && !chunk.display_allowed) {
                     break;
                 }
 

@@ -1,0 +1,229 @@
+{
+  "timestamp": "2026-07-26T23:33:20.789916",
+  "execution_time_seconds": 20.21,
+  "authenticated_student": {
+    "uid": "anonymous",
+    "email": "anonymous@cg.com",
+    "name": "Sonu",
+    "class": 8,
+    "board": "CBSE",
+    "role": "student"
+  },
+  "raw_user_query": "explain about the role of Nizam in India",
+  "orchestrator_output": {
+    "is_authorized": true,
+    "refusal_reason": null,
+    "classification": "CURRICULUM",
+    "reformulated_query": "Role of the Nizam in India",
+    "matched_subject": "Social",
+    "matched_chapter": "New Kings and Kingdoms",
+    "complexity_level": 3,
+    "format_decision": "VIDEO_REQUIRED",
+    "text_narration": "Namaste Sonu! Today, we're going to explore the fascinating role of the Nizams in India's history. They were powerful rulers who shaped a significant part of our country.The Nizams were the rulers of the princely state of Hyderabad. Their story begins in the early 18th century, when the Mughal Empire was declining. Asaf Jah I, a powerful Mughal governor, declared his independence and established the Asaf Jahi dynasty in 1724, making Hyderabad a powerful kingdom.During the British Raj, the Nizams of Hyderabad became one of the most important princely states. They entered into a subsidiary alliance with the British, which meant they maintained internal autonomy but gave control of their foreign affairs and defense to the British. This alliance helped them maintain their power for a long time.Hyderabad under the Nizams was a large and prosperous state, known for its rich culture, architecture, and administration. They promoted education, built grand palaces, and developed infrastructure. It was a hub of art, literature, and trade, reflecting a blend of various cultures.After India gained independence in 1947, the Nizam initially wanted Hyderabad to remain independent. However, due to various political and social reasons, and a police action known as 'Operation Polo' in 1948, Hyderabad was integrated into the Indian Union. This marked the end of the Nizam's rule.So, Sonu, let's quickly check your understanding! Which powerful Mughal governor established the Asaf Jahi dynasty in Hyderabad?",
+    "video_storyboard": {
+      "lesson_title": "The Role of the Nizams in India",
+      "layout_mode": "timeline",
+      "theme": "History",
+      "global_assets": [],
+      "connections": [],
+      "scenes": [
+        {
+          "scene_no": 1,
+          "purpose": "Introduce the topic of Nizams in India's history.",
+          "template_id": "title_slide",
+          "template_selection_reasoning": "Standard opening for a video lesson to introduce the topic.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "Namaste Sonu! Today, we're going to explore the fascinating role of the Nizams in India's history. They were powerful rulers who shaped a significant part of our country.",
+          "template_data": {
+            "title": "The Nizams of Hyderabad",
+            "subtitle": "Their Role in Indian History",
+            "image_url": "https://example.com/nizam_intro.png"
+          }
+        },
+        {
+          "scene_no": 2,
+          "purpose": "Explain the origin and establishment of the Nizam's rule.",
+          "template_id": "timeline",
+          "template_selection_reasoning": "A timeline is effective for showing the historical progression from Mughal decline to the establishment of the Asaf Jahi dynasty.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "The Nizams were the rulers of the princely state of Hyderabad. Their story begins in the early 18th century, when the Mughal Empire was declining. Asaf Jah I, a powerful Mughal governor, declared his independence and established the Asaf Jahi dynasty in 1724, making Hyderabad a powerful kingdom.",
+          "template_data": {
+            "title": "Rise of the Nizams",
+            "events": [
+              {
+                "year": "Early 18th Century",
+                "description": "Decline of the Mughal Empire"
+              },
+              {
+                "year": "1724",
+                "description": "Asaf Jah I declares independence, establishes Asaf Jahi dynasty in Hyderabad"
+              }
+            ],
+            "image_url": "https://example.com/asaf_jah_i.png"
+          }
+        },
+        {
+          "scene_no": 3,
+          "purpose": "Detail the relationship between the Nizams and the British.",
+          "template_id": "concept_diagram",
+          "template_selection_reasoning": "A concept diagram can visually represent the alliance and power dynamics between the Nizam and the British.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "During the British Raj, the Nizams of Hyderabad became one of the most important princely states. They entered into a subsidiary alliance with the British, which meant they maintained internal autonomy but gave control of their foreign affairs and defense to the British. This alliance helped them maintain their power for a long time.",
+          "template_data": {
+            "title": "Nizams and the British Raj",
+            "main_concept": "Subsidiary Alliance",
+            "nodes": [
+              {
+                "id": "nizam",
+                "label": "Nizam of Hyderabad",
+                "description": "Internal Autonomy"
+              },
+              {
+                "id": "british",
+                "label": "British Empire",
+                "description": "Control over Foreign Affairs & Defense"
+              }
+            ],
+            "connections": [
+              {
+                "from": "nizam",
+                "to": "british",
+                "label": "Alliance"
+              }
+            ],
+            "image_url": "https://example.com/subsidiary_alliance.png"
+          }
+        },
+        {
+          "scene_no": 4,
+          "purpose": "Highlight the characteristics and importance of Hyderabad state under Nizam rule.",
+          "template_id": "database_grid",
+          "template_selection_reasoning": "A database grid is suitable for presenting multiple key aspects and achievements of the state under Nizam rule in an organized manner.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "Hyderabad under the Nizams was a large and prosperous state, known for its rich culture, architecture, and administration. They promoted education, built grand palaces, and developed infrastructure. It was a hub of art, literature, and trade, reflecting a blend of various cultures.",
+          "template_data": {
+            "title": "Hyderabad: A Prosperous State",
+            "headers": [
+              "Aspect",
+              "Description"
+            ],
+            "rows": [
+              [
+                "Culture",
+                "Rich blend of various traditions"
+              ],
+              [
+                "Architecture",
+                "Grand palaces and monuments"
+              ],
+              [
+                "Economy",
+                "Hub of trade and commerce"
+              ],
+              [
+                "Administration",
+                "Developed infrastructure and education"
+              ]
+            ],
+            "image_url": "https://example.com/charminar.png"
+          }
+        },
+        {
+          "scene_no": 5,
+          "purpose": "Explain the integration of Hyderabad into independent India.",
+          "template_id": "timeline",
+          "template_selection_reasoning": "A timeline helps to clearly show the sequence of events leading to Hyderabad's merger with India after independence.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "After India gained independence in 1947, the Nizam initially wanted Hyderabad to remain independent. However, due to various political and social reasons, and a police action known as 'Operation Polo' in 1948, Hyderabad was integrated into the Indian Union. This marked the end of the Nizam's rule.",
+          "template_data": {
+            "title": "Integration into India",
+            "events": [
+              {
+                "year": "1947",
+                "description": "India gains independence; Nizam desires independent Hyderabad"
+              },
+              {
+                "year": "1948",
+                "description": "Operation Polo; Hyderabad integrated into Indian Union"
+              }
+            ],
+            "image_url": "https://example.com/map_india_1948.png"
+          }
+        },
+        {
+          "scene_no": 6,
+          "purpose": "Test the student's understanding with a quick quiz question.",
+          "template_id": "quiz_checkpoint",
+          "template_selection_reasoning": "A quiz checkpoint is an excellent way to reinforce learning and check comprehension at the end of a lesson.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "So, Sonu, let's quickly check your understanding! Which powerful Mughal governor established the Asaf Jahi dynasty in Hyderabad?",
+          "template_data": {
+            "question": "Which powerful Mughal governor established the Asaf Jahi dynasty in Hyderabad?",
+            "options": [
+              "Mir Qamar-ud-din Khan Siddiqi",
+              "Aurangzeb",
+              "Tipu Sultan",
+              "Akbar"
+            ],
+            "correct_answer": "Mir Qamar-ud-din Khan Siddiqi",
+            "explanation": "Mir Qamar-ud-din Khan Siddiqi, also known as Asaf Jah I, was the Mughal governor who declared independence and founded the Asaf Jahi dynasty in Hyderabad."
+          }
+        }
+      ]
+    }
+  },
+  "rag_retrieval_executed": true,
+  "retrieved_top10_chunks": [
+    {
+      "chunk_index": 1,
+      "score": 0.0,
+      "book_name": "",
+      "chapter_name": "",
+      "content_snippet": "..."
+    },
+    {
+      "chunk_index": 2,
+      "score": 0.0,
+      "book_name": "",
+      "chapter_name": "",
+      "content_snippet": "..."
+    },
+    {
+      "chunk_index": 3,
+      "score": 0.0,
+      "book_name": "",
+      "chapter_name": "",
+      "content_snippet": "..."
+    }
+  ]
+}

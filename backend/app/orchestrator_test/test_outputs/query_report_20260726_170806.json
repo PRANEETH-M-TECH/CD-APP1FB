@@ -1,0 +1,200 @@
+{
+  "timestamp": "2026-07-26T17:08:06.262199",
+  "execution_time_seconds": 16.72,
+  "authenticated_student": {
+    "uid": "n1kWaoB6SPcSwb5IzP46vbdSjG92",
+    "email": "student8@cg.com",
+    "name": "Sonu",
+    "class": 8,
+    "board": "CBSE",
+    "role": "student"
+  },
+  "raw_user_query": "Why do volcanoes erupt and how does lava form?",
+  "orchestrator_output": {
+    "is_authorized": true,
+    "refusal_reason": null,
+    "classification": "GENERAL_KNOWLEDGE",
+    "reformulated_query": "Causes of volcanic eruptions and formation of lava for Class 8",
+    "matched_subject": null,
+    "matched_chapter": null,
+    "complexity_level": 2,
+    "format_decision": "VIDEO_REQUIRED",
+    "text_narration": "Namaste, Sonu! Today, we're going to explore one of Earth's most powerful natural wonders: volcanoes! Have you ever wondered why they erupt and how that fiery lava forms? Let's find out!Our Earth has several layers, like an onion. Deep inside, beneath the solid crust, there's a super-hot, semi-liquid rock called magma. Think of it like a very thick, molten paste. This magma is formed due to the intense heat and pressure deep within the Earth's mantle.This magma is lighter than the surrounding solid rock, so it slowly starts to rise towards the Earth's surface through cracks and weak spots in the crust. As it rises, gases trapped within it start to expand, building up immense pressure, much like shaking a soda bottle!When this pressure becomes too great, the magma forces its way out through a vent or opening in the volcano, causing an eruption! Once magma comes out onto the Earth's surface, it's called lava. Lava is still super hot, but it starts to cool down and solidify as it flows, forming new rock and adding to the volcano's shape.So, remember, magma is inside the Earth, and lava is what we see flowing out during an eruption! Here's a quick question for you, Sonu!",
+    "video_storyboard": {
+      "lesson_title": "Understanding Volcanoes: Eruptions and Lava Formation",
+      "layout_mode": "timeline",
+      "theme": "Science",
+      "global_assets": [],
+      "connections": [],
+      "scenes": [
+        {
+          "scene_no": 1,
+          "purpose": "Introduce volcanoes and the lesson's focus.",
+          "template_id": "title_slide",
+          "template_selection_reasoning": "Standard opening for a video lesson.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0.5,
+            "pan_y": 0.5,
+            "target_node": ""
+          },
+          "teacher_script": "Namaste, Sonu! Today, we're going to explore one of Earth's most powerful natural wonders: volcanoes! Have you ever wondered why they erupt and how that fiery lava forms? Let's find out!",
+          "template_data": {
+            "title": "Volcanoes: Eruptions & Lava",
+            "subtitle": "Understanding Earth's Fiery Mountains"
+          }
+        },
+        {
+          "scene_no": 2,
+          "purpose": "Explain the source of magma deep within the Earth.",
+          "template_id": "concept_diagram",
+          "template_selection_reasoning": "Best for illustrating Earth's layers and the location of magma.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0.5,
+            "pan_y": 0.5,
+            "target_node": ""
+          },
+          "teacher_script": "Our Earth has several layers, like an onion. Deep inside, beneath the solid crust, there's a super-hot, semi-liquid rock called magma. Think of it like a very thick, molten paste. This magma is formed due to the intense heat and pressure deep within the Earth's mantle.",
+          "template_data": {
+            "diagram_title": "Earth's Layers & Magma",
+            "description": "Magma forms deep within the Earth's mantle due to extreme heat and pressure.",
+            "labels": [
+              {
+                "label": "Crust",
+                "position": {
+                  "x": 0.5,
+                  "y": 0.1
+                }
+              },
+              {
+                "label": "Mantle (Magma Source)",
+                "position": {
+                  "x": 0.5,
+                  "y": 0.4
+                }
+              },
+              {
+                "label": "Outer Core",
+                "position": {
+                  "x": 0.5,
+                  "y": 0.7
+                }
+              },
+              {
+                "label": "Inner Core",
+                "position": {
+                  "x": 0.5,
+                  "y": 0.9
+                }
+              }
+            ]
+          }
+        },
+        {
+          "scene_no": 3,
+          "purpose": "Illustrate the process of magma rising and pressure building.",
+          "template_id": "cycle_template",
+          "template_selection_reasoning": "Suitable for showing a sequential process of magma movement.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0.5,
+            "pan_y": 0.5,
+            "target_node": ""
+          },
+          "teacher_script": "This magma is lighter than the surrounding solid rock, so it slowly starts to rise towards the Earth's surface through cracks and weak spots in the crust. As it rises, gases trapped within it start to expand, building up immense pressure, much like shaking a soda bottle!",
+          "template_data": {
+            "cycle_title": "Magma's Journey Upwards",
+            "steps": [
+              {
+                "step_no": 1,
+                "description": "Magma forms in the mantle."
+              },
+              {
+                "step_no": 2,
+                "description": "Rises through cracks due to being lighter."
+              },
+              {
+                "step_no": 3,
+                "description": "Gases expand, building pressure."
+              }
+            ]
+          }
+        },
+        {
+          "scene_no": 4,
+          "purpose": "Describe the eruption process and the transformation of magma to lava.",
+          "template_id": "concept_diagram",
+          "template_selection_reasoning": "Ideal for depicting the structure of a volcano and the eruption.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0.5,
+            "pan_y": 0.5,
+            "target_node": ""
+          },
+          "teacher_script": "When this pressure becomes too great, the magma forces its way out through a vent or opening in the volcano, causing an eruption! Once magma comes out onto the Earth's surface, it's called lava. Lava is still super hot, but it starts to cool down and solidify as it flows, forming new rock and adding to the volcano's shape.",
+          "template_data": {
+            "diagram_title": "The Volcanic Eruption",
+            "description": "Magma erupts as lava, cooling to form new rock.",
+            "labels": [
+              {
+                "label": "Magma Chamber",
+                "position": {
+                  "x": 0.5,
+                  "y": 0.7
+                }
+              },
+              {
+                "label": "Vent",
+                "position": {
+                  "x": 0.5,
+                  "y": 0.3
+                }
+              },
+              {
+                "label": "Lava Flow",
+                "position": {
+                  "x": 0.7,
+                  "y": 0.4
+                }
+              },
+              {
+                "label": "Ash Cloud",
+                "position": {
+                  "x": 0.5,
+                  "y": 0.1
+                }
+              }
+            ]
+          }
+        },
+        {
+          "scene_no": 5,
+          "purpose": "Test the student's comprehension with a quick question.",
+          "template_id": "quiz_checkpoint",
+          "template_selection_reasoning": "To reinforce learning and check understanding.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0.5,
+            "pan_y": 0.5,
+            "target_node": ""
+          },
+          "teacher_script": "So, remember, magma is inside the Earth, and lava is what we see flowing out during an eruption! Here's a quick question for you, Sonu!",
+          "template_data": {
+            "question": "What is magma called once it reaches the Earth's surface?",
+            "options": [
+              "Rock",
+              "Ash",
+              "Lava",
+              "Crust"
+            ],
+            "correct_answer": "Lava",
+            "explanation": "That's right! Magma becomes lava once it erupts and flows onto the Earth's surface."
+          }
+        }
+      ]
+    }
+  },
+  "rag_retrieval_executed": false,
+  "retrieved_top10_chunks": []
+}

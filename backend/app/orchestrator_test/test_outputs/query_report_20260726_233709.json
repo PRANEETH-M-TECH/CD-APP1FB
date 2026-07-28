@@ -1,0 +1,288 @@
+{
+  "timestamp": "2026-07-26T23:37:09.492462",
+  "execution_time_seconds": 22.89,
+  "authenticated_student": {
+    "uid": "student8_id",
+    "name": "Sonu",
+    "class": 8,
+    "board": "CBSE",
+    "role": "student"
+  },
+  "raw_user_query": "Explain about the rule of nizams in India?",
+  "orchestrator_output": {
+    "is_authorized": true,
+    "refusal_reason": null,
+    "classification": "CURRICULUM",
+    "reformulated_query": "Rule of Nizams in India for Class 8",
+    "matched_subject": "Class 8 Social",
+    "matched_chapter": "New Kings and Kingdoms",
+    "complexity_level": 2,
+    "format_decision": "VIDEO_REQUIRED",
+    "text_narration": "Namaste, Sonu! Today, let's explore the fascinating rule of the Nizams in India, a powerful dynasty that shaped a significant part of our history.The Nizams were the rulers of the princely state of Hyderabad. Their story begins in the early 18th century, as the mighty Mughal Empire started to decline. Asaf Jah I, originally a Mughal governor, declared his independence and established the Asaf Jahi dynasty in 1724, making Hyderabad his capital.The Nizam's dominion, the Hyderabad State, was one of the largest and wealthiest princely states in British India. It covered a vast area, including parts of present-day Telangana, Maharashtra, and Karnataka. They had their own army, currency, and administrative system, maintaining a blend of Mughal and local traditions.During the British Raj, the Nizams maintained a unique relationship with the British. They were considered a 'loyal ally' and were allowed significant internal autonomy, but they accepted British paramountcy. This alliance helped them retain their power for a long time.The Nizams left a rich legacy in terms of architecture, culture, and administration, especially in Hyderabad city. Their rule finally came to an end in 1948, shortly after India gained independence, when Hyderabad was integrated into the Indian Union.Now, a quick question for you, Sonu! Who was the founder of the Nizam dynasty in Hyderabad? That's right! Asaf Jah I, originally Mir Qamar-ud-din Khan, established the Nizam dynasty.",
+    "video_storyboard": {
+      "lesson_title": "The Rule of the Nizams in India",
+      "layout_mode": "timeline",
+      "theme": "History",
+      "global_assets": [],
+      "connections": [],
+      "scenes": [
+        {
+          "scene_no": 1,
+          "purpose": "Introduce the topic of Nizams' rule in India.",
+          "template_id": "title_slide",
+          "template_selection_reasoning": "Standard opening for a new lesson.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "Namaste, Sonu! Today, let's explore the fascinating rule of the Nizams in India, a powerful dynasty that shaped a significant part of our history.",
+          "template_data": {
+            "title": "The Rule of the Nizams in India",
+            "subtitle": "A Glimpse into Hyderabad's History"
+          }
+        },
+        {
+          "scene_no": 2,
+          "purpose": "Explain the origin and rise of the Nizam dynasty.",
+          "template_id": "concept_diagram",
+          "template_selection_reasoning": "To visually represent the transition from Mughal decline to Nizam's rise.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "The Nizams were the rulers of the princely state of Hyderabad. Their story begins in the early 18th century, as the mighty Mughal Empire started to decline. Asaf Jah I, originally a Mughal governor, declared his independence and established the Asaf Jahi dynasty in 1724, making Hyderabad his capital.",
+          "template_data": {
+            "title": "The Rise of the Nizams",
+            "nodes": [
+              {
+                "id": "node1",
+                "label": "Decline of Mughal Empire",
+                "description": "Early 18th Century"
+              },
+              {
+                "id": "node2",
+                "label": "Asaf Jah I (Mir Qamar-ud-din Khan)",
+                "description": "Mughal Governor"
+              },
+              {
+                "id": "node3",
+                "label": "Declaration of Independence",
+                "description": "1724 AD"
+              },
+              {
+                "id": "node4",
+                "label": "Establishment of Asaf Jahi Dynasty",
+                "description": "Hyderabad as Capital"
+              }
+            ],
+            "edges": [
+              {
+                "source": "node1",
+                "target": "node2",
+                "label": "Context"
+              },
+              {
+                "source": "node2",
+                "target": "node3",
+                "label": "Action"
+              },
+              {
+                "source": "node3",
+                "target": "node4",
+                "label": "Result"
+              }
+            ]
+          }
+        },
+        {
+          "scene_no": 3,
+          "purpose": "Describe the extent and nature of the Hyderabad State under the Nizams.",
+          "template_id": "geo_marker",
+          "template_selection_reasoning": "To show the geographical spread of the Nizam's dominion.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "The Nizam's dominion, the Hyderabad State, was one of the largest and wealthiest princely states in British India. It covered a vast area, including parts of present-day Telangana, Maharashtra, and Karnataka. They had their own army, currency, and administrative system, maintaining a blend of Mughal and local traditions.",
+          "template_data": {
+            "map_image_url": "https://example.com/map_of_princely_hyderabad.png",
+            "markers": [
+              {
+                "lat": 17.385,
+                "lng": 78.4867,
+                "label": "Hyderabad (Capital)"
+              },
+              {
+                "lat": 18.1124,
+                "lng": 79.0193,
+                "label": "Telangana Region"
+              },
+              {
+                "lat": 17.6599,
+                "lng": 75.9064,
+                "label": "Maharashtra Region"
+              },
+              {
+                "lat": 16.9018,
+                "lng": 77.3223,
+                "label": "Karnataka Region"
+              }
+            ],
+            "title": "The Vast Hyderabad State"
+          }
+        },
+        {
+          "scene_no": 4,
+          "purpose": "Explain the Nizams' relationship with the British during the British Raj.",
+          "template_id": "timeline",
+          "template_selection_reasoning": "To illustrate the historical progression of their alliance with the British.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "During the British Raj, the Nizams maintained a unique relationship with the British. They were considered a 'loyal ally' and were allowed significant internal autonomy, but they accepted British paramountcy. This alliance helped them retain their power for a long time.",
+          "template_data": {
+            "title": "Nizams and the British Raj",
+            "events": [
+              {
+                "year": "Late 18th Century",
+                "description": "Initial treaties and alliances with the British East India Company."
+              },
+              {
+                "year": "1798",
+                "description": "Hyderabad becomes the first princely state to accept a Subsidiary Alliance."
+              },
+              {
+                "year": "19th-20th Century",
+                "description": "Nizams maintain internal autonomy under British paramountcy, known as 'loyal allies'."
+              }
+            ]
+          }
+        },
+        {
+          "scene_no": 5,
+          "purpose": "Summarize the legacy of the Nizams and the end of their rule.",
+          "template_id": "concept_diagram",
+          "template_selection_reasoning": "To show the various aspects of their legacy and the final integration.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "The Nizams left a rich legacy in terms of architecture, culture, and administration, especially in Hyderabad city. Their rule finally came to an end in 1948, shortly after India gained independence, when Hyderabad was integrated into the Indian Union.",
+          "template_data": {
+            "title": "Legacy and Integration",
+            "nodes": [
+              {
+                "id": "legacy",
+                "label": "Nizam's Legacy",
+                "description": "Rich contributions to architecture, culture, and administration."
+              },
+              {
+                "id": "architecture",
+                "label": "Architecture",
+                "description": "Charminar, Falaknuma Palace, High Court"
+              },
+              {
+                "id": "culture",
+                "label": "Culture & Arts",
+                "description": "Urdu literature, Deccani cuisine, music"
+              },
+              {
+                "id": "end_rule",
+                "label": "End of Rule",
+                "description": "1948 - Integration into Indian Union (Operation Polo)"
+              }
+            ],
+            "edges": [
+              {
+                "source": "legacy",
+                "target": "architecture",
+                "label": "Includes"
+              },
+              {
+                "source": "legacy",
+                "target": "culture",
+                "label": "Includes"
+              },
+              {
+                "source": "legacy",
+                "target": "end_rule",
+                "label": "Culminated in"
+              }
+            ]
+          }
+        },
+        {
+          "scene_no": 6,
+          "purpose": "Test the student's understanding with a quick question.",
+          "template_id": "quiz_checkpoint",
+          "template_selection_reasoning": "To reinforce learning and check comprehension.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "Now, a quick question for you, Sonu! Who was the founder of the Nizam dynasty in Hyderabad? That's right! Asaf Jah I, originally Mir Qamar-ud-din Khan, established the Nizam dynasty.",
+          "template_data": {
+            "question": "Who was the founder of the Nizam dynasty in Hyderabad?",
+            "options": [
+              {
+                "id": "A",
+                "text": "Aurangzeb"
+              },
+              {
+                "id": "B",
+                "text": "Asaf Jah I"
+              },
+              {
+                "id": "C",
+                "text": "Tipu Sultan"
+              },
+              {
+                "id": "D",
+                "text": "Robert Clive"
+              }
+            ],
+            "correct_answer": "B",
+            "explanation": "Asaf Jah I, originally Mir Qamar-ud-din Khan, established the Nizam dynasty in 1724."
+          }
+        }
+      ]
+    }
+  },
+  "rag_retrieval_executed": true,
+  "retrieved_top10_chunks": [
+    {
+      "chunk_index": 1,
+      "score": 0.0,
+      "book_name": "",
+      "chapter_name": "",
+      "content_snippet": "..."
+    },
+    {
+      "chunk_index": 2,
+      "score": 0.0,
+      "book_name": "",
+      "chapter_name": "",
+      "content_snippet": "..."
+    },
+    {
+      "chunk_index": 3,
+      "score": 0.0,
+      "book_name": "",
+      "chapter_name": "",
+      "content_snippet": "..."
+    }
+  ]
+}

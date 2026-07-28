@@ -1,0 +1,227 @@
+{
+  "timestamp": "2026-07-26T22:22:44.410664",
+  "execution_time_seconds": 15.67,
+  "authenticated_student": {
+    "uid": "anonymous",
+    "email": "anonymous@cg.com",
+    "name": "Sonu",
+    "class": 8,
+    "board": "CBSE",
+    "role": "student"
+  },
+  "raw_user_query": "Explain about the types of magent?",
+  "orchestrator_output": {
+    "is_authorized": true,
+    "refusal_reason": null,
+    "classification": "GENERAL_KNOWLEDGE",
+    "reformulated_query": "Explain the types of magnets for Class 8",
+    "matched_subject": null,
+    "matched_chapter": null,
+    "complexity_level": 3,
+    "format_decision": "VIDEO_REQUIRED",
+    "text_narration": "Hello Sonu! Today, we're going to explore the fascinating world of magnets and understand their different types. Magnets are special objects that can attract certain materials like iron, nickel, and cobalt. They have two poles, a North pole and a South pole, and opposite poles attract while like poles repel each other.First, let's look at how magnets are found or made. We have natural magnets, which are found in nature, like the mineral magnetite. Then, there are artificial magnets, which are made by humans using various methods, often by magnetizing materials like steel or iron.Among artificial magnets, we can further classify them into permanent and temporary magnets. Permanent magnets, like those in your refrigerator door, retain their magnetic properties for a long time. Temporary magnets, on the other hand, act as magnets only when they are under the influence of another magnet or an electric current, like an iron nail becoming magnetic when rubbed with a strong magnet.A very important type of temporary magnet is an electromagnet. These are created when electric current flows through a coil of wire, usually wrapped around a soft iron core. When the current is switched on, it becomes a magnet, and when the current is switched off, it loses its magnetism. They are used in many devices like electric bells, cranes, and even in MRI machines!Great job, Sonu! Now, let's quickly check your understanding. Which of these is an example of a natural magnet?",
+    "video_storyboard": {
+      "lesson_title": "Understanding Types of Magnets",
+      "layout_mode": "timeline",
+      "theme": "Science",
+      "global_assets": [],
+      "connections": [],
+      "scenes": [
+        {
+          "scene_no": 1,
+          "purpose": "Introduce what a magnet is and its basic properties.",
+          "template_id": "title_slide",
+          "template_selection_reasoning": "Best for introducing the topic and setting the context.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "Hello Sonu! Today, we're going to explore the fascinating world of magnets and understand their different types. Magnets are special objects that can attract certain materials like iron, nickel, and cobalt. They have two poles, a North pole and a South pole, and opposite poles attract while like poles repel each other.",
+          "template_data": {
+            "title": "Types of Magnets",
+            "subtitle": "Exploring the World of Magnetic Materials",
+            "image_url": "https://example.com/magnet_intro.png",
+            "image_alt": "A bar magnet attracting iron filings"
+          }
+        },
+        {
+          "scene_no": 2,
+          "purpose": "Differentiate between natural and artificial magnets.",
+          "template_id": "column_comparison",
+          "template_selection_reasoning": "Ideal for comparing two distinct categories with their characteristics.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "First, let's look at how magnets are found or made. We have natural magnets, which are found in nature, like the mineral magnetite. Then, there are artificial magnets, which are made by humans using various methods, often by magnetizing materials like steel or iron.",
+          "template_data": {
+            "title": "Natural vs. Artificial Magnets",
+            "columns": [
+              {
+                "heading": "Natural Magnets",
+                "items": [
+                  {
+                    "type": "text",
+                    "content": "Found in nature (e.g., Magnetite)"
+                  },
+                  {
+                    "type": "text",
+                    "content": "Weaker magnetic force"
+                  },
+                  {
+                    "type": "text",
+                    "content": "Irregular shapes"
+                  }
+                ]
+              },
+              {
+                "heading": "Artificial Magnets",
+                "items": [
+                  {
+                    "type": "text",
+                    "content": "Man-made (e.g., Bar, Horseshoe)"
+                  },
+                  {
+                    "type": "text",
+                    "content": "Stronger magnetic force"
+                  },
+                  {
+                    "type": "text",
+                    "content": "Specific, desired shapes"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "scene_no": 3,
+          "purpose": "Explain the difference between permanent and temporary magnets.",
+          "template_id": "column_comparison",
+          "template_selection_reasoning": "Effective for comparing two types of artificial magnets based on their magnetic retention.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "Among artificial magnets, we can further classify them into permanent and temporary magnets. Permanent magnets, like those in your refrigerator door, retain their magnetic properties for a long time. Temporary magnets, on the other hand, act as magnets only when they are under the influence of another magnet or an electric current, like an iron nail becoming magnetic when rubbed with a strong magnet.",
+          "template_data": {
+            "title": "Permanent vs. Temporary Magnets",
+            "columns": [
+              {
+                "heading": "Permanent Magnets",
+                "items": [
+                  {
+                    "type": "text",
+                    "content": "Retain magnetism for a long time"
+                  },
+                  {
+                    "type": "text",
+                    "content": "Made from hard steel, alloys (Alnico)"
+                  },
+                  {
+                    "type": "text",
+                    "content": "Used in speakers, compasses"
+                  }
+                ]
+              },
+              {
+                "heading": "Temporary Magnets",
+                "items": [
+                  {
+                    "type": "text",
+                    "content": "Lose magnetism easily"
+                  },
+                  {
+                    "type": "text",
+                    "content": "Made from soft iron"
+                  },
+                  {
+                    "type": "text",
+                    "content": "Used in electric bells, relays"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "scene_no": 4,
+          "purpose": "Introduce and explain electromagnets.",
+          "template_id": "concept_diagram",
+          "template_selection_reasoning": "Best for illustrating how an electromagnet works with a visual representation.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "A very important type of temporary magnet is an electromagnet. These are created when electric current flows through a coil of wire, usually wrapped around a soft iron core. When the current is switched on, it becomes a magnet, and when the current is switched off, it loses its magnetism. They are used in many devices like electric bells, cranes, and even in MRI machines!",
+          "template_data": {
+            "title": "Electromagnets",
+            "description": "Magnets created by electric current.",
+            "diagram_url": "https://example.com/electromagnet_diagram.png",
+            "diagram_alt": "Diagram showing a coil of wire wrapped around an iron core connected to a battery and switch.",
+            "labels": [
+              {
+                "text": "Coil of Wire",
+                "position": "top-left"
+              },
+              {
+                "text": "Soft Iron Core",
+                "position": "center"
+              },
+              {
+                "text": "Battery/Power Source",
+                "position": "bottom-right"
+              }
+            ]
+          }
+        },
+        {
+          "scene_no": 5,
+          "purpose": "Test the student's understanding with a quick quiz.",
+          "template_id": "quiz_checkpoint",
+          "template_selection_reasoning": "To reinforce learning and check comprehension at the end of the lesson.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "Great job, Sonu! Now, let's quickly check your understanding. Which of these is an example of a natural magnet?",
+          "template_data": {
+            "question": "Which of these is an example of a natural magnet?",
+            "options": [
+              {
+                "id": "A",
+                "text": "Bar magnet"
+              },
+              {
+                "id": "B",
+                "text": "Horseshoe magnet"
+              },
+              {
+                "id": "C",
+                "text": "Magnetite"
+              },
+              {
+                "id": "D",
+                "text": "Electromagnet"
+              }
+            ],
+            "correct_answer": "C",
+            "explanation": "Magnetite is a naturally occurring mineral that exhibits magnetic properties, making it a natural magnet."
+          }
+        }
+      ]
+    }
+  },
+  "rag_retrieval_executed": false,
+  "retrieved_top10_chunks": []
+}

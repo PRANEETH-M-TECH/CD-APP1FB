@@ -171,13 +171,13 @@ class Renderer {
         </div>
         ` : ''}
         
-        <div class="mindmap-canvas" style="position: relative; width: ${hasBullets ? '55%' : '100%'}; height: 100%; display: flex; align-items: center; justify-content: center;">
+        <div class="mindmap-canvas" style="position: relative; width: ${hasBullets ? '55%' : '100%'}; height: 100%;">
           <svg viewBox="0 0 1280 720" style="position: absolute; width: 1280px; height: 720px; top: 0; left: 0; z-index: 2; pointer-events: none;">
             <g id="cd-lines-group-${sId}"></g>
           </svg>
-          <div class="center-node theme-accent-bg" id="cd-center-${sId}" style="color: #090d16;">${centerText}</div>
+          <div class="center-node theme-accent-bg" id="cd-center-${sId}" style="color: #090d16; position: absolute; left: ${hasBullets ? 900 : 640}px; top: 360px; transform: translate(-50%, -50%);">${centerText}</div>
           <div id="cd-leaves-group-${sId}">
-            ${leafTexts.map((node, nIdx) => `<div class="leaf-node theme-card-border" id="cd-leaf-${sId}-${nIdx}">${node}</div>`).join('')}
+            ${leafTexts.map((node, nIdx) => `<div class="leaf-node theme-card-border" id="cd-leaf-${sId}-${nIdx}" style="position: absolute; transform: translate(-50%, -50%) scale(0);">${node}</div>`).join('')}
           </div>
         </div>
       </div>

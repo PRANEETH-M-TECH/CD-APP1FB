@@ -11,23 +11,28 @@ module.exports = {
     const scene = Scene.deserialize(sceneJson);
     return Renderer.renderScene(scene);
   },
-  animate: (sId, data) => {
+  animate: (sId, data, storyboard, sceneDuration) => {
+    const dur = sceneDuration || 8.0;
     const hasBullets = data.left_bullets && data.left_bullets.length > 0;
     const centerX = hasBullets ? 900 : 640;
     const centerY = 360;
     const radius = hasBullets ? 190 : 270;
-    const totalLeaves = (data.leaf_nodes || []).length;
+    const leafNodes = data.leaf_nodes || [];
+    const totalLeaves = leafNodes.length;
+    const timeStep = (dur - 1.5) / Math.max(1, totalLeaves);
     
     return `
-      sceneTl.fromTo('#cd-center-${sId}', { scale: 0 }, { scale: 1, duration: 0.5, ease: 'back.out(1.5)' });
+      sceneTl.fromTo('#cd-center-${sId}', { scale: 0 }, { scale: 1, duration: 0.6, ease: 'back.out(1.7)' }, 0.2);
       
       ${hasBullets ? `
-        sceneTl.fromTo('#cd-left-title-${sId}', { opacity: 0, x: -20 }, { opacity: 1, x: 0, duration: 0.4 }, 0.2);
-        sceneTl.fromTo('#cd-bullets-list-${sId} .bullet-card', { opacity: 0, y: 15 }, { opacity: 1, y: 0, stagger: 0.15, duration: 0.4 }, 0.3);
+        sceneTl.fromTo('#cd-left-title-${sId}', { opacity: 0, x: -20 }, { opacity: 1, x: 0, duration: 0.4 }, 0.3);
+        sceneTl.fromTo('#cd-bullets-list-${sId} .bullet-card', { opacity: 0, y: 15 }, { opacity: 1, y: 0, stagger: 0.2, duration: 0.5 }, 0.4);
       ` : ''}
 
       const linesGroup_${sId} = document.getElementById('cd-lines-group-${sId}');
-      const leafNodesData_${sId} = ${JSON.stringify(data.leaf_nodes || [])};
+      const leafNodesData_${sId} = ${JSON.stringify(leafNodes)};
+      const dur_${sId} = ${dur};
+      const timeStep_${sId} = ${timeStep};
       
       leafNodesData_${sId}.forEach((node, idx) => {
         const total = leafNodesData_${sId}.length;
@@ -63,8 +68,8 @@ module.exports = {
         lineEl.setAttribute('stroke', theme.accentColor);
         lineEl.setAttribute('stroke-width', '3.5');
         lineEl.setAttribute('stroke-linecap', 'round');
-        lineEl.style.filter = 'drop-shadow(0 0 4px ' + theme.accentColor + ')';
-        lineEl.style.opacity = '0.75';
+        lineEl.style.filter = 'drop-shadow(0 0 6px ' + theme.accentColor + ')';
+        lineEl.style.opacity = '0.85';
         linesGroup_${sId}.appendChild(lineEl);
 
         const leafNode = document.getElementById('cd-leaf-${sId}-' + idx);
@@ -74,18 +79,28 @@ module.exports = {
           leafNode.style.transform = 'translate(-50%, -50%) scale(0)';
         }
 
+        const revealStart = 0.5 + (idx * timeStep_${sId});
+
         sceneTl.to(lineEl, {
           attr: { x2: x2, y2: y2 },
           duration: 0.6,
           ease: 'power2.out'
-        }, 0.5 + idx * 0.05);
+        }, revealStart);
 
         if (leafNode) {
           sceneTl.to(leafNode, {
             transform: 'translate(-50%, -50%) scale(1)',
+            duration: 0.5,
+            ease: 'back.out(1.7)'
+          }, revealStart + 0.2);
+
+          // Active node pulse glow
+          sceneTl.to(leafNode, {
+            boxShadow: '0 0 24px ' + theme.accentColor,
             duration: 0.4,
-            ease: 'back.out(1.5)'
-          }, 0.8 + idx * 0.05);
+            yoyo: true,
+            repeat: 1
+          }, revealStart + 0.6);
         }
       });
     `;

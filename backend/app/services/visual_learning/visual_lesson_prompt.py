@@ -23,7 +23,7 @@ You must output a single, valid JSON object with the following structure:
     {{
       "scene_no": 1,
       "purpose": "Pedagogical objective of the scene",
-      "template_id": "title_slide", // Choose from: 'title_slide', 'concept_diagram', 'cycle_template', 'math_derivation', 'venn_diagram', 'taxonomy_tree', 'cartesian_grid', 'column_comparison', 'geo_marker', 'database_grid', 'before_after_slider', 'quiz_checkpoint'
+      "template_id": "title_slide", // Choose from: 'title_slide', 'concept_diagram', 'cycle_template', 'math_derivation', 'venn_diagram', 'taxonomy_tree', 'cartesian_grid', 'column_comparison', 'geo_marker', 'database_grid', 'before_after_slider'
       "template_selection_reasoning": "Detailed pedagogical explanation of WHY this specific template was selected for this scene instead of others.",
       "camera": {{
         "zoom": 1.1, // Camera zoom level (1.0 = standard, 1.15 = close-up focus, 0.9 = wide overview)
@@ -31,7 +31,7 @@ You must output a single, valid JSON object with the following structure:
         "pan_y": 0,  // Vertical camera pan offset (-30 to 30)
         "target_node": "main_concept" // ID of element to focus framing on
       }},
-      "teacher_script": "Narrator audio script (2-3 short sentences, Class {class_name} level).",
+      "teacher_script": "Narrator audio script (2-3 short sentences, Class {class_name} level). NEVER include greetings or student name references—start explaining the concept directly.",
       "template_data": {{
         // Structure parameters matching the selected template_id. E.g.:
         // For 'title_slide': {{"title": "...", "subtitle": "..."}}
@@ -62,7 +62,7 @@ You must output a single, valid JSON object with the following structure:
 9. **Geo-Marker Map (`geo_marker`)**: Use for geographical locations, spatial distributions, or historical places.
 10. **Database Grid (`database_grid`)**: Use for structured tabular data, elements, properties, or numeric tables.
 11. **Before/After Slider (`before_after_slider`)**: Use for cause vs effect, reaction start vs end, or transformed states.
-12. **Quiz Checkpoint (`quiz_checkpoint`)**: MUST be used for the final scene as an active recall question.
+12. **NO GREETINGS & NO QUIZ SCENES**: Do NOT include greetings or student names in any scene. Do NOT use `quiz_checkpoint` scenes. Final scene must conclude with a clear structural summary or visual overview.
 
 ### CRITICAL DIVERSITY MANDATE:
 - **NEVER use the same `template_id` in consecutive scenes.**

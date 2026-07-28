@@ -1,0 +1,227 @@
+{
+  "timestamp": "2026-07-26T18:40:33.419659",
+  "execution_time_seconds": 22.52,
+  "authenticated_student": {
+    "uid": "anonymous",
+    "email": "anonymous@cg.com",
+    "name": "Sonu",
+    "class": 8,
+    "board": "CBSE",
+    "role": "student"
+  },
+  "raw_user_query": "explain about how did Britishers rule in East India Company",
+  "orchestrator_output": {
+    "is_authorized": true,
+    "refusal_reason": null,
+    "classification": "CURRICULUM",
+    "reformulated_query": "How did the British East India Company establish and maintain its rule in India?",
+    "matched_subject": "Class 8 Social",
+    "matched_chapter": "Establishment of the British Empire in India",
+    "complexity_level": 3,
+    "format_decision": "VIDEO_REQUIRED",
+    "text_narration": "Namaste Sonu! Let's understand how the British East India Company, or EIC, gradually established its rule in India. Initially, the EIC came to India in the early 17th century purely for trade, buying spices, textiles, and other goods to sell in Europe. They set up trading posts, called 'factories', in places like Surat, Madras, and Calcutta.Over time, the EIC started getting involved in Indian politics. After the Battle of Plassey in 1757, they gained significant political influence in Bengal. This victory was a turning point, as it gave them control over vast revenues and resources. They slowly started replacing Indian rulers and appointing their own officials, becoming more than just traders.The EIC used clever strategies to expand its control. One was the 'Subsidiary Alliance', where Indian rulers had to keep a British army in their state and pay for it, losing their independence. Another was the 'Doctrine of Lapse', which stated that if an Indian ruler died without a natural male heir, their kingdom would be annexed by the British. These policies helped them take over many kingdoms.Once in control, the EIC set up its own administration, collecting taxes directly from farmers and artisans. They focused on extracting raw materials like cotton, indigo, and opium from India to feed British industries, and then sold finished goods back to India. This system made India a supplier of raw materials and a market for British products, benefiting Britain greatly.The EIC's rule, marked by exploitation and various policies, eventually led to widespread discontent among Indians. The Great Revolt of 1857 finally led the British Crown to take direct control of India, ending the Company's rule. This period laid the foundation for the British Raj. Now, Sonu, can you tell me which battle was a major turning point for the EIC's political power?",
+    "video_storyboard": {
+      "lesson_title": "The British East India Company's Rule in India",
+      "layout_mode": "timeline",
+      "theme": "History",
+      "global_assets": [],
+      "connections": [],
+      "scenes": [
+        {
+          "scene_no": 1,
+          "purpose": "Introduce the East India Company and its initial objective in India.",
+          "template_id": "title_slide",
+          "template_selection_reasoning": "Best for introducing the topic and setting the context.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "Namaste Sonu! Let's understand how the British East India Company, or EIC, gradually established its rule in India. Initially, the EIC came to India in the early 17th century purely for trade, buying spices, textiles, and other goods to sell in Europe. They set up trading posts, called 'factories', in places like Surat, Madras, and Calcutta.",
+          "template_data": {
+            "title": "The British East India Company's Rule",
+            "subtitle": "From Traders to Rulers in India",
+            "image_url": "https://example.com/eic_ship.png"
+          }
+        },
+        {
+          "scene_no": 2,
+          "purpose": "Explain the transition of the EIC from a trading company to a political power.",
+          "template_id": "timeline",
+          "template_selection_reasoning": "A timeline helps visualize the progression of events that led to political control.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": "event_plassey"
+          },
+          "teacher_script": "Over time, the EIC started getting involved in Indian politics. After the Battle of Plassey in 1757, they gained significant political influence in Bengal. This victory was a turning point, as it gave them control over vast revenues and resources. They slowly started replacing Indian rulers and appointing their own officials, becoming more than just traders.",
+          "template_data": {
+            "events": [
+              {
+                "year": "1600",
+                "title": "EIC Formed",
+                "description": "British East India Company established for trade."
+              },
+              {
+                "year": "1612",
+                "title": "First Factory",
+                "description": "EIC sets up its first trading post in Surat."
+              },
+              {
+                "year": "1757",
+                "title": "Battle of Plassey",
+                "description": "EIC gains political control over Bengal."
+              },
+              {
+                "year": "1765",
+                "title": "Diwani Rights",
+                "description": "EIC gets rights to collect revenue in Bengal, Bihar, and Orissa."
+              }
+            ]
+          }
+        },
+        {
+          "scene_no": 3,
+          "purpose": "Detail the key policies used by the EIC to expand and consolidate its rule.",
+          "template_id": "column_comparison",
+          "template_selection_reasoning": "Comparing two distinct policies side-by-side helps in understanding their individual mechanisms and impact.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "The EIC used clever strategies to expand its control. One was the 'Subsidiary Alliance', where Indian rulers had to keep a British army in their state and pay for it, losing their independence. Another was the 'Doctrine of Lapse', which stated that if an Indian ruler died without a natural male heir, their kingdom would be annexed by the British. These policies helped them take over many kingdoms.",
+          "template_data": {
+            "title": "EIC's Expansion Policies",
+            "columns": [
+              {
+                "header": "Subsidiary Alliance",
+                "content": [
+                  "Indian rulers had to accept British forces.",
+                  "Pay for the maintenance of British troops.",
+                  "Lost their sovereignty and foreign policy control.",
+                  "Example: Hyderabad, Awadh."
+                ]
+              },
+              {
+                "header": "Doctrine of Lapse",
+                "content": [
+                  "If an Indian ruler died without a natural male heir.",
+                  "Their kingdom would be annexed by the British.",
+                  "No adoption of heirs allowed without British approval.",
+                  "Example: Satara, Jhansi, Nagpur."
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "scene_no": 4,
+          "purpose": "Explain the administrative and economic exploitation under EIC rule.",
+          "template_id": "concept_diagram",
+          "template_selection_reasoning": "A concept diagram can effectively illustrate the flow of resources and the economic system established by the EIC.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "Once in control, the EIC set up its own administration, collecting taxes directly from farmers and artisans. They focused on extracting raw materials like cotton, indigo, and opium from India to feed British industries, and then sold finished goods back to India. This system made India a supplier of raw materials and a market for British products, benefiting Britain greatly.",
+          "template_data": {
+            "title": "Economic Exploitation by EIC",
+            "nodes": [
+              {
+                "id": "india_raw",
+                "label": "India (Raw Materials)",
+                "description": "Source of cotton, indigo, spices, opium."
+              },
+              {
+                "id": "eic_admin",
+                "label": "EIC Administration",
+                "description": "Collected taxes, controlled trade."
+              },
+              {
+                "id": "britain_ind",
+                "label": "Britain (Industries)",
+                "description": "Processed raw materials into finished goods."
+              },
+              {
+                "id": "india_market",
+                "label": "India (Market)",
+                "description": "Market for British finished goods."
+              }
+            ],
+            "edges": [
+              {
+                "source": "india_raw",
+                "target": "eic_admin",
+                "label": "Extracts Resources"
+              },
+              {
+                "source": "eic_admin",
+                "target": "britain_ind",
+                "label": "Sends Raw Materials"
+              },
+              {
+                "source": "britain_ind",
+                "target": "india_market",
+                "label": "Sells Finished Goods"
+              }
+            ]
+          }
+        },
+        {
+          "scene_no": 5,
+          "purpose": "Conclude the EIC's rule and test student comprehension with a quiz.",
+          "template_id": "quiz_checkpoint",
+          "template_selection_reasoning": "A quiz checkpoint is an excellent way to reinforce learning and check understanding at the end of a topic.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "The EIC's rule, marked by exploitation and various policies, eventually led to widespread discontent among Indians. The Great Revolt of 1857 finally led the British Crown to take direct control of India, ending the Company's rule. This period laid the foundation for the British Raj. Now, Sonu, can you tell me which battle was a major turning point for the EIC's political power?",
+          "template_data": {
+            "question": "Which battle marked a major turning point for the British East India Company's political power in India?",
+            "options": [
+              "Battle of Panipat",
+              "Battle of Buxar",
+              "Battle of Plassey",
+              "Battle of Seringapatam"
+            ],
+            "correct_answer": "Battle of Plassey",
+            "explanation": "The Battle of Plassey in 1757 was crucial because it gave the EIC significant political and financial control over Bengal, paving the way for its expansion across India."
+          }
+        }
+      ]
+    }
+  },
+  "rag_retrieval_executed": true,
+  "retrieved_top10_chunks": [
+    {
+      "chunk_index": 1,
+      "score": 0.0,
+      "book_name": "",
+      "chapter_name": "",
+      "content_snippet": "..."
+    },
+    {
+      "chunk_index": 2,
+      "score": 0.0,
+      "book_name": "",
+      "chapter_name": "",
+      "content_snippet": "..."
+    },
+    {
+      "chunk_index": 3,
+      "score": 0.0,
+      "book_name": "",
+      "chapter_name": "",
+      "content_snippet": "..."
+    }
+  ]
+}

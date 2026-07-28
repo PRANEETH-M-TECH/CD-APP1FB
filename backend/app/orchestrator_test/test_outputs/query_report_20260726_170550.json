@@ -1,0 +1,223 @@
+{
+  "timestamp": "2026-07-26T17:05:50.612903",
+  "execution_time_seconds": 21.31,
+  "authenticated_student": {
+    "uid": "n1kWaoB6SPcSwb5IzP46vbdSjG92",
+    "email": "student8@cg.com",
+    "name": "Sonu",
+    "class": 8,
+    "board": "CBSE",
+    "role": "student"
+  },
+  "raw_user_query": "How did the British establish their empire in India and what was the role of the East India Company?",
+  "orchestrator_output": {
+    "is_authorized": true,
+    "refusal_reason": null,
+    "classification": "CURRICULUM",
+    "reformulated_query": "Establishment of the British Empire in India and the role of the East India Company",
+    "matched_subject": "Social",
+    "matched_chapter": "Establishment of the British Empire in India",
+    "complexity_level": 3,
+    "format_decision": "VIDEO_REQUIRED",
+    "text_narration": "Hello Sonu! Today, let's explore how the British established their vast empire in India and the crucial role played by the East India Company. It's a fascinating part of our history! The British East India Company started as a simple trading company in the early 17th century. They came to India mainly to trade in valuable goods like spices, textiles, and indigo. They set up trading posts, called 'factories', in places like Surat, Madras (Chennai), and Calcutta (Kolkata), and slowly gained influence by taking advantage of the political instability among Indian rulers. The Company gradually shifted from being just traders to becoming rulers. Key battles like the Battle of Plassey in 1757 and the Battle of Buxar in 1764 were turning points. These victories gave the Company significant political and administrative control over vast territories, especially Bengal. They also introduced policies like the 'Subsidiary Alliance' and the 'Doctrine of Lapse' to annex more Indian states without direct warfare. After the Revolt of 1857, the British government decided to take direct control of India from the East India Company. This marked the official beginning of the British Raj, where India was ruled directly by the British Crown. The Company's army and administration were taken over by the British government, and India became a jewel in the British Empire. So, the East India Company was the initial gateway, paving the way for the British Empire. Now, for a quick check: Which battle is often considered a major turning point in the East India Company's rise to power in India? A) Battle of Panipat, B) Battle of Plassey, C) Battle of Seringapatam, D) Battle of Haldighati. The correct answer is B) Battle of Plassey. This battle, fought in 1757, gave the East India Company significant control over Bengal, which was a very rich province.",
+    "video_storyboard": {
+      "lesson_title": "How the British Empire Rose in India",
+      "layout_mode": "timeline",
+      "theme": "History",
+      "global_assets": [],
+      "connections": [],
+      "scenes": [
+        {
+          "scene_no": 1,
+          "purpose": "Introduce the topic and set the stage for understanding the British Empire's establishment.",
+          "template_id": "title_slide",
+          "template_selection_reasoning": "Standard opening for any lesson, clearly stating the topic.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "Hello Sonu! Today, let's explore how the British established their vast empire in India and the crucial role played by the East India Company. It's a fascinating part of our history!",
+          "template_data": {
+            "title": "The Rise of the British Empire in India",
+            "subtitle": "Role of the East India Company",
+            "image_url": "https://example.com/british_flag_india.png"
+          }
+        },
+        {
+          "scene_no": 2,
+          "purpose": "Explain the initial arrival and trading activities of the East India Company.",
+          "template_id": "geo_marker",
+          "template_selection_reasoning": "To visually show the key trading locations where the EIC first established its presence in India.",
+          "camera": {
+            "zoom": 1.2,
+            "pan_x": 0.5,
+            "pan_y": 0.3,
+            "target_node": "India_Map"
+          },
+          "teacher_script": "The British East India Company started as a simple trading company in the early 17th century. They came to India mainly to trade in valuable goods like spices, textiles, and indigo. They set up trading posts, called 'factories', in places like Surat, Madras (Chennai), and Calcutta (Kolkata), and slowly gained influence by taking advantage of the political instability among Indian rulers.",
+          "template_data": {
+            "map_image_url": "https://example.com/india_map_17th_century.png",
+            "markers": [
+              {
+                "id": "surat",
+                "lat": 21.1702,
+                "lon": 72.8311,
+                "label": "Surat (First Factory)"
+              },
+              {
+                "id": "madras",
+                "lat": 13.0827,
+                "lon": 80.2707,
+                "label": "Madras (Fort St. George)"
+              },
+              {
+                "id": "calcutta",
+                "lat": 22.5726,
+                "lon": 88.3639,
+                "label": "Calcutta (Fort William)"
+              }
+            ],
+            "title": "East India Company's Early Trading Posts"
+          }
+        },
+        {
+          "scene_no": 3,
+          "purpose": "Illustrate the transition of the EIC from a trading body to a political and military power.",
+          "template_id": "timeline",
+          "template_selection_reasoning": "A timeline is ideal for showing the sequence of key historical events and policies that led to the EIC's territorial expansion.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "The Company gradually shifted from being just traders to becoming rulers. Key battles like the Battle of Plassey in 1757 and the Battle of Buxar in 1764 were turning points. These victories gave the Company significant political and administrative control over vast territories, especially Bengal. They also introduced policies like the 'Subsidiary Alliance' and the 'Doctrine of Lapse' to annex more Indian states without direct warfare.",
+          "template_data": {
+            "title": "From Trade to Territory: Key Events",
+            "events": [
+              {
+                "year": "1757",
+                "description": "Battle of Plassey: EIC gains control over Bengal."
+              },
+              {
+                "year": "1764",
+                "description": "Battle of Buxar: EIC defeats combined Indian forces."
+              },
+              {
+                "year": "Late 18th - Mid 19th Century",
+                "description": "Implementation of Subsidiary Alliance and Doctrine of Lapse."
+              }
+            ]
+          }
+        },
+        {
+          "scene_no": 4,
+          "purpose": "Explain the final phase where the British Crown took direct control from the EIC.",
+          "template_id": "concept_diagram",
+          "template_selection_reasoning": "A concept diagram can effectively show the shift in power and the establishment of direct British rule.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "After the Revolt of 1857, the British government decided to take direct control of India from the East India Company. This marked the official beginning of the British Raj, where India was ruled directly by the British Crown. The Company's army and administration were taken over by the British government, and India became a jewel in the British Empire. So, the East India Company was the initial gateway, paving the way for the British Empire.",
+          "template_data": {
+            "title": "From Company Rule to British Raj",
+            "nodes": [
+              {
+                "id": "eic_rule",
+                "label": "East India Company Rule (1757-1858)",
+                "description": "Trading company with growing political and military power."
+              },
+              {
+                "id": "revolt_1857",
+                "label": "Revolt of 1857",
+                "description": "Major uprising against EIC rule."
+              },
+              {
+                "id": "british_raj",
+                "label": "British Raj (1858-1947)",
+                "description": "Direct rule by the British Crown."
+              }
+            ],
+            "connections": [
+              {
+                "from": "eic_rule",
+                "to": "revolt_1857",
+                "label": "Led to"
+              },
+              {
+                "from": "revolt_1857",
+                "to": "british_raj",
+                "label": "Resulted in"
+              }
+            ]
+          }
+        },
+        {
+          "scene_no": 5,
+          "purpose": "Test the student's comprehension with a quick question.",
+          "template_id": "quiz_checkpoint",
+          "template_selection_reasoning": "A quiz checkpoint helps reinforce learning and check understanding of key facts.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "Now, for a quick check: Which battle is often considered a major turning point in the East India Company's rise to power in India? A) Battle of Panipat, B) Battle of Plassey, C) Battle of Seringapatam, D) Battle of Haldighati. The correct answer is B) Battle of Plassey. This battle, fought in 1757, gave the East India Company significant control over Bengal, which was a very rich province.",
+          "template_data": {
+            "question": "Which battle is often considered a major turning point in the East India Company's rise to power in India?",
+            "options": [
+              {
+                "id": "A",
+                "text": "Battle of Panipat"
+              },
+              {
+                "id": "B",
+                "text": "Battle of Plassey"
+              },
+              {
+                "id": "C",
+                "text": "Battle of Seringapatam"
+              },
+              {
+                "id": "D",
+                "text": "Battle of Haldighati"
+              }
+            ],
+            "correct_answer": "B",
+            "explanation": "The Battle of Plassey (1757) was crucial as it gave the East India Company significant political and administrative control over Bengal, a wealthy province, marking a shift from trade to territorial power."
+          }
+        }
+      ]
+    }
+  },
+  "rag_retrieval_executed": true,
+  "retrieved_top10_chunks": [
+    {
+      "chunk_index": 1,
+      "score": 0.0,
+      "book_name": "",
+      "chapter_name": "",
+      "content_snippet": "..."
+    },
+    {
+      "chunk_index": 2,
+      "score": 0.0,
+      "book_name": "",
+      "chapter_name": "",
+      "content_snippet": "..."
+    },
+    {
+      "chunk_index": 3,
+      "score": 0.0,
+      "book_name": "",
+      "chapter_name": "",
+      "content_snippet": "..."
+    }
+  ]
+}

@@ -1,0 +1,215 @@
+{
+  "timestamp": "2026-07-28T00:52:11.388164",
+  "execution_time_seconds": 17.61,
+  "authenticated_student": {
+    "uid": "anonymous",
+    "email": "anonymous@cg.com",
+    "name": "Sonu",
+    "class": 8,
+    "board": "CBSE",
+    "role": "student"
+  },
+  "raw_user_query": "explain you know briefly about the transportation in India",
+  "orchestrator_output": {
+    "is_authorized": true,
+    "refusal_reason": null,
+    "classification": "CURRICULUM",
+    "reformulated_query": "Explain the importance of transport system in India for Class 8.",
+    "matched_subject": "Class 8 Social",
+    "matched_chapter": "Importance of Transport System",
+    "complexity_level": 2,
+    "format_decision": "VIDEO_REQUIRED",
+    "text_narration": "Transport systems are like the lifelines of our country, connecting people, places, and goods. Let's explore the different ways India moves!Roads are the most common way we travel, from local streets to national highways. They help us reach remote villages and carry goods over short and medium distances, playing a vital role in daily life and trade.Indian Railways is one of the largest networks in the world, carrying millions of passengers and huge amounts of freight every day. It's crucial for long-distance travel and transporting heavy goods like coal and food grains across the country.Waterways, including rivers and sea routes, are the cheapest mode for carrying heavy and bulky goods over long distances. India has important inland waterways and a vast coastline for international trade, connecting us to the world.Airways are the fastest mode of transport, essential for quick travel and carrying perishable goods or valuable items. They are especially important for connecting distant cities and for international travel, though they are generally more expensive. Together, these transport systems are the backbone of India's economy and development. They help in trade, tourism, defense, and connect people from different parts of the country, fostering unity and progress.",
+    "video_storyboard": {
+      "lesson_title": "Understanding Transport Systems in India",
+      "layout_mode": "timeline",
+      "theme": "Civics",
+      "global_assets": [],
+      "connections": [],
+      "scenes": [
+        {
+          "scene_no": 1,
+          "purpose": "Introduce the concept of transport systems in India.",
+          "template_id": "title_slide",
+          "template_selection_reasoning": "Best for introducing the lesson topic and setting the context.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "Transport systems are like the lifelines of our country, connecting people, places, and goods. Let's explore the different ways India moves!",
+          "template_data": {
+            "title": "Transport Systems in India",
+            "subtitle": "Connecting Our Nation",
+            "image_url": "https://example.com/indian_transport_intro.png"
+          }
+        },
+        {
+          "scene_no": 2,
+          "purpose": "Explain the role and importance of roadways.",
+          "template_id": "concept_diagram",
+          "template_selection_reasoning": "Suitable for illustrating different types of roads and their functions.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "Roads are the most common way we travel, from local streets to national highways. They help us reach remote villages and carry goods over short and medium distances, playing a vital role in daily life and trade.",
+          "template_data": {
+            "diagram_title": "Roadways: The Everyday Connectors",
+            "main_concept": {
+              "text": "Roads",
+              "image_url": "https://example.com/indian_highway.png"
+            },
+            "sub_concepts": [
+              {
+                "text": "Local Streets",
+                "description": "Connect homes and markets."
+              },
+              {
+                "text": "National Highways",
+                "description": "Link major cities and states."
+              },
+              {
+                "text": "Rural Roads",
+                "description": "Reach remote villages."
+              }
+            ]
+          }
+        },
+        {
+          "scene_no": 3,
+          "purpose": "Describe the significance of Indian Railways.",
+          "template_id": "database_grid",
+          "template_selection_reasoning": "Good for presenting facts and figures about a large network like railways.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "Indian Railways is one of the largest networks in the world, carrying millions of passengers and huge amounts of freight every day. It's crucial for long-distance travel and transporting heavy goods like coal and food grains across the country.",
+          "template_data": {
+            "grid_title": "Indian Railways: The National Lifeline",
+            "headers": [
+              "Aspect",
+              "Description"
+            ],
+            "rows": [
+              [
+                "Network Size",
+                "One of the largest in the world"
+              ],
+              [
+                "Passengers",
+                "Millions daily"
+              ],
+              [
+                "Freight",
+                "Heavy goods (coal, food grains)"
+              ],
+              [
+                "Purpose",
+                "Long-distance travel, economic backbone"
+              ]
+            ]
+          }
+        },
+        {
+          "scene_no": 4,
+          "purpose": "Explain the role of waterways in transport.",
+          "template_id": "geo_marker",
+          "template_selection_reasoning": "Ideal for showing geographical locations like ports and river routes.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "Waterways, including rivers and sea routes, are the cheapest mode for carrying heavy and bulky goods over long distances. India has important inland waterways and a vast coastline for international trade, connecting us to the world.",
+          "template_data": {
+            "map_title": "Waterways: Economic Routes",
+            "map_image_url": "https://example.com/india_waterways_map.png",
+            "markers": [
+              {
+                "id": "mumbai_port",
+                "lat": 18.9667,
+                "lon": 72.8333,
+                "label": "Mumbai Port (Sea Trade)"
+              },
+              {
+                "id": "ganga_waterway",
+                "lat": 25.3176,
+                "lon": 82.9739,
+                "label": "Ganga River (Inland Waterway)"
+              }
+            ],
+            "description": "Waterways are cost-effective for heavy goods and crucial for international trade."
+          }
+        },
+        {
+          "scene_no": 5,
+          "purpose": "Discuss airways and summarize the overall importance of transport.",
+          "template_id": "column_comparison",
+          "template_selection_reasoning": "Allows for comparing features of airways and then summarizing the collective importance of all modes.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "Airways are the fastest mode of transport, essential for quick travel and carrying perishable goods or valuable items. They are especially important for connecting distant cities and for international travel, though they are generally more expensive. Together, these transport systems are the backbone of India's economy and development. They help in trade, tourism, defense, and connect people from different parts of the country, fostering unity and progress.",
+          "template_data": {
+            "comparison_title": "Airways & Overall Impact",
+            "columns": [
+              {
+                "title": "Airways",
+                "items": [
+                  "Fastest mode of transport",
+                  "Ideal for perishable/valuable goods",
+                  "Connects distant cities & countries",
+                  "Generally more expensive"
+                ]
+              },
+              {
+                "title": "Overall Importance",
+                "items": [
+                  "Backbone of economy & development",
+                  "Facilitates trade & tourism",
+                  "Supports defense & national security",
+                  "Connects people, fosters unity"
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "rag_retrieval_executed": true,
+  "retrieved_top10_chunks": [
+    {
+      "chunk_index": 1,
+      "score": 0.0,
+      "book_name": "",
+      "chapter_name": "",
+      "content_snippet": "..."
+    },
+    {
+      "chunk_index": 2,
+      "score": 0.0,
+      "book_name": "",
+      "chapter_name": "",
+      "content_snippet": "..."
+    },
+    {
+      "chunk_index": 3,
+      "score": 0.0,
+      "book_name": "",
+      "chapter_name": "",
+      "content_snippet": "..."
+    }
+  ]
+}
