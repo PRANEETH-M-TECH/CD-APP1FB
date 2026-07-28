@@ -173,7 +173,7 @@ def run_orchestrator_pipeline(raw_query: str, student_profile: Dict[str, Any]) -
     print(f"\n[ORCHESTRATOR LLM] Executing single-pass evaluation for Class {grade} query...")
     user_prompt = f"USER RAW QUERY: \"{raw_query}\""
 
-    MODEL = os.environ.get("GEMINI_MODEL_NAME", "gemini-2.5-flash")
+    MODEL = os.environ.get("GEMINI_MODEL_NAME", "gemini-3.6-flash")
 
     # Step 1/3 — Query classification (keyword-based, instant, free)
     # If query is GK/current events, we perform live Google Search grounding to answer.
@@ -197,7 +197,7 @@ def run_orchestrator_pipeline(raw_query: str, student_profile: Dict[str, Any]) -
         tools=[{"google_search": {}}] if is_gk_query else None
     )
 
-    # Step 2/3 — Main Orchestrator LLM call — single model: gemini-2.5-flash
+    # Step 2/3 — Main Orchestrator LLM call — single model: gemini-3.6-flash
     search_note = "with Google Search Grounding (may take 15-25s)" if is_gk_query else "without Search Grounding (fast)"
     response = None
     last_error = None
