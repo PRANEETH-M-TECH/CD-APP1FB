@@ -25,7 +25,7 @@ EMBEDDING_MODEL = "all-MiniLM-L6-v2"
 client: Optional[QC] = None
 local_embedder: Optional[SentenceTransformer] = None
 gemini_client: Optional[genai.Client] = None
-generation_model_name: str = os.environ.get("GEMINI_MODEL_NAME", "gemini-2.5-flash")
+generation_model_name: str = os.environ.get("GEMINI_MODEL_NAME", "gemini-3.6-flash")
 bm25_indices: Dict[str, BM25Okapi] = {}
 book_corpus: Dict[str, List[Dict]] = {}
 
