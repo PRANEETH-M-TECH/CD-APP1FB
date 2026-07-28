@@ -139,10 +139,10 @@ async def generate_visual_lesson_stream(query: str, book_uuid: str, class_name: 
                 raise RuntimeError("Gemini Client is not initialized in qdrant_service.")
                 
             candidate_models = [
-                os.environ.get("GEMINI_MODEL_NAME", "gemini-3.5-flash"),
-                "gemini-3.5-flash"
+                os.environ.get("GEMINI_MODEL_NAME", "gemini-2.5-flash"),
             ]
             candidate_models = list(dict.fromkeys(candidate_models))
+
 
             response_text = None
             last_error = None

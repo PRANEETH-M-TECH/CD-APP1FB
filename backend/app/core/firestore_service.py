@@ -124,6 +124,15 @@ def check_global_query_cache(raw_query: str, class_name: str, subject: str = Non
             return None
 
         cached_data = docs[0].to_dict()
+        orchestrator_val = cached_data.get("orchestrator_output", {})
+        if isinstance(orchestrator_val, str):
+            import json
+            try:
+                cached_data["orchestrator_output"] = json.loads(orchestrator_val)
+            except Exception as parse_err:
+                logger.error(f"[CACHE] Error parsing cached JSON: {parse_err}")
+                return None
+
         out = cached_data.get("orchestrator_output", {})
 
         # Verify orchestrator output is complete
@@ -166,6 +175,7 @@ def save_to_global_query_cache(raw_query: str, class_name: str, subject: str, or
     Saves a query execution result into the 'global_query_cache' collection.
     """
     from datetime import datetime
+    import json
     if not orchestrator_output or not orchestrator_output.get("text_narration"):
         logger.warning("[CACHE] Rejecting save_to_global_query_cache because orchestrator_output is incomplete.")
         return
@@ -185,7 +195,8 @@ def save_to_global_query_cache(raw_query: str, class_name: str, subject: str, or
         "normalized_query": normalized,
         "class": class_str,
         "subject": subj_str,
-        "orchestrator_output": orchestrator_output,
+        # Store as string to prevent Firestore map field nesting limits / invalid keys
+        "orchestrator_output": json.dumps(orchestrator_output),
         "interactive_url": interactive_url,
         "created_at": datetime.now().isoformat()
     }

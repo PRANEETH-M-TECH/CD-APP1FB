@@ -1,0 +1,273 @@
+{
+  "timestamp": "2026-07-28T20:03:33.439310",
+  "execution_time_seconds": 25.29,
+  "authenticated_student": {
+    "uid": "anonymous",
+    "email": "anonymous@cg.com",
+    "name": "Sonu",
+    "class": 8,
+    "board": "CBSE",
+    "role": "student"
+  },
+  "raw_user_query": "explain some of the cruel rules that were put by Mughals and nizams at a people",
+  "orchestrator_output": {
+    "is_authorized": true,
+    "refusal_reason": null,
+    "classification": "CURRICULUM",
+    "reformulated_query": "Policies and practices of Mughal Empire and Nizams affecting people in India for Class 8",
+    "matched_subject": "Social",
+    "matched_chapter": "Mughal Empire",
+    "complexity_level": 3,
+    "format_decision": "VIDEO_REQUIRED",
+    "text_narration": "Let's explore some of the significant policies and administrative practices of the Mughal Empire and the Nizams, and how they impacted the lives of ordinary people in India. The Mughal Empire, known for its vastness, had a complex administration. One of its most impactful policies was the land revenue system. Farmers had to pay a significant portion of their produce as tax, which could be burdensome, especially during famines or poor harvests. Emperors like Akbar tried to make it fairer with systems like 'Zabt', but it still meant a large share of income went to the state. Mughal rulers also had varying religious policies. Emperor Akbar promoted tolerance and abolished the 'jizya' tax on non-Muslims. However, later emperors like Aurangzeb reinstated 'jizya' and imposed stricter religious policies, which caused discontent among certain sections of the population. These policies often dictated social norms and could feel restrictive to many. After the decline of the Mughal Empire in the 18th century, many regional powers emerged. One such powerful state was Hyderabad, ruled by the Nizams. They were initially Mughal governors who became independent. Their rule, like many feudal systems, involved a hierarchy where land was often controlled by jagirdars and zamindars, who collected revenue from the peasants. The Nizams continued many land revenue practices similar to the Mughals, where peasants often faced heavy taxes and exploitation by local landlords. The justice system, while aiming for order, could sometimes be harsh, especially for the poor who had limited recourse against powerful officials. Public works were undertaken, but the burden of funding them often fell on the common people through taxes. Both Mughal and Nizam policies, while establishing vast empires and administrative structures, often had a significant impact on the common people. High land taxes, varying religious policies, and a feudal system of governance meant that life could be challenging, especially for farmers and the less privileged. Understanding these policies helps us appreciate the complexities of historical rule.",
+    "video_storyboard": {
+      "lesson_title": "Mughal and Nizam Policies: Impact on People",
+      "layout_mode": "timeline",
+      "theme": "History",
+      "global_assets": [],
+      "connections": [],
+      "scenes": [
+        {
+          "scene_no": 1,
+          "purpose": "Introduce the topic of Mughal and Nizam policies and their impact on people.",
+          "template_id": "title_slide",
+          "template_selection_reasoning": "Best for introducing the lesson title and main topic.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "Let's explore some of the significant policies and administrative practices of the Mughal Empire and the Nizams, and how they impacted the lives of ordinary people in India.",
+          "template_data": {
+            "title": "Mughal and Nizam Policies",
+            "subtitle": "Impact on People in India (Class 8)"
+          }
+        },
+        {
+          "scene_no": 2,
+          "purpose": "Explain the Mughal land revenue system and its burden on farmers.",
+          "template_id": "concept_diagram",
+          "template_selection_reasoning": "Visualizing the flow of revenue or the structure of the system helps explain its impact.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "The Mughal Empire, known for its vastness, had a complex administration. One of its most impactful policies was the land revenue system. Farmers had to pay a significant portion of their produce as tax, which could be burdensome, especially during famines or poor harvests. Emperors like Akbar tried to make it fairer with systems like 'Zabt', but it still meant a large share of income went to the state.",
+          "template_data": {
+            "diagram_title": "Mughal Land Revenue System",
+            "nodes": [
+              {
+                "id": "emperor",
+                "label": "Mughal Emperor",
+                "type": "central"
+              },
+              {
+                "id": "officials",
+                "label": "Revenue Officials (e.g., Zamindars)",
+                "type": "intermediate"
+              },
+              {
+                "id": "farmers",
+                "label": "Farmers/Peasants",
+                "type": "source"
+              }
+            ],
+            "edges": [
+              {
+                "from": "farmers",
+                "to": "officials",
+                "label": "Pay Taxes (1/3 to 1/2 of produce)"
+              },
+              {
+                "from": "officials",
+                "to": "emperor",
+                "label": "Remit Revenue"
+              }
+            ],
+            "description": "High land taxes were a major burden, impacting farmers' livelihoods."
+          }
+        },
+        {
+          "scene_no": 3,
+          "purpose": "Discuss varying Mughal religious policies and their social impact.",
+          "template_id": "column_comparison",
+          "template_selection_reasoning": "Comparing policies of different emperors (Akbar vs. Aurangzeb) highlights the changes and their effects.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "Mughal rulers also had varying religious policies. Emperor Akbar promoted tolerance and abolished the 'jizya' tax on non-Muslims. However, later emperors like Aurangzeb reinstated 'jizya' and imposed stricter religious policies, which caused discontent among certain sections of the population. These policies often dictated social norms and could feel restrictive to many.",
+          "template_data": {
+            "title": "Mughal Religious Policies",
+            "columns": [
+              {
+                "header": "Emperor Akbar",
+                "items": [
+                  "Promoted religious tolerance",
+                  "Abolished 'jizya' tax (tax on non-Muslims)",
+                  "Encouraged discussions among different faiths"
+                ]
+              },
+              {
+                "header": "Emperor Aurangzeb",
+                "items": [
+                  "Reinstated 'jizya' tax",
+                  "Imposed stricter Islamic laws",
+                  "Caused discontent among non-Muslim communities"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "scene_no": 4,
+          "purpose": "Introduce the emergence of the Nizams and the Hyderabad State.",
+          "template_id": "geo_marker",
+          "template_selection_reasoning": "A map helps locate Hyderabad and understand the geographical context of Nizam rule.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "After the decline of the Mughal Empire in the 18th century, many regional powers emerged. One such powerful state was Hyderabad, ruled by the Nizams. They were initially Mughal governors who became independent. Their rule, like many feudal systems, involved a hierarchy where land was often controlled by jagirdars and zamindars, who collected revenue from the peasants.",
+          "template_data": {
+            "map_focus": "India",
+            "markers": [
+              {
+                "id": "hyderabad",
+                "lat": 17.385,
+                "lon": 78.4867,
+                "label": "Hyderabad State (Nizams)"
+              }
+            ],
+            "description": "The Nizams established their independent rule in the Deccan region after the decline of the Mughals."
+          }
+        },
+        {
+          "scene_no": 5,
+          "purpose": "Explain key policies of the Nizams and their impact on common people.",
+          "template_id": "database_grid",
+          "template_selection_reasoning": "A grid format is effective for listing different policy areas and their corresponding impacts.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "The Nizams continued many land revenue practices similar to the Mughals, where peasants often faced heavy taxes and exploitation by local landlords. The justice system, while aiming for order, could sometimes be harsh, especially for the poor who had limited recourse against powerful officials. Public works were undertaken, but the burden of funding them often fell on the common people through taxes.",
+          "template_data": {
+            "grid_title": "Nizam Policies and Impact",
+            "headers": [
+              "Policy Area",
+              "Description/Impact"
+            ],
+            "rows": [
+              [
+                "Land Revenue",
+                "Heavy taxes on peasants, often collected by jagirdars/zamindars leading to exploitation."
+              ],
+              [
+                "Justice System",
+                "Could be harsh, with limited avenues for redressal for the poor against powerful figures."
+              ],
+              [
+                "Feudal System",
+                "Power concentrated in the hands of landlords and nobles, often at the expense of commoners."
+              ],
+              [
+                "Public Works",
+                "Undertaken for development, but funded through taxes that burdened the general populace."
+              ]
+            ]
+          }
+        },
+        {
+          "scene_no": 6,
+          "purpose": "Summarize the overall impact and legacy of these historical policies.",
+          "template_id": "concept_diagram",
+          "template_selection_reasoning": "A concept diagram can visually connect policies to their broad societal impacts.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": ""
+          },
+          "teacher_script": "Both Mughal and Nizam policies, while establishing vast empires and administrative structures, often had a significant impact on the common people. High land taxes, varying religious policies, and a feudal system of governance meant that life could be challenging, especially for farmers and the less privileged. Understanding these policies helps us appreciate the complexities of historical rule.",
+          "template_data": {
+            "diagram_title": "Overall Impact of Policies",
+            "nodes": [
+              {
+                "id": "policies",
+                "label": "Mughal & Nizam Policies (Land Revenue, Religious, Feudal)",
+                "type": "central"
+              },
+              {
+                "id": "farmers",
+                "label": "Burden on Farmers",
+                "type": "effect"
+              },
+              {
+                "id": "discontent",
+                "label": "Social Discontent",
+                "type": "effect"
+              },
+              {
+                "id": "challenges",
+                "label": "Challenging Life for Commoners",
+                "type": "effect"
+              }
+            ],
+            "edges": [
+              {
+                "from": "policies",
+                "to": "farmers",
+                "label": "High Taxes"
+              },
+              {
+                "from": "policies",
+                "to": "discontent",
+                "label": "Varying Religious Rules"
+              },
+              {
+                "from": "policies",
+                "to": "challenges",
+                "label": "Feudal System"
+              }
+            ],
+            "description": "These policies shaped the lives of millions, leading to both administrative order and significant hardships for the common people."
+          }
+        }
+      ]
+    }
+  },
+  "rag_retrieval_executed": true,
+  "retrieved_top10_chunks": [
+    {
+      "chunk_index": 1,
+      "score": 0.0,
+      "book_name": "",
+      "chapter_name": "",
+      "content_snippet": "..."
+    },
+    {
+      "chunk_index": 2,
+      "score": 0.0,
+      "book_name": "",
+      "chapter_name": "",
+      "content_snippet": "..."
+    },
+    {
+      "chunk_index": 3,
+      "score": 0.0,
+      "book_name": "",
+      "chapter_name": "",
+      "content_snippet": "..."
+    }
+  ]
+}

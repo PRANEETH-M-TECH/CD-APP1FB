@@ -483,10 +483,14 @@ async def smart_query_engine(
 
             # 3. Cache Miss: Run Orchestrator Pipeline
             # Run in thread executor so the async event loop is NOT blocked during LLM calls
+            # Propagate ContextVars (tracking context) using copy_context().run to fix 0-stats issue
             print(f"[CACHE MISS] Calling single-pass Orchestrator Agent...")
+            import contextvars
+            ctx = contextvars.copy_context()
             loop = asyncio.get_event_loop()
             report = await loop.run_in_executor(
                 None,  # uses the default ThreadPoolExecutor
+                ctx.run,
                 run_orchestrator_pipeline,
                 query,
                 student_profile
