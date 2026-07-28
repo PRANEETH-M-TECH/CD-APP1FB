@@ -363,7 +363,7 @@ function setupChatSubmitGlobal() {
 
         if (submitButton) submitButton.setAttribute('disabled', 'true');
         if (listChaptersBtn) listChaptersBtn.classList.add('hidden');
-        const currentTurn = _turnCount;
+        const currentTurn = _turnCount++;
 
         // Show AI loading card — using the existing styled classes from conversation.css
         const aiRow = document.createElement('div');
@@ -455,7 +455,6 @@ function setupChatSubmitGlobal() {
                 }
                 if (submitButton) submitButton.removeAttribute('disabled');
                 if (listChaptersBtn) listChaptersBtn.classList.remove('hidden');
-                _turnCount++;
                 chatHistory.scrollTop = chatHistory.scrollHeight;
                 return;
             }
