@@ -708,6 +708,9 @@ function setupChatSubmitGlobal() {
                         if (durEl && dur > 0) durEl.textContent = hfFmtTime(dur);
                     } else if (e.data.type === 'SCENE_CHANGED' || e.data.sceneNo !== undefined) {
                         if (sceneEl) sceneEl.textContent = `Scene ${e.data.sceneNo || e.data.currentScene || ''}`;
+                    } else if (e.data.type === 'TIMELINE_FINISHED' || e.data.type === 'LESSON_COMPLETE' || e.data.type === 'PLAYBACK_COMPLETE') {
+                        console.log(`[Hyperframes Player] completion event received for turn ${turnId}: ${e.data.type}`);
+                        requestVideoFeedback(turnId);
                     }
                 });
 
@@ -812,14 +815,110 @@ function hfToggleTextAnswer(turnId) {
    STUDENT FEEDBACK SYSTEM
    ───────────────────────────────────────────────────────────────────────── */
 
+const pendingVideoFeedbackTurns = new Set();
+const shownVideoFeedbackTurns = new Set();
+
+function requestVideoFeedback(turnId) {
+    if (document.fullscreenElement) {
+        pendingVideoFeedbackTurns.add(String(turnId));
+        console.log(`[Feedback] Deferred until fullscreen exit for turn ${turnId}.`);
+        return;
+    }
+    showVideoFeedbackOverlay(turnId);
+}
+
+document.addEventListener('fullscreenchange', () => {
+    hfRescaleAllPlayers();
+    if (document.fullscreenElement) return;
+    pendingVideoFeedbackTurns.forEach((turnId) => {
+        pendingVideoFeedbackTurns.delete(turnId);
+        showVideoFeedbackOverlay(turnId);
+    });
+});
+
+/** Display the overlay rating popup inside the video shell when video completes */
+function showVideoFeedbackOverlay(turnId) {
+    const shell = document.getElementById(`hf-player-${turnId}`);
+    if (!shell || shownVideoFeedbackTurns.has(String(turnId))) return;
+    shownVideoFeedbackTurns.add(String(turnId));
+    
+    let overlay = document.getElementById(`hf-feedback-overlay-${turnId}`);
+    if (!overlay) {
+        overlay = document.createElement('div');
+        overlay.id = `hf-feedback-overlay-${turnId}`;
+        overlay.className = 'hf-feedback-overlay';
+        overlay.innerHTML = `
+            <div class="hf-feedback-dialog" role="dialog" aria-modal="true" aria-label="Lesson feedback">
+                <button class="hf-feedback-close" aria-label="Close feedback" title="Close"
+                    onclick="skipVideoFeedback('${turnId}')">×</button>
+                <div class="hf-feedback-icon">🌟</div>
+                <h3 class="hf-feedback-title">Was this lesson helpful?</h3>
+                <p class="hf-feedback-subtitle">Your feedback helps us make lessons better.</p>
+                <div class="hf-feedback-options">
+                    <button class="hf-feedback-btn" onclick="submitVideoFeedback('${turnId}', 'like')">👍 Yes, helpful</button>
+                    <button class="hf-feedback-btn" onclick="submitVideoFeedback('${turnId}', 'dislike')">👎 Not quite</button>
+                </div>
+                <button class="hf-feedback-skip" onclick="skipVideoFeedback('${turnId}')">Skip for now</button>
+                <button class="hf-feedback-btn-replay" onclick="replayVideoFromOverlay('${turnId}')">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <path d="M1 4v6h6"/><path d="M3.51 15a9 9 0 1 0 .49-3.5"/>
+                    </svg>
+                    Replay Lesson
+                </button>
+            </div>
+        `;
+        // Mount at document level so the iframe/player stacking context cannot
+        // intercept clicks on the feedback controls.
+        document.body.appendChild(overlay);
+    }
+    
+    // Show overlay smoothly
+    requestAnimationFrame(() => overlay.classList.add('fb-show'));
+}
+
+window.skipVideoFeedback = function(turnId) {
+    const overlay = document.getElementById(`hf-feedback-overlay-${turnId}`);
+    if (overlay) overlay.classList.remove('fb-show');
+};
+
+window.submitVideoFeedback = function(turnId, type) {
+    // Hide overlay
+    const overlay = document.getElementById(`hf-feedback-overlay-${turnId}`);
+    if (overlay) {
+        overlay.classList.remove('fb-show');
+    }
+    
+    // Call standard feedback submission pipeline
+    submitFeedback(turnId, type);
+};
+
+window.replayVideoFromOverlay = function(turnId) {
+    const iframeId = `hf-iframe-${turnId}`;
+    
+    // Hide overlay
+    const overlay = document.getElementById(`hf-feedback-overlay-${turnId}`);
+    if (overlay) {
+        overlay.classList.remove('fb-show');
+    }
+    
+    // Command player to restart
+    hfCmd(iframeId, 'RESTART');
+};
+
 /** Inject animated 👍 / 👎 buttons at the bottom of an AI response card */
 function injectFeedbackButtons(turnId) {
     const card = document.getElementById(`ai-card-global-${turnId}`);
-    if (!card || card.querySelector('.fb-row')) return; // already injected
+    if (!card) {
+        console.warn(`[Feedback] Cannot inject row: AI card ${turnId} was not found.`);
+        return;
+    }
+    if (card.querySelector('.fb-row')) return; // already injected
     const row = document.createElement('div');
-    row.className = 'fb-row';
+    row.className = 'fb-row fb-floating';
+    row.setAttribute('role', 'dialog');
+    row.setAttribute('aria-label', 'Answer feedback');
     row.innerHTML = `
-      <span class="fb-label">Was this helpful?</span>
+      <span class="fb-label">Was this answer helpful?</span>
       <button class="fb-thumb fb-up" id="fb-up-${turnId}" title="Yes, helpful!"
         onclick="submitFeedback('${turnId}', 'like')">👍</button>
       <button class="fb-thumb fb-down" id="fb-down-${turnId}" title="Could be better"
@@ -828,6 +927,7 @@ function injectFeedbackButtons(turnId) {
     card.appendChild(row);
     // Slide-in animation trigger
     requestAnimationFrame(() => row.classList.add('fb-visible'));
+    console.log(`[Feedback] Rating row rendered for turn ${turnId}.`);
 }
 
 /** Handle a thumbs up or down click */
@@ -884,6 +984,7 @@ function ensureFeedbackOverlayMarkup() {
     overlay.style.display = 'none';
     overlay.innerHTML = `
         <div class="fb-modal">
+          <button class="fb-modal-close" aria-label="Close feedback" title="Close" onclick="closeFeedbackOverlay(false)">×</button>
           <div class="fb-robot-wrap">
             <div class="fb-robot-glow"></div>
             <div class="fb-robot-avatar">🤖</div>
@@ -2368,4 +2469,3 @@ try {
 } catch (e) {
     console.warn('[script.js] Initial setupChatSubmitGlobal error:', e);
 }
-

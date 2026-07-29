@@ -3,6 +3,7 @@ import sys
 import json
 import time
 import datetime
+import re
 from typing import Dict, Any, Optional
 
 # Ensure project root is in python path
@@ -199,7 +200,7 @@ def run_orchestrator_pipeline(raw_query: str, student_profile: Dict[str, Any]) -
     print(f"\n[ORCHESTRATOR LLM] Executing single-pass evaluation for Class {grade} query...")
     user_prompt = f"USER RAW QUERY: \"{raw_query}\""
 
-    MODEL = os.environ.get("GEMINI_MODEL_NAME", "gemini-3.6-flash")
+    MODEL = os.environ.get("GEMINI_MODEL_NAME", "gemini-2.5-flash")
 
     # Step 1/3 — Query classification (keyword-based, instant, free)
     # If query is GK/current events, we perform live Google Search grounding to answer.
@@ -213,7 +214,12 @@ def run_orchestrator_pipeline(raw_query: str, student_profile: Dict[str, Any]) -
         "news", "happened", "incident", "2026", "2025",
     }
     query_lower = raw_query.lower()
-    is_gk_query = any(kw in query_lower for kw in _GK_KEYWORDS)
+    # Match keywords as complete words. A substring check would classify
+    # "winter" as GK because the GK list contains the word "win".
+    is_gk_query = any(
+        re.search(rf"(?<!\w){re.escape(kw)}(?!\w)", query_lower)
+        for kw in _GK_KEYWORDS
+    )
     query_type = "GK_KNOWLEDGE" if is_gk_query else "CURRICULUM"
     print(f"[ORCHESTRATOR] Step 1/3 — Query type: {query_type} (keyword match, 0ms)")
 
@@ -223,7 +229,7 @@ def run_orchestrator_pipeline(raw_query: str, student_profile: Dict[str, Any]) -
         tools=[{"google_search": {}}] if is_gk_query else None
     )
 
-    # Step 2/3 — Main Orchestrator LLM call — single model: gemini-3.6-flash
+    # Step 2/3 — Main Orchestrator LLM call — single model: gemini-2.5-flash
     search_note = "with Google Search Grounding (may take 15-25s)" if is_gk_query else "without Search Grounding (fast)"
     response = None
     last_error = None
@@ -321,14 +327,45 @@ def run_orchestrator_pipeline(raw_query: str, student_profile: Dict[str, Any]) -
         print(f"[RAG SEARCH] Running hybrid vector search for: '{reformulated_query}'...")
         rag_executed = True
         try:
+            # Resolve book_uuid from Firestore summaries using matched_subject and grade
+            resolved_book_uuid = ""
+            if matched_subject:
+                try:
+                    from backend.app.core.firebase.firebase_init import db
+                    # Gemini may return "Science" or "Class 6 Science".
+                    # Summary documents are keyed as summaries/{subject}_{class}.
+                    normalized_subject = re.sub(
+                        r"\b(?:class|grade)\s*\d+\b", "", str(matched_subject), flags=re.IGNORECASE
+                    )
+                    normalized_subject = re.sub(r"\s+", " ", normalized_subject).strip(" -_:")
+                    sub_key = normalized_subject.lower().strip()
+                    summary_key = f"{sub_key}_{grade}"
+                    # Summaries are stored under summaries/{subject}_{class}
+                    sum_doc = db.collection("summaries").document(summary_key).get()
+                    if sum_doc.exists:
+                        resolved_book_uuid = sum_doc.to_dict().get("book_uuid", "")
+                        print(f"[RAG SEARCH] Resolved summaries/{summary_key} book_uuid (Class {grade}): {resolved_book_uuid}")
+                    else:
+                        print(f"[RAG SEARCH WARNING] Summary document not found: summaries/{summary_key}")
+                except Exception as e:
+                    print(f"[RAG RESOLVE WARNING] Failed to resolve book_uuid from Firestore: {e}")
+
+            if not resolved_book_uuid:
+                raise RuntimeError(
+                    f"Could not resolve a book UUID for subject '{matched_subject}' and Class {grade}."
+                )
+
             # Query Qdrant vector database using qdrant_service.hybrid_search
             if hasattr(qdrant_service, 'hybrid_search'):
-                raw_chunks = qdrant_service.hybrid_search(
-                    book_uuid="",
+                filters = {}
+                if matched_chapter:
+                    filters["chapter_names"] = [matched_chapter]
+                raw_chunks, _, _ = qdrant_service.hybrid_search(
+                    book_uuid=resolved_book_uuid,
                     query=reformulated_query,
                     keywords=[],
                     conceptual_score=0.7,
-                    metadata_filters={"class_name": str(grade)}
+                    metadata_filters=filters
                 )
             elif hasattr(qdrant_service, 'search_books_hybrid'):
                 raw_chunks = qdrant_service.search_books_hybrid(
@@ -340,17 +377,32 @@ def run_orchestrator_pipeline(raw_query: str, student_profile: Dict[str, Any]) -
             else:
                 raw_chunks = []
 
-            for idx, c in enumerate(raw_chunks, start=1):
+            for idx, c in enumerate(raw_chunks[:10], start=1):
+                # hybrid_search returns (hybrid_score, payload_dict), while
+                # some fallback implementations return a result object/dict.
+                # Normalize both shapes before writing the audit report.
+                if isinstance(c, tuple) and len(c) >= 2:
+                    result_score, payload = c[0], c[1]
+                else:
+                    result_score, payload = getattr(c, "score", 0.0), c
+
+                if hasattr(payload, "payload"):
+                    payload = payload.payload
+                if not isinstance(payload, dict):
+                    payload = {}
+
                 rag_chunks.append({
                     "chunk_index": idx,
-                    "score": getattr(c, "score", 0.0) if not isinstance(c, dict) else c.get("score", 0.0),
-                    "book_name": getattr(c, "book_name", "") if not isinstance(c, dict) else c.get("book_name", ""),
-                    "chapter_name": getattr(c, "chapter_name", "") if not isinstance(c, dict) else c.get("chapter_name", ""),
-                    "content_snippet": (getattr(c, "content", "") if not isinstance(c, dict) else c.get("content", ""))[:150] + "..."
+                    "score": round(float(result_score or 0.0), 4),
+                    "book_name": payload.get("book_name", payload.get("book", "")),
+                    "chapter_name": payload.get("chapter_name", payload.get("chapter", "")),
+                    "content_snippet": (payload.get("text", payload.get("content", "")) or "")[:150] + "..."
                 })
         except Exception as e:
             print(f"[RAG SEARCH NOTICE] Qdrant search fallback: {e}")
-            rag_chunks = [{"chunk_index": 1, "score": 1.0, "content_snippet": "NCERT Class Textbook Context"}]
+            # Do not write a fabricated chunk when retrieval fails; the audit
+            # report must reflect the actual Qdrant result.
+            rag_chunks = []
 
     execution_time = round(time.time() - start_time, 2)
 

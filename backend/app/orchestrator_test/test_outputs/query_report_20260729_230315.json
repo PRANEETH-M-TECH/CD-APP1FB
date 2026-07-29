@@ -1,0 +1,236 @@
+{
+  "timestamp": "2026-07-29T23:03:15.605598",
+  "execution_time_seconds": 32.52,
+  "authenticated_student": {
+    "uid": "qOeL4u9Cp5N0jtD24J405ORwVsn1",
+    "email": "student6@cg.com",
+    "name": "Gaurav",
+    "class": 6,
+    "board": "CBSE",
+    "role": "student"
+  },
+  "raw_user_query": "explain about the availability of water on earth",
+  "orchestrator_output": {
+    "is_authorized": true,
+    "refusal_reason": null,
+    "classification": "CURRICULUM",
+    "reformulated_query": "Explain the availability of water on Earth",
+    "matched_subject": "Science",
+    "matched_chapter": "WATER IN OUR LIFE",
+    "complexity_level": 2,
+    "format_decision": "VIDEO_REQUIRED",
+    "text_narration": "Our Earth is often called the 'Blue Planet' because it looks mostly blue from space. This blue colour comes from the huge amount of water present on its surface.\n\nBut how much of this water is actually available? About 71% of the Earth's surface is covered by water. This means almost three-fourths of our planet is water!\n\nMost of this water, about 97%, is saltwater found in oceans and seas. This water is too salty for us to drink or use for farming. Only a small part, about 3%, is freshwater.\n\nNow, let's look at this small 3% freshwater. Most of it is locked up in ice caps and glaciers, especially at the North and South Poles. A good amount is also found underground as groundwater. Only a very tiny fraction is available as surface water in rivers, lakes, and ponds.\n\nSo, even though Earth has a lot of water, only a very small portion is freshwater that we can easily use for drinking, cooking, and other daily needs. This is why it's so important to save water!",
+    "video_storyboard": {
+      "lesson_title": "Water on Earth: Where is it?",
+      "layout_mode": "timeline",
+      "theme": "Science",
+      "global_assets": [],
+      "connections": [],
+      "scenes": [
+        {
+          "scene_no": 1,
+          "purpose": "Introduce the topic of water on Earth and why it's called the 'Blue Planet'.",
+          "template_id": "title_slide",
+          "template_selection_reasoning": "Best for introducing the lesson title and a brief opening statement.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": null
+          },
+          "teacher_script": "Our Earth is often called the 'Blue Planet' because it looks mostly blue from space. This blue colour comes from the huge amount of water present on its surface.",
+          "template_data": {
+            "title": "Water on Earth: Where is it?",
+            "subtitle": "Understanding Water Availability"
+          }
+        },
+        {
+          "scene_no": 2,
+          "purpose": "Show the total percentage of Earth's surface covered by water.",
+          "template_id": "concept_diagram",
+          "template_selection_reasoning": "A concept diagram (like a pie chart) is ideal for visually representing percentages of Earth's surface.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": null
+          },
+          "teacher_script": "But how much of this water is actually available? About 71% of the Earth's surface is covered by water. This means almost three-fourths of our planet is water!",
+          "template_data": {
+            "diagram_type": "pie_chart",
+            "sections": [
+              {
+                "label": "Water",
+                "percentage": 71,
+                "color": "#4285F4"
+              },
+              {
+                "label": "Land",
+                "percentage": 29,
+                "color": "#34A853"
+              }
+            ],
+            "title": "Earth's Surface Coverage"
+          }
+        },
+        {
+          "scene_no": 3,
+          "purpose": "Explain the division of water into saltwater and freshwater.",
+          "template_id": "column_comparison",
+          "template_selection_reasoning": "Column comparison is effective for showing two distinct categories and their relative proportions.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": null
+          },
+          "teacher_script": "Most of this water, about 97%, is saltwater found in oceans and seas. This water is too salty for us to drink or use for farming. Only a small part, about 3%, is freshwater.",
+          "template_data": {
+            "title": "Saltwater vs. Freshwater",
+            "columns": [
+              {
+                "header": "Saltwater",
+                "content": "• Found in oceans and seas\n• About 97% of all water\n• Too salty to drink or use for farming",
+                "icon": "ocean_wave"
+              },
+              {
+                "header": "Freshwater",
+                "content": "• Only about 3% of all water\n• Needed for drinking and farming",
+                "icon": "water_drop"
+              }
+            ]
+          }
+        },
+        {
+          "scene_no": 4,
+          "purpose": "Break down the sources of freshwater.",
+          "template_id": "taxonomy_tree",
+          "template_selection_reasoning": "A taxonomy tree is suitable for showing how freshwater is further divided into different categories.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": null
+          },
+          "teacher_script": "Now, let's look at this small 3% freshwater. Most of it is locked up in ice caps and glaciers, especially at the North and South Poles. A good amount is also found underground as groundwater. Only a very tiny fraction is available as surface water in rivers, lakes, and ponds.",
+          "template_data": {
+            "title": "Where is Freshwater Found?",
+            "root_node": {
+              "id": "freshwater",
+              "label": "Freshwater (3%)",
+              "children": [
+                {
+                  "id": "ice_caps",
+                  "label": "Ice Caps & Glaciers (Most)",
+                  "description": "Frozen at poles and mountains"
+                },
+                {
+                  "id": "groundwater",
+                  "label": "Groundwater (Good Amount)",
+                  "description": "Underground in aquifers"
+                },
+                {
+                  "id": "surface_water",
+                  "label": "Surface Water (Tiny Fraction)",
+                  "description": "Rivers, lakes, ponds"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "scene_no": 5,
+          "purpose": "Conclude by emphasizing the scarcity of readily usable freshwater and the importance of conservation.",
+          "template_id": "concept_diagram",
+          "template_selection_reasoning": "A simple concept diagram can visually represent the small amount of usable water, reinforcing the main message.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": null
+          },
+          "teacher_script": "So, even though Earth has a lot of water, only a very small portion is freshwater that we can easily use for drinking, cooking, and other daily needs. This is why it's so important to save water!",
+          "template_data": {
+            "diagram_type": "icon_with_text",
+            "icon": "water_tap",
+            "title": "Usable Water is Precious",
+            "description": "Only a tiny part of Earth's water is easily available for our daily needs. We must use it wisely!"
+          }
+        }
+      ]
+    }
+  },
+  "rag_retrieval_executed": true,
+  "retrieved_top10_chunks": [
+    {
+      "chunk_index": 1,
+      "score": 0.0,
+      "book_name": "",
+      "chapter_name": "",
+      "content_snippet": "..."
+    },
+    {
+      "chunk_index": 2,
+      "score": 0.0,
+      "book_name": "",
+      "chapter_name": "",
+      "content_snippet": "..."
+    },
+    {
+      "chunk_index": 3,
+      "score": 0.0,
+      "book_name": "",
+      "chapter_name": "",
+      "content_snippet": "..."
+    },
+    {
+      "chunk_index": 4,
+      "score": 0.0,
+      "book_name": "",
+      "chapter_name": "",
+      "content_snippet": "..."
+    },
+    {
+      "chunk_index": 5,
+      "score": 0.0,
+      "book_name": "",
+      "chapter_name": "",
+      "content_snippet": "..."
+    },
+    {
+      "chunk_index": 6,
+      "score": 0.0,
+      "book_name": "",
+      "chapter_name": "",
+      "content_snippet": "..."
+    },
+    {
+      "chunk_index": 7,
+      "score": 0.0,
+      "book_name": "",
+      "chapter_name": "",
+      "content_snippet": "..."
+    },
+    {
+      "chunk_index": 8,
+      "score": 0.0,
+      "book_name": "",
+      "chapter_name": "",
+      "content_snippet": "..."
+    },
+    {
+      "chunk_index": 9,
+      "score": 0.0,
+      "book_name": "",
+      "chapter_name": "",
+      "content_snippet": "..."
+    },
+    {
+      "chunk_index": 10,
+      "score": 0.0,
+      "book_name": "",
+      "chapter_name": "",
+      "content_snippet": "..."
+    }
+  ]
+}

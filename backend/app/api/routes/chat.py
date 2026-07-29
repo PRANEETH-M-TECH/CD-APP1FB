@@ -209,6 +209,12 @@ async def query_engine(
         summary_doc = load_summary_from_firestore(class_name, subject)
         chapters = summary_doc["chapters"]
         print(f"[FIRESTORE] Loaded {len(chapters)} chapters\n")
+
+        if book_uuid == "global" or not book_uuid:
+            resolved_uuid = summary_doc.get("book_uuid")
+            if resolved_uuid:
+                book_uuid = resolved_uuid
+                print(f"[QUERY] Mapped global book_uuid to resolved database UUID: {book_uuid}")
         
         try:
             reform = reformulate_with_llm(
