@@ -65,6 +65,14 @@ async def _generate_single_slide_audio(
     dummy_wav_b64 = "UklGRigAAABXQVZFZm10IBAAAAABAAEAESsAACJWAAACABAAZGF0YQQAAAAAAA=="
     
     slide_no = slide.get("scene_no", slide_idx)
+    audio_url = slide.get("audio_url")
+    if audio_url and audio_url.startswith("http"):
+        logger.info(f"[AudioGen] Slide {slide_no} already has audio URL: {audio_url}")
+        print(f"🚀 [AudioGen] Skip TTS. Using pre-generated audio for Scene {slide_no} -> {audio_url}", flush=True)
+        if progress_callback:
+            await progress_callback(slide_no, total_slides)
+        return audio_url
+
     if not isinstance(slide_no, int):
         slide_no = slide_idx
         
@@ -85,45 +93,15 @@ async def _generate_single_slide_audio(
             await progress_callback(slide_no, total_slides)
         return f"/uploads/visual_lessons/{lesson_id}/{wav_filename}"
         
-    headers = {
-        "api-subscription-key": api_key,
-        "Content-Type": "application/json",
-    }
-    
-    chunks = _split_text(text)
-    logger.info(f"[AudioGen] Scene {slide_no} script: {len(text)} chars, split into {len(chunks)} chunks.")
-    print(f"   [AudioGen] Calling Sarvam TTS for Scene {slide_no} ({len(text)} chars)...", flush=True)
-    all_audio_bytes = b""
-    
     try:
-        for idx, chunk in enumerate(chunks):
-            payload = {
-                "text": chunk,
-                "target_language_code": "en-IN",
-                "speaker": "ritu",
-                "model": "bulbul:v3",
-                "enable_preprocessing": True,
-            }
-            
-            start_time = time.time()
-            response = await client.post(SARVAM_API_URL, headers=headers, json=payload)
-            duration = time.time() - start_time
-            
-            logger.info(f"[AudioGen] Scene {slide_no} Sarvam Response: status={response.status_code} | time={duration:.2f}s")
-            print(f"   [AudioGen] Sarvam Response Scene {slide_no}: status={response.status_code} | time={duration:.2f}s", flush=True)
-            
-            if response.status_code != 200:
-                err_msg = f"Sarvam API error for Scene {slide_no}: Status {response.status_code} - {response.text}"
-                logger.error(f"[AudioGen] {err_msg}")
-                raise AudioGenerationError(err_msg)
-                
-            data = response.json()
-            audios = data.get("audios", [])
-            if not audios:
-                raise AudioGenerationError(f"Sarvam returned empty audio array for Scene {slide_no}.")
-                
-            all_audio_bytes += base64.b64decode(audios[0])
-            
+        from backend.app.services.chat.tts_service import synthesize_text_cached
+        all_audio_bytes, _ = await synthesize_text_cached(
+            text=text,
+            language="en-IN",
+            speaker="ritu",
+            model="bulbul:v3"
+        )
+        
         with open(wav_path, "wb") as f:
             f.write(all_audio_bytes)
             

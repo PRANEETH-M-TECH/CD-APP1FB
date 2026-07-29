@@ -63,7 +63,8 @@ def log_query(
     mode: str,
     llm_action: str,
     answer_length: int,
-    ai_difficulty_score: Optional[float] = None
+    ai_difficulty_score: Optional[float] = None,
+    query_json_url: Optional[str] = None
 ) -> str:
     """
     Logs a single user query to the user_queries collection ONLY.
@@ -81,6 +82,7 @@ def log_query(
         llm_action: Action taken by LLM (e.g., "retrieve_and_answer")
         answer_length: Length of generated answer
         ai_difficulty_score: AI-assessed difficulty (optional)
+        query_json_url: Supabase URL of the full transaction JSON (optional)
     
     Returns:
         Document ID of the logged query
@@ -116,6 +118,9 @@ def log_query(
         
         if ai_difficulty_score is not None:
             query_data["ai_difficulty_score"] = ai_difficulty_score
+            
+        if query_json_url:
+            query_data["query_json_url"] = query_json_url
         
         doc_ref.set(query_data)
         logger.info(f"✅ Query logged to user_queries: {doc_ref.id}")

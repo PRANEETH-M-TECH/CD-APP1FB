@@ -313,6 +313,44 @@ class StreamingAudioPipeline {
     }
 
     /**
+     * Push a pre-generated chunk of text along with its already compiled Supabase audio URL.
+     * Bypasses the TTS generation pipeline completely.
+     * @param {string} text
+     * @param {string} audio_url
+     */
+    pushPreGeneratedChunk(text, audio_url) {
+        if (!this.isActive) {
+            console.log('[STREAM] Starting pipeline for pre-generated audio delivery.');
+            this.isActive = true;
+        }
+        this.chunkIdCounter++;
+        const chunk_id = this.chunkIdCounter;
+        const sanitized = this._sanitizeForTTS(text);
+        
+        console.log(`[PIPELINE] Pushing pre-generated Chunk #${chunk_id} with audio: ${audio_url}`);
+        
+        const chunk = {
+            chunk_id,
+            text_chunk: text,
+            sanitized_text: sanitized,
+            audio_blob_url: audio_url || null,
+            status: 'ready', // Immediately ready for playback
+            text_displayed: false,
+            display_allowed: false,
+            _createTime: performance.now()
+        };
+        
+        this.deliveryQueue.push(chunk);
+        this.renderQueue.push(chunk);
+        
+        // Process rendering and playback lists
+        this._processRenderQueue();
+        if (!this.isProcessingPlayback) {
+            this._processPlaybackQueue();
+        }
+    }
+
+    /**
      * Push a raw token from the Gemini SSE stream.
      * @param {string} token
      */
@@ -330,7 +368,7 @@ class StreamingAudioPipeline {
      * Call when the Gemini stream emits [DONE].
     flush() {
         if (!this.isActive) return;
-        const remaining = this.textBuffer.trim();
+        const remaining = this.textBuffer;
         if (remaining) {
             this._createChunk(remaining);
             this.textBuffer = '';
@@ -371,7 +409,7 @@ class StreamingAudioPipeline {
             }
         }
         // If there is any remaining text in textBuffer, render it too
-        const remaining = this.textBuffer.trim();
+        const remaining = this.textBuffer;
         if (remaining) {
             if (typeof this.onDisplayChunk === 'function') {
                 this.onDisplayChunk(remaining, this.chunkIdCounter + 1);
@@ -517,8 +555,8 @@ class StreamingAudioPipeline {
             // Try to split at last sentence boundary within the buffer
             const lastBoundary = this._findLastSentenceBoundary(this.textBuffer);
             if (lastBoundary > 0) {
-                const chunk = this.textBuffer.slice(0, lastBoundary).trim();
-                this.textBuffer = this.textBuffer.slice(lastBoundary).trim();
+                const chunk = this.textBuffer.slice(0, lastBoundary);
+                this.textBuffer = this.textBuffer.slice(lastBoundary);
                 this._createChunk(chunk);
                 console.log(`[BUFFER] Char threshold (${this.charThreshold}) triggered flush`);
                 return;
@@ -564,8 +602,8 @@ class StreamingAudioPipeline {
         }
         if (found >= count) {
             return {
-                chunk: text.slice(0, lastPos).trim(),
-                remainder: text.slice(lastPos).trim()
+                chunk: text.slice(0, lastPos),
+                remainder: text.slice(lastPos)
             };
         }
         return { chunk: '', remainder: text };
@@ -575,6 +613,9 @@ class StreamingAudioPipeline {
         if (!text) return '';
         
         let clean = text;
+        
+        // Strip HTML tags
+        clean = clean.replace(/<[^>]*>/g, ' ');
         
         // Remove bold/italic markers
         clean = clean.replace(/\*\*/g, '');

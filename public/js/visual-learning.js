@@ -289,10 +289,15 @@ class VisualLearningController {
         if (chatInput) chatInput.style.display = 'none';
 
         try {
+            const className = String(window.currentUserClass || localStorage.getItem('userClass') || '').replace(/\D/g, '');
+            if (!className) {
+                alert('Class information is missing. Please refresh the page or log in again.');
+                return;
+            }
             const requestPayload = {
                 query: query,
                 book_uuid: window.selectedBook.id,
-                class_name: String(window.currentUserClass || "8"),
+                class_name: className,
                 subject: window.selectedBook.subject
             };
             

@@ -54,7 +54,21 @@ class StoryboardAdapter {
 
       // 2. Otherwise, adapt legacy fields to evolved Scene Graph nodes containing Components
       const sceneNo = sceneJson.scene_no;
-      const templateId = sceneJson.template_id || 'general_scene';
+      // Normalize template id: accept CamelCase, spaces, and hyphens from LLM outputs
+      const rawTemplateId = sceneJson.template_id || 'general_scene';
+      const normalizeTemplateId = (t) => {
+        if (!t) return 'general_scene';
+        // If already snake_case, return lowercased
+        let s = String(t).trim();
+        // Convert CamelCase to snake_case, and replace spaces/hyphens with underscore
+        s = s.replace(/([a-z0-9])([A-Z])/g, '$1_$2');
+        s = s.replace(/[^a-zA-Z0-9]+/g, '_');
+        s = s.toLowerCase();
+        s = s.replace(/__+/g, '_').replace(/^_+|_+$/g, '');
+        if (!s) return 'general_scene';
+        return s;
+      };
+      const templateId = normalizeTemplateId(rawTemplateId || 'general_scene');
       const teacherScript = sceneJson.teacher_script || '';
       const data = sceneJson.template_data || {};
 
@@ -96,6 +110,8 @@ class StoryboardAdapter {
             || data.main_concept
             || data.concept_name
             || data.title
+            || data.question
+            || data.header
             || '';
           data.central_node = typeof centerRaw === 'object'
             ? (centerRaw.text || centerRaw.label || centerRaw.name || '')
@@ -103,7 +119,7 @@ class StoryboardAdapter {
 
           let rawLeaves = (data.leaf_nodes && Array.isArray(data.leaf_nodes))
             ? data.leaf_nodes
-            : (data.branches || data.attributes || data.nodes || []);
+            : (data.key_nodes || data.branches || data.attributes || data.nodes || data.options || data.stages || data.steps || data.bullets || data.items || data.concepts || data.elements || []);
 
           if (!Array.isArray(rawLeaves) && typeof rawLeaves === 'object' && rawLeaves !== null) {
             rawLeaves = Object.entries(rawLeaves).map(([key, val]) => `${key}: ${val}`);
@@ -244,9 +260,13 @@ class StoryboardAdapter {
                 return label ? `${label}: ${value}` : String(value);
               }).filter((b) => b !== '')
             };
-            if (data.conclusion) leftCol.bullets.push(data.conclusion);
           }
-
+          if (!leftCol && data.left) {
+            leftCol = { header: data.left_title || 'A', bullets: data.left };
+          }
+          if (!rightCol && data.right) {
+            rightCol = { header: data.right_title || 'B', bullets: data.right };
+          }
           leftCol = leftCol || { header: '', bullets: [] };
           rightCol = rightCol || { header: '', bullets: [] };
           data.left_column = leftCol;
@@ -295,6 +315,13 @@ class StoryboardAdapter {
         case 'database_grid': {
           nodes.push(StoryboardAdapter.createNode(`title_${sceneNo}`, 'TEXT', 'TEXT', `title_comp_${sceneNo}`, { text: data.table_title || data.title || '' }));
           
+          if (!data.headers && !data.rows && Array.isArray(data.items)) {
+            const firstItem = data.items[0] || {};
+            const keys = Object.keys(firstItem);
+            data.headers = keys.map(k => k.charAt(0).toUpperCase() + k.slice(1));
+            data.rows = data.items.map(item => keys.map(k => item[k] || ''));
+          }
+
           const headNodes = (data.headers || []).map((h, idx) =>
             StoryboardAdapter.createNode(`header_${sceneNo}_${idx}`, 'TEXT', 'TEXT', `header_comp_${sceneNo}_${idx}`, { text: h })
           );
@@ -312,20 +339,33 @@ class StoryboardAdapter {
         }
 
         case 'venn_diagram': {
-          nodes.push(StoryboardAdapter.createNode(`left_title_${sceneNo}`, 'TEXT', 'TEXT', `left_title_comp_${sceneNo}`, { text: data.left_title || 'A' }));
-          nodes.push(StoryboardAdapter.createNode(`right_title_${sceneNo}`, 'TEXT', 'TEXT', `right_title_comp_${sceneNo}`, { text: data.right_title || 'B' }));
+          // Normalize LLM keys & fallbacks
+          let leftList = data.left || data.left_items || data.left_list || (data.left_col ? (data.left_col.bullets || data.left_col.items) : null) || [];
+          let rightList = data.right || data.right_items || data.right_list || (data.right_col ? (data.right_col.bullets || data.right_col.items) : null) || [];
+          let interList = data.intersection || data.intersect || data.shared || data.overlap || data.middle || data.intersection_items || [];
+          let leftTitleVal = data.left_title || (data.left_col ? (data.left_col.header || data.left_col.title) : null) || 'A';
+          let rightTitleVal = data.right_title || (data.right_col ? (data.right_col.header || data.right_col.title) : null) || 'B';
+
+          data.left = leftList;
+          data.right = rightList;
+          data.intersection = interList;
+          data.left_title = leftTitleVal;
+          data.right_title = rightTitleVal;
+
+          nodes.push(StoryboardAdapter.createNode(`left_title_${sceneNo}`, 'TEXT', 'TEXT', `left_title_comp_${sceneNo}`, { text: leftTitleVal }));
+          nodes.push(StoryboardAdapter.createNode(`right_title_${sceneNo}`, 'TEXT', 'TEXT', `right_title_comp_${sceneNo}`, { text: rightTitleVal }));
           
-          const leftNodes = (data.left || []).map((item, idx) =>
+          const leftNodes = leftList.map((item, idx) =>
             StoryboardAdapter.createNode(`left_item_${sceneNo}_${idx}`, 'TEXT', 'TEXT', `left_item_comp_${sceneNo}_${idx}`, { text: item })
           );
           nodes.push(StoryboardAdapter.createNode(`left_${sceneNo}`, 'GROUP', 'GROUP', `left_comp_${sceneNo}`, {}, {}, leftNodes));
 
-          const midNodes = (data.intersection || []).map((item, idx) =>
+          const midNodes = interList.map((item, idx) =>
             StoryboardAdapter.createNode(`intersection_item_${sceneNo}_${idx}`, 'TEXT', 'TEXT', `intersection_item_comp_${sceneNo}_${idx}`, { text: item })
           );
           nodes.push(StoryboardAdapter.createNode(`intersection_${sceneNo}`, 'GROUP', 'GROUP', `intersection_comp_${sceneNo}`, {}, {}, midNodes));
 
-          const rightNodes = (data.right || []).map((item, idx) =>
+          const rightNodes = rightList.map((item, idx) =>
             StoryboardAdapter.createNode(`right_item_${sceneNo}_${idx}`, 'TEXT', 'TEXT', `right_item_comp_${sceneNo}_${idx}`, { text: item })
           );
           nodes.push(StoryboardAdapter.createNode(`right_${sceneNo}`, 'GROUP', 'GROUP', `right_comp_${sceneNo}`, {}, {}, rightNodes));
@@ -477,6 +517,78 @@ class StoryboardAdapter {
               resolvedAsset: resolvedImage ? resolvedImage.serialize() : null
             }
           ));
+          break;
+        }
+
+        case 'taxonomy_tree': {
+          nodes.push(StoryboardAdapter.createNode(`title_${sceneNo}`, 'TEXT', 'TEXT', `title_comp_${sceneNo}`, { text: data.title || '' }));
+          
+          let rootLabel = 'Root Category';
+          let branches = [];
+
+          if (data.root) {
+            if (typeof data.root === 'object') {
+              rootLabel = data.root.label || data.root.name || 'Root Category';
+              branches = data.root.children || data.root.branches || [];
+            } else {
+              rootLabel = String(data.root);
+            }
+          }
+
+          if (branches.length === 0 && Array.isArray(data.branches)) {
+            branches = data.branches;
+          }
+
+          nodes.push(StoryboardAdapter.createNode(`root_${sceneNo}`, 'TEXT', 'TEXT', `root_comp_${sceneNo}`, { text: rootLabel }));
+          
+          const branchNodes = branches.map((b, idx) => {
+            const label = typeof b === 'object' ? (b.label || b.title || b.name || '') : b;
+            const sub = typeof b === 'object' ? (b.children || b.sub_nodes || b.sub || b.sub_branches || []) : [];
+            const subTexts = sub.map(s => typeof s === 'object' ? (s.label || s.title || s.name || '') : s);
+            return StoryboardAdapter.createNode(
+              `branch_${sceneNo}_${idx}`, 'TEXT', 'TEXT', `branch_comp_${sceneNo}_${idx}`,
+              { text: label, sub: subTexts }
+            );
+          });
+          nodes.push(StoryboardAdapter.createNode(`branches_${sceneNo}`, 'GROUP', 'GROUP', `branches_comp_${sceneNo}`, {}, {}, branchNodes));
+          break;
+        }
+
+        case 'cartesian_grid': {
+          nodes.push(StoryboardAdapter.createNode(`title_${sceneNo}`, 'TEXT', 'TEXT', `title_comp_${sceneNo}`, { text: data.title || '' }));
+          nodes.push(StoryboardAdapter.createNode(`equation_${sceneNo}`, 'TEXT', 'TEXT', `equation_comp_${sceneNo}`, { text: data.equation_label || '' }));
+          const pointNodes = (data.points || []).map((p, idx) =>
+            StoryboardAdapter.createNode(`point_${sceneNo}_${idx}`, 'CUSTOM', 'CUSTOM', `point_comp_${sceneNo}_${idx}`, { x: p.x, y: p.y, label: p.label })
+          );
+          nodes.push(StoryboardAdapter.createNode(`points_${sceneNo}`, 'GROUP', 'GROUP', `points_comp_${sceneNo}`, {}, {}, pointNodes));
+          break;
+        }
+
+        case 'geo_marker': {
+          nodes.push(StoryboardAdapter.createNode(`title_${sceneNo}`, 'TEXT', 'TEXT', `title_comp_${sceneNo}`, { text: data.title || '' }));
+          const markerNodes = (data.markers || []).map((m, idx) =>
+            StoryboardAdapter.createNode(`marker_${sceneNo}_${idx}`, 'CUSTOM', 'CUSTOM', `marker_comp_${sceneNo}_${idx}`, { label: m.label, x: m.x, y: m.y, description: m.description })
+          );
+          nodes.push(StoryboardAdapter.createNode(`markers_${sceneNo}`, 'GROUP', 'GROUP', `markers_comp_${sceneNo}`, {}, {}, markerNodes));
+          break;
+        }
+
+        case 'before_after_slider': {
+          nodes.push(StoryboardAdapter.createNode(`title_${sceneNo}`, 'TEXT', 'TEXT', `title_comp_${sceneNo}`, { text: data.title || '' }));
+          
+          const beforeLabel = (data.before && data.before.label) || 'BEFORE';
+          const beforeBullets = (data.before && data.before.bullets) || [];
+          const beforeNodes = beforeBullets.map((b, idx) =>
+            StoryboardAdapter.createNode(`before_bullet_${sceneNo}_${idx}`, 'TEXT', 'TEXT', `before_bullet_comp_${sceneNo}_${idx}`, { text: b })
+          );
+          nodes.push(StoryboardAdapter.createNode(`before_group_${sceneNo}`, 'GROUP', 'GROUP', `before_group_comp_${sceneNo}`, { label: beforeLabel }, {}, beforeNodes));
+
+          const afterLabel = (data.after && data.after.label) || 'AFTER';
+          const afterBullets = (data.after && data.after.bullets) || [];
+          const afterNodes = afterBullets.map((b, idx) =>
+            StoryboardAdapter.createNode(`after_bullet_${sceneNo}_${idx}`, 'TEXT', 'TEXT', `after_bullet_comp_${sceneNo}_${idx}`, { text: b })
+          );
+          nodes.push(StoryboardAdapter.createNode(`after_group_${sceneNo}`, 'GROUP', 'GROUP', `after_group_comp_${sceneNo}`, { label: afterLabel }, {}, afterNodes));
           break;
         }
 

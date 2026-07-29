@@ -324,7 +324,7 @@ function generateMasterHtml(storyboard, lessonDir, callback) {
     let targetPath = path.join(lessonDir, fallbackName);
     
     if (audioUrl) {
-      const fileName = path.basename(audioUrl);
+      const fileName = audioUrl.split('?')[0].split('/').pop();
       const possiblePath = path.join(lessonDir, fileName);
       if (fs.existsSync(possiblePath)) {
         targetPath = possiblePath;
@@ -348,7 +348,7 @@ function generateMasterHtml(storyboard, lessonDir, callback) {
     return null;
   };
 
-  // Estimate scene durations accurately based on exact audio duration + 0.3s transition padding
+  // Estimate scene durations accurately based on exact audio duration + 0.6s transition padding
   let currentStart = 0;
   const scenesWithTiming = scenes.map((scene, idx) => {
     let duration = scene.durationInFrames ? scene.durationInFrames / fps : null;
@@ -356,10 +356,10 @@ function generateMasterHtml(storyboard, lessonDir, callback) {
     if (!duration) {
       const audioDuration = getAudioDurationInSeconds(scene);
       if (audioDuration) {
-        duration = audioDuration + 0.3;
+        duration = audioDuration + 0.6;
       } else {
         const words = scene.teacher_script ? scene.teacher_script.split(/\s+/).length : 0;
-        duration = Math.max(3.0, words * 0.35 + 0.5);
+        duration = Math.max(4.0, words * 0.45 + 1.0);
       }
     }
 
@@ -435,7 +435,6 @@ function generateMasterHtml(storyboard, lessonDir, callback) {
 
     /* Subtitles banner */
     .subtitles-container {
-      display: none !important;
       position: absolute;
       bottom: 45px;
       left: 8%;
@@ -1180,6 +1179,9 @@ ${compiledScript}      mainTimeline.add(sceneTl, ${scene.start});
   });
 
   html += `
+    // Pad mainTimeline to match computed totalDuration (narration padding)
+    mainTimeline.set({}, {}, ${totalDuration});
+
     window.__timelines = window.__timelines || {};
     window.__timelines["root"] = mainTimeline;
 
@@ -1189,7 +1191,7 @@ ${compiledScript}      mainTimeline.add(sceneTl, ${scene.start});
     window.HyperframesEngine = {
       scenes: rawData,
       totalDuration: ${totalDuration},
-      currentSceneNo: 1,
+      currentSceneNo: null,
       isPlaying: false,
       isMuted: false,
       speed: 1.0,

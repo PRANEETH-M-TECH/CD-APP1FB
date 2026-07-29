@@ -2102,8 +2102,10 @@
     color: #78350f !important;
     font-weight: 700;
 }
-.ai-card.subject-social p, .ai-response-card.subject-social p {
-    color: #3f2f21 !important;
+.ai-card.subject-social p, .ai-response-card.subject-social p,
+.ai-card.subject-social .ai-text-content, .ai-response-card.subject-social .ai-text-content,
+.ai-card.subject-social .ai-text-content *, .ai-response-card.subject-social .ai-text-content * {
+    color: #2c1d11 !important;
     line-height: 1.6;
 }
 
@@ -2191,4 +2193,393 @@
     align-items: center;
     gap: 12px;
 }
+
+/* ═══════════════════════════════════════════════════════════
+   HYPERFRAMES PLAYER SHELL
+   ═══════════════════════════════════════════════════════════ */
+
+.hf-player-shell {
+  margin-top: 14px;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #000;
+  border: 1px solid rgba(20, 184, 166, 0.25);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+  width: 100%;
+  min-height: 0;
+}
+
+/* Viewport: clips and sizes the scaled canvas */
+.hf-viewport-wrapper {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background: #000;
+  aspect-ratio: 16 / 9;
+  min-height: 0;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+/* The scale-box holds the raw 1280×720 iframe */
+.hf-scale-box {
+  position: relative;
+  width: 1280px;
+  height: 720px;
+  transform-origin: top left;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.hf-iframe {
+  width: 100%;
+  height: 100%;
+  min-width: 100%;
+  min-height: 100%;
+  border: none;
+  display: block;
+}
+
+/* Subtitle overlay at bottom of the video */
+.hf-subtitle-bar {
+  position: absolute;
+  bottom: 10px;
+  left: 5%;
+  right: 5%;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.4;
+  color: #fff;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.9), 1px 1px 0 #000, -1px -1px 0 #000;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: 10;
+  padding: 6px 12px;
+  background: rgba(0,0,0,0.35);
+  border-radius: 8px;
+  backdrop-filter: blur(4px);
+}
+
+/* Controls bar */
+.hf-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: rgba(7, 16, 18, 0.95);
+  backdrop-filter: blur(16px);
+  border-top: 1px solid rgba(255,255,255,0.07);
+}
+
+.hf-controls-left  { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+.hf-controls-center { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0; }
+.hf-controls-right  { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+
+/* Icon buttons */
+.hf-btn {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: #E2E8F0;
+  border-radius: 8px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s, transform 0.1s;
+}
+.hf-btn:hover {
+  background: rgba(20,184,166,0.2);
+  color: #14B8A6;
+  border-color: rgba(20,184,166,0.4);
+  transform: scale(1.08);
+}
+.hf-btn:active { transform: scale(0.96); }
+
+/* Progress bar */
+.hf-progress-track {
+  flex: 1;
+  height: 5px;
+  background: rgba(255,255,255,0.12);
+  border-radius: 3px;
+  position: relative;
+  cursor: pointer;
+  transition: height 0.15s;
+}
+.hf-progress-track:hover { height: 7px; }
+.hf-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #10B981, #14B8A6);
+  border-radius: 3px;
+  pointer-events: none;
+}
+.hf-progress-thumb {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: #14B8A6;
+  border: 2px solid #fff;
+  box-shadow: 0 0 6px rgba(20,184,166,0.8);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+.hf-progress-track:hover .hf-progress-thumb { opacity: 1; }
+
+/* Time display */
+.hf-time {
+  font-size: 11px;
+  font-weight: 600;
+  color: #94A3B8;
+  font-variant-numeric: tabular-nums;
+  min-width: 34px;
+  text-align: center;
+}
+
+/* Speed selector */
+.hf-speed-select {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: #CBD5E1;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 6px;
+  cursor: pointer;
+  outline: none;
+}
+.hf-speed-select:hover { border-color: rgba(20,184,166,0.4); }
+
+/* Scene counter */
+.hf-scene-counter {
+  font-size: 10px;
+  font-weight: 700;
+  color: #64748B;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+/* Fullscreen mode */
+.hf-player-shell:fullscreen {
+  background: #000;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  border-radius: 0;
+}
+.hf-player-shell:fullscreen .hf-viewport-wrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  overflow: hidden;
+}
+.hf-player-shell:fullscreen .hf-iframe {
+  width: 1280px;
+  height: 720px;
+}
+.hf-player-shell:fullscreen .hf-player-top-overlay {
+  display: none !important;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   FEEDBACK THUMBS ROW (inline in response card)
+   ═══════════════════════════════════════════════════════════ */
+.fb-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+.fb-row.fb-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.fb-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.45);
+  letter-spacing: 0.3px;
+  margin-right: 4px;
+}
+.fb-thumb {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  font-size: 17px;
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+  display: flex; align-items: center; justify-content: center;
+  padding: 0;
+}
+.fb-thumb:hover { transform: scale(1.2); background: rgba(255,255,255,0.12); }
+.fb-thumb:disabled { opacity: 0.5; cursor: default; transform: none; }
+.fb-thumb.fb-selected-up {
+  background: rgba(34, 197, 94, 0.2);
+  border-color: rgba(34, 197, 94, 0.5);
+  box-shadow: 0 0 12px rgba(34, 197, 94, 0.35);
+  animation: fb-bounce 0.4s ease;
+}
+.fb-thumb.fb-selected-down {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: rgba(239, 68, 68, 0.5);
+  box-shadow: 0 0 12px rgba(239, 68, 68, 0.35);
+}
+@keyframes fb-bounce {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.4); }
+  70%  { transform: scale(0.9); }
+  100% { transform: scale(1); }
+}
+.fb-thanks {
+  font-size: 11px;
+  font-weight: 700;
+  color: #22c55e;
+  margin-left: 6px;
+  animation: fb-fadein 0.4s ease;
+}
+.fb-thanks-down { color: #f59e0b; }
+@keyframes fb-fadein { from { opacity:0; transform: translateX(-4px); } to { opacity:1; transform: none; } }
+
+/* ═══════════════════════════════════════════════════════════
+   FEEDBACK DISLIKE OVERLAY MODAL
+   ═══════════════════════════════════════════════════════════ */
+.fb-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(5, 8, 18, 0.80);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.fb-overlay.fb-open { opacity: 1; }
+.fb-modal {
+  background: linear-gradient(145deg, rgba(15, 23, 42, 0.98), rgba(9, 14, 27, 0.98));
+  border: 1px solid rgba(20, 184, 166, 0.28);
+  border-radius: 24px;
+  padding: 36px 32px 28px;
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(20,184,166,0.1);
+  transform: scale(0.92) translateY(10px);
+  transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1);
+}
+.fb-overlay.fb-open .fb-modal { transform: scale(1) translateY(0); }
+
+/* Robot avatar with pulsing glow */
+.fb-robot-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+.fb-robot-glow {
+  position: absolute;
+  width: 80px; height: 80px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(20,184,166,0.35) 0%, transparent 70%);
+  animation: fb-pulse-glow 2s ease-in-out infinite;
+}
+@keyframes fb-pulse-glow {
+  0%, 100% { transform: scale(1);   opacity: 0.7; }
+  50%       { transform: scale(1.4); opacity: 1;   }
+}
+.fb-robot-avatar {
+  font-size: 54px;
+  position: relative;
+  z-index: 1;
+  animation: fb-robot-float 3s ease-in-out infinite;
+}
+@keyframes fb-robot-float {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-6px); }
+}
+
+.fb-robot-question {
+  font-size: 15px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.88);
+  line-height: 1.5;
+  margin-bottom: 18px;
+}
+.fb-transcript-box {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  padding: 14px 16px;
+  min-height: 60px;
+  font-size: 13px;
+  color: rgba(255,255,255,0.75);
+  line-height: 1.55;
+  margin-bottom: 20px;
+  text-align: left;
+  word-break: break-word;
+}
+.fb-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+.fb-mic-btn {
+  background: rgba(20,184,166,0.15);
+  border: 1px solid rgba(20,184,166,0.4);
+  color: #14b8a6;
+  border-radius: 10px;
+  padding: 9px 18px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.fb-mic-btn:hover { background: rgba(20,184,166,0.25); }
+.fb-submit-btn {
+  background: rgba(34,197,94,0.15);
+  border: 1px solid rgba(34,197,94,0.4);
+  color: #22c55e;
+  border-radius: 10px;
+  padding: 9px 18px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.fb-submit-btn:hover { background: rgba(34,197,94,0.25); }
+.fb-skip-btn {
+  background: transparent;
+  border: none;
+  color: rgba(255,255,255,0.3);
+  font-size: 12px;
+  cursor: pointer;
+  padding: 4px 8px;
+  transition: color 0.2s ease;
+}
+.fb-skip-btn:hover { color: rgba(255,255,255,0.55); }
 

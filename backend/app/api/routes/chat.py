@@ -29,6 +29,27 @@ from backend.app.core.firestore_service import check_global_query_cache, save_to
 from backend.app.orchestrator_test.test_runner import run_orchestrator_pipeline
 from backend.app.services.deployment_logger import save_chat_log_background
 
+def format_text_explanation(text: str) -> str:
+    if not text:
+        return text
+    
+    import re
+    # 1. Add space after punctuation if followed directly by any letter (English or Devanagari)
+    text = re.sub(r'([.!?।])(?=[a-zA-Z\u0900-\u097F])', r'\1 ', text)
+    
+    # 2. Format sideheadings (bold text followed by a colon) to put the description on a new line
+    text = re.sub(r'-\s*\*\*([^*]+)\*\*:\s*', r'- **\1**:<br>', text)
+    text = re.sub(r'(^|\n)\s*\*\*([^*]+)\*\*:\s*(?!<br>)', r'\1**\2**:<br>', text)
+    
+    # 3. Replace inline bullet markers (e.g. ".- **" or " - **") with clean double newlines and bullets
+    text = re.sub(r'(?<!\n)(?:\s*\.\s*)-\s*(\*\*)?', r'.\n\n- \1', text)
+    text = re.sub(r'(?<!\n)(?:\s+)-\s*(\*\*)?', r'\n\n- \1', text)
+    
+    # 4. Ensure double newlines before bullets for clean vertical spacing in markdown rendering
+    text = re.sub(r'(?<!\n)\n-\s*', r'\n\n- ', text)
+    
+    return text
+
 logger = logging.getLogger(__name__)
 
 router = APIRouter()
@@ -43,6 +64,12 @@ class SummaryRequest(BaseModel):
     class_name: str
     subject: str
     chapter_name: str
+
+
+class FeedbackRequest(BaseModel):
+    query_id: str
+    feedback_type: str            # "like" or "dislike"
+    feedback_text: Optional[str] = None
 
 
 def track_cumulative_analytics(uid: str, query: str, subject: str, chapter_name: str = "Unknown"):
@@ -412,12 +439,29 @@ async def smart_query_engine(
             # 1. Load summary list for grade mapping
             session = session_manager.get_or_create_session(book_uuid, session_id)
             
+            # Extract requested class number from query params as fallback.
+            # Use request.query_params directly (more robust across invocation styles).
+            fallback_class = 0
+            try:
+                raw_class_param = request.query_params.get('class_name') or request.query_params.get('class') or class_name or ''
+                print(f"[DEBUG] raw_class_param from request.query_params/class_name: {raw_class_param!r}")
+                import re
+                digits = re.findall(r'\d+', str(raw_class_param))
+                print(f"[DEBUG] extracted digits from raw_class_param: {digits!r}")
+                if digits:
+                    fallback_class = int(digits[0])
+                print(f"[DEBUG] parsed fallback_class: {fallback_class}")
+            except Exception:
+                # Keep fallback_class as 0 on parse error
+                pass
+
             # Get authenticated student profile from Firestore
+            print(f"[DEBUG] uid: {uid!r}, fallback_class (before building student_profile): {fallback_class}")
             student_profile = {
                 "uid": uid,
                 "email": "anonymous@cg.com",
                 "name": "Sonu",
-                "class": 8,
+                "class": int(fallback_class) if fallback_class is not None else 0,
                 "board": "CBSE",
                 "role": "student"
             }
@@ -426,14 +470,36 @@ async def smart_query_engine(
                 if user_doc.exists:
                     udata = user_doc.to_dict()
                     # Strip all string fields fetched during auth
+                    u_class = udata.get("class")
+                    parsed_class = fallback_class
+                    if u_class is not None:
+                        try:
+                            if isinstance(u_class, str):
+                                digits = re.findall(r'\d+', u_class)
+                                parsed_class = int(digits[0]) if digits else fallback_class
+                            else:
+                                parsed_class = int(u_class)
+                        except Exception:
+                            pass
+
                     student_profile = {
                         "uid": uid,
                         "email": str(udata.get("email", "")).strip(),
                         "name": str(udata.get("name", "Sonu")).strip(),
-                        "class": int(udata.get("class", 8)) if udata.get("class") is not None else 8,
+                        "class": int(parsed_class) if parsed_class is not None else int(fallback_class or 0),
                         "board": str(udata.get("board", "CBSE")).strip(),
                         "role": str(udata.get("role", "student")).strip()
                     }
+
+            else:
+                student_profile = {
+                    "uid": uid,
+                    "email": "anonymous@cg.com",
+                    "name": "Sonu",
+                    "class": int(fallback_class) if fallback_class is not None else 0,
+                    "board": "CBSE",
+                    "role": "student"
+                }
 
             # 2. Check global cache hit
             cached = check_global_query_cache(query, student_profile["class"], subject)
@@ -445,20 +511,43 @@ async def smart_query_engine(
                 matched_subject = out.get("matched_subject")
                 matched_chapter = out.get("matched_chapter")
                 format_decision = out.get("format_decision", "QUICK_ANSWER")
+                text_script = out.get("text_narration") or ""
 
                 print(f"[CACHE HIT] Reusing cached query payload. Format: {format_decision}")
                 yield f"data: {json.dumps({'type': 'intent', 'intent': classification, 'subject': matched_subject, 'chapter': matched_chapter, 'format': format_decision})}\n\n"
                 
-                # Stream pre-cached text_narration sentence-by-sentence for synchronized TTS pipeline
-                text_script = out.get("text_narration") or ""
-                import re
-                cached_sentences = [s.strip() for s in re.split(r'(?<=[.!?।])\s+', text_script) if s.strip()]
-                if not cached_sentences:
-                    cached_sentences = [text_script]
-
-                for s in cached_sentences:
-                    yield f"data: {json.dumps({'display_text': s + ' '})}\n\n"
-                    await asyncio.sleep(0.05)
+                # Stream pre-cached text_narration in a structured bulleted layout matching the cache miss path if video required
+                if format_decision == "VIDEO_REQUIRED" and out.get("video_storyboard"):
+                    storyboard = out.get("video_storyboard")
+                    scenes = storyboard.get("scenes", [])
+                    for idx, s in enumerate(scenes):
+                        title = s.get("template_data", {}).get("title") or s.get("template_data", {}).get("heading") or s.get("purpose") or f"Scene {s.get('scene_no')}"
+                        script = s.get("teacher_script") or ""
+                        audio_url = s.get("audio_url") or ""
+                        
+                        # Format as markdown bullet point
+                        bullet_text = f"- **{title}**: {script}"
+                        bullet_text = format_text_explanation(bullet_text)
+                        text_chunk = bullet_text + "\n\n"
+                        
+                        yield f"data: {json.dumps({'display_text': text_chunk, 'audio_url': audio_url})}\n\n"
+                        await asyncio.sleep(0.05)
+                else:
+                    # STANDARD RAG/QUICK_ANSWER OR NON-VIDEO CACHE HIT FLOW
+                    text_script = out.get("text_narration") or ""
+                    text_script = format_text_explanation(text_script)
+                    import re
+                    lines = text_script.split('\n')
+                    for l_idx, line in enumerate(lines):
+                        if not line.strip():
+                            yield f"data: {json.dumps({'display_text': '\n'})}\n\n"
+                            continue
+                        
+                        sentences = [s.strip() for s in re.split(r'(?<=[.!?।])\s+', line) if s.strip()]
+                        for s_idx, s in enumerate(sentences):
+                            prefix = "\n" if (l_idx > 0 and s_idx == 0) else ""
+                            yield f"data: {json.dumps({'display_text': prefix + s + ' '})}\n\n"
+                            await asyncio.sleep(0.05)
                 
                 # If a video lesson is ready, yield metadata details
                 if format_decision == "VIDEO_REQUIRED" and interactive_url:
@@ -478,6 +567,38 @@ async def smart_query_engine(
                     }
                     yield f"data: {json.dumps(ready_payload)}\n\n"
                 
+                # Log query to Firestore user_queries collection
+                _query_doc_id = None
+                try:
+                    from backend.app.services.analytics import analytics_service
+                    _query_doc_id = analytics_service.log_query(
+                        uid=uid,
+                        class_name=str(student_profile["class"]),
+                        subject=subject,
+                        chapter_id=0,
+                        chapter_name=matched_chapter or "Unknown",
+                        query=query,
+                        reformulated_query=out.get("reformulated_query", query),
+                        mode="text",
+                        llm_action=classification,
+                        answer_length=len(text_script),
+                        query_json_url=None
+                    )
+
+                    # Rebuild/update user analytics (streaks, counts, etc.)
+                    analytics_service.update_user_stats(
+                        uid=uid,
+                        subject=subject,
+                        chapter_id=0,
+                        class_name=str(student_profile["class"])
+                    )
+                except Exception as log_err:
+                    logger.error(f"[ANALYTICS] Failed to log query to user_queries on cache hit: {log_err}")
+
+                # Yield the Firestore document ID so the frontend can attach feedback to this query
+                if _query_doc_id:
+                    yield f"data: {json.dumps({'type': 'query_id', 'query_id': _query_doc_id})}\n\n"
+
                 yield "data: [DONE]\n\n"
                 return
 
@@ -485,6 +606,7 @@ async def smart_query_engine(
             # Run in thread executor so the async event loop is NOT blocked during LLM calls
             # Propagate ContextVars (tracking context) using copy_context().run to fix 0-stats issue
             print(f"[CACHE MISS] Calling single-pass Orchestrator Agent...")
+            print(f"[DEBUG] student_profile before orchestrator call: {student_profile}")
             import contextvars
             ctx = contextvars.copy_context()
             loop = asyncio.get_event_loop()
@@ -518,18 +640,73 @@ async def smart_query_engine(
             # Yield classification intent (this tells frontend about subject/chapter metadata for backgrounds)
             yield f"data: {json.dumps({'type': 'intent', 'intent': classification, 'subject': matched_subject, 'chapter': matched_chapter, 'format': format_decision})}\n\n"
 
-            # Stream text narration sentence-by-sentence so TTS pipeline receives clean scene/sentence chunks
-            import re
-            sentences = [s.strip() for s in re.split(r'(?<=[.!?।])\s+', text_script) if s.strip()]
-            if not sentences:
-                sentences = [text_script]
+            if format_decision == "VIDEO_REQUIRED" and out.get("video_storyboard"):
+                storyboard_payload = out.get("video_storyboard")
+                
+                # Make sure the storyboard has a unique lesson_id
+                import uuid
+                lesson_id = storyboard_payload.get("lesson_id") or f"vl_{uuid.uuid4().hex[:8]}"
+                storyboard_payload["lesson_id"] = lesson_id
+                
+                scenes = storyboard_payload.get("scenes", [])
+                
+                # Step 1: Pre-generate voice narration audio clips for all scenes!
+                yield f"data: {json.dumps({'type': 'progress', 'step': 'creating_narration', 'status': 'in_progress', 'message': 'Pre-generating lesson audio tracks...'})}\n\n"
+                
+                from backend.app.services.visual_learning.visual_audio_generator import generate_slide_audio
+                audio_urls = []
+                try:
+                    audio_urls = await generate_slide_audio(scenes, lesson_id)
+                except Exception as audio_err:
+                    print(f"[ERROR] Pre-generating slide audio failed: {audio_err}")
+                
+                # Map audio URLs back to scenes
+                for idx, url in enumerate(audio_urls):
+                    if idx < len(scenes) and url:
+                        scenes[idx]["audio_url"] = url
+                
+                yield f"data: {json.dumps({'type': 'progress', 'step': 'creating_narration', 'status': 'complete', 'message': 'Lesson audio tracks pre-generated.'})}\n\n"
+                
+                # Step 2: Stream scene-by-scene. Chunk 1 is Scene 1 script + its audio_url!
+                for idx, s in enumerate(scenes):
+                    title = s.get("template_data", {}).get("title") or s.get("template_data", {}).get("heading") or s.get("purpose") or f"Scene {s.get('scene_no')}"
+                    script = s.get("teacher_script") or ""
+                    audio_url = s.get("audio_url") or ""
+                    
+                    # Format as markdown bullet point
+                    bullet_text = f"- **{title}**: {script}"
+                    # Apply cleaning overrides (spaces after punctuation)
+                    bullet_text = format_text_explanation(bullet_text)
+                    
+                    # Add trailing newline for visual separation between bullets
+                    text_chunk = bullet_text + "\n\n"
+                    
+                    # Stream this scene script + its Supabase audio_url to the client!
+                    yield f"data: {json.dumps({'display_text': text_chunk, 'audio_url': audio_url})}\n\n"
+                    await asyncio.sleep(0.5)
 
-            for s in sentences:
-                yield f"data: {json.dumps({'display_text': s + ' '})}\n\n"
-                await asyncio.sleep(0.05)
+            else:
+                # STANDARD RAG/QUICK_ANSWER STREAMING FLOW
+                # Post-process formatting for double spacing, clean bullets, and spaces after periods
+                text_script = format_text_explanation(text_script)
+                
+                # Stream text narration sentence-by-sentence preserving bullet newlines
+                import re
+                lines = text_script.split('\n')
+                for l_idx, line in enumerate(lines):
+                    if not line.strip():
+                        yield f"data: {json.dumps({'display_text': '\n'})}\n\n"
+                        continue
+                    
+                    sentences = [s.strip() for s in re.split(r'(?<=[.!?।])\s+', line) if s.strip()]
+                    for s_idx, s in enumerate(sentences):
+                        prefix = "\n" if (l_idx > 0 and s_idx == 0) else ""
+                        yield f"data: {json.dumps({'display_text': prefix + s + ' '})}\n\n"
+                        await asyncio.sleep(0.05)
 
             # If format decision is video required, compile the video lesson asynchronously in the background
             interactive_url = None
+            updated_lesson_package = None
             if format_decision == "VIDEO_REQUIRED":
                 print("[ORCHESTRATOR] Starting background Hyperframes video generation...")
                 from backend.app.services.visual_learning.visual_learning_service import generate_visual_lesson_stream
@@ -562,9 +739,69 @@ async def smart_query_engine(
                         # Handle ready payload
                         if chunk_json.get("type") == "lesson_ready":
                             interactive_url = chunk_json.get("interactive_url")
+                            updated_lesson_package = chunk_json.get("lesson_package")
                             yield f"data: {json.dumps(chunk_json)}\n\n"
                     except Exception as json_err:
                         logger.error(f"[SSE FORWARD] Parse error: {json_err} on raw: {raw_data}")
+
+            # Compile query transaction JSON payload for Supabase Cloud Storage
+            import uuid
+            query_id = f"q_{uuid.uuid4().hex[:8]}"
+            
+            # Construct unified transaction package
+            transaction_payload = {
+                "query_id": query_id,
+                "session_id": session["session_id"],
+                "uid": uid,
+                "class": student_profile["class"],
+                "subject": subject,
+                "query": query,
+                "reformulated_query": out.get("reformulated_query", query),
+                "classification": classification,
+                "format_decision": format_decision,
+                "text_narration": text_script,
+                "timestamp": datetime.datetime.utcnow().isoformat() + "Z",
+                "video_storyboard": updated_lesson_package or out.get("video_storyboard"),
+                "media_urls": {
+                    "interactive_url": interactive_url,
+                    "storyboard_json_url": (updated_lesson_package or {}).get("storyboard_json_url") if updated_lesson_package else None
+                }
+            }
+            
+            # Create local user history directory
+            import os
+            ROUTE_DIR = os.path.dirname(os.path.abspath(__file__))
+            PROJECT_ROOT = os.path.abspath(os.path.join(ROUTE_DIR, "..", "..", "..", ".."))
+            user_history_dir = os.path.join(PROJECT_ROOT, "uploads", "user_history", uid)
+            os.makedirs(user_history_dir, exist_ok=True)
+            
+            transaction_file_path = os.path.join(user_history_dir, f"{query_id}.json")
+            query_json_url = None
+            try:
+                with open(transaction_file_path, "w", encoding="utf-8") as f:
+                    json.dump(transaction_payload, f, indent=2, ensure_ascii=False)
+                
+                # Upload transaction JSON to Supabase Cloud Storage
+                from backend.app.core.supabase_storage import upload_file_to_supabase
+                query_json_url = upload_file_to_supabase(
+                    transaction_file_path,
+                    f"user_history/{uid}/{query_id}.json"
+                )
+                
+                if query_json_url:
+                    transaction_payload["query_json_url"] = query_json_url
+                    # Update local copy with public URL
+                    with open(transaction_file_path, "w", encoding="utf-8") as f:
+                        json.dump(transaction_payload, f, indent=2, ensure_ascii=False)
+            except Exception as store_err:
+                logger.error(f"[History Logger] Failed to save/upload transaction JSON: {store_err}")
+            finally:
+                # Clean up local temporary file to save space
+                if os.path.exists(transaction_file_path):
+                    try:
+                        os.remove(transaction_file_path)
+                    except Exception:
+                        pass
 
             # Register compiled query results to the global cache
             save_to_global_query_cache(
@@ -585,6 +822,38 @@ async def smart_query_engine(
                 "timestamp": datetime.datetime.now().isoformat()
             }
             session_manager.add_turn(session["session_id"], turn_data)
+
+            # Log query to Firestore user_queries collection
+            _query_doc_id = None
+            try:
+                from backend.app.services.analytics import analytics_service
+                _query_doc_id = analytics_service.log_query(
+                    uid=uid,
+                    class_name=str(student_profile["class"]),
+                    subject=subject,
+                    chapter_id=0,
+                    chapter_name=matched_chapter or "Unknown",
+                    query=query,
+                    reformulated_query=out.get("reformulated_query", query),
+                    mode="text",
+                    llm_action=classification,
+                    answer_length=len(text_script),
+                    query_json_url=query_json_url
+                )
+
+                # Rebuild/update user analytics (streaks, counts, etc.)
+                analytics_service.update_user_stats(
+                    uid=uid,
+                    subject=subject,
+                    chapter_id=0,
+                    class_name=str(student_profile["class"])
+                )
+            except Exception as log_err:
+                logger.error(f"[ANALYTICS] Failed to log query to user_queries: {log_err}")
+
+            # Yield the Firestore document ID so the frontend can attach feedback to this query
+            if _query_doc_id:
+                yield f"data: {json.dumps({'type': 'query_id', 'query_id': _query_doc_id})}\n\n"
 
             yield "data: [DONE]\n\n"
             from backend.app.utils.gemini_tracker import print_query_performance_report
@@ -721,3 +990,30 @@ async def websocket_conversation(
         print(f"[App] WebSocket error for {conversation_id}: {exc}")
     finally:
         conversation_manager.disconnect(conversation_id)
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# STUDENT FEEDBACK ENDPOINT
+# ─────────────────────────────────────────────────────────────────────────────
+
+@router.post("/api/feedback")
+async def submit_feedback(request: FeedbackRequest):
+    """
+    Save student feedback (like / dislike + optional voice transcript)
+    back to the matching user_queries Firestore document.
+    """
+    try:
+        from google.cloud import firestore as _fs
+        doc_ref = db.collection("user_queries").document(request.query_id)
+        doc_ref.update({
+            "feedback": {
+                "type": request.feedback_type,
+                "text": request.feedback_text or "",
+                "timestamp": _fs.SERVER_TIMESTAMP
+            }
+        })
+        logger.info(f"[FEEDBACK] Saved '{request.feedback_type}' for query {request.query_id}")
+        return {"status": "ok"}
+    except Exception as e:
+        logger.error(f"[FEEDBACK] Failed to save feedback: {e}")
+        raise HTTPException(status_code=500, detail="Failed to save feedback.")

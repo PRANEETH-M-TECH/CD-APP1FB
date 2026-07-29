@@ -1,0 +1,147 @@
+{
+  "timestamp": "2026-07-29T22:05:42.974880",
+  "execution_time_seconds": 20.07,
+  "authenticated_student": {
+    "uid": "qOeL4u9Cp5N0jtD24J405ORwVsn1",
+    "email": "student6@cg.com",
+    "name": "Gaurav",
+    "class": 6,
+    "board": "CBSE",
+    "role": "student"
+  },
+  "raw_user_query": "I did not understand an experiment which was explained by my teacher which was how to measure accurately by using the metre scale",
+  "orchestrator_output": {
+    "is_authorized": true,
+    "refusal_reason": null,
+    "classification": "CURRICULUM",
+    "reformulated_query": "How to measure length accurately using a metre scale",
+    "matched_subject": "Class 6 Science",
+    "matched_chapter": "LEARNING HOW TO MEASURE",
+    "complexity_level": 2,
+    "format_decision": "VIDEO_REQUIRED",
+    "text_narration": "Measuring the length of an object correctly using a metre scale is an essential skill in science. To get an accurate measurement every time, we need to follow three important rules. First, place the scale in contact with the object along its entire length. Make sure the scale is strictly parallel to the edge you are measuring, without any slant or tilt. Second, if the zero mark of your scale is worn out or broken, do not start from zero. Instead, start from any other full mark, such as 1 centimetre, and subtract that value from the final reading at the end. Third, your eye must be placed directly above the reading mark. Looking at the scale from the left or right side causes parallax error and leads to wrong measurements.",
+    "video_storyboard": {
+      "lesson_title": "How to Measure Length Accurately Using a Metre Scale",
+      "layout_mode": "timeline",
+      "theme": "Science",
+      "global_assets": [],
+      "connections": [],
+      "scenes": [
+        {
+          "scene_no": 1,
+          "purpose": "Introduce the rules for measuring accurately using a metre scale.",
+          "template_id": "title_slide",
+          "template_selection_reasoning": "Standard introductory scene for video lesson structure.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": "title_card"
+          },
+          "teacher_script": "Measuring the length of an object correctly using a metre scale is an essential skill in science. To get an accurate measurement every time, we need to follow three important rules.",
+          "template_data": {
+            "title": "Measuring Length Accurately",
+            "subtitle": "Class 6 Science: Precautions in Measurement",
+            "icon": "ruler"
+          }
+        },
+        {
+          "scene_no": 2,
+          "purpose": "Explain Rule 1: Correct placement of scale along the length.",
+          "template_id": "concept_diagram",
+          "template_selection_reasoning": "Shows rule 1 clearly with key visual directives.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": "rule1_node"
+          },
+          "teacher_script": "First, place the scale in contact with the object along its entire length. Make sure the scale is strictly parallel to the edge you are measuring, without any slant or tilt.",
+          "template_data": {
+            "node_id": "rule1_node",
+            "title": "Rule 1: Contact and Alignment",
+            "description": "Place the scale touching the object and align it straight along the edge.",
+            "key_points": [
+              "Scale must touch the object",
+              "Keep the scale straight, not tilted"
+            ]
+          }
+        },
+        {
+          "scene_no": 3,
+          "purpose": "Explain Rule 2: Handling broken or worn-out zero marks.",
+          "template_id": "before_after_slider",
+          "template_selection_reasoning": "Compares using a broken zero mark versus using a clear full mark like 1.0 cm.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": "broken_zero_slider"
+          },
+          "teacher_script": "Second, if the zero mark of your scale is worn out or broken, do not start from zero. Instead, start from any other full mark, such as 1 centimetre, and subtract that value from the final reading at the end.",
+          "template_data": {
+            "slider_id": "broken_zero_slider",
+            "before_label": "Broken Zero Mark",
+            "before_text": "Do not start from a broken zero mark as it gives inaccurate results.",
+            "after_label": "Start from 1.0 cm Mark",
+            "after_text": "Start at 1 cm. Reading = Final Mark (7.5 cm) - Initial Mark (1.0 cm) = 6.5 cm."
+          }
+        },
+        {
+          "scene_no": 4,
+          "purpose": "Explain Rule 3: Correct eye positioning to avoid parallax error.",
+          "template_id": "column_comparison",
+          "template_selection_reasoning": "Contrasts correct vertical viewing position with incorrect side viewing position.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": "eye_position_comp"
+          },
+          "teacher_script": "Third, your eye must be placed directly above the reading mark. Looking at the scale from the left or right side causes parallax error and leads to wrong measurements.",
+          "template_data": {
+            "comparison_id": "eye_position_comp",
+            "column1": {
+              "title": "Correct Position",
+              "items": [
+                "Eye positioned vertically above reading point",
+                "Ensures accurate reading"
+              ]
+            },
+            "column2": {
+              "title": "Incorrect Position",
+              "items": [
+                "Eye looking from left or right side",
+                "Causes Parallax Error (wrong reading)"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "rag_retrieval_executed": true,
+  "retrieved_top10_chunks": [
+    {
+      "chunk_index": 1,
+      "score": 0.0,
+      "book_name": "",
+      "chapter_name": "",
+      "content_snippet": "..."
+    },
+    {
+      "chunk_index": 2,
+      "score": 0.0,
+      "book_name": "",
+      "chapter_name": "",
+      "content_snippet": "..."
+    },
+    {
+      "chunk_index": 3,
+      "score": 0.0,
+      "book_name": "",
+      "chapter_name": "",
+      "content_snippet": "..."
+    }
+  ]
+}

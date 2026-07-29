@@ -384,8 +384,16 @@ function setupChatSubmitGlobal() {
         const contentDiv = document.getElementById(`ai-content-${currentTurn}`);
 
         // Build request
-        const studentClass = window.currentUserClass || "8";
+        const studentClass = String(window.currentUserClass || localStorage.getItem('userClass') || '').replace(/\D/g, '');
         const selectedBook = window.selectedBook;
+
+        if (!selectedBook && !studentClass) {
+            alert('Your class information is still loading. Please wait a moment or refresh the page.');
+            if (submitButton) submitButton.removeAttribute('disabled');
+            if (listChaptersBtn) listChaptersBtn.classList.remove('hidden');
+            return;
+        }
+
         const params = new URLSearchParams({
             book_uuid: selectedBook ? selectedBook.id : "global",
             query: query,
@@ -395,19 +403,28 @@ function setupChatSubmitGlobal() {
         });
         if (_sessionId) params.append('session_id', _sessionId);
 
-        // Attach auth token with non-blocking timeout
+        // Attach auth token — use pre-cached token for instant attach (no race timeout)
         try {
-            if (typeof firebase !== 'undefined' && firebase.auth) {
+            // 1st: Use the globally cached token (set on page load, refreshed every 55min)
+            if (window._cachedAuthToken) {
+                params.append('token', window._cachedAuthToken);
+                console.log('[AUTH] Using cached token for request');
+            } else if (typeof firebase !== 'undefined' && firebase.auth) {
+                // 2nd: Live fetch with timeout (fallback for first query before cache is set)
                 const user = firebase.auth().currentUser;
                 if (user) {
                     const tokenPromise = user.getIdToken();
-                    const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject('timeout'), 500));
+                    const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject('timeout'), 2000));
                     const token = await Promise.race([tokenPromise, timeoutPromise]);
-                    if (token) params.append('token', token);
+                    if (token) {
+                        params.append('token', token);
+                        window._cachedAuthToken = token; // update cache
+                        console.log('[AUTH] Fetched live token and cached it');
+                    }
                 }
             }
         } catch(e) {
-            console.warn('[submitSmartQuery] Token retrieval skipped or timed out:', e);
+            console.warn('[AUTH] Token retrieval skipped or timed out:', e);
         }
 
         // Audio Output & Teacher Reading Chunk Streaming Setup
@@ -456,6 +473,8 @@ function setupChatSubmitGlobal() {
                 if (submitButton) submitButton.removeAttribute('disabled');
                 if (listChaptersBtn) listChaptersBtn.classList.remove('hidden');
                 chatHistory.scrollTop = chatHistory.scrollHeight;
+                // Inject feedback thumbs after a short delay
+                injectFeedbackButtons(currentTurn);
                 return;
             }
             try {
@@ -477,9 +496,17 @@ function setupChatSubmitGlobal() {
                         else if (subject.includes('english')) card.classList.add('subject-english');
                         else card.classList.add('subject-gk');
                     }
+                } else if (data.type === 'query_id') {
+                    // Store the Firestore doc ID on the card for feedback association
+                    const card = document.getElementById(`ai-card-global-${currentTurn}`);
+                    if (card) card.dataset.queryId = data.query_id;
                 } else if (data.display_text) {
                     if (useStreamingAudio) {
-                        window.ttsPipeline.pushToken(data.display_text);
+                        if (data.audio_url) {
+                            window.ttsPipeline.pushPreGeneratedChunk(data.display_text, data.audio_url);
+                        } else {
+                            window.ttsPipeline.pushToken(data.display_text);
+                        }
                     } else {
                         fullText += data.display_text;
                         if (contentDiv) {
@@ -510,6 +537,7 @@ function setupChatSubmitGlobal() {
             }
         };
 
+
         source.onerror = function(e) {
             console.error('[submitSmartQuery] EventSource error:', e);
             source.close();
@@ -528,8 +556,30 @@ function setupChatSubmitGlobal() {
                 const timeId    = `hf-time-${turnId}`;
                 const sceneId   = `hf-scene-${turnId}`;
 
+                // By default, hide text answer and card top once video is mounted and ready
+                const cardTop = document.querySelector(`#ai-card-global-${turnId} .ai-card-top`);
+                const textContent = document.getElementById(`ai-content-${turnId}`);
+                if (cardTop) cardTop.style.display = 'none';
+                if (textContent) textContent.style.display = 'none';
+
+                // Append the toggle button directly to the card container so it sits in the top-right
+                const card = document.getElementById(`ai-card-global-${turnId}`);
+                if (card) {
+                    const existingBtn = document.getElementById(`hf-toggle-text-${turnId}`);
+                    if (existingBtn) existingBtn.remove();
+                    const btnContainer = document.createElement('div');
+                    btnContainer.className = 'hf-player-top-overlay';
+                    btnContainer.style.cssText = 'position: absolute; top: 12px; right: 12px; z-index: 100;';
+                    btnContainer.innerHTML = `
+                      <button class="hf-overlay-btn" id="hf-toggle-text-${turnId}" onclick="hfToggleTextAnswer('${turnId}')" style="background: rgba(9, 13, 22, 0.75); border: 1px solid rgba(20, 184, 166, 0.45); color: #14b8a6; padding: 6px 12px; border-radius: 8px; font-size: 11px; font-weight: 700; cursor: pointer; backdrop-filter: blur(4px); transition: all 0.2s ease;">
+                        Show Text Answer
+                      </button>
+                    `;
+                    card.appendChild(btnContainer);
+                }
+
                 mount.innerHTML = `
-<div class="hf-player-shell" id="${playerId}">
+<div class="hf-player-shell" id="${playerId}" style="position: relative;">
   <!-- Viewport: scales the 1280×720 Hyperframes canvas to fit any width -->
   <div class="hf-viewport-wrapper" id="hf-viewport-${turnId}">
     <div class="hf-scale-box" id="hf-scalebox-${turnId}">
@@ -600,6 +650,31 @@ function setupChatSubmitGlobal() {
                     hfScaleViewport(`hf-viewport-${turnId}`, `hf-scalebox-${turnId}`);
                 });
 
+                // Observe size changes via ResizeObserver for robust layout adaptation
+                if (typeof ResizeObserver !== 'undefined') {
+                    const wrapperEl = document.getElementById(`hf-viewport-${turnId}`);
+                    if (wrapperEl) {
+                        const ro = new ResizeObserver(entries => {
+                            for (let entry of entries) {
+                                if (entry.contentRect.width > 0) {
+                                    hfScaleViewport(`hf-viewport-${turnId}`, `hf-scalebox-${turnId}`);
+                                }
+                            }
+                        });
+                        ro.observe(wrapperEl);
+                        // Save observer reference on the element
+                        wrapperEl._resizeObserver = ro;
+                    }
+                }
+
+                // Re-scale once the iframe is fully loaded in the DOM
+                const iframeEl = document.getElementById(iframeId);
+                if (iframeEl) {
+                    iframeEl.addEventListener('load', () => {
+                        hfScaleViewport(`hf-viewport-${turnId}`, `hf-scalebox-${turnId}`);
+                    });
+                }
+
                 // Listen for postMessage events from this iframe using turnId
                 window.addEventListener('message', function hfListener(e) {
                     if (!e.data || e.data.source !== 'HYPERFRAMES_ENGINE') return;
@@ -611,7 +686,12 @@ function setupChatSubmitGlobal() {
                     const sceneEl = document.getElementById(sceneId);
                     const state   = document.getElementById(`hf-ppstate-${turnId}`);
 
-                    if (e.data.type === 'PLAYING') {
+                    if (e.data.type === 'READY') {
+                        const dur = e.data.duration || e.data.totalDuration || 0;
+                        if (state) state.dataset.duration = dur;
+                        if (durEl && dur > 0) durEl.textContent = hfFmtTime(dur);
+                        if (sceneEl && e.data.totalScenes) sceneEl.textContent = `Scene 1 / ${e.data.totalScenes}`;
+                    } else if (e.data.type === 'PLAYING') {
                         if (ppBtn) { ppBtn.querySelector('.icon-play').style.display='none'; ppBtn.querySelector('.icon-pause').style.display=''; }
                         if (state) state.dataset.playing = '1';
                     } else if (e.data.type === 'PAUSED') {
@@ -679,7 +759,285 @@ function hfSeekClick(e, iframeId, trackId, stateId) {
     if (!dur) return;
     const rect = track.getBoundingClientRect();
     const pct  = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
-    hfCmd(iframeId, 'SEEK', { targetTime: pct * dur });
+    const targetTime = pct * dur;
+
+    // Send the seek command to the Hyperframes iframe
+    hfCmd(iframeId, 'SEEK', { targetTime });
+
+    // Update the progress UI immediately for responsiveness
+    const prog = document.getElementById(trackId).querySelector('.hf-progress-fill');
+    const thumb = document.getElementById(trackId).querySelector('.hf-progress-thumb');
+    const timeEl = document.getElementById(trackId.replace('track', 'time'));
+    if (prog) prog.style.width = `${(pct * 100).toFixed(1)}%`;
+    if (thumb) thumb.style.left = `${(pct * 100).toFixed(1)}%`;
+    if (timeEl) timeEl.textContent = hfFmtTime(targetTime);
+}
+
+/** Toggle text answer visibility on user request */
+function hfToggleTextAnswer(turnId) {
+    const cardTop = document.querySelector(`#ai-card-global-${turnId} .ai-card-top`);
+    const textContent = document.getElementById(`ai-content-${turnId}`);
+    const btn = document.getElementById(`hf-toggle-text-${turnId}`);
+    const viewport = document.getElementById(`hf-viewport-${turnId}`);
+    const controls = document.querySelector(`#hf-player-${turnId} .hf-controls`);
+    const iframeId = `hf-iframe-${turnId}`;
+
+    if (textContent && btn && viewport) {
+        const isVideoHidden = viewport.style.display === 'none';
+        if (isVideoHidden) {
+            // Show video player, hide text answer
+            if (cardTop) cardTop.style.display = 'none';
+            textContent.style.display = 'none';
+            viewport.style.display = 'flex';
+            if (controls) controls.style.display = 'flex';
+            btn.textContent = 'Show Text Answer';
+            
+            // Re-scale player viewport
+            hfScaleViewport(`hf-viewport-${turnId}`, `hf-scalebox-${turnId}`);
+        } else {
+            // Show text answer, hide video player, and pause video
+            if (cardTop) cardTop.style.display = 'flex';
+            textContent.style.display = 'block';
+            viewport.style.display = 'none';
+            if (controls) controls.style.display = 'none';
+            btn.textContent = 'Show Video Lesson';
+            
+            // Pause the video player
+            hfCmd(iframeId, 'PAUSE');
+        }
+    }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   STUDENT FEEDBACK SYSTEM
+   ───────────────────────────────────────────────────────────────────────── */
+
+/** Inject animated 👍 / 👎 buttons at the bottom of an AI response card */
+function injectFeedbackButtons(turnId) {
+    const card = document.getElementById(`ai-card-global-${turnId}`);
+    if (!card || card.querySelector('.fb-row')) return; // already injected
+    const row = document.createElement('div');
+    row.className = 'fb-row';
+    row.innerHTML = `
+      <span class="fb-label">Was this helpful?</span>
+      <button class="fb-thumb fb-up" id="fb-up-${turnId}" title="Yes, helpful!"
+        onclick="submitFeedback('${turnId}', 'like')">👍</button>
+      <button class="fb-thumb fb-down" id="fb-down-${turnId}" title="Could be better"
+        onclick="submitFeedback('${turnId}', 'dislike')">👎</button>
+    `;
+    card.appendChild(row);
+    // Slide-in animation trigger
+    requestAnimationFrame(() => row.classList.add('fb-visible'));
+}
+
+/** Handle a thumbs up or down click */
+function submitFeedback(turnId, type) {
+    const card = document.getElementById(`ai-card-global-${turnId}`);
+    const queryId = card ? card.dataset.queryId : null;
+    const upBtn  = document.getElementById(`fb-up-${turnId}`);
+    const downBtn = document.getElementById(`fb-down-${turnId}`);
+
+    // Disable both buttons to prevent double-clicks
+    if (upBtn)   upBtn.disabled = true;
+    if (downBtn) downBtn.disabled = true;
+
+    if (type === 'like') {
+        // Animate the thumbs up
+        if (upBtn) { upBtn.classList.add('fb-selected-up'); upBtn.textContent = '👍'; }
+        // Show inline thank-you message
+        const row = card ? card.querySelector('.fb-row') : null;
+        if (row) {
+            const thanks = document.createElement('span');
+            thanks.className = 'fb-thanks';
+            thanks.textContent = '🎉 Thanks! Glad it helped!';
+            row.appendChild(thanks);
+        }
+        // Speak gratitude via TTS
+        const msg = new SpeechSynthesisUtterance('Hey, thanks for your feedback! I hope you enjoy learning with me.');
+        msg.lang = 'en-IN'; msg.rate = 0.95; msg.pitch = 1.1;
+        window.speechSynthesis.cancel();
+        window.speechSynthesis.speak(msg);
+        // Save to backend silently
+        if (queryId) _saveFeedbackToServer(queryId, 'like', '');
+    } else {
+        // Animate the thumbs down
+        if (downBtn) { downBtn.classList.add('fb-selected-down'); }
+        // Open the interactive robot overlay
+        openFeedbackOverlay(queryId, turnId);
+    }
+}
+
+/** Global state for the feedback voice overlay */
+let _fbQueryId   = null;
+let _fbTurnId    = null;
+let _fbTranscript = '';
+let _fbRecognition = null;
+let _fbSilenceTimer = null;
+let _fbMicActive = false;
+
+function ensureFeedbackOverlayMarkup() {
+    if (document.getElementById('feedback-dislike-overlay')) return;
+    
+    const overlay = document.createElement('div');
+    overlay.id = 'feedback-dislike-overlay';
+    overlay.className = 'fb-overlay';
+    overlay.style.display = 'none';
+    overlay.innerHTML = `
+        <div class="fb-modal">
+          <div class="fb-robot-wrap">
+            <div class="fb-robot-glow"></div>
+            <div class="fb-robot-avatar">🤖</div>
+          </div>
+          <p class="fb-robot-question" id="fb-robot-question">
+            Hmm... what could I have done better for you?
+          </p>
+          <div class="fb-transcript-box">
+            <span id="fb-interim-text">🤖 Just a moment...</span>
+          </div>
+          <div class="fb-actions">
+            <button id="fb-mic-btn" class="fb-mic-btn" onclick="fbToggleMic()">🎤 Tap to Speak</button>
+            <button class="fb-submit-btn" onclick="closeFeedbackOverlay(true)">✅ Submit</button>
+          </div>
+          <button class="fb-skip-btn" onclick="closeFeedbackOverlay(false)">✕ Skip</button>
+        </div>
+    `;
+    document.body.appendChild(overlay);
+}
+
+/** Open the animated robot dislike overlay and begin the voice flow */
+function openFeedbackOverlay(queryId, turnId) {
+    ensureFeedbackOverlayMarkup();
+    _fbQueryId    = queryId;
+    _fbTurnId     = turnId;
+    _fbTranscript = '';
+    _fbMicActive  = false;
+
+    const overlay = document.getElementById('feedback-dislike-overlay');
+    const interim = document.getElementById('fb-interim-text');
+    const micBtn  = document.getElementById('fb-mic-btn');
+    if (interim) interim.textContent = '🤖 Just a moment...';
+    if (micBtn)  micBtn.textContent = '🎤 Tap to Speak';
+    if (overlay) { overlay.style.display = 'flex'; requestAnimationFrame(() => overlay.classList.add('fb-open')); }
+
+    // Robot speaks its question first, and the student must tap the mic to start recording.
+    window.speechSynthesis.cancel();
+    const utter = new SpeechSynthesisUtterance("Hmm... what could I have done better for you? Please tap the mic when you are ready to speak.");
+    utter.lang = 'en-IN'; utter.rate = 0.92; utter.pitch = 1.05;
+    utter.onend = () => {
+        const micBtn = document.getElementById('fb-mic-btn');
+        if (micBtn) micBtn.textContent = '🎤 Tap to Speak';
+    };
+    window.speechSynthesis.speak(utter);
+}
+
+/** Auto-start the mic (called after robot finishes speaking) */
+function fbStartMic() {
+    const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRec) return;
+    const interim  = document.getElementById('fb-interim-text');
+    const micBtn   = document.getElementById('fb-mic-btn');
+
+    if (_fbRecognition) { try { _fbRecognition.stop(); } catch(e) {} }
+
+    _fbRecognition = new SpeechRec();
+    _fbRecognition.continuous = true;
+    _fbRecognition.interimResults = true;
+    _fbRecognition.lang = 'en-IN';
+    _fbMicActive = true;
+    if (micBtn) micBtn.textContent = '🔴 Listening...';
+
+    _fbRecognition.onresult = (event) => {
+        let full = '';
+        for (let i = 0; i < event.results.length; i++) {
+            full += event.results[i][0].transcript;
+        }
+        _fbTranscript = full;
+        if (interim) interim.textContent = full || '🎙️ Listening...';
+        // Reset silence detection
+        clearTimeout(_fbSilenceTimer);
+        _fbSilenceTimer = setTimeout(() => { closeFeedbackOverlay(true); }, 3500);
+    };
+    _fbRecognition.onerror = () => { _fbMicActive = false; if (micBtn) micBtn.textContent = '🎤 Tap to Speak'; };
+    _fbRecognition.onend   = () => { _fbMicActive = false; if (micBtn) micBtn.textContent = '🎤 Tap to Speak'; };
+    _fbRecognition.start();
+
+    // Play a soft beep to signal mic is live
+    try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator(); const gain = ctx.createGain();
+        osc.connect(gain); gain.connect(ctx.destination);
+        osc.type = 'sine'; osc.frequency.value = 880;
+        gain.gain.setValueAtTime(0.2, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
+        osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.3);
+    } catch(e) {}
+}
+
+/** Manual mic toggle button (if student wants to control it) */
+function fbToggleMic() {
+    if (_fbMicActive) {
+        if (_fbRecognition) { try { _fbRecognition.stop(); } catch(e) {} }
+        _fbMicActive = false;
+        const micBtn = document.getElementById('fb-mic-btn');
+        if (micBtn) micBtn.textContent = '🎤 Tap to Speak';
+    } else {
+        fbStartMic();
+    }
+}
+
+/** Close the overlay — optionally submit the transcribed text */
+function closeFeedbackOverlay(shouldSubmit) {
+    clearTimeout(_fbSilenceTimer);
+    window.speechSynthesis.cancel();
+    if (_fbRecognition) { try { _fbRecognition.stop(); } catch(e) {} _fbRecognition = null; }
+
+    const overlay = document.getElementById('feedback-dislike-overlay');
+    const interim  = document.getElementById('fb-interim-text');
+
+    if (shouldSubmit && _fbTranscript.trim().length > 0) {
+        // Show thank-you message inside overlay before closing
+        if (interim) interim.textContent = '💪 Thank you! I\'ll work hard to get better for you!';
+        const robotQ = document.getElementById('fb-robot-question');
+        if (robotQ) robotQ.textContent = 'Thanks for your honest feedback! 🙏';
+        const thankUtter = new SpeechSynthesisUtterance("Thank you! I will work hard to get better for you.");
+        thankUtter.lang = 'en-IN'; thankUtter.rate = 0.95; thankUtter.pitch = 1.1;
+        window.speechSynthesis.speak(thankUtter);
+
+        // Save to backend
+        if (_fbQueryId) _saveFeedbackToServer(_fbQueryId, 'dislike', _fbTranscript.trim());
+
+        // Reflect on the turn card
+        if (_fbTurnId) {
+            const downBtn = document.getElementById(`fb-down-${_fbTurnId}`);
+            if (downBtn) downBtn.classList.add('fb-selected-down');
+            const row = document.querySelector(`#ai-card-global-${_fbTurnId} .fb-row`);
+            if (row && !row.querySelector('.fb-thanks')) {
+                const thanks = document.createElement('span');
+                thanks.className = 'fb-thanks fb-thanks-down';
+                thanks.textContent = '📝 Feedback noted. Thank you!';
+                row.appendChild(thanks);
+            }
+        }
+        // Auto-close after 1.8s
+        setTimeout(() => { if (overlay) { overlay.classList.remove('fb-open'); setTimeout(() => { overlay.style.display = 'none'; }, 350); } }, 1800);
+    } else {
+        // Just close
+        if (overlay) { overlay.classList.remove('fb-open'); setTimeout(() => { overlay.style.display = 'none'; }, 350); }
+    }
+}
+
+/** POST feedback to the backend API */
+async function _saveFeedbackToServer(queryId, type, text) {
+    try {
+        await fetch('/api/feedback', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ query_id: queryId, feedback_type: type, feedback_text: text })
+        });
+        console.log(`[Feedback] Saved '${type}' for query ${queryId}`);
+    } catch(e) {
+        console.warn('[Feedback] Failed to save feedback:', e);
+    }
 }
 
 /** Scale the 1280×720 iframe to fill the viewport wrapper using CSS transform */
@@ -707,12 +1065,15 @@ function hfScaleViewport(wrapperId, scaleBoxId) {
         scalebox.style.width  = nativeW + 'px';
         scalebox.style.height = nativeH + 'px';
     } else {
-        const containerW = wrapper.clientWidth || 800;
-        const scale = containerW / nativeW;
+        const containerW = wrapper.getBoundingClientRect().width || wrapper.clientWidth || 800;
+        const scale = Math.min(1, containerW / nativeW);
         const scaledH = nativeH * scale;
 
         wrapper.style.height = scaledH + 'px';
-        wrapper.style.display = 'block';
+        wrapper.style.display = 'flex';
+        wrapper.style.justifyContent = 'flex-start';
+        wrapper.style.alignItems = 'flex-start';
+        wrapper.style.width = '100%';
 
         scalebox.style.transform = `scale(${scale})`;
         scalebox.style.transformOrigin = 'top left';
@@ -1009,7 +1370,7 @@ function setupUserPage() {
     }
 
     async function loadBook() {
-        const className = window.currentUserClass;
+        const className = String(window.currentUserClass || localStorage.getItem('userClass') || '').replace(/\D/g, '');
         const subject = subjectSelect.value;
         if (!className || !subject) return;
 

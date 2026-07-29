@@ -1,0 +1,27 @@
+{
+  "timestamp": "2026-07-29T19:31:45.731190",
+  "execution_time_seconds": 10.56,
+  "authenticated_student": {
+    "uid": "anonymous",
+    "email": "anonymous@cg.com",
+    "name": "Sonu",
+    "class": 0,
+    "board": "CBSE",
+    "role": "student"
+  },
+  "raw_user_query": "parse fallback",
+  "orchestrator_output": {
+    "is_authorized": true,
+    "refusal_reason": null,
+    "classification": "GENERAL_KNOWLEDGE",
+    "reformulated_query": "What is a parse fallback in computer programming and data processing?",
+    "matched_subject": null,
+    "matched_chapter": null,
+    "complexity_level": 1,
+    "format_decision": "QUICK_ANSWER",
+    "text_narration": "• A **parse fallback** is a backup plan that a computer program uses when it cannot read or understand incoming data.\n\n• \"Parsing\" means reading data (like text or code) and converting it into a structured format that the computer can easily process.\n\n• If the input data is broken, missing, or formatted incorrectly, the primary parsing process fails.\n\n• Instead of crashing or stopping completely, the system switches to a **fallback** mechanism, such as using a default value or a simple secondary method to handle the error safely.\n\n• Think of it like keeping a spare tire on a vehicle: if your main tire gets flat, the fallback tire allows you to keep moving forward without getting stuck!",
+    "video_storyboard": null
+  },
+  "rag_retrieval_executed": false,
+  "retrieved_top10_chunks": []
+}

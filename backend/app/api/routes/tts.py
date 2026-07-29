@@ -247,13 +247,12 @@ async def text_to_speech(request: TTSRequest):
 
     try:
         if model == "sarvam":
-            print(f"📡 [SARVAM API] Preparing payload for Sarvam Bulbul v3...")
-            audio_bytes, fmt = await _call_sarvam(
+            from backend.app.services.chat.tts_service import synthesize_text_cached
+            audio_bytes, fmt = await synthesize_text_cached(
                 text=text,
                 language=request.language,
                 speaker=request.speaker,
             )
-            print(f"✅ [SARVAM API] Success! Received {len(audio_bytes)} bytes of audio.")
         elif model == "azure":
             print(f"📡 [AZURE API] Preparing payload for Microsoft Azure TTS...")
             audio_bytes, fmt = await _call_azure(

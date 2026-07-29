@@ -845,9 +845,8 @@ class ConversationMode {
         if (!this.classSelect) return;
 
         // If user data is available, use it to set the class
-        if (window.userData && window.userData.class) {
-            const userClass = window.userData.class;
-
+        const userClass = String(window.currentUserClass || window.userData?.class || localStorage.getItem('userClass') || '').replace(/\D/g, '');
+        if (userClass) {
             const classField = this.classSelect.parentElement;
             if (classField) {
                 classField.style.display = 'none'; // This will hide the dropdown's container
@@ -1210,7 +1209,7 @@ function initPhase1UI() {
 
 function syncAuthenticatedUserProfile() {
     let name = localStorage.getItem('userName') || (window.authManager && window.authManager.userData ? window.authManager.userData.name : '') || 'Student';
-    let userClass = localStorage.getItem('userClass') || (window.authManager && window.authManager.userData ? window.authManager.userData.class : '') || '7';
+    let userClass = String(window.currentUserClass || localStorage.getItem('userClass') || (window.authManager && window.authManager.userData ? window.authManager.userData.class : '') || '').replace(/\D/g, '');
 
     const avatarEl = document.getElementById('profile-avatar-letter');
     const nameEl = document.getElementById('profile-user-name');
@@ -1431,7 +1430,26 @@ function appendAIMessage(text) {
 function speakText(text) {
     if ('speechSynthesis' in window) {
         window.speechSynthesis.cancel();
-        const utterance = new SpeechSynthesisUtterance(text);
+        
+        let clean = text;
+        // Strip HTML tags
+        clean = clean.replace(/<[^>]*>/g, ' ');
+        // Remove bold/italic markers
+        clean = clean.replace(/\*\*/g, '');
+        clean = clean.replace(/\*/g, '');
+        clean = clean.replace(/__/g, '');
+        clean = clean.replace(/_/g, '');
+        // Remove headers
+        clean = clean.replace(/^\s*#+\s+/gm, '');
+        // Remove markdown bullets
+        clean = clean.replace(/^\s*[\*\-\•]\s+/gm, '');
+        // Convert colons to periods for natural pauses
+        clean = clean.replace(/:\s*$/gm, '.');
+        clean = clean.replace(/(\w+):\s/g, '$1. ');
+        // Normalize multiple spaces
+        clean = clean.replace(/\s+/g, ' ').trim();
+        
+        const utterance = new SpeechSynthesisUtterance(clean);
         window.speechSynthesis.speak(utterance);
     }
 }
@@ -1440,4 +1458,4 @@ function escapeHtml(str) {
     return str.replace(/[&<>'"]/g, 
         tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
     );
-}
+}

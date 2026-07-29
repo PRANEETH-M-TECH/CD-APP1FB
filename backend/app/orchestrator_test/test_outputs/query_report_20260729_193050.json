@@ -1,0 +1,27 @@
+{
+  "timestamp": "2026-07-29T19:30:50.527845",
+  "execution_time_seconds": 10.14,
+  "authenticated_student": {
+    "uid": "anonymous",
+    "email": "anonymous@cg.com",
+    "name": "Sonu",
+    "class": 0,
+    "board": "CBSE",
+    "role": "student"
+  },
+  "raw_user_query": "orch debug",
+  "orchestrator_output": {
+    "is_authorized": true,
+    "refusal_reason": null,
+    "classification": "GENERAL_KNOWLEDGE",
+    "reformulated_query": "Explanation of orchestration and debugging in computer systems",
+    "matched_subject": null,
+    "matched_chapter": null,
+    "complexity_level": 1,
+    "format_decision": "QUICK_ANSWER",
+    "text_narration": "• Software orchestration refers to automatically managing and arranging multiple computer programs or tasks so they work together smoothly like an orchestra.\n\n• Debugging is the step-by-step process of finding, tracking, and fixing mistakes or errors (called bugs) in computer software.\n\n• Orchestration debugging means checking logs and system connections to find and fix failure points when multiple automated computer systems interact with each other.",
+    "video_storyboard": null
+  },
+  "rag_retrieval_executed": false,
+  "retrieved_top10_chunks": []
+}

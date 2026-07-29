@@ -1,0 +1,161 @@
+{
+  "timestamp": "2026-07-29T16:47:48.835837",
+  "execution_time_seconds": 15.45,
+  "authenticated_student": {
+    "uid": "anonymous",
+    "email": "anonymous@cg.com",
+    "name": "Sonu",
+    "class": 8,
+    "board": "CBSE",
+    "role": "student"
+  },
+  "raw_user_query": "Explain about the chola dynasty?",
+  "orchestrator_output": {
+    "is_authorized": true,
+    "refusal_reason": null,
+    "classification": "CURRICULUM",
+    "reformulated_query": "Overview and administration of the Chola dynasty in medieval India",
+    "matched_subject": "Class 8 Social",
+    "matched_chapter": "New Kings and Kingdoms",
+    "complexity_level": 3,
+    "format_decision": "VIDEO_REQUIRED",
+    "text_narration": "The Chola dynasty was one of the longest-ruling and most powerful dynasties in South India, reaching its height between the ninth and thirteenth centuries. Rajaraja First and his son Rajendra First were the greatest Chola rulers who expanded the empire across South India, Sri Lanka, and parts of Southeast Asia through their powerful navy. Chola administration was famous for its well-organized local self-government, where local assemblies called Ur and Sabha managed local affairs, tax collection, and water tanks. Grand temples like the Brihadisvara temple at Thanjavur served as centers of economic, social, and cultural life, celebrated for exquisite bronze sculptures like the Nataraja.",
+    "video_storyboard": {
+      "lesson_title": "The Chola Dynasty: Governance, Expansion, and Art",
+      "layout_mode": "timeline",
+      "theme": "History",
+      "global_assets": [],
+      "connections": [],
+      "scenes": [
+        {
+          "scene_no": 1,
+          "purpose": "Introduction to the Chola Dynasty",
+          "template_id": "title_slide",
+          "template_selection_reasoning": "Introduces the overall historical theme and key aspects of the Chola Empire for Class 8 students.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": "title_slide"
+          },
+          "teacher_script": "The Chola dynasty was one of the longest-ruling and most powerful dynasties in South India, reaching its height between the ninth and thirteenth centuries.",
+          "template_data": {
+            "title": "The Chola Dynasty",
+            "subtitle": "Class 8 Social Science - New Kings and Kingdoms",
+            "highlights": [
+              "Powerful South Indian Maritime Empire",
+              "Unique Local Self-Government",
+              "Grand Temples and Bronze Art"
+            ]
+          }
+        },
+        {
+          "scene_no": 2,
+          "purpose": "Key Rulers and Military Expansion",
+          "template_id": "database_grid",
+          "template_selection_reasoning": "Database grid allows structured breakdown of important rulers and their achievements.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": "rulers_grid"
+          },
+          "teacher_script": "Rajaraja First and his son Rajendra First were the greatest Chola rulers who expanded the empire across South India, Sri Lanka, and parts of Southeast Asia through their powerful navy.",
+          "template_data": {
+            "title": "Greatest Chola Kings",
+            "items": [
+              {
+                "name": "Rajaraja I",
+                "detail": "Built Brihadisvara Temple; developed strong navy and expanded empire in South India and Sri Lanka."
+              },
+              {
+                "name": "Rajendra I",
+                "detail": "Led expedition to River Ganga; built Gangaikondacholapuram and expanded trade routes to Southeast Asia."
+              }
+            ]
+          }
+        },
+        {
+          "scene_no": 3,
+          "purpose": "Chola Administration and Local Governance",
+          "template_id": "taxonomy_tree",
+          "template_selection_reasoning": "Tree dynamic clearly shows hierarchical structure from Kingdom level down to village self-assemblies.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": "admin_tree"
+          },
+          "teacher_script": "Chola administration was famous for its well-organized local self-government, where local assemblies called Ur and Sabha managed local affairs, tax collection, and water tanks.",
+          "template_data": {
+            "title": "Chola Administrative Setup",
+            "root": "Chola Kingdom (Empire)",
+            "branches": [
+              {
+                "name": "Territorial Divisions",
+                "sub": [
+                  "Mandalams (Provinces)",
+                  "Valanadus (Districts)",
+                  "Nadus (Groups of Villages)"
+                ]
+              },
+              {
+                "name": "Village Assemblies",
+                "sub": [
+                  "Ur (Assembly of general landholders)",
+                  "Sabha (Assembly of Brahmin landholders)"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "scene_no": 4,
+          "purpose": "Cultural Heritage, Temples, and Bronze Statues",
+          "template_id": "concept_diagram",
+          "template_selection_reasoning": "Concept diagram illustrates the multi-faceted role of temples beyond religious worship in Chola society.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": "culture_diagram"
+          },
+          "teacher_script": "Grand temples like the Brihadisvara temple at Thanjavur served as centers of economic, social, and cultural life, celebrated for exquisite bronze sculptures like the Nataraja.",
+          "template_data": {
+            "title": "Role of Chola Temples",
+            "central_concept": "Chola Temple Hubs",
+            "key_nodes": [
+              "Economic & Craft Centers",
+              "Bronze Metalwork (Nataraja)",
+              "Irrational Canals & Agricultural Boost"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "rag_retrieval_executed": true,
+  "retrieved_top10_chunks": [
+    {
+      "chunk_index": 1,
+      "score": 0.0,
+      "book_name": "",
+      "chapter_name": "",
+      "content_snippet": "..."
+    },
+    {
+      "chunk_index": 2,
+      "score": 0.0,
+      "book_name": "",
+      "chapter_name": "",
+      "content_snippet": "..."
+    },
+    {
+      "chunk_index": 3,
+      "score": 0.0,
+      "book_name": "",
+      "chapter_name": "",
+      "content_snippet": "..."
+    }
+  ]
+}

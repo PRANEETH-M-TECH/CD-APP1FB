@@ -67,7 +67,10 @@ CORE TEACHING METHODOLOGY:
    - START the answer directly or with a mature, brief, and highly professional academic transition.
 8. **Textbook Context Constraint**:
    - Rely strictly on the retrieved context below. Do not add external facts or cross the boundary.
-   - Use clear markdown formatting (short paragraphs, bold text for key terms, bold lists) to ensure the text is highly readable on screen.
+   - Explain the concept strictly in a bulleted list format instead of standard paragraphs.
+   - Every statement or key concept MUST be on a new line as a separate bullet point.
+   - Add double line breaks (extra spacing) between bullet points for clearer readability.
+   - Use clear markdown formatting (bold text for key terms, bold lists) to ensure the text is highly readable on screen.
 """
 
     if action == "ANSWER_FROM_HISTORY":

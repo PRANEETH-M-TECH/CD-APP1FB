@@ -1,0 +1,155 @@
+{
+  "timestamp": "2026-07-29T11:21:58.173604",
+  "execution_time_seconds": 23.55,
+  "authenticated_student": {
+    "uid": "anonymous",
+    "email": "anonymous@cg.com",
+    "name": "Sonu",
+    "class": 8,
+    "board": "CBSE",
+    "role": "student"
+  },
+  "raw_user_query": "Explain about the CJP protest in detail?",
+  "orchestrator_output": {
+    "is_authorized": true,
+    "refusal_reason": null,
+    "classification": "GENERAL_KNOWLEDGE",
+    "reformulated_query": "Detailed explanation of Cockroach Janta Party CJP student protests in India",
+    "matched_subject": null,
+    "matched_chapter": null,
+    "complexity_level": 3,
+    "format_decision": "VIDEO_REQUIRED",
+    "text_narration": "The Cockroach Janta Party, known as CJP, started in mid-2026 as a youth-led social movement in India. It began on social media as a satirical group created by young people to express their feelings about student issues. The protest started mainly due to two main reasons. First, students were upset over exam paper leaks in major national competitive tests. Second, young people wanted fair rules, better job opportunities, and accountability in conducting public examinations. The movement grew step-by-step. It started online in May 2026, moved to peaceful gatherings in New Delhi in June 2026, gained national attention through public discussions, and led to official dialogues regarding exam reforms in July 2026. This movement shows how young citizens in a democracy can use peaceful expression to raise concerns about education and exam systems. It highlights the importance of fair opportunities and active civic participation for a better future.",
+    "video_storyboard": {
+      "lesson_title": "Understanding the CJP Youth Movement",
+      "layout_mode": "timeline",
+      "theme": "General",
+      "global_assets": [],
+      "connections": [],
+      "scenes": [
+        {
+          "scene_no": 1,
+          "purpose": "Introduction to the Cockroach Janta Party (CJP) movement",
+          "template_id": "title_slide",
+          "template_selection_reasoning": "Title slide introduces the core topic clearly for students.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": "title"
+          },
+          "teacher_script": "The Cockroach Janta Party, known as CJP, started in mid-2026 as a youth-led social movement in India. It began on social media as a satirical group created by young people to express their feelings about student issues.",
+          "template_data": {
+            "title": "Understanding the CJP Youth Movement",
+            "subtitle": "Origin, Key Issues, and Impact of the Student Protests",
+            "icon": "flag"
+          }
+        },
+        {
+          "scene_no": 2,
+          "purpose": "Why the protests started - Key issues",
+          "template_id": "column_comparison",
+          "template_selection_reasoning": "Column comparison breaks down the main reasons behind the protest into clear visual categories.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": "issues"
+          },
+          "teacher_script": "The protest started mainly due to two main reasons. First, students were upset over exam paper leaks in major national competitive tests. Second, young people wanted fair rules, better job opportunities, and accountability in conducting public examinations.",
+          "template_data": {
+            "heading": "Main Causes of the Protest",
+            "columns": [
+              {
+                "title": "Exam Paper Leaks",
+                "items": [
+                  "Irregularities in national entrance tests",
+                  "Distress and uncertainty among hardworking candidates",
+                  "Demand for fair and secure exam systems"
+                ]
+              },
+              {
+                "title": "Youth Voice & Accountability",
+                "items": [
+                  "Demand for institutional transparency",
+                  "Focus on employment opportunities",
+                  "Peaceful student advocacy and dialogue"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "scene_no": 3,
+          "purpose": "Timeline of major protest events",
+          "template_id": "cycle_template",
+          "template_selection_reasoning": "Cycle or timeline template helps present sequential developments step-by-step.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": "timeline"
+          },
+          "teacher_script": "The movement grew step-by-step. It started online in May 2026, moved to peaceful gatherings in New Delhi in June 2026, gained national attention through public discussions, and led to official dialogues regarding exam reforms in July 2026.",
+          "template_data": {
+            "heading": "Key Stages of the Movement",
+            "steps": [
+              {
+                "step_no": 1,
+                "title": "Online Origin",
+                "description": "Started as a social media awareness group in May 2026"
+              },
+              {
+                "step_no": 2,
+                "title": "Peaceful Gatherings",
+                "description": "Students assembled at Jantar Mantar in New Delhi"
+              },
+              {
+                "step_no": 3,
+                "title": "National Attention",
+                "description": "Widespread discussions on exam fairness and youth concerns"
+              },
+              {
+                "step_no": 4,
+                "title": "Government Response",
+                "description": "Discussions held leading to focus on education reforms"
+              }
+            ]
+          }
+        },
+        {
+          "scene_no": 4,
+          "purpose": "Key takeaways for civic understanding",
+          "template_id": "database_grid",
+          "template_selection_reasoning": "Database grid summarizes important civic lessons about youth participation and democracy.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": "summary"
+          },
+          "teacher_script": "This movement shows how young citizens in a democracy can use peaceful expression to raise concerns about education and exam systems. It highlights the importance of fair opportunities and active civic participation for a better future.",
+          "template_data": {
+            "heading": "Important Takeaways",
+            "cards": [
+              {
+                "title": "Peaceful Expression",
+                "description": "Democracy allows citizens to raise voices peacefully for positive change."
+              },
+              {
+                "title": "Educational Fairness",
+                "description": "Clean and honest examination systems are essential for all students."
+              },
+              {
+                "title": "Youth Participation",
+                "description": "Young people play a vital role in shaping discussions on public policy."
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "rag_retrieval_executed": false,
+  "retrieved_top10_chunks": []
+}

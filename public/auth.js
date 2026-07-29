@@ -32,9 +32,13 @@ class AuthManager {
             const userDoc = await db.collection('users').doc(this.currentUser.uid).get();
             if (userDoc.exists) {
                 this.userData = userDoc.data();
+                const classValue = String(this.userData.class || '').replace(/\D/g, '');
+                this.userData.class = classValue;
+                window.userData = this.userData;
+                window.currentUserClass = classValue;
 
                 // Store in localStorage for quick access
-                localStorage.setItem('userClass', this.userData.class || '');
+                localStorage.setItem('userClass', classValue);
                 localStorage.setItem('userRole', this.userData.role || '');
                 localStorage.setItem('userName', this.userData.name || '');
 
@@ -153,13 +157,14 @@ class AuthManager {
 
     async updateUserClass(classNum) {
         if (!this.currentUser) return { success: false, error: 'Not authenticated' };
+        const normalizedClass = String(classNum || '').replace(/\D/g, '');
 
         try {
             await db.collection('users').doc(this.currentUser.uid).update({
-                class: classNum
+                class: normalizedClass
             });
-            this.userData.class = classNum;
-            localStorage.setItem('userClass', classNum);
+            this.userData.class = normalizedClass;
+            localStorage.setItem('userClass', normalizedClass);
             this.updateUI();
             return { success: true };
         } catch (error) {
@@ -172,12 +177,16 @@ class AuthManager {
         if (!this.currentUser) return { success: false, error: 'Not authenticated' };
 
         try {
-            await db.collection('users').doc(this.currentUser.uid).update(data);
+            const payload = { ...data };
+            if (payload.class) {
+                payload.class = String(payload.class || '').replace(/\D/g, '');
+            }
+            await db.collection('users').doc(this.currentUser.uid).update(payload);
             // Update local userData
-            Object.assign(this.userData, data);
+            Object.assign(this.userData, payload);
             // Update localStorage
-            if (data.class) localStorage.setItem('userClass', data.class);
-            if (data.avatar) localStorage.setItem('userAvatar', data.avatar);
+            if (payload.class) localStorage.setItem('userClass', payload.class);
+            if (payload.avatar) localStorage.setItem('userAvatar', payload.avatar);
             this.updateUI();
             return { success: true };
         } catch (error) {

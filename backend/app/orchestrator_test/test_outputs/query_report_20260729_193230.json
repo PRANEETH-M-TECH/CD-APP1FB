@@ -1,0 +1,27 @@
+{
+  "timestamp": "2026-07-29T19:32:30.293214",
+  "execution_time_seconds": 11.84,
+  "authenticated_student": {
+    "uid": "anonymous",
+    "email": "anonymous@cg.com",
+    "name": "Sonu",
+    "class": 0,
+    "board": "CBSE",
+    "role": "student"
+  },
+  "raw_user_query": "uid fallback debug",
+  "orchestrator_output": {
+    "is_authorized": true,
+    "refusal_reason": null,
+    "classification": "GENERAL_KNOWLEDGE",
+    "reformulated_query": "What is a UID (Unique Identifier) and how does a fallback mechanism work in computer systems?",
+    "matched_subject": null,
+    "matched_chapter": null,
+    "complexity_level": 1,
+    "format_decision": "QUICK_ANSWER",
+    "text_narration": "• A **UID (Unique Identifier)** is a unique code or number given to a user or system process so it can be easily identified without any confusion, just like a roll number in school.\n\n• A **Fallback** is an automatic backup plan used by a computer program if the main feature fails, helping the system stay running without stopping.\n\n• **Debugging** means finding and fixing small errors or glitches in computer software, similar to finding and correcting mistakes in your homework.\n\n• In computing, **UID fallback debug** refers to a technical diagnostic process where a system uses a backup identification mechanism to trace and resolve minor software errors.",
+    "video_storyboard": null
+  },
+  "rag_retrieval_executed": false,
+  "retrieved_top10_chunks": []
+}

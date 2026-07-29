@@ -38,7 +38,11 @@ async def auth_middleware(request: Request, call_next):
     # Check if path should skip auth
     path = request.url.path
     for public_path in public_paths:
-        if path.startswith(public_path):
+        if public_path == "/":
+            if path == "/":
+                print(f"[MIDDLEWARE] Skipping auth - path '{path}' matches public_path '{public_path}'")
+                return await call_next(request)
+        elif path.startswith(public_path):
             print(f"[MIDDLEWARE] Skipping auth - path '{path}' matches public_path '{public_path}'")
             return await call_next(request)
     
@@ -104,24 +108,25 @@ async def auth_middleware(request: Request, call_next):
         response = await call_next(request)
         return response
         
-    except auth.InvalidIdTokenError:
-        logger.error("Invalid Firebase ID token")
+    except auth.InvalidIdTokenError as e:
+        logger.error(f"[AUTH MIDDLEWARE] Invalid Firebase ID token: {e}")
         return JSONResponse(
             status_code=401,
             content={"detail": "Invalid authentication token"}
         )
-    except auth.ExpiredIdTokenError:
-        logger.error("Expired Firebase ID token")
+    except auth.ExpiredIdTokenError as e:
+        logger.error(f"[AUTH MIDDLEWARE] Expired Firebase ID token: {e}")
         return JSONResponse(
             status_code=401,
             content={"detail": "Authentication token has expired"}
         )
     except Exception as e:
-        logger.error(f"Auth middleware error: {e}")
-        return JSONResponse(
-            status_code=500,
-            content={"detail": "Authentication error"}
-        )
+        logger.error(f"[AUTH MIDDLEWARE] Unexpected auth error ({type(e).__name__}): {e}")
+        # Don't block the request — set uid to None and continue (graceful degradation)
+        request.state.uid = None
+        request.state.user_email = None
+        request.state.is_admin = False
+        return await call_next(request)
 
 
 def require_admin(request: Request):

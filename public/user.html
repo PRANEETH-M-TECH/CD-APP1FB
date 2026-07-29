@@ -869,9 +869,17 @@
       box-shadow: 0 8px 32px rgba(16,185,129,0.15), 0 0 0 1px rgba(16,185,129,0.3) !important;
     }
     .ai-response-card.subject-social {
-      border-color: rgba(245,158,11,0.5) !important;
-      background: linear-gradient(135deg, rgba(28,18,5,0.9) 0%, rgba(15,34,32,0.75) 100%) !important;
-      box-shadow: 0 8px 32px rgba(245,158,11,0.15), 0 0 0 1px rgba(245,158,11,0.3) !important;
+      background: linear-gradient(180deg, #f7f1e1 0%, #e8dbbc 100%) !important;
+      border: 2px solid #bca780 !important;
+      box-shadow: 0 12px 36px rgba(0,0,0,0.25), inset 0 0 40px rgba(179,153,115,0.25) !important;
+      font-family: 'Georgia', 'Times New Roman', serif !important;
+    }
+    .ai-response-card.subject-social .ai-card-title {
+      color: #78350f !important;
+    }
+    .ai-response-card.subject-social .ai-text-content,
+    .ai-response-card.subject-social .ai-text-content * {
+      color: #2c1d11 !important;
     }
     .ai-response-card.subject-english {
       border-color: rgba(167,139,250,0.5) !important;
@@ -922,188 +930,6 @@
       padding: 4px 12px;
       color: #94A3B8;
       font-style: italic;
-    }
-
-    /* ═══════════════════════════════════════════════════════════
-       HYPERFRAMES PLAYER SHELL
-       ═══════════════════════════════════════════════════════════ */
-
-    .hf-player-shell {
-      margin-top: 14px;
-      border-radius: 14px;
-      overflow: hidden;
-      background: #000;
-      border: 1px solid rgba(20, 184, 166, 0.25);
-      box-shadow: 0 12px 40px rgba(0,0,0,0.6);
-    }
-
-    /* Viewport: clips and sizes the scaled canvas */
-    .hf-viewport-wrapper {
-      position: relative;
-      width: 100%;
-      overflow: hidden;
-      background: #000;
-    }
-
-    /* The scale-box holds the raw 1280×720 iframe */
-    .hf-scale-box {
-      position: relative;
-    }
-
-    .hf-iframe {
-      width: 1280px;
-      height: 720px;
-      border: none;
-      display: block;
-    }
-
-    /* Subtitle overlay at bottom of the video */
-    .hf-subtitle-bar {
-      position: absolute;
-      bottom: 10px;
-      left: 5%;
-      right: 5%;
-      text-align: center;
-      font-size: 14px;
-      font-weight: 600;
-      line-height: 1.4;
-      color: #fff;
-      text-shadow: 0 2px 6px rgba(0,0,0,0.9), 1px 1px 0 #000, -1px -1px 0 #000;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-      pointer-events: none;
-      z-index: 10;
-      padding: 6px 12px;
-      background: rgba(0,0,0,0.35);
-      border-radius: 8px;
-      backdrop-filter: blur(4px);
-    }
-
-    /* Controls bar */
-    .hf-controls {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 10px 14px;
-      background: rgba(7, 16, 18, 0.95);
-      backdrop-filter: blur(16px);
-      border-top: 1px solid rgba(255,255,255,0.07);
-    }
-
-    .hf-controls-left  { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
-    .hf-controls-center { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0; }
-    .hf-controls-right  { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
-
-    /* Icon buttons */
-    .hf-btn {
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.1);
-      color: #E2E8F0;
-      border-radius: 8px;
-      width: 32px;
-      height: 32px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: background 0.18s, color 0.18s, transform 0.1s;
-    }
-    .hf-btn:hover {
-      background: rgba(20,184,166,0.2);
-      color: #14B8A6;
-      border-color: rgba(20,184,166,0.4);
-      transform: scale(1.08);
-    }
-    .hf-btn:active { transform: scale(0.96); }
-
-    /* Progress bar */
-    .hf-progress-track {
-      flex: 1;
-      height: 5px;
-      background: rgba(255,255,255,0.12);
-      border-radius: 3px;
-      position: relative;
-      cursor: pointer;
-      transition: height 0.15s;
-    }
-    .hf-progress-track:hover { height: 7px; }
-    .hf-progress-fill {
-      height: 100%;
-      background: linear-gradient(90deg, #10B981, #14B8A6);
-      border-radius: 3px;
-      pointer-events: none;
-    }
-    .hf-progress-thumb {
-      position: absolute;
-      top: 50%;
-      transform: translate(-50%, -50%);
-      width: 13px;
-      height: 13px;
-      border-radius: 50%;
-      background: #14B8A6;
-      border: 2px solid #fff;
-      box-shadow: 0 0 6px rgba(20,184,166,0.8);
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity 0.15s;
-    }
-    .hf-progress-track:hover .hf-progress-thumb { opacity: 1; }
-
-    /* Time display */
-    .hf-time {
-      font-size: 11px;
-      font-weight: 600;
-      color: #94A3B8;
-      font-variant-numeric: tabular-nums;
-      min-width: 34px;
-      text-align: center;
-    }
-
-    /* Speed selector */
-    .hf-speed-select {
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.12);
-      color: #CBD5E1;
-      border-radius: 6px;
-      font-size: 11px;
-      font-weight: 600;
-      padding: 4px 6px;
-      cursor: pointer;
-      outline: none;
-    }
-    .hf-speed-select:hover { border-color: rgba(20,184,166,0.4); }
-
-    /* Scene counter */
-    .hf-scene-counter {
-      font-size: 10px;
-      font-weight: 700;
-      color: #64748B;
-      letter-spacing: 0.5px;
-      white-space: nowrap;
-    }
-
-    /* Fullscreen mode */
-    .hf-player-shell:fullscreen {
-      background: #000;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      width: 100vw;
-      height: 100vh;
-      margin: 0;
-      border-radius: 0;
-    }
-    .hf-player-shell:fullscreen .hf-viewport-wrapper {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      overflow: hidden;
-    }
-    .hf-player-shell:fullscreen .hf-iframe {
-      width: 1280px;
-      height: 720px;
     }
   </style>
   <!-- Quill Theme -->
@@ -1347,6 +1173,31 @@
   <script>
     console.log('[USER PAGE] Starting sidebar initialization...');
 
+    // ── Token Cache ──────────────────────────────────────────────────────────
+    // EventSource (SSE) cannot use custom headers, so we pass the Firebase
+    // ID token as a ?token= query param. We pre-fetch and cache it here as
+    // soon as auth state resolves, then auto-refresh every 55 minutes so it
+    // is always instantly available — no more race timeouts per query.
+    window._cachedAuthToken = null;
+    window._tokenRefreshTimer = null;
+
+    async function refreshAndCacheToken(user) {
+      try {
+        const token = await user.getIdToken(/* forceRefresh= */ false);
+        window._cachedAuthToken = token;
+        console.log('[AUTH TOKEN CACHE] Token refreshed and cached successfully.');
+      } catch (e) {
+        console.warn('[AUTH TOKEN CACHE] Failed to refresh token:', e);
+        window._cachedAuthToken = null;
+      }
+    }
+
+    function scheduleTokenRefresh(user) {
+      if (window._tokenRefreshTimer) clearInterval(window._tokenRefreshTimer);
+      // Firebase tokens expire after 60 minutes. Refresh 5 min before expiry.
+      window._tokenRefreshTimer = setInterval(() => refreshAndCacheToken(user), 55 * 60 * 1000);
+    }
+
     // Check auth and initialize sidebar
     firebase.auth().onAuthStateChanged(async (user) => {
       console.log('[USER PAGE] Auth state changed:', user ? user.email : 'No user');
@@ -1359,6 +1210,11 @@
       }
 
       try {
+        // Cache auth token immediately — must happen before any query is submitted
+        await refreshAndCacheToken(user);
+        scheduleTokenRefresh(user);
+        console.log('[USER PAGE] Auth token cached. UID:', user.uid);
+
         // Load user data
         console.log('[USER PAGE] Loading user data from Firestore...');
         const userDoc = await db.collection('users').doc(user.uid).get();
@@ -1381,14 +1237,20 @@
             }
           }
 
-          // Store class globally for script.js to access
-          window.currentUserClass = userData.class;
-          console.log('[USER PAGE] Class stored globally:', userData.class);
+          // Store normalized class globally for script.js and conversation functions to access
+          window.userData = userData;
+          const rawClass = userData.class || localStorage.getItem('userClass') || '';
+          const normalizedClass = String(rawClass).replace(/\D/g, '');
+          window.currentUserClass = normalizedClass;
+          if (window.currentUserClass) {
+            localStorage.setItem('userClass', window.currentUserClass);
+          }
+          console.log('[USER PAGE] Class stored globally:', window.currentUserClass);
 
           // Populate subjects for the loaded class
           if (window.populateSubjectsForUser) {
-            console.log('[USER PAGE] Calling populateSubjectsForUser with class:', userData.class);
-            window.populateSubjectsForUser(userData.class);
+            console.log('[USER PAGE] Calling populateSubjectsForUser with class:', window.currentUserClass);
+            window.populateSubjectsForUser(window.currentUserClass);
           } else {
             console.error('[USER PAGE] ❌ populateSubjectsForUser function not found!');
           }
@@ -2180,6 +2042,9 @@
       <span class="text-[10px] text-slate-500 mt-1">Tap microphone button again to stop and submit</span>
     </div>
   </div>
+
+
+
 </body>
 
 </html>

@@ -29,7 +29,7 @@ try:
     qdrant_service.initialize()
 except Exception as _qdrant_init_err:
     print(f"[WARN] Qdrant initialization failed at startup (will retry on first request): {_qdrant_init_err}")
-gemini_client = qdrant_service.gemini_client
+# gemini_client will be dynamically fetched inside functions to avoid NoneType binding issue
 
 
 
@@ -153,6 +153,32 @@ def run_orchestrator_pipeline(raw_query: str, student_profile: Dict[str, Any]) -
     Executes the single-pass Orchestrator LLM, runs RAG search if CURRICULUM,
     and returns a complete execution report without Sarvam TTS audio or video rendering.
     """
+    # Debug: log the incoming student_profile to verify propagation from request
+    try:
+        print(f"[ORCH DEBUG] run_orchestrator_pipeline received student_profile: {student_profile}")
+    except Exception:
+        print("[ORCH DEBUG] run_orchestrator_pipeline received student_profile: <unprintable>")
+
+    gemini_client = qdrant_service.gemini_client
+    if gemini_client is None:
+        try:
+            qdrant_service.initialize()
+        except Exception as e:
+            print(f"[WARN] Failed to fully initialize qdrant_service dynamically (possibly due to Qdrant DB connection): {e}")
+        # Always fetch it after trying, since Gemini client initialization happens first
+        gemini_client = qdrant_service.gemini_client
+
+    if gemini_client is None:
+        try:
+            from google import genai
+            from backend.app.utils.gemini_tracker import instrument_client
+            api_key = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")
+            gemini_client = genai.Client(api_key=api_key)
+            gemini_client = instrument_client(gemini_client)
+            print("[ORCHESTRATOR] Standalone fallback Gemini client initialized successfully.")
+        except Exception as fallback_err:
+            print(f"[ERROR] Standalone fallback Gemini client initialization failed: {fallback_err}")
+
     start_time = time.time()
     system_prompt = load_master_prompt_template()
 

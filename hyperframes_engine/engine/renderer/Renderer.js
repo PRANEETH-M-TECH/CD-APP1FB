@@ -71,6 +71,18 @@ class Renderer {
       case 'database_grid':
         contentHtml = Renderer.renderDatabaseGrid(scene, renderTree);
         break;
+      case 'taxonomy_tree':
+        contentHtml = Renderer.renderTaxonomyTree(scene, renderTree);
+        break;
+      case 'cartesian_grid':
+        contentHtml = Renderer.renderCartesianGrid(scene, renderTree);
+        break;
+      case 'geo_marker':
+        contentHtml = Renderer.renderGeoMarker(scene, renderTree);
+        break;
+      case 'before_after_slider':
+        contentHtml = Renderer.renderBeforeAfterSlider(scene, renderTree);
+        break;
       case 'venn_diagram':
         contentHtml = Renderer.renderVennDiagram(scene, renderTree);
         break;
@@ -90,11 +102,18 @@ class Renderer {
     }
 
     // Wrap the content inside the camera viewport container
-    return `
+    const wrapped = `
       <div class="camera-viewport-wrapper" style="width: 100%; height: 100%; position: relative; overflow: hidden; ${cameraTransform}">
         ${contentHtml}
       </div>
     `;
+
+    // If contentHtml is empty or minimal, log a warning for template generation issues
+    if (!contentHtml || contentHtml.trim().length < 10) {
+      console.warn(`[Renderer Warning] Rendered empty content for Scene ${scene.sceneNo} (template: ${templateId})`);
+    }
+
+    return wrapped;
   }
 
   /**
@@ -478,6 +497,199 @@ class Renderer {
       <div class="general-scene-container" id="general-${sId}" style="width:100%; height:100%; position:relative;">
         <h2 class="theme-text" style="font-size: 34px; font-weight: 800; position:absolute; top:40px; left:60px;" id="general-title-${sId}">${title}</h2>
         <div id="general-assets-${sId}"></div>
+      </div>
+    `;
+  }
+
+  static renderTaxonomyTree(scene, renderTree) {
+    const sId = scene.sceneNo;
+    const titleNode = scene.findNode(`title_${sId}`);
+    const rootNode = scene.findNode(`root_${sId}`);
+    const branchesNode = scene.findNode(`branches_${sId}`);
+
+    const title = titleNode ? titleNode.component.properties.text : 'Classification Hierarchy';
+    const rootLabel = rootNode ? rootNode.component.properties.text : 'Root Category';
+    
+    let branchesHtml = '';
+    if (branchesNode) {
+      branchesNode.component.children.forEach((bComp, idx) => {
+        const label = bComp.properties.text || '';
+        const sub = bComp.properties.sub || [];
+        
+        let subHtml = '';
+        if (sub.length > 0) {
+          subHtml = `<div style="font-size: 13px; font-weight: 400; opacity: 0.85; line-height: 1.3;">` +
+                    sub.map(s => `• ${s}`).join('<br>') +
+                    `</div>`;
+        }
+        
+        branchesHtml += `
+          <div class="branch-card theme-card-bg theme-card-border" id="tax-branch-${sId}-${idx}" style="padding: 18px 24px; border-radius: 16px; min-width: 180px; text-align: center; font-weight: 700; font-size: 18px; box-shadow: 0 8px 20px rgba(0,0,0,0.4);">
+            <div style="font-weight: 800; margin-bottom: 4px;">${label}</div>
+            ${subHtml}
+          </div>
+        `;
+      });
+    }
+
+    return `
+      <div class="taxonomy-container" id="taxonomy-${sId}" style="width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px; position: relative;">
+        <h2 class="theme-text" style="font-size: 34px; font-weight: 900; margin-bottom: 30px;" id="taxonomy-title-${sId}">${title}</h2>
+        
+        <div class="tree-canvas" style="position: relative; width: 90%; height: 450px; display: flex; flex-direction: column; align-items: center;">
+          <!-- Root Node -->
+          <div class="root-node theme-accent-bg" id="tax-root-${sId}" style="z-index: 5; padding: 16px 36px; border-radius: 20px; font-size: 24px; font-weight: 800; color: #090d16; box-shadow: 0 10px 25px rgba(0,0,0,0.5);">
+            ${rootLabel}
+          </div>
+
+          <!-- Branches Layer -->
+          <div id="tax-branches-${sId}" style="display: flex; justify-content: space-around; width: 100%; margin-top: 80px; z-index: 5;">
+            ${branchesHtml}
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  static renderCartesianGrid(scene, renderTree) {
+    const sId = scene.sceneNo;
+    const titleNode = scene.findNode(`title_${sId}`);
+    const equationNode = scene.findNode(`equation_${sId}`);
+    const pointsNode = scene.findNode(`points_${sId}`);
+
+    const title = titleNode ? titleNode.component.properties.text : 'Coordinate Geometry';
+    const eqLabel = equationNode ? equationNode.component.properties.text : 'y = f(x)';
+    const points = pointsNode ? pointsNode.component.children.map(c => ({
+      x: c.properties.x,
+      y: c.properties.y,
+      label: c.properties.label
+    })) : [];
+
+    return `
+      <div class="cartesian-container" id="cartesian-${sId}" style="width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px; position: relative;">
+        <h2 class="theme-text" style="font-size: 32px; font-weight: 900; margin-bottom: 12px;" id="cartesian-title-${sId}">${title}</h2>
+        <div class="equation-badge theme-card-bg theme-card-border" id="cartesian-eq-${sId}" style="padding: 8px 20px; border-radius: 12px; font-weight: 700; font-size: 18px; margin-bottom: 20px; color: #38bdf8;">
+          ${eqLabel}
+        </div>
+
+        <div class="grid-viewport theme-card-bg theme-card-border" style="position: relative; width: 680px; height: 380px; border-radius: 20px; overflow: hidden; display: flex; align-items: center; justify-content: center;">
+          <!-- SVG Axis & Curves -->
+          <svg viewBox="0 0 680 380" style="position: absolute; width: 100%; height: 100%; top: 0; left: 0;">
+            <!-- Grid Lines -->
+            <line x1="0" y1="190" x2="680" y2="190" stroke="rgba(255,255,255,0.3)" stroke-width="2" />
+            <line x1="340" y1="0" x2="340" y2="380" stroke="rgba(255,255,255,0.3)" stroke-width="2" />
+            
+            <!-- Curve Plot Line -->
+            <path id="cartesian-curve-${sId}" d="M 100 300 Q 340 50 580 300" stroke="#38bdf8" stroke-width="4" fill="none" stroke-linecap="round" />
+          </svg>
+
+          <!-- Labeled Points -->
+          <div id="cartesian-points-${sId}">
+            ${points.map((p, pIdx) => `
+              <div class="grid-point theme-accent-bg" id="cart-point-${sId}-${pIdx}" style="position: absolute; width: 14px; height: 14px; border-radius: 50%; left: ${340 + (p.x || 0) * 40}px; top: ${190 - (p.y || 0) * 30}px; transform: translate(-50%, -50%); box-shadow: 0 0 12px #38bdf8;">
+                <span style="position: absolute; top: -24px; left: 50%; transform: translateX(-50%); font-size: 13px; font-weight: 800; white-space: nowrap; color: #ffffff; text-shadow: 0 2px 6px #000;">${p.label || ''}</span>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  static renderGeoMarker(scene, renderTree) {
+    const sId = scene.sceneNo;
+    const titleNode = scene.findNode(`title_${sId}`);
+    const markersNode = scene.findNode(`markers_${sId}`);
+
+    const title = titleNode ? titleNode.component.properties.text : 'Geographical Overview';
+    const markers = markersNode ? markersNode.component.children.map(c => ({
+      label: c.properties.label,
+      x: c.properties.x,
+      y: c.properties.y,
+      description: c.properties.description
+    })) : [];
+
+    return `
+      <div class="geomarker-container" id="geo-${sId}" style="width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px; position: relative;">
+        <h2 class="theme-text" style="font-size: 34px; font-weight: 900; margin-bottom: 24px;" id="geo-title-${sId}">${title}</h2>
+
+        <div class="map-viewport theme-card-bg theme-card-border" style="position: relative; width: 85%; height: 420px; border-radius: 24px; overflow: hidden; background: radial-gradient(circle, rgba(15,23,42,0.9) 0%, rgba(9,13,22,1) 100%);">
+          <!-- Stylized Map Grid Overlay -->
+          <svg viewBox="0 0 100 100" style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; opacity: 0.15;">
+            <pattern id="map-grid" width="10" height="10" patternUnits="userSpaceOnUse">
+              <path d="M 10 0 L 0 0 0 10" fill="none" stroke="#ffffff" stroke-width="0.5" />
+            </pattern>
+            <rect width="100" height="100" fill="url(#map-grid)" />
+          </svg>
+
+          <!-- Pins & Description Cards -->
+          <div id="geo-markers-${sId}">
+            ${markers.map((m, mIdx) => `
+              <div class="geo-pin-wrapper" id="geo-pin-${sId}-${mIdx}" style="position: absolute; left: ${m.x || 50}%; top: ${m.y || 50}%; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; z-index: 5;">
+                <div class="pin-head theme-accent-bg" style="width: 18px; height: 18px; border-radius: 50%; box-shadow: 0 0 16px #38bdf8; position: relative;">
+                  <div style="position: absolute; width: 100%; height: 100%; border-radius: 50%; border: 2px solid #38bdf8; animation: ping 2s infinite;"></div>
+                </div>
+                <div class="pin-card theme-card-bg theme-card-border" style="margin-top: 10px; padding: 10px 16px; border-radius: 12px; white-space: nowrap; text-align: center; box-shadow: 0 8px 20px rgba(0,0,0,0.6);">
+                  <div style="font-weight: 800; font-size: 15px; color: #ffffff;">${m.label || 'Marker'}</div>
+                  ${m.description ? `<div style="font-size: 12px; color: rgba(255,255,255,0.7); margin-top: 2px;">${m.description}</div>` : ''}
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  static renderBeforeAfterSlider(scene, renderTree) {
+    const sId = scene.sceneNo;
+    const titleNode = scene.findNode(`title_${sId}`);
+    const beforeGroup = scene.findNode(`before_group_${sId}`);
+    const afterGroup = scene.findNode(`after_group_${sId}`);
+
+    const title = titleNode ? titleNode.component.properties.text : 'Before vs After State';
+    const beforeLabel = beforeGroup ? beforeGroup.component.properties.label : 'BEFORE';
+    const beforeBullets = beforeGroup ? beforeGroup.component.children.map(c => c.properties.text) : [];
+    
+    const afterLabel = afterGroup ? afterGroup.component.properties.label : 'AFTER';
+    const afterBullets = afterGroup ? afterGroup.component.children.map(c => c.properties.text) : [];
+
+    return `
+      <div class="before-after-container" id="ba-${sId}" style="width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px; position: relative;">
+        <h2 class="theme-text" style="font-size: 34px; font-weight: 900; margin-bottom: 24px;" id="ba-title-${sId}">${title}</h2>
+
+        <div class="ba-grid" style="display: flex; gap: 30px; width: 85%; height: 420px; position: relative; align-items: center; justify-content: center;">
+          <!-- Before Card -->
+          <div class="ba-card theme-card-bg theme-card-border" id="ba-before-${sId}" style="flex: 1; height: 100%; border-radius: 24px; padding: 30px; display: flex; flex-direction: column; box-shadow: 0 10px 25px rgba(0,0,0,0.5); border-left: 4px solid #ef4444;">
+            <div style="font-size: 22px; font-weight: 900; color: #ef4444; text-transform: uppercase; margin-bottom: 16px; letter-spacing: 1px;">${beforeLabel}</div>
+            <div style="display: flex; flex-direction: column; gap: 12px;">
+              ${beforeBullets.map((b, bIdx) => `
+                <div style="font-size: 16px; font-weight: 600; color: rgba(255,255,255,0.9); display: flex; align-items: center; gap: 10px;">
+                  <span style="width: 8px; height: 8px; border-radius: 50%; background: #ef4444; flex-shrink: 0;"></span>
+                  <span>${b}</span>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+
+          <!-- Divider Indicator -->
+          <div id="ba-divider-${sId}" style="width: 50px; height: 50px; border-radius: 50%; background: #090d16; border: 2px solid rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; font-weight: 900; z-index: 10; color: #38bdf8;">
+            ➔
+          </div>
+
+          <!-- After Card -->
+          <div class="ba-card theme-card-bg theme-card-border" id="ba-after-${sId}" style="flex: 1; height: 100%; border-radius: 24px; padding: 30px; display: flex; flex-direction: column; box-shadow: 0 10px 25px rgba(0,0,0,0.5); border-left: 4px solid #22c55e;">
+            <div style="font-size: 22px; font-weight: 900; color: #22c55e; text-transform: uppercase; margin-bottom: 16px; letter-spacing: 1px;">${afterLabel}</div>
+            <div style="display: flex; flex-direction: column; gap: 12px;">
+              ${afterBullets.map((b, bIdx) => `
+                <div style="font-size: 16px; font-weight: 600; color: rgba(255,255,255,0.9); display: flex; align-items: center; gap: 10px;">
+                  <span style="width: 8px; height: 8px; border-radius: 50%; background: #22c55e; flex-shrink: 0;"></span>
+                  <span>${b}</span>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        </div>
       </div>
     `;
   }

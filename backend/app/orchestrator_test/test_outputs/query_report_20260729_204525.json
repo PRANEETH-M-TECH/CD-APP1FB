@@ -1,0 +1,176 @@
+{
+  "timestamp": "2026-07-29T20:45:25.430370",
+  "execution_time_seconds": 18.43,
+  "authenticated_student": {
+    "uid": "anonymous",
+    "email": "anonymous@cg.com",
+    "name": "Sonu",
+    "class": 6,
+    "board": "CBSE",
+    "role": "student"
+  },
+  "raw_user_query": "types of motion",
+  "orchestrator_output": {
+    "is_authorized": true,
+    "refusal_reason": null,
+    "classification": "CURRICULUM",
+    "reformulated_query": "Types of motion and their examples Class 6 Science",
+    "matched_subject": "Science",
+    "matched_chapter": "LEARNING HOW TO MEASURE",
+    "complexity_level": 2,
+    "format_decision": "VIDEO_REQUIRED",
+    "text_narration": "When an object changes its position with time, we say it is in motion. In our daily life, we see different things moving in different ways, such as a marching soldier, a spinning top, or a swinging pendulum. Based on how objects move, motion is divided into different types. Rectilinear motion is motion along a straight line. When an object moves in a straight path without changing direction, it is in rectilinear motion. For example, a car moving on a straight road or soldiers marching in a parade move along a straight line. Circular motion happens when an object moves along a circular path at a fixed distance from a central point, like a stone tied to a string being whirled around. Rotational motion happens when an object turns around its own central axis, like the blades of a ceiling fan or a spinning top. Periodic motion is a motion that repeats itself after a fixed equal interval of time. When a swing moves back and forth, or a pendulum moves from side to side, it repeats its motion regularly. This repeating movement at equal time intervals is called periodic motion.",
+    "video_storyboard": {
+      "lesson_title": "Types of Motion",
+      "layout_mode": "timeline",
+      "theme": "Science",
+      "global_assets": [],
+      "connections": [],
+      "scenes": [
+        {
+          "scene_no": 1,
+          "purpose": "Introduce the concept of motion and its different forms",
+          "template_id": "title_slide",
+          "template_selection_reasoning": "Title slide introduces the main topic clearly for Class 6 level.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": "title_node"
+          },
+          "teacher_script": "When an object changes its position with time, we say it is in motion. In our daily life, we see different things moving in different ways, such as a marching soldier, a spinning top, or a swinging pendulum. Based on how objects move, motion is divided into different types.",
+          "template_data": {
+            "title": "Types of Motion",
+            "subtitle": "Class 6 Science - Understanding How Things Move"
+          }
+        },
+        {
+          "scene_no": 2,
+          "purpose": "Explain Rectilinear Motion with simple examples",
+          "template_id": "concept_diagram",
+          "template_selection_reasoning": "Concept diagram visualizes motion in a straight line with simple clear nodes.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": "rectilinear_main"
+          },
+          "teacher_script": "Rectilinear motion is motion along a straight line. When an object moves in a straight path without changing direction, it is in rectilinear motion. For example, a car moving on a straight road or soldiers marching in a parade move along a straight line.",
+          "template_data": {
+            "title": "Rectilinear Motion",
+            "description": "Motion in a straight line",
+            "nodes": [
+              {
+                "id": "rectilinear_main",
+                "label": "Straight Line Path",
+                "type": "main"
+              },
+              {
+                "id": "ex1",
+                "label": "Car on a straight road",
+                "type": "example"
+              },
+              {
+                "id": "ex2",
+                "label": "Soldiers in a parade",
+                "type": "example"
+              }
+            ]
+          }
+        },
+        {
+          "scene_no": 3,
+          "purpose": "Compare Circular Motion and Rotational Motion",
+          "template_id": "column_comparison",
+          "template_selection_reasoning": "Column comparison clearly separates circular motion from rotational motion.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": "col1"
+          },
+          "teacher_script": "Circular motion happens when an object moves along a circular path at a fixed distance from a central point, like a stone tied to a string being whirled around. Rotational motion happens when an object turns around its own central axis, like the blades of a ceiling fan or a spinning top.",
+          "template_data": {
+            "title": "Circular vs Rotational Motion",
+            "columns": [
+              {
+                "header": "Circular Motion",
+                "items": [
+                  "Object moves around a center point",
+                  "Distance from center stays constant",
+                  "Example: Hands of a clock"
+                ]
+              },
+              {
+                "header": "Rotational Motion",
+                "items": [
+                  "Object spins around its own axis",
+                  "Entire body turns together",
+                  "Example: Ceiling fan blades"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "scene_no": 4,
+          "purpose": "Explain Periodic Motion with relatable examples",
+          "template_id": "concept_diagram",
+          "template_selection_reasoning": "Concept diagram explains the key feature of periodic repeating motion.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": "periodic_main"
+          },
+          "teacher_script": "Periodic motion is a motion that repeats itself after a fixed equal interval of time. When a swing moves back and forth, or a pendulum moves from side to side, it repeats its motion regularly. This repeating movement at equal time intervals is called periodic motion.",
+          "template_data": {
+            "title": "Periodic Motion",
+            "description": "Motion that repeats at regular time intervals",
+            "nodes": [
+              {
+                "id": "periodic_main",
+                "label": "Repeats after fixed time",
+                "type": "main"
+              },
+              {
+                "id": "ex3",
+                "label": "Swing moving back and forth",
+                "type": "example"
+              },
+              {
+                "id": "ex4",
+                "label": "Clock pendulum swinging",
+                "type": "example"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "rag_retrieval_executed": true,
+  "retrieved_top10_chunks": [
+    {
+      "chunk_index": 1,
+      "score": 0.0,
+      "book_name": "",
+      "chapter_name": "",
+      "content_snippet": "..."
+    },
+    {
+      "chunk_index": 2,
+      "score": 0.0,
+      "book_name": "",
+      "chapter_name": "",
+      "content_snippet": "..."
+    },
+    {
+      "chunk_index": 3,
+      "score": 0.0,
+      "book_name": "",
+      "chapter_name": "",
+      "content_snippet": "..."
+    }
+  ]
+}

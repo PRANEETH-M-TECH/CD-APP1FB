@@ -91,11 +91,40 @@ class TTSManager {
      * @param {string} text  — The text to speak.
      * @param {HTMLElement|null} btn — Optional 🔊 button (for icon updates).
      */
+    _sanitizeForTTS(text) {
+        if (!text) return '';
+        let clean = text;
+        // Strip HTML tags
+        clean = clean.replace(/<[^>]*>/g, ' ');
+        // Remove bold/italic markers
+        clean = clean.replace(/\*\*/g, '');
+        clean = clean.replace(/\*/g, '');
+        clean = clean.replace(/__/g, '');
+        clean = clean.replace(/_/g, '');
+        // Remove headers
+        clean = clean.replace(/^\s*#+\s+/gm, '');
+        // Remove markdown bullets
+        clean = clean.replace(/^\s*[\*\-\•]\s+/gm, '');
+        // Convert colons to periods for natural pauses
+        clean = clean.replace(/:\s*$/gm, '.');
+        clean = clean.replace(/(\w+):\s/g, '$1. ');
+        // Normalize multiple spaces
+        clean = clean.replace(/\s+/g, ' ').trim();
+        return clean;
+    }
+
+    /**
+     * Speak text using the active model.
+     * @param {string} text  — The text to speak.
+     * @param {HTMLElement|null} btn — Optional 🔊 button (for icon updates).
+     */
     async speak(text, btn = null) {
         if (!text || !text.trim()) return;
 
         this._activeBtn = btn;
-        this.fetchQueue.push(text);
+        const sanitized = this._sanitizeForTTS(text);
+        if (!sanitized) return;
+        this.fetchQueue.push(sanitized);
 
         if (!this.isFetching) {
             this._processFetchQueue();

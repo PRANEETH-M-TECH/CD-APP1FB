@@ -86,7 +86,11 @@ async def generate_visual_lesson_stream(query: str, book_uuid: str, class_name: 
     Streams progress states synchronized with frontend UI steps, compiles Hyperframes composition,
     and returns completed lesson ready event.
     """
-    lesson_id = f"vl_{uuid.uuid4().hex[:8]}"
+    lesson_id = None
+    if precomputed_storyboard and precomputed_storyboard.get("lesson_id"):
+        lesson_id = precomputed_storyboard.get("lesson_id")
+    if not lesson_id:
+        lesson_id = f"vl_{uuid.uuid4().hex[:8]}"
     print("\n======================================================================")
     print(f"[PIPELINE DEBUG] ENTER VisualLearning")
     print(f"   Query: '{query}' | Lesson ID: {lesson_id}")
@@ -316,6 +320,17 @@ async def generate_visual_lesson_stream(query: str, book_uuid: str, class_name: 
         lesson_json_path = os.path.join(output_dir, "lesson.json")
         with open(lesson_json_path, "w", encoding="utf-8") as f:
             json.dump(lesson_package, f, indent=2)
+            
+        # Upload storyboard lesson.json to Supabase Cloud Storage
+        from backend.app.core.supabase_storage import upload_file_to_supabase
+        cloud_lesson_json_url = upload_file_to_supabase(lesson_json_path, f"{lesson_id}/lesson.json")
+        if cloud_lesson_json_url:
+            lesson_package["storyboard_json_url"] = cloud_lesson_json_url
+            logger.info(f"[Supabase Storage] Storyboard lesson.json uploaded -> {cloud_lesson_json_url}")
+            
+            # Re-write lesson.json with the embedded storyboard_json_url
+            with open(lesson_json_path, "w", encoding="utf-8") as f:
+                json.dump(lesson_package, f, indent=2)
             
         # Trigger engine compilation bridge passing root output_dir
         try:

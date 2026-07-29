@@ -17,7 +17,17 @@ module.exports = {
     const centerX = hasBullets ? 900 : 640;
     const centerY = 360;
     const radius = hasBullets ? 190 : 270;
-    const leafNodes = data.leaf_nodes || [];
+    const leafNodes = data.leaf_nodes
+      || data.key_nodes
+      || data.branches
+      || data.attributes
+      || data.nodes
+      || data.options
+      || data.stages
+      || data.steps
+      || data.bullets
+      || data.items
+      || [];
     const totalLeaves = leafNodes.length;
     const timeStep = (dur - 1.5) / Math.max(1, totalLeaves);
     

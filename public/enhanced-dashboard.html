@@ -640,7 +640,7 @@
                 // Initialize sidebar
                 const userData = {
                     name: user.displayName || 'Student',
-                    class: localStorage.getItem('userClass') || '8',
+                    class: localStorage.getItem('userClass') || '',
                     email: user.email,
                     studyStreak: 0
                 };
@@ -656,7 +656,7 @@
             try {
                 // Fetch main dashboard data
                 // Pass class_name for strict isolation
-                const userClass = localStorage.getItem('userClass') || '8';
+                const userClass = localStorage.getItem('userClass') || '';
                 const response = await fetch(`/api/dashboard/enhanced?uid=${currentUser.uid}&class_name=Class ${userClass}`, {
                     headers: { 'Authorization': `Bearer ${userToken}` }
                 });
