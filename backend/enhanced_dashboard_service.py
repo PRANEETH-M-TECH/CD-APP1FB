@@ -9,7 +9,6 @@ import logging
 from datetime import datetime, timedelta
 from typing import Optional, Dict, List
 from collections import defaultdict, Counter
-from google import genai  # NEW SDK!
 
 logger = logging.getLogger(__name__)
 
