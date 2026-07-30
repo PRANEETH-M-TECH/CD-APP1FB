@@ -2625,8 +2625,9 @@
   justify-content: center;
   z-index: 10000;
   opacity: 0;
+  visibility: hidden;
   pointer-events: none;
-  transition: opacity 0.4s ease;
+  transition: opacity 0.4s ease, visibility 0.4s ease;
 }
 .fb-modal-close {
   position: absolute;
@@ -2687,6 +2688,7 @@
 .hf-feedback-skip:hover { color: #e2e8f0; }
 .hf-feedback-overlay.fb-show {
   opacity: 1;
+  visibility: visible;
   pointer-events: auto;
 }
 .hf-feedback-title {

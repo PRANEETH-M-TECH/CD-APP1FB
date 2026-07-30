@@ -500,6 +500,7 @@ function setupChatSubmitGlobal() {
                     // Store the Firestore doc ID on the card for feedback association
                     const card = document.getElementById(`ai-card-global-${currentTurn}`);
                     if (card) card.dataset.queryId = data.query_id;
+                    window.lastQueryId = data.query_id;
                 } else if (data.display_text) {
                     if (useStreamingAudio) {
                         if (data.audio_url) {
@@ -837,9 +838,18 @@ document.addEventListener('fullscreenchange', () => {
 });
 
 /** Display the overlay rating popup inside the video shell when video completes */
-function showVideoFeedbackOverlay(turnId) {
+function showVideoFeedbackOverlay(turnId, retryCount = 0) {
     const shell = document.getElementById(`hf-player-${turnId}`);
-    if (!shell || shownVideoFeedbackTurns.has(String(turnId))) return;
+    if (!shell) {
+        if (retryCount < 10) {
+            console.log(`[Feedback] Player shell not found for turn ${turnId}. Retrying in 100ms... (attempt ${retryCount + 1}/10)`);
+            setTimeout(() => showVideoFeedbackOverlay(turnId, retryCount + 1), 100);
+        } else {
+            console.warn(`[Feedback] Player shell not found for turn ${turnId} after 10 attempts.`);
+        }
+        return;
+    }
+    if (shownVideoFeedbackTurns.has(String(turnId))) return;
     shownVideoFeedbackTurns.add(String(turnId));
     
     let overlay = document.getElementById(`hf-feedback-overlay-${turnId}`);
@@ -933,7 +943,7 @@ function injectFeedbackButtons(turnId) {
 /** Handle a thumbs up or down click */
 function submitFeedback(turnId, type) {
     const card = document.getElementById(`ai-card-global-${turnId}`);
-    const queryId = card ? card.dataset.queryId : null;
+    const queryId = (card && card.dataset.queryId) ? card.dataset.queryId : (window.lastQueryId || null);
     const upBtn  = document.getElementById(`fb-up-${turnId}`);
     const downBtn = document.getElementById(`fb-down-${turnId}`);
 
@@ -1008,7 +1018,7 @@ function ensureFeedbackOverlayMarkup() {
 /** Open the animated robot dislike overlay and begin the voice flow */
 function openFeedbackOverlay(queryId, turnId) {
     ensureFeedbackOverlayMarkup();
-    _fbQueryId    = queryId;
+    _fbQueryId    = queryId || window.lastQueryId || null;
     _fbTurnId     = turnId;
     _fbTranscript = '';
     _fbMicActive  = false;
