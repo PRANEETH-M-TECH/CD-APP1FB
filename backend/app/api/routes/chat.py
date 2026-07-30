@@ -1,4 +1,4 @@
-﻿import json
+import json
 import time
 import datetime
 import logging
@@ -546,7 +546,7 @@ async def smart_query_engine(
                     lines = text_script.split('\n')
                     for l_idx, line in enumerate(lines):
                         if not line.strip():
-                            yield f"data: {json.dumps({'display_text': '\n'})}\n\n"
+                            yield "data: " + json.dumps({'display_text': '\n'}) + "\n\n"
                             continue
                         
                         sentences = [s.strip() for s in re.split(r'(?<=[.!?à¥¤])\s+', line) if s.strip()]
@@ -701,7 +701,7 @@ async def smart_query_engine(
                 lines = text_script.split('\n')
                 for l_idx, line in enumerate(lines):
                     if not line.strip():
-                        yield f"data: {json.dumps({'display_text': '\n'})}\n\n"
+                        yield "data: " + json.dumps({'display_text': '\n'}) + "\n\n"
                         continue
                     
                     sentences = [s.strip() for s in re.split(r'(?<=[.!?à¥¤])\s+', line) if s.strip()]
