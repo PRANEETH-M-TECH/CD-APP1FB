@@ -61,7 +61,16 @@ async def process_book_in_background(book_uuid: str, pdf_path: str, class_name: 
         print(f"[PROCESS] Initializing services...")
         qdrant.initialize()
         reader = PdfReader(pdf_path)
-        text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
+        parent_splitter = RecursiveCharacterTextSplitter(
+            chunk_size=2000,
+            chunk_overlap=400,
+            separators=["\n\n", "\n", " ", ""]
+        )
+        child_splitter = RecursiveCharacterTextSplitter(
+            chunk_size=400,
+            chunk_overlap=100,
+            separators=["\n\n", "\n", ".", " ", ""]
+        )
         print(f"[PROCESS] ✓ Services initialized\n")
 
         chapters_to_process = chapters
@@ -86,41 +95,64 @@ async def process_book_in_background(book_uuid: str, pdf_path: str, class_name: 
                 continue
             
             print(f"[PROCESS] │  Pages: PDF {start_page}-{end_page}, Chapter {chp_start}-{chp_end}")
-            print(f"[PROCESS] │  Extracting text from PDF...")
+            print(f"[PROCESS] │  Extracting and chunking text from PDF...")
 
-            # Extract text
-            chapter_text = ""
-            for page_num in range(start_page - 1, end_page):
-                if 0 <= page_num < len(reader.pages):
-                    chapter_text += reader.pages[page_num].extract_text() or ""
-
-            # Create and upload chunks to Qdrant
-            text_chunks = text_splitter.split_text(chapter_text)
-            print(f"[PROCESS] │  ✓ Extracted and split into {len(text_chunks)} chunks")
-            print(f"[PROCESS] │  Uploading to Qdrant...")
-            
             points_to_upload = []
-            for j, chunk_text in enumerate(text_chunks):
-                chunk_id = str(uuid.uuid4())
-                qdrant_id = str(uuid.uuid4())
-                embedding = qdrant.local_embedder.encode(chunk_text).tolist()
-                points_to_upload.append(
-                    models.PointStruct(
-                        id=qdrant_id,
-                        vector=embedding,
-                        payload={
-                            "book_uuid": book_uuid,
-                            "chapter_id": str(i + 1),
-                            "chunk_id": chunk_id,
-                            "text": chunk_text,
-                            "chapter_name": chapter_name,
-                            "pdf_startpg": chapter_data.get("pdf_startpg"),
-                            "pdf_endpg": chapter_data.get("pdf_endpg"),
-                            "chpstpage": chapter_data.get("chpstpage"),
-                            "chpendpage": chapter_data.get("chpendpage"),
-                        },
-                    )
-                )
+            chapter_parent_chunks = []
+
+            # Process page by page
+            for page_num in range(start_page - 1, end_page):
+                if page_num < 0 or page_num >= len(reader.pages):
+                    continue
+                
+                page_text = reader.pages[page_num].extract_text() or ""
+                if not page_text.strip():
+                    continue
+
+                # Split page text into parent chunks
+                parent_chunks = parent_splitter.split_text(page_text)
+                for parent_text in parent_chunks:
+                    parent_text = parent_text.strip()
+                    if not parent_text:
+                        continue
+                    
+                    chapter_parent_chunks.append(parent_text)
+                    
+                    # Split parent chunk into child chunks
+                    child_chunks = child_splitter.split_text(parent_text)
+                    for chunk_text in child_chunks:
+                        chunk_text = chunk_text.strip()
+                        if not chunk_text:
+                            continue
+                        
+                        chunk_id = str(uuid.uuid4())
+                        qdrant_id = str(uuid.uuid4())
+                        
+                        # Generate embedding for child text
+                        embedding = qdrant.local_embedder.encode(chunk_text).tolist()
+                        
+                        # Compute actual printed page
+                        current_printed_page = chp_start + (page_num - (start_page - 1)) if chp_start is not None else 1
+                        
+                        points_to_upload.append(
+                            models.PointStruct(
+                                id=qdrant_id,
+                                vector=embedding,
+                                payload={
+                                    "book_uuid": book_uuid,
+                                    "chapter_id": str(i + 1),
+                                    "chunk_id": chunk_id,
+                                    "text": chunk_text,
+                                    "parent_text": parent_text,
+                                    "chapter_name": chapter_name,
+                                    "pdf_page": page_num + 1,
+                                    "pdf_startpg": start_page,
+                                    "pdf_endpg": end_page,
+                                    "chpstpage": current_printed_page,
+                                    "chpendpage": current_printed_page,
+                                },
+                            )
+                        )
 
             if points_to_upload:
                 print(f"[PROCESS] │  ✓ Saved {len(points_to_upload)} chunks to Qdrant")
@@ -158,7 +190,7 @@ async def process_book_in_background(book_uuid: str, pdf_path: str, class_name: 
 
             # Generate summary
             print(f"[PROCESS] │  Generating summary with LLM...")
-            summary_text = generate_chapter_summary(class_name, subject, chapter_name, text_chunks)
+            summary_text = generate_chapter_summary(class_name, subject, chapter_name, chapter_parent_chunks)
             print(f"[PROCESS] │  ✓ Summary generated ({len(summary_text)} chars)")
             
             chapter_summary_data = {

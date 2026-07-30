@@ -42,8 +42,8 @@ def track_topic_analytics(
         for topic in topics:
             # Document ID: {uid}_{subject}_{chapter_id}_{topic}
             topic_slug = topic.lower().replace(" ", "_")[:50]
-            doc_id = f"{uid}_{subject.lower()}_{chapter_id}_{topic_slug}"
-            doc_ref = db.collection("topic_analytics").document(doc_id)
+            doc_id = f"{subject.lower()}_{chapter_id}_{topic_slug}"
+            doc_ref = db.collection("users").document(uid).collection("topic_analytics").document(doc_id)
             
             doc = doc_ref.get()
             
@@ -108,7 +108,7 @@ def update_frequent_questions(
         subject: Subject name
     """
     try:
-        doc_ref = db.collection("frequent_questions").document(uid)
+        doc_ref = db.collection("users").document(uid).collection("stats").document("frequent_questions")
         doc = doc_ref.get()
         
         if not doc.exists:
@@ -189,7 +189,7 @@ def analyze_weak_areas(uid: str) -> Dict:
         }
         
         # Analyze topic analytics
-        topic_docs = db.collection("topic_analytics").where("uid", "==", uid).stream()
+        topic_docs = db.collection("users").document(uid).collection("topic_analytics").stream()
         
         topic_issues = []
         for doc in topic_docs:
@@ -235,7 +235,7 @@ def analyze_weak_areas(uid: str) -> Dict:
                 })
         
         # Save to Firestore
-        db.collection("weak_areas").document(uid).set(weak_areas)
+        db.collection("users").document(uid).collection("mistakes").document("weak_areas").set(weak_areas)
         logger.info(f"✅ Analyzed weak areas for {uid}: {len(topic_issues)} issues found")
         
         return weak_areas
@@ -309,7 +309,7 @@ def generate_suggestions(uid: str) -> List[Dict]:
             })
         
         # Get frequent questions
-        freq_doc = db.collection("frequent_questions").document(uid).get()
+        freq_doc = db.collection("users").document(uid).collection("stats").document("frequent_questions").get()
         if freq_doc.exists:
             freq_data = freq_doc.to_dict()
             questions = freq_data.get("questions", [])
@@ -368,7 +368,7 @@ def get_student_detailed_report(uid: str) -> Dict:
             logger.info(f"✅ Rebuilt analytics for {uid} for admin report")
         except Exception as e:
             logger.error(f"⚠️ Failed to rebuild analytics, falling back to stored stats: {e}")
-            user_stats_doc = db.collection("user_stats").document(uid).get()
+            user_stats_doc = db.collection("users").document(uid).collection("stats").document("stats_doc").get()
             if user_stats_doc.exists:
                 report["basic_stats"] = user_stats_doc.to_dict()
         
@@ -378,7 +378,7 @@ def get_student_detailed_report(uid: str) -> Dict:
         # actually, let's stick to the existing logic for other parts to minimize risk, 
         # but basic_stats was the main complaint.
         
-        queries = db.collection("user_queries").where("uid", "==", uid).stream()
+        queries = db.collection("users").document(uid).collection("queries").stream()
         chapter_counts = Counter()
         subject_counts = Counter()
         
@@ -397,7 +397,7 @@ def get_student_detailed_report(uid: str) -> Dict:
         report["subject_distribution"] = dict(subject_counts)
         
         # Topic mastery
-        topics = db.collection("topic_analytics").where("uid", "==", uid).stream()
+        topics = db.collection("users").document(uid).collection("topic_analytics").stream()
         topic_list = []
         for t in topics:
             data = t.to_dict()
@@ -413,13 +413,12 @@ def get_student_detailed_report(uid: str) -> Dict:
         report["topic_mastery"] = topic_list
         
         # Weak areas
-        weak_doc = db.collection("weak_areas").document(uid).get()
+        weak_doc = db.collection("users").document(uid).collection("mistakes").document("weak_areas").get()
         if weak_doc.exists:
             report["weak_areas"] = weak_doc.to_dict().get("topics", [])
         
         # Recent queries
-        recent = db.collection("user_queries")\
-            .where("uid", "==", uid)\
+        recent = db.collection("users").document(uid).collection("queries")\
             .order_by("timestamp", direction=firestore.Query.DESCENDING)\
             .limit(10)\
             .stream()

@@ -72,8 +72,7 @@ def generate_student_feedback(uid: str, class_name: str = None) -> Dict:
         stats = stats_doc.to_dict()
         
         # Get recent queries
-        queries_ref = db.collection("user_queries")\
-            .where("uid", "==", uid)\
+        queries_ref = db.collection("users").document(uid).collection("queries")\
             .order_by("timestamp", direction=firestore.Query.DESCENDING)\
             .limit(50)
         
@@ -189,8 +188,7 @@ def get_chapter_hotspots_for_student(uid: str, limit: int = 5) -> List[Dict]:
     """
     try:
         # Get all queries for this user
-        queries_ref = db.collection("user_queries")\
-            .where("uid", "==", uid)\
+        queries_ref = db.collection("users").document(uid).collection("queries")\
             .order_by("timestamp", direction=firestore.Query.DESCENDING)\
             .limit(100)
         

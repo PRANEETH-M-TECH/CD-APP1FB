@@ -145,7 +145,7 @@ def get_activity_heatmap(uid: str, days: int = 90) -> List[Dict]:
         # Get queries from last N days
         start_date = datetime.now(timezone.utc) - timedelta(days=days)
         
-        queries_ref = db.collection("user_queries").where("uid", "==", uid).where("timestamp", ">=", start_date)
+        queries_ref = db.collection("users").document(uid).collection("queries").where("timestamp", ">=", start_date)
         queries = queries_ref.stream()
         
         # Count queries per day
@@ -182,7 +182,7 @@ def get_recent_activities(uid: str, limit: int = 5) -> List[Dict]:
         activities = []
         
         # Get recent queries
-        queries_ref = db.collection("user_queries").where("uid", "==", uid).order_by("timestamp", direction=firestore.Query.DESCENDING).limit(limit)
+        queries_ref = db.collection("users").document(uid).collection("queries").order_by("timestamp", direction=firestore.Query.DESCENDING).limit(limit)
         queries = queries_ref.stream()
         
         for query in queries:
