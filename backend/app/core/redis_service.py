@@ -21,6 +21,9 @@ class InMemoryRedis:
         if ex:
             self.expirations[name] = time.time() + ex
         return True
+
+    def setex(self, name, time, value):
+        return self.set(name, value, ex=time)
     
     def delete(self, name):
         if name in self.store:
