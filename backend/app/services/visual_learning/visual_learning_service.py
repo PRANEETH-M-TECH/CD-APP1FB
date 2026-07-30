@@ -137,13 +137,13 @@ async def generate_visual_lesson_stream(query: str, book_uuid: str, class_name: 
             await asyncio.sleep(0.3)
             
             prompt = get_visual_lesson_prompt(class_name, subject, query, context)
-            client = qdrant.gemini_client
+            client = qdrant.openai_client
             
             if not client:
-                raise RuntimeError("Gemini Client is not initialized in qdrant_service.")
+                raise RuntimeError("OpenAI Client is not initialized in qdrant_service.")
                 
             candidate_models = [
-                os.environ.get("GEMINI_MODEL_NAME", "gemini-2.5-flash"),
+                os.environ.get("OPENAI_MODEL", "gpt-4o-mini"),
             ]
             candidate_models = list(dict.fromkeys(candidate_models))
 
@@ -154,11 +154,10 @@ async def generate_visual_lesson_stream(query: str, book_uuid: str, class_name: 
             for target_model in candidate_models:
                 try:
                     logger.info(f"[VisualLearning] Generating storyboard with '{target_model}'...")
-                    from google.genai import types
-                    gen_config = types.GenerateContentConfig(
-                        response_mime_type="application/json",
-                        temperature=0.2
-                    )
+                    gen_config = {
+                        "response_mime_type": "application/json",
+                        "temperature": 0.2
+                    }
                     response = client.models.generate_content(
                         model=target_model,
                         contents=prompt,
@@ -203,7 +202,7 @@ async def generate_visual_lesson_stream(query: str, book_uuid: str, class_name: 
                         "template_data": {"title": f"Scene {idx}", "subtitle": item}
                     })
 
-            # ── Template Selection Audit & Variety Validation Pass ────────────
+            # â”€â”€ Template Selection Audit & Variety Validation Pass â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
             valid_templates = [
                 'title_slide', 'concept_diagram', 'cycle_template', 'math_derivation',
                 'venn_diagram', 'taxonomy_tree', 'cartesian_grid', 'column_comparison',
@@ -373,7 +372,7 @@ async def generate_visual_lesson_stream(query: str, book_uuid: str, class_name: 
 
         try:
             print("\n======================================================================")
-            print(f"🎉 [RENDER LOG] [VISUAL LEARNING PIPELINE SUCCESS]")
+            print(f"ðŸŽ‰ [RENDER LOG] [VISUAL LEARNING PIPELINE SUCCESS]")
             print(f"   Lesson ID: {lesson_id}")
             print(f"   Title: '{lesson_package['lesson_title']}'")
             print(f"   Scenes: {len(processed_scenes)}")
@@ -387,7 +386,8 @@ async def generate_visual_lesson_stream(query: str, book_uuid: str, class_name: 
     except Exception as e:
         logger.error(f"[VisualLearning] Failed to stream visual lesson storyboard: {e}", exc_info=True)
         try:
-            print(f"\n❌ [RENDER LOG] [VISUAL LEARNING PIPELINE ERROR]: {e}\n")
+            print(f"\nâŒ [RENDER LOG] [VISUAL LEARNING PIPELINE ERROR]: {e}\n")
         except Exception:
             print(f"[RENDER LOG] [VISUAL LEARNING PIPELINE ERROR]: {e}")
         yield f"data: {json.dumps({'type': 'error', 'message': str(e)})}\n\n"
+

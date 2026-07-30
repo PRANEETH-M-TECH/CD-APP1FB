@@ -1,4 +1,4 @@
-import re
+﻿import re
 import json
 import logging
 from typing import List, Dict, Optional
@@ -239,7 +239,7 @@ async def get_topic_clusters(
             queries_bullet_list=chr(10).join(f"- {q}" for q in query_texts[:50])
         )
 
-        response = qdrant.gemini_client.models.generate_content(
+        response = qdrant.openai_client.models.generate_content(
             model=qdrant.generation_model_name,
             contents=prompt
         )
@@ -568,3 +568,4 @@ async def get_student_performance_endpoint(uid: str = Query(...)):
     except Exception as e:
         logger.error(f"Failed to get student performance: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+

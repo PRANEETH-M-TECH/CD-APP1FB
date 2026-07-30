@@ -1,4 +1,4 @@
-import json
+﻿import json
 import time
 import datetime
 import logging
@@ -35,7 +35,7 @@ def format_text_explanation(text: str) -> str:
     
     import re
     # 1. Add space after punctuation if followed directly by any letter (English or Devanagari)
-    text = re.sub(r'([.!?।])(?=[a-zA-Z\u0900-\u097F])', r'\1 ', text)
+    text = re.sub(r'([.!?à¥¤])(?=[a-zA-Z\u0900-\u097F])', r'\1 ', text)
     
     # 2. Format sideheadings (bold text followed by a colon) to put the description on a new line
     text = re.sub(r'-\s*\*\*([^*]+)\*\*:\s*', r'- **\1**:<br>', text)
@@ -195,7 +195,7 @@ async def query_engine(
     Streams the answer in real-time using Server-Sent Events (SSE).
     """
     async def event_generator():
-        from backend.app.utils.gemini_tracker import request_stats
+        from backend.app.utils.llm_tracker import request_stats
         request_stats.set({"calls": [], "start_time": time.time(), "query": query})
         start = time.time()
         print(f"\n{'='*80}")
@@ -333,7 +333,7 @@ async def query_engine(
         
         full_answer = ""
         try:
-            response_stream = qdrant.gemini_client.models.generate_content_stream(
+            response_stream = qdrant.openai_client.models.generate_content_stream(
                 model=qdrant.generation_model_name,
                 contents=final_prompt
             )
@@ -376,7 +376,7 @@ async def query_engine(
                     f.write(f"   {idx}. {ch['chapter_name']} (relevance: {ch.get('relevance_score', 'N/A')})\n")
                 f.write(f"\n4. GENERATED ANSWER:\n{full_answer}\n\n")
         except Exception as e:
-            print(f"[LOG] ✗ Error writing to ans.txt: {e}\n")
+            print(f"[LOG] âœ— Error writing to ans.txt: {e}\n")
             
         try:
             rag_chunks = []
@@ -399,7 +399,7 @@ async def query_engine(
         except Exception as log_err:
             logger.error(f"[DeploymentLogger] Failed to log query_engine: {log_err}")
 
-        from backend.app.utils.gemini_tracker import print_query_performance_report
+        from backend.app.utils.llm_tracker import print_query_performance_report
         print_query_performance_report()
             
     return StreamingResponse(event_generator(), media_type="text/event-stream")
@@ -433,7 +433,7 @@ async def smart_query_engine(
         subject = ""
 
     async def event_generator():
-        from backend.app.utils.gemini_tracker import request_stats
+        from backend.app.utils.llm_tracker import request_stats
         request_stats.set({"calls": [], "start_time": time.time(), "query": query})
         uid = get_user_id_or_default(request)
         start_time = time.time()
@@ -549,7 +549,7 @@ async def smart_query_engine(
                             yield f"data: {json.dumps({'display_text': '\n'})}\n\n"
                             continue
                         
-                        sentences = [s.strip() for s in re.split(r'(?<=[.!?।])\s+', line) if s.strip()]
+                        sentences = [s.strip() for s in re.split(r'(?<=[.!?à¥¤])\s+', line) if s.strip()]
                         for s_idx, s in enumerate(sentences):
                             prefix = "\n" if (l_idx > 0 and s_idx == 0) else ""
                             yield f"data: {json.dumps({'display_text': prefix + s + ' '})}\n\n"
@@ -704,7 +704,7 @@ async def smart_query_engine(
                         yield f"data: {json.dumps({'display_text': '\n'})}\n\n"
                         continue
                     
-                    sentences = [s.strip() for s in re.split(r'(?<=[.!?।])\s+', line) if s.strip()]
+                    sentences = [s.strip() for s in re.split(r'(?<=[.!?à¥¤])\s+', line) if s.strip()]
                     for s_idx, s in enumerate(sentences):
                         prefix = "\n" if (l_idx > 0 and s_idx == 0) else ""
                         yield f"data: {json.dumps({'display_text': prefix + s + ' '})}\n\n"
@@ -862,13 +862,13 @@ async def smart_query_engine(
                 yield f"data: {json.dumps({'type': 'query_id', 'query_id': _query_doc_id})}\n\n"
 
             yield "data: [DONE]\n\n"
-            from backend.app.utils.gemini_tracker import print_query_performance_report
+            from backend.app.utils.llm_tracker import print_query_performance_report
             print_query_performance_report()
 
         except Exception as e:
             logger.error(f"[ORCHESTRATE ROUTE ERROR] Failed: {e}", exc_info=True)
             yield f"data: {json.dumps({'error': str(e)})}\n\n"
-            from backend.app.utils.gemini_tracker import print_query_performance_report
+            from backend.app.utils.llm_tracker import print_query_performance_report
             print_query_performance_report()
     
     return StreamingResponse(event_generator(), media_type="text/event-stream")
@@ -998,9 +998,9 @@ async def websocket_conversation(
         conversation_manager.disconnect(conversation_id)
 
 
-# ─────────────────────────────────────────────────────────────────────────────
+# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 # STUDENT FEEDBACK ENDPOINT
-# ─────────────────────────────────────────────────────────────────────────────
+# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 @router.post("/api/feedback")
 async def submit_feedback(request: FeedbackRequest):
@@ -1023,3 +1023,4 @@ async def submit_feedback(request: FeedbackRequest):
     except Exception as e:
         logger.error(f"[FEEDBACK] Failed to save feedback: {e}")
         raise HTTPException(status_code=500, detail="Failed to save feedback.")
+

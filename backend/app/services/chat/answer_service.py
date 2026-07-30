@@ -7,8 +7,8 @@ from backend.app.services.retrieval import qdrant_service as qdrant
 from backend.app.prompts import get_teacher_explanation_prompt, templates
 
 def __getattr__(name: str):
-    if name == 'gemini_client':
-        return qdrant.gemini_client
+    if name == 'openai_client':
+        return qdrant.openai_client
     if name == 'generation_model_name':
         return qdrant.generation_model_name
     raise AttributeError(f"module '{__name__}' has no attribute '{name}'")
@@ -21,7 +21,7 @@ def reformulate_and_classify_query(query: str, class_name: Optional[str] = None,
     Use the generative model to reformulate the query, extract keywords and
     return a conceptual_score. Returns a dict.
     """
-    gemini_client = qdrant.gemini_client
+    openai_client = qdrant.openai_client
     generation_model_name = qdrant.generation_model_name
     raw_query = query
     summary_context = ""
@@ -56,7 +56,7 @@ def reformulate_and_classify_query(query: str, class_name: Optional[str] = None,
             raw_query=raw_query
         )
 
-    if not gemini_client:
+    if not openai_client:
         # Fallback: simple deterministic extraction if no model available
         result = {
             "reformulated_query": raw_query,
@@ -69,7 +69,7 @@ def reformulate_and_classify_query(query: str, class_name: Optional[str] = None,
         return result
 
     try:
-        response = gemini_client.models.generate_content(
+        response = openai_client.models.generate_content(
             model=generation_model_name,
             contents=base_prompt
         )
@@ -107,13 +107,13 @@ def reformulate_and_classify_query(query: str, class_name: Optional[str] = None,
 
 def generate_answer(raw_query: str, book_details: Dict, context: str):
     """
-    Use the generative model (Gemini) with a teacher-system prompt to answer the query.
+    Use the generative model (OpenAI) with a teacher-system prompt to answer the query.
     This function is a generator that yields chunks of the response (both for display and TTS).
     """
-    gemini_client = qdrant.gemini_client
+    openai_client = qdrant.openai_client
     generation_model_name = qdrant.generation_model_name
-    if not gemini_client:
-        raise RuntimeError("Gemini client not initialized.")
+    if not openai_client:
+        raise RuntimeError("OpenAI client not initialized.")
 
     system_prompt = templates.GENERATE_ANSWER_SYSTEM
     user_prompt = templates.GENERATE_ANSWER_USER.format(
@@ -125,7 +125,7 @@ def generate_answer(raw_query: str, book_details: Dict, context: str):
 
     combined_prompt = f"{system_prompt}\n\n{user_prompt}"
     
-    response = gemini_client.models.generate_content_stream(
+    response = openai_client.models.generate_content_stream(
         model=generation_model_name,
         contents=combined_prompt
     )
@@ -135,13 +135,13 @@ def generate_answer(raw_query: str, book_details: Dict, context: str):
 
 def generate_conversational_answer(raw_query: str, book_details: Dict, context: str):
     """
-    Use the generative model (Gemini) with a conversational system prompt to answer the query.
+    Use the generative model (OpenAI) with a conversational system prompt to answer the query.
     This is designed for the real-time conversational mode.
     """
-    gemini_client = qdrant.gemini_client
+    openai_client = qdrant.openai_client
     generation_model_name = qdrant.generation_model_name
-    if not gemini_client:
-        raise RuntimeError("Gemini client not initialized.")
+    if not openai_client:
+        raise RuntimeError("OpenAI client not initialized.")
 
     system_prompt = templates.GENERATE_CONVERSATIONAL_ANSWER_SYSTEM
     user_prompt = templates.GENERATE_CONVERSATIONAL_ANSWER_USER.format(
@@ -153,7 +153,7 @@ def generate_conversational_answer(raw_query: str, book_details: Dict, context: 
 
     combined_prompt = f"{system_prompt}\n\n{user_prompt}"
     
-    response = gemini_client.models.generate_content_stream(
+    response = openai_client.models.generate_content_stream(
         model=generation_model_name,
         contents=combined_prompt
     )
@@ -166,10 +166,10 @@ def generate_teacher_explanation(class_name: str, subject: str, chapter_name: st
     Uses the generative model to create a teacher-like explanation from a chapter summary,
     tailored specifically for Indian students of that class level.
     """
-    gemini_client = qdrant.gemini_client
+    openai_client = qdrant.openai_client
     generation_model_name = qdrant.generation_model_name
-    if not gemini_client:
-        raise RuntimeError("Gemini client not initialized.")
+    if not openai_client:
+        raise RuntimeError("OpenAI client not initialized.")
 
     combined_prompt = get_teacher_explanation_prompt(
         class_name=class_name,
@@ -178,7 +178,7 @@ def generate_teacher_explanation(class_name: str, subject: str, chapter_name: st
         summary_text=summary_text
     )
     
-    response = gemini_client.models.generate_content(
+    response = openai_client.models.generate_content(
         model=generation_model_name,
         contents=combined_prompt
     )
@@ -189,10 +189,10 @@ def generate_chapter_summary(class_name: str, subject_name: str, chapter_name: s
     """
     Generates a summary for a single chapter using the generative model.
     """
-    gemini_client = qdrant.gemini_client
+    openai_client = qdrant.openai_client
     generation_model_name = qdrant.generation_model_name
-    if not gemini_client:
-        raise RuntimeError("Gemini client not initialized.")
+    if not openai_client:
+        raise RuntimeError("OpenAI client not initialized.")
 
     # Combine chunks into a single text
     full_chapter_text = "\n\n".join(chapter_chunks)
@@ -206,7 +206,7 @@ def generate_chapter_summary(class_name: str, subject_name: str, chapter_name: s
     )
 
     try:
-        response = gemini_client.models.generate_content(
+        response = openai_client.models.generate_content(
             model=generation_model_name,
             contents=prompt
         )
@@ -242,9 +242,9 @@ def generate_chapters_from_text(json_path: str) -> str:
     Read the page JSON file (json_path), construct prompt and ask the generative model to extract chapters.
     Returns a JSON-string representation of the parsed LLM output or a safe default.
     """
-    gemini_client = qdrant.gemini_client
+    openai_client = qdrant.openai_client
     generation_model_name = qdrant.generation_model_name
-    if not gemini_client:
+    if not openai_client:
         return json.dumps({"pdf_offset": 0, "chapters": []})
 
     with open(json_path, "r", encoding="utf-8") as f:
@@ -253,7 +253,7 @@ def generate_chapters_from_text(json_path: str) -> str:
     prompt = generate_chapters_from_json(pdf_pages_data)
 
     try:
-        response = gemini_client.models.generate_content(
+        response = openai_client.models.generate_content(
             model=generation_model_name,
             contents=prompt
         )
@@ -285,14 +285,14 @@ def generate_chapters_from_text(json_path: str) -> str:
         try:
             data = json.loads(text)
             num_chapters = len(data.get('chapters', []))
-            print(f"[CHAPTER EXTRACTION] ✅ Successfully parsed JSON with {num_chapters} chapters")
+            print(f"[CHAPTER EXTRACTION] âœ… Successfully parsed JSON with {num_chapters} chapters")
             return json.dumps(data)
         except json.JSONDecodeError as e:
-            print(f"[CHAPTER EXTRACTION] ❌ JSON decode failed: {e}")
+            print(f"[CHAPTER EXTRACTION] âŒ JSON decode failed: {e}")
             return json.dumps({"pdf_offset": 0, "chapters": []})
 
     except Exception as e:
-        print(f"[CHAPTER EXTRACTION] ❌ Exception during LLM call: {e}")
+        print(f"[CHAPTER EXTRACTION] âŒ Exception during LLM call: {e}")
         return json.dumps({"pdf_offset": 0, "chapters": []})
 
 
@@ -334,7 +334,7 @@ def extract_json_block(text: str):
 
 
 def reformulate_with_llm(raw_query: str, class_name: str, subject: str, chapters):
-    gemini_client = qdrant.gemini_client
+    openai_client = qdrant.openai_client
     generation_model_name = qdrant.generation_model_name
     # Extract only chapter names
     chapter_names = [chapter.get("chapter_name") for chapter in chapters if chapter.get("chapter_name")]
@@ -349,7 +349,7 @@ def reformulate_with_llm(raw_query: str, class_name: str, subject: str, chapters
 
     # LLM Call
     try:
-        response = gemini_client.models.generate_content(
+        response = openai_client.models.generate_content(
             model=generation_model_name,
             contents=prompt
         )
@@ -394,7 +394,7 @@ def context_aware_reformulate(query: str, conversation_window: List[dict]) -> di
     Reformulate query using previous conversation context.
     Expands vague references like "that", "it", "more" using previous Q&A.
     """
-    gemini_client = qdrant.gemini_client
+    openai_client = qdrant.openai_client
     generation_model_name = qdrant.generation_model_name
     if not conversation_window:
         return {
@@ -417,7 +417,7 @@ def context_aware_reformulate(query: str, conversation_window: List[dict]) -> di
     )
     
     try:
-        response = gemini_client.models.generate_content(
+        response = openai_client.models.generate_content(
             model=generation_model_name,
             contents=prompt
         )
@@ -439,7 +439,7 @@ def context_aware_reformulate(query: str, conversation_window: List[dict]) -> di
         return result
     
     except Exception as e:
-        print(f"[REFORM] ⚠️ Context-aware reformulation failed: {e}")
+        print(f"[REFORM] âš ï¸ Context-aware reformulation failed: {e}")
         return {
             "reformulated_query": query,
             "keywords": []
@@ -451,7 +451,7 @@ def generate_smart_followups(query: str, answer: str, top_chunks: List) -> List[
     Generate answer-specific follow-up questions tailored for Indian students.
     Questions are age-appropriate, in simple English, and contextually relevant.
     """
-    gemini_client = qdrant.gemini_client
+    openai_client = qdrant.openai_client
     generation_model_name = qdrant.generation_model_name
     try:
         chapter_names = []
@@ -519,7 +519,7 @@ def generate_smart_followups(query: str, answer: str, top_chunks: List) -> List[
             complexity=complexity
         )
         
-        response = gemini_client.models.generate_content(
+        response = openai_client.models.generate_content(
             model=generation_model_name,
             contents=prompt
         )
@@ -556,3 +556,4 @@ def generate_smart_followups(query: str, answer: str, top_chunks: List) -> List[
             f"What is an example of this?",
             f"Why is this important?"
         ]
+

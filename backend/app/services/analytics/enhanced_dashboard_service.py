@@ -1,4 +1,4 @@
-"""
+﻿"""
 Enhanced Dashboard Service with AI-Powered Feedback
 Analyzes student patterns and provides friendly insights.
 """
@@ -63,11 +63,11 @@ def generate_student_feedback(uid: str, class_name: str = None) -> Dict:
 
         if not stats_doc.exists:
             return {
-                "overall_feedback": "Hey! Start asking questions to get personalized feedback! 🌟",
+                "overall_feedback": "Hey! Start asking questions to get personalized feedback! ðŸŒŸ",
                 "weak_topics": [],
                 "strengths": [],
                 "suggestions": ["Start exploring different subjects!", "Build your learning streak!"],
-                "motivation_message": "Every question is a step towards learning! 📚"
+                "motivation_message": "Every question is a step towards learning! ðŸ“š"
             }
         
         stats = stats_doc.to_dict()
@@ -127,7 +127,7 @@ Response format (JSON):
         # Call LLM using qdrant's shared client
         try:
             from backend.app.services.retrieval import qdrant_service as qdrant
-            response = qdrant.gemini_client.models.generate_content(
+            response = qdrant.openai_client.models.generate_content(
                 model=qdrant.generation_model_name,
                 contents=prompt
             )
@@ -146,8 +146,8 @@ Response format (JSON):
         except Exception as e:
             logger.error(f"AI feedback generation failed: {e}")
             ai_feedback = {
-                "overall_feedback": f"You've asked {total_queries} questions! That's awesome! 🎉 Keep exploring and learning!",
-                "motivation_message": f"Your {streak}-day streak is impressive! 🔥"
+                "overall_feedback": f"You've asked {total_queries} questions! That's awesome! ðŸŽ‰ Keep exploring and learning!",
+                "motivation_message": f"Your {streak}-day streak is impressive! ðŸ”¥"
             }
         
         # Identify strengths (subjects with most engagement)
@@ -167,17 +167,17 @@ Response format (JSON):
             "weak_topics": [t.split(':')[1] for t in weak_topics[:3]],  # Top 3
             "strengths": strengths,
             "suggestions": suggestions if suggestions else ["Keep up the great work!"],
-            "motivation_message": ai_feedback.get("motivation_message", f"Your {streak}-day streak is amazing! 🌟")
+            "motivation_message": ai_feedback.get("motivation_message", f"Your {streak}-day streak is amazing! ðŸŒŸ")
         }
         
     except Exception as e:
         logger.error(f"Failed to generate feedback: {e}", exc_info=True)
         return {
-            "overall_feedback": "Keep asking questions and learning! 💪",
+            "overall_feedback": "Keep asking questions and learning! ðŸ’ª",
             "weak_topics": [],
             "strengths": [],
             "suggestions": ["Keep exploring!"],
-            "motivation_message": "You're doing great! 🌟"
+            "motivation_message": "You're doing great! ðŸŒŸ"
         }
 
 
@@ -265,4 +265,5 @@ def get_enhanced_dashboard_data(uid: str, class_name: str = None) -> Dict:
         raise
 
 
-logger.info("✅ Enhanced dashboard service loaded successfully")
+logger.info("âœ… Enhanced dashboard service loaded successfully")
+

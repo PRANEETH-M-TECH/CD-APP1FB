@@ -1,5 +1,6 @@
-import os
+﻿import os
 import sys
+import os
 import json
 import time
 import datetime
@@ -15,8 +16,7 @@ from dotenv import load_dotenv
 load_dotenv(override=True)
 
 # Imports from backend app
-from google import genai
-from google.genai import types
+from backend.app.services.llm.openai_client import OPENAI_MODEL, create_client
 from backend.app.core.firebase.firebase_init import db
 from backend.app.services.retrieval import qdrant_service
 
@@ -30,7 +30,7 @@ try:
     qdrant_service.initialize()
 except Exception as _qdrant_init_err:
     print(f"[WARN] Qdrant initialization failed at startup (will retry on first request): {_qdrant_init_err}")
-# gemini_client will be dynamically fetched inside functions to avoid NoneType binding issue
+# openai_client will be dynamically fetched inside functions to avoid NoneType binding issue
 
 
 
@@ -103,7 +103,7 @@ def get_cached_curriculum_metadata(grade: int) -> str:
                 subject = data.get("subject", "Science")
                 title = data.get("title") or data.get("chapter_name", "Chapter")
                 summary = data.get("summary") or data.get("topics", "")
-                chapter_summaries.append(f"• {subject} | {title} -> Key topics: {summary}")
+                chapter_summaries.append(f"â€¢ {subject} | {title} -> Key topics: {summary}")
         except Exception as e:
             print(f"[CURRICULUM CACHE WARN] Firestore query exception: {e}")
 
@@ -124,7 +124,7 @@ def get_cached_curriculum_metadata(grade: int) -> str:
                     chaps = val.get("chapters", [])
                     for ch in chaps:
                         ch_name = ch.get("chapter_name", "")
-                        chapter_summaries.append(f"• Class {key_grade or grade} {subj_name} | Chapter: {ch_name}")
+                        chapter_summaries.append(f"â€¢ Class {key_grade or grade} {subj_name} | Chapter: {ch_name}")
         except Exception as e:
             print(f"[CURRICULUM CACHE WARN] chapters_cache.json load exception: {e}")
 
@@ -132,18 +132,18 @@ def get_cached_curriculum_metadata(grade: int) -> str:
         # Fallback chapter list for Class 7 / Class 8 testing
         if grade == 7:
             chapter_summaries = [
-                "• Science | Chapter 1: Nutrition in Plants -> Key topics: Photosynthesis, chlorophyll, stomata, autotrophs, solar energy.",
-                "• Science | Chapter 2: Nutrition in Animals -> Key topics: Human digestive system, alimentary canal, stomach, small intestine, ruminants.",
-                "• Science | Chapter 3: Heat -> Key topics: Temperature measurement, conduction, convection, radiation, insulators.",
-                "• Mathematics | Chapter 1: Integers -> Key topics: Positive/negative numbers, addition/subtraction rules, number line.",
-                "• Social Science | Chapter 1: Environment -> Key topics: Ecosystem, biotic/abiotic components, atmosphere, hydrosphere."
+                "â€¢ Science | Chapter 1: Nutrition in Plants -> Key topics: Photosynthesis, chlorophyll, stomata, autotrophs, solar energy.",
+                "â€¢ Science | Chapter 2: Nutrition in Animals -> Key topics: Human digestive system, alimentary canal, stomach, small intestine, ruminants.",
+                "â€¢ Science | Chapter 3: Heat -> Key topics: Temperature measurement, conduction, convection, radiation, insulators.",
+                "â€¢ Mathematics | Chapter 1: Integers -> Key topics: Positive/negative numbers, addition/subtraction rules, number line.",
+                "â€¢ Social Science | Chapter 1: Environment -> Key topics: Ecosystem, biotic/abiotic components, atmosphere, hydrosphere."
             ]
         else:
             chapter_summaries = [
-                "• Social Studies | Chapter: The Kakatiyas - Emergence of a Regional Kingdom -> Key topics: Rani Rudramadevi, Prataparudra, Warangal Fort, Kakatiya administration.",
-                "• Social Studies | Chapter: Making of Laws in the State Assembly -> Key topics: Legislative Assembly, MLA, Bill to Law, Governor approval.",
-                "• Social Studies | Chapter: The Indian Constitution -> Key topics: Preamble, Fundamental Rights, Secularism, Democracy.",
-                "• Science | Chapter: Crop Production -> Key topics: Agricultural practices, sowing, irrigation, harvesting."
+                "â€¢ Social Studies | Chapter: The Kakatiyas - Emergence of a Regional Kingdom -> Key topics: Rani Rudramadevi, Prataparudra, Warangal Fort, Kakatiya administration.",
+                "â€¢ Social Studies | Chapter: Making of Laws in the State Assembly -> Key topics: Legislative Assembly, MLA, Bill to Law, Governor approval.",
+                "â€¢ Social Studies | Chapter: The Indian Constitution -> Key topics: Preamble, Fundamental Rights, Secularism, Democracy.",
+                "â€¢ Science | Chapter: Crop Production -> Key topics: Agricultural practices, sowing, irrigation, harvesting."
             ]
 
     return "\n".join(chapter_summaries)
@@ -160,25 +160,23 @@ def run_orchestrator_pipeline(raw_query: str, student_profile: Dict[str, Any]) -
     except Exception:
         print("[ORCH DEBUG] run_orchestrator_pipeline received student_profile: <unprintable>")
 
-    gemini_client = qdrant_service.gemini_client
-    if gemini_client is None:
+    openai_client = qdrant_service.openai_client
+    if openai_client is None:
         try:
             qdrant_service.initialize()
         except Exception as e:
             print(f"[WARN] Failed to fully initialize qdrant_service dynamically (possibly due to Qdrant DB connection): {e}")
         # Always fetch it after trying, since Gemini client initialization happens first
-        gemini_client = qdrant_service.gemini_client
+        openai_client = qdrant_service.openai_client
 
-    if gemini_client is None:
+    if openai_client is None:
         try:
-            from google import genai
-            from backend.app.utils.gemini_tracker import instrument_client
-            api_key = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")
-            gemini_client = genai.Client(api_key=api_key)
-            gemini_client = instrument_client(gemini_client)
-            print("[ORCHESTRATOR] Standalone fallback Gemini client initialized successfully.")
+            from backend.app.utils.llm_tracker import instrument_client
+            openai_client = create_client()
+            openai_client = instrument_client(openai_client)
+            print("[ORCHESTRATOR] Standalone fallback OpenAI client initialized successfully.")
         except Exception as fallback_err:
-            print(f"[ERROR] Standalone fallback Gemini client initialization failed: {fallback_err}")
+            print(f"[ERROR] Standalone fallback OpenAI client initialization failed: {fallback_err}")
 
     start_time = time.time()
     system_prompt = load_master_prompt_template()
@@ -200,9 +198,9 @@ def run_orchestrator_pipeline(raw_query: str, student_profile: Dict[str, Any]) -
     print(f"\n[ORCHESTRATOR LLM] Executing single-pass evaluation for Class {grade} query...")
     user_prompt = f"USER RAW QUERY: \"{raw_query}\""
 
-    MODEL = os.environ.get("GEMINI_MODEL_NAME", "gemini-2.5-flash")
+    MODEL = os.environ.get("OPENAI_MODEL", OPENAI_MODEL)
 
-    # Step 1/3 — Query classification (keyword-based, instant, free)
+    # Step 1/3 â€” Query classification (keyword-based, instant, free)
     # If query is GK/current events, we perform live Google Search grounding to answer.
     # Otherwise, for curriculum/school questions, we skip search to save 15-20 seconds.
     _GK_KEYWORDS = {
@@ -221,23 +219,20 @@ def run_orchestrator_pipeline(raw_query: str, student_profile: Dict[str, Any]) -
         for kw in _GK_KEYWORDS
     )
     query_type = "GK_KNOWLEDGE" if is_gk_query else "CURRICULUM"
-    print(f"[ORCHESTRATOR] Step 1/3 — Query type: {query_type} (keyword match, 0ms)")
+    print(f"[ORCHESTRATOR] Step 1/3 â€” Query type: {query_type} (keyword match, 0ms)")
 
     # Enable Google Search grounding dynamically for GK/live queries
-    config = types.GenerateContentConfig(
-        temperature=0.2,
-        tools=[{"google_search": {}}] if is_gk_query else None
-    )
+    config = {"temperature": 0.2}
 
-    # Step 2/3 — Main Orchestrator LLM call — single model: gemini-2.5-flash
+    # Step 2/3 â€” Main Orchestrator LLM call â€” single model: gemini-2.5-flash
     search_note = "with Google Search Grounding (may take 15-25s)" if is_gk_query else "without Search Grounding (fast)"
     response = None
     last_error = None
     for attempt in range(1, 4):  # up to 3 retries on 503
         try:
             _llm_start = time.time()
-            print(f"[ORCHESTRATOR] Step 2/3 — [{MODEL}] {search_note} (Attempt {attempt}/3)...")
-            response = gemini_client.models.generate_content(
+            print(f"[ORCHESTRATOR] Step 2/3 â€” [{MODEL}] {search_note} (Attempt {attempt}/3)...")
+            response = openai_client.models.generate_content(
                 model=MODEL,
                 contents=[formatted_prompt, user_prompt],
                 config=config
@@ -323,7 +318,7 @@ def run_orchestrator_pipeline(raw_query: str, student_profile: Dict[str, Any]) -
 
     # Step 4: Handle RAG Retrieval if Authorized + CURRICULUM
     if is_authorized and classification == "CURRICULUM":
-        print(f"[ORCHESTRATOR] Step 3/3 — RAG vector search for: '{reformulated_query[:60]}...'")
+        print(f"[ORCHESTRATOR] Step 3/3 â€” RAG vector search for: '{reformulated_query[:60]}...'")
         print(f"[RAG SEARCH] Running hybrid vector search for: '{reformulated_query}'...")
         rag_executed = True
         try:
@@ -440,3 +435,4 @@ if __name__ == "__main__":
     print(f"Format Dec.  : {out.get('format_decision')}")
     print(f"Reformulated : {out.get('reformulated_query')}")
     print("--------------------------------------------\n")
+

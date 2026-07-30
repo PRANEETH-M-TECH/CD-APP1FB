@@ -8,8 +8,7 @@ import pickle
 from typing import List, Dict, Optional
 
 from qdrant_client import QdrantClient as QC, models
-from google import genai
-from google.genai import types
+from backend.app.services.llm.openai_client import OPENAI_MODEL, create_client
 from pypdf import PdfReader
 import numpy as np
 from langchain_text_splitters import RecursiveCharacterTextSplitter
@@ -24,8 +23,8 @@ EMBEDDING_MODEL = "all-MiniLM-L6-v2"
 # --- GLOBALS (initialized by initialize()) ---
 client: Optional[QC] = None
 local_embedder = None
-gemini_client: Optional[genai.Client] = None
-generation_model_name: str = os.environ.get("GEMINI_MODEL_NAME", "gemini-2.5-flash")
+openai_client = None
+generation_model_name: str = os.environ.get("OPENAI_MODEL", OPENAI_MODEL)
 bm25_indices: Dict[str, BM25Okapi] = {}
 book_corpus: Dict[str, List[Dict]] = {}
 
@@ -58,19 +57,19 @@ def initialize():
     Initialize models and Qdrant client. Called once at application startup.
     PRODUCTION MODE: Preserves existing data.
     """
-    global client, local_embedder, gemini_client, generation_model_name
+    global client, local_embedder, openai_client, generation_model_name
 
     local_embedder = FastEmbedWrapper(EMBEDDING_MODEL)
 
-    api_key = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")
-    print(f"[DEBUG KEY] Loaded API key: {api_key[:10] if api_key else 'None'}... (len: {len(api_key) if api_key else 0})")
+    api_key = os.getenv("OPENAI_API_KEY")
+    print(f"[DEBUG OPENAI KEY] Loaded API key: {'yes' if api_key else 'no'}")
     try:
-        gemini_client = genai.Client(api_key=api_key)
-        from backend.app.utils.gemini_tracker import instrument_client
-        gemini_client = instrument_client(gemini_client)
-        print("[Qdrant] Gemini client initialized and instrumented successfully in qdrant_service.")
+        openai_client = create_client()
+        from backend.app.utils.llm_tracker import instrument_client
+        openai_client = instrument_client(openai_client)
+        print("[Qdrant] OpenAI client initialized and instrumented successfully in qdrant_service.")
     except Exception as e:
-        print(f"[Qdrant Warning] Error initializing Gemini client: {e}")
+        print(f"[Qdrant Warning] Error initializing OpenAI client: {e}")
 
     qdrant_url = os.getenv("QDRANT_URL")
     qdrant_api_key = os.getenv("QDRANT_API_KEY")

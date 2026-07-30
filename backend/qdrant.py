@@ -2,10 +2,10 @@ import os
 import uuid
 import hashlib
 import json
-from typing import List, Dict, Optional
+from typing import List, Dict, Optional, Any
 
 from qdrant_client import QdrantClient as QC, models
-import google.generativeai as genai
+from backend.app.services.llm.openai_client import create_client, OPENAI_MODEL
 from pypdf import PdfReader
 from sentence_transformers import SentenceTransformer
 from langchain.text_splitter import RecursiveCharacterTextSplitter
@@ -19,7 +19,7 @@ EMBEDDING_MODEL = "all-MiniLM-L6-v2"
 # --- GLOBALS (initialized by initialize()) ---
 client: Optional[QC] = None
 local_embedder: Optional[SentenceTransformer] = None
-generation_model: Optional[genai.GenerativeModel] = None
+generation_model: Optional[Any] = None
 bm25_indices: Dict[str, BM25Okapi] = {}
 book_corpus: Dict[str, List[Dict]] = {}
 
@@ -32,13 +32,12 @@ def initialize():
 
     local_embedder = SentenceTransformer(EMBEDDING_MODEL)
 
-    # Initialize Gemini / generative model (if API key/config available)
-    genai.configure(api_key=os.environ.get("GOOGLE_API_KEY"))
-    GENERATION_MODEL_NAME = "models/gemini-flash-latest"
+    # Initialize OpenAI Client Adapter
     try:
-        generation_model = genai.GenerativeModel(GENERATION_MODEL_NAME)
+        generation_model = create_client().models
     except Exception as e:
-        generation_model = None  # type: ignore
+        generation_model = None
+
 
     client = QC(
         url=os.environ.get("QDRANT_URL", "http://localhost:6333"),
