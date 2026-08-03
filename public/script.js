@@ -51,37 +51,117 @@ if (document.readyState === 'loading') {
  */
 function setupAdminPage() {
     const adminForm = document.getElementById('admin-form');
+    const dropZone = document.getElementById('drop-zone');
+    const fileInput = document.getElementById('pdf-file');
+    const filesContainer = document.getElementById('selected-files-container');
+    
+    let selectedFiles = [];
+
+    // Click drop zone to select files
+    dropZone.addEventListener('click', () => fileInput.click());
+
+    // Drag events
+    ['dragenter', 'dragover'].forEach(eventName => {
+        dropZone.addEventListener(eventName, (e) => {
+            e.preventDefault();
+            dropZone.classList.add('dragover');
+        }, false);
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+        dropZone.addEventListener(eventName, (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+        }, false);
+    });
+
+    // Drop files
+    dropZone.addEventListener('drop', (e) => {
+        const dt = e.dataTransfer;
+        const files = dt.files;
+        handleFiles(files);
+    });
+
+    // Select files via input
+    fileInput.addEventListener('change', (e) => {
+        handleFiles(e.target.files);
+    });
+
+    function handleFiles(files) {
+        for (let file of files) {
+            if (file.type === 'application/pdf' || file.name.endsWith('.pdf')) {
+                // Prevent duplicate files
+                if (!selectedFiles.some(f => f.name === file.name && f.size === file.size)) {
+                    selectedFiles.push(file);
+                }
+            }
+        }
+        renderFileChips();
+    }
+
+    function renderFileChips() {
+        filesContainer.innerHTML = '';
+        selectedFiles.forEach((file, index) => {
+            const sizeStr = file.size > 1024 * 1024 
+                ? (file.size / (1024 * 1024)).toFixed(2) + ' MB'
+                : (file.size / 1024).toFixed(1) + ' KB';
+                
+            const chip = document.createElement('div');
+            chip.className = 'file-chip';
+            chip.innerHTML = `
+                <span class="file-chip-name" title="${file.name}">${file.name}</span>
+                <span class="file-chip-size">(${sizeStr})</span>
+                <button type="button" class="file-chip-remove" data-index="${index}">&times;</button>
+            `;
+            
+            chip.querySelector('.file-chip-remove').addEventListener('click', (e) => {
+                e.stopPropagation();
+                selectedFiles.splice(index, 1);
+                renderFileChips();
+            });
+            
+            filesContainer.appendChild(chip);
+        });
+    }
 
     adminForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        showStatus('Uploading PDF...', 'info');
-
-        const pdfFile = document.getElementById('pdf-file').files[0];
+        
         const className = document.getElementById('class').value;
         const subject = document.getElementById('subject').value;
 
-        if (!pdfFile || !className || !subject) {
-            showStatus('Please fill out all fields and select a PDF.', 'error');
+        if (selectedFiles.length === 0) {
+            showStatus('Please upload at least one PDF file.', 'error');
             return;
         }
 
+        if (!className || !subject) {
+            showStatus('Please select Class and Subject.', 'error');
+            return;
+        }
+
+        showStatus(`Uploading ${selectedFiles.length} file(s)...`, 'info');
+
         const uploadFormData = new FormData();
-        uploadFormData.append('file', pdfFile);
+        selectedFiles.forEach(file => {
+            uploadFormData.append('files', file);
+        });
 
         try {
-            // Step 1: Upload the file
-            const response = await fetch('/api/upload', {
+            // Upload multiple files
+            const response = await fetch('/api/upload-multiple', {
                 method: 'POST',
                 body: uploadFormData,
             });
             const uploadResult = await response.json();
             if (!response.ok) {
-                throw new Error(uploadResult.detail || 'Failed to upload file.');
+                throw new Error(uploadResult.detail || 'Failed to upload files.');
             }
 
-            // Step 2: Redirect to the chapters page with data in URL
+            // Redirect to the chapters page with all filenames
+            const filenamesParam = JSON.stringify(uploadResult.filenames);
             const queryParams = new URLSearchParams({
-                filename: uploadResult.filename,
+                filenames: filenamesParam,
                 class_name: className,
                 subject: subject
             });
@@ -93,229 +173,418 @@ function setupAdminPage() {
     });
 }
 
-/**
- * Sets up the chapters definition page (PDF viewer and chapter form).
- */
 function setupChaptersPage() {
     const params = new URLSearchParams(window.location.search);
+    const filenamesParam = params.get('filenames');
     const filename = params.get('filename');
-    const className = params.get('class_name'); // Changed to 'class_name'
+    const className = params.get('class_name');
     const subject = params.get('subject');
 
-    if (!filename) {
-        document.body.innerHTML = '<h1 style="color: red; text-align: center;">Error: No PDF file specified. Please go back to the admin page and upload a file.</h1>';
-        return;
-    }
-
-    const pdfUrl = `/uploads/${filename}`;
     const chaptersForm = document.getElementById('chapters-form');
+    const chaptersTableBody = document.getElementById('chapters-table-body');
+    const chaptersTableHead = document.querySelector('#chapters-table thead');
+    const numChaptersInput = document.getElementById('num-chapters');
+    const numChaptersGroup = numChaptersInput ? numChaptersInput.closest('.form-group') : null;
+    const extractChaptersBtn = document.getElementById('extract-chapters-btn');
+    const extractChaptersGroup = extractChaptersBtn ? extractChaptersBtn.closest('.form-group') : null;
 
-    // PDF.js state
-    let pdfDoc = null;
-    let pageNum = 1;
-    let pageRendering = false;
-    let pageNumPending = null;
-    const scale = 1.5;
-    const canvas = document.getElementById('pdf-canvas');
-    const ctx = canvas.getContext('2d');
+    // Determine Mode
+    const isMultiPdf = !!filenamesParam;
 
-    /**
-     * Get page info from document, resize canvas accordingly, and render page.
-     */
-    function renderPage(num) {
-        pageRendering = true;
-        document.getElementById('pdf-loading-message').style.display = 'block';
+    if (isMultiPdf) {
+        // Multi-PDF Mode Layout adjustments
+        const pageContainer = document.querySelector('.chapters-page-container');
+        if (pageContainer) {
+            pageContainer.classList.add('multi-pdf-layout');
+        }
+        
+        // Hide PDF extraction controls
+        if (numChaptersGroup) numChaptersGroup.style.display = 'none';
+        if (extractChaptersGroup) extractChaptersGroup.style.display = 'none';
+        
+        const headerTitle = document.querySelector('.chapters-form-card .card-header h2');
+        if (headerTitle) {
+            headerTitle.textContent = 'Review & Verify Chapters';
+        }
 
-        // Using promise to fetch the page
-        pdfDoc.getPage(num).then(function (page) {
-            const container = document.getElementById('pdf-render-area');
-            const unscaledViewport = page.getViewport({ scale: 1 });
+        // Change table headers dynamically
+        if (chaptersTableHead) {
+            chaptersTableHead.innerHTML = `
+                <tr>
+                    <th style="width: 80px; text-align: center;">Academic?</th>
+                    <th>Filename</th>
+                    <th>Chapter Title</th>
+                    <th style="width: 100px;">Start Page</th>
+                    <th style="width: 100px;">End Page</th>
+                    <th style="width: 150px; text-align: center;">Actions</th>
+                </tr>
+            `;
+        }
 
-            // Dynamically calculate scale to fit container width
-            const scale = container.clientWidth / unscaledViewport.width;
-            const viewport = page.getViewport({ scale: scale });
+        // Fetch pre-analysis results
+        const filenames = JSON.parse(filenamesParam);
+        showStatus('Running smart pre-analysis to extract chapter metadata...', 'info');
 
-            canvas.height = viewport.height;
-            canvas.width = viewport.width;
+        fetch('/api/books/pre-analyze', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                filenames: filenames,
+                class_name: className,
+                subject: subject
+            })
+        })
+        .then(res => {
+            if (!res.ok) throw new Error('Pre-analysis request failed.');
+            return res.json();
+        })
+        .then(data => {
+            showStatus('Pre-analysis complete. Please verify chapter details below.', 'success');
+            renderPreAnalyzedRows(data.chapters);
+        })
+        .catch(err => {
+            showStatus(`Pre-analysis failed: ${err.message}. You can still add chapters manually.`, 'error');
+            // Fallback: render basic rows
+            const fallbackChapters = filenames.map((fn, idx) => ({
+                filename: fn,
+                is_academic: true,
+                chapter_name: fn.replace('.pdf', '').replace(/_/g, ' ').toUpperCase(),
+                chapter_no: idx + 1,
+                chpstpage: 1,
+                chpendpage: 10
+            }));
+            renderPreAnalyzedRows(fallbackChapters);
+        });
 
-            // Render PDF page into canvas context
-            const renderContext = {
-                canvasContext: ctx,
-                viewport: viewport
-            };
-            const renderTask = page.render(renderContext);
+        function renderPreAnalyzedRows(chapters) {
+            chaptersTableBody.innerHTML = '';
+            chapters.forEach(chap => {
+                const row = document.createElement('tr');
+                row.className = 'chapter-entry';
+                row.dataset.filename = chap.filename;
+                row.innerHTML = `
+                    <td style="text-align: center;"><input type="checkbox" class="is-academic" ${chap.is_academic ? 'checked' : ''}></td>
+                    <td style="font-size: 0.85rem; color: #64748b; font-weight: 500; word-break: break-all;">${chap.filename}</td>
+                    <td><input type="text" class="chapter-name" value="${chap.chapter_name || ''}" placeholder="e.g., Chemical Effects" required></td>
+                    <td><input type="number" class="start-page" value="${chap.chpstpage || ''}" placeholder="e.g., 1" min="1" required></td>
+                    <td><input type="number" class="end-page" value="${chap.chpendpage || ''}" placeholder="e.g., 10" min="1" required></td>
+                    <td style="text-align: center;">
+                        <button type="button" class="action-button small btn-up" style="padding: 4px 8px; margin-right: 2px;">▲</button>
+                        <button type="button" class="action-button small btn-down" style="padding: 4px 8px; margin-right: 2px;">▼</button>
+                        <button type="button" class="secondary-button small remove-chapter-btn" style="padding: 4px 8px; background: #ef4444; color: white; border: none;">&times;</button>
+                    </td>
+                `;
 
-            // Wait for rendering to finish
-            renderTask.promise.then(function () {
-                pageRendering = false;
-                document.getElementById('pdf-loading-message').style.display = 'none';
-                if (pageNumPending !== null) {
-                    // New page rendering is pending
-                    renderPage(pageNumPending);
-                    pageNumPending = null;
+                // Up / Down sorting event listeners
+                row.querySelector('.btn-up').addEventListener('click', () => {
+                    const prev = row.previousElementSibling;
+                    if (prev) {
+                        row.parentNode.insertBefore(row, prev);
+                    }
+                });
+
+                row.querySelector('.btn-down').addEventListener('click', () => {
+                    const next = row.nextElementSibling;
+                    if (next) {
+                        row.parentNode.insertBefore(next, row);
+                    }
+                });
+
+                row.querySelector('.remove-chapter-btn').addEventListener('click', () => {
+                    row.remove();
+                });
+
+                // Toggle dimming of non-academic rows
+                const academicCheckbox = row.querySelector('.is-academic');
+                const updateRowDimming = () => {
+                    if (academicCheckbox.checked) {
+                        row.style.opacity = '1';
+                        row.querySelectorAll('input[type="text"], input[type="number"]').forEach(input => input.disabled = false);
+                    } else {
+                        row.style.opacity = '0.5';
+                        row.querySelectorAll('input[type="text"], input[type="number"]').forEach(input => input.disabled = true);
+                    }
+                };
+                academicCheckbox.addEventListener('change', updateRowDimming);
+                updateRowDimming(); // Initial state
+
+                chaptersTableBody.appendChild(row);
+            });
+        }
+
+        // Final form submission for Multi-PDF Mode
+        chaptersForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            // Clear previous errors
+            document.querySelectorAll('#chapters-table-body .input-error').forEach(el => el.classList.remove('input-error'));
+
+            const rows = document.querySelectorAll('#chapters-table-body tr');
+            const chapters = [];
+            let validationError = false;
+
+            rows.forEach((row, idx) => {
+                const isAcademic = row.querySelector('.is-academic').checked;
+                if (!isAcademic) return; // Skip non-academic rows
+
+                const nameInput = row.querySelector('.chapter-name');
+                const startPageInput = row.querySelector('.start-page');
+                const endPageInput = row.querySelector('.end-page');
+
+                const name = nameInput.value.strip ? nameInput.value.strip() : nameInput.value.trim();
+                const start_page = parseInt(startPageInput.value, 10);
+                const end_page = parseInt(endPageInput.value, 10);
+
+                let hasRowError = false;
+                if (!name) {
+                    nameInput.classList.add('input-error');
+                    hasRowError = true;
+                }
+                if (isNaN(start_page) || start_page <= 0) {
+                    startPageInput.classList.add('input-error');
+                    hasRowError = true;
+                }
+                if (isNaN(end_page) || end_page < start_page) {
+                    endPageInput.classList.add('input-error');
+                    hasRowError = true;
+                }
+
+                if (hasRowError) {
+                    validationError = true;
+                } else {
+                    chapters.push({
+                        chapter_name: name,
+                        filename: row.dataset.filename,
+                        chpstpage: start_page,
+                        chpendpage: end_page,
+                        chapter_id: String(idx + 1)
+                    });
                 }
             });
-        });
 
-        // Update page counters
-        document.getElementById('page-num').textContent = num;
-    }
-
-    /**
-     * If another page rendering in progress, waits until the rendering is
-     * finished. Otherwise, executes rendering immediately.
-     */
-    function queueRenderPage(num) {
-        if (pageRendering) {
-            pageNumPending = num;
-        } else {
-            renderPage(num);
-        }
-    }
-
-    // Load the PDF
-    pdfjsLib.getDocument(pdfUrl).promise.then(function (pdfDoc_) {
-        pdfDoc = pdfDoc_;
-        document.getElementById('page-count').textContent = pdfDoc.numPages;
-        renderPage(pageNum);
-    }).catch(err => {
-        showStatus(`Error loading PDF: ${err.message}`, 'error');
-        document.getElementById('pdf-loading-message').textContent = 'Error loading PDF.';
-    });
-
-    // Button events
-    document.getElementById('prev-page').addEventListener('click', () => {
-        if (pageNum <= 1) return;
-        pageNum--;
-        queueRenderPage(pageNum);
-    });
-
-    document.getElementById('next-page').addEventListener('click', () => {
-        if (pageNum >= pdfDoc.numPages) return;
-        pageNum++;
-        queueRenderPage(pageNum);
-    });
-
-    // Chapter input generation
-    const numChaptersInput = document.getElementById('num-chapters');
-    const chaptersTableBody = document.getElementById('chapters-table-body');
-
-    function createChapterRow() {
-        const row = document.createElement('tr');
-        row.classList.add('chapter-entry');
-        row.innerHTML = `
-            <td><input type="text" class="chapter-name" placeholder="e.g., Introduction" required></td>
-            <td><input type="number" class="start-page" placeholder="e.g., 1" min="1" required></td>
-            <td><input type="number" class="end-page" placeholder="e.g., 10" min="1" required></td>
-            <td><button type="button" class="remove-chapter-btn">Remove</button></td>
-        `;
-
-        row.querySelector('.remove-chapter-btn').addEventListener('click', () => {
-            row.remove();
-        });
-
-        return row;
-    }
-
-    numChaptersInput.addEventListener('input', () => {
-        const count = parseInt(numChaptersInput.value, 10);
-        chaptersTableBody.innerHTML = ''; // Clear existing rows
-
-        if (count > 0) {
-            for (let i = 0; i < count; i++) {
-                chaptersTableBody.appendChild(createChapterRow());
-            }
-        }
-    });
-
-
-    // Final form submission
-    chaptersForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-
-        // Clear previous errors
-        document.querySelectorAll('#chapters-table-body .input-error').forEach(el => el.classList.remove('input-error'));
-
-        const chapterEntries = document.querySelectorAll('#chapters-table-body tr');
-        const chapters = [];
-        let validationError = false;
-
-        if (chapterEntries.length === 0) {
-            showStatus('Please add at least one chapter.', 'error');
-            return;
-        }
-
-        chapterEntries.forEach(entry => {
-            const nameInput = entry.querySelector('.chapter-name');
-            const startPageInput = entry.querySelector('.start-page');
-            const endPageInput = entry.querySelector('.end-page');
-
-            const name = nameInput.value;
-            const start_page = parseInt(startPageInput.value, 10);
-            const end_page = parseInt(endPageInput.value, 10);
-
-            let hasRowError = false;
-            if (!name) {
-                nameInput.classList.add('input-error');
-                hasRowError = true;
-            }
-            if (isNaN(start_page) || start_page <= 0) {
-                startPageInput.classList.add('input-error');
-                hasRowError = true;
-            }
-            if (isNaN(end_page) || end_page < start_page) {
-                endPageInput.classList.add('input-error');
-                hasRowError = true;
+            if (validationError) {
+                showStatus('Please fix the errors in the highlighted fields.', 'error');
+                return;
             }
 
-            if (hasRowError) {
-                validationError = true;
-            } else {
-                // Send chapter pages - backend will calculate PDF pages using offset
-                chapters.push({
-                    chapter_name: name,
-                    chpstpage: start_page,  // Chapter start page
-                    chpendpage: end_page    // Chapter end page
+            if (chapters.length === 0) {
+                showStatus('Please confirm at least one academic chapter to ingest.', 'error');
+                return;
+            }
+
+            showStatus('Starting batch ingestion background task...', 'info');
+
+            try {
+                const response = await fetch('/api/books/batch-ingest', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        class_name: className,
+                        subject: subject,
+                        chapters: chapters
+                    })
                 });
+                const result = await response.json();
+                if (!response.ok) throw new Error(result.detail || 'Failed to trigger batch ingestion.');
+
+                const finalMessage = "Batch Ingestion started successfully. You can now leave this page. All chapters will appear in the dashboard shortly.";
+                showStatus(finalMessage, 'success');
+
+                chaptersForm.reset();
+                chaptersTableBody.innerHTML = '';
+            } catch (error) {
+                showStatus(`Ingestion failed: ${error.message}`, 'error');
             }
         });
 
-        if (validationError) {
-            showStatus('Please fix the errors in the highlighted fields.', 'error');
+    } else {
+        // Single-PDF Mode (Original Logic)
+        if (!filename) {
+            document.body.innerHTML = '<h1 style="color: red; text-align: center;">Error: No PDF file specified. Please go back to the admin page and upload a file.</h1>';
             return;
         }
 
-        showStatus('Processing book and chapters...', 'info');
+        const pdfUrl = `/uploads/${filename}`;
 
-        const finalData = {
-            class_name: className,
-            subject: subject,
-            filename: filename,
-            chapters: chapters
-        };
+        // PDF.js state
+        let pdfDoc = null;
+        let pageNum = 1;
+        let pageRendering = false;
+        let pageNumPending = null;
+        const canvas = document.getElementById('pdf-canvas');
+        const ctx = canvas.getContext('2d');
 
-        try {
-            const response = await fetch('/api/books', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(finalData)
+        function renderPage(num) {
+            pageRendering = true;
+            document.getElementById('pdf-loading-message').style.display = 'block';
+
+            pdfDoc.getPage(num).then(function (page) {
+                const container = document.getElementById('pdf-render-area');
+                const unscaledViewport = page.getViewport({ scale: 1 });
+                const scale = container.clientWidth / unscaledViewport.width;
+                const viewport = page.getViewport({ scale: scale });
+
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
+
+                const renderContext = {
+                    canvasContext: ctx,
+                    viewport: viewport
+                };
+                const renderTask = page.render(renderContext);
+
+                renderTask.promise.then(function () {
+                    pageRendering = false;
+                    document.getElementById('pdf-loading-message').style.display = 'none';
+                    if (pageNumPending !== null) {
+                        renderPage(pageNumPending);
+                        pageNumPending = null;
+                    }
+                });
             });
-            const result = await response.json();
-            if (!response.ok) throw new Error(result.detail || 'Failed to process book.');
 
-            const finalMessage = "Processing started in the background. You can now safely leave this page. The book will be available in a few minutes.";
-            showStatus(finalMessage, 'success');
-
-            chaptersForm.reset();
-            chaptersTableBody.innerHTML = '';
-            numChaptersInput.value = ''; // Clear the number input
-
-        } catch (error) {
-            showStatus(`Error: ${error.message}`, 'error');
+            document.getElementById('page-num').textContent = num;
         }
-    });
+
+        function queueRenderPage(num) {
+            if (pageRendering) {
+                pageNumPending = num;
+            } else {
+                renderPage(num);
+            }
+        }
+
+        pdfjsLib.getDocument(pdfUrl).promise.then(function (pdfDoc_) {
+            pdfDoc = pdfDoc_;
+            document.getElementById('page-count').textContent = pdfDoc.numPages;
+            renderPage(pageNum);
+        }).catch(err => {
+            showStatus(`Error loading PDF: ${err.message}`, 'error');
+            document.getElementById('pdf-loading-message').textContent = 'Error loading PDF.';
+        });
+
+        document.getElementById('prev-page').addEventListener('click', () => {
+            if (pageNum <= 1) return;
+            pageNum--;
+            queueRenderPage(pageNum);
+        });
+
+        document.getElementById('next-page').addEventListener('click', () => {
+            if (pageNum >= pdfDoc.numPages) return;
+            pageNum++;
+            queueRenderPage(pageNum);
+        });
+
+        function createChapterRow() {
+            const row = document.createElement('tr');
+            row.classList.add('chapter-entry');
+            row.innerHTML = `
+                <td><input type="text" class="chapter-name" placeholder="e.g., Introduction" required></td>
+                <td><input type="number" class="start-page" placeholder="e.g., 1" min="1" required></td>
+                <td><input type="number" class="end-page" placeholder="e.g., 10" min="1" required></td>
+                <td><button type="button" class="remove-chapter-btn">Remove</button></td>
+            `;
+
+            row.querySelector('.remove-chapter-btn').addEventListener('click', () => {
+                row.remove();
+            });
+
+            return row;
+        }
+
+        numChaptersInput.addEventListener('input', () => {
+            const count = parseInt(numChaptersInput.value, 10);
+            chaptersTableBody.innerHTML = '';
+
+            if (count > 0) {
+                for (let i = 0; i < count; i++) {
+                    chaptersTableBody.appendChild(createChapterRow());
+                }
+            }
+        });
+
+        chaptersForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            document.querySelectorAll('#chapters-table-body .input-error').forEach(el => el.classList.remove('input-error'));
+
+            const chapterEntries = document.querySelectorAll('#chapters-table-body tr');
+            const chapters = [];
+            let validationError = false;
+
+            if (chapterEntries.length === 0) {
+                showStatus('Please add at least one chapter.', 'error');
+                return;
+            }
+
+            chapterEntries.forEach(entry => {
+                const nameInput = entry.querySelector('.chapter-name');
+                const startPageInput = entry.querySelector('.start-page');
+                const endPageInput = entry.querySelector('.end-page');
+
+                const name = nameInput.value;
+                const start_page = parseInt(startPageInput.value, 10);
+                const end_page = parseInt(endPageInput.value, 10);
+
+                let hasRowError = false;
+                if (!name) {
+                    nameInput.classList.add('input-error');
+                    hasRowError = true;
+                }
+                if (isNaN(start_page) || start_page <= 0) {
+                    startPageInput.classList.add('input-error');
+                    hasRowError = true;
+                }
+                if (isNaN(end_page) || end_page < start_page) {
+                    endPageInput.classList.add('input-error');
+                    hasRowError = true;
+                }
+
+                if (hasRowError) {
+                    validationError = true;
+                } else {
+                    chapters.push({
+                        chapter_name: name,
+                        chpstpage: start_page,
+                        chpendpage: end_page
+                    });
+                }
+            });
+
+            if (validationError) {
+                showStatus('Please fix the errors in the highlighted fields.', 'error');
+                return;
+            }
+
+            showStatus('Processing book and chapters...', 'info');
+
+            const finalData = {
+                class_name: className,
+                subject: subject,
+                filename: filename,
+                chapters: chapters
+            };
+
+            try {
+                const response = await fetch('/api/books', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(finalData)
+                });
+                const result = await response.json();
+                if (!response.ok) throw new Error(result.detail || 'Failed to process book.');
+
+                const finalMessage = "Processing started in the background. You can now safely leave this page. The book will be available in a few minutes.";
+                showStatus(finalMessage, 'success');
+
+                chaptersForm.reset();
+                chaptersTableBody.innerHTML = '';
+                numChaptersInput.value = '';
+            } catch (error) {
+                showStatus(`Error: ${error.message}`, 'error');
+            }
+        });
+    }
 
     // Add event listeners to clear errors on input
     chaptersTableBody.addEventListener('input', (e) => {

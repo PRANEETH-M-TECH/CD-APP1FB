@@ -64,28 +64,15 @@ def log_query(
     llm_action: str,
     answer_length: int,
     ai_difficulty_score: Optional[float] = None,
-    query_json_url: Optional[str] = None
+    query_json_url: Optional[str] = None,
+    llm_response: Optional[str] = None,
+    retrieved_sources: Optional[List[Dict]] = None,
+    storyboard_data: Optional[Dict] = None,
+    video_url: Optional[str] = None,
+    audio_url: Optional[str] = None
 ) -> str:
     """
-    Logs a single user query to the user_queries collection ONLY.
-    Does NOT modify user_stats to prevent daily_activity overwrite.
-    
-    Args:
-        uid: User ID
-        class_name: Class (e.g., "8")
-        subject: Subject name (e.g., "science")
-        chapter_id: Chapter ID (optional)
-        chapter_name: Chapter name (optional)
-        query: Original user query
-        reformulated_query: LLM-reformulated query
-        mode: "text" or "voice"
-        llm_action: Action taken by LLM (e.g., "retrieve_and_answer")
-        answer_length: Length of generated answer
-        ai_difficulty_score: AI-assessed difficulty (optional)
-        query_json_url: Supabase URL of the full transaction JSON (optional)
-    
-    Returns:
-        Document ID of the logged query
+    Logs a single user query and full LLM response details to the users/{uid}/queries collection.
     """
     logger.info(f"[ANALYTICS] Logging query for user {uid} in subject {subject}")
     try:
@@ -100,20 +87,28 @@ def log_query(
         # Ensure subject is a string
         safe_subject = subject.lower().strip() if isinstance(subject, str) else "unknown"
         
-        doc_ref = db.collection("user_queries").document()
+        # Generate chronological and readable document ID
+        timestamp_str = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
+        doc_id = f"{timestamp_str}_class{class_int}"
+        
+        doc_ref = db.collection("users").document(uid).collection("queries").document(doc_id)
         
         query_data = {
-            "uid": uid,
+            "query": query,
+            "reformulated_query": reformulated_query,
+            "llm_response": llm_response,
             "class": class_int,
             "subject": safe_subject,
             "chapter_id": chapter_id if chapter_id is not None else 0,
             "chapter_name": chapter_name or "Unknown",
-            "query": query,
-            "reformulated_query": reformulated_query,
             "mode": mode,
             "llm_action": llm_action,
             "timestamp": firestore.SERVER_TIMESTAMP,
             "answer_length": answer_length,
+            "retrieved_sources": retrieved_sources or [],
+            "storyboard_data": storyboard_data,
+            "video_url": video_url,
+            "audio_url": audio_url
         }
         
         if ai_difficulty_score is not None:
@@ -123,7 +118,7 @@ def log_query(
             query_data["query_json_url"] = query_json_url
         
         doc_ref.set(query_data)
-        logger.info(f"✅ Query logged to user_queries: {doc_ref.id}")
+        logger.info(f"✅ Query logged to user queries subcollection: {doc_ref.id}")
         return doc_ref.id
         
     except Exception as e:
@@ -133,7 +128,7 @@ def log_query(
 
 def rebuild_user_analytics_from_queries(uid: str) -> Dict:
     """
-    Rebuild complete user analytics from user_queries collection.
+    Rebuild complete user analytics from the users/{uid}/queries subcollection.
     This is the single source of truth for dashboard statistics.
     
     Computes:
@@ -156,7 +151,7 @@ def rebuild_user_analytics_from_queries(uid: str) -> Dict:
     logger.info(f"[REBUILD ANALYTICS] Starting for uid: {uid}")
     try:
         # Fetch all queries for this user
-        queries_ref = db.collection("user_queries").where("uid", "==", uid).stream()
+        queries_ref = db.collection("users").document(uid).collection("queries").stream()
         
         # Initialize aggregators
         total_queries = 0
@@ -360,16 +355,8 @@ def update_chapter_stats(
 ) -> None:
     """
     Updates chapter-level analytics with atomic operations.
-    
-    Args:
-        class_name: Class (e.g., "8")
-        subject: Subject name
-        chapter_id: Chapter ID
-        chapter_name: Chapter name
-        uid: User ID (to track unique students)
     """
     try:
-        # Parse class to integer
         class_int = 0
         try:
             if class_name:
@@ -379,15 +366,14 @@ def update_chapter_stats(
 
         safe_subject = subject.lower() if isinstance(subject, str) else "unknown"
         
-        # Document ID: {class}_{subject}_{chapter_id}
-        doc_id = f"{class_int}_{safe_subject}_{chapter_id}"
-        doc_ref = db.collection("chapter_stats").document(doc_id)
+        # Centralized Content Path: classes/{class}/subjects/{subject}/stats/{chapter_id}
+        doc_ref = db.collection("classes").document(str(class_int))\
+                    .collection("subjects").document(safe_subject)\
+                    .collection("stats").document(str(chapter_id))
         
-        # Check if document exists
         doc = doc_ref.get()
         
         if not doc.exists:
-            # Create new document with initial data
             doc_ref.set({
                 "class": class_int,
                 "subject": safe_subject,
@@ -398,19 +384,18 @@ def update_chapter_stats(
                 "avg_difficulty": 0.0,
                 "last_asked": firestore.SERVER_TIMESTAMP
             })
-            logger.info(f"✅ Created new chapter stats: {doc_id}")
+            logger.info(f"✅ Created new chapter stats for {class_int}_{safe_subject}_{chapter_id}")
         else:
-            # Update existing document
             update_data = {
                 "total_queries": firestore.Increment(1),
                 "unique_students": firestore.ArrayUnion([uid]),
                 "last_asked": firestore.SERVER_TIMESTAMP
             }
             doc_ref.update(update_data)
-            logger.info(f"✅ Updated chapter stats: {doc_id}")
+            logger.info(f"✅ Updated chapter stats for {class_int}_{safe_subject}_{chapter_id}")
             
     except Exception as e:
-        logger.error(f"❌ Failed to update chapter stats for {class_name}_{subject}_{chapter_id}: {e}")
+        logger.error(f"❌ Failed to update chapter stats: {e}")
         raise
 
 
@@ -422,15 +407,10 @@ def update_mistake_patterns(
 ) -> None:
     """
     Updates student mistake patterns and learning recommendations.
-    
-    Args:
-        uid: User ID
-        patterns: List of identified patterns (optional)
-        confusion_topics: List of topics causing confusion (optional)
-        recommended_tasks: List of recommended practice tasks (optional)
     """
     try:
-        doc_ref = db.collection("student_mistakes").document(uid)
+        # Centralized User Path: users/{uid}/mistakes/mistakes_doc
+        doc_ref = db.collection("users").document(uid).collection("mistakes").document("mistakes_doc")
         
         update_data = {}
         
@@ -550,15 +530,9 @@ def delete_note(uid: str, note_index: int) -> None:
 def get_user_stats(uid: str) -> Optional[Dict]:
     """
     Retrieves user statistics.
-    
-    Args:
-        uid: User ID
-    
-    Returns:
-        User stats dictionary or None if not found
     """
     try:
-        doc_ref = db.collection("user_stats").document(uid)
+        doc_ref = db.collection("users").document(uid).collection("stats").document("stats_doc")
         doc = doc_ref.get()
         
         if doc.exists:
@@ -574,20 +548,12 @@ def get_user_stats(uid: str) -> Optional[Dict]:
 def get_chapter_stats(class_name: str, subject: str, chapter_id: int) -> Optional[Dict]:
     """
     Retrieves chapter statistics.
-    
-    Args:
-        class_name: Class
-        subject: Subject name
-        chapter_id: Chapter ID
-    
-    Returns:
-        Chapter stats dictionary or None if not found
     """
     try:
         class_int = int(class_name.replace("Class", "").replace("class", "").strip())
-        doc_id = f"{class_int}_{subject.lower()}_{chapter_id}"
-        
-        doc_ref = db.collection("chapter_stats").document(doc_id)
+        doc_ref = db.collection("classes").document(str(class_int))\
+                    .collection("subjects").document(subject.lower())\
+                    .collection("stats").document(str(chapter_id))
         doc = doc_ref.get()
         
         if doc.exists:

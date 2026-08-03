@@ -17,8 +17,16 @@ from rank_bm25 import BM25Okapi
 logger = logging.getLogger(__name__)
 
 # --- CONFIGURATION ---
-COLLECTION_NAME = os.environ.get("QDRANT_COLLECTION_NAME", "data")
-EMBEDDING_MODEL = "all-MiniLM-L6-v2"
+COLLECTION_NAME = os.environ.get("QDRANT_COLLECTION_NAME", "textbooks_v2")
+EMBEDDING_TYPE = os.environ.get("EMBEDDING_TYPE", "openai").lower()
+if EMBEDDING_TYPE == "openai" and not os.getenv("OPENAI_API_KEY"):
+    print("[Qdrant Warning] OPENAI_API_KEY not found. Falling back to local Sentence-Transformer.")
+    EMBEDDING_TYPE = "local"
+
+if EMBEDDING_TYPE == "openai":
+    EMBEDDING_MODEL = os.environ.get("EMBEDDING_MODEL", "text-embedding-3-small")
+else:
+    EMBEDDING_MODEL = os.environ.get("EMBEDDING_MODEL", "all-MiniLM-L6-v2")
 
 # --- GLOBALS (initialized by initialize()) ---
 client: Optional[QC] = None
@@ -52,6 +60,34 @@ class FastEmbedWrapper:
         return 384
 
 
+class OpenAIEmbedderWrapper:
+    def __init__(self, model_name: str = "text-embedding-3-small"):
+        self.model_name = model_name
+
+    def encode(self, texts):
+        from openai import OpenAI
+        client_api = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+        if isinstance(texts, str):
+            response = client_api.embeddings.create(
+                input=[texts],
+                model=self.model_name
+            )
+            res = response.data[0].embedding
+            return np.array(res, dtype=np.float32)
+        else:
+            response = client_api.embeddings.create(
+                input=texts,
+                model=self.model_name
+            )
+            res_list = [item.embedding for item in response.data]
+            return np.array(res_list, dtype=np.float32)
+
+    def get_sentence_embedding_dimension(self) -> int:
+        if "text-embedding-3-small" in self.model_name:
+            return 1536
+        return 1536
+
+
 def initialize():
     """
     Initialize models and Qdrant client. Called once at application startup.
@@ -59,7 +95,10 @@ def initialize():
     """
     global client, local_embedder, openai_client, generation_model_name
 
-    local_embedder = FastEmbedWrapper(EMBEDDING_MODEL)
+    if EMBEDDING_TYPE == "openai":
+        local_embedder = OpenAIEmbedderWrapper(EMBEDDING_MODEL)
+    else:
+        local_embedder = FastEmbedWrapper(EMBEDDING_MODEL)
 
     api_key = os.getenv("OPENAI_API_KEY")
     print(f"[DEBUG OPENAI KEY] Loaded API key: {'yes' if api_key else 'no'}")
@@ -109,7 +148,7 @@ def initialize():
             print(f"[Qdrant] Collection '{COLLECTION_NAME}' created successfully.")
 
             # Create payload index for keyword filtering
-            for field in ["class_name", "subject", "chapter", "book_uuid", "chpstpage", "chpendpage"]:
+            for field in ["class_name", "subject", "chapter", "chapter_name", "book_uuid", "chpstpage", "chpendpage"]:
                 client.create_payload_index(
                     collection_name=COLLECTION_NAME,
                     field_name=field,
@@ -502,13 +541,21 @@ def hybrid_search(book_uuid: str, query: str, keywords: List[Dict], conceptual_s
 
     ranked_list.sort(key=lambda x: x[0], reverse=True)
 
-    # Print the top 5 chunks with their scores
-    # print("\n[HYBRID_SEARCH] Top 5 Hybrid Chunks:")
-    # for score, doc in ranked_list[:5]:
-    #     print(f"  - Score: {score:.4f} | Chunk: {doc.get('text', '')[:100]}...")
-    # print()
+    # In-memory parent deduplication
+    deduplicated_list = []
+    seen_parents = set()
+    for score, doc in ranked_list:
+        parent_text = doc.get("parent_text", doc.get("text", "")).strip()
+        if not parent_text:
+            continue
+        
+        if parent_text not in seen_parents:
+            seen_parents.add(parent_text)
+            new_doc = dict(doc)
+            new_doc["text"] = parent_text
+            deduplicated_list.append((score, new_doc))
 
-    return ranked_list[:10], semantic_results, normalized_bm25_results
+    return deduplicated_list[:10], semantic_results, normalized_bm25_results
 
 
 def embed_query(query: str):

@@ -2055,3 +2055,74 @@ body {
     display: flex;
     gap: 12px;
 }
+
+/* Multi-file batch upload styles */
+.drop-zone {
+    border: 2px dashed var(--primary-color);
+    border-radius: 8px;
+    padding: 30px;
+    text-align: center;
+    background-color: #f8fafc;
+    cursor: pointer;
+    transition: background-color 0.2s, border-color 0.2s;
+    margin-bottom: 15px;
+}
+.drop-zone:hover, .drop-zone.dragover {
+    background-color: #f1f5f9;
+    border-color: #354a85;
+}
+.drop-zone-prompt {
+    font-size: 1rem;
+    color: #64748b;
+    font-weight: 500;
+}
+.selected-files-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+}
+.file-chip {
+    display: flex;
+    align-items: center;
+    background: #e2e8f0;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #334155;
+    animation: fadeIn 0.3s ease;
+}
+.file-chip-name {
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.file-chip-size {
+    font-size: 0.75rem;
+    color: #64748b;
+    margin-left: 6px;
+}
+.file-chip-remove {
+    margin-left: 8px;
+    cursor: pointer;
+    color: #ef4444;
+    font-weight: bold;
+    font-size: 1rem;
+    border: none;
+    background: none;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+}
+.file-chip-remove:hover {
+    color: #dc2626;
+}
+
+.multi-pdf-layout .pdf-viewer-container {
+    display: none !important;
+}

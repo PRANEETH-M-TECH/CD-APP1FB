@@ -6,24 +6,19 @@ logger = logging.getLogger(__name__)
 
 def save_summary_document(class_name: str, subject: str, book_uuid: str, chapters: list):
     """
-    Creates a single Firestore summary document containing ALL chapter summaries
-    for a given class + subject. This document is used ONLY for LLM context.
+    Creates a Firestore summary document containing ALL chapter summaries
+    for a given class + subject under the centralized content structure.
 
     Document path:
-        summaries/{subject}_{class}
+        classes/{class}/subjects/{subject}
     Example:
-        summaries/science_7
+        classes/8/subjects/science
     """
-
-    doc_id = f"{subject.strip().lower()}_{class_name.strip().replace(' ', '')}"
-    
-    # Check if the collection exists, create it if it doesn't
-    collections = [col.id for col in db.collections()]
-    if "summaries" not in collections:
-        # Create a dummy document to create the collection
-        db.collection("summaries").document("dummy").set({})
+    clean_class = "".join(c for c in str(class_name) if c.isdigit())
+    if not clean_class:
+        clean_class = "unknown"
         
-    doc_ref = db.collection("summaries").document(doc_id)
+    doc_ref = db.collection("classes").document(clean_class).collection("subjects").document(subject.strip().lower())
 
     payload = {
         "class": class_name,
@@ -33,7 +28,7 @@ def save_summary_document(class_name: str, subject: str, book_uuid: str, chapter
     }
 
     try:
-        logger.info(f"📤 Uploading to Firestore document: summaries/{doc_id}")
+        logger.info(f"📤 Uploading to Firestore document: classes/{clean_class}/subjects/{subject}")
         doc_ref.set(payload)
         logger.info(f"✓ Document created/updated successfully")
         logger.info(f"📝 Chapters saved:")
@@ -44,21 +39,23 @@ def save_summary_document(class_name: str, subject: str, book_uuid: str, chapter
             logger.info(f"   ✓ Chapter {sno}: {ch_name} ({summary_len} chars)")
 
     except Exception as e:
-        logger.error(f"❌ Failed to save summary document summaries/{doc_id}: {e}")
-        for chapter in chapters:
-            sno = chapter.get('sno', 'N/A')
-            logger.error(f"   ✗ Chapter {sno} failed to save")
+        logger.error(f"❌ Failed to save summary document classes/{clean_class}/subjects/{subject}: {e}")
         raise
+
 
 # In-memory cache for summaries to avoid repeated Firestore reads
 SUMMARY_CACHE = {}
 
 def load_summary_from_firestore(class_name: str, subject: str):
     """
-    Loads summaries/{subject}_{class} from Firestore.
+    Loads classes/{class}/subjects/{subject} from Firestore.
     Caches in memory for FAST access (0ms after first load).
     """
-    key = f"{subject.strip().lower()}_{class_name.strip().replace(' ', '')}"
+    clean_class = "".join(c for c in str(class_name) if c.isdigit())
+    if not clean_class:
+        clean_class = "unknown"
+        
+    key = f"{clean_class}_{subject.strip().lower()}"
     logger.debug(f"Attempting to load summary for key: {key}")
 
     # Check cached
@@ -68,12 +65,11 @@ def load_summary_from_firestore(class_name: str, subject: str):
 
     logger.debug(f"Summary for key '{key}' not in cache, fetching from Firestore.")
     # Fetch from Firestore
-    doc_ref = db.collection("summaries").document(key)
+    doc_ref = db.collection("classes").document(clean_class).collection("subjects").document(subject.strip().lower())
     doc = doc_ref.get()
 
     if not doc.exists:
-        logger.warning(f"Summary document not found in Firestore for key: {key}")
-        # Return None or raise? Let's return None to let caller handle
+        logger.warning(f"Summary document not found in Firestore for classes/{clean_class}/subjects/{subject}")
         return None
 
     data = doc.to_dict()
@@ -95,7 +91,7 @@ def normalize_query_string(q: str) -> str:
 
 def check_global_query_cache(raw_query: str, class_name: str, subject: str = None):
     """
-    Checks Firestore 'global_query_cache' for a matching query record.
+    Checks Firestore nested 'query_cache' for a matching query record.
     Returns the cached data if found and valid on disk, else None.
     """
     import os
@@ -105,17 +101,22 @@ def check_global_query_cache(raw_query: str, class_name: str, subject: str = Non
 
     class_str = str(class_name).strip()
     subj_str = str(subject or "").strip().lower()
+    clean_class = "".join(c for c in class_str if c.isdigit()) or "unknown"
 
     logger.info(f"[CACHE] Checking global cache: normalized='{normalized}', class='{class_str}', subject='{subj_str}'")
     try:
-        # Search by normalized query and class
-        query_ref = db.collection("global_query_cache")\
-                      .where("normalized_query", "==", normalized)\
-                      .where("class", "==", class_str)
-        
-        # Only filter by subject if subject is specific and not generic "all"
+        # If subject is specific, search inside that subject's query_cache
         if subj_str and subj_str not in ["all", "none", "choose your subject..."]:
-            query_ref = query_ref.where("subject", "==", subj_str)
+            query_ref = db.collection("classes").document(clean_class)\
+                          .collection("subjects").document(subj_str)\
+                          .collection("query_cache")\
+                          .where("normalized_query", "==", normalized)\
+                          .where("class", "==", class_str)
+        else:
+            # Fallback to collection group across all query_cache subcollections
+            query_ref = db.collection_group("query_cache")\
+                          .where("normalized_query", "==", normalized)\
+                          .where("class", "==", class_str)
             
         docs = query_ref.limit(1).get()
         
@@ -137,7 +138,7 @@ def check_global_query_cache(raw_query: str, class_name: str, subject: str = Non
 
         # Verify orchestrator output is complete
         if not out or not out.get("text_narration"):
-            logger.warning(f"[CACHE] Cached record for '{raw_query}' is incomplete (empty orchestrator_output). Treating as cache miss.")
+            logger.warning(f"[CACHE] Cached record for '{raw_query}' is incomplete. Treating as cache miss.")
             return None
 
         # If it was a video, verify local files still exist
@@ -172,7 +173,7 @@ def check_global_query_cache(raw_query: str, class_name: str, subject: str = Non
 
 def save_to_global_query_cache(raw_query: str, class_name: str, subject: str, orchestrator_output: dict, interactive_url: str = None):
     """
-    Saves a query execution result into the 'global_query_cache' collection.
+    Saves a query execution result into the nested 'query_cache' collection.
     """
     from datetime import datetime
     import json
@@ -204,12 +205,15 @@ def save_to_global_query_cache(raw_query: str, class_name: str, subject: str, or
     try:
         # Create a deterministic document ID to prevent duplicate listings
         doc_id = f"{class_str}_{subj_str}_{normalized}"
-        # Firestore document ID cannot exceed 1500 bytes; if query is extremely long, crop or hash it
         if len(doc_id) > 500:
             import hashlib
             doc_id = f"{class_str}_{subj_str}_" + hashlib.md5(normalized.encode()).hexdigest()
 
-        db.collection("global_query_cache").document(doc_id).set(payload)
-        logger.info(f"[CACHE] Successfully registered query in global cache: summaries/{doc_id}")
+        clean_class = "".join(c for c in class_str if c.isdigit()) or "unknown"
+        doc_ref = db.collection("classes").document(clean_class)\
+                    .collection("subjects").document(subj_str)\
+                    .collection("query_cache").document(doc_id)
+        doc_ref.set(payload)
+        logger.info(f"[CACHE] Successfully registered query in global cache: classes/{clean_class}/subjects/{subj_str}/query_cache/{doc_id}")
     except Exception as e:
         logger.error(f"[CACHE] Failed to write cache record: {e}")

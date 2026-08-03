@@ -1,4 +1,4 @@
-﻿import re
+import re
 import json
 import logging
 from typing import List, Dict, Optional
@@ -117,7 +117,7 @@ def enhanced_dashboard(uid: str, class_name: str = Query(None)):
 def get_topic_breakdown(uid: str, subject: str = None, chapter_id: str = None):
     """Get topic-level analytics with optional filters"""
     try:
-        query = db.collection("topic_analytics").where("uid", "==", uid)
+        query = db.collection("users").document(uid).collection("topic_analytics")
         if subject and subject != "All Subjects":
             query = query.where("subject", "==", subject.lower())
             
@@ -206,8 +206,7 @@ async def get_topic_clusters(
         logger.info(f"[TOPIC CLUSTERS] Request: uid={uid}, subject={subject}, chapter_name={chapter_name}, chapter_id={chapter_id}")
         
         logger.info(f"[TOPIC CLUSTERS] Fetching all queries for subject={subject}")
-        all_queries_ref = db.collection("user_queries")\
-            .where("uid", "==", uid)\
+        all_queries_ref = db.collection("users").document(uid).collection("queries")\
             .where("subject", "==", subject.lower())\
             .stream()
         
@@ -258,9 +257,8 @@ async def get_topic_clusters(
         for topic in topics_data.get('topics', []):
             topic_name = topic.get('topic_name', 'Unknown Topic')
             slug = re.sub(r'[^a-z0-9]+', '_', topic_name.lower()).strip('_')
-            doc_id = f"{uid}_{subject}_{chapter_id}_{slug}"
-            
-            topic_doc_ref = db.collection('topic_analytics').document(doc_id)
+            doc_id = f"{subject}_{chapter_id}_{slug}"
+            topic_doc_ref = db.collection('users').document(uid).collection('topic_analytics').document(doc_id)
             topic_doc_ref.set({
                 'uid': uid,
                 'subject': subject,
@@ -308,7 +306,7 @@ async def initialize_user_analytics(uid: str = Query(...)):
         from datetime import datetime
         logger.info(f"[ANALYTICS INIT] Initializing analytics for uid: {uid}")
         
-        doc_ref = db.collection('user_analytics').document(uid)
+        doc_ref = db.collection('users').document(uid).collection('user_analytics').document('user_analytics_doc')
         doc = doc_ref.get()
         
         if doc.exists:
@@ -316,8 +314,7 @@ async def initialize_user_analytics(uid: str = Query(...)):
             return {"message": "Analytics document already exists", "data": doc.to_dict()}
         
         logger.info(f"[ANALYTICS INIT] Fetching query history for {uid}")
-        queries_ref = db.collection('user_query_details')\
-            .where('uid', '==', uid)\
+        queries_ref = db.collection('users').document(uid).collection('queries')\
             .order_by('timestamp', direction=firestore.Query.DESCENDING)\
             .stream()
         
@@ -459,7 +456,7 @@ async def get_analytics_summary(uid: str = Query(...)):
     Get cumulative analytics summary for dashboard main stats.
     """
     try:
-        doc_ref = db.collection('user_analytics').document(uid)
+        doc_ref = db.collection('users').document(uid).collection('user_analytics').document('user_analytics_doc')
         doc = doc_ref.get()
         
         if not doc.exists:

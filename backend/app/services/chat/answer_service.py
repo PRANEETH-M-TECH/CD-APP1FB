@@ -296,35 +296,6 @@ def generate_chapters_from_text(json_path: str) -> str:
         return json.dumps({"pdf_offset": 0, "chapters": []})
 
 
-SUMMARY_CACHE = {}
-
-def load_summary_from_firestore(class_name: str, subject: str):
-    """
-    Loads summaries/{subject}_{class} from Firestore.
-    Caches in memory for FAST access (0ms after first load).
-    """
-    key = f"{subject.lower()}_{class_name.replace(' ', '')}"
-
-    # Check cached
-    if key in SUMMARY_CACHE:
-        return SUMMARY_CACHE[key]
-
-    # Fetch from Firestore
-    from backend.app.core.firebase.firebase_init import db
-    doc_ref = db.collection("summaries").document(key)
-    doc = doc_ref.get()
-
-    if not doc.exists:
-        raise Exception(f"Summary document not found: summaries/{key}")
-
-    data = doc.to_dict()
-    SUMMARY_CACHE[key] = data  # cache it
-
-    print(f"[CACHE] Loaded summary -> summaries/{key}")
-
-    return data
-
-
 def extract_json_block(text: str):
     start = text.find("{")
     end = text.rfind("}") + 1

@@ -10,6 +10,20 @@ if sys.platform == "win32":
         asyncio.set_event_loop_policy(asyncio.WindowsProactorEventLoopPolicy())
     except Exception:
         pass
+    try:
+        # Windows' default console codepage (cp1252) can't encode most emoji or
+        # box-drawing characters, which this codebase prints a lot of (progress
+        # bars, checkmarks, status icons). An unencodable print() crashes
+        # whatever called it outright - including fire-and-forget background
+        # tasks like book ingestion, which then fail silently from the caller's
+        # perspective (the HTTP request already returned 200). Reconfiguring
+        # stdout/stderr to UTF-8 with substitution on failure fixes this for
+        # every print() in the process, everywhere, rather than patching each
+        # Unicode character as it's found.
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+        sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:
+        pass
 
 # Load environment variables FIRST with override to prioritize .env file over system env vars
 # Resolve root .env path relative to main.py
@@ -115,6 +129,22 @@ async def enhanced_dashboard_page():
 @app.get("/admin")
 async def admin_page():
     return FileResponse(os.path.join(PUBLIC_DIR, 'admin.html'))
+
+@app.get("/admin-login")
+async def admin_login_page():
+    return FileResponse(os.path.join(PUBLIC_DIR, 'admin-login.html'))
+
+@app.get("/admin-login.html")
+async def admin_login_html_page():
+    return FileResponse(os.path.join(PUBLIC_DIR, 'admin-login.html'))
+
+@app.get("/admin-dashboard")
+async def admin_dashboard_page():
+    return FileResponse(os.path.join(PUBLIC_DIR, 'admin-dashboard.html'))
+
+@app.get("/admin-dashboard.html")
+async def admin_dashboard_html_page():
+    return FileResponse(os.path.join(PUBLIC_DIR, 'admin-dashboard.html'))
 
 @app.get("/user")
 async def user_page():

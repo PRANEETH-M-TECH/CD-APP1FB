@@ -222,8 +222,7 @@ def get_frequent_questions(uid: str, limit: int = 10) -> List[Dict]:
         List of query dictionaries with metadata
     """
     try:
-        queries_ref = db.collection("user_queries")\
-            .where("uid", "==", uid)\
+        queries_ref = db.collection("users").document(uid).collection("queries")\
             .limit(limit)
         
         docs = queries_ref.stream()
@@ -311,13 +310,15 @@ def get_class_overview() -> Dict:
     """
     try:
         # Aggregate from chapter_stats
-        chapter_stats_ref = db.collection("chapter_stats").stream()
+        chapter_stats_ref = db.collection_group("stats").stream()
         
         class_counts = defaultdict(int)
         total = 0
         
         for doc in chapter_stats_ref:
             data = doc.to_dict()
+            if "chapter_name" not in data:
+                continue
             class_num = data.get("class", 0)
             query_count = data.get("total_queries", 0)
             
@@ -349,10 +350,9 @@ def get_chapter_hotspots(class_name: str, subject: str, limit: int = 10) -> List
     try:
         class_int = int(class_name.replace("Class", "").replace("class", "").strip())
         
-        # Query chapter_stats filtered by class and subject
-        chapter_stats_ref = db.collection("chapter_stats")\
-            .where("class", "==", class_int)\
-            .where("subject", "==", subject.lower())\
+        chapter_stats_ref = db.collection("classes").document(str(class_int))\
+            .collection("subjects").document(subject.lower())\
+            .collection("stats")\
             .limit(limit)
         
         docs = chapter_stats_ref.stream()
@@ -387,12 +387,14 @@ def get_subject_distribution() -> Dict:
     """
     try:
         # Aggregate from chapter_stats
-        chapter_stats_ref = db.collection("chapter_stats").stream()
+        chapter_stats_ref = db.collection_group("stats").stream()
         
         subject_counts = defaultdict(int)
         
         for doc in chapter_stats_ref:
             data = doc.to_dict()
+            if "chapter_name" not in data:
+                continue
             subject = data.get("subject", "unknown")
             query_count = data.get("total_queries", 0)
             
@@ -460,8 +462,7 @@ def get_student_performance(uid: str) -> Dict:
                 aggregated_stats["classes"].append(data["class"])
         
         # Get recent queries
-        queries_ref = db.collection("user_queries")\
-            .where("uid", "==", uid)\
+        queries_ref = db.collection("users").document(uid).collection("queries")\
             .order_by("timestamp", direction=firestore.Query.DESCENDING)\
             .limit(20)
         

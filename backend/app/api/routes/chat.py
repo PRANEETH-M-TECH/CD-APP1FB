@@ -10,7 +10,6 @@ from fastapi.responses import StreamingResponse
 
 from backend.app.services.retrieval import qdrant_service as qdrant
 from backend.app.services.chat.answer_service import (
-    load_summary_from_firestore,
     reformulate_with_llm,
     context_aware_reformulate,
     generate_smart_followups,
@@ -79,7 +78,7 @@ def track_cumulative_analytics(uid: str, query: str, subject: str, chapter_name:
     from datetime import datetime
     try:
         logger.info(f"[CUMULATIVE ANALYTICS] Starting tracking for uid: {uid}, subject: {subject}, chapter: {chapter_name}")
-        doc_ref = db.collection('user_analytics').document(uid)
+        doc_ref = db.collection('users').document(uid).collection('user_analytics').document('user_analytics_doc')
         doc = doc_ref.get()
         
         today = datetime.now().strftime('%Y-%m-%d')
@@ -206,7 +205,10 @@ async def query_engine(
         print(f"{'='*80}\n")
         
         print(f"[FIRESTORE] Loading summaries from cache/Firestore...")
-        summary_doc = load_summary_from_firestore(class_name, subject)
+        summary_doc = firestore_service.load_summary_from_firestore(class_name, subject)
+        if not summary_doc:
+            yield f"data: {json.dumps({'error': 'No content found for this class/subject.'})}\n\n"
+            return
         chapters = summary_doc["chapters"]
         print(f"[FIRESTORE] Loaded {len(chapters)} chapters\n")
 
@@ -588,7 +590,12 @@ async def smart_query_engine(
                         mode="text",
                         llm_action=classification,
                         answer_length=len(text_script),
-                        query_json_url=None
+                        query_json_url=None,
+                        llm_response=text_script,
+                        retrieved_sources=None,  # Cache hits don't execute a fresh search
+                        storyboard_data=out.get("video_storyboard"),
+                        video_url=interactive_url,
+                        audio_url=None
                     )
 
                     # Rebuild/update user analytics (streaks, counts, etc.)
@@ -810,6 +817,17 @@ async def smart_query_engine(
             # Log query to Firestore user_queries collection
             _query_doc_id = None
             try:
+                # Format RAG chunks for storage
+                retrieved_sources = []
+                if hybrid_results:
+                    for score, doc in hybrid_results:
+                        retrieved_sources.append({
+                            "chunk_id": doc.get("chunk_id", "unknown"),
+                            "text": doc.get("text", ""),
+                            "score": float(score),
+                            "page_number": doc.get("chpstpage", 1)
+                        })
+
                 from backend.app.services.analytics import analytics_service
                 _query_doc_id = analytics_service.log_query(
                     uid=uid,
@@ -822,7 +840,12 @@ async def smart_query_engine(
                     mode="text",
                     llm_action=classification,
                     answer_length=len(text_script),
-                    query_json_url=query_json_url
+                    query_json_url=query_json_url,
+                    llm_response=text_script,
+                    retrieved_sources=retrieved_sources,
+                    storyboard_data=updated_lesson_package or out.get("video_storyboard"),
+                    video_url=interactive_url,
+                    audio_url=None
                 )
 
                 # Rebuild/update user analytics (streaks, counts, etc.)
@@ -984,11 +1007,19 @@ async def websocket_conversation(
 async def submit_feedback(request: FeedbackRequest):
     """
     Save student feedback (like / dislike + optional voice transcript)
-    back to the matching user_queries Firestore document.
+    back to the matching nested user queries Firestore document.
     """
     try:
         from google.cloud import firestore as _fs
-        doc_ref = db.collection("user_queries").document(request.query_id)
+        # Use collection group to find the document by query_id without needing uid
+        queries_group = db.collection_group("queries")
+        docs = list(queries_group.where(_fs.FieldPath.document_id(), "==", request.query_id).limit(1).stream())
+        
+        if not docs:
+            logger.error(f"[FEEDBACK] Query document {request.query_id} not found across nested queries.")
+            raise HTTPException(status_code=404, detail="Query document not found.")
+            
+        doc_ref = docs[0].reference
         doc_ref.update({
             "feedback": {
                 "type": request.feedback_type,
@@ -996,8 +1027,10 @@ async def submit_feedback(request: FeedbackRequest):
                 "timestamp": _fs.SERVER_TIMESTAMP
             }
         })
-        logger.info(f"[FEEDBACK] Saved '{request.feedback_type}' for query {request.query_id}")
+        logger.info(f"[FEEDBACK] Saved '{request.feedback_type}' for query {request.query_id} at {doc_ref.path}")
         return {"status": "ok"}
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"[FEEDBACK] Failed to save feedback: {e}")
         raise HTTPException(status_code=500, detail="Failed to save feedback.")

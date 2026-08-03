@@ -1,4 +1,4 @@
-﻿"""
+"""
 Conversation state management and optimized processing for real-time interactions.
 """
 import asyncio
@@ -307,6 +307,19 @@ class ConversationManager:
         finally:
             # Consolidate analytics logging for WebSocket
             try:
+                # Format RAG chunks for storage
+                retrieved_sources = []
+                if 'search_results' in locals() and search_results:
+                    for score, doc in search_results:
+                        # doc might be a dict or a payload object depending on source
+                        if isinstance(doc, dict):
+                            retrieved_sources.append({
+                                "chunk_id": doc.get("chunk_id", "unknown"),
+                                "text": doc.get("text", ""),
+                                "score": float(score),
+                                "page_number": doc.get("chpstpage", 1)
+                            })
+
                 logger.info(f"DEBUG: Analytics - uid={uid}, class_name={class_name}, subject={subject}, chapter_id={chapter_id}")
                 analytics_service.log_query(
                     uid=uid,
@@ -318,7 +331,12 @@ class ConversationManager:
                     reformulated_query=reformulated_query,
                     mode=mode,
                     llm_action=action,
-                    answer_length=len(full_answer)
+                    answer_length=len(full_answer),
+                    llm_response=full_answer,
+                    retrieved_sources=retrieved_sources,
+                    storyboard_data=None,
+                    video_url=None,
+                    audio_url=None
                 )
 
                 analytics_service.update_user_stats(uid, subject, chapter_id, class_name)

@@ -8,8 +8,98 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css?v=202">
     <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
-    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        .drop-zone {
+            border: 2px dashed #4a69bd !important;
+            border-radius: 12px !important;
+            padding: 40px 20px !important;
+            text-align: center !important;
+            background-color: #f8fafc !important;
+            cursor: pointer !important;
+            transition: all 0.3s ease !important;
+            margin-bottom: 20px !important;
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: center !important;
+            justify-content: center !important;
+        }
+        .drop-zone:hover, .drop-zone.dragover {
+            background-color: #f1f5f9 !important;
+            border-color: #354a85 !important;
+            transform: translateY(-2px) !important;
+            box-shadow: 0 6px 20px rgba(74, 105, 189, 0.1) !important;
+        }
+        .drop-zone-icon {
+            font-size: 3rem !important;
+            margin-bottom: 10px !important;
+        }
+        .drop-zone-prompt {
+            font-size: 1.1rem !important;
+            color: #475569 !important;
+            font-weight: 600 !important;
+            margin-bottom: 10px !important;
+        }
+        .choose-files-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+            color: white !important;
+            border: none !important;
+            padding: 12px 28px !important;
+            border-radius: 8px !important;
+            font-weight: 600 !important;
+            font-size: 15px !important;
+            cursor: pointer !important;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3) !important;
+            transition: all 0.3s ease !important;
+            margin-top: 10px !important;
+        }
+        .choose-files-btn:hover {
+            transform: translateY(-1px) !important;
+            box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4) !important;
+        }
+        .selected-files-container {
+            display: flex !important;
+            flex-wrap: wrap !important;
+            gap: 10px !important;
+            margin-top: 15px !important;
+        }
+        .file-chip {
+            display: flex !important;
+            align-items: center !important;
+            background: #e2e8f0 !important;
+            padding: 8px 16px !important;
+            border-radius: 20px !important;
+            font-size: 0.9rem !important;
+            font-weight: 500 !important;
+            color: #334155 !important;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05) !important;
+        }
+        .file-chip-name {
+            max-width: 250px !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+            white-space: nowrap !important;
+        }
+        .file-chip-size {
+            font-size: 0.75rem !important;
+            color: #64748b !important;
+            margin-left: 8px !important;
+        }
+        .file-chip-remove {
+            margin-left: 10px !important;
+            cursor: pointer !important;
+            color: #ef4444 !important;
+            font-weight: bold !important;
+            font-size: 1.1rem !important;
+            border: none !important;
+            background: none !important;
+            padding: 0 !important;
+        }
+        .file-chip-remove:hover {
+            color: #dc2626 !important;
+        }
+    </style>
 </head>
 
 <body>
@@ -62,8 +152,14 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="pdf-file">Book PDF File</label>
-                            <input type="file" id="pdf-file" class="file-input" accept=".pdf" required>
+                            <label>Book PDF Files (Select one or more chapters)</label>
+                            <div id="drop-zone" class="drop-zone">
+                                <div class="drop-zone-icon">📂</div>
+                                <div class="drop-zone-prompt">Drag & drop chapter PDF files here or</div>
+                                <button type="button" class="choose-files-btn">Choose Files</button>
+                                <input type="file" id="pdf-file" class="file-input" accept=".pdf" multiple style="display: none;">
+                            </div>
+                            <div id="selected-files-container" class="selected-files-container"></div>
                         </div>
                     </div>
                 </div>

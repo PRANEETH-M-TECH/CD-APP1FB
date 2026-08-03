@@ -90,10 +90,28 @@ def authenticate_student_by_email(email: str) -> Dict[str, Any]:
 
 def get_cached_curriculum_metadata(grade: int) -> str:
     """
-    Fetches available subject & chapter summaries from Firestore or local service for the student's grade.
+    Fetches available subject & chapter summaries for the student's grade.
+    Prefers the new classes/{grade}/subjects/{subject} schema (real,
+    LLM-generated per-chapter summaries from the 'rag' branch's ingestion
+    pipeline) and only falls back to the old flat collections/local cache
+    (bare chapter titles, no summary content) if nothing exists there yet.
     """
-    firestore_db = db
     chapter_summaries = []
+    for subject_id, data in _get_classes_subjects_docs(grade):
+        subject_label = data.get("subject") or subject_id
+        for ch in data.get("chapters", []):
+            ch_name = ch.get("chapter_name", "")
+            summary = (ch.get("summary") or "").strip()
+            if summary:
+                # Keep prompt size sane - full summaries are prose paragraphs.
+                chapter_summaries.append(f"• {subject_label} | Chapter: {ch_name} -> Summary: {summary[:400]}")
+            else:
+                chapter_summaries.append(f"• {subject_label} | Chapter: {ch_name}")
+
+    if chapter_summaries:
+        return "\n".join(chapter_summaries)
+
+    firestore_db = db
 
     if firestore_db:
         try:
@@ -149,19 +167,65 @@ def get_cached_curriculum_metadata(grade: int) -> str:
     return "\n".join(chapter_summaries)
 
 
+def _get_classes_subjects_docs(grade: int) -> list:
+    """
+    Reads the new consolidated schema: classes/{grade}/subjects/{subject_id},
+    each holding {class, subject, book_uuid, chapters: [{chapter_name, summary, ...}]}.
+    This is the schema the 'rag' branch's ingestion pipeline writes (real,
+    LLM-generated chapter summaries) - it replaced the old flat 'summaries'/
+    'chapters' collections, which are now empty in production. Returns a list
+    of (subject_doc_id, data_dict) tuples, or [] if nothing exists yet for
+    this grade (e.g. before any book has been migrated/ingested).
+    """
+    try:
+        subj_refs = db.collection("classes").document(str(grade)).collection("subjects").stream()
+        return [(doc.id, doc.to_dict() or {}) for doc in subj_refs]
+    except Exception as e:
+        print(f"[CURRICULUM CACHE WARN] classes/{grade}/subjects query exception: {e}")
+        return []
+
+
+def resolve_book_uuid_for_subject(grade: int, matched_subject: str) -> str:
+    """
+    Resolves the real book_uuid for a validated matched_subject directly from
+    classes/{grade}/subjects/{subject}.book_uuid. Replaces the old
+    summaries/{subject}_{grade} lookup, which always misses now (that
+    collection is empty - see [[rag-branch-merge-plan]] memory). Several
+    near-duplicate subject documents can exist per grade (e.g. 'social',
+    'social science', 'social studies' for the same real subject) due to
+    inconsistent naming at write time; among fuzzy-matching candidates, this
+    prefers the one with a real book_uuid and the most chapters.
+    """
+    normalized = normalize_subject_name(matched_subject or "")
+    if not normalized:
+        return ""
+    best_uuid, best_score = "", -1
+    for subject_id, data in _get_classes_subjects_docs(grade):
+        sid = subject_id.strip().lower()
+        if normalized == sid or normalized in sid or sid in normalized:
+            book_uuid = data.get("book_uuid") or ""
+            score = (100 if book_uuid else 0) + len(data.get("chapters", []))
+            if score > best_score:
+                best_score, best_uuid = score, book_uuid
+    return best_uuid
+
+
 def get_valid_subjects_for_grade(grade: int) -> set:
     """
-    Real subject names actually available for this grade, derived from the
-    same sources as get_cached_curriculum_metadata(). Used to validate the
+    Real subject names actually available for this grade. Used to validate the
     orchestrator LLM's claimed matched_subject before trusting a CURRICULUM
     classification - the LLM can otherwise hallucinate a plausible-sounding
     subject (e.g. "Class 8 Science" for a student whose grade only actually
     has Social Studies loaded), silently mis-marking a general-knowledge
     question as curriculum and skipping real grounding.
     """
-    subjects = set()
-    firestore_db = db
+    subjects = {sid.strip().lower() for sid, _ in _get_classes_subjects_docs(grade)}
+    if subjects:
+        return subjects
 
+    # Fall back to the old flat schema / local cache if the new schema has
+    # nothing for this grade yet (no book migrated/ingested there yet).
+    firestore_db = db
     if firestore_db:
         try:
             chapters_ref = firestore_db.collection("chapters").where(filter=FieldFilter("class_level", "==", grade)).get()
@@ -394,27 +458,15 @@ def run_orchestrator_pipeline(raw_query: str, student_profile: Dict[str, Any]) -
         print(f"[RAG SEARCH] Running hybrid vector search for: '{reformulated_query}'...")
         rag_executed = True
         try:
-            # Resolve book_uuid from Firestore summaries using matched_subject and grade
+            # Resolve book_uuid from the new classes/{grade}/subjects/{subject}
+            # schema (replaces the old summaries/{subject}_{grade} lookup,
+            # which always misses now - that collection is empty in production).
             if matched_subject:
-                try:
-                    from backend.app.core.firebase.firebase_init import db
-                    # Gemini may return "Science" or "Class 6 Science".
-                    # Summary documents are keyed as summaries/{subject}_{class}.
-                    normalized_subject = re.sub(
-                        r"\b(?:class|grade)\s*\d+\b", "", str(matched_subject), flags=re.IGNORECASE
-                    )
-                    normalized_subject = re.sub(r"\s+", " ", normalized_subject).strip(" -_:")
-                    sub_key = normalized_subject.lower().strip()
-                    summary_key = f"{sub_key}_{grade}"
-                    # Summaries are stored under summaries/{subject}_{class}
-                    sum_doc = db.collection("summaries").document(summary_key).get()
-                    if sum_doc.exists:
-                        resolved_book_uuid = sum_doc.to_dict().get("book_uuid", "")
-                        print(f"[RAG SEARCH] Resolved summaries/{summary_key} book_uuid (Class {grade}): {resolved_book_uuid}")
-                    else:
-                        print(f"[RAG SEARCH WARNING] Summary document not found: summaries/{summary_key}")
-                except Exception as e:
-                    print(f"[RAG RESOLVE WARNING] Failed to resolve book_uuid from Firestore: {e}")
+                resolved_book_uuid = resolve_book_uuid_for_subject(grade, matched_subject)
+                if resolved_book_uuid:
+                    print(f"[RAG SEARCH] Resolved book_uuid for subject '{matched_subject}' (Class {grade}): {resolved_book_uuid}")
+                else:
+                    print(f"[RAG SEARCH WARNING] No book_uuid found for subject '{matched_subject}' (Class {grade})")
 
             if not resolved_book_uuid:
                 raise RuntimeError(
