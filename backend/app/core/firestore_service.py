@@ -177,7 +177,7 @@ def save_to_global_query_cache(raw_query: str, class_name: str, subject: str, or
     """
     from datetime import datetime
     import json
-    if not orchestrator_output or not orchestrator_output.get("text_narration"):
+    if not orchestrator_output or not (orchestrator_output.get("text_narration") or orchestrator_output.get("video_storyboard")):
         logger.warning("[CACHE] Rejecting save_to_global_query_cache because orchestrator_output is incomplete.")
         return
     normalized = normalize_query_string(raw_query)

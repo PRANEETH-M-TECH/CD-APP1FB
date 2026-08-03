@@ -1,4 +1,4 @@
-﻿import os
+import os
 import sys
 import os
 import json
@@ -320,6 +320,46 @@ def run_orchestrator_pipeline(raw_query: str, student_profile: Dict[str, Any]) -
     grade = student_profile.get("class", 7)
     curriculum_cache_text = get_cached_curriculum_metadata(grade)
 
+    # Step 1.5: Pre-retrieve RAG Chunks if curriculum query (to ground the LLM's single-pass generation)
+    retrieved_chunks_text = ""
+    try:
+        # Match keywords in the query to find likely subject
+        valid_subjects = get_valid_subjects_for_grade(grade)
+        likely_subject = None
+        for s in valid_subjects:
+            if s.lower() in raw_query.lower():
+                likely_subject = s
+                break
+        
+        if not likely_subject:
+            likely_subject = "science" if "science" in valid_subjects else (valid_subjects[0] if valid_subjects else "science")
+        
+        resolved_book_uuid = resolve_book_uuid_for_subject(grade, likely_subject)
+        
+        if resolved_book_uuid:
+            raw_chunks, _, _ = qdrant_service.hybrid_search(
+                book_uuid=resolved_book_uuid,
+                query=raw_query,
+                keywords=[],
+                conceptual_score=0.6,
+                top_k=8
+            )
+            if raw_chunks:
+                lines = []
+                for idx, c in enumerate(raw_chunks[:8], start=1):
+                    if isinstance(c, tuple) and len(c) >= 2:
+                        payload = c[1]
+                    else:
+                        payload = getattr(c, "payload", c)
+                    if not isinstance(payload, dict):
+                        payload = {}
+                    text = payload.get("text", payload.get("content", ""))
+                    ch_name = payload.get("chapter_name", payload.get("chapter", "Unknown"))
+                    lines.append(f"[{idx}] (Chapter: {ch_name}) {text}")
+                retrieved_chunks_text = "\n\n".join(lines)
+    except Exception as pre_rag_err:
+        print(f"[RAG PRE-SEARCH NOTICE] Pre-search failed: {pre_rag_err}")
+
     # Step 2: Format System Prompt
     current_date_time = datetime.datetime.now().strftime("%A, %B %d, %Y (%H:%M:%S)")
     formatted_prompt = system_prompt.replace("{student_name}", student_profile.get("name", "Student"))
@@ -327,7 +367,10 @@ def run_orchestrator_pipeline(raw_query: str, student_profile: Dict[str, Any]) -
     formatted_prompt = formatted_prompt.replace("{student_board}", student_profile.get("board", "CBSE"))
     formatted_prompt = formatted_prompt.replace("{current_date_time}", current_date_time)
     formatted_prompt = formatted_prompt.replace("{cached_subjects_and_chapter_summaries}", curriculum_cache_text)
-    formatted_prompt = formatted_prompt.replace("{retrieved_top10_chunks}", "[RAG Chunks will be provided if CURRICULUM]")
+    if retrieved_chunks_text:
+        formatted_prompt = formatted_prompt.replace("{retrieved_top10_chunks}", retrieved_chunks_text)
+    else:
+        formatted_prompt = formatted_prompt.replace("{retrieved_top10_chunks}", "No relevant NCERT textbook chunks found.")
 
     # Step 3: Run Orchestrator LLM (Single Pass)
     print(f"\n[ORCHESTRATOR LLM] Executing single-pass evaluation for Class {grade} query...")

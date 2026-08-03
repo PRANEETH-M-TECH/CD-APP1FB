@@ -1,0 +1,119 @@
+{
+  "timestamp": "2026-08-03T16:02:28.213038",
+  "execution_time_seconds": 17.21,
+  "authenticated_student": {
+    "uid": "n1kWaoB6SPcSwb5IzP46vbdSjG92",
+    "email": "student8@cg.com",
+    "name": "Sonu",
+    "class": 8,
+    "board": "CBSE",
+    "role": "student"
+  },
+  "raw_user_query": "explain why did the people started Revolt against the Mughals",
+  "orchestrator_output": {
+    "is_authorized": true,
+    "refusal_reason": null,
+    "classification": "CURRICULUM",
+    "reformulated_query": "Why did the people start revolting against the Mughals?",
+    "matched_subject": "Social",
+    "matched_chapter": "Mughal Empire",
+    "complexity_level": 2,
+    "format_decision": "VIDEO_REQUIRED",
+    "text_narration": "The Mughal Empire faced revolts for several reasons:\n\n- Heavy taxation: Many people felt burdened by the high taxes imposed by the Mughal rulers.\n\n- Religious intolerance: Some rulers, like Aurangzeb, were seen as intolerant towards other religions, leading to dissatisfaction among non-Muslim communities.\n\n- Local grievances: Many local leaders and zamindars felt neglected and wanted more power and recognition.\n\n- Economic decline: The empire's economy was declining, leading to poverty and unrest among the common people.\n\n- Rise of regional powers: As the Mughal Empire weakened, regional powers began to assert their independence, leading to revolts against Mughal authority.",
+    "video_storyboard": {
+      "lesson_title": "Reasons for Revolts Against the Mughals",
+      "layout_mode": "timeline",
+      "theme": "History",
+      "global_assets": [],
+      "connections": [],
+      "scenes": [
+        {
+          "scene_no": 1,
+          "purpose": "Introduction to the topic",
+          "template_id": "title_slide",
+          "template_selection_reasoning": "To introduce the lesson clearly.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": "title"
+          },
+          "teacher_script": "This lesson will explore the reasons behind the revolts against the Mughal Empire.",
+          "template_data": {}
+        },
+        {
+          "scene_no": 2,
+          "purpose": "Discuss heavy taxation",
+          "template_id": "concept_diagram",
+          "template_selection_reasoning": "To visually represent the impact of heavy taxation.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": "taxation"
+          },
+          "teacher_script": "One major reason for the revolts was heavy taxation. People felt burdened by the high taxes imposed by the Mughal rulers.",
+          "template_data": {}
+        },
+        {
+          "scene_no": 3,
+          "purpose": "Explain religious intolerance",
+          "template_id": "concept_diagram",
+          "template_selection_reasoning": "To illustrate the effects of religious intolerance.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": "religious_intolerance"
+          },
+          "teacher_script": "Religious intolerance, especially during Aurangzeb's reign, led to dissatisfaction among non-Muslim communities.",
+          "template_data": {}
+        },
+        {
+          "scene_no": 4,
+          "purpose": "Highlight local grievances",
+          "template_id": "concept_diagram",
+          "template_selection_reasoning": "To show the local leaders' perspectives.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": "local_grievances"
+          },
+          "teacher_script": "Local grievances also played a role. Many zamindars and local leaders felt neglected and wanted more power.",
+          "template_data": {}
+        },
+        {
+          "scene_no": 5,
+          "purpose": "Discuss economic decline",
+          "template_id": "concept_diagram",
+          "template_selection_reasoning": "To explain the economic factors leading to unrest.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": "economic_decline"
+          },
+          "teacher_script": "The economic decline of the empire led to poverty and unrest among the common people.",
+          "template_data": {}
+        },
+        {
+          "scene_no": 6,
+          "purpose": "Conclude with rise of regional powers",
+          "template_id": "concept_diagram",
+          "template_selection_reasoning": "To summarize the rise of regional powers.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": "regional_powers"
+          },
+          "teacher_script": "As the Mughal Empire weakened, regional powers began to assert their independence, leading to revolts against Mughal authority.",
+          "template_data": {}
+        }
+      ]
+    }
+  },
+  "rag_retrieval_executed": true,
+  "retrieved_top10_chunks": []
+}

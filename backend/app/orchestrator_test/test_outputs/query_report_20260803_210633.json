@@ -1,0 +1,27 @@
+{
+  "timestamp": "2026-08-03T21:06:33.603920",
+  "execution_time_seconds": 9.94,
+  "authenticated_student": {
+    "uid": "anonymous",
+    "email": "anonymous@cg.com",
+    "name": "Sonu",
+    "class": 8,
+    "board": "CBSE",
+    "role": "student"
+  },
+  "raw_user_query": "Explain how the Industrial Revolution changed the way goods were produced",
+  "orchestrator_output": {
+    "is_authorized": true,
+    "refusal_reason": null,
+    "classification": "CURRICULUM",
+    "reformulated_query": "How did the Industrial Revolution change the way goods were produced?",
+    "matched_subject": "Social",
+    "matched_chapter": "Industrial Revolution",
+    "complexity_level": 2,
+    "format_decision": "VIDEO_REQUIRED",
+    "text_narration": "The Industrial Revolution brought significant changes to how goods were produced. Here are the key points:\n\n- **Shift from Hand Production to Machines**: Before the Industrial Revolution, goods were made by hand. The introduction of machines allowed for faster and more efficient production.\n\n- **Factory System**: Production moved from homes to factories. This centralized production, where many workers and machines operated together in one place.\n\n- **Mass Production**: With machines, goods could be produced in large quantities. This made products cheaper and more accessible to people.\n\n- **Specialization of Labor**: Workers began to specialize in specific tasks. This increased efficiency as each worker became skilled in their particular job.\n\n- **Use of New Energy Sources**: The Industrial Revolution saw the use of steam engines and later electricity, which powered machines and increased production capacity.\n\n- **Transportation Improvements**: Better transportation systems, like railways and steamships, allowed for quicker movement of raw materials and finished goods, expanding markets.\n\n- **Impact on Society**: These changes led to urbanization, as people moved to cities for factory jobs, changing social structures and lifestyles.\n\nOverall, the Industrial Revolution transformed production methods, leading to economic growth and changes in society."
+  },
+  "rag_retrieval_executed": true,
+  "retrieved_top10_chunks": [],
+  "resolved_book_uuid": ""
+}

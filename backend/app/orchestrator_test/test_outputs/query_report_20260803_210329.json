@@ -1,0 +1,27 @@
+{
+  "timestamp": "2026-08-03T21:03:29.212748",
+  "execution_time_seconds": 5.88,
+  "authenticated_student": {
+    "uid": "anonymous",
+    "email": "anonymous@cg.com",
+    "name": "Sonu",
+    "class": 8,
+    "board": "CBSE",
+    "role": "student"
+  },
+  "raw_user_query": "What is ground water?",
+  "orchestrator_output": {
+    "is_authorized": true,
+    "refusal_reason": null,
+    "classification": "CURRICULUM",
+    "reformulated_query": "What is ground water?",
+    "matched_subject": "Social",
+    "matched_chapter": "Tanks and Ground Water",
+    "complexity_level": 1,
+    "format_decision": "QUICK_ANSWER",
+    "text_narration": "- Groundwater is water that is found underground in soil and rock formations.\n\n- It is stored in spaces between rocks and soil particles.\n\n- Groundwater is an important source of drinking water for many people.\n\n- It can be accessed through wells and springs.\n\n- Groundwater is replenished by rainwater that seeps into the ground."
+  },
+  "rag_retrieval_executed": true,
+  "retrieved_top10_chunks": [],
+  "resolved_book_uuid": ""
+}

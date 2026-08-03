@@ -494,6 +494,8 @@ def hybrid_search(book_uuid: str, query: str, keywords: List[Dict], conceptual_s
             keyword_list.append(item)
             
     keyword_query_str = " ".join(keyword_list)
+    if not keyword_query_str.strip():
+        keyword_query_str = query
 
     # Semantic search
     must_conditions = [models.FieldCondition(key="book_uuid", match=models.MatchValue(value=book_uuid))]
@@ -535,14 +537,19 @@ def hybrid_search(book_uuid: str, query: str, keywords: List[Dict], conceptual_s
     normalized_bm25_results = []
     if bm25:
         corpus_docs = book_corpus.get(book_uuid, [])
-        tokenized_query = keyword_query_str.split(" ")
+        tokenized_query = [w for w in keyword_query_str.split() if w]
         bm25_scores = bm25.get_scores(tokenized_query)
 
         sparse_results_with_scores = []
         for i, doc in enumerate(corpus_docs):
-            if metadata_filters and "chapter" in metadata_filters:
-                if doc.get("chapter") != metadata_filters["chapter"]:
+            if metadata_filters:
+                if "chapter" in metadata_filters and doc.get("chapter") != metadata_filters["chapter"]:
                     continue
+                if "chapter_names" in metadata_filters:
+                    ch_names = metadata_filters["chapter_names"]
+                    doc_chapter = doc.get("chapter") or doc.get("chapter_name")
+                    if ch_names and doc_chapter not in ch_names:
+                        continue
             sparse_results_with_scores.append((bm25_scores[i], doc))
 
         sparse_results_with_scores.sort(key=lambda x: x[0], reverse=True)

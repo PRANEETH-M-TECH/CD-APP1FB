@@ -1,0 +1,27 @@
+{
+  "timestamp": "2026-08-03T21:08:02.483774",
+  "execution_time_seconds": 7.54,
+  "authenticated_student": {
+    "uid": "anonymous",
+    "email": "anonymous@cg.com",
+    "name": "Sonu",
+    "class": 6,
+    "board": "CBSE",
+    "role": "student"
+  },
+  "raw_user_query": "How do magnets attract and repel objects?",
+  "orchestrator_output": {
+    "is_authorized": true,
+    "refusal_reason": null,
+    "classification": "CURRICULUM",
+    "reformulated_query": "How do magnets attract and repel objects?",
+    "matched_subject": "Science",
+    "matched_chapter": "PLAYING WITH MAGNETS",
+    "complexity_level": 2,
+    "format_decision": "VIDEO_REQUIRED",
+    "text_narration": "Magnets attract and repel objects based on their magnetic poles.\n\n- Every magnet has two poles: a north pole and a south pole.\n\n- Like poles repel each other. This means:\n  - North pole repels north pole.\n  - South pole repels south pole.\n\n- Unlike poles attract each other. This means:\n  - North pole attracts south pole.\n\n- When you bring a magnet close to a metal object, if the object is made of magnetic material (like iron), the magnet will attract it.\n\n- The strength of attraction or repulsion depends on the distance between the magnets and the type of materials involved.\n\n- Magnets can also affect other magnets, causing them to move without touching, due to their magnetic field."
+  },
+  "rag_retrieval_executed": true,
+  "retrieved_top10_chunks": [],
+  "resolved_book_uuid": ""
+}

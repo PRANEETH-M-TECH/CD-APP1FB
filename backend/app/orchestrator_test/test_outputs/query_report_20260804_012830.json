@@ -1,0 +1,209 @@
+{
+  "timestamp": "2026-08-04T01:28:30.631848",
+  "execution_time_seconds": 17.68,
+  "authenticated_student": {
+    "uid": "test_user_6",
+    "email": "anonymous@cg.com",
+    "name": "Sonu",
+    "class": 6,
+    "board": "CBSE",
+    "role": "student"
+  },
+  "raw_user_query": "explain step-by-step how a simple electric circuit is built and all the main components of a circuit",
+  "orchestrator_output": {
+    "is_authorized": true,
+    "refusal_reason": null,
+    "classification": "CURRICULUM",
+    "reformulated_query": "explain how to build a simple electric circuit and its main components",
+    "matched_subject": "science",
+    "matched_chapter": "SIMPLE ELECTRIC CIRCUITS",
+    "complexity_level": 2,
+    "format_decision": "VIDEO_REQUIRED",
+    "text_narration": null,
+    "video_storyboard": {
+      "lesson_title": "Building a Simple Electric Circuit",
+      "layout_mode": "timeline",
+      "theme": "Science",
+      "global_assets": [],
+      "connections": [],
+      "scenes": [
+        {
+          "scene_no": 1,
+          "purpose": "Introduction to Electric Circuits",
+          "template_id": "title_slide",
+          "template_selection_reasoning": "To introduce the topic clearly.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": "title"
+          },
+          "teacher_script": "This lesson will explain how to build a simple electric circuit and identify its main components.",
+          "template_data": {
+            "title": "Building a Simple Electric Circuit",
+            "subtitle": "Understanding the Basics"
+          }
+        },
+        {
+          "scene_no": 2,
+          "purpose": "Components of a Circuit",
+          "template_id": "concept_diagram",
+          "template_selection_reasoning": "To visually represent the components of a circuit.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": "central_node"
+          },
+          "teacher_script": "A simple electric circuit consists of several main components: a power source, wires, a switch, and a load (like a bulb).",
+          "template_data": {
+            "title": "Main Components of a Circuit",
+            "central_node": {
+              "text": "Electric Circuit",
+              "icon": "lightbulb"
+            },
+            "leaf_nodes": [
+              {
+                "text": "Power Source (Battery)",
+                "icon": "battery"
+              },
+              {
+                "text": "Wires",
+                "icon": "wire"
+              },
+              {
+                "text": "Switch",
+                "icon": "lightbulb"
+              },
+              {
+                "text": "Load (Bulb)",
+                "icon": "lightbulb"
+              }
+            ]
+          }
+        },
+        {
+          "scene_no": 3,
+          "purpose": "Building the Circuit",
+          "template_id": "cycle_template",
+          "template_selection_reasoning": "To show the steps in a cyclical manner.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": "stages"
+          },
+          "teacher_script": "To build a simple circuit, follow these steps: 1. Connect the positive terminal of the battery to one end of the switch. 2. Connect the other end of the switch to one terminal of the bulb. 3. Connect the other terminal of the bulb back to the negative terminal of the battery.",
+          "template_data": {
+            "title": "Steps to Build a Circuit",
+            "stages": [
+              {
+                "label": "Connect Battery to Switch",
+                "icon": "battery"
+              },
+              {
+                "label": "Connect Switch to Bulb",
+                "icon": "lightbulb"
+              },
+              {
+                "label": "Connect Bulb to Battery",
+                "icon": "battery"
+              }
+            ]
+          }
+        },
+        {
+          "scene_no": 4,
+          "purpose": "Conclusion",
+          "template_id": "title_slide",
+          "template_selection_reasoning": "To summarize the lesson.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": "title"
+          },
+          "teacher_script": "Now you know how to build a simple electric circuit and the main components involved. Practice building your own circuit!",
+          "template_data": {
+            "title": "Conclusion",
+            "subtitle": "You Did It!"
+          }
+        }
+      ]
+    }
+  },
+  "rag_retrieval_executed": true,
+  "retrieved_top10_chunks": [
+    {
+      "chunk_index": 1,
+      "score": 0.46,
+      "book_name": "",
+      "chapter_name": "SIMPLE ELECTRIC CIRCUITS",
+      "content_snippet": "“electricity.” He believed electricity was caused by a moving fluid called humor.\nFig. 4 (a)\nGlass chamber\nFilament\nTerminals\nTerminals\nMetal Cap\nSCER..."
+    },
+    {
+      "chunk_index": 2,
+      "score": 0.3416,
+      "book_name": "",
+      "chapter_name": "SIMPLE ELECTRIC CIRCUITS",
+      "content_snippet": "wires. In a electric circuit, the electric current\nflows from positive terminal to negative\nterminal.\nAn electric circuit provides a complete path\nfor..."
+    },
+    {
+      "chunk_index": 3,
+      "score": 0.2656,
+      "book_name": "",
+      "chapter_name": "SIMPLE ELECTRIC CIRCUITS",
+      "content_snippet": "115\nScience VI Class\nFig. 4(b) to 4(g)\nTable 1\nConnection Does the  bulb glow\n(Yes/No)\nFig 4(b)\nFig 4(c)\nFig 4(d)\nFig 4(e)\nFig 4(f)\nFig 4(g)\n(b) (c)\n(..."
+    },
+    {
+      "chunk_index": 4,
+      "score": 0.2647,
+      "book_name": "",
+      "chapter_name": "SIMPLE ELECTRIC CIRCUITS",
+      "content_snippet": "122\nSIMPLE ELECTRIC CIRCUIT Free Distribution by Govt. of T.S. 2020-21\n15. Connect circuits as shown in the following figure. Write your observation i..."
+    },
+    {
+      "chunk_index": 5,
+      "score": 0.261,
+      "book_name": "",
+      "chapter_name": "SIMPLE ELECTRIC CIRCUITS",
+      "content_snippet": "120\nSIMPLE ELECTRIC CIRCUIT Free Distribution by Govt. of T.S. 2020-21\nbamboo fan. An idea striked his curious\nmind -  \"Well, why not try bamboo fiber..."
+    },
+    {
+      "chunk_index": 6,
+      "score": 0.2464,
+      "book_name": "",
+      "chapter_name": "SIMPLE ELECTRIC CIRCUITS",
+      "content_snippet": "paper clip etc. in the gap between A and\nB. With each insertion, check whether the\nbulb glows or not. Record your\nobservations in table 2 for each cas..."
+    },
+    {
+      "chunk_index": 7,
+      "score": 0.246,
+      "book_name": "",
+      "chapter_name": "SIMPLE ELECTRIC CIRCUITS",
+      "content_snippet": "114\nSIMPLE ELECTRIC CIRCUIT Free Distribution by Govt. of T.S. 2020-21\nHave you seen  (+) and (-) signs on a  cell?\nThese signs indicate the two termi..."
+    },
+    {
+      "chunk_index": 8,
+      "score": 0.2433,
+      "book_name": "",
+      "chapter_name": "SIMPLE ELECTRIC CIRCUITS",
+      "content_snippet": "electricity to the bulb or any other\nelectrical device.\nThe flow of electricity in a circuit is called\ncurrent.\n Torch-light\n• What does a torch consi..."
+    },
+    {
+      "chunk_index": 9,
+      "score": 0.2403,
+      "book_name": "",
+      "chapter_name": "SIMPLE ELECTRIC CIRCUITS",
+      "content_snippet": "116\nSIMPLE ELECTRIC CIRCUIT Free Distribution by Govt. of T.S. 2020-21\nMany times in our houses we observe that\nthough electricity is available some b..."
+    },
+    {
+      "chunk_index": 10,
+      "score": 0.0786,
+      "book_name": "",
+      "chapter_name": "SIMPLE ELECTRIC CIRCUITS",
+      "content_snippet": "Take a torch and observe its internal\nparts (Fig. 7).\n Fig. 6 : Circuit with a switch\nItalian biologist Luigi Galvani (1737–1798) touched two pieces o..."
+    }
+  ],
+  "resolved_book_uuid": "02388bd2e1e88738b9ce21a5d1c7ce9b"
+}

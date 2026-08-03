@@ -1,0 +1,27 @@
+{
+  "timestamp": "2026-08-03T21:02:02.286710",
+  "execution_time_seconds": 3.69,
+  "authenticated_student": {
+    "uid": "anonymous",
+    "email": "anonymous@cg.com",
+    "name": "Sonu",
+    "class": 8,
+    "board": "CBSE",
+    "role": "student"
+  },
+  "raw_user_query": "What does MLA stand for in the state assembly?",
+  "orchestrator_output": {
+    "is_authorized": true,
+    "refusal_reason": null,
+    "classification": "GENERAL_KNOWLEDGE",
+    "reformulated_query": "What does MLA stand for in the state assembly?",
+    "matched_subject": null,
+    "matched_chapter": null,
+    "complexity_level": 1,
+    "format_decision": "QUICK_ANSWER",
+    "text_narration": "MLA stands for Member of Legislative Assembly.\n\n- An MLA is an elected representative in the state assembly.\n\n- They are responsible for making laws and representing the interests of their constituents.\n\n- Each state in India has its own assembly, and MLAs are elected by the people during state elections."
+  },
+  "rag_retrieval_executed": false,
+  "retrieved_top10_chunks": [],
+  "resolved_book_uuid": ""
+}

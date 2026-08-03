@@ -1,0 +1,119 @@
+{
+  "timestamp": "2026-08-03T19:12:50.929522",
+  "execution_time_seconds": 18.6,
+  "authenticated_student": {
+    "uid": "n1kWaoB6SPcSwb5IzP46vbdSjG92",
+    "email": "student8@cg.com",
+    "name": "Sonu",
+    "class": 8,
+    "board": "CBSE",
+    "role": "student"
+  },
+  "raw_user_query": "process of water cycle in detail",
+  "orchestrator_output": {
+    "is_authorized": true,
+    "refusal_reason": null,
+    "classification": "CURRICULUM",
+    "reformulated_query": "process of water cycle in detail",
+    "matched_subject": "Class 8 Social",
+    "matched_chapter": "Rain and Rivers",
+    "complexity_level": 2,
+    "format_decision": "VIDEO_REQUIRED",
+    "text_narration": "The water cycle is a continuous process that describes how water moves on, above, and below the surface of the Earth.\n\n1. **Evaporation**: Water from oceans, rivers, and lakes heats up due to the sun's energy and turns into water vapor, rising into the atmosphere.\n\n2. **Condensation**: As the water vapor rises, it cools down and changes back into tiny water droplets, forming clouds.\n\n3. **Precipitation**: When the clouds become heavy with water droplets, they release this water as rain, snow, or hail, which falls back to the Earth's surface.\n\n4. **Collection**: The precipitation collects in bodies of water like rivers, lakes, and oceans, and the cycle starts again.\n\n5. **Infiltration**: Some of the water also seeps into the ground, replenishing groundwater supplies.\n\n6. **Transpiration**: Plants also release water vapor into the air through a process called transpiration, contributing to the water cycle.",
+    "video_storyboard": {
+      "lesson_title": "Understanding the Water Cycle",
+      "layout_mode": "timeline",
+      "theme": "Science",
+      "global_assets": [],
+      "connections": [],
+      "scenes": [
+        {
+          "scene_no": 1,
+          "purpose": "Introduce the water cycle",
+          "template_id": "title_slide",
+          "template_selection_reasoning": "To provide a clear introduction to the topic.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": "title"
+          },
+          "teacher_script": "The water cycle is a continuous process that describes how water moves on, above, and below the surface of the Earth.",
+          "template_data": {}
+        },
+        {
+          "scene_no": 2,
+          "purpose": "Explain evaporation",
+          "template_id": "concept_diagram",
+          "template_selection_reasoning": "To visually represent the process of evaporation.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": "evaporation"
+          },
+          "teacher_script": "Water from oceans, rivers, and lakes heats up due to the sun's energy and turns into water vapor, rising into the atmosphere.",
+          "template_data": {}
+        },
+        {
+          "scene_no": 3,
+          "purpose": "Explain condensation",
+          "template_id": "concept_diagram",
+          "template_selection_reasoning": "To visually represent the process of condensation.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": "condensation"
+          },
+          "teacher_script": "As the water vapor rises, it cools down and changes back into tiny water droplets, forming clouds.",
+          "template_data": {}
+        },
+        {
+          "scene_no": 4,
+          "purpose": "Explain precipitation",
+          "template_id": "concept_diagram",
+          "template_selection_reasoning": "To visually represent the process of precipitation.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": "precipitation"
+          },
+          "teacher_script": "When the clouds become heavy with water droplets, they release this water as rain, snow, or hail, which falls back to the Earth's surface.",
+          "template_data": {}
+        },
+        {
+          "scene_no": 5,
+          "purpose": "Explain collection and infiltration",
+          "template_id": "concept_diagram",
+          "template_selection_reasoning": "To visually represent the processes of collection and infiltration.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": "collection_infiltration"
+          },
+          "teacher_script": "The precipitation collects in bodies of water like rivers, lakes, and oceans, and some of the water seeps into the ground, replenishing groundwater supplies.",
+          "template_data": {}
+        },
+        {
+          "scene_no": 6,
+          "purpose": "Explain transpiration",
+          "template_id": "concept_diagram",
+          "template_selection_reasoning": "To visually represent the process of transpiration.",
+          "camera": {
+            "zoom": 1,
+            "pan_x": 0,
+            "pan_y": 0,
+            "target_node": "transpiration"
+          },
+          "teacher_script": "Plants also release water vapor into the air through a process called transpiration, contributing to the water cycle.",
+          "template_data": {}
+        }
+      ]
+    }
+  },
+  "rag_retrieval_executed": true,
+  "retrieved_top10_chunks": []
+}

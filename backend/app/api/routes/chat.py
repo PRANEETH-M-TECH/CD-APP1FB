@@ -657,61 +657,88 @@ async def smart_query_engine(
             yield f"data: {json.dumps({'type': 'intent', 'intent': classification, 'subject': matched_subject, 'chapter': matched_chapter, 'format': format_decision})}\n\n"
 
             # Stream the orchestrator's own text_narration the same way regardless
-            # of format_decision - it's a real answer either way (for VIDEO_REQUIRED
-            # it's the "Show Text Answer" toggle content; the actual video comes from
-            # a separate, fresh generation below via the fixed pipeline, not from the
-            # orchestrator's own draft storyboard). This also removes a redundant
-            # audio-pre-generation pass that used to run against the orchestrator's
-            # (often empty-content) scenes before the real video was even built.
-            text_script = format_text_explanation(text_script)
-
-            import re
-            lines = text_script.split('\n')
-            for l_idx, line in enumerate(lines):
-                if not line.strip():
-                    yield "data: " + json.dumps({'display_text': '\n'}) + "\n\n"
-                    continue
-
-                sentences = [s.strip() for s in re.split(r'(?<=[.!?à¥¤])\s+', line) if s.strip()]
-                for s_idx, s in enumerate(sentences):
-                    prefix = "\n" if (l_idx > 0 and s_idx == 0) else ""
-                    yield f"data: {json.dumps({'display_text': prefix + s + ' '})}\n\n"
-                    await asyncio.sleep(0.05)
+            # Stream the orchestrator's own text_narration or storyboard scenes
+            if format_decision == "VIDEO_REQUIRED" and out.get("video_storyboard"):
+                storyboard_payload = out.get("video_storyboard")
+                
+                # Make sure the storyboard has a unique lesson_id
+                import uuid
+                lesson_id = storyboard_payload.get("lesson_id") or f"vl_{uuid.uuid4().hex[:8]}"
+                storyboard_payload["lesson_id"] = lesson_id
+                
+                scenes = storyboard_payload.get("scenes", [])
+                
+                # Step 1: Pre-generate voice narration audio clips for all scenes!
+                yield f"data: {json.dumps({'type': 'progress', 'step': 'creating_narration', 'status': 'in_progress', 'message': 'Pre-generating lesson audio tracks...'})}\n\n"
+                
+                from backend.app.services.visual_learning.visual_audio_generator import generate_slide_audio
+                audio_urls = []
+                try:
+                    audio_urls = await generate_slide_audio(scenes, lesson_id)
+                except Exception as audio_err:
+                    print(f"[ERROR] Pre-generating slide audio failed: {audio_err}")
+                
+                # Map audio URLs back to scenes
+                for idx, url in enumerate(audio_urls):
+                    if idx < len(scenes) and url:
+                        scenes[idx]["audio_url"] = url
+                
+                yield f"data: {json.dumps({'type': 'progress', 'step': 'creating_narration', 'status': 'complete', 'message': 'Lesson audio tracks pre-generated.'})}\n\n"
+                
+                # Step 2: Stream scene-by-scene. Chunk 1 is Scene 1 script + its audio_url!
+                for idx, s in enumerate(scenes):
+                    title = s.get("template_data", {}).get("title") or s.get("template_data", {}).get("heading") or s.get("purpose") or f"Scene {s.get('scene_no')}"
+                    script = s.get("teacher_script") or ""
+                    audio_url = s.get("audio_url") or ""
+                    
+                    # Format as markdown bullet point
+                    bullet_text = f"- **{title}**: {script}"
+                    bullet_text = format_text_explanation(bullet_text)
+                    text_chunk = bullet_text + "\n\n"
+                    
+                    # Stream this scene script + its Supabase audio_url to the client!
+                    yield f"data: {json.dumps({'display_text': text_chunk, 'audio_url': audio_url})}\n\n"
+                    await asyncio.sleep(0.5)
+            else:
+                # STANDARD RAG/QUICK_ANSWER OR FALLBACK STREAMING FLOW
+                text_script = format_text_explanation(text_script)
+                import re
+                lines = text_script.split('\n')
+                for l_idx, line in enumerate(lines):
+                    if not line.strip():
+                        yield "data: " + json.dumps({'display_text': '\n'}) + "\n\n"
+                        continue
+                    
+                    sentences = [s.strip() for s in re.split(r'(?<=[.!?à¥¤])\s+', line) if s.strip()]
+                    for s_idx, s in enumerate(sentences):
+                        prefix = "\n" if (l_idx > 0 and s_idx == 0) else ""
+                        yield f"data: {json.dumps({'display_text': prefix + s + ' '})}\n\n"
+                        await asyncio.sleep(0.05)
 
             # If format decision is video required, compile the video lesson asynchronously in the background
             interactive_url = None
             updated_lesson_package = None
             if format_decision == "VIDEO_REQUIRED":
-                print("[ORCHESTRATOR] Starting Hyperframes video generation (fixed pipeline, fresh storyboard)...")
+                print("[ORCHESTRATOR] Starting Hyperframes video generation...")
                 from backend.app.services.visual_learning.visual_learning_service import generate_visual_lesson_stream
-
-                # Deliberately do NOT pass the orchestrator's own draft storyboard
-                # (out.get("video_storyboard")) - it comes from a single-pass LLM
-                # call with no schema guidance, no icon/template registry, and no
-                # retry-if-empty guard, and was the source of blank videos. Let
-                # generate_visual_lesson_stream do its own real generation instead.
-                #
-                # Use the validated, Firestore-resolved book for a real curriculum
-                # match. The Firestore "summaries" collection this resolves against
-                # is currently empty in this environment, so resolution routinely
-                # comes back blank even for a genuinely-validated match - in that
-                # case, fall back to whatever book the student currently has open
-                # (a reasonable bet for a real curriculum match: they're usually
-                # asking about the subject they're already browsing). For
-                # GENERAL_KNOWLEDGE, never fall back to the open book - generate
-                # with no book context at all, rather than searching an unrelated one.
+                
+                # Determine which book to use for video context
                 if classification == "CURRICULUM":
                     video_book_uuid = resolved_book_uuid or book_uuid
                     video_subject = matched_subject or subject
                 else:
                     video_book_uuid = ""
                     video_subject = matched_subject or subject or "General Knowledge"
-
+                
+                # Fetch pre-compiled storyboard from orchestrator agent result if available
+                storyboard_payload = out.get("video_storyboard")
+                
                 visual_stream = generate_visual_lesson_stream(
                     query=query,
                     book_uuid=video_book_uuid,
                     class_name=str(student_profile["class"]),
-                    subject=video_subject
+                    subject=video_subject,
+                    precomputed_storyboard=storyboard_payload
                 )
 
                 async for sse_chunk in visual_stream:
@@ -819,13 +846,14 @@ async def smart_query_engine(
             try:
                 # Format RAG chunks for storage
                 retrieved_sources = []
-                if hybrid_results:
-                    for score, doc in hybrid_results:
+                chunks = report.get("retrieved_top10_chunks", [])
+                if chunks:
+                    for chunk in chunks:
                         retrieved_sources.append({
-                            "chunk_id": doc.get("chunk_id", "unknown"),
-                            "text": doc.get("text", ""),
-                            "score": float(score),
-                            "page_number": doc.get("chpstpage", 1)
+                            "chunk_id": f"chunk_{chunk.get('chunk_index')}",
+                            "text": chunk.get("content_snippet", ""),
+                            "score": float(chunk.get("score", 0.0)),
+                            "page_number": 1
                         })
 
                 from backend.app.services.analytics import analytics_service
