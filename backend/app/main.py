@@ -112,6 +112,22 @@ async def enhanced_dashboard_page():
 async def admin_page():
     return FileResponse(os.path.join(PUBLIC_DIR, 'admin.html'))
 
+@app.get("/admin-login")
+async def admin_login_page():
+    return FileResponse(os.path.join(PUBLIC_DIR, 'admin-login.html'))
+
+@app.get("/admin-login.html")
+async def admin_login_html_page():
+    return FileResponse(os.path.join(PUBLIC_DIR, 'admin-login.html'))
+
+@app.get("/admin-dashboard")
+async def admin_dashboard_page():
+    return FileResponse(os.path.join(PUBLIC_DIR, 'admin-dashboard.html'))
+
+@app.get("/admin-dashboard.html")
+async def admin_dashboard_html_page():
+    return FileResponse(os.path.join(PUBLIC_DIR, 'admin-dashboard.html'))
+
 @app.get("/user")
 async def user_page():
     return FileResponse(os.path.join(PUBLIC_DIR, 'user.html'))

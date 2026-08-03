@@ -239,6 +239,154 @@ async def process_book_in_background(book_uuid: str, pdf_path: str, class_name: 
     logger.info(f"Finished background processing for book {book_uuid}")
 
 
+async def process_batch_ingest_in_background(book_uuid: str, class_name: str, subject: str, chapters: List[Dict]):
+    """
+    Processes multiple chapter PDFs in the background, creates summaries, and saves to Qdrant/Firestore.
+    """
+    print(f"\n{'='*100}")
+    print(f"[PROCESS BATCH] ========== BATCH PROCESSING START ==========")
+    print(f"[PROCESS BATCH] Book: Class {class_name} - {subject.capitalize()}")
+    print(f"[PROCESS BATCH] UUID: {book_uuid}")
+    print(f"[PROCESS BATCH] Total Chapters: {len(chapters)}")
+    print(f"{'='*100}\n")
+    
+    try:
+        # Initialize services
+        qdrant.initialize()
+        parent_splitter = RecursiveCharacterTextSplitter(
+            chunk_size=2000,
+            chunk_overlap=400,
+            separators=["\n\n", "\n", " ", ""]
+        )
+        child_splitter = RecursiveCharacterTextSplitter(
+            chunk_size=400,
+            chunk_overlap=100,
+            separators=["\n\n", "\n", ".", " ", ""]
+        )
+
+        all_chapters_with_summaries = []
+
+        for i, chapter_data in enumerate(chapters):
+            chapter_name = chapter_data['chapter_name']
+            filename = chapter_data.get('filename')
+            chp_start = chapter_data.get("chpstpage")
+            chp_end = chapter_data.get("chpendpage")
+            chapter_id = chapter_data.get("chapter_id", str(i + 1))
+
+            if not filename:
+                print(f"[PROCESS BATCH] │  ✗ Skipping - missing filename")
+                continue
+
+            pdf_path = os.path.join(UPLOADS_DIR, filename)
+            if not os.path.exists(pdf_path):
+                print(f"[PROCESS BATCH] │  ✗ Skipping - file not found: {filename}")
+                continue
+
+            print(f"[PROCESS BATCH] ┌─ [{i+1}/{len(chapters)}] {chapter_name} ({filename})")
+            print(f"[PROCESS BATCH] │  Textbook Pages: {chp_start}-{chp_end}")
+            
+            reader = PdfReader(pdf_path)
+            num_pages = len(reader.pages)
+            points_to_upload = []
+            chapter_parent_chunks = []
+
+            for page_num in range(num_pages):
+                page_text = reader.pages[page_num].extract_text() or ""
+                if not page_text.strip():
+                    continue
+
+                parent_chunks = parent_splitter.split_text(page_text)
+                for parent_text in parent_chunks:
+                    parent_text = parent_text.strip()
+                    if not parent_text:
+                        continue
+                    
+                    chapter_parent_chunks.append(parent_text)
+                    
+                    child_chunks = child_splitter.split_text(parent_text)
+                    for chunk_text in child_chunks:
+                        chunk_text = chunk_text.strip()
+                        if not chunk_text:
+                            continue
+                        
+                        chunk_id = str(uuid.uuid4())
+                        qdrant_id = str(uuid.uuid4())
+                        
+                        embedding = qdrant.local_embedder.encode(chunk_text).tolist()
+                        
+                        # Calculate printed page based on PDF page offset
+                        current_printed_page = chp_start + page_num if chp_start is not None else (page_num + 1)
+                        
+                        points_to_upload.append(
+                            models.PointStruct(
+                                id=qdrant_id,
+                                vector=embedding,
+                                payload={
+                                    "book_uuid": book_uuid,
+                                    "chapter_id": chapter_id,
+                                    "chunk_id": chunk_id,
+                                    "text": chunk_text,
+                                    "parent_text": parent_text,
+                                    "chapter_name": chapter_name,
+                                    "pdf_page": page_num + 1,
+                                    "pdf_startpg": 1,
+                                    "pdf_endpg": num_pages,
+                                    "chpstpage": current_printed_page,
+                                    "chpendpage": current_printed_page,
+                                },
+                            )
+                        )
+
+            if points_to_upload:
+                print(f"[PROCESS BATCH] │  ✓ Saved {len(points_to_upload)} chunks to Qdrant")
+                
+                # Upload to Qdrant
+                BATCH_SIZE = 50
+                for batch_start in range(0, len(points_to_upload), BATCH_SIZE):
+                    batch_end = min(batch_start + BATCH_SIZE, len(points_to_upload))
+                    batch = points_to_upload[batch_start:batch_end]
+                    qdrant.client.upsert(
+                        collection_name=qdrant.COLLECTION_NAME,
+                        points=batch,
+                        wait=True
+                    )
+            
+            # Generate summary for this chapter
+            print(f"[PROCESS BATCH] │  Generating summary via Gemini...")
+            
+            summary = ""
+            try:
+                summary = generate_chapter_summary(class_name, subject, chapter_name, chapter_parent_chunks[:20])
+                print(f"[PROCESS BATCH] │  ✓ Summary generated")
+            except Exception as e:
+                print(f"[PROCESS BATCH] │  ✗ Summary generation failed: {e}")
+                summary = f"Summary not available. (Error: {e})"
+                
+            all_chapters_with_summaries.append({
+                "chapter_name": chapter_name,
+                "chapter_id": chapter_id,
+                "chpstpage": chp_start,
+                "chpendpage": chp_end,
+                "summary": summary
+            })
+            print(f"[PROCESS BATCH] └─ Done processing {chapter_name}\n")
+
+        # Save all summaries to Firestore in the consolidated content path: /classes/{class}/subjects/{subject}
+        print(f"[PROCESS BATCH] Saving summaries to Firestore...")
+        doc_ref = db.collection("classes").document(class_name).collection("subjects").document(subject.lower())
+        doc_ref.set({
+            "book_uuid": book_uuid,
+            "filename": "batch_upload",
+            "chapters": all_chapters_with_summaries
+        })
+        print(f"[PROCESS BATCH] [SUCCESS] All summaries successfully written to Firestore path: classes/{class_name}/subjects/{subject}")
+        print(f"[PROCESS BATCH] ========== BATCH PROCESSING SUCCESS ==========\n")
+        
+    except Exception as e:
+        print(f"[PROCESS BATCH] [FATAL ERROR] Ingestion failed: {e}")
+        logger.error(f"Fatal error in batch ingestion background task: {e}", exc_info=True)
+
+
 @router.post("/api/upload")
 async def upload_file(file: UploadFile = File(...)):
     """
@@ -567,3 +715,212 @@ async def clear_qdrant_data():
         return {"message": "Qdrant collection cleared and re-initialized successfully."}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to clear Qdrant collection: {e}")
+
+
+class PreAnalyzeRequest(BaseModel):
+    filenames: List[str]
+    class_name: str
+    subject: str
+
+
+class BatchIngestRequest(BaseModel):
+    class_name: str
+    subject: str
+    chapters: List[Dict]
+
+
+@router.post("/api/upload-multiple")
+async def upload_multiple_files(files: List[UploadFile] = File(...)):
+    filenames = []
+    for file in files:
+        safe_filename = os.path.basename(file.filename)
+        file_path = os.path.join(UPLOADS_DIR, safe_filename)
+        with open(file_path, "wb") as buffer:
+            shutil.copyfileobj(file.file, buffer)
+        filenames.append(safe_filename)
+    return {"filenames": filenames}
+
+
+@router.post("/api/books/pre-analyze")
+async def pre_analyze_books(request: PreAnalyzeRequest):
+    """
+    Analyzes multiple uploaded chapter PDFs concurrently using the LLM.
+    Returns classified metadata (chapter name, number, textbook start/end page numbers, page count).
+    """
+    import asyncio
+    qdrant.initialize()
+    openai_client = qdrant.openai_client
+    generation_model_name = qdrant.generation_model_name
+
+    if not openai_client:
+        raise HTTPException(status_code=500, detail="Gemini/OpenAI client not initialized.")
+
+    results = []
+
+    async def analyze_single_file(filename: str):
+        file_path = os.path.join(UPLOADS_DIR, filename)
+        if not os.path.exists(file_path):
+            return {
+                "filename": filename,
+                "is_academic": False,
+                "chapter_name": None,
+                "chapter_no": None,
+                "pdf_page_count": 0,
+                "chpstpage": None,
+                "chpendpage": None,
+                "error": "File not found"
+            }
+
+        try:
+            reader = PdfReader(file_path)
+            pdf_page_count = len(reader.pages)
+            
+            # Extract first 2 pages text
+            sample_text = ""
+            for i in range(min(2, pdf_page_count)):
+                sample_text += f"\n--- PAGE {i+1} ---\n" + (reader.pages[i].extract_text() or "")
+            
+            # Fast simple heuristic: check for typical front matter keywords
+            lower_sample = sample_text.lower()
+            preface_keywords = ["preface", "acknowledgements", "table of contents", "constitution", "national anthem", "foreword", "index"]
+            is_definitely_admin = any(kw in lower_sample[:1000] for kw in preface_keywords)
+            
+            if is_definitely_admin and "chapter" not in lower_sample:
+                return {
+                    "filename": filename,
+                    "is_academic": False,
+                    "chapter_name": None,
+                    "chapter_no": None,
+                    "pdf_page_count": pdf_page_count,
+                    "chpstpage": None,
+                    "chpendpage": None
+                }
+
+            prompt = f"""
+            Analyze the following text sample extracted from the first two pages of a Class {request.class_name} {request.subject} textbook document.
+            Determine if this is an academic chapter or administrative front/back matter (TOC, preface, constitution, anthem, index).
+            
+            Format response as a JSON object with these keys:
+            - is_academic: boolean
+            - chapter_name: string or null (the chapter title, capitalized nicely)
+            - chapter_no: integer or null (the chapter number)
+            - chpstpage: integer or null (the starting printed page number of the chapter in the book)
+            - chpendpage: integer or null (the ending printed page number of the chapter, estimated as start page + {pdf_page_count} - 1)
+            
+            Document Text:
+            {sample_text[:3000]}
+            """
+
+            # Run LLM call in executor to keep it non-blocking
+            loop = asyncio.get_running_loop()
+            response = await loop.run_in_executor(
+                None,
+                lambda: openai_client.models.generate_content(
+                    model=generation_model_name,
+                    contents=prompt,
+                    config={"response_mime_type": "application/json"}
+                )
+            )
+            
+            llm_text = response.text.strip()
+            # Strip fences if present
+            if llm_text.startswith("```json"):
+                first_nl = llm_text.find("\n")
+                if first_nl != -1:
+                    llm_text = llm_text[first_nl+1:]
+            if llm_text.endswith("```"):
+                llm_text = llm_text[:-3].strip()
+
+            parsed = json.loads(llm_text)
+            
+            # Heuristic checks
+            is_academic = parsed.get("is_academic", True)
+            chapter_name = parsed.get("chapter_name")
+            chapter_no = parsed.get("chapter_no")
+            chpstpage = parsed.get("chpstpage")
+            chpendpage = parsed.get("chpendpage")
+
+            # Fallbacks if LLM fails to extract page numbers or names
+            if is_academic and not chapter_name:
+                chapter_name = filename.replace(".pdf", "").replace("_", " ").capitalize()
+            if is_academic and not chpstpage:
+                chpstpage = 1
+                chpendpage = pdf_page_count
+
+            return {
+                "filename": filename,
+                "is_academic": is_academic,
+                "chapter_name": chapter_name,
+                "chapter_no": chapter_no,
+                "pdf_page_count": pdf_page_count,
+                "chpstpage": chpstpage,
+                "chpendpage": chpendpage
+            }
+
+        except Exception as e:
+            logger.error(f"Error analyzing file {filename}: {e}")
+            return {
+                "filename": filename,
+                "is_academic": True,
+                "chapter_name": filename.replace(".pdf", "").replace("_", " ").capitalize(),
+                "chapter_no": None,
+                "pdf_page_count": 0,
+                "chpstpage": 1,
+                "chpendpage": 10,
+                "error": str(e)
+            }
+
+    # Run all file analyzes concurrently
+    tasks = [analyze_single_file(fn) for fn in request.filenames]
+    results = await asyncio.gather(*tasks)
+
+    # Sort results so academic chapters come first, ordered by chapter_no
+    academic_results = [r for r in results if r["is_academic"]]
+    admin_results = [r for r in results if not r["is_academic"]]
+    
+    academic_results.sort(key=lambda x: x["chapter_no"] if x["chapter_no"] is not None else 999)
+    
+    # Assign sequential chapter numbers to academic chapters if they were parsed as null
+    for idx, r in enumerate(academic_results):
+        if r["chapter_no"] is None:
+            r["chapter_no"] = idx + 1
+            
+    sorted_results = academic_results + admin_results
+    return {"chapters": sorted_results}
+
+
+@router.post("/api/books/batch-ingest")
+async def batch_ingest_books(
+    background_tasks: BackgroundTasks,
+    request: BatchIngestRequest
+):
+    """
+    Starts batch ingestion of the confirmed chapters in the background.
+    """
+    try:
+        class_name = request.class_name
+        subject = request.subject
+        chapters = request.chapters
+
+        # Compute deterministic book_uuid based on class and subject name
+        import hashlib
+        book_key = f"{class_name}_{subject.lower()}"
+        book_uuid = str(uuid.uuid5(uuid.NAMESPACE_DNS, book_key))
+
+        logger.info(f"Starting batch background ingestion for book {book_uuid} (Class {class_name} - {subject})")
+        background_tasks.add_task(
+            process_batch_ingest_in_background,
+            book_uuid,
+            class_name,
+            subject,
+            chapters
+        )
+
+        return {
+            "message": "Batch ingestion started in the background.",
+            "status": "processing",
+            "book_id": book_uuid
+        }
+    except Exception as e:
+        logger.error(f"Error starting batch ingestion: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail=str(e))

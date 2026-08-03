@@ -17,7 +17,7 @@ from rank_bm25 import BM25Okapi
 logger = logging.getLogger(__name__)
 
 # --- CONFIGURATION ---
-COLLECTION_NAME = os.environ.get("QDRANT_COLLECTION_NAME", "data")
+COLLECTION_NAME = os.environ.get("QDRANT_COLLECTION_NAME", "textbooks_v2")
 EMBEDDING_TYPE = os.environ.get("EMBEDDING_TYPE", "openai").lower()
 if EMBEDDING_TYPE == "openai" and not os.getenv("OPENAI_API_KEY"):
     print("[Qdrant Warning] OPENAI_API_KEY not found. Falling back to local Sentence-Transformer.")
