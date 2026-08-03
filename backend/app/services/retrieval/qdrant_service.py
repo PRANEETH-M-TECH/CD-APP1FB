@@ -361,6 +361,41 @@ def process_and_embed_book(pdf_path: str, book_uuid: str, class_name: str, subje
     return True
 
 
+_content_cache: Dict[str, bool] = {}
+
+
+def book_has_content(book_uuid: str) -> bool:
+    """
+    Cheap existence check: does this book_uuid have any ingested chunks in
+    Qdrant? Firestore can have a classes/{grade}/subjects/{subject} doc with
+    chapter metadata/summaries but zero matching Qdrant vectors (metadata
+    written, content never (re-)ingested through the parent-child pipeline).
+    Callers that need real RAG grounding should gate on this rather than
+    trusting Firestore metadata alone. Result is cached in-memory per
+    book_uuid since ingestion state doesn't change within a process lifetime.
+    """
+    if not book_uuid:
+        return False
+    if book_uuid in _content_cache:
+        return _content_cache[book_uuid]
+    if not client:
+        return False
+    try:
+        result = client.count(
+            collection_name=COLLECTION_NAME,
+            count_filter=models.Filter(
+                must=[models.FieldCondition(key="book_uuid", match=models.MatchValue(value=book_uuid))]
+            ),
+            exact=False,
+        )
+        has_content = result.count > 0
+    except Exception as e:
+        logger.warning(f"[book_has_content] Count check failed for book_uuid={book_uuid}: {e}")
+        has_content = False
+    _content_cache[book_uuid] = has_content
+    return has_content
+
+
 def get_chapter_names(book_uuid: str) -> List[str]:
     """
     Get all unique chapter names for a book from Qdrant payload.

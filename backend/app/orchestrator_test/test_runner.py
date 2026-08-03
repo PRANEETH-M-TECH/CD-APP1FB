@@ -195,6 +195,12 @@ def resolve_book_uuid_for_subject(grade: int, matched_subject: str) -> str:
     'social science', 'social studies' for the same real subject) due to
     inconsistent naming at write time; among fuzzy-matching candidates, this
     prefers the one with a real book_uuid and the most chapters.
+
+    Candidates are gated on qdrant_service.book_has_content(): a subject doc
+    can have Firestore chapter metadata (written at upload time) with zero
+    matching Qdrant vectors (never actually (re-)ingested through the
+    parent-child pipeline) - a book_uuid with no content would resolve
+    "successfully" here but then silently return zero RAG chunks downstream.
     """
     normalized = normalize_subject_name(matched_subject or "")
     if not normalized:
@@ -204,7 +210,9 @@ def resolve_book_uuid_for_subject(grade: int, matched_subject: str) -> str:
         sid = subject_id.strip().lower()
         if normalized == sid or normalized in sid or sid in normalized:
             book_uuid = data.get("book_uuid") or ""
-            score = (100 if book_uuid else 0) + len(data.get("chapters", []))
+            if not book_uuid or not qdrant_service.book_has_content(book_uuid):
+                continue
+            score = 100 + len(data.get("chapters", []))
             if score > best_score:
                 best_score, best_uuid = score, book_uuid
     return best_uuid
@@ -218,8 +226,21 @@ def get_valid_subjects_for_grade(grade: int) -> set:
     subject (e.g. "Class 8 Science" for a student whose grade only actually
     has Social Studies loaded), silently mis-marking a general-knowledge
     question as curriculum and skipping real grounding.
+
+    A subject only counts as "valid" here if its book_uuid actually has
+    ingested content in Qdrant (qdrant_service.book_has_content()) - a
+    classes/{grade}/subjects/{subject} doc can exist with chapter metadata
+    but zero matching vectors (uploaded but never (re-)ingested through the
+    parent-child pipeline). Without this gate, such a subject would pass
+    validation, RAG retrieval would then resolve a book_uuid but return no
+    chunks, and the student would get an ungrounded "curriculum" answer
+    instead of being correctly routed to GENERAL_KNOWLEDGE.
     """
-    subjects = {sid.strip().lower() for sid, _ in _get_classes_subjects_docs(grade)}
+    subjects = {
+        sid.strip().lower()
+        for sid, data in _get_classes_subjects_docs(grade)
+        if qdrant_service.book_has_content(data.get("book_uuid") or "")
+    }
     if subjects:
         return subjects
 
@@ -242,10 +263,11 @@ def get_valid_subjects_for_grade(grade: int) -> set:
         try:
             with open(cache_path, "r", encoding="utf-8") as f:
                 local_cache = json.load(f)
-            for key in local_cache.keys():
+            for key, entry in local_cache.items():
                 parts = key.split("_")
                 if len(parts) >= 2 and parts[0].isdigit() and int(parts[0]) == grade:
-                    subjects.add(parts[1].strip().lower())
+                    if qdrant_service.book_has_content(entry.get("book_uuid") or ""):
+                        subjects.add(parts[1].strip().lower())
         except Exception as e:
             print(f"[CURRICULUM VALIDATION WARN] chapters_cache.json load exception: {e}")
 
