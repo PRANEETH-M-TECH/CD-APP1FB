@@ -25,8 +25,7 @@ class AnswerPreferenceManager {
             text_text:   { input: 'text', output: 'text'  },
             text_audio:  { input: 'text', output: 'audio' },
             audio_text:  { input: 'audio', output: 'text' },
-            audio_audio: { input: 'audio', output: 'audio'},
-            visual_learning: { input: 'text', output: 'visual' }
+            audio_audio: { input: 'audio', output: 'audio'}
         };
         this.STORAGE_KEY = 'answerPreference';
         this.DEFAULT_MODE = 'text_text';
@@ -137,44 +136,6 @@ class AnswerPreferenceManager {
             return;
         }
 
-        // Prevent switching to Visual Learning Mode if no book is selected
-        if (newMode === 'visual_learning' && !window.selectedBook) {
-            alert("Please select a Class and Subject first!");
-            if (this.dropdown) {
-                this.dropdown.value = this.currentMode;
-            }
-            // Update active UI details
-            const triggerIcon = document.getElementById('trigger-mode-icon');
-            const triggerText = document.getElementById('trigger-mode-text');
-            const modeDetails = {
-                text_text:   { label: 'Reading Mode', icon: '📖' },
-                text_audio:  { label: 'Tutor Mode', icon: '🎧' },
-                audio_text:  { label: 'Voice Query', icon: '🎙️' },
-                audio_audio: { label: 'AI Voice Mode', icon: '🧑🏫' },
-                visual_learning: { label: 'Visual Learning Mode', icon: '🎬' }
-            };
-            const details = modeDetails[this.currentMode] || { label: this.currentMode, icon: '🎓' };
-            if (triggerIcon) triggerIcon.textContent = details.icon;
-            if (triggerText) triggerText.textContent = details.label;
-
-            // Re-sync overlay radio/card active classes
-            const cards = document.querySelectorAll('.learning-mode-card');
-            cards.forEach(card => {
-                const cardMode = card.getAttribute('data-mode');
-                const dot = card.querySelector('.card-radio-dot');
-                if (cardMode === this.currentMode) {
-                    card.classList.add('border-indigo-500', 'bg-indigo-50/20');
-                    card.classList.remove('border-gray-200');
-                    if (dot) dot.classList.remove('hidden');
-                } else {
-                    card.classList.remove('border-indigo-500', 'bg-indigo-50/20');
-                    card.classList.add('border-gray-200');
-                    if (dot) dot.classList.add('hidden');
-                }
-            });
-            return;
-        }
-
         // Stop mic if switching away from an audio-input mode
         if (this.isListening) {
             this._stopMic();
@@ -254,12 +215,6 @@ class AnswerPreferenceManager {
         // ── AI Voice Mode Flagship UI Toggle ──────────────────────────────
         const chatInput = document.getElementById('chat-input-container');
         const voicePanel = document.getElementById('voice-interaction-panel');
-        const chatContainer = document.getElementById('chat-container');
-        const followupPanel = document.getElementById('followup-sticky-panel');
-        const vlContainer = document.getElementById('visual-learning-container');
-        const vlLanding = document.getElementById('vl-landing-view');
-        const vlLoading = document.getElementById('vl-loading-screen');
-        const vlPlayer = document.getElementById('vl-player');
 
         if (mode === 'audio_audio') {
             if (chatInput) chatInput.style.display = 'none';
@@ -272,40 +227,6 @@ class AnswerPreferenceManager {
             if (voicePanel) voicePanel.style.display = 'none';
         }
 
-        // ── Visual Learning Mode Toggle ──────────────────────────────
-        const toggleLeftBtn = document.getElementById('toggle-left-pane-btn');
-        if (mode === 'visual_learning') {
-            document.body.classList.add('left-pane-collapsed');
-            if (toggleLeftBtn) toggleLeftBtn.style.display = 'none';
-
-            if (chatContainer) chatContainer.style.display = 'none';
-            if (followupPanel) followupPanel.style.display = 'none';
-            if (vlContainer) {
-                vlContainer.style.display = 'flex';
-                // If a lesson is already playing/loaded, keep it, otherwise show landing
-                if (window.VisualLearningRenderer && window.VisualLearningRenderer.lessonPackage) {
-                    if (vlLanding) vlLanding.style.display = 'none';
-                    if (vlLoading) vlLoading.style.display = 'none';
-                    if (vlPlayer) vlPlayer.style.display = 'flex';
-                } else {
-                    if (vlLanding) vlLanding.style.display = 'flex';
-                    if (vlLoading) vlLoading.style.display = 'none';
-                    if (vlPlayer) vlPlayer.style.display = 'none';
-                }
-            }
-        } else {
-            document.body.classList.remove('left-pane-collapsed');
-            if (toggleLeftBtn) toggleLeftBtn.style.display = '';
-
-            if (chatContainer) chatContainer.style.display = 'flex';
-            if (vlContainer) vlContainer.style.display = 'none';
-            
-            // Clean up visual learning audio/player if switching away
-            if (window.VisualLearningRenderer && window.VisualLearningRenderer.lessonPackage) {
-                window.VisualLearningRenderer.destroyLesson();
-            }
-        }
-
         // ── Mode indicator badge ──────────────────────────────────────────
         const badge = document.getElementById('active-mode-badge');
         if (badge) {
@@ -313,8 +234,7 @@ class AnswerPreferenceManager {
                 text_text:   '📖 Reading',
                 text_audio:  '🎧 Tutor',
                 audio_text:  '🎙️ Voice Query',
-                audio_audio: '🧑🏫 AI Voice',
-                visual_learning: '🎬 Visual Learning'
+                audio_audio: '🧑🏫 AI Voice'
             };
             badge.textContent = labels[mode] || mode;
         }

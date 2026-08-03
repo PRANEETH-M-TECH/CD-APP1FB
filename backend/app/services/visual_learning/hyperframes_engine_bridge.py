@@ -5,6 +5,7 @@ import shutil
 import logging
 import asyncio
 import subprocess
+from datetime import datetime, timezone
 from pathlib import Path
 
 logger = logging.getLogger(__name__)
@@ -29,13 +30,16 @@ def _compile_index_html_python_fallback(lesson_id: str, lesson_dir: str) -> str:
         lesson_title = lesson_data.get("lesson_title", "Visual Storyboard Video")
         scenes = lesson_data.get("scenes", [])
         raw_data_json = json.dumps(scenes)
+        compiled_at = datetime.now(timezone.utc).isoformat()
 
         html_content = f"""<!DOCTYPE html>
+<!-- HYPERFRAMES_ENGINE: python-fallback compiled={compiled_at} -->
 <html>
 <head>
   <meta charset="UTF-8">
+  <meta name="hf-engine" content="python-fallback">
   <title>{lesson_title}</title>
-  
+
   <!-- CSS Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&family=Space+Grotesk:wght@400;700&family=Inter:wght@400;500;700;900&family=Cinzel:wght@700&family=Playfair+Display:wght@700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   
@@ -87,11 +91,13 @@ def _compile_index_html_python_fallback(lesson_id: str, lesson_dir: str) -> str:
       justify-content: center;
       padding: 40px;
       opacity: 0;
-      transition: opacity 0.5s ease;
+      transform: translateY(16px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
     }}
 
     .scene.active {{
       opacity: 1;
+      transform: translateY(0);
     }}
 
     .scene-title {{
@@ -140,31 +146,58 @@ def _compile_index_html_python_fallback(lesson_id: str, lesson_dir: str) -> str:
     const rawData = {raw_data_json};
     let currentSceneIndex = 0;
     let currentAudio = null;
+    let advanceTimer = null;
+
+    function estimateDurationSeconds(teacherScript) {{
+      const words = teacherScript ? teacherScript.split(/\\s+/).filter(Boolean).length : 0;
+      return Math.max(4.0, words * 0.45 + 1.0);
+    }}
 
     function renderScene(index) {{
       if (index < 0 || index >= rawData.length) return;
+      if (currentAudio) {{ currentAudio.pause(); currentAudio = null; }}
+      if (advanceTimer) {{ clearTimeout(advanceTimer); advanceTimer = null; }}
+
       const container = document.getElementById('hyperframes-container');
       const sceneData = rawData[index];
       const templateData = sceneData.template_data || {{}};
       const title = templateData.title || sceneData.metadata?.title || 'Visual Learning';
 
       container.innerHTML = `
-        <div class="scene active">
+        <div class="scene">
           <h1 class="scene-title">${{title}}</h1>
           <div class="scene-body">${{sceneData.teacher_script || ''}}</div>
         </div>
       `;
 
+      // Class is added on a following frame so the opacity/transform CSS
+      // transition has a starting state to animate from.
+      requestAnimationFrame(() => {{
+        requestAnimationFrame(() => {{
+          const sceneEl = container.querySelector('.scene');
+          if (sceneEl) sceneEl.classList.add('active');
+        }});
+      }});
+
+      let advanced = false;
+      const goNext = () => {{
+        if (advanced) return;
+        advanced = true;
+        if (advanceTimer) {{ clearTimeout(advanceTimer); advanceTimer = null; }}
+        if (index + 1 < rawData.length) renderScene(index + 1);
+      }};
+
       if (sceneData.audio_url) {{
-        if (currentAudio) {{ currentAudio.pause(); }}
         currentAudio = new Audio(sceneData.audio_url);
         currentAudio.play().catch(err => console.log('Audio playback prevented:', err));
-        
-        currentAudio.onended = () => {{
-          if (index + 1 < rawData.length) {{
-            renderScene(index + 1);
-          }}
-        }};
+        currentAudio.onended = goNext;
+        // Safety net: if audio never fires 'onended' (blocked autoplay, load error),
+        // still advance based on an estimated narration duration.
+        advanceTimer = setTimeout(goNext, estimateDurationSeconds(sceneData.teacher_script) * 1000);
+      }} else {{
+        // No audio for this scene at all - advance on an estimated reading duration
+        // instead of stalling forever.
+        advanceTimer = setTimeout(goNext, estimateDurationSeconds(sceneData.teacher_script) * 1000);
       }}
     }}
 
@@ -214,35 +247,62 @@ async def compile_hyperframes_html_fast(lesson_id: str, lesson_dir: str):
 
     lesson_json_rel = os.path.join("outputs", lesson_id, "lesson.json")
 
-    def _run_node_compiler():
+    # NODE_COMPILE_TIMEOUT_S is deliberately generous (well above the ~0.3s warm-run
+    # time) to survive cold starts on constrained hosts (e.g. Render free/small tier
+    # doing a cold require() of ~239 engine files). A single fast retry follows a
+    # timeout on the first attempt, since a fresh `node` process still benefits from
+    # the OS disk cache warmed by the first attempt even though V8 JIT state doesn't
+    # carry over between processes.
+    NODE_COMPILE_TIMEOUT_S = 22
+    NODE_COMPILE_RETRY_TIMEOUT_S = 8
+
+    def _run_node_compiler(timeout_s: float):
         cmd = ["node", "run-storyboard.js", lesson_json_rel, "compile"]
         return subprocess.run(
             cmd, cwd=hf_dir, capture_output=True, text=True,
-            encoding='utf-8', errors='replace', shell=False, timeout=5
+            encoding='utf-8', errors='replace', shell=False, timeout=timeout_s
         )
 
-    try:
-        res = await asyncio.to_thread(_run_node_compiler)
-        if res.stdout:
-            logger.info(f"[Hyperframes Compiler] stdout:\n{res.stdout.strip()}")
-        if res.returncode != 0:
-            logger.warning(f"[Hyperframes Compiler Notice] Exit code {res.returncode}: {res.stderr}")
-        else:
-            logger.info(f"[Hyperframes Compiler] Compilation succeeded (exit 0)")
-    except subprocess.TimeoutExpired:
-        logger.warning(f"[Hyperframes Compiler Notice] Node compiler execution timed out (>5s). Falling back to instant Python HTML generator.")
-    except Exception as e:
-        logger.error(f"[Hyperframes Compiler Error] {e}")
+    degraded_reason = None
+    node_ok = False
+    attempts = [NODE_COMPILE_TIMEOUT_S, NODE_COMPILE_RETRY_TIMEOUT_S]
+    for attempt_idx, attempt_timeout in enumerate(attempts):
+        try:
+            res = await asyncio.to_thread(_run_node_compiler, attempt_timeout)
+            if res.stdout:
+                logger.info(f"[Hyperframes Compiler] stdout:\n{res.stdout.strip()}")
+            if res.returncode != 0:
+                degraded_reason = "nonzero_exit"
+                logger.error(
+                    f"[HYPERFRAMES_ENGINE_DEGRADED] reason=nonzero_exit lesson_id={lesson_id} "
+                    f"attempt={attempt_idx + 1} exit_code={res.returncode} stderr={res.stderr}"
+                )
+            else:
+                logger.info(f"[Hyperframes Compiler] Compilation succeeded (exit 0)")
+                node_ok = True
+                degraded_reason = None
+            break
+        except subprocess.TimeoutExpired:
+            degraded_reason = "timeout"
+            logger.error(
+                f"[HYPERFRAMES_ENGINE_DEGRADED] reason=timeout lesson_id={lesson_id} "
+                f"attempt={attempt_idx + 1} timeout_s={attempt_timeout}"
+            )
+            continue
+        except FileNotFoundError as e:
+            degraded_reason = "node_missing"
+            logger.error(f"[HYPERFRAMES_ENGINE_DEGRADED] reason=node_missing lesson_id={lesson_id} error={e}")
+            break
+        except Exception as e:
+            degraded_reason = "exception"
+            logger.error(f"[HYPERFRAMES_ENGINE_DEGRADED] reason=exception lesson_id={lesson_id} error={e}")
+            break
 
     # Copy index.html from compiler output dir to uploads serving dir
     src_html = os.path.join(hf_outputs_dir, "index.html")
     dest_html = os.path.join(lesson_dir, "index.html")
-    if os.path.exists(src_html):
+    if node_ok and os.path.exists(src_html):
         try:
-            print("\n======================================================================")
-            print("[PIPELINE DEBUG] ENTER Output Copy")
-            print(f"   Copying {src_html} -> {dest_html}")
-            print("======================================================================\n")
             shutil.copy2(src_html, dest_html)
         except Exception as copy_err:
             logger.warning(f"[Hyperframes Bridge] HTML copy warning: {copy_err}")
@@ -258,45 +318,32 @@ async def compile_hyperframes_html_fast(lesson_id: str, lesson_dir: str):
         # Backup index.html to Supabase Cloud Storage
         from backend.app.core.supabase_storage import upload_file_to_supabase
         cloud_html_url = upload_file_to_supabase(dest_html, f"{lesson_id}/index.html")
-        
+
         # Always serve index.html via FastAPI route to guarantee text/html MIME type rendering in browser iframes
         serving_url = f"/uploads/visual_lessons/{lesson_id}/index.html"
         logger.info(f"[RENDER LOG] [ENGINE SUCCESS] Compiled index.html ready -> {serving_url} (Cloud Backup: {cloud_html_url})")
-        try:
-            print(f"[RENDER LOG] [ENGINE SUCCESS] Compiled index.html ready -> {serving_url}")
-        except Exception:
-            pass
-        return serving_url
+        return {"url": serving_url, "engine": "node", "degraded_reason": None}
 
-    elif os.path.exists(dest_html):
-        hf_shared = os.path.join(hf_dir, "shared")
-        if os.path.exists(hf_shared):
-            try:
-                shutil.copytree(hf_shared, os.path.join(lesson_dir, "shared"), dirs_exist_ok=True)
-            except Exception:
-                pass
-        from backend.app.core.supabase_storage import upload_file_to_supabase
-        cloud_html_url = upload_file_to_supabase(dest_html, f"{lesson_id}/index.html")
-        serving_url = f"/uploads/visual_lessons/{lesson_id}/index.html"
-        try:
-            print(f"[RENDER LOG] [ENGINE SUCCESS] Using existing index.html -> {serving_url}")
-        except Exception:
-            pass
-        return serving_url
     else:
-        # Fallback to pure Python compiler if Node execution was unavailable
-        try:
-            print("[RENDER LOG] [ENGINE NOTICE] Node compiler unavailable. Executing Python HTML fallback compiler...")
-        except Exception:
-            pass
+        # Node compile failed, timed out, or produced no output file - fall back to
+        # the pure-Python HTML generator so a lesson is still playable.
+        if not node_ok:
+            logger.error(
+                f"[HYPERFRAMES_ENGINE_DEGRADED] reason={degraded_reason or 'no_output'} "
+                f"lesson_id={lesson_id} action=falling_back_to_python_compiler"
+            )
+        elif not os.path.exists(src_html):
+            degraded_reason = degraded_reason or "no_output"
+            logger.error(
+                f"[HYPERFRAMES_ENGINE_DEGRADED] reason=no_output lesson_id={lesson_id} "
+                f"action=falling_back_to_python_compiler (node exited 0 but produced no index.html)"
+            )
+
         fallback_url = _compile_index_html_python_fallback(lesson_id, lesson_dir)
         dest_fallback = os.path.join(lesson_dir, "index.html")
         if os.path.exists(dest_fallback):
             from backend.app.core.supabase_storage import upload_file_to_supabase
             upload_file_to_supabase(dest_fallback, f"{lesson_id}/index.html")
         serving_url = f"/uploads/visual_lessons/{lesson_id}/index.html"
-        try:
-            print(f"[RENDER LOG] [ENGINE SUCCESS] Python fallback HTML compiled -> {serving_url}")
-        except Exception:
-            pass
-        return serving_url
+        logger.info(f"[RENDER LOG] [ENGINE SUCCESS] Python fallback HTML compiled -> {serving_url}")
+        return {"url": serving_url, "engine": "python_fallback", "degraded_reason": degraded_reason or "unknown"}

@@ -624,7 +624,10 @@ async def smart_query_engine(
                 student_profile
             )
             out = report.get("orchestrator_output", {})
-
+            # Real, Firestore-validated book_uuid for the orchestrator's matched_subject
+            # (empty if this is GENERAL_KNOWLEDGE or the match couldn't be resolved) -
+            # see get_valid_subjects_for_grade()/resolved_book_uuid in test_runner.py.
+            resolved_book_uuid = report.get("resolved_book_uuid", "")
 
             classification = out.get("classification", "CURRICULUM")
             matched_subject = out.get("matched_subject")
@@ -646,87 +649,62 @@ async def smart_query_engine(
             # Yield classification intent (this tells frontend about subject/chapter metadata for backgrounds)
             yield f"data: {json.dumps({'type': 'intent', 'intent': classification, 'subject': matched_subject, 'chapter': matched_chapter, 'format': format_decision})}\n\n"
 
-            if format_decision == "VIDEO_REQUIRED" and out.get("video_storyboard"):
-                storyboard_payload = out.get("video_storyboard")
-                
-                # Make sure the storyboard has a unique lesson_id
-                import uuid
-                lesson_id = storyboard_payload.get("lesson_id") or f"vl_{uuid.uuid4().hex[:8]}"
-                storyboard_payload["lesson_id"] = lesson_id
-                
-                scenes = storyboard_payload.get("scenes", [])
-                
-                # Step 1: Pre-generate voice narration audio clips for all scenes!
-                yield f"data: {json.dumps({'type': 'progress', 'step': 'creating_narration', 'status': 'in_progress', 'message': 'Pre-generating lesson audio tracks...'})}\n\n"
-                
-                from backend.app.services.visual_learning.visual_audio_generator import generate_slide_audio
-                audio_urls = []
-                try:
-                    audio_urls = await generate_slide_audio(scenes, lesson_id)
-                except Exception as audio_err:
-                    print(f"[ERROR] Pre-generating slide audio failed: {audio_err}")
-                
-                # Map audio URLs back to scenes
-                for idx, url in enumerate(audio_urls):
-                    if idx < len(scenes) and url:
-                        scenes[idx]["audio_url"] = url
-                
-                yield f"data: {json.dumps({'type': 'progress', 'step': 'creating_narration', 'status': 'complete', 'message': 'Lesson audio tracks pre-generated.'})}\n\n"
-                
-                # Step 2: Stream scene-by-scene. Chunk 1 is Scene 1 script + its audio_url!
-                for idx, s in enumerate(scenes):
-                    title = s.get("template_data", {}).get("title") or s.get("template_data", {}).get("heading") or s.get("purpose") or f"Scene {s.get('scene_no')}"
-                    script = s.get("teacher_script") or ""
-                    audio_url = s.get("audio_url") or ""
-                    
-                    # Format as markdown bullet point
-                    bullet_text = f"- **{title}**: {script}"
-                    # Apply cleaning overrides (spaces after punctuation)
-                    bullet_text = format_text_explanation(bullet_text)
-                    
-                    # Add trailing newline for visual separation between bullets
-                    text_chunk = bullet_text + "\n\n"
-                    
-                    # Stream this scene script + its Supabase audio_url to the client!
-                    yield f"data: {json.dumps({'display_text': text_chunk, 'audio_url': audio_url})}\n\n"
-                    await asyncio.sleep(0.5)
+            # Stream the orchestrator's own text_narration the same way regardless
+            # of format_decision - it's a real answer either way (for VIDEO_REQUIRED
+            # it's the "Show Text Answer" toggle content; the actual video comes from
+            # a separate, fresh generation below via the fixed pipeline, not from the
+            # orchestrator's own draft storyboard). This also removes a redundant
+            # audio-pre-generation pass that used to run against the orchestrator's
+            # (often empty-content) scenes before the real video was even built.
+            text_script = format_text_explanation(text_script)
 
-            else:
-                # STANDARD RAG/QUICK_ANSWER STREAMING FLOW
-                # Post-process formatting for double spacing, clean bullets, and spaces after periods
-                text_script = format_text_explanation(text_script)
-                
-                # Stream text narration sentence-by-sentence preserving bullet newlines
-                import re
-                lines = text_script.split('\n')
-                for l_idx, line in enumerate(lines):
-                    if not line.strip():
-                        yield "data: " + json.dumps({'display_text': '\n'}) + "\n\n"
-                        continue
-                    
-                    sentences = [s.strip() for s in re.split(r'(?<=[.!?à¥¤])\s+', line) if s.strip()]
-                    for s_idx, s in enumerate(sentences):
-                        prefix = "\n" if (l_idx > 0 and s_idx == 0) else ""
-                        yield f"data: {json.dumps({'display_text': prefix + s + ' '})}\n\n"
-                        await asyncio.sleep(0.05)
+            import re
+            lines = text_script.split('\n')
+            for l_idx, line in enumerate(lines):
+                if not line.strip():
+                    yield "data: " + json.dumps({'display_text': '\n'}) + "\n\n"
+                    continue
+
+                sentences = [s.strip() for s in re.split(r'(?<=[.!?à¥¤])\s+', line) if s.strip()]
+                for s_idx, s in enumerate(sentences):
+                    prefix = "\n" if (l_idx > 0 and s_idx == 0) else ""
+                    yield f"data: {json.dumps({'display_text': prefix + s + ' '})}\n\n"
+                    await asyncio.sleep(0.05)
 
             # If format decision is video required, compile the video lesson asynchronously in the background
             interactive_url = None
             updated_lesson_package = None
             if format_decision == "VIDEO_REQUIRED":
-                print("[ORCHESTRATOR] Starting background Hyperframes video generation...")
+                print("[ORCHESTRATOR] Starting Hyperframes video generation (fixed pipeline, fresh storyboard)...")
                 from backend.app.services.visual_learning.visual_learning_service import generate_visual_lesson_stream
-                
-                # Fetch pre-compiled storyboard from orchestrator agent result
-                storyboard_payload = out.get("video_storyboard")
-                
-                # We feed the pre-computed storyboard directly to visual_learning_stream
+
+                # Deliberately do NOT pass the orchestrator's own draft storyboard
+                # (out.get("video_storyboard")) - it comes from a single-pass LLM
+                # call with no schema guidance, no icon/template registry, and no
+                # retry-if-empty guard, and was the source of blank videos. Let
+                # generate_visual_lesson_stream do its own real generation instead.
+                #
+                # Use the validated, Firestore-resolved book for a real curriculum
+                # match. The Firestore "summaries" collection this resolves against
+                # is currently empty in this environment, so resolution routinely
+                # comes back blank even for a genuinely-validated match - in that
+                # case, fall back to whatever book the student currently has open
+                # (a reasonable bet for a real curriculum match: they're usually
+                # asking about the subject they're already browsing). For
+                # GENERAL_KNOWLEDGE, never fall back to the open book - generate
+                # with no book context at all, rather than searching an unrelated one.
+                if classification == "CURRICULUM":
+                    video_book_uuid = resolved_book_uuid or book_uuid
+                    video_subject = matched_subject or subject
+                else:
+                    video_book_uuid = ""
+                    video_subject = matched_subject or subject or "General Knowledge"
+
                 visual_stream = generate_visual_lesson_stream(
                     query=query,
-                    book_uuid=book_uuid,
+                    book_uuid=video_book_uuid,
                     class_name=str(student_profile["class"]),
-                    subject=subject,
-                    precomputed_storyboard=storyboard_payload
+                    subject=video_subject
                 )
 
                 async for sse_chunk in visual_stream:

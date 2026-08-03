@@ -149,6 +149,55 @@ def get_cached_curriculum_metadata(grade: int) -> str:
     return "\n".join(chapter_summaries)
 
 
+def get_valid_subjects_for_grade(grade: int) -> set:
+    """
+    Real subject names actually available for this grade, derived from the
+    same sources as get_cached_curriculum_metadata(). Used to validate the
+    orchestrator LLM's claimed matched_subject before trusting a CURRICULUM
+    classification - the LLM can otherwise hallucinate a plausible-sounding
+    subject (e.g. "Class 8 Science" for a student whose grade only actually
+    has Social Studies loaded), silently mis-marking a general-knowledge
+    question as curriculum and skipping real grounding.
+    """
+    subjects = set()
+    firestore_db = db
+
+    if firestore_db:
+        try:
+            chapters_ref = firestore_db.collection("chapters").where(filter=FieldFilter("class_level", "==", grade)).get()
+            for doc in chapters_ref:
+                data = doc.to_dict()
+                subj = data.get("subject")
+                if subj:
+                    subjects.add(str(subj).strip().lower())
+        except Exception as e:
+            print(f"[CURRICULUM VALIDATION WARN] Firestore query exception: {e}")
+
+    cache_path = os.path.join(PROJECT_ROOT, "chapterdata", "chapters_cache.json")
+    if os.path.exists(cache_path):
+        try:
+            with open(cache_path, "r", encoding="utf-8") as f:
+                local_cache = json.load(f)
+            for key in local_cache.keys():
+                parts = key.split("_")
+                if len(parts) >= 2 and parts[0].isdigit() and int(parts[0]) == grade:
+                    subjects.add(parts[1].strip().lower())
+        except Exception as e:
+            print(f"[CURRICULUM VALIDATION WARN] chapters_cache.json load exception: {e}")
+
+    return subjects
+
+
+def normalize_subject_name(raw: str) -> str:
+    """Strips 'Class N'/'Grade N' framing the LLM sometimes adds, e.g.
+    'Class 8 Science' -> 'science', so it can be compared against real subject names."""
+    if not raw:
+        return ""
+    s = re.sub(r"\b(?:class|grade)\s*\d+\b", "", raw, flags=re.IGNORECASE)
+    s = re.sub(r"\s+", " ", s).strip(" -_:")
+    return s.lower()
+
+
 def run_orchestrator_pipeline(raw_query: str, student_profile: Dict[str, Any]) -> Dict[str, Any]:
     """
     Executes the single-pass Orchestrator LLM, runs RAG search if CURRICULUM,
@@ -313,8 +362,31 @@ def run_orchestrator_pipeline(raw_query: str, student_profile: Dict[str, Any]) -
     matched_chapter = orchestrator_output.get("matched_chapter")
     format_decision = orchestrator_output.get("format_decision", "QUICK_ANSWER")
 
+    # Validate the LLM's claimed curriculum match against real subject data
+    # before trusting it - see get_valid_subjects_for_grade() docstring.
+    if is_authorized and classification == "CURRICULUM":
+        valid_subjects = get_valid_subjects_for_grade(grade)
+        normalized_match = normalize_subject_name(matched_subject or "")
+        subject_is_real = bool(normalized_match) and any(
+            normalized_match == v or normalized_match in v or v in normalized_match
+            for v in valid_subjects
+        )
+        if not subject_is_real:
+            print(
+                f"[CURRICULUM VALIDATION] Rejecting hallucinated match '{matched_subject}' - "
+                f"Class {grade} only actually has: {sorted(valid_subjects) or 'no cached subjects'}. "
+                f"Downgrading classification to GENERAL_KNOWLEDGE."
+            )
+            classification = "GENERAL_KNOWLEDGE"
+            matched_subject = None
+            matched_chapter = None
+            orchestrator_output["classification"] = classification
+            orchestrator_output["matched_subject"] = None
+            orchestrator_output["matched_chapter"] = None
+
     rag_chunks = []
     rag_executed = False
+    resolved_book_uuid = ""
 
     # Step 4: Handle RAG Retrieval if Authorized + CURRICULUM
     if is_authorized and classification == "CURRICULUM":
@@ -323,7 +395,6 @@ def run_orchestrator_pipeline(raw_query: str, student_profile: Dict[str, Any]) -
         rag_executed = True
         try:
             # Resolve book_uuid from Firestore summaries using matched_subject and grade
-            resolved_book_uuid = ""
             if matched_subject:
                 try:
                     from backend.app.core.firebase.firebase_init import db
@@ -409,7 +480,12 @@ def run_orchestrator_pipeline(raw_query: str, student_profile: Dict[str, Any]) -
         "raw_user_query": raw_query,
         "orchestrator_output": orchestrator_output,
         "rag_retrieval_executed": rag_executed,
-        "retrieved_top10_chunks": rag_chunks
+        "retrieved_top10_chunks": rag_chunks,
+        # The real (validated, Firestore-resolved) book_uuid for this query's
+        # matched_subject+grade, or "" if this is GENERAL_KNOWLEDGE / resolution
+        # failed. Callers (e.g. chat.py) should use THIS instead of whatever
+        # book the student happens to have open, when triggering video generation.
+        "resolved_book_uuid": resolved_book_uuid
     }
 
     # Save Audit Report to test_outputs/

@@ -1,0 +1,105 @@
+{
+  "_comment": "Single source of truth for HyperFrames scene templates. Consumed by both the Node engine (hyperframes_engine/) via require() and the Python backend (backend/app/services/visual_learning/) via json.load(). Add/remove/edit a template here instead of editing prompt files or hardcoded lists directly - every consumer derives its behavior from this file. 'status' controls whether the LLM is offered the template: active = offered, banned = deliberately excluded (see 'banned_reason'), fallback_only = never offered to the LLM but used internally as an engine fallback, experimental = offered but flagged as unproven.",
+  "templates": {
+    "title_slide": {
+      "best_for": "Lesson opener only (scene 1 always)",
+      "template_data_hint": "{\"title\": \"...\", \"subtitle\": \"...\"}",
+      "constraints": ["scene_1_only"],
+      "status": "active"
+    },
+    "concept_diagram": {
+      "best_for": "Central concept with branches/leaves",
+      "template_data_hint": "{\"title\": \"...\", \"central_node\": {\"text\": \"...\", \"icon\": \"...\"}, \"leaf_nodes\": [{\"text\": \"...\", \"icon\": \"...\"}]}",
+      "constraints": ["max_uses:1"],
+      "status": "active"
+    },
+    "cycle_template": {
+      "best_for": "Circular/repeating processes",
+      "template_data_hint": "{\"title\": \"...\", \"stages\": [{\"label\": \"...\", \"icon\": \"...\"}]}",
+      "constraints": [],
+      "status": "active"
+    },
+    "math_derivation": {
+      "best_for": "Step-by-step equations, formulas, derivations",
+      "template_data_hint": "{\"title\": \"...\", \"formula\": \"...\", \"steps\": [\"step1\", \"step2\"]}",
+      "constraints": [],
+      "status": "active"
+    },
+    "column_comparison": {
+      "best_for": "Comparing two items, pros/cons, side-by-side contrast",
+      "template_data_hint": "{\"title\": \"...\", \"left_col\": {\"header\": \"...\", \"bullets\": [{\"text\": \"...\", \"icon\": \"...\"}]}, \"right_col\": {\"header\": \"...\", \"bullets\": [{\"text\": \"...\", \"icon\": \"...\"}]}}",
+      "constraints": [],
+      "status": "active"
+    },
+    "horizontal_timeline": {
+      "best_for": "Sequences, ordered steps, historical events",
+      "template_data_hint": "{\"title\": \"...\", \"events\": [{\"label\": \"...\", \"description\": \"...\"}]}",
+      "constraints": [],
+      "status": "banned",
+      "banned_reason": "Not currently offered in production prompt; drifted out of the template-choice list at some point. No known rendering defect - candidate to re-enable after a quick visual QA pass."
+    },
+    "database_grid": {
+      "best_for": "Structured tabular data, elements, properties, numeric tables",
+      "template_data_hint": "{\"title\": \"...\", \"headers\": [], \"rows\": [[]]}",
+      "constraints": [],
+      "status": "active"
+    },
+    "venn_diagram": {
+      "best_for": "Overlap/intersection of two concepts",
+      "template_data_hint": "{\"left_title\": \"...\", \"right_title\": \"...\", \"left\": [{\"text\": \"...\", \"icon\": \"...\"}], \"right\": [{\"text\": \"...\", \"icon\": \"...\"}], \"intersection\": [{\"text\": \"...\", \"icon\": \"...\"}]}",
+      "constraints": [],
+      "status": "active"
+    },
+    "taxonomy_tree": {
+      "best_for": "Classification, hierarchy, family/branch trees",
+      "template_data_hint": "{\"title\": \"...\", \"root\": {\"label\": \"...\", \"icon\": \"...\", \"children\": [{\"label\": \"...\", \"icon\": \"...\", \"children\": []}]}}",
+      "constraints": [],
+      "status": "active"
+    },
+    "cartesian_grid": {
+      "best_for": "Graphs, functions, coordinate geometry",
+      "template_data_hint": "{\"title\": \"...\", \"equation_label\": \"ax^2+bx+c=0\", \"points\": [{\"x\": -2, \"y\": 4, \"label\": \"Vertex\"}], \"lines\": [], \"svg_elements\": [{\"type\": \"path\", \"d\": \"M200 800 C350 300, 650 300, 800 800\", \"stroke\": \"#3b82f6\", \"stroke_width\": 4}]}",
+      "constraints": [],
+      "status": "active"
+    },
+    "geo_marker": {
+      "best_for": "Geography, locations, maps, spatial distributions",
+      "template_data_hint": "{\"title\": \"...\", \"map_type\": \"world\", \"markers\": [{\"label\": \"...\", \"x\": 40, \"y\": 50, \"description\": \"...\", \"icon\": \"...\"}]}",
+      "constraints": [],
+      "status": "active"
+    },
+    "before_after_slider": {
+      "best_for": "State changes, cause vs effect, transformations",
+      "template_data_hint": "{\"title\": \"...\", \"before\": {\"label\": \"...\", \"bullets\": [{\"text\": \"...\", \"icon\": \"...\"}]}, \"after\": {\"label\": \"...\", \"bullets\": [{\"text\": \"...\", \"icon\": \"...\"}]}}",
+      "constraints": [],
+      "status": "active"
+    },
+    "quiz_checkpoint": {
+      "best_for": "Review/assessment scenes (last scene ideally)",
+      "template_data_hint": "{\"question\": \"...\", \"options\": [\"...\"], \"correct_index\": 0}",
+      "constraints": ["last_scene_only"],
+      "status": "banned",
+      "banned_reason": "Product decision: lessons should end with a structural summary, not a quiz interruption, per current pedagogy rules."
+    },
+    "illustrated_scene": {
+      "best_for": "SVG-drawn scene of a physical/process/anatomical concept (e.g. water cycle with sun+sea+rising vapor, a stomach digesting, a plant cell, a historical scene) - the one template that draws real pictorial content instead of text-in-boxes; prefer this whenever the concept is something students would picture visually",
+      "template_data_hint": "{\"title\": \"...\", \"animation_action\": \"rise|fall|spin|scale_up|slide_left|slide_right\" (how the drawn elements animate in), \"elements\": [{\"type\": \"path|circle|line|rect\", \"path_data\": \"SVG path 'd' attribute, required for type=path\", \"cx\": 0, \"cy\": 0, \"r\": 0 (for type=circle), \"stroke_color\": \"#hex\", \"stroke_width\": 2, \"fill\": \"rgba(r,g,b,a)\" or \"none\", \"dash_array\": \"8 6\" (optional, for flowing/moving lines like rising vapor or arrows), \"label\": \"optional short text overlay for this element\"}]}. MUST include at least 4-8 elements combining: an outline/shape (path), 1-2 moving/highlight accents (small circles), and flow indicators (dashed lines) to draw a recognizable, non-lazy scene - e.g. for the water cycle: a sun (circle), wavy sea (path), 2-3 rising dashed lines for evaporation, a cloud shape (path or grouped circles), and falling lines for rain.",
+      "constraints": [],
+      "status": "active"
+    },
+    "image_scene": {
+      "best_for": "Real-world photo/image with annotations",
+      "template_data_hint": "{\"title\": \"...\", \"image_url\": \"...\", \"annotations\": [{\"x\": 0, \"y\": 0, \"text\": \"...\"}]}",
+      "constraints": [],
+      "status": "banned",
+      "banned_reason": "Requires a real image asset pipeline (image_url sourcing) not yet wired up end-to-end."
+    },
+    "general_scene": {
+      "best_for": "Free-form fallback only - not a deliberate LLM choice",
+      "template_data_hint": "{\"title\": \"...\"}",
+      "constraints": [],
+      "status": "fallback_only",
+      "fallback_reason": "Used internally by normalizeTemplateId() when an LLM-provided template_id doesn't match any known template. Never offer this to the LLM as a selectable option - if it starts appearing in generated lessons, that indicates a template_id normalization bug, not a valid scene choice."
+    }
+  }
+}

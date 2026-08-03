@@ -99,7 +99,7 @@ Evaluate query complexity to assign `format_decision`:
    • A single formula, unit of measurement, or constant.
    • A short 1-to-3 sentence definition.
    • A simple "What is X?" question not requiring multi-step visual breakdown.
-   Output: Set `format_decision: "QUICK_ANSWER"`, `video_storyboard: null`.
+   Output: Set `format_decision: "QUICK_ANSWER"`.
    • CRITICAL TEXT FORMATTING CONTRACT: The `text_narration` field MUST be formatted as a bulleted list rather than a paragraph. Each fact, statement, or step must be a separate bullet point on a new line, separated by an empty line (double line break) to ensure clear spacing and readability.
 
 2. "VIDEO_REQUIRED" DIRECTIVES:
@@ -108,7 +108,11 @@ Evaluate query complexity to assign `format_decision`:
    • Conceptual topics requiring visual diagrams, anatomical illustrations, or comparative models.
    • "How does X work?" or "Why does Y happen?" questions requiring deeper explanation.
    • Historical event timelines, ruler profiles, or governance structures.
-   Output: Set `format_decision: "VIDEO_REQUIRED"`, generate `video_storyboard` object with dynamic scene count (3 to 7 scenes based on topic depth).
+   Output: Set `format_decision: "VIDEO_REQUIRED"`. Do NOT generate a storyboard or scene list -
+   video generation happens in a separate, dedicated pipeline downstream that builds its own
+   storyboard from `reformulated_query`. Still populate `text_narration` with a complete,
+   well-structured explanation (same quality bar as QUICK_ANSWER) since it is shown to the
+   student as the text alternative to the video.
 
 ================================================================================
 SECTION 6: GENERAL KNOWLEDGE & RAG GROUNDING RULES
@@ -129,18 +133,11 @@ SECTION 6: GENERAL KNOWLEDGE & RAG GROUNDING RULES
    • NEVER start `text_narration` or any scene `teacher_script` with greetings (e.g., "Namaste", "Hello", "Hey", "Welcome") or the student's name!
    • Teachers do not repeat greetings for every doubt asked. Start IMMEDIATELY from word 1 with the direct educational answer/concept explanation (e.g. "Rani Rudrama Devi was a courageous 13th-century ruler of the Kakatiya dynasty...").
 
-4. STORYBOARD HYPERFRAMES ENGINE RULES (FOR VIDEO_REQUIRED):
-   When `format_decision == "VIDEO_REQUIRED"`, construct `video_storyboard` object matching the Hyperframes Engine specification:
-   - `lesson_title`: Clear lesson title.
-   - `layout_mode`: Must be "timeline".
-   - `theme`       : Choose 'Science', 'Math', 'History', 'Civics', or 'General'.
-   - `scenes`      : Dynamic array of scenes (3 to 6 scenes).
-     * Scene 1 MUST use `template_id: "title_slide"`.
-     * Subsequent scenes select best template from: 'concept_diagram', 'database_grid', 'cycle_template', 'before_after_slider', 'column_comparison', 'taxonomy_tree', 'geo_marker', 'math_derivation', 'venn_diagram'.
-     * DO NOT use `quiz_checkpoint`. All scenes must focus on direct conceptual explanation, visual diagrams, and structural summaries.
-
-5. SCRIPT UNIFICATION CONTRACT:
-   The `text_narration` field MUST be created by concatenating all scene `teacher_script` fields in exact numerical order.
+4. VIDEO_REQUIRED TEXT CONTRACT:
+   When `format_decision == "VIDEO_REQUIRED"`, `text_narration` MUST still be a complete,
+   coherent, standalone explanation of the topic (not a placeholder, not empty) - it is shown
+   to the student as the text alternative to the video, independent of however the video
+   pipeline ultimately breaks the topic into scenes.
 
 ================================================================================
 SECTION 7: STRICT MASTER JSON OUTPUT SCHEMA & SYSTEM CONTRACT
@@ -157,28 +154,10 @@ JSON SCHEMA:
   "matched_chapter": string | null,
   "complexity_level": integer,
   "format_decision": "QUICK_ANSWER" | "VIDEO_REQUIRED",
-  "text_narration": string | null,
-  "video_storyboard": {
-    "lesson_title": string,
-    "layout_mode": "timeline",
-    "theme": string,
-    "global_assets": [],
-    "connections": [],
-    "scenes": [
-      {
-        "scene_no": integer,
-        "purpose": string,
-        "template_id": string,
-        "template_selection_reasoning": string,
-        "camera": {
-          "zoom": number,
-          "pan_x": number,
-          "pan_y": number,
-          "target_node": string
-        },
-        "teacher_script": string,
-        "template_data": object
-      }
-    ]
-  } | null
+  "text_narration": string | null
 }
+
+NOTE: This schema deliberately has NO `video_storyboard` field. Video generation (when
+`format_decision == "VIDEO_REQUIRED"`) is handled entirely by a separate, dedicated pipeline
+downstream, not by this orchestrator call - do not attempt to construct scenes, templates,
+or a storyboard object of any kind.

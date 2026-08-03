@@ -39,12 +39,16 @@ module.exports = {
         if (stageEl) {
           stageEl.style.left = x + 'px';
           stageEl.style.top = y + 'px';
-          stageEl.style.transform = 'translate(-50%, -50%) scale(0)';
-          
+          // See ConceptDiagram.js for why: centering + scale must both go through
+          // GSAP (xPercent/yPercent + scale), not a hand-written 'transform' string,
+          // or the element gets stuck at scale(0) - invisible - despite its opacity
+          // tween completing.
+          gsap.set(stageEl, { xPercent: -50, yPercent: -50, scale: 0 });
+
           const revealStart = 0.5 + (idx * timeStep_${sId});
 
           sceneTl.to(stageEl, {
-            transform: 'translate(-50%, -50%) scale(1)',
+            scale: 1,
             duration: 0.5,
             ease: 'back.out(1.6)'
           }, revealStart);

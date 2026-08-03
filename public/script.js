@@ -1631,18 +1631,11 @@ function setupUserPage() {
         const query = queryText.value.trim();
         if (!query) return;
 
-        const currentMode = window.answerPreferenceManager ? window.answerPreferenceManager.currentMode : 'text_text';
-        if (currentMode === 'visual_learning') {
-            if (window.VisualLearningRenderer) {
-                await window.VisualLearningRenderer.startLesson(query);
-            } else {
-                console.error('[MODE] VisualLearningRenderer not found');
-            }
-        } else {
-            // Use the new smart query system
-            // Legacy handleQuerySubmit redirects to the unified global window.submitSmartQuery
-            await window.submitSmartQuery(query, false);
-        }
+        // All questions go through the orchestrator (submitSmartQuery), which
+        // decides text vs video itself based on content - there is no longer a
+        // separate "Visual Learning Mode" bypass. The old direct-to-VisualLearningRenderer
+        // path targeted DOM elements that no longer exist in this page and was dead.
+        await window.submitSmartQuery(query, false);
     }
 
     /**
@@ -1846,16 +1839,8 @@ function setupUserPage() {
     window.submitSmartQueryFromMic = function(transcript) {
         console.log('[MODE] submitSmartQueryFromMic called with:', transcript);
         if (!transcript) return;
-        const currentMode = window.answerPreferenceManager ? window.answerPreferenceManager.currentMode : 'text_text';
-        if (currentMode === 'visual_learning') {
-            if (window.VisualLearningRenderer) {
-                window.VisualLearningRenderer.startLesson(transcript);
-            } else {
-                console.error('[MODE] VisualLearningRenderer not found');
-            }
-        } else {
-            submitSmartQuery(transcript, false);
-        }
+        // Same unified path as handleQuerySubmit - no more Visual Learning Mode bypass.
+        submitSmartQuery(transcript, false);
     };
 }
 

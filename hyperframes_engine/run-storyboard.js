@@ -22,6 +22,31 @@ const templates = {
   general_scene: require('./templates/GeneralScene'),
 };
 
+// Startup consistency check: every 'active'/'fallback_only' entry in the shared
+// template registry must have a matching require()'d template above, and vice
+// versa - a mismatch means an LLM-selectable template would silently degrade to
+// general_scene instead of failing loudly.
+(function checkTemplateRegistryConsistency() {
+  try {
+    const registryPath = path.join(__dirname, 'shared', 'template-registry.json');
+    const registry = JSON.parse(fs.readFileSync(registryPath, 'utf8')).templates || {};
+    const registryIds = Object.keys(registry).filter(
+      (tid) => registry[tid].status === 'active' || registry[tid].status === 'fallback_only'
+    );
+    const templateIds = Object.keys(templates);
+    const missingFromEngine = registryIds.filter((tid) => !templateIds.includes(tid));
+    const missingFromRegistry = templateIds.filter((tid) => !registryIds.includes(tid) && registry[tid] === undefined);
+    if (missingFromEngine.length || missingFromRegistry.length) {
+      console.warn(
+        '[TEMPLATE_REGISTRY_MISMATCH]',
+        JSON.stringify({ missingFromEngine, missingFromRegistry })
+      );
+    }
+  } catch (e) {
+    console.warn('[TEMPLATE_REGISTRY_MISMATCH] Could not verify registry consistency:', e.message);
+  }
+})();
+
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout
@@ -384,12 +409,15 @@ function generateMasterHtml(storyboard, lessonDir, callback) {
   fs.copyFileSync(path.join(sharedDir, 'animations.js'), path.join(targetSharedDir, 'animations.js'));
 
   // Build the master HTML content
+  const compiledAt = new Date().toISOString();
   let html = `<!DOCTYPE html>
+<!-- HYPERFRAMES_ENGINE: node compiled=${compiledAt} -->
 <html>
 <head>
   <meta charset="UTF-8">
+  <meta name="hf-engine" content="node">
   <title>${storyboard.lesson_title || 'Visual Storyboard Video'}</title>
-  
+
   <!-- CSS Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&family=Space+Grotesk:wght@400;700&family=Inter:wght@400;500;700;900&family=Cinzel:wght@700&family=Playfair+Display:wght@700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   

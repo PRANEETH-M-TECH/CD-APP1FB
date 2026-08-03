@@ -1,4 +1,5 @@
 const RenderTree = require('./RenderTree');
+const { getIconMarkup } = require('../../shared/icons.js');
 
 /**
  * Renderer.js
@@ -7,8 +8,55 @@ const RenderTree = require('./RenderTree');
  */
 class Renderer {
   /**
+   * Renders a small inline icon <svg> for a node's optional `icon` name
+   * (looked up in the shared curated icon library, falling back to a plain
+   * dot for missing/unrecognized names - never breaks rendering). Returns
+   * '' when no icon name is given, so callers can splice this in unconditionally.
+   * @param {string} iconName
+   * @param {number} sizePx
+   * @returns {string} HTML for the icon, or '' if iconName is falsy
+   */
+  static renderIcon(iconName, sizePx = 22) {
+    if (!iconName) return '';
+    const markup = getIconMarkup(iconName);
+    return `<svg viewBox="0 0 24 24" width="${sizePx}" height="${sizePx}" fill="none" class="theme-stroke" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0; display:block; margin: 0 auto 6px;">${markup}</svg>`;
+  }
+
+  /**
+   * Returns an inline CSS string applying scene.focuses emphasis (dim/highlight/glow/
+   * isolate) directly to a rendered element, bypassing the VisualEmphasisEngine/
+   * component.style indirection that most template renderers never read. Matches a
+   * focus target against either the scene-graph node id or the element's own display
+   * text (case-insensitive), since the LLM authoring a storyboard has no visibility
+   * into generated node-id naming and more naturally refers to items by their label.
+   * @param {Scene} scene
+   * @param {string[]} candidateIds - node id(s) and/or display text for this element
+   * @returns {string} extra inline CSS (may be empty)
+   */
+  static getFocusStyle(scene, candidateIds) {
+    if (!scene || !Array.isArray(scene.focuses) || scene.focuses.length === 0) return '';
+    const mode = (scene.focuses[0].mode || '').toUpperCase();
+    const targets = scene.focuses.map(f => String(f.target || '').toLowerCase().trim()).filter(Boolean);
+    if (targets.length === 0) return '';
+    const isFocused = candidateIds.some(cid => targets.includes(String(cid || '').toLowerCase().trim()));
+
+    switch (mode) {
+      case 'DIM_BACKGROUND':
+        return isFocused ? '' : 'opacity:0.35; filter: blur(1px) grayscale(40%); transition: opacity 0.4s ease, filter 0.4s ease;';
+      case 'HIGHLIGHT':
+        return isFocused ? 'filter: drop-shadow(0 0 12px #3b82f6); transition: filter 0.4s ease;' : '';
+      case 'GLOW':
+        return isFocused ? 'filter: drop-shadow(0 0 20px #eab308); transition: filter 0.4s ease;' : '';
+      case 'ISOLATE':
+        return isFocused ? '' : 'visibility:hidden;';
+      default:
+        return '';
+    }
+  }
+
+  /**
    * Main entry method to render a Scene.
-   * @param {Scene} scene 
+   * @param {Scene} scene
    * @returns {string} Compiled HTML markup
    */
   static renderScene(scene) {
@@ -175,9 +223,10 @@ class Renderer {
 
     const hasBullets = !!bulletsNode;
     const leftTitle = leftTitleNode ? leftTitleNode.component.properties.text : '';
-    const bullets = bulletsNode ? bulletsNode.component.children.map(c => c.properties.text) : [];
+    const bullets = bulletsNode ? bulletsNode.component.children.map(c => ({ text: c.properties.text, icon: c.properties.icon })) : [];
     const centerText = centerNode ? centerNode.component.properties.text : '';
-    const leafTexts = leavesNode ? leavesNode.component.children.map(c => c.properties.text) : [];
+    const centerIcon = centerNode ? centerNode.component.properties.icon : null;
+    const leaves = leavesNode ? leavesNode.component.children.map(c => ({ text: c.properties.text, icon: c.properties.icon })) : [];
 
     return `
       <div class="concept-diagram-container" id="concept-diagram-${sId}">
@@ -185,18 +234,18 @@ class Renderer {
         <div class="left-bullets-col">
           <h2 class="theme-text" id="cd-left-title-${sId}" style="font-size: 38px; font-weight: 800; margin-bottom: 24px; letter-spacing: -1px;">${leftTitle}</h2>
           <div style="display: flex; flex-direction: column; gap: 16px;" id="cd-bullets-list-${sId}">
-            ${bullets.map((b, bIdx) => `<div class="bullet-card theme-card-bg theme-card-border" id="cd-bullet-${sId}-${bIdx}">${b}</div>`).join('')}
+            ${bullets.map((b, bIdx) => `<div class="bullet-card theme-card-bg theme-card-border" id="cd-bullet-${sId}-${bIdx}" style="display:flex; align-items:center; gap:12px; ${Renderer.getFocusStyle(scene, [`bullet_${sId}_${bIdx}`, b.text])}">${Renderer.renderIcon(b.icon, 24).replace('margin: 0 auto 6px;', 'margin:0;')}<span>${b.text}</span></div>`).join('')}
           </div>
         </div>
         ` : ''}
-        
+
         <div class="mindmap-canvas" style="position: relative; width: ${hasBullets ? '55%' : '100%'}; height: 100%;">
           <svg viewBox="0 0 1280 720" style="position: absolute; width: 1280px; height: 720px; top: 0; left: 0; z-index: 2; pointer-events: none;">
             <g id="cd-lines-group-${sId}"></g>
           </svg>
-          <div class="center-node theme-accent-bg" id="cd-center-${sId}" style="color: #090d16; position: absolute; left: ${hasBullets ? 900 : 640}px; top: 360px; transform: translate(-50%, -50%);">${centerText}</div>
+          <div class="center-node theme-accent-bg" id="cd-center-${sId}" style="color: #090d16; position: absolute; left: ${hasBullets ? 900 : 640}px; top: 360px; transform: translate(-50%, -50%); ${centerIcon ? 'flex-direction: column;' : ''} ${Renderer.getFocusStyle(scene, [`center_${sId}`, centerText])}">${Renderer.renderIcon(centerIcon, 26)}<span>${centerText}</span></div>
           <div id="cd-leaves-group-${sId}">
-            ${leafTexts.map((node, nIdx) => `<div class="leaf-node theme-card-border" id="cd-leaf-${sId}-${nIdx}" style="position: absolute; transform: translate(-50%, -50%) scale(0);">${node}</div>`).join('')}
+            ${leaves.map((leaf, nIdx) => `<div class="leaf-node theme-card-border" id="cd-leaf-${sId}-${nIdx}" style="position: absolute; transform: translate(-50%, -50%) scale(0); ${Renderer.getFocusStyle(scene, [`leaf_${sId}_${nIdx}`, leaf.text])}">${Renderer.renderIcon(leaf.icon, 20)}<span>${leaf.text}</span></div>`).join('')}
           </div>
         </div>
       </div>
@@ -209,7 +258,7 @@ class Renderer {
     const stagesNode = scene.findNode(`stages_${sId}`);
 
     const title = titleNode ? titleNode.component.properties.text : '';
-    const stages = stagesNode ? stagesNode.component.children.map(c => c.properties.text) : [];
+    const stages = stagesNode ? stagesNode.component.children.map(c => ({ text: c.properties.text, icon: c.properties.icon })) : [];
 
     return `
       <div class="cycle-container" id="cycle-${sId}">
@@ -223,7 +272,8 @@ class Renderer {
             ${stages.map((stage, stIdx) => `
               <div class="cycle-stage theme-card-bg theme-card-border" id="cycle-stage-${sId}-${stIdx}">
                 <div class="cycle-stage-badge theme-text">Step ${stIdx + 1}</div>
-                <div class="cycle-stage-label">${stage}</div>
+                ${Renderer.renderIcon(stage.icon, 22)}
+                <div class="cycle-stage-label">${stage.text}</div>
               </div>
             `).join('')}
           </div>
@@ -268,10 +318,22 @@ class Renderer {
     const title = titleNode ? titleNode.component.properties.text : 'Comparison';
     
     const leftHeader = leftColNode ? leftColNode.component.properties.header : '';
-    const leftBullets = leftColNode ? leftColNode.component.children.map(c => c.properties.text) : [];
+    const leftBullets = leftColNode ? leftColNode.component.children.map(c => ({ text: c.properties.text, icon: c.properties.icon })) : [];
 
     const rightHeader = rightColNode ? rightColNode.component.properties.header : '';
-    const rightBullets = rightColNode ? rightColNode.component.children.map(c => c.properties.text) : [];
+    const rightBullets = rightColNode ? rightColNode.component.children.map(c => ({ text: c.properties.text, icon: c.properties.icon })) : [];
+
+    // Shrink bullet typography as list length grows so tall columns don't
+    // overflow the fixed 720px canvas height (body has overflow:hidden, so
+    // overflow was previously silently clipped rather than scrolling).
+    const maxBullets = Math.max(leftBullets.length, rightBullets.length);
+    let bulletFontSize = 18, bulletMarginBottom = 16;
+    if (maxBullets > 7) {
+      bulletFontSize = 14; bulletMarginBottom = 8;
+    } else if (maxBullets > 5) {
+      bulletFontSize = 16; bulletMarginBottom = 12;
+    }
+    const bulletStyle = `font-size: ${bulletFontSize}px; margin-bottom: ${bulletMarginBottom}px;`;
 
     return `
       <div class="comparison-container" id="comparison-${sId}">
@@ -281,21 +343,21 @@ class Renderer {
             <div class="comparison-col-header theme-text theme-card-border" id="comparison-header-left-${sId}" style="border-bottom-color: rgba(255,255,255,0.1);">${leftHeader}</div>
             <div id="comparison-bullets-left-${sId}">
               ${leftBullets.map((b, bIdx) => `
-                <div class="comparison-bullet" id="comparison-bullet-l-${sId}-${bIdx}">
-                  <span class="comparison-bullet-dot theme-accent-bg"></span>
-                  <span>${b}</span>
+                <div class="comparison-bullet" id="comparison-bullet-l-${sId}-${bIdx}" style="${bulletStyle} ${Renderer.getFocusStyle(scene, [`left_bullet_${sId}_${bIdx}`, b.text])}">
+                  ${b.icon ? Renderer.renderIcon(b.icon, 18).replace('margin: 0 auto 6px;', 'margin:0 10px 0 0;') : '<span class="comparison-bullet-dot theme-accent-bg"></span>'}
+                  <span>${b.text}</span>
                 </div>
               `).join('')}
             </div>
           </div>
-          
+
           <div class="comparison-column theme-card-bg theme-card-border" id="comparison-col-right-${sId}">
             <div class="comparison-col-header theme-text theme-card-border" id="comparison-header-right-${sId}" style="border-bottom-color: rgba(255,255,255,0.1);">${rightHeader}</div>
             <div id="comparison-bullets-right-${sId}">
               ${rightBullets.map((b, bIdx) => `
-                <div class="comparison-bullet" id="comparison-bullet-r-${sId}-${bIdx}">
-                  <span class="comparison-bullet-dot theme-accent-bg"></span>
-                  <span>${b}</span>
+                <div class="comparison-bullet" id="comparison-bullet-r-${sId}-${bIdx}" style="${bulletStyle} ${Renderer.getFocusStyle(scene, [`right_bullet_${sId}_${bIdx}`, b.text])}">
+                  ${b.icon ? Renderer.renderIcon(b.icon, 18).replace('margin: 0 auto 6px;', 'margin:0 10px 0 0;') : '<span class="comparison-bullet-dot theme-accent-bg"></span>'}
+                  <span>${b.text}</span>
                 </div>
               `).join('')}
             </div>
@@ -360,20 +422,31 @@ class Renderer {
       });
     }
 
+    // Shrink row padding/font-size as row count grows, and cap the card's
+    // height with a scroll fallback, so a long table doesn't silently clip
+    // against the fixed 720px canvas (body has overflow:hidden).
+    let cellPadding = '16px 20px', tableFontSize = 16;
+    if (rows.length > 8) {
+      cellPadding = '8px 14px'; tableFontSize = 13;
+    } else if (rows.length > 5) {
+      cellPadding = '11px 16px'; tableFontSize = 14;
+    }
+    const cellStyle = `padding: ${cellPadding};`;
+
     return `
       <div class="database-container" id="db-${sId}">
         <h2 class="theme-text" style="font-size: 34px; font-weight: 800; margin-bottom: 24px;" id="db-title-${sId}">${title}</h2>
-        <div class="database-grid-card theme-card-border" id="db-card-${sId}">
-          <table class="database-table">
+        <div class="database-grid-card theme-card-border" id="db-card-${sId}" style="max-height: 520px; overflow-y: auto;">
+          <table class="database-table" style="font-size: ${tableFontSize}px;">
             <thead>
               <tr id="db-head-row-${sId}">
-                ${headers.map((h, hIdx) => `<th id="db-th-${sId}-${hIdx}">${h}</th>`).join('')}
+                ${headers.map((h, hIdx) => `<th id="db-th-${sId}-${hIdx}" style="${cellStyle}">${h}</th>`).join('')}
               </tr>
             </thead>
             <tbody>
               ${rows.map((row, rIdx) => `
                 <tr id="db-row-${sId}-${rIdx}">
-                  ${row.map((cell, cIdx) => `<td id="db-cell-${sId}-${rIdx}-${cIdx}">${cell}</td>`).join('')}
+                  ${row.map((cell, cIdx) => `<td id="db-cell-${sId}-${rIdx}-${cIdx}" style="${cellStyle}">${cell}</td>`).join('')}
                 </tr>
               `).join('')}
             </tbody>
@@ -395,9 +468,13 @@ class Renderer {
     const leftTitle = leftTitleNode ? leftTitleNode.component.properties.text : 'A';
     const rightTitle = rightTitleNode ? rightTitleNode.component.properties.text : 'B';
 
-    const leftItems = leftNode ? leftNode.component.children.map(c => c.properties.text) : [];
-    const midItems = midNode ? midNode.component.children.map(c => c.properties.text) : [];
-    const rightItems = rightNode ? rightNode.component.children.map(c => c.properties.text) : [];
+    const leftItems = leftNode ? leftNode.component.children.map(c => ({ text: c.properties.text, icon: c.properties.icon })) : [];
+    const midItems = midNode ? midNode.component.children.map(c => ({ text: c.properties.text, icon: c.properties.icon })) : [];
+    const rightItems = rightNode ? rightNode.component.children.map(c => ({ text: c.properties.text, icon: c.properties.icon })) : [];
+    const itemInner = (item) => item.icon
+      ? `${Renderer.renderIcon(item.icon, 16).replace('margin: 0 auto 6px;', 'margin:0 8px 0 0;')}<span>${item.text}</span>`
+      : item.text;
+    const itemStyle = (item) => item.icon ? 'display:flex; align-items:center;' : '';
 
     return `
       <div class="venn-container" id="venn-${sId}">
@@ -406,21 +483,21 @@ class Renderer {
           <div style="color: #ffffff;">Comparison</div>
           <div class="theme-text" id="venn-header-right-${sId}">${rightTitle}</div>
         </div>
-        
+
         <div class="venn-diagram-canvas">
           <div class="venn-circle-left theme-card-bg theme-card-border" id="venn-circle-left-${sId}"></div>
           <div class="venn-circle-right theme-card-bg theme-card-border" id="venn-circle-right-${sId}"></div>
-          
+
           <div class="venn-content-left" id="venn-content-left-${sId}">
-            ${leftItems.map((item, iIdx) => `<div class="venn-item-card" id="venn-item-l-${sId}-${iIdx}">${item}</div>`).join('')}
+            ${leftItems.map((item, iIdx) => `<div class="venn-item-card" id="venn-item-l-${sId}-${iIdx}" style="${itemStyle(item)}">${itemInner(item)}</div>`).join('')}
           </div>
-          
+
           <div class="venn-content-middle" id="venn-content-middle-${sId}">
-            ${midItems.map((item, iIdx) => `<div class="venn-item-card theme-accent-border" id="venn-item-m-${sId}-${iIdx}" style="border: 1.5px dashed; font-weight: 700;">${item}</div>`).join('')}
+            ${midItems.map((item, iIdx) => `<div class="venn-item-card theme-accent-border" id="venn-item-m-${sId}-${iIdx}" style="border: 1.5px dashed; font-weight: 700; ${itemStyle(item)}">${itemInner(item)}</div>`).join('')}
           </div>
-          
+
           <div class="venn-content-right" id="venn-content-right-${sId}">
-            ${rightItems.map((item, iIdx) => `<div class="venn-item-card" id="venn-item-r-${sId}-${iIdx}">${item}</div>`).join('')}
+            ${rightItems.map((item, iIdx) => `<div class="venn-item-card" id="venn-item-r-${sId}-${iIdx}" style="${itemStyle(item)}">${itemInner(item)}</div>`).join('')}
           </div>
         </div>
       </div>
@@ -509,22 +586,36 @@ class Renderer {
 
     const title = titleNode ? titleNode.component.properties.text : 'Classification Hierarchy';
     const rootLabel = rootNode ? rootNode.component.properties.text : 'Root Category';
-    
+    const rootIcon = rootNode ? rootNode.component.properties.icon : null;
+
+    // Scale card size/typography down as branch count grows so items wrap onto
+    // multiple rows instead of overflowing the fixed 1280x720 canvas (no-wrap
+    // flexbox with a fixed min-width previously broke past ~6 branches).
+    const branchCount = branchesNode ? branchesNode.component.children.length : 0;
+    let cardMinWidth = 180, cardFontSize = 18, cardPadding = '18px 24px', subFontSize = 13;
+    if (branchCount > 8) {
+      cardMinWidth = 120; cardFontSize = 14; cardPadding = '12px 14px'; subFontSize = 11;
+    } else if (branchCount > 6) {
+      cardMinWidth = 145; cardFontSize = 16; cardPadding = '14px 18px'; subFontSize = 12;
+    }
+
     let branchesHtml = '';
     if (branchesNode) {
       branchesNode.component.children.forEach((bComp, idx) => {
         const label = bComp.properties.text || '';
+        const icon = bComp.properties.icon;
         const sub = bComp.properties.sub || [];
-        
+
         let subHtml = '';
         if (sub.length > 0) {
-          subHtml = `<div style="font-size: 13px; font-weight: 400; opacity: 0.85; line-height: 1.3;">` +
+          subHtml = `<div style="font-size: ${subFontSize}px; font-weight: 400; opacity: 0.85; line-height: 1.3;">` +
                     sub.map(s => `• ${s}`).join('<br>') +
                     `</div>`;
         }
-        
+
         branchesHtml += `
-          <div class="branch-card theme-card-bg theme-card-border" id="tax-branch-${sId}-${idx}" style="padding: 18px 24px; border-radius: 16px; min-width: 180px; text-align: center; font-weight: 700; font-size: 18px; box-shadow: 0 8px 20px rgba(0,0,0,0.4);">
+          <div class="branch-card theme-card-bg theme-card-border" id="tax-branch-${sId}-${idx}" style="padding: ${cardPadding}; border-radius: 16px; min-width: ${cardMinWidth}px; text-align: center; font-weight: 700; font-size: ${cardFontSize}px; box-shadow: 0 8px 20px rgba(0,0,0,0.4); ${Renderer.getFocusStyle(scene, [`branch_${sId}_${idx}`, label])}">
+            ${Renderer.renderIcon(icon, 20)}
             <div style="font-weight: 800; margin-bottom: 4px;">${label}</div>
             ${subHtml}
           </div>
@@ -535,15 +626,15 @@ class Renderer {
     return `
       <div class="taxonomy-container" id="taxonomy-${sId}" style="width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px; position: relative;">
         <h2 class="theme-text" style="font-size: 34px; font-weight: 900; margin-bottom: 30px;" id="taxonomy-title-${sId}">${title}</h2>
-        
-        <div class="tree-canvas" style="position: relative; width: 90%; height: 450px; display: flex; flex-direction: column; align-items: center;">
+
+        <div class="tree-canvas" style="position: relative; width: 90%; height: 450px; display: flex; flex-direction: column; align-items: center; overflow: visible;">
           <!-- Root Node -->
-          <div class="root-node theme-accent-bg" id="tax-root-${sId}" style="z-index: 5; padding: 16px 36px; border-radius: 20px; font-size: 24px; font-weight: 800; color: #090d16; box-shadow: 0 10px 25px rgba(0,0,0,0.5);">
-            ${rootLabel}
+          <div class="root-node theme-accent-bg" id="tax-root-${sId}" style="z-index: 5; padding: 16px 36px; border-radius: 20px; font-size: 24px; font-weight: 800; color: #090d16; box-shadow: 0 10px 25px rgba(0,0,0,0.5); ${rootIcon ? 'display:flex; align-items:center; gap:10px;' : ''}">
+            ${Renderer.renderIcon(rootIcon, 22).replace('margin: 0 auto 6px;', 'margin:0;')}<span>${rootLabel}</span>
           </div>
 
           <!-- Branches Layer -->
-          <div id="tax-branches-${sId}" style="display: flex; justify-content: space-around; width: 100%; margin-top: 80px; z-index: 5;">
+          <div id="tax-branches-${sId}" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 16px; width: 100%; margin-top: 80px; z-index: 5;">
             ${branchesHtml}
           </div>
         </div>
@@ -606,7 +697,8 @@ class Renderer {
       label: c.properties.label,
       x: c.properties.x,
       y: c.properties.y,
-      description: c.properties.description
+      description: c.properties.description,
+      icon: c.properties.icon
     })) : [];
 
     return `
@@ -629,9 +721,12 @@ class Renderer {
                 <div class="pin-head theme-accent-bg" style="width: 18px; height: 18px; border-radius: 50%; box-shadow: 0 0 16px #38bdf8; position: relative;">
                   <div style="position: absolute; width: 100%; height: 100%; border-radius: 50%; border: 2px solid #38bdf8; animation: ping 2s infinite;"></div>
                 </div>
-                <div class="pin-card theme-card-bg theme-card-border" style="margin-top: 10px; padding: 10px 16px; border-radius: 12px; white-space: nowrap; text-align: center; box-shadow: 0 8px 20px rgba(0,0,0,0.6);">
-                  <div style="font-weight: 800; font-size: 15px; color: #ffffff;">${m.label || 'Marker'}</div>
-                  ${m.description ? `<div style="font-size: 12px; color: rgba(255,255,255,0.7); margin-top: 2px;">${m.description}</div>` : ''}
+                <div class="pin-card theme-card-bg theme-card-border" style="margin-top: 10px; padding: 10px 16px; border-radius: 12px; white-space: nowrap; text-align: center; box-shadow: 0 8px 20px rgba(0,0,0,0.6); ${m.icon ? 'display:flex; align-items:center; gap:8px;' : ''}">
+                  ${m.icon ? Renderer.renderIcon(m.icon, 18).replace('margin: 0 auto 6px;', 'margin:0;') : ''}
+                  <div>
+                    <div style="font-weight: 800; font-size: 15px; color: #ffffff;">${m.label || 'Marker'}</div>
+                    ${m.description ? `<div style="font-size: 12px; color: rgba(255,255,255,0.7); margin-top: 2px;">${m.description}</div>` : ''}
+                  </div>
                 </div>
               </div>
             `).join('')}
@@ -649,10 +744,10 @@ class Renderer {
 
     const title = titleNode ? titleNode.component.properties.text : 'Before vs After State';
     const beforeLabel = beforeGroup ? beforeGroup.component.properties.label : 'BEFORE';
-    const beforeBullets = beforeGroup ? beforeGroup.component.children.map(c => c.properties.text) : [];
-    
+    const beforeBullets = beforeGroup ? beforeGroup.component.children.map(c => ({ text: c.properties.text, icon: c.properties.icon })) : [];
+
     const afterLabel = afterGroup ? afterGroup.component.properties.label : 'AFTER';
-    const afterBullets = afterGroup ? afterGroup.component.children.map(c => c.properties.text) : [];
+    const afterBullets = afterGroup ? afterGroup.component.children.map(c => ({ text: c.properties.text, icon: c.properties.icon })) : [];
 
     return `
       <div class="before-after-container" id="ba-${sId}" style="width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px; position: relative;">
@@ -665,8 +760,8 @@ class Renderer {
             <div style="display: flex; flex-direction: column; gap: 12px;">
               ${beforeBullets.map((b, bIdx) => `
                 <div style="font-size: 16px; font-weight: 600; color: rgba(255,255,255,0.9); display: flex; align-items: center; gap: 10px;">
-                  <span style="width: 8px; height: 8px; border-radius: 50%; background: #ef4444; flex-shrink: 0;"></span>
-                  <span>${b}</span>
+                  ${b.icon ? Renderer.renderIcon(b.icon, 18).replace('margin: 0 auto 6px;', 'margin:0;') : '<span style="width: 8px; height: 8px; border-radius: 50%; background: #ef4444; flex-shrink: 0;"></span>'}
+                  <span>${b.text}</span>
                 </div>
               `).join('')}
             </div>
@@ -683,8 +778,8 @@ class Renderer {
             <div style="display: flex; flex-direction: column; gap: 12px;">
               ${afterBullets.map((b, bIdx) => `
                 <div style="font-size: 16px; font-weight: 600; color: rgba(255,255,255,0.9); display: flex; align-items: center; gap: 10px;">
-                  <span style="width: 8px; height: 8px; border-radius: 50%; background: #22c55e; flex-shrink: 0;"></span>
-                  <span>${b}</span>
+                  ${b.icon ? Renderer.renderIcon(b.icon, 18).replace('margin: 0 auto 6px;', 'margin:0;') : '<span style="width: 8px; height: 8px; border-radius: 50%; background: #22c55e; flex-shrink: 0;"></span>'}
+                  <span>${b.text}</span>
                 </div>
               `).join('')}
             </div>

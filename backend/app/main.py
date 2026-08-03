@@ -31,8 +31,7 @@ from backend.app.api.routes import (
     dashboard_router,
     bag_router,
     profile_router,
-    tts_router,
-    visual_learning_router
+    tts_router
 )
 
 # --- Lifespan Management ---
@@ -70,7 +69,12 @@ app.include_router(dashboard_router)
 app.include_router(bag_router)
 app.include_router(profile_router)
 app.include_router(tts_router)
-app.include_router(visual_learning_router)
+# Note: visual_learning_router (the standalone /api/visual_learning HTTP endpoint)
+# has been removed - nothing in the frontend calls it anymore (the "Visual
+# Learning Mode" UI it served was dead/unreachable code). The underlying
+# generate_visual_lesson_stream() function it wrapped is still very much in use -
+# it's imported directly by chat.py's orchestrator flow, which is now the only
+# caller and the single real video-generation pipeline.
 
 # --- STATIC FILE SERVING ---
 PUBLIC_DIR = os.path.join(PROJECT_ROOT, "public")

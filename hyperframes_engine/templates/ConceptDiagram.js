@@ -86,7 +86,14 @@ module.exports = {
         if (leafNode) {
           leafNode.style.left = x2 + 'px';
           leafNode.style.top = y2 + 'px';
-          leafNode.style.transform = 'translate(-50%, -50%) scale(0)';
+          // Centering (xPercent/yPercent) and scale must both be set through GSAP,
+          // not as a hand-written 'transform' string - GSAP's CSSPlugin owns the
+          // transform property once it tweens any of x/y/scale/rotation, and a
+          // percentage-based translate() baked into a raw transform string doesn't
+          // interpolate correctly against GSAP's own composited value, leaving the
+          // element permanently stuck at scale(0) (invisible, 0x0) even though its
+          // opacity animation completes normally.
+          gsap.set(leafNode, { xPercent: -50, yPercent: -50, scale: 0 });
         }
 
         const revealStart = 0.5 + (idx * timeStep_${sId});
@@ -99,7 +106,7 @@ module.exports = {
 
         if (leafNode) {
           sceneTl.to(leafNode, {
-            transform: 'translate(-50%, -50%) scale(1)',
+            scale: 1,
             duration: 0.5,
             ease: 'back.out(1.7)'
           }, revealStart + 0.2);

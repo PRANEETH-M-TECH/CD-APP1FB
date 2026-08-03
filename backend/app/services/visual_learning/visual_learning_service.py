@@ -11,6 +11,29 @@ from backend.app.services.visual_learning.visual_audio_generator import generate
 
 logger = logging.getLogger(__name__)
 
+def _scene_template_data_is_empty(template_data) -> bool:
+    """A scene has no usable visual content if template_data is missing/empty
+    or every value in it is falsy (empty string/list/dict/None)."""
+    if not isinstance(template_data, dict) or not template_data:
+        return True
+    return not any(v for v in template_data.values() if v not in (None, "", [], {}))
+
+def storyboard_content_is_empty(clips: list) -> bool:
+    """
+    True if the storyboard has no real content to render - i.e. template_data
+    came back empty for all or nearly all scenes. Seen occasionally when the
+    LLM returns malformed JSON that clean_and_parse_json's repair pipeline
+    salvages structurally but loses scene content from, or when the LLM
+    itself returns placeholder-only scenes. Shipping this silently produces
+    a lesson that plays audio/titles but shows nothing.
+    """
+    if not clips:
+        return True
+    empty_count = sum(1 for c in clips if _scene_template_data_is_empty(c.get("template_data")))
+    if len(clips) <= 2:
+        return empty_count == len(clips)
+    return empty_count >= len(clips) - 1
+
 def clean_and_parse_json(response_text: str) -> dict:
     """
     Resilient JSON parser that handles code blocks, unescaped text,
@@ -96,6 +119,55 @@ async def generate_visual_lesson_stream(query: str, book_uuid: str, class_name: 
     print(f"   Query: '{query}' | Lesson ID: {lesson_id}")
     print("======================================================================\n")
     
+    def _normalize_and_audit_clips(raw_clips: list, lesson_title: str) -> list:
+        """Robust Clip Normalization (Guarantees dict object structure for every
+        scene) + Template Selection Audit & Variety Validation Pass, driven
+        entirely by hyperframes_engine/shared/template-registry.json (via
+        template_registry.py) so this never needs editing when a template is
+        added/removed/re-enabled - only the registry does."""
+        clips = []
+        for idx, item in enumerate(raw_clips, 1):
+            if isinstance(item, dict):
+                item["scene_no"] = idx
+                clips.append(item)
+            elif isinstance(item, str):
+                clips.append({
+                    "scene_no": idx,
+                    "purpose": item,
+                    "template_id": "title_slide" if idx == 1 else "concept_diagram",
+                    "teacher_script": item,
+                    "template_data": {"title": f"Scene {idx}", "subtitle": item}
+                })
+
+        from backend.app.services.visual_learning.template_registry import (
+            get_active_template_ids,
+            repair_scene_templates,
+        )
+        valid_templates = get_active_template_ids()
+
+        print("\n----------------------------------------------------------------------")
+        print("[STORYBOARD AUDIT] LLM Template Selection & Reasoning Analysis:")
+        print(f"   Lesson Title: {lesson_title}")
+        print(f"   Total Scenes: {len(clips)}")
+        print("----------------------------------------------------------------------")
+
+        for idx, clip in enumerate(clips, 1):
+            tid = clip.get("template_id", "concept_diagram")
+            reasoning = clip.get("template_selection_reasoning", "No explicit reasoning provided.")
+
+            is_valid = tid in valid_templates
+            status_icon = "[OK]" if is_valid else "[FALLBACK]"
+            print(f"   Scene {idx}: [{tid}] {status_icon}")
+            print(f"           Reasoning: {reasoning[:90]}...")
+
+        repair_scene_templates(clips, log=print)
+
+        empty_count = sum(1 for c in clips if _scene_template_data_is_empty(c.get("template_data")))
+        print(f"   [CONTENT AUDIT] {empty_count}/{len(clips)} scenes have empty template_data")
+        print("----------------------------------------------------------------------\n")
+
+        return clips
+
     try:
         if precomputed_storyboard:
             yield f"data: {json.dumps({'type': 'progress', 'step': 'understanding_topic', 'status': 'complete', 'message': 'Using designed storyboard blueprint.'})}\n\n"
@@ -108,11 +180,20 @@ async def generate_visual_lesson_stream(query: str, book_uuid: str, class_name: 
             connections = blueprint.get("connections", [])
             layout_mode = blueprint.get("layout_mode", "timeline")
             theme = blueprint.get("theme", "indigo")
+
+            try:
+                clips = _normalize_and_audit_clips(raw_clips, blueprint.get('lesson_title', 'Untitled'))
+            except Exception as e:
+                logger.error(f"[VisualLearning] Failed to normalize precomputed storyboard: {e}")
+                raise ValueError(f"Failed to parse storyboard from precomputed blueprint: {e}")
+
+            if storyboard_content_is_empty(clips):
+                logger.warning(f"[VisualLearning] Precomputed storyboard for lesson_id={lesson_id} has no usable visual content - proceeding anyway (no LLM call to retry here).")
         else:
             # Step 1: Retrieve context from book using hybrid search
             yield f"data: {json.dumps({'type': 'progress', 'step': 'understanding_topic', 'status': 'in_progress', 'message': 'Retrieving relevant textbook context...'})}\n\n"
             await asyncio.sleep(0.3)
-            
+
             context = ""
             try:
                 hybrid_results, _, _ = qdrant.hybrid_search(
@@ -129,120 +210,87 @@ async def generate_visual_lesson_stream(query: str, book_uuid: str, class_name: 
                     logger.warning("[VisualLearning] No chunks retrieved. Using query context only.")
             except Exception as e:
                 logger.error(f"[VisualLearning] Hybrid search failed: {e}")
-                
+
             yield f"data: {json.dumps({'type': 'progress', 'step': 'understanding_topic', 'status': 'complete', 'message': 'Textbook context analyzed.'})}\n\n"
-            
-            # Step 2: Design lesson storyboard blueprint with Gemini
+
+            # Step 2: Design lesson storyboard blueprint with the LLM. Retried
+            # once (same prompt/context, fresh completion) if the result comes
+            # back with no usable visual content - see storyboard_content_is_empty.
+            # This guards against the occasional LLM/JSON-repair hiccup that
+            # otherwise ships a lesson that plays but shows nothing.
             yield f"data: {json.dumps({'type': 'progress', 'step': 'designing_lesson', 'status': 'in_progress', 'message': 'Creating storyboard and scene animations...'})}\n\n"
             await asyncio.sleep(0.3)
-            
+
             prompt = get_visual_lesson_prompt(class_name, subject, query, context)
             client = qdrant.openai_client
-            
+
             if not client:
                 raise RuntimeError("OpenAI Client is not initialized in qdrant_service.")
-                
+
             candidate_models = [
                 os.environ.get("OPENAI_MODEL", "gpt-4o-mini"),
             ]
             candidate_models = list(dict.fromkeys(candidate_models))
 
+            MAX_LLM_ATTEMPTS = 2
+            blueprint = None
+            clips = None
 
-            response_text = None
-            last_error = None
+            for llm_attempt in range(1, MAX_LLM_ATTEMPTS + 1):
+                response_text = None
+                last_error = None
 
-            for target_model in candidate_models:
+                for target_model in candidate_models:
+                    try:
+                        logger.info(f"[VisualLearning] Generating storyboard with '{target_model}' (attempt {llm_attempt}/{MAX_LLM_ATTEMPTS})...")
+                        gen_config = {
+                            "response_mime_type": "application/json",
+                            "temperature": 0.2
+                        }
+                        response = client.models.generate_content(
+                            model=target_model,
+                            contents=prompt,
+                            config=gen_config
+                        )
+                        if response and response.text:
+                            response_text = response.text.strip()
+                            logger.info(f"[VisualLearning] Successfully received response from '{target_model}' (length: {len(response_text)})")
+                            break
+                    except Exception as m_err:
+                        last_error = m_err
+                        logger.warning(f"[VisualLearning] Model '{target_model}' failed: {m_err}. Trying fallback model...")
+                        await asyncio.sleep(1.0)
+
+                if not response_text:
+                    raise RuntimeError(f"Failed to generate storyboard with {target_model}: {last_error}")
+
                 try:
-                    logger.info(f"[VisualLearning] Generating storyboard with '{target_model}'...")
-                    gen_config = {
-                        "response_mime_type": "application/json",
-                        "temperature": 0.2
-                    }
-                    response = client.models.generate_content(
-                        model=target_model,
-                        contents=prompt,
-                        config=gen_config
-                    )
-                    if response and response.text:
-                        response_text = response.text.strip()
-                        logger.info(f"[VisualLearning] Successfully received response from '{target_model}' (length: {len(response_text)})")
-                        break
-                except Exception as m_err:
-                    last_error = m_err
-                    logger.warning(f"[VisualLearning] Model '{target_model}' failed: {m_err}. Trying fallback model...")
-                    await asyncio.sleep(1.0)
+                    blueprint = clean_and_parse_json(response_text)
+                    raw_clips = blueprint.get("clips", blueprint.get("scenes", []))
+                    global_assets = blueprint.get("global_assets", [])
+                    connections = blueprint.get("connections", [])
+                    layout_mode = blueprint.get("layout_mode", "timeline")
+                    theme = blueprint.get("theme", "indigo")
+                except Exception as e:
+                    logger.error(f"[VisualLearning] Failed to clean/parse JSON storyboard: {e}")
+                    raise
 
-            if not response_text:
-                raise RuntimeError(f"Failed to generate storyboard with {target_model}: {last_error}")
-            
-            try:
-                blueprint = clean_and_parse_json(response_text)
-                raw_clips = blueprint.get("clips", blueprint.get("scenes", []))
-                global_assets = blueprint.get("global_assets", [])
-                connections = blueprint.get("connections", [])
-                layout_mode = blueprint.get("layout_mode", "timeline")
-                theme = blueprint.get("theme", "indigo")
-            except Exception as e:
-                logger.error(f"[VisualLearning] Failed to clean/parse JSON storyboard: {e}")
-                raise
-        
-        try:    
-            # Robust Clip Normalization (Guarantees dict object structure for every scene)
-            clips = []
-            for idx, item in enumerate(raw_clips, 1):
-                if isinstance(item, dict):
-                    item["scene_no"] = idx
-                    clips.append(item)
-                elif isinstance(item, str):
-                    clips.append({
-                        "scene_no": idx,
-                        "purpose": item,
-                        "template_id": "title_slide" if idx == 1 else "concept_diagram",
-                        "teacher_script": item,
-                        "template_data": {"title": f"Scene {idx}", "subtitle": item}
-                    })
+                try:
+                    clips = _normalize_and_audit_clips(raw_clips, blueprint.get('lesson_title', 'Untitled'))
+                except Exception as e:
+                    logger.error(f"[VisualLearning] Failed to parse storyboard JSON. Raw response:\n{response_text[:500]}...\nError: {e}")
+                    raise ValueError(f"Failed to parse storyboard JSON from LLM response: {e}")
 
-            # â”€â”€ Template Selection Audit & Variety Validation Pass â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-            valid_templates = [
-                'title_slide', 'concept_diagram', 'cycle_template', 'math_derivation',
-                'venn_diagram', 'taxonomy_tree', 'cartesian_grid', 'column_comparison',
-                'geo_marker', 'database_grid', 'before_after_slider'
-            ]
-            
-            print("\n----------------------------------------------------------------------")
-            print("[STORYBOARD AUDIT] LLM Template Selection & Reasoning Analysis:")
-            print(f"   Lesson Title: {blueprint.get('lesson_title', 'Untitled')}")
-            print(f"   Total Scenes: {len(clips)}")
-            print("----------------------------------------------------------------------")
-            
-            for idx, clip in enumerate(clips, 1):
-                tid = clip.get("template_id", "concept_diagram")
-                reasoning = clip.get("template_selection_reasoning", "No explicit reasoning provided.")
-                
-                is_valid = tid in valid_templates
-                status_icon = "[OK]" if is_valid else "[FALLBACK]"
-                print(f"   Scene {idx}: [{tid}] {status_icon}")
-                print(f"           Reasoning: {reasoning[:90]}...")
-            
-            # Enforce non-consecutive duplicate rule & title_slide rule & no quiz rule
-            for idx in range(len(clips)):
-                if idx == 0:
-                    clips[idx]["template_id"] = "title_slide"
-                else:
-                    if clips[idx].get("template_id") in ["title_slide", "quiz_checkpoint"]:
-                        clips[idx]["template_id"] = "concept_diagram"
-                        print(f"   [AUDIT REPAIR] Swapped disallowed template in Scene {idx+1} to 'concept_diagram'")
-                    if clips[idx].get("template_id") == clips[idx-1].get("template_id"):
-                        alt_templates = [t for t in valid_templates if t not in [clips[idx-1].get("template_id"), 'title_slide', 'quiz_checkpoint']]
-                        clips[idx]["template_id"] = alt_templates[0]
-                        print(f"   [AUDIT REPAIR] Swapped consecutive duplicate template in Scene {idx+1} to '{clips[idx]['template_id']}'")
-            
-            print("----------------------------------------------------------------------\n")
-            
-        except Exception as e:
-            logger.error(f"[VisualLearning] Failed to parse storyboard JSON. Raw response:\n{response_text[:500]}...\nError: {e}")
-            raise ValueError(f"Failed to parse storyboard JSON from Gemini response: {e}")
-            
+                if storyboard_content_is_empty(clips):
+                    if llm_attempt < MAX_LLM_ATTEMPTS:
+                        logger.warning(f"[VisualLearning] Storyboard for lesson_id={lesson_id} came back with no usable content on attempt {llm_attempt}. Retrying LLM generation...")
+                        print(f"   [CONTENT AUDIT] Empty storyboard detected - retrying generation (attempt {llm_attempt + 1}/{MAX_LLM_ATTEMPTS})")
+                        continue
+                    else:
+                        logger.error(f"[VisualLearning] Storyboard for lesson_id={lesson_id} still empty after {MAX_LLM_ATTEMPTS} attempts.")
+                        raise ValueError("The AI could not generate visual content for this topic after multiple attempts. Please try rephrasing your question.")
+                break
+
         yield f"data: {json.dumps({'type': 'progress', 'step': 'designing_lesson', 'status': 'complete', 'message': f'Storyboard generated with {len(clips)} dynamic scenes.'})}\n\n"
         
         # Step 3: Retrieve Animated Scene Assets
@@ -332,11 +380,18 @@ async def generate_visual_lesson_stream(query: str, book_uuid: str, class_name: 
                 json.dump(lesson_package, f, indent=2)
             
         # Trigger engine compilation bridge passing root output_dir
+        compiled_url = None
+        render_engine = None
+        degraded_reason = None
         try:
             from backend.app.services.visual_learning.hyperframes_engine_bridge import compile_hyperframes_html_fast
-            compiled_url = await compile_hyperframes_html_fast(lesson_id, output_dir)
+            compile_result = await compile_hyperframes_html_fast(lesson_id, output_dir)
+            if compile_result:
+                compiled_url = compile_result.get("url")
+                render_engine = compile_result.get("engine")
+                degraded_reason = compile_result.get("degraded_reason")
         except Exception as compile_err:
-            logger.warning(f"[VisualLearning] Engine bridge compilation notice: {compile_err}")
+            logger.error(f"[HYPERFRAMES_ENGINE_DEGRADED] reason=bridge_exception lesson_id={lesson_id} error={compile_err}")
             compiled_url = None
 
         # Verify whether index.html actually exists on disk before setting html_url
@@ -344,11 +399,28 @@ async def generate_visual_lesson_stream(query: str, book_uuid: str, class_name: 
         if not (compiled_url and os.path.exists(expected_index_path)):
             logger.warning(f"[VisualLearning] index.html not found on disk at {expected_index_path}. Falling back to client-side slide renderer.")
             compiled_url = None
-            
+            render_engine = None
+
+        if render_engine == "python_fallback":
+            logger.warning(
+                f"[VisualLearning] Lesson {lesson_id} served via python_fallback engine "
+                f"(degraded_reason={degraded_reason}) - animation will be minimal."
+            )
+
         # Attach URLs explicitly for Hyperframes player mounting
         lesson_package["html_url"] = compiled_url
         lesson_package["interactive_url"] = compiled_url
         lesson_package["video_url"] = None
+        lesson_package["render_engine"] = render_engine
+        lesson_package["render_degraded_reason"] = degraded_reason
+
+        # Persist render_engine/degraded_reason to disk so it's queryable per-lesson
+        # without needing to grep logs (logs rotate; this file doesn't).
+        try:
+            with open(lesson_json_path, "w", encoding="utf-8") as f:
+                json.dump(lesson_package, f, indent=2)
+        except Exception as e:
+            logger.warning(f"[VisualLearning] Could not persist render_engine to lesson.json: {e}")
 
         yield f"data: {json.dumps({'type': 'progress', 'step': 'hyperframes_engine', 'status': 'complete', 'message': 'Hyperframes compilation complete.'})}\n\n"
         
