@@ -134,10 +134,22 @@ def check_global_query_cache(raw_query: str, class_name: str, subject: str = Non
                 logger.error(f"[CACHE] Error parsing cached JSON: {parse_err}")
                 return None
 
+        video_scenes_val = cached_data.get("video_scenes")
+        if isinstance(video_scenes_val, str):
+            import json
+            try:
+                cached_data["video_scenes"] = json.loads(video_scenes_val) if video_scenes_val else None
+            except Exception as parse_err:
+                logger.error(f"[CACHE] Error parsing cached video_scenes JSON: {parse_err}")
+                cached_data["video_scenes"] = None
+
         out = cached_data.get("orchestrator_output", {})
 
-        # Verify orchestrator output is complete
-        if not out or not out.get("text_narration"):
+        # Verify the cached answer has real content: either narration text
+        # (QUICK_ANSWER) or scene scripts (VIDEO_REQUIRED - text_narration is
+        # no longer generated/used for that path, see save_to_global_query_cache).
+        has_content = out.get("text_narration") or cached_data.get("video_scenes")
+        if not out or not has_content:
             logger.warning(f"[CACHE] Cached record for '{raw_query}' is incomplete. Treating as cache miss.")
             return None
 
@@ -171,13 +183,19 @@ def check_global_query_cache(raw_query: str, class_name: str, subject: str = Non
         return None
 
 
-def save_to_global_query_cache(raw_query: str, class_name: str, subject: str, orchestrator_output: dict, interactive_url: str = None):
+def save_to_global_query_cache(raw_query: str, class_name: str, subject: str, orchestrator_output: dict, interactive_url: str = None, video_scenes: list = None):
     """
     Saves a query execution result into the nested 'query_cache' collection.
+
+    video_scenes: the finished storyboard scenes (teacher_script + audio_url per
+    scene) for VIDEO_REQUIRED answers, from generate_visual_lesson_stream()'s
+    lesson_package. The orchestrator itself no longer produces a storyboard, so
+    this is the only place scene/audio data for a video answer is persisted -
+    without it, a cache hit on a video query would have nothing to replay.
     """
     from datetime import datetime
     import json
-    if not orchestrator_output or not (orchestrator_output.get("text_narration") or orchestrator_output.get("video_storyboard")):
+    if not orchestrator_output or not (orchestrator_output.get("text_narration") or video_scenes):
         logger.warning("[CACHE] Rejecting save_to_global_query_cache because orchestrator_output is incomplete.")
         return
     normalized = normalize_query_string(raw_query)
@@ -186,7 +204,7 @@ def save_to_global_query_cache(raw_query: str, class_name: str, subject: str, or
 
     class_str = str(class_name).strip()
     subj_str = str(subject or "").strip().lower()
-    
+
     # Resolve subject from orchestrator output if generic "all"
     if not subj_str or subj_str in ["all", "none", "choose your subject..."]:
         subj_str = str(orchestrator_output.get("matched_subject") or "general knowledge").strip().lower()
@@ -199,6 +217,7 @@ def save_to_global_query_cache(raw_query: str, class_name: str, subject: str, or
         # Store as string to prevent Firestore map field nesting limits / invalid keys
         "orchestrator_output": json.dumps(orchestrator_output),
         "interactive_url": interactive_url,
+        "video_scenes": json.dumps(video_scenes) if video_scenes else None,
         "created_at": datetime.now().isoformat()
     }
 

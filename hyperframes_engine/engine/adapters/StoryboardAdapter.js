@@ -598,6 +598,18 @@ class StoryboardAdapter {
             StoryboardAdapter.createNode(`point_${sceneNo}_${idx}`, 'CUSTOM', 'CUSTOM', `point_comp_${sceneNo}_${idx}`, { x: p.x, y: p.y, label: p.label })
           );
           nodes.push(StoryboardAdapter.createNode(`points_${sceneNo}`, 'GROUP', 'GROUP', `points_comp_${sceneNo}`, {}, {}, pointNodes));
+
+          // The LLM's own drawn curve (svg_elements[0], a path) - previously
+          // parsed nowhere, so renderCartesianGrid always fell back to a
+          // hardcoded generic curve regardless of what was actually asked for.
+          const curveEl = (data.svg_elements || []).find((el) => (el.type || '').toLowerCase() === 'path' && (el.d || el.path_data));
+          if (curveEl) {
+            nodes.push(StoryboardAdapter.createNode(`curve_${sceneNo}`, 'CUSTOM', 'CUSTOM', `curve_comp_${sceneNo}`, {
+              d: curveEl.d || curveEl.path_data,
+              stroke: curveEl.stroke || curveEl.stroke_color || '#38bdf8',
+              stroke_width: curveEl.stroke_width != null ? curveEl.stroke_width : 4
+            }));
+          }
           break;
         }
 

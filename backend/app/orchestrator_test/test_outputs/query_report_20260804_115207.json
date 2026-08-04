@@ -1,0 +1,98 @@
+{
+  "timestamp": "2026-08-04T11:52:07.095461",
+  "execution_time_seconds": 14.24,
+  "authenticated_student": {
+    "uid": "qOeL4u9Cp5N0jtD24J405ORwVsn1",
+    "email": "student6@cg.com",
+    "name": "Gaurav",
+    "class": 6,
+    "board": "CBSE",
+    "role": "student"
+  },
+  "raw_user_query": "Explain a few central ideas of Buddhism. Briefly comment upon them",
+  "orchestrator_output": {
+    "is_authorized": true,
+    "refusal_reason": null,
+    "classification": "CURRICULUM",
+    "reformulated_query": "Explain the central ideas of Buddhism.",
+    "matched_subject": "social",
+    "matched_chapter": "INDIA’S CULTURAL ROOTS",
+    "complexity_level": 2,
+    "format_decision": "QUICK_ANSWER",
+    "text_narration": "- Buddhism is a religion and philosophy founded by Siddhartha Gautama, known as the Buddha, in the 5th century BCE.\n\n- **Four Noble Truths**: These are the core teachings of Buddhism:\n  - The truth of suffering (Dukkha): Life is filled with suffering and dissatisfaction.\n  - The truth of the cause of suffering (Samudaya): Suffering is caused by desire and attachment.\n  - The truth of the end of suffering (Nirodha): It is possible to end suffering by overcoming desire.\n  - The truth of the path to the end of suffering (Magga): Following the Eightfold Path leads to the cessation of suffering.\n\n- **Eightfold Path**: This is a guide to ethical and mental development with the goal of freeing individuals from attachments and delusions. It includes:\n  - Right Understanding\n  - Right Intent\n  - Right Speech\n  - Right Action\n  - Right Livelihood\n  - Right Effort\n  - Right Mindfulness\n  - Right Concentration\n\n- **Karma and Rebirth**: Buddhism teaches that actions have consequences, and good deeds lead to positive outcomes, while bad deeds lead to suffering. This cycle continues through rebirth until one achieves enlightenment.\n\n- **Nirvana**: The ultimate goal in Buddhism is to reach Nirvana, a state of liberation and freedom from suffering and the cycle of rebirth."
+  },
+  "rag_retrieval_executed": true,
+  "retrieved_top10_chunks": [
+    {
+      "chunk_index": 1,
+      "score": 0.699,
+      "book_name": "",
+      "chapter_name": "INDIA’S CULTURAL ROOTS",
+      "content_snippet": "123\n7 ― India’s Cultural Roots\nQuestions, activities and projects \n1. If you were Nachik eta, what questions would you like to ask \nYama? Write them d..."
+    },
+    {
+      "chunk_index": 2,
+      "score": 0.4664,
+      "book_name": "",
+      "chapter_name": "INDIA’S CULTURAL ROOTS",
+      "content_snippet": "115\n7 ― India’s Cultural Roots\nLET’S EXPLORE\n Æ Discuss the wa y the Buddha is depicted in the above panel.\n Æ Can you name some states of India or so..."
+    },
+    {
+      "chunk_index": 3,
+      "score": 0.2468,
+      "book_name": "",
+      "chapter_name": "INDIA’S CULTURAL ROOTS",
+      "content_snippet": "113\n7 ― India’s Cultural Roots\nAscetic: \nSomeone \nwho engages \nin a rigorous \ndiscipline to \nattain a higher \nconsciousness.\nAttachment: \nThe conditio..."
+    },
+    {
+      "chunk_index": 4,
+      "score": 0.2401,
+      "book_name": "",
+      "chapter_name": "INDIA’S CULTURAL ROOTS",
+      "content_snippet": "110\nExploring Society: India and Beyond  \nOur Cultural Heritage and Knowledge Traditions\naham brahmāsmi\n“I am brahman” (that is to say, I am divine)\nt..."
+    },
+    {
+      "chunk_index": 5,
+      "score": 0.2388,
+      "book_name": "",
+      "chapter_name": "INDIA’S CULTURAL ROOTS",
+      "content_snippet": "105\n7 ― India’s Cultural Roots\nIndia’s Cultural Roots\nCHAPTER7 \nThat which cannot be stolen; that which cannot be \nconfiscated by rulers; … that which..."
+    },
+    {
+      "chunk_index": 6,
+      "score": 0.2367,
+      "book_name": "",
+      "chapter_name": "INDIA’S CULTURAL ROOTS",
+      "content_snippet": "114\nExploring Society: India and Beyond  \nOur Cultural Heritage and Knowledge Traditions\nThe Buddha founded the Sangha, a community of bhikṣhus  \nor m..."
+    },
+    {
+      "chunk_index": 7,
+      "score": 0.1376,
+      "book_name": "",
+      "chapter_name": "INDIA’S CULTURAL ROOTS",
+      "content_snippet": "122\nExploring Society: India and Beyond  \nOur Cultural Heritage and Knowledge Traditions\nthe Moon who later rose to the higher status of a supreme god..."
+    },
+    {
+      "chunk_index": 8,
+      "score": 0.1201,
+      "book_name": "",
+      "chapter_name": "INDIA’S CULTURAL ROOTS",
+      "content_snippet": "106\nExploring Society: India and Beyond  \nOur Cultural Heritage and Knowledge Traditions\nIndian culture, by any estimate, is several millenniums old. ..."
+    },
+    {
+      "chunk_index": 9,
+      "score": 0.0079,
+      "book_name": "",
+      "chapter_name": "INDIA’S CULTURAL ROOTS",
+      "content_snippet": "121\n7 ― India’s Cultural Roots\nThere has been a constant interaction \nbetween folk and tribal traditions, and \nthe leading schools of thought such as ..."
+    },
+    {
+      "chunk_index": 10,
+      "score": 0.0059,
+      "book_name": "",
+      "chapter_name": "INDIA’S CULTURAL ROOTS",
+      "content_snippet": "116\nExploring Society: India and Beyond  \nOur Cultural Heritage and Knowledge Traditions\nto Indian culture. The first may be illustrated by this sayin..."
+    }
+  ],
+  "resolved_book_uuid": "d2918761-6481-5762-acdc-3d59bbeccd15"
+}

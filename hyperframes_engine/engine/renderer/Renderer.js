@@ -647,6 +647,7 @@ class Renderer {
     const titleNode = scene.findNode(`title_${sId}`);
     const equationNode = scene.findNode(`equation_${sId}`);
     const pointsNode = scene.findNode(`points_${sId}`);
+    const curveNode = scene.findNode(`curve_${sId}`);
 
     const title = titleNode ? titleNode.component.properties.text : 'Coordinate Geometry';
     const eqLabel = equationNode ? equationNode.component.properties.text : 'y = f(x)';
@@ -655,6 +656,11 @@ class Renderer {
       y: c.properties.y,
       label: c.properties.label
     })) : [];
+    // Use the LLM's own drawn curve when provided; otherwise fall back to a
+    // generic demo curve so the scene never renders with a blank plot area.
+    const curveD = curveNode ? curveNode.component.properties.d : 'M 100 300 Q 340 50 580 300';
+    const curveStroke = curveNode ? curveNode.component.properties.stroke : '#38bdf8';
+    const curveStrokeWidth = curveNode ? curveNode.component.properties.stroke_width : 4;
 
     return `
       <div class="cartesian-container" id="cartesian-${sId}" style="width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px; position: relative;">
@@ -671,7 +677,7 @@ class Renderer {
             <line x1="340" y1="0" x2="340" y2="380" stroke="rgba(255,255,255,0.3)" stroke-width="2" />
             
             <!-- Curve Plot Line -->
-            <path id="cartesian-curve-${sId}" d="M 100 300 Q 340 50 580 300" stroke="#38bdf8" stroke-width="4" fill="none" stroke-linecap="round" />
+            <path id="cartesian-curve-${sId}" d="${curveD}" stroke="${curveStroke}" stroke-width="${curveStrokeWidth}" fill="none" stroke-linecap="round" />
           </svg>
 
           <!-- Labeled Points -->

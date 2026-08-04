@@ -292,7 +292,16 @@ async def generate_visual_lesson_stream(query: str, book_uuid: str, class_name: 
                 break
 
         yield f"data: {json.dumps({'type': 'progress', 'step': 'designing_lesson', 'status': 'complete', 'message': f'Storyboard generated with {len(clips)} dynamic scenes.'})}\n\n"
-        
+
+        # Checkpoint: the storyboard (scenes + teacher_script) is finalized, but
+        # audio hasn't been generated yet. Callers can use this to stream each
+        # scene's teacher_script as the visible text answer right now - no
+        # audio_url attached yet, so no separate TTS call is triggered for it.
+        # The audio generated below (Step 4) is the ONLY TTS pass for this
+        # lesson, and is reused for both the video and (via caching) any
+        # future replay of this same text.
+        yield f"data: {json.dumps({'type': 'storyboard_ready', 'lesson_title': blueprint.get('lesson_title'), 'scenes': clips})}\n\n"
+
         # Step 3: Retrieve Animated Scene Assets
         yield f"data: {json.dumps({'type': 'progress', 'step': 'generating_visuals', 'status': 'in_progress', 'message': 'Retrieving animated scene templates and visual assets...'})}\n\n"
         await asyncio.sleep(0.3)
@@ -334,7 +343,14 @@ async def generate_visual_lesson_stream(query: str, book_uuid: str, class_name: 
                     scene["audio_url"] = ""
             
         yield f"data: {json.dumps({'type': 'progress', 'step': 'creating_narration', 'status': 'complete', 'message': 'Voiceovers & narration ready.'})}\n\n"
-        
+
+        # Checkpoint: every scene now has its real (single-generation) audio_url.
+        # Callers can stream each scene's teacher_script + this audio_url together
+        # right now, well before the video itself finishes compiling - this is
+        # the same real, single Sarvam pass that will also drive the video, not
+        # a separate synthesis.
+        yield f"data: {json.dumps({'type': 'audio_ready', 'lesson_title': blueprint.get('lesson_title'), 'scenes': processed_scenes})}\n\n"
+
         # Step 5: Compile Hyperframes Rendering Engine
         yield f"data: {json.dumps({'type': 'progress', 'step': 'hyperframes_engine', 'status': 'in_progress', 'message': 'Compiling Hyperframes 60fps HTML video composition...'})}\n\n"
         await asyncio.sleep(0.3)

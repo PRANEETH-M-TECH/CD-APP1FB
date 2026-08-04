@@ -1,0 +1,84 @@
+{
+  "timestamp": "2026-08-04T16:30:00.163227",
+  "execution_time_seconds": 9.74,
+  "authenticated_student": {
+    "uid": "anonymous",
+    "email": "anonymous@cg.com",
+    "name": "Sonu",
+    "class": 6,
+    "board": "CBSE",
+    "role": "student"
+  },
+  "raw_user_query": "Explain how the Vedas helped human society develop, run five",
+  "orchestrator_output": {
+    "is_authorized": true,
+    "refusal_reason": null,
+    "classification": "CURRICULUM",
+    "reformulated_query": "Explain how the Vedas helped human society develop.",
+    "matched_subject": "social",
+    "matched_chapter": "INDIA’S CULTURAL ROOTS",
+    "complexity_level": 2,
+    "format_decision": "VIDEO_REQUIRED",
+    "text_narration": null
+  },
+  "rag_retrieval_executed": true,
+  "retrieved_top10_chunks": [
+    {
+      "chunk_index": 1,
+      "score": 0.7332,
+      "book_name": "",
+      "chapter_name": "INDIA’S CULTURAL ROOTS",
+      "content_snippet": "106\nExploring Society: India and Beyond  \nOur Cultural Heritage and Knowledge Traditions\nIndian culture, by any estimate, is several millenniums old. ..."
+    },
+    {
+      "chunk_index": 2,
+      "score": 0.4432,
+      "book_name": "",
+      "chapter_name": "INDIA’S CULTURAL ROOTS",
+      "content_snippet": "122\nExploring Society: India and Beyond  \nOur Cultural Heritage and Knowledge Traditions\nthe Moon who later rose to the higher status of a supreme god..."
+    },
+    {
+      "chunk_index": 3,
+      "score": 0.4231,
+      "book_name": "",
+      "chapter_name": "INDIA’S CULTURAL ROOTS",
+      "content_snippet": "108\nExploring Society: India and Beyond  \nOur Cultural Heritage and Knowledge Traditions\nb. Vedic society\nEarly Vedic society was organised in differe..."
+    },
+    {
+      "chunk_index": 4,
+      "score": 0.3147,
+      "book_name": "",
+      "chapter_name": "INDIA’S CULTURAL ROOTS",
+      "content_snippet": "109\n7 ― India’s Cultural Roots\nHealer: \nSomeone who \nuses traditional \npractices to \nrelieve or heal \ndiseases.\nNot much is known of how these janas g..."
+    },
+    {
+      "chunk_index": 5,
+      "score": 0.293,
+      "book_name": "",
+      "chapter_name": "INDIA’S CULTURAL ROOTS",
+      "content_snippet": "107\n7 ― India’s Cultural Roots\nUNESCO: \nUNESCO \nstands for \n‘United Nations \nEducational, \nScientific \nand Cultural \nOrganization’. \nIt promotes \ndial..."
+    },
+    {
+      "chunk_index": 6,
+      "score": 0.2804,
+      "book_name": "",
+      "chapter_name": "INDIA’S CULTURAL ROOTS",
+      "content_snippet": "110\nExploring Society: India and Beyond  \nOur Cultural Heritage and Knowledge Traditions\naham brahmāsmi\n“I am brahman” (that is to say, I am divine)\nt..."
+    },
+    {
+      "chunk_index": 7,
+      "score": 0.269,
+      "book_name": "",
+      "chapter_name": "INDIA’S CULTURAL ROOTS",
+      "content_snippet": "123\n7 ― India’s Cultural Roots\nQuestions, activities and projects \n1. If you were Nachik eta, what questions would you like to ask \nYama? Write them d..."
+    },
+    {
+      "chunk_index": 8,
+      "score": 0.1154,
+      "book_name": "",
+      "chapter_name": "INDIA’S CULTURAL ROOTS",
+      "content_snippet": "113\n7 ― India’s Cultural Roots\nAscetic: \nSomeone \nwho engages \nin a rigorous \ndiscipline to \nattain a higher \nconsciousness.\nAttachment: \nThe conditio..."
+    }
+  ],
+  "resolved_book_uuid": "d2918761-6481-5762-acdc-3d59bbeccd15"
+}

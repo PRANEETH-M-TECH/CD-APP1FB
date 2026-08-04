@@ -1,0 +1,29 @@
+{
+  "timestamp": "2026-08-04T09:55:15.828148",
+  "execution_time_seconds": 21.67,
+  "authenticated_student": {
+    "uid": "qOeL4u9Cp5N0jtD24J405ORwVsn1",
+    "email": "student6@cg.com",
+    "name": "Gaurav",
+    "class": 6,
+    "board": "CBSE",
+    "role": "student"
+  },
+  "raw_user_query": "Explain about the idealogy of buddism?",
+  "orchestrator_output": {
+    "safety_reasoning": "The query is about a historical and philosophical topic, which is safe for educational purposes.",
+    "is_authorized": true,
+    "refusal_reason": null,
+    "classification": "GENERAL_KNOWLEDGE",
+    "reformulated_query": "Explain the ideology of Buddhism.",
+    "matched_subject": null,
+    "matched_chapter": null,
+    "complexity_level": 6,
+    "format_decision": "QUICK_ANSWER",
+    "text_narration": "- Buddhism is a religion and philosophy founded by Siddhartha Gautama, known as the Buddha, in the 5th century BCE.\n\n- The core ideology of Buddhism revolves around the Four Noble Truths:\n  - The truth of suffering (Dukkha): Life is filled with suffering and dissatisfaction.\n  - The truth of the cause of suffering (Samudaya): Suffering is caused by desire and attachment.\n  - The truth of the end of suffering (Nirodha): It is possible to end suffering by overcoming desire.\n  - The truth of the path to the end of suffering (Magga): Following the Eightfold Path leads to the cessation of suffering.\n\n- The Eightfold Path consists of:\n  - Right Understanding\n  - Right Intent\n  - Right Speech\n  - Right Action\n  - Right Livelihood\n  - Right Effort\n  - Right Mindfulness\n  - Right Concentration\n\n- Buddhism emphasizes the importance of meditation, ethical conduct, and wisdom.\n\n- It teaches the concept of impermanence (Anicca) and the idea of non-self (Anatta), which means that there is no permanent, unchanging self.\n\n- Compassion (Karuna) and loving-kindness (Metta) are also central values in Buddhism, encouraging followers to act with kindness towards all living beings.",
+    "video_storyboard": null
+  },
+  "rag_retrieval_executed": false,
+  "retrieved_top10_chunks": [],
+  "resolved_book_uuid": ""
+}

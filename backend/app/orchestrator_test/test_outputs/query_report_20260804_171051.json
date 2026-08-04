@@ -1,0 +1,98 @@
+{
+  "timestamp": "2026-08-04T17:10:51.268883",
+  "execution_time_seconds": 10.04,
+  "authenticated_student": {
+    "uid": "qOeL4u9Cp5N0jtD24J405ORwVsn1",
+    "email": "student6@cg.com",
+    "name": "Gaurav",
+    "class": 6,
+    "board": "CBSE",
+    "role": "student"
+  },
+  "raw_user_query": "explain about the process of water cycle",
+  "orchestrator_output": {
+    "is_authorized": true,
+    "refusal_reason": null,
+    "classification": "CURRICULUM",
+    "reformulated_query": "explain the process of the water cycle",
+    "matched_subject": "science",
+    "matched_chapter": "RAIN: WHERE DOES IT COME FROM?",
+    "complexity_level": 2,
+    "format_decision": "VIDEO_REQUIRED",
+    "text_narration": null
+  },
+  "rag_retrieval_executed": true,
+  "retrieved_top10_chunks": [
+    {
+      "chunk_index": 1,
+      "score": 0.46,
+      "book_name": "",
+      "chapter_name": "RAIN: WHERE DOES IT COME FROM?",
+      "content_snippet": "to clouds and clouds to rain by\ncondensation is known as “water\ncycle”\nIf  the rain drops are very small, they are collectively termed drizzle.\nclouds..."
+    },
+    {
+      "chunk_index": 2,
+      "score": 0.4481,
+      "book_name": "",
+      "chapter_name": "RAIN: WHERE DOES IT COME FROM?",
+      "content_snippet": "• Water on the Earth can exist in\nthree forms: ice (solid form),\nwater  (liquid form) and water\nvapour (gaseous form).\n• The process of changing of wa..."
+    },
+    {
+      "chunk_index": 3,
+      "score": 0.3432,
+      "book_name": "",
+      "chapter_name": "RAIN: WHERE DOES IT COME FROM?",
+      "content_snippet": "27\nScience VI Class\nof dark clouds gathering.  When the size\nof the water drops increases further it\nbecomes difficult for the cloud to hold\nthem and ..."
+    },
+    {
+      "chunk_index": 4,
+      "score": 0.3032,
+      "book_name": "",
+      "chapter_name": "RAIN: WHERE DOES IT COME FROM?",
+      "content_snippet": "28\nRAIN: Where Does It Come From? Free Distribution by Govt. of T.S. 2020-21\nThis cycle of evaporation and\ncondensation takes place continuously\nin na..."
+    },
+    {
+      "chunk_index": 5,
+      "score": 0.2938,
+      "book_name": "",
+      "chapter_name": "RAIN: WHERE DOES IT COME FROM?",
+      "content_snippet": "water vapour. This goes up into the\nair to form clouds. These clouds again\ncool and produce rain.\nFig. 12 : Water Cycle\nThe circulation of water into ..."
+    },
+    {
+      "chunk_index": 6,
+      "score": 0.2832,
+      "book_name": "",
+      "chapter_name": "RAIN: WHERE DOES IT COME FROM?",
+      "content_snippet": "25\nScience VI Class\nActivity-1: Condensation\nTake some water in a glass. Add some\npieces of  ice to it. Observe  for few\nminutes.\n• What changes do yo..."
+    },
+    {
+      "chunk_index": 7,
+      "score": 0.2533,
+      "book_name": "",
+      "chapter_name": "RAIN: WHERE DOES IT COME FROM?",
+      "content_snippet": "29\nScience VI Class\n“If the size of water drops\ndecreases in the clouds, they can\nno longer hold the water drops.”\n7. Which of the following days is\nm..."
+    },
+    {
+      "chunk_index": 8,
+      "score": 0.1693,
+      "book_name": "",
+      "chapter_name": "RAIN: WHERE DOES IT COME FROM?",
+      "content_snippet": "drops come on the leaves and\ngrass?\nFig. 7 : Dew on grass\nFig. 6\nSome monkeys are omnivores which eat other animals.\nSCERT TELANGANA25\nScience VI Clas..."
+    },
+    {
+      "chunk_index": 9,
+      "score": 0.1199,
+      "book_name": "",
+      "chapter_name": "RAIN: WHERE DOES IT COME FROM?",
+      "content_snippet": "forms small  drops on the outer surface\nof  glass.\nHave you ever observed in your daily life\nwhere water vapour changes into water?\nList out them.\nThe..."
+    },
+    {
+      "chunk_index": 10,
+      "score": 0.1082,
+      "book_name": "",
+      "chapter_name": "RAIN: WHERE DOES IT COME FROM?",
+      "content_snippet": "up only due to sunlight or due to\nother reasons?\nYou must have seen that water on wet\nroads, roof  tops and some other places\ndries up after sometime...."
+    }
+  ],
+  "resolved_book_uuid": "02388bd2e1e88738b9ce21a5d1c7ce9b"
+}

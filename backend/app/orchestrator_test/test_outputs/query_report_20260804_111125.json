@@ -1,0 +1,98 @@
+{
+  "timestamp": "2026-08-04T11:11:25.382700",
+  "execution_time_seconds": 15.26,
+  "authenticated_student": {
+    "uid": "qOeL4u9Cp5N0jtD24J405ORwVsn1",
+    "email": "student6@cg.com",
+    "name": "Gaurav",
+    "class": 6,
+    "board": "CBSE",
+    "role": "student"
+  },
+  "raw_user_query": "What do plants need to grow, explain habitat",
+  "orchestrator_output": {
+    "is_authorized": true,
+    "refusal_reason": null,
+    "classification": "CURRICULUM",
+    "reformulated_query": "What do plants need to grow and what is habitat?",
+    "matched_subject": "science",
+    "matched_chapter": "HABITAT",
+    "complexity_level": 2,
+    "format_decision": "VIDEO_REQUIRED",
+    "text_narration": "Plants need several essential things to grow properly:\n\n- **Sunlight**: Plants require sunlight for photosynthesis, which is the process they use to make food.\n\n- **Water**: Water is crucial for plants as it helps in nutrient absorption and photosynthesis.\n\n- **Nutrients**: Plants need nutrients from the soil, such as nitrogen, phosphorus, and potassium, to grow healthy.\n\n- **Air**: Carbon dioxide from the air is necessary for photosynthesis.\n\n- **Suitable Temperature**: Each plant has a preferred temperature range for optimal growth.\n\n**Habitat** refers to the natural environment where plants and animals live. It provides everything they need to survive, including food, water, shelter, and space. Different plants thrive in different habitats, such as:\n\n- **Forests**: Rich in biodiversity, providing ample sunlight and moisture.\n\n- **Deserts**: Home to drought-resistant plants that can survive with very little water.\n\n- **Wetlands**: Support plants that thrive in waterlogged conditions.\n\nUnderstanding what plants need and their habitats helps us appreciate their role in the ecosystem."
+  },
+  "rag_retrieval_executed": true,
+  "retrieved_top10_chunks": [
+    {
+      "chunk_index": 1,
+      "score": 0.46,
+      "book_name": "",
+      "chapter_name": "HABITAT",
+      "content_snippet": "deep under. On the surface organisms\nare easily eaten up by others because\nthere is little protection for them.\nHowever, there is plenty of food and\na..."
+    },
+    {
+      "chunk_index": 2,
+      "score": 0.3621,
+      "book_name": "",
+      "chapter_name": "HABITAT",
+      "content_snippet": "difference in the ways in which plants\nand animals adjust or adapt to their\nsurroundings.\nA study of the difference between\naquatic and terrestrial pl..."
+    },
+    {
+      "chunk_index": 3,
+      "score": 0.3517,
+      "book_name": "",
+      "chapter_name": "HABITAT",
+      "content_snippet": "But we find several other small plants\ngrowing on the ground and also find\ndifferent types of animals there.\n• Are all plants that grow in an\norchard ..."
+    },
+    {
+      "chunk_index": 4,
+      "score": 0.3427,
+      "book_name": "",
+      "chapter_name": "HABITAT",
+      "content_snippet": "• Based on your observations, for\nwhich organisms is the tree\nobserved by you  a habitat?\nDiscuss with the other groups what they\nobserved and answer ..."
+    },
+    {
+      "chunk_index": 5,
+      "score": 0.3062,
+      "book_name": "",
+      "chapter_name": "HABITAT",
+      "content_snippet": "pond that can stay in different\nregions in the same pond? What\nmakes them stay in different\nregions in the pond?\n• Can different places in the pond\nal..."
+    },
+    {
+      "chunk_index": 6,
+      "score": 0.2822,
+      "book_name": "",
+      "chapter_name": "HABITAT",
+      "content_snippet": "growth especially in the rainy season).\nTrees are thus habitat for different\norganisms. Birds and squirrels come and\ngo from a tree yet the tree is a ..."
+    },
+    {
+      "chunk_index": 7,
+      "score": 0.2808,
+      "book_name": "",
+      "chapter_name": "HABITAT",
+      "content_snippet": "HABITAT Free Distribution by Govt. of T.S. 2020-21\n54\naccording to where they can be found.\nYou could put the name of one\norganism in more than one co..."
+    },
+    {
+      "chunk_index": 8,
+      "score": 0.273,
+      "book_name": "",
+      "chapter_name": "HABITAT",
+      "content_snippet": "HABITAT Free Distribution by Govt. of T.S. 2020-21\n62\nWhat we have learnt\n• Habitat is a dwelling place  for plants\nand animals that gives them optimu..."
+    },
+    {
+      "chunk_index": 9,
+      "score": 0.2584,
+      "book_name": "",
+      "chapter_name": "HABITAT",
+      "content_snippet": "HABITAT Free Distribution by Govt. of T.S. 2020-21\n60\nTamarind, mango, amla are examples\nof plants that grow in forests or in the\nhouse-gardens or fie..."
+    },
+    {
+      "chunk_index": 10,
+      "score": 0.2523,
+      "book_name": "",
+      "chapter_name": "HABITAT",
+      "content_snippet": "HABITAT Free Distribution by Govt. of T.S. 2020-21\n58\nNote the following :\n• Make a list of all the organisms\nseen by you on your first visit.\nAdd the..."
+    }
+  ],
+  "resolved_book_uuid": "02388bd2e1e88738b9ce21a5d1c7ce9b"
+}

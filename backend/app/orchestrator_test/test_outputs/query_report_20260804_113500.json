@@ -1,0 +1,27 @@
+{
+  "timestamp": "2026-08-04T11:35:00.060883",
+  "execution_time_seconds": 16.07,
+  "authenticated_student": {
+    "uid": "qOeL4u9Cp5N0jtD24J405ORwVsn1",
+    "email": "student6@cg.com",
+    "name": "Gaurav",
+    "class": 6,
+    "board": "CBSE",
+    "role": "student"
+  },
+  "raw_user_query": "What did Harrapans eat?",
+  "orchestrator_output": {
+    "is_authorized": true,
+    "refusal_reason": null,
+    "classification": "GENERAL_KNOWLEDGE",
+    "reformulated_query": "What did Harappans eat?",
+    "matched_subject": null,
+    "matched_chapter": null,
+    "complexity_level": 6,
+    "format_decision": "QUICK_ANSWER",
+    "text_narration": "The Harappans, who lived in the Indus Valley Civilization, had a varied diet that included:\n\n- **Wheat and Barley**: They cultivated these grains and used them to make bread and porridge.\n\n- **Rice**: Evidence shows that they also grew rice, which was an important part of their diet.\n\n- **Legumes**: They consumed lentils and peas, which are good sources of protein.\n\n- **Fruits and Vegetables**: They ate a variety of fruits and vegetables, including dates, melons, and various leafy greens.\n\n- **Fish and Meat**: The Harappans also included fish and meat in their diet, as they lived near rivers and had access to animals.\n\n- **Dairy Products**: They likely consumed milk and other dairy products from domesticated animals like cows and goats.\n\nThis diverse diet helped them stay healthy and thrive in their environment."
+  },
+  "rag_retrieval_executed": false,
+  "retrieved_top10_chunks": [],
+  "resolved_book_uuid": ""
+}

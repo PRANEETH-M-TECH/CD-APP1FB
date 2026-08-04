@@ -514,7 +514,8 @@ async def smart_query_engine(
             if cached:
                 out = cached["orchestrator_output"]
                 interactive_url = cached.get("interactive_url")
-                
+                cached_video_scenes = cached.get("video_scenes")
+
                 classification = out.get("classification", "CURRICULUM")
                 matched_subject = out.get("matched_subject")
                 matched_chapter = out.get("matched_chapter")
@@ -523,11 +524,11 @@ async def smart_query_engine(
 
                 print(f"[CACHE HIT] Reusing cached query payload. Format: {format_decision}")
                 yield f"data: {json.dumps({'type': 'intent', 'intent': classification, 'subject': matched_subject, 'chapter': matched_chapter, 'format': format_decision})}\n\n"
-                
-                # Stream pre-cached text_narration in a structured bulleted layout matching the cache miss path if video required
-                if format_decision == "VIDEO_REQUIRED" and out.get("video_storyboard"):
-                    storyboard = out.get("video_storyboard")
-                    scenes = storyboard.get("scenes", [])
+
+                # Stream pre-cached scene scripts in a structured bulleted layout,
+                # reusing each scene's already-generated audio_url - no fresh TTS call.
+                if format_decision == "VIDEO_REQUIRED" and cached_video_scenes:
+                    scenes = cached_video_scenes
                     for idx, s in enumerate(scenes):
                         title = s.get("template_data", {}).get("title") or s.get("template_data", {}).get("heading") or s.get("purpose") or f"Scene {s.get('scene_no')}"
                         script = s.get("teacher_script") or ""
@@ -562,16 +563,17 @@ async def smart_query_engine(
                     yield f"data: {json.dumps({'type': 'progress', 'step': 'launching_lesson', 'status': 'complete', 'message': 'Pre-rendered lesson loaded from cache!'})}\n\n"
                     await asyncio.sleep(0.5)
                     
+                    cached_lesson_package = {"scenes": cached_video_scenes} if cached_video_scenes else None
                     ready_payload = {
                         "type": "lesson_ready",
                         "lesson_id": interactive_url.split("/")[-2] if "/" in interactive_url else "cached",
-                        "lesson_title": out.get("video_storyboard", {}).get("lesson_title", "Cached Lesson"),
+                        "lesson_title": "Cached Lesson",
                         "interactive_url": interactive_url,
                         "html_url": interactive_url,
                         "video_url": None,
-                        "scene_count": len(out.get("video_storyboard", {}).get("scenes", [])) if isinstance(out.get("video_storyboard"), dict) else 0,
-                        "lesson": out.get("video_storyboard"),
-                        "lesson_package": out.get("video_storyboard")
+                        "scene_count": len(cached_video_scenes) if cached_video_scenes else 0,
+                        "lesson": cached_lesson_package,
+                        "lesson_package": cached_lesson_package
                     }
                     yield f"data: {json.dumps(ready_payload)}\n\n"
                 
@@ -593,7 +595,7 @@ async def smart_query_engine(
                         query_json_url=None,
                         llm_response=text_script,
                         retrieved_sources=None,  # Cache hits don't execute a fresh search
-                        storyboard_data=out.get("video_storyboard"),
+                        storyboard_data={"scenes": cached_video_scenes} if cached_video_scenes else None,
                         video_url=interactive_url,
                         audio_url=None
                     )
@@ -656,89 +658,38 @@ async def smart_query_engine(
             # Yield classification intent (this tells frontend about subject/chapter metadata for backgrounds)
             yield f"data: {json.dumps({'type': 'intent', 'intent': classification, 'subject': matched_subject, 'chapter': matched_chapter, 'format': format_decision})}\n\n"
 
-            # Stream the orchestrator's own text_narration the same way regardless
-            # Stream the orchestrator's own text_narration or storyboard scenes
-            if format_decision == "VIDEO_REQUIRED" and out.get("video_storyboard"):
-                storyboard_payload = out.get("video_storyboard")
-                
-                # Make sure the storyboard has a unique lesson_id
-                import uuid
-                lesson_id = storyboard_payload.get("lesson_id") or f"vl_{uuid.uuid4().hex[:8]}"
-                storyboard_payload["lesson_id"] = lesson_id
-                
-                scenes = storyboard_payload.get("scenes", [])
-                
-                # Step 1: Pre-generate voice narration audio clips for all scenes!
-                yield f"data: {json.dumps({'type': 'progress', 'step': 'creating_narration', 'status': 'in_progress', 'message': 'Pre-generating lesson audio tracks...'})}\n\n"
-                
-                from backend.app.services.visual_learning.visual_audio_generator import generate_slide_audio
-                audio_urls = []
-                try:
-                    audio_urls = await generate_slide_audio(scenes, lesson_id)
-                except Exception as audio_err:
-                    print(f"[ERROR] Pre-generating slide audio failed: {audio_err}")
-                
-                # Map audio URLs back to scenes
-                for idx, url in enumerate(audio_urls):
-                    if idx < len(scenes) and url:
-                        scenes[idx]["audio_url"] = url
-                
-                yield f"data: {json.dumps({'type': 'progress', 'step': 'creating_narration', 'status': 'complete', 'message': 'Lesson audio tracks pre-generated.'})}\n\n"
-                
-                # Step 2: Stream scene-by-scene. Chunk 1 is Scene 1 script + its audio_url!
-                for idx, s in enumerate(scenes):
-                    title = s.get("template_data", {}).get("title") or s.get("template_data", {}).get("heading") or s.get("purpose") or f"Scene {s.get('scene_no')}"
-                    script = s.get("teacher_script") or ""
-                    audio_url = s.get("audio_url") or ""
-                    
-                    # Format as markdown bullet point
-                    bullet_text = f"- **{title}**: {script}"
-                    bullet_text = format_text_explanation(bullet_text)
-                    text_chunk = bullet_text + "\n\n"
-                    
-                    # Stream this scene script + its Supabase audio_url to the client!
-                    yield f"data: {json.dumps({'display_text': text_chunk, 'audio_url': audio_url})}\n\n"
-                    await asyncio.sleep(0.5)
-            else:
-                # STANDARD RAG/QUICK_ANSWER OR FALLBACK STREAMING FLOW
-                text_script = format_text_explanation(text_script)
-                import re
-                lines = text_script.split('\n')
-                for l_idx, line in enumerate(lines):
-                    if not line.strip():
-                        yield "data: " + json.dumps({'display_text': '\n'}) + "\n\n"
-                        continue
-                    
-                    sentences = [s.strip() for s in re.split(r'(?<=[.!?à¥¤])\s+', line) if s.strip()]
-                    for s_idx, s in enumerate(sentences):
-                        prefix = "\n" if (l_idx > 0 and s_idx == 0) else ""
-                        yield f"data: {json.dumps({'display_text': prefix + s + ' '})}\n\n"
-                        await asyncio.sleep(0.05)
+            import re
 
             # If format decision is video required, compile the video lesson asynchronously in the background
             interactive_url = None
             updated_lesson_package = None
+            video_scenes_for_cache = None
             if format_decision == "VIDEO_REQUIRED":
-                print("[ORCHESTRATOR] Starting Hyperframes video generation...")
+                print("[ORCHESTRATOR] Starting Hyperframes video generation (fixed pipeline, fresh storyboard)...")
                 from backend.app.services.visual_learning.visual_learning_service import generate_visual_lesson_stream
-                
-                # Determine which book to use for video context
+
+                # Deliberately do NOT pass the orchestrator's own draft storyboard
+                # (out.get("video_storyboard")) - it comes from a single-pass LLM
+                # call with no schema guidance, no icon/template registry, and no
+                # retry-if-empty guard, and was the source of blank videos. Let
+                # generate_visual_lesson_stream do its own real generation instead.
+                #
+                # Use the validated, Firestore-resolved book for a real curriculum
+                # match. For GENERAL_KNOWLEDGE, never fall back to the open book -
+                # generate with no book context at all, rather than searching an
+                # unrelated one.
                 if classification == "CURRICULUM":
                     video_book_uuid = resolved_book_uuid or book_uuid
                     video_subject = matched_subject or subject
                 else:
                     video_book_uuid = ""
                     video_subject = matched_subject or subject or "General Knowledge"
-                
-                # Fetch pre-compiled storyboard from orchestrator agent result if available
-                storyboard_payload = out.get("video_storyboard")
-                
+
                 visual_stream = generate_visual_lesson_stream(
                     query=query,
                     book_uuid=video_book_uuid,
                     class_name=str(student_profile["class"]),
-                    subject=video_subject,
-                    precomputed_storyboard=storyboard_payload
+                    subject=video_subject
                 )
 
                 async for sse_chunk in visual_stream:
@@ -746,21 +697,69 @@ async def smart_query_engine(
                     raw_data = sse_chunk.strip()
                     if raw_data.startswith("data: "):
                         raw_data = raw_data[6:]
-                    
+
                     try:
                         chunk_json = json.loads(raw_data)
-                        
+
+                        # The storyboard (scenes + teacher_script) is ready before
+                        # audio/compile finish. Ignore it for display purposes -
+                        # we wait for 'audio_ready' below so real, single-generation
+                        # audio can be attached to each scene's text as it streams
+                        # (a real-time teacher reading it aloud), instead of either
+                        # streaming silently or triggering a second, separate TTS call.
+                        if chunk_json.get("type") == "storyboard_ready":
+                            continue
+
+                        # Audio is ready (the ONLY TTS pass for this lesson - reused
+                        # for both this narrated text stream and the video itself).
+                        # Stream each scene's teacher_script with its real audio_url,
+                        # same pattern as the cache-hit path.
+                        if chunk_json.get("type") == "audio_ready":
+                            scenes = chunk_json.get("scenes", [])
+                            video_scenes_for_cache = scenes
+                            narration_parts = []
+                            for s in scenes:
+                                title = s.get("template_data", {}).get("title") or s.get("template_data", {}).get("heading") or s.get("purpose") or f"Scene {s.get('scene_no')}"
+                                script = s.get("teacher_script") or ""
+                                audio_url = s.get("audio_url") or ""
+                                narration_parts.append(script)
+                                bullet_text = f"- **{title}**: {script}"
+                                bullet_text = format_text_explanation(bullet_text)
+                                text_chunk = bullet_text + "\n\n"
+                                yield f"data: {json.dumps({'display_text': text_chunk, 'audio_url': audio_url})}\n\n"
+                                await asyncio.sleep(0.05)
+                            text_script = " ".join(narration_parts)
+                            continue
+
                         # Forward progress steps to frontend
                         if chunk_json.get("type") == "progress":
                             yield f"data: {json.dumps(chunk_json)}\n\n"
-                        
+
                         # Handle ready payload
                         if chunk_json.get("type") == "lesson_ready":
                             interactive_url = chunk_json.get("interactive_url")
                             updated_lesson_package = chunk_json.get("lesson_package")
+                            # Prefer the final compiled scenes (now carrying audio_url)
+                            # for caching, if available.
+                            if updated_lesson_package and updated_lesson_package.get("scenes"):
+                                video_scenes_for_cache = updated_lesson_package.get("scenes")
                             yield f"data: {json.dumps(chunk_json)}\n\n"
                     except Exception as json_err:
                         logger.error(f"[SSE FORWARD] Parse error: {json_err} on raw: {raw_data}")
+            else:
+                # STANDARD QUICK_ANSWER FLOW - stream the orchestrator's own text_narration
+                text_script = format_text_explanation(text_script)
+                lines = text_script.split('\n')
+                for l_idx, line in enumerate(lines):
+                    if not line.strip():
+                        yield "data: " + json.dumps({'display_text': '\n'}) + "\n\n"
+                        continue
+
+                    sentences = [s.strip() for s in re.split(r'(?<=[.!?à¥¤])\s+', line) if s.strip()]
+                    for s_idx, s in enumerate(sentences):
+                        prefix = "\n" if (l_idx > 0 and s_idx == 0) else ""
+                        yield f"data: {json.dumps({'display_text': prefix + s + ' '})}\n\n"
+                        await asyncio.sleep(0.05)
 
             # Compile query transaction JSON payload for Supabase Cloud Storage
             import uuid
@@ -779,7 +778,7 @@ async def smart_query_engine(
                 "format_decision": format_decision,
                 "text_narration": text_script,
                 "timestamp": datetime.datetime.utcnow().isoformat() + "Z",
-                "video_storyboard": updated_lesson_package or out.get("video_storyboard"),
+                "video_storyboard": updated_lesson_package,
                 "media_urls": {
                     "interactive_url": interactive_url,
                     "storyboard_json_url": (updated_lesson_package or {}).get("storyboard_json_url") if updated_lesson_package else None
@@ -827,7 +826,8 @@ async def smart_query_engine(
                 class_name=student_profile["class"],
                 subject=subject,
                 orchestrator_output=out,
-                interactive_url=interactive_url
+                interactive_url=interactive_url,
+                video_scenes=video_scenes_for_cache
             )
 
             # Save query turn to standard chat session manager
@@ -871,7 +871,7 @@ async def smart_query_engine(
                     query_json_url=query_json_url,
                     llm_response=text_script,
                     retrieved_sources=retrieved_sources,
-                    storyboard_data=updated_lesson_package or out.get("video_storyboard"),
+                    storyboard_data=updated_lesson_package,
                     video_url=interactive_url,
                     audio_url=None
                 )

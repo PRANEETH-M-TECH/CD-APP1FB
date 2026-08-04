@@ -27,45 +27,19 @@
         * Book/Source: 02388bd2e1e88738b9ce21a5d1c7ce9b | Chapter: SIMPLE ELECTRIC CIRCUITS
         * Book/Source: 02388bd2e1e88738b9ce21a5d1c7ce9b | Chapter: WATER IN OUR LIFE
         * Book/Source: 02388bd2e1e88738b9ce21a5d1c7ce9b | Chapter: WHAT DO ANIMALS EAT?
-        * Book/Source: b250da676f2f0c2a2b1423a27ae133c1a32829112733470fc683ceab06193ba0 | Chapter: Abolition of Zamindari System
-        * Book/Source: b250da676f2f0c2a2b1423a27ae133c1a32829112733470fc683ceab06193ba0 | Chapter: Africa
-        * Book/Source: b250da676f2f0c2a2b1423a27ae133c1a32829112733470fc683ceab06193ba0 | Chapter: Caste Discrimination and the Struggle for Equalities
-        * Book/Source: b250da676f2f0c2a2b1423a27ae133c1a32829112733470fc683ceab06193ba0 | Chapter: Devotional Paths to the Divine
-        * Book/Source: b250da676f2f0c2a2b1423a27ae133c1a32829112733470fc683ceab06193ba0 | Chapter: Earth Movements and Seasons
-        * Book/Source: b250da676f2f0c2a2b1423a27ae133c1a32829112733470fc683ceab06193ba0 | Chapter: Energy from the Sun
-        * Book/Source: b250da676f2f0c2a2b1423a27ae133c1a32829112733470fc683ceab06193ba0 | Chapter: Establishment of the British Empire in India
-        * Book/Source: b250da676f2f0c2a2b1423a27ae133c1a32829112733470fc683ceab06193ba0 | Chapter: Europe
-        * Book/Source: b250da676f2f0c2a2b1423a27ae133c1a32829112733470fc683ceab06193ba0 | Chapter: Folk - Religion
-        * Book/Source: b250da676f2f0c2a2b1423a27ae133c1a32829112733470fc683ceab06193ba0 | Chapter: Forests:Using and Protecting
-        * Book/Source: b250da676f2f0c2a2b1423a27ae133c1a32829112733470fc683ceab06193ba0 | Chapter: Freedom Movement in Hyderabad State
-        * Book/Source: b250da676f2f0c2a2b1423a27ae133c1a32829112733470fc683ceab06193ba0 | Chapter: Handicrafts and Handlooms
-        * Book/Source: b250da676f2f0c2a2b1423a27ae133c1a32829112733470fc683ceab06193ba0 | Chapter: Impact of Technology on Livelihoods
-        * Book/Source: b250da676f2f0c2a2b1423a27ae133c1a32829112733470fc683ceab06193ba0 | Chapter: Implementation of Laws in the District
-        * Book/Source: b250da676f2f0c2a2b1423a27ae133c1a32829112733470fc683ceab06193ba0 | Chapter: Importance of Transport System
-        * Book/Source: b250da676f2f0c2a2b1423a27ae133c1a32829112733470fc683ceab06193ba0 | Chapter: Industrial Revolution
-        * Book/Source: b250da676f2f0c2a2b1423a27ae133c1a32829112733470fc683ceab06193ba0 | Chapter: Landlords and Tenants under the British and the Nizam
-        * Book/Source: b250da676f2f0c2a2b1423a27ae133c1a32829112733470fc683ceab06193ba0 | Chapter: Law and Justice - A Case Study
-        * Book/Source: b250da676f2f0c2a2b1423a27ae133c1a32829112733470fc683ceab06193ba0 | Chapter: Livelihood and Struggles of Urban Workers
-        * Book/Source: b250da676f2f0c2a2b1423a27ae133c1a32829112733470fc683ceab06193ba0 | Chapter: Making of Laws in the State Assembly
-        * Book/Source: b250da676f2f0c2a2b1423a27ae133c1a32829112733470fc683ceab06193ba0 | Chapter: Minerals and Mining
-        * Book/Source: b250da676f2f0c2a2b1423a27ae133c1a32829112733470fc683ceab06193ba0 | Chapter: Money and Banking
-        * Book/Source: b250da676f2f0c2a2b1423a27ae133c1a32829112733470fc683ceab06193ba0 | Chapter: Mughal Empire
-        * Book/Source: b250da676f2f0c2a2b1423a27ae133c1a32829112733470fc683ceab06193ba0 | Chapter: National Movement - The Early Phase 1885-1919
-        * Book/Source: b250da676f2f0c2a2b1423a27ae133c1a32829112733470fc683ceab06193ba0 | Chapter: National Movement - The Last Phase 1919-1947
-        * Book/Source: b250da676f2f0c2a2b1423a27ae133c1a32829112733470fc683ceab06193ba0 | Chapter: New Kings and Kingdoms
-        * Book/Source: b250da676f2f0c2a2b1423a27ae133c1a32829112733470fc683ceab06193ba0 | Chapter: Oceans and Fishing
-        * Book/Source: b250da676f2f0c2a2b1423a27ae133c1a32829112733470fc683ceab06193ba0 | Chapter: Parliament and Central Government
-        * Book/Source: b250da676f2f0c2a2b1423a27ae133c1a32829112733470fc683ceab06193ba0 | Chapter: Production in a Factory - A Paper Mill
-        * Book/Source: b250da676f2f0c2a2b1423a27ae133c1a32829112733470fc683ceab06193ba0 | Chapter: Public Health and the Government
-        * Book/Source: b250da676f2f0c2a2b1423a27ae133c1a32829112733470fc683ceab06193ba0 | Chapter: Rain and Rivers
-        * Book/Source: b250da676f2f0c2a2b1423a27ae133c1a32829112733470fc683ceab06193ba0 | Chapter: Reading Maps of Different kinds
-        * Book/Source: b250da676f2f0c2a2b1423a27ae133c1a32829112733470fc683ceab06193ba0 | Chapter: Reading and Analysis of Maps
-        * Book/Source: b250da676f2f0c2a2b1423a27ae133c1a32829112733470fc683ceab06193ba0 | Chapter: Rulers and Buildings
-        * Book/Source: b250da676f2f0c2a2b1423a27ae133c1a32829112733470fc683ceab06193ba0 | Chapter: Tanks and Ground Water
-        * Book/Source: b250da676f2f0c2a2b1423a27ae133c1a32829112733470fc683ceab06193ba0 | Chapter: The Indian Constitution
-        * Book/Source: b250da676f2f0c2a2b1423a27ae133c1a32829112733470fc683ceab06193ba0 | Chapter: The Kakatiyas - Emergence of a Regional Kingdom
-        * Book/Source: b250da676f2f0c2a2b1423a27ae133c1a32829112733470fc683ceab06193ba0 | Chapter: The Kings of Vijayanagara
-        * Book/Source: b250da676f2f0c2a2b1423a27ae133c1a32829112733470fc683ceab06193ba0 | Chapter: The Polar Regions
-        * Book/Source: b250da676f2f0c2a2b1423a27ae133c1a32829112733470fc683ceab06193ba0 | Chapter: Understanding Poverty
+        * Book/Source: d2918761-6481-5762-acdc-3d59bbeccd15 | Chapter: ECONOMIC ACTIVITIES AROUND US
+        * Book/Source: d2918761-6481-5762-acdc-3d59bbeccd15 | Chapter: EXPLORING SOCIETY: INDIA AND BEYOND
+        * Book/Source: d2918761-6481-5762-acdc-3d59bbeccd15 | Chapter: FAMILY AND COMMUNITY
+        * Book/Source: d2918761-6481-5762-acdc-3d59bbeccd15 | Chapter: GRASSROOTS DEMOCRACY – PART 1
+        * Book/Source: d2918761-6481-5762-acdc-3d59bbeccd15 | Chapter: GRASSROOTS DEMOCRACY – PART 2
+        * Book/Source: d2918761-6481-5762-acdc-3d59bbeccd15 | Chapter: GRASSROOTS DEMOCRACY – PART 3
+        * Book/Source: d2918761-6481-5762-acdc-3d59bbeccd15 | Chapter: INDIA’S CULTURAL ROOTS
+        * Book/Source: d2918761-6481-5762-acdc-3d59bbeccd15 | Chapter: India, That Is Bharat
+        * Book/Source: d2918761-6481-5762-acdc-3d59bbeccd15 | Chapter: LANDFORMS AND LIFE
+        * Book/Source: d2918761-6481-5762-acdc-3d59bbeccd15 | Chapter: OCEANS AND CONTINENTS
+        * Book/Source: d2918761-6481-5762-acdc-3d59bbeccd15 | Chapter: THE VALUE OF WORK
+        * Book/Source: d2918761-6481-5762-acdc-3d59bbeccd15 | Chapter: TIMELINE AND SOURCES OF HISTORY
+        * Book/Source: d2918761-6481-5762-acdc-3d59bbeccd15 | Chapter: The Beginnings of Indian Civilisation
+        * Book/Source: d2918761-6481-5762-acdc-3d59bbeccd15 | Chapter: UNITY IN DIVERSITY, OR ‘MANY IN THE ONE’
 
 ==================================================
