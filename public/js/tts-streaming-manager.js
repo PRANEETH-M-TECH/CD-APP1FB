@@ -366,6 +366,7 @@ class StreamingAudioPipeline {
     /**
      * Force-flush remaining buffer as the final chunk.
      * Call when the Gemini stream emits [DONE].
+     */
     flush() {
         if (!this.isActive) return;
         const remaining = this.textBuffer;

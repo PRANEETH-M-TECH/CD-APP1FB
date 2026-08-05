@@ -20,7 +20,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"
     integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV" crossorigin="anonymous">
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"
-    integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmImMNkdTe"
+    integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmUb0ZY0l8"
     crossorigin="anonymous"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
     integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05"
@@ -1082,18 +1082,18 @@
   <script src="/static/profile-dropdown.js"></script>
 
   <!-- TTS Manager (load FIRST so it's ready when script.js runs) -->
-  <script src="/static/js/tts-manager.js?v=2.0"></script>
+  <script src="/static/js/tts-manager.js?v=2.3"></script>
 
   <!-- Answer Preference: Streaming TTS Pipeline (load before script.js) -->
-  <script src="/static/js/tts-streaming-manager.js?v=2.0"></script>
+  <script src="/static/js/tts-streaming-manager.js?v=2.3"></script>
 
   <!-- Main script -->
-  <script src="/static/script.js?v=2.0"></script>
-  <script src="/static/conversation.js?v=2.0"></script>
-  <script src="/static/save-selection.js?v=2.0"></script>
+  <script src="/static/script.js?v=2.3"></script>
+  <script src="/static/conversation.js?v=2.3"></script>
+  <script src="/static/save-selection.js?v=2.3"></script>
 
   <!-- Answer Preference Manager (load after script.js so submitSmartQueryFromMic is defined first) -->
-  <script src="/static/js/answer-preference-manager.js?v=2.0"></script>
+  <script src="/static/js/answer-preference-manager.js?v=2.3"></script>
   
   <!-- GSAP & Lottie libraries for Visual Learning V1 -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
@@ -1525,58 +1525,47 @@
             const selectedSubject = subjectSelect ? subjectSelect.value : '';
 
             showThinkingIndicator();
+
+            try {
+              const requestBody = {
+                class_name: String(selectedClass), // Explicitly convert to string
+                subject: selectedSubject,
+                chapter_name: selectedChapter
+              };
+              console.log("Sending to /api/summarize:", JSON.stringify(requestBody, null, 2));
+
+              const response = await fetch('/api/summarize', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(requestBody)
+              });
+
+              if (!response.ok) {
+                throw new Error('Could not retrieve summary.');
+              }
+
+              const data = await response.json();
+
+              removeThinkingIndicator();
+
+              addMessageToChat({
+                role: 'ai',
+                content: data.summary
+              });
+
+            } catch (error) {
+              console.error('Error fetching summary:', error);
+              removeThinkingIndicator();
+              addMessageToChat({
+                role: 'ai',
+                content: `Sorry, an error occurred while fetching the summary: ${error.message}`
+              });
+            }
           }
         });
       }
-            return;
-          }
-
-          const subjectSelect = document.getElementById('subject-select');
-          // Get class from user profile (stored in window.currentUserClass)
-          const selectedClass = window.currentUserClass;
-          const selectedSubject = subjectSelect.value;
-
-          showThinkingIndicator();
-
-          try {
-            const requestBody = {
-              class_name: String(selectedClass), // Explicitly convert to string
-              subject: selectedSubject,
-              chapter_name: selectedChapter
-            };
-            console.log("Sending to /api/summarize:", JSON.stringify(requestBody, null, 2));
-
-            const response = await fetch('/api/summarize', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify(requestBody)
-            });
-
-            if (!response.ok) {
-              throw new Error('Could not retrieve summary.');
-            }
-
-            const data = await response.json();
-
-            removeThinkingIndicator();
-
-            addMessageToChat({
-              role: 'ai',
-              content: data.summary
-            });
-
-          } catch (error) {
-            console.error('Error fetching summary:', error);
-            removeThinkingIndicator();
-            addMessageToChat({
-              role: 'ai',
-              content: `Sorry, an error occurred while fetching the summary: ${error.message}`
-            });
-          }
-        }
-      });
 
       window.copyMessage = copyMessage;
     });
@@ -1667,8 +1656,6 @@
           <option value="english">📖 English</option>
           <option value="maths">🔢 Maths</option>
           <option value="science">🔬 Science</option>
-          <option value="physics">⚛️ Physics</option>
-          <option value="biology">🧬 Biology</option>
           <option value="social">🌍 Social</option>
           <option value="general">📚 General</option>
         </select>

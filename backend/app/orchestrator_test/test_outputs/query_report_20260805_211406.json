@@ -1,0 +1,106 @@
+{
+  "timestamp": "2026-08-05T21:14:06.059024",
+  "execution_time_seconds": 7.89,
+  "authenticated_student": {
+    "name": "Student Ten",
+    "class": 10,
+    "board": "CBSE",
+    "email": "student10@cg.com"
+  },
+  "raw_user_query": "State and prove the midpoint theorem for triangles.",
+  "orchestrator_output": {
+    "is_authorized": true,
+    "refusal_reason": null,
+    "classification": "CURRICULUM",
+    "reformulated_query": "State and prove the midpoint theorem for triangles.",
+    "matched_subject": "maths",
+    "matched_chapter": "Triangles",
+    "complexity_level": 2,
+    "format_decision": "VIDEO_REQUIRED",
+    "text_narration": null
+  },
+  "rag_retrieval_executed": true,
+  "retrieved_top10_chunks": [
+    {
+      "chunk_index": 1,
+      "score": 0.46,
+      "book_name": "",
+      "chapter_name": "Triangles",
+      "page_number": 94,
+      "content_snippet": "94 MATHEMA TICS\ni.e., AM\nPN  = CA\nRP (3)\nAlso,  MAC =  NPR [From (2)] (4)\nSo, from (3) and (4),\n AMC ~  PNR (SAS similarity) (5)\n(ii) From (5), CM..."
+    },
+    {
+      "chunk_index": 2,
+      "score": 0.3699,
+      "book_name": "",
+      "chapter_name": "Real Numbers",
+      "page_number": 1,
+      "content_snippet": "REAL NUMBERS 1\n1\n1.1 Introduction\nIn Class IX, you began your exploration of the world of real numbers and encountered\nirrational numbers. We continue..."
+    },
+    {
+      "chunk_index": 3,
+      "score": 0.315,
+      "book_name": "",
+      "chapter_name": "Triangles",
+      "page_number": 85,
+      "content_snippet": "TRIANGLES 85\n5. In Fig. 6.20, DE || OQ and DF || OR. Show that\nEF || QR.\n6. In Fig. 6.21, A, B and C are points on OP, OQ and\nOR respectively such tha..."
+    },
+    {
+      "chunk_index": 4,
+      "score": 0.308,
+      "book_name": "",
+      "chapter_name": "Triangles",
+      "page_number": 90,
+      "content_snippet": "90 MATHEMA TICS\nFig. 6.27\nHere, you may observe that AB\nDE  = AC\nDF  (each equal to 2\n3\n) and  A (included\nbetween the sides AB and AC) =  D (includ..."
+    },
+    {
+      "chunk_index": 5,
+      "score": 0.3076,
+      "book_name": "",
+      "chapter_name": "Triangles",
+      "page_number": 82,
+      "content_snippet": "82 MATHEMA TICS\nFig. 6.13\nTheorem 6.2 :  If a line divides any two sides of a\ntriangle in the same ratio, then the line is parallel\nto the third side...."
+    },
+    {
+      "chunk_index": 6,
+      "score": 0.3074,
+      "book_name": "",
+      "chapter_name": "Triangles",
+      "page_number": 80,
+      "content_snippet": "80 MATHEMA TICS\nTheorem 6.1 :  If a line is drawn parallel to one side of a triangle to intersect the\nother two sides in distinct points, the other tw..."
+    },
+    {
+      "chunk_index": 7,
+      "score": 0.295,
+      "book_name": "",
+      "chapter_name": "Triangles",
+      "page_number": 97,
+      "content_snippet": "TRIANGLES 97\n11. In Fig. 6.40, E is a point on side CB\nproduced of an isosceles triangle ABC\nwith AB = AC. If AD  BC and EF  AC,\nprove that  ABD ~ ..."
+    },
+    {
+      "chunk_index": 8,
+      "score": 0.2815,
+      "book_name": "",
+      "chapter_name": "Triangles",
+      "page_number": 87,
+      "content_snippet": "TRIANGLES 87\nLet rays BP and CQ intersect each other at A and rays ER and FS intersect each\nother at D. In the two triangles ABC and DEF, you can see ..."
+    },
+    {
+      "chunk_index": 9,
+      "score": 0.2802,
+      "book_name": "",
+      "chapter_name": "Triangles",
+      "page_number": 73,
+      "content_snippet": "TRIANGLES 73\n6\n6.1 Introduction\nYou are familiar with triangles and many of their properties from your earlier classes.\nIn Class IX, you have studied ..."
+    },
+    {
+      "chunk_index": 10,
+      "score": 0.2633,
+      "book_name": "",
+      "chapter_name": "Introduction to Trigonometry",
+      "page_number": 121,
+      "content_snippet": "INTRODUCTION TO TRIGONOMETRY 121\nEXERCISE 8.1\n1. In  ABC,  right-angled at B, AB = 24 cm, BC = 7 cm. Determine :\n(i) sin A, cos A\n(ii) sin C, cos C\n2..."
+    }
+  ],
+  "resolved_book_uuid": "6533c9be-f65c-5636-bce3-7d669f3cfcd4"
+}

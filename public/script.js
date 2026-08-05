@@ -633,6 +633,14 @@ function setupChatSubmitGlobal() {
         if (submitButton) submitButton.setAttribute('disabled', 'true');
         if (listChaptersBtn) listChaptersBtn.classList.add('hidden');
         const currentTurn = _turnCount++;
+        // Tracks whether this turn is a video lesson, set from the 'intent'
+        // SSE event's format field. Video lessons get their own completion-
+        // triggered feedback modal (requestVideoFeedback, fired when the
+        // player actually finishes playing) - the inline thumbs row below
+        // must not ALSO fire on '[DONE]' for these, since '[DONE]' means the
+        // server finished generating, not that the student has finished
+        // watching. Firing both is what caused feedback to appear twice.
+        let isVideoLesson = false;
 
         // Show AI loading card — using the existing styled classes from conversation.css
         const aiRow = document.createElement('div');
@@ -742,14 +750,21 @@ function setupChatSubmitGlobal() {
                 if (submitButton) submitButton.removeAttribute('disabled');
                 if (listChaptersBtn) listChaptersBtn.classList.remove('hidden');
                 chatHistory.scrollTop = chatHistory.scrollHeight;
-                // Inject feedback thumbs after a short delay
-                injectFeedbackButtons(currentTurn);
+                // Inject feedback thumbs now, unless this is a video lesson -
+                // those get their own feedback modal timed to actual video
+                // playback completion instead (see isVideoLesson above).
+                if (!isVideoLesson) {
+                    injectFeedbackButtons(currentTurn);
+                }
                 return;
             }
             try {
                 const data = JSON.parse(event.data);
 
                 if (data.type === 'intent') {
+                    if (data.format === 'VIDEO_REQUIRED') {
+                        isVideoLesson = true;
+                    }
                     const badge = document.getElementById(`intent-badge-${currentTurn}`);
                     if (badge) {
                         badge.textContent = (data.intent || '').replace(/_/g, ' ');
@@ -764,6 +779,17 @@ function setupChatSubmitGlobal() {
                         else if (subject.includes('social') || subject.includes('history')) card.classList.add('subject-social');
                         else if (subject.includes('english')) card.classList.add('subject-english');
                         else card.classList.add('subject-gk');
+                    }
+                } else if (data.type === 'progress') {
+                    // The video pipeline (orchestrator -> storyboard -> voiceover
+                    // synthesis) takes 20-40s+ with nothing else shown to the
+                    // student in that window - the backend already emits a
+                    // message at every step, but it was previously dropped
+                    // entirely by this handler, leaving only a generic
+                    // "thinking..." animation for the whole wait. Surface it in
+                    // place of that animation so the wait feels transparent.
+                    if (contentDiv && data.message && !fullText) {
+                        contentDiv.innerHTML = `<span class="thinking-anim"><span></span><span></span><span></span></span> <span class="progress-status-text">${data.message}</span>`;
                     }
                 } else if (data.type === 'query_id') {
                     // Store the Firestore doc ID on the card for feedback association

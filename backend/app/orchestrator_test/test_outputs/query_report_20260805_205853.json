@@ -1,0 +1,25 @@
+{
+  "timestamp": "2026-08-05T20:58:53.093548",
+  "execution_time_seconds": 7.39,
+  "authenticated_student": {
+    "name": "Student Ten",
+    "class": 10,
+    "board": "CBSE",
+    "email": "student10@cg.com"
+  },
+  "raw_user_query": "What is the difference between aerobic and anaerobic respiration?",
+  "orchestrator_output": {
+    "is_authorized": true,
+    "refusal_reason": null,
+    "classification": "GENERAL_KNOWLEDGE",
+    "reformulated_query": "What is the difference between aerobic and anaerobic respiration?",
+    "matched_subject": null,
+    "matched_chapter": null,
+    "complexity_level": 2,
+    "format_decision": "QUICK_ANSWER",
+    "text_narration": "- **Aerobic Respiration**:\n  - Occurs in the presence of oxygen.\n  - Produces more energy (approximately 36-38 ATP molecules per glucose molecule).\n  - End products are carbon dioxide and water.\n\n- **Anaerobic Respiration**:\n  - Occurs in the absence of oxygen.\n  - Produces less energy (approximately 2 ATP molecules per glucose molecule).\n  - End products can include lactic acid (in animals) or ethanol and carbon dioxide (in yeast)."
+  },
+  "rag_retrieval_executed": false,
+  "retrieved_top10_chunks": [],
+  "resolved_book_uuid": ""
+}

@@ -80,7 +80,9 @@ Backups/
 
 # ============ AI ASSISTANT FILES ============
 .gemini/
-docs/
+docs/*
+!docs/APPLICATION_WORKFLOW.md
+!docs/workflow.html
 
 # ============ NODE (if using) ============
 node_modules/

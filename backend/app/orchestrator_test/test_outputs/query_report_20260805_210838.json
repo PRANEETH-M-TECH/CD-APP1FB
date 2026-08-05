@@ -1,0 +1,106 @@
+{
+  "timestamp": "2026-08-05T21:08:38.774991",
+  "execution_time_seconds": 12.31,
+  "authenticated_student": {
+    "name": "Student Ten",
+    "class": 10,
+    "board": "CBSE",
+    "email": "student10@cg.com"
+  },
+  "raw_user_query": "can you explain step by step why my muscles start hurting and burning when i keep running without stopping, like what exactly happens inside my body",
+  "orchestrator_output": {
+    "is_authorized": true,
+    "refusal_reason": null,
+    "classification": "CURRICULUM",
+    "reformulated_query": "Explain what happens in the body when muscles hurt and burn during running.",
+    "matched_subject": "science",
+    "matched_chapter": "LIFE PROCESSES",
+    "complexity_level": 2,
+    "format_decision": "VIDEO_REQUIRED",
+    "text_narration": null
+  },
+  "rag_retrieval_executed": true,
+  "retrieved_top10_chunks": [
+    {
+      "chunk_index": 1,
+      "score": 0.46,
+      "book_name": "",
+      "chapter_name": "LIFE PROCESSES",
+      "page_number": 80,
+      "content_snippet": "Science80\nclass, even if we are just asleep, this maintenance job has to go on.\nThe processes which together perform this maintenance job are\nlife pro..."
+    },
+    {
+      "chunk_index": 2,
+      "score": 0.3309,
+      "book_name": "",
+      "chapter_name": "CARBON AND ITS COMPOUNDS",
+      "page_number": 70,
+      "content_snippet": "Science70\nmixture is burnt to give a clean blue flame. If you observe the bottoms of\ncooking vessels getting blackened, it means that the air holes ar..."
+    },
+    {
+      "chunk_index": 3,
+      "score": 0.289,
+      "book_name": "",
+      "chapter_name": "LIFE PROCESSES",
+      "page_number": 80,
+      "content_snippet": "of break -down of food sources for cellular needs, is what we call\nrespiration.\nIn the case of a single-celled organism, no specific organs for taking..."
+    },
+    {
+      "chunk_index": 4,
+      "score": 0.25,
+      "book_name": "",
+      "chapter_name": "LIFE PROCESSES",
+      "page_number": 88,
+      "content_snippet": "Science88\nprocess breaks up the three-carbon pyruvate molecule to give three\nmolecules of carbon dioxide. The other pr oduct is water . Since this\npro..."
+    },
+    {
+      "chunk_index": 5,
+      "score": 0.2145,
+      "book_name": "",
+      "chapter_name": "CONTROL AND COORDINATION",
+      "page_number": 109,
+      "content_snippet": "supply of more oxygen to our muscles. The blood to the digestive system\nand skin is reduced due to contraction of muscles around small arteries\nin the..."
+    },
+    {
+      "chunk_index": 6,
+      "score": 0.2086,
+      "book_name": "",
+      "chapter_name": "CONTROL AND COORDINATION",
+      "page_number": 109,
+      "content_snippet": "Control and Coordination 109\n6.3 HORMONES IN ANIMALS6.3 HORMONES IN ANIMALS6.3 HORMONES IN ANIMALS6.3 HORMONES IN ANIMALS6.3 HORMONES IN ANIMALS\nHow a..."
+    },
+    {
+      "chunk_index": 7,
+      "score": 0.2038,
+      "book_name": "",
+      "chapter_name": "CONTROL AND COORDINATION",
+      "page_number": 102,
+      "content_snippet": "order to receive these signals, this thinking part of the brain in the skull\nmust be connected to nerves coming from various parts of the body.\nSimila..."
+    },
+    {
+      "chunk_index": 8,
+      "score": 0.1901,
+      "book_name": "",
+      "chapter_name": "CONTROL AND COORDINATION",
+      "page_number": 105,
+      "content_snippet": "Control and Coordination 105\n6.1.3 How are these Tissues protected?\nA delicate organ like the brain, which is so important for a variety of\nactivities..."
+    },
+    {
+      "chunk_index": 9,
+      "score": 0.1847,
+      "book_name": "",
+      "chapter_name": "CONTROL AND COORDINATION",
+      "page_number": 102,
+      "content_snippet": "Science102\n6.1.1 What happens in Reflex Actions?\n‘Reflex’ is a word we use very commonly when we talk about some sudden\naction in response to somethin..."
+    },
+    {
+      "chunk_index": 10,
+      "score": 0.144,
+      "book_name": "",
+      "chapter_name": "OUR ENVIRONMENT",
+      "page_number": 215,
+      "content_snippet": "Our Environment 215\nActivity 13.7Activity 13.7Activity 13.7Activity 13.7Activity 13.7\n/square6Find out what happens to the waste generated at home. Is..."
+    }
+  ],
+  "resolved_book_uuid": "71d30452-178b-5820-8900-e87d333f3911"
+}

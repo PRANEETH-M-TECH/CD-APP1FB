@@ -192,7 +192,7 @@ async def generate_visual_lesson_stream(query: str, book_uuid: str, class_name: 
         else:
             # Step 1: Retrieve context from book using hybrid search
             yield f"data: {json.dumps({'type': 'progress', 'step': 'understanding_topic', 'status': 'in_progress', 'message': 'Retrieving relevant textbook context...'})}\n\n"
-            await asyncio.sleep(0.3)
+            await asyncio.sleep(0.05)
 
             context = ""
             try:
@@ -219,7 +219,7 @@ async def generate_visual_lesson_stream(query: str, book_uuid: str, class_name: 
             # This guards against the occasional LLM/JSON-repair hiccup that
             # otherwise ships a lesson that plays but shows nothing.
             yield f"data: {json.dumps({'type': 'progress', 'step': 'designing_lesson', 'status': 'in_progress', 'message': 'Creating storyboard and scene animations...'})}\n\n"
-            await asyncio.sleep(0.3)
+            await asyncio.sleep(0.05)
 
             prompt = get_visual_lesson_prompt(class_name, subject, query, context)
             client = qdrant.openai_client
@@ -304,7 +304,7 @@ async def generate_visual_lesson_stream(query: str, book_uuid: str, class_name: 
 
         # Step 3: Retrieve Animated Scene Assets
         yield f"data: {json.dumps({'type': 'progress', 'step': 'generating_visuals', 'status': 'in_progress', 'message': 'Retrieving animated scene templates and visual assets...'})}\n\n"
-        await asyncio.sleep(0.3)
+        await asyncio.sleep(0.05)
         yield f"data: {json.dumps({'type': 'progress', 'step': 'generating_visuals', 'status': 'complete', 'message': 'Scene visual templates assembled.'})}\n\n"
 
         # Step 4: Synthesize Voice Narration Audio
@@ -353,7 +353,7 @@ async def generate_visual_lesson_stream(query: str, book_uuid: str, class_name: 
 
         # Step 5: Compile Hyperframes Rendering Engine
         yield f"data: {json.dumps({'type': 'progress', 'step': 'hyperframes_engine', 'status': 'in_progress', 'message': 'Compiling Hyperframes 60fps HTML video composition...'})}\n\n"
-        await asyncio.sleep(0.3)
+        await asyncio.sleep(0.05)
         
         # Correctly calculate absolute PROJECT_ROOT (4 parent directory levels up from backend/app/services/visual_learning)
         MAIN_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -442,7 +442,7 @@ async def generate_visual_lesson_stream(query: str, book_uuid: str, class_name: 
         
         # Step 6: Launching Media Player & Emit lesson_ready Event
         yield f"data: {json.dumps({'type': 'progress', 'step': 'launching_lesson', 'status': 'in_progress', 'message': 'Launching media player...'})}\n\n"
-        await asyncio.sleep(0.2)
+        await asyncio.sleep(0.05)
         yield f"data: {json.dumps({'type': 'progress', 'step': 'launching_lesson', 'status': 'complete', 'message': 'Lesson ready!'})}\n\n"
 
         # Final Event Payload matching frontend handleSSEEvent contract

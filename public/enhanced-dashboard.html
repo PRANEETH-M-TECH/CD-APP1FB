@@ -328,8 +328,6 @@
                     <option value="english">📖 English</option>
                     <option value="maths">🔢 Maths</option>
                     <option value="science">🔬 Science</option>
-                    <option value="physics">⚛️ Physics</option>
-                    <option value="biology">🧬 Biology</option>
                     <option value="social">🌍 Social</option>
                     <option value="general">📚 General</option>
                 </select>
@@ -845,7 +843,7 @@
 
         function createSubjectFilters() {
             // Standard subjects that should always be available
-            const standardSubjects = ['english', 'maths', 'science', 'physics', 'biology', 'social', 'hindi', 'telugu'];
+            const standardSubjects = ['english', 'maths', 'science', 'social', 'hindi', 'telugu'];
 
             // Get subjects from data
             const dataSubjects = (dashboardData.summary?.top_subjects || []).map(s => s.subject.toLowerCase());
@@ -1266,8 +1264,6 @@
                 'maths': '🔢',
                 'mathematics': '🔢',
                 'science': '🔬',
-                'physics': '⚛️',
-                'biology': '🧬',
                 'social': '🌍',
                 'hindi': '📝',
                 'telugu': '📝'

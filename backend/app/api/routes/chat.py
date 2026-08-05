@@ -851,9 +851,10 @@ async def smart_query_engine(
                     for chunk in chunks:
                         retrieved_sources.append({
                             "chunk_id": f"chunk_{chunk.get('chunk_index')}",
+                            "chapter_name": chunk.get("chapter_name") or "Unknown",
                             "text": chunk.get("content_snippet", ""),
                             "score": float(chunk.get("score", 0.0)),
-                            "page_number": 1
+                            "page_number": chunk.get("page_number") or 1
                         })
 
                 from backend.app.services.analytics import analytics_service

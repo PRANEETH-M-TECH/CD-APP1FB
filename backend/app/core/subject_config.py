@@ -22,33 +22,27 @@ SUBJECT_CONFIG = {
         }
     },
     
-    # Classes 7-10: Science split into Physics and Biology
+    # Classes 7-10: NCERT has a single combined Science subject, same as 1-6 -
+    # there is no separate Physics/Biology split in the actual curriculum.
     "7-10": {
-        "subjects": ["english", "maths", "physics", "biology", "social"],
+        "subjects": ["english", "maths", "science", "social"],
         "icons": {
             "english": "📖",
             "maths": "🔢",
-            "physics": "⚛️",
-            "biology": "🧬",
+            "science": "🔬",
             "social": "🌍"
         },
         "colors": {
             "english": "#8b5cf6",
             "maths": "#f59e0b",
-            "physics": "#3b82f6",
-            "biology": "#10b981",
+            "science": "#3b82f6",
             "social": "#ec4899"
         }
     }
 }
 
 # All possible subjects (for database queries and analytics)
-ALL_SUBJECTS = ["english", "maths", "science", "physics", "biology", "social"]
-
-# Mapping for backward compatibility (science -> physics/biology)
-SUBJECT_MIGRATION_MAP = {
-    "science": ["physics", "biology"]  # Old science queries can be categorized under both
-}
+ALL_SUBJECTS = ["english", "maths", "science", "social"]
 
 def get_subjects_for_class(class_num: int) -> list:
     """
@@ -93,8 +87,6 @@ def get_subject_icon(subject: str, class_num: int = None) -> str:
         "english": "📖",
         "maths": "🔢",
         "science": "🔬",
-        "physics": "⚛️",
-        "biology": "🧬",
         "social": "🌍"
     }
     return icons.get(subject.lower(), "📚")
@@ -120,8 +112,6 @@ def get_subject_color(subject: str, class_num: int = None) -> str:
         "english": "#8b5cf6",
         "maths": "#f59e0b",
         "science": "#3b82f6",
-        "physics": "#3b82f6",
-        "biology": "#10b981",
         "social": "#ec4899"
     }
     return colors.get(subject.lower(), "#6b7280")

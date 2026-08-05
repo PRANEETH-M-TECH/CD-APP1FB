@@ -507,6 +507,34 @@ def run_orchestrator_pipeline(raw_query: str, student_profile: Dict[str, Any]) -
                     conceptual_score=0.7,
                     metadata_filters=filters
                 )
+
+                # Safety net: the orchestrator LLM's matched_chapter guess is
+                # sometimes wrong (e.g. it can confuse lexically-similar
+                # chapters like "respiration" vs "reproduction"), which
+                # silently narrows the search to the wrong chapter and
+                # returns weak, irrelevant top hits instead of erroring. A
+                # low top score on a chapter-filtered search is a reliable
+                # signal of that failure mode, since a real match in the
+                # right chapter typically scores well above this. When it
+                # happens, retry across the whole subject book (still gated
+                # to the validated book_uuid) rather than trust the guess.
+                if filters:
+                    top_score = 0.0
+                    if raw_chunks:
+                        first = raw_chunks[0]
+                        top_score = first[0] if isinstance(first, tuple) and len(first) >= 2 else getattr(first, "score", 0.0)
+                    if (top_score or 0.0) < 0.55:
+                        print(
+                            f"[RAG SEARCH] Weak top score ({top_score:.3f}) for chapter-filtered "
+                            f"search on '{matched_chapter}' - retrying across the whole subject book."
+                        )
+                        raw_chunks, _, _ = qdrant_service.hybrid_search(
+                            book_uuid=resolved_book_uuid,
+                            query=reformulated_query,
+                            keywords=[],
+                            conceptual_score=0.7,
+                            metadata_filters={}
+                        )
             elif hasattr(qdrant_service, 'search_books_hybrid'):
                 raw_chunks = qdrant_service.search_books_hybrid(
                     query=reformulated_query,
@@ -536,6 +564,7 @@ def run_orchestrator_pipeline(raw_query: str, student_profile: Dict[str, Any]) -
                     "score": round(float(result_score or 0.0), 4),
                     "book_name": payload.get("book_name", payload.get("book", "")),
                     "chapter_name": payload.get("chapter_name", payload.get("chapter", "")),
+                    "page_number": payload.get("chpstpage") or payload.get("pdf_page"),
                     "content_snippet": (payload.get("text", payload.get("content", "")) or "")[:150] + "..."
                 })
         except Exception as e:

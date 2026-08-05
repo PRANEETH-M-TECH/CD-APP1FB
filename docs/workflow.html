@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Chaduvu Guru — Application Workflow</title>
+<style>
+  :root {
+    --ink: #14181a;
+    --ink-2: #2a3134;
+    --paper: #eef1ee;
+    --paper-2: #e2e6e1;
+    --card: #ffffff;
+    --line: rgba(20,24,26,0.13);
+    --text: #171b1c;
+    --text-muted: #565f60;
+    --accent: #128a72;
+    --accent-ink: #ffffff;
+    --accent-soft: rgba(18,138,114,0.10);
+    --prompt: #a8611f;
+    --prompt-soft: rgba(168,97,31,0.10);
+    --warn: #b3401f;
+    --warn-soft: rgba(179,64,31,0.10);
+    --code-bg: #f2f0e9;
+    --shadow: 0 1px 2px rgba(20,24,26,0.06), 0 8px 24px -12px rgba(20,24,26,0.18);
+    --radius: 10px;
+    --screen-bg: #0f1315;
+    --screen-line: rgba(238,241,238,0.14);
+    --screen-text: #eef1ee;
+    --screen-muted: #9aa5a3;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --ink: #eef1ee;
+      --paper: #101314;
+      --paper-2: #171b1c;
+      --card: #171b1c;
+      --line: rgba(238,241,238,0.13);
+      --text: #eef1ee;
+      --text-muted: #9aa5a3;
+      --accent: #35c9a5;
+      --accent-ink: #06110d;
+      --accent-soft: rgba(53,201,165,0.14);
+      --prompt: #e0a25c;
+      --prompt-soft: rgba(224,162,92,0.14);
+      --warn: #e2734c;
+      --warn-soft: rgba(226,115,76,0.14);
+      --code-bg: #1c211f;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 12px 32px -14px rgba(0,0,0,0.6);
+    }
+  }
+  :root[data-theme="dark"] {
+    --ink: #eef1ee; --paper: #101314; --paper-2: #171b1c; --card: #171b1c;
+    --line: rgba(238,241,238,0.13); --text: #eef1ee; --text-muted: #9aa5a3;
+    --accent: #35c9a5; --accent-ink: #06110d; --accent-soft: rgba(53,201,165,0.14);
+    --prompt: #e0a25c; --prompt-soft: rgba(224,162,92,0.14);
+    --warn: #e2734c; --warn-soft: rgba(226,115,76,0.14);
+    --code-bg: #1c211f; --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 12px 32px -14px rgba(0,0,0,0.6);
+  }
+  :root[data-theme="light"] {
+    --ink: #14181a; --paper: #eef1ee; --paper-2: #e2e6e1; --card: #ffffff;
+    --line: rgba(20,24,26,0.13); --text: #171b1c; --text-muted: #565f60;
+    --accent: #128a72; --accent-ink: #ffffff; --accent-soft: rgba(18,138,114,0.10);
+    --prompt: #a8611f; --prompt-soft: rgba(168,97,31,0.10);
+    --warn: #b3401f; --warn-soft: rgba(179,64,31,0.10);
+    --code-bg: #f2f0e9; --shadow: 0 1px 2px rgba(20,24,26,0.06), 0 8px 24px -12px rgba(20,24,26,0.18);
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--paper);
+    color: var(--text);
+    font-family: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection { background: var(--accent-soft); }
+
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 56px 28px 120px; }
+
+  /* ---------- Header ---------- */
+  .eyebrow {
+    font-family: ui-monospace, "Cascadia Code", "Consolas", "SFMono-Regular", Menlo, monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 18px;
+  }
+  .eyebrow::before {
+    content: "";
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+  }
+  h1 {
+    font-size: clamp(30px, 4vw, 44px);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.08;
+    margin: 0 0 14px;
+    text-wrap: balance;
+    max-width: 18ch;
+  }
+  .lede {
+    font-size: 17.5px;
+    color: var(--text-muted);
+    max-width: 62ch;
+    margin: 0 0 8px;
+  }
+  .meta-row {
+    display: flex; flex-wrap: wrap; gap: 10px;
+    margin-top: 26px;
+  }
+  .meta-chip {
+    font-family: ui-monospace, "Cascadia Code", "Consolas", "SFMono-Regular", Menlo, monospace;
+    font-size: 12px;
+    padding: 5px 10px;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    color: var(--text-muted);
+    background: var(--card);
+  }
+
+  /* ---------- Section scaffolding ---------- */
+  section.phase { margin-top: 64px; }
+  .phase-head {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 6px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--line);
+  }
+  .phase-no {
+    font-family: ui-monospace, "Cascadia Code", "Consolas", "SFMono-Regular", Menlo, monospace;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent);
+    background: var(--accent-soft);
+    border-radius: 5px;
+    padding: 3px 8px;
+    letter-spacing: 0.02em;
+    flex-shrink: 0;
+  }
+  .phase-head h2 {
+    font-size: 21px;
+    font-weight: 700;
+    margin: 0;
+    letter-spacing: -0.01em;
+  }
+  .phase-sub {
+    color: var(--text-muted);
+    font-size: 14.5px;
+    margin: 10px 0 22px;
+    max-width: 68ch;
+  }
+  .phase-branch {
+    font-size: 12px;
+    font-family: ui-monospace, "Cascadia Code", "Consolas", "SFMono-Regular", Menlo, monospace;
+    color: var(--text-muted);
+    margin-left: auto;
+    padding-left: 12px;
+  }
+
+  h2 { color: var(--text); }
+
+  /* ---------- Overview diagram panel ---------- */
+  .screen {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 8px 8px 20px;
+    box-shadow: var(--shadow);
+    margin: 28px 0 8px;
+    overflow-x: auto;
+  }
+  .screen-topbar {
+    display: flex; align-items: center; gap: 8px;
+    padding: 10px 14px 14px;
+    font-family: ui-monospace, "Cascadia Code", "Consolas", "SFMono-Regular", Menlo, monospace;
+    font-size: 11.5px;
+    color: var(--text-muted);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .screen-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--line); }
+  .screen pre.mermaid {
+    min-width: 720px;
+    display: flex;
+    justify-content: center;
+  }
+  .screen-caption {
+    font-size: 13px;
+    color: var(--text-muted);
+    padding: 10px 4px 0;
+  }
+
+  /* ---------- Legend ---------- */
+  .legend {
+    display: flex; flex-wrap: wrap; gap: 22px;
+    margin: 22px 0 0;
+    font-size: 13.5px;
+    color: var(--text-muted);
+  }
+  .legend-item { display: flex; align-items: center; gap: 8px; }
+  .swatch { width: 13px; height: 13px; border-radius: 4px; flex-shrink: 0; }
+
+  /* ---------- Reference tables ---------- */
+  .tbl-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius); background: var(--card); box-shadow: var(--shadow); }
+  table { border-collapse: collapse; width: 100%; min-width: 720px; }
+  thead th {
+    text-align: left;
+    font-size: 11.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+    font-weight: 600;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--line);
+    background: var(--paper-2);
+    white-space: nowrap;
+  }
+  tbody td {
+    padding: 13px 16px;
+    border-bottom: 1px solid var(--line);
+    font-size: 14px;
+    vertical-align: top;
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover { background: var(--accent-soft); }
+  td.step-cell { font-weight: 600; white-space: nowrap; }
+  .path {
+    font-family: ui-monospace, "Cascadia Code", "Consolas", "SFMono-Regular", Menlo, monospace;
+    font-size: 12.5px;
+    display: block;
+    color: var(--text);
+  }
+  .fn {
+    font-family: ui-monospace, "Cascadia Code", "Consolas", "SFMono-Regular", Menlo, monospace;
+    font-size: 12.5px;
+    color: var(--accent);
+  }
+  .tag {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-family: ui-monospace, "Cascadia Code", "Consolas", "SFMono-Regular", Menlo, monospace;
+    font-size: 11.5px;
+    padding: 2px 7px;
+    border-radius: 5px;
+    background: var(--prompt-soft);
+    color: var(--prompt);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .note { color: var(--text-muted); font-size: 13px; }
+  .none-cell { color: var(--text-muted); font-style: italic; font-size: 13px; }
+
+  /* ---------- Callouts ---------- */
+  .callout {
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--warn);
+    background: var(--warn-soft);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    font-size: 14px;
+    color: var(--text);
+    margin: 20px 0;
+  }
+  .callout b { color: var(--warn); }
+
+  /* ---------- Footer ---------- */
+  footer {
+    margin-top: 90px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line);
+    display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+    font-size: 13px;
+    color: var(--text-muted);
+    font-family: ui-monospace, "Cascadia Code", "Consolas", "SFMono-Regular", Menlo, monospace;
+  }
+
+  @media (max-width: 640px) {
+    .wrap { padding: 36px 16px 90px; }
+    .phase-head { flex-wrap: wrap; }
+    .phase-branch { margin-left: 0; padding-left: 0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <div class="eyebrow">Internal engineering reference</div>
+  <h1>How a question becomes an answer</h1>
+  <p class="lede">The full request pipeline for Chaduvu Guru — every stage, the exact file and function responsible for it, and the prompt driving it where one exists. Built for onboarding new contributors without a walkthrough.</p>
+  <div class="meta-row">
+    <div class="meta-chip">backend/app/api/routes/chat.py → smart_query_engine()</div>
+    <div class="meta-chip">2 LLM stages</div>
+    <div class="meta-chip">1 TTS pass per lesson</div>
+  </div>
+
+  <!-- ============ OVERVIEW DIAGRAM ============ -->
+  <section class="phase" style="margin-top: 48px;">
+    <div class="screen">
+      <div class="screen-topbar"><span class="screen-dot"></span> full-request-flow.mmd</div>
+      <pre class="mermaid">
+flowchart TD
+    A["Student asks a question<br/>public/script.js"] --> D["GET /api/smart_query<br/>chat.py :: smart_query_engine()"]
+    D --> E["Auth + student profile<br/>auth_middleware.py"]
+    E --> G{"Cached?<br/>check_global_query_cache()"}
+    G -- yes --> H["Replay scenes + audio<br/>from Firestore query_cache"]
+    G -- no --> S1
+
+    subgraph S1["STAGE 1 · Classify — test_runner.py"]
+      direction TB
+      I1["Load curriculum data<br/>get_cached_curriculum_metadata()"] --> I2["master_orchestrator_prompt.txt<br/>+ LLM call"]
+      I2 --> I3{"is_authorized?"}
+      I3 -- no --> I4["UNAUTHORIZED → refusal"]
+      I3 -- yes --> I5{"classification"}
+      I5 -- CURRICULUM --> I6["resolve_book_uuid_for_subject()<br/>gated on book_has_content()"]
+      I6 --> I7["hybrid_search()<br/>qdrant_service.py"]
+      I5 -- GENERAL_KNOWLEDGE --> I8["skip retrieval"]
+    end
+
+    I4 --> Z["Stream refusal to UI"]
+    I7 --> J{"format_decision"}
+    I8 --> J
+    J -- QUICK_ANSWER --> K["Stream text_narration"]
+    J -- VIDEO_REQUIRED --> S2
+
+    subgraph S2["STAGE 2 · Video — visual_learning_service.py"]
+      direction TB
+      L1["get_visual_lesson_prompt()<br/>+ template_registry.json + icons.js"] --> L2["LLM call: design storyboard"]
+      L2 --> L3{"scenes empty?"}
+      L3 -- retry <2 --> L2
+      L3 -- no --> L4["storyboard_ready<br/>stream scene text, no audio yet"]
+      L4 --> L5["generate_slide_audio()<br/>Sarvam TTS — ONE call per scene"]
+      L5 --> L6["audio_ready<br/>stream same text + real audio_url"]
+      L6 --> L7["run-storyboard.js<br/>StoryboardAdapter → Renderer → templates/*.js"]
+      L7 --> L8["lesson_ready<br/>mount video"]
+    end
+
+    K --> M["save_to_global_query_cache()"]
+    L8 --> M
+    M --> N["log_query() / update_user_stats()<br/>analytics_service.py"]
+    N --> O(("Answer delivered"))
+    H --> O
+      </pre>
+    </div>
+    <div class="legend">
+      <div class="legend-item">rounded box — a step, named as file :: function</div>
+      <div class="legend-item">◇ diamond — a decision point (branches on a real condition)</div>
+      <div class="legend-item">subgraph outline — the two LLM stages, kept visually separate</div>
+    </div>
+  </section>
+
+  <!-- ============ PHASE 1 ============ -->
+  <section class="phase">
+    <div class="phase-head">
+      <span class="phase-no">01</span>
+      <h2>Entry — question hits the backend</h2>
+      <span class="phase-branch">both paths</span>
+    </div>
+    <p class="phase-sub">The frontend streams the query over SSE; the backend resolves who's asking and what grade they're in before anything else runs.</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Step</th><th>File</th><th>Function</th><th>Prompt</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="step-cell">Submit question</td>
+            <td><span class="path">public/script.js</span></td>
+            <td><span class="fn">submitSmartQuery()</span></td>
+            <td class="none-cell">—</td>
+            <td class="note">Opens SSE connection to <span class="fn">/api/smart_query</span>.</td>
+          </tr>
+          <tr>
+            <td class="step-cell">Route handler</td>
+            <td><span class="path">backend/app/api/routes/chat.py</span></td>
+            <td><span class="fn">smart_query_engine()</span></td>
+            <td class="none-cell">—</td>
+            <td class="note">Owns the entire response stream, from cache check through final SSE <span class="fn">[DONE]</span>.</td>
+          </tr>
+          <tr>
+            <td class="step-cell">Resolve identity</td>
+            <td><span class="path">backend/app/core/auth_middleware.py</span></td>
+            <td><span class="fn">get_user_id_or_default()</span></td>
+            <td class="none-cell">—</td>
+            <td class="note">Decodes the Firebase ID token; login itself happens client-side, not here.</td>
+          </tr>
+          <tr>
+            <td class="step-cell">Load student profile</td>
+            <td><span class="path">chat.py</span> (inline)</td>
+            <td class="fn">db.collection("users")…</td>
+            <td class="none-cell">—</td>
+            <td class="note">Reads <span class="fn">Firestore users/{uid}</span> for real grade/board — the query param is just a fallback.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ============ PHASE 2 ============ -->
+  <section class="phase">
+    <div class="phase-head">
+      <span class="phase-no">02</span>
+      <h2>Cache check</h2>
+      <span class="phase-branch">both paths</span>
+    </div>
+    <p class="phase-sub">Every answer — text or video — is keyed by normalized query + class + subject. A hit skips both LLM stages entirely.</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Step</th><th>File</th><th>Function</th><th>Prompt</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="step-cell">Check cache</td>
+            <td><span class="path">backend/app/core/firestore_service.py</span></td>
+            <td><span class="fn">check_global_query_cache()</span></td>
+            <td class="none-cell">—</td>
+            <td class="note">Reads <span class="fn">classes/{grade}/subjects/{subject}/query_cache</span>. For video answers, also verifies the compiled lesson still exists on disk.</td>
+          </tr>
+          <tr>
+            <td class="step-cell">Write cache</td>
+            <td>firestore_service.py</td>
+            <td><span class="fn">save_to_global_query_cache()</span></td>
+            <td class="none-cell">—</td>
+            <td class="note">Stores <span class="fn">orchestrator_output</span> + (for video) the finished <span class="fn">video_scenes</span> — teacher_script and real audio_url per scene, so a cache hit can replay narration exactly.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ============ PHASE 3 ============ -->
+  <section class="phase">
+    <div class="phase-head">
+      <span class="phase-no">03</span>
+      <h2>Stage 1 — classify</h2>
+      <span class="phase-branch">on cache miss</span>
+    </div>
+    <p class="phase-sub">One LLM call decides three things only: is this allowed, is it curriculum or general knowledge, and does it need a quick answer or a video. It never designs a video itself.</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Step</th><th>File</th><th>Function</th><th>Prompt</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="step-cell">Run pipeline</td>
+            <td><span class="path">backend/app/orchestrator_test/test_runner.py</span></td>
+            <td><span class="fn">run_orchestrator_pipeline()</span></td>
+            <td><span class="tag">◆ prompt</span></td>
+            <td class="note">Formats and sends <span class="fn">master_orchestrator_prompt.txt</span>, the single classification+answer call.</td>
+          </tr>
+          <tr>
+            <td class="step-cell">Inject curriculum context</td>
+            <td>test_runner.py</td>
+            <td><span class="fn">get_cached_curriculum_metadata()</span></td>
+            <td class="none-cell">—</td>
+            <td class="note">Pulls every chapter title + summary for the student's grade — this is what the LLM matches the question against.</td>
+          </tr>
+          <tr>
+            <td class="step-cell">Prompt source</td>
+            <td colspan="2"><span class="path">backend/app/orchestrator_test/master_orchestrator_prompt.txt</span></td>
+            <td><span class="tag">◆ prompt</span></td>
+            <td class="note">Owns child-safety rules, the CURRICULUM/GENERAL_KNOWLEDGE decision, and QUICK_ANSWER/VIDEO_REQUIRED. Explicitly forbids generating a storyboard — that's Stage 2's job.</td>
+          </tr>
+          <tr>
+            <td class="step-cell">Validate the match</td>
+            <td>test_runner.py</td>
+            <td><span class="fn">get_valid_subjects_for_grade()</span><br/><span class="fn">resolve_book_uuid_for_subject()</span></td>
+            <td class="none-cell">—</td>
+            <td class="note">Both gated on <span class="fn">book_has_content()</span> — a subject with chapter metadata but zero ingested chunks is downgraded to GENERAL_KNOWLEDGE rather than answered ungrounded.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ============ PHASE 4 ============ -->
+  <section class="phase">
+    <div class="phase-head">
+      <span class="phase-no">04</span>
+      <h2>Retrieval</h2>
+      <span class="phase-branch">CURRICULUM only</span>
+    </div>
+    <p class="phase-sub">Only runs once Stage 1 has committed to a real, content-backed subject.</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Step</th><th>File</th><th>Function</th><th>Prompt</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="step-cell">Vector + keyword search</td>
+            <td><span class="path">backend/app/services/retrieval/qdrant_service.py</span></td>
+            <td><span class="fn">hybrid_search()</span></td>
+            <td class="none-cell">—</td>
+            <td class="note">Hybrid dense + BM25 search against the <span class="fn">textbooks_v2</span> Qdrant collection, filtered to the resolved book_uuid.</td>
+          </tr>
+          <tr>
+            <td class="step-cell">Content existence check</td>
+            <td>qdrant_service.py</td>
+            <td><span class="fn">book_has_content()</span></td>
+            <td class="none-cell">—</td>
+            <td class="note">Cached Qdrant <span class="fn">count()</span> — the gate referenced in Phase 03.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ============ PHASE 5 ============ -->
+  <section class="phase">
+    <div class="phase-head">
+      <span class="phase-no">05</span>
+      <h2>Stage 2 — build the lesson</h2>
+      <span class="phase-branch">format_decision = VIDEO_REQUIRED</span>
+    </div>
+    <p class="phase-sub">A second, dedicated LLM call — with the full template registry and icon library in context — designs the actual scenes. Audio is synthesized exactly once per scene and reused for both the on-screen narration and the video itself.</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Step</th><th>File</th><th>Function</th><th>Prompt</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="step-cell">Orchestrate the lesson</td>
+            <td><span class="path">backend/app/services/visual_learning/visual_learning_service.py</span></td>
+            <td><span class="fn">generate_visual_lesson_stream()</span></td>
+            <td class="none-cell">—</td>
+            <td class="note">A generator: yields <span class="fn">progress</span> → <span class="fn">storyboard_ready</span> → <span class="fn">audio_ready</span> → <span class="fn">lesson_ready</span> events in order.</td>
+          </tr>
+          <tr>
+            <td class="step-cell">Design storyboard</td>
+            <td><span class="path">backend/app/services/visual_learning/visual_lesson_prompt.py</span></td>
+            <td><span class="fn">get_visual_lesson_prompt()</span></td>
+            <td><span class="tag">◆ prompt</span></td>
+            <td class="note">Built dynamically at call time from <span class="fn">hyperframes_engine/shared/template-registry.json</span> (which templates + data shape) and <span class="fn">icons.js</span> (which icon names exist) via <span class="path">template_registry.py</span> — never hand-edit template choices elsewhere.</td>
+          </tr>
+          <tr>
+            <td class="step-cell">Retry if empty</td>
+            <td>visual_learning_service.py</td>
+            <td><span class="fn">storyboard_content_is_empty()</span></td>
+            <td class="none-cell">—</td>
+            <td class="note">One retry with a fresh completion if the LLM returns scenes with no real template_data.</td>
+          </tr>
+          <tr>
+            <td class="step-cell">Stream text (no audio yet)</td>
+            <td>chat.py</td>
+            <td class="fn">on "storyboard_ready"</td>
+            <td class="none-cell">—</td>
+            <td class="note">Ignored for display — waits for real audio rather than triggering a second, separate TTS pass client-side.</td>
+          </tr>
+          <tr>
+            <td class="step-cell">Synthesize narration</td>
+            <td><span class="path">backend/app/services/visual_learning/visual_audio_generator.py</span></td>
+            <td><span class="fn">generate_slide_audio()</span></td>
+            <td class="none-cell">—</td>
+            <td class="note">Calls <span class="fn">tts_service.synthesize_text_cached()</span> (Sarvam) once per scene, uploads each clip to Supabase.</td>
+          </tr>
+          <tr>
+            <td class="step-cell">Stream text + real audio</td>
+            <td>chat.py</td>
+            <td class="fn">on "audio_ready"</td>
+            <td class="none-cell">—</td>
+            <td class="note">The single, real narration reused for the video — this is what the student actually hears while reading.</td>
+          </tr>
+          <tr>
+            <td class="step-cell">Compile the video</td>
+            <td><span class="path">backend/app/services/visual_learning/hyperframes_engine_bridge.py</span></td>
+            <td>Node subprocess</td>
+            <td class="none-cell">—</td>
+            <td class="note">Shells out to <span class="path">hyperframes_engine/run-storyboard.js</span> → <span class="fn">StoryboardAdapter</span> → <span class="fn">Renderer</span> → <span class="path">templates/*.js</span>. Not touched by Python at all past this point.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout"><b>Known footgun —</b> the prompt and the engine must agree on canvas scale for anything with raw SVG coordinates (<span class="fn">illustrated_scene</span>, <span class="fn">cartesian_grid</span>). If <span class="path">template-registry.json</span>'s hint doesn't state the real pixel canvas size, the LLM invents tiny coordinates and the scene renders as good as blank.</div>
+  </section>
+
+  <!-- ============ PHASE 6 ============ -->
+  <section class="phase">
+    <div class="phase-head">
+      <span class="phase-no">06</span>
+      <h2>Persist + deliver</h2>
+      <span class="phase-branch">both paths, end of turn</span>
+    </div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Step</th><th>File</th><th>Function</th><th>Prompt</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="step-cell">Cache the result</td>
+            <td>firestore_service.py</td>
+            <td><span class="fn">save_to_global_query_cache()</span></td>
+            <td class="none-cell">—</td>
+            <td class="note">See Phase 02.</td>
+          </tr>
+          <tr>
+            <td class="step-cell">Log + update stats</td>
+            <td><span class="path">backend/app/services/analytics/analytics_service.py</span></td>
+            <td><span class="fn">log_query()</span> / <span class="fn">update_user_stats()</span></td>
+            <td class="none-cell">—</td>
+            <td class="note">Writes to <span class="fn">users/{uid}/queries</span> — visible in the app's History view and the <span class="path">/admin-dashboard</span>.</td>
+          </tr>
+          <tr>
+            <td class="step-cell">Render on screen</td>
+            <td><span class="path">public/script.js</span> +<br/><span class="path">public/js/tts-streaming-manager.js</span></td>
+            <td><span class="fn">mountVideoLessonGlobal()</span></td>
+            <td class="none-cell">—</td>
+            <td class="note">Text renders via the SSE stream; audio plays through <span class="fn">pushPreGeneratedChunk()</span> using the real <span class="fn">audio_url</span> — never a fresh client-side TTS call for video answers.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer>
+    <span>chaduvu-guru · workflow reference</span>
+    <span>source of truth: code, not this diagram — regenerate on drift</span>
+  </footer>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  mermaid.initialize({ startOnLoad: true, securityLevel: 'loose' });
+</script>
+</body>
+</html>

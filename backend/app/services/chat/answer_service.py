@@ -1,6 +1,7 @@
 import os
 import json
 import logging
+import re
 from typing import List, Dict, Optional
 
 from backend.app.services.retrieval import qdrant_service as qdrant
@@ -216,7 +217,16 @@ def generate_chapter_summary(class_name: str, subject_name: str, chapter_name: s
         json_end = json_text.rfind("}") + 1
         if json_start != -1 and json_end != -1:
             clean_json = json_text[json_start:json_end]
-            parsed_json = json.loads(clean_json)
+            try:
+                parsed_json = json.loads(clean_json)
+            except json.JSONDecodeError:
+                # LLM output for math/formula-heavy chapters often contains
+                # LaTeX-style backslash sequences (\frac, \(, \times) that
+                # aren't valid JSON escapes. The only escape the model
+                # realistically produces on purpose is \" (a quoted term),
+                # so escape every other backslash and retry once.
+                repaired = re.sub(r'\\(?!")', r'\\\\', clean_json)
+                parsed_json = json.loads(repaired)
             return parsed_json.get("summary", "")
         else:
             return "Could not generate summary."

@@ -1,5 +1,6 @@
 from google.cloud import firestore
 from backend.app.core.firebase.firebase_init import db
+from datetime import datetime, timedelta
 import logging
 
 logger = logging.getLogger(__name__)
@@ -125,6 +126,25 @@ def check_global_query_cache(raw_query: str, class_name: str, subject: str = Non
             return None
 
         cached_data = docs[0].to_dict()
+
+        # TTL check: a cache entry has no expiry by default, so a wrong
+        # classification/answer from a since-fixed prompt or model would
+        # otherwise be replayed to every student asking that exact phrasing
+        # forever (this bit us for a GENERAL_KNOWLEDGE misclassification
+        # that stayed cached after the orchestrator prompt was corrected).
+        # Expiring entries after a week keeps the caching benefit for
+        # genuinely repeated questions while letting fixes take effect on a
+        # reasonable timescale instead of requiring manual cache deletion.
+        created_at_str = cached_data.get("created_at")
+        if created_at_str:
+            try:
+                created_at = datetime.fromisoformat(created_at_str)
+                if datetime.now() - created_at > timedelta(days=7):
+                    logger.info(f"[CACHE] Cached record for '{raw_query}' is older than 7 days. Treating as cache miss.")
+                    return None
+            except (ValueError, TypeError):
+                pass
+
         orchestrator_val = cached_data.get("orchestrator_output", {})
         if isinstance(orchestrator_val, str):
             import json
@@ -193,7 +213,6 @@ def save_to_global_query_cache(raw_query: str, class_name: str, subject: str, or
     this is the only place scene/audio data for a video answer is persisted -
     without it, a cache hit on a video query would have nothing to replay.
     """
-    from datetime import datetime
     import json
     if not orchestrator_output or not (orchestrator_output.get("text_narration") or video_scenes):
         logger.warning("[CACHE] Rejecting save_to_global_query_cache because orchestrator_output is incomplete.")
