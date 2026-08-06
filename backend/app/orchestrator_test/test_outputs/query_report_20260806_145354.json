@@ -1,0 +1,108 @@
+{
+  "timestamp": "2026-08-06T14:53:54.575775",
+  "execution_time_seconds": 13.23,
+  "authenticated_student": {
+    "uid": "64AUNqlQKHTeR5BMfntEdZTglTn2",
+    "email": "student10@cg.com",
+    "name": "Student Ten",
+    "class": 10,
+    "board": "CBSE",
+    "role": "student"
+  },
+  "raw_user_query": "\"Explain the human digestive system — describe each organ from the mouth to the large intestine and how food is digested and absorbed.\"",
+  "orchestrator_output": {
+    "is_authorized": true,
+    "refusal_reason": null,
+    "classification": "CURRICULUM",
+    "reformulated_query": "Explain the human digestive system, describing each organ from the mouth to the large intestine and how food is digested and absorbed.",
+    "matched_subject": "science",
+    "matched_chapter": "LIFE PROCESSES",
+    "complexity_level": 2,
+    "format_decision": "VIDEO_REQUIRED",
+    "text_narration": null
+  },
+  "rag_retrieval_executed": true,
+  "retrieved_top10_chunks": [
+    {
+      "chunk_index": 1,
+      "score": 0.46,
+      "book_name": "",
+      "chapter_name": "LIFE PROCESSES",
+      "page_number": 98,
+      "content_snippet": "Science98\n5.5.2 Excretion in Plants\nPlants use completely different\nstrategies for excretion than those\nof animals. Oxygen itself can be\nthought of as..."
+    },
+    {
+      "chunk_index": 2,
+      "score": 0.4334,
+      "book_name": "",
+      "chapter_name": "LIFE PROCESSES",
+      "page_number": 85,
+      "content_snippet": "Life Processes 85\nActivity 5.3Activity 5.3Activity 5.3Activity 5.3Activity 5.3\n/square6Take 1 mL starch solution (1%) in two test tubes (A and B).\n/sq..."
+    },
+    {
+      "chunk_index": 3,
+      "score": 0.3512,
+      "book_name": "",
+      "chapter_name": "LIFE PROCESSES",
+      "page_number": 86,
+      "content_snippet": "secrete intestinal juice. The enzymes present in it finally convert the\nproteins to amino acids, complex carbohydrates into glucose and fats\ninto fatt..."
+    },
+    {
+      "chunk_index": 4,
+      "score": 0.2962,
+      "book_name": "",
+      "chapter_name": "LIFE PROCESSES",
+      "page_number": 87,
+      "content_snippet": "Life Processes 87\n5.3 RESPIR5.3 RESPIR5.3 RESPIR5.3 RESPIR5.3 RESPIR A AAAATIONTIONTIONTIONTION\nActivity 5.4Activity 5.4Activity 5.4Activity 5.4Activi..."
+    },
+    {
+      "chunk_index": 5,
+      "score": 0.2847,
+      "book_name": "",
+      "chapter_name": "LIFE PROCESSES",
+      "page_number": 85,
+      "content_snippet": "canal has muscles that contract\nrhythmically in order to push the food\nforward. These peristaltic movements\noccur all along the gut.\nFrom the mouth, t..."
+    },
+    {
+      "chunk_index": 6,
+      "score": 0.2574,
+      "book_name": "",
+      "chapter_name": "LIFE PROCESSES",
+      "page_number": 84,
+      "content_snippet": "temporary finger-like extensions of the cell surface which fuse over\nthe food particle forming a food-vacuole (Fig. 5.5). Inside the food-\nvacuole, co..."
+    },
+    {
+      "chunk_index": 7,
+      "score": 0.2499,
+      "book_name": "",
+      "chapter_name": "LIFE PROCESSES",
+      "page_number": 86,
+      "content_snippet": "Science86\nhave often heard adults complaining about ‘acidity’. Can this be related\nto what has been discussed above?\nThe exit of food from the stomach..."
+    },
+    {
+      "chunk_index": 8,
+      "score": 0.2448,
+      "book_name": "",
+      "chapter_name": "LIFE PROCESSES",
+      "page_number": 99,
+      "content_snippet": "Life Processes 99\n/square6During the process of respiration, organic compounds such as glucose are broken\ndown to provide energy in the form of ATP. A..."
+    },
+    {
+      "chunk_index": 9,
+      "score": 0.162,
+      "book_name": "",
+      "chapter_name": "LIFE PROCESSES",
+      "page_number": 94,
+      "content_snippet": "Science94\npumping system. To avoid this, the blood has platelet cells which circulate\naround the body and plug these leaks by helping to clot the bloo..."
+    },
+    {
+      "chunk_index": 10,
+      "score": 0.0127,
+      "book_name": "",
+      "chapter_name": "LIFE PROCESSES",
+      "page_number": 84,
+      "content_snippet": "Science84\ntaken up in the form of inorganic nitrates or nitrites. Or it is taken up as\norganic compounds which have been prepared by bacteria from\natm..."
+    }
+  ],
+  "resolved_book_uuid": "71d30452-178b-5820-8900-e87d333f3911"
+}

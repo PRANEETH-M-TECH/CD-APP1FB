@@ -1,0 +1,100 @@
+{
+  "timestamp": "2026-08-06T20:12:32.659363",
+  "execution_time_seconds": 11.46,
+  "authenticated_student": {
+    "uid": "64AUNqlQKHTeR5BMfntEdZTglTn2",
+    "email": "student10@cg.com",
+    "name": "Student Ten",
+    "class": 10,
+    "board": "CBSE",
+    "role": "student"
+  },
+  "raw_user_query": "\"Explain the magnetic field lines around a current-carrying straight conductor using the right-hand thumb rule.\"",
+  "orchestrator_output": {
+    "is_authorized": true,
+    "refusal_reason": null,
+    "classification": "CURRICULUM",
+    "reformulated_query": "Explain the magnetic field lines around a current-carrying straight conductor using the right-hand thumb rule.",
+    "matched_subject": "science",
+    "matched_chapter": "MAGNETIC EFFECTS OF ELECTRIC CURRENT",
+    "complexity_level": 2,
+    "format_decision": "VIDEO_REQUIRED",
+    "text_narration": null
+  },
+  "rag_retrieval_executed": true,
+  "retrieved_top10_chunks": [
+    {
+      "chunk_index": 1,
+      "score": 0.891,
+      "book_name": "",
+      "chapter_name": "MAGNETIC EFFECTS OF ELECTRIC CURRENT",
+      "page_number": 200,
+      "content_snippet": "Science200\nImagine that you are holding a current-carrying straight\nconductor in your right hand such that the thumb points towards\nthe direction of c..."
+    },
+    {
+      "chunk_index": 2,
+      "score": 0.4039,
+      "book_name": "",
+      "chapter_name": "MAGNETIC EFFECTS OF ELECTRIC CURRENT",
+      "page_number": 199,
+      "content_snippet": "Magnetic Effects of Electric Current 199\nWhat happens to the deflection of the compass needle placed at a\ngiven point if the current in the copper wir..."
+    },
+    {
+      "chunk_index": 3,
+      "score": 0.3902,
+      "book_name": "",
+      "chapter_name": "MAGNETIC EFFECTS OF ELECTRIC CURRENT",
+      "page_number": 203,
+      "content_snippet": "Magnetic Effects of Electric Current 203\nthe direction of force acting on the current-carrying rod gets reversed. It\nshows that the direction of the f..."
+    },
+    {
+      "chunk_index": 4,
+      "score": 0.382,
+      "book_name": "",
+      "chapter_name": "MAGNETIC EFFECTS OF ELECTRIC CURRENT",
+      "page_number": 200,
+      "content_snippet": "circular loop, the concentric circles representing the magnetic\nfield around it would become larger and larger as we move\naway from the wire (Fig. 12...."
+    },
+    {
+      "chunk_index": 5,
+      "score": 0.3373,
+      "book_name": "",
+      "chapter_name": "MAGNETIC EFFECTS OF ELECTRIC CURRENT",
+      "page_number": 207,
+      "content_snippet": "Magnetic Effects of Electric Current 207\nEXERCISES\n1. Which of the following correctly describes the magnetic field near a long\nstraight wire?\n(a) The..."
+    },
+    {
+      "chunk_index": 6,
+      "score": 0.3103,
+      "book_name": "",
+      "chapter_name": "MAGNETIC EFFECTS OF ELECTRIC CURRENT",
+      "page_number": 206,
+      "content_snippet": "Science206\nWhat you have learnt\n/square6A compass needle is a small magnet. Its one end, which points towards north, is\ncalled a north pole, and the o..."
+    },
+    {
+      "chunk_index": 7,
+      "score": 0.0985,
+      "book_name": "",
+      "chapter_name": "MAGNETIC EFFECTS OF ELECTRIC CURRENT",
+      "page_number": 202,
+      "content_snippet": "Science202\n12.3 12.312.3 12.312.3 FORCE ON A CURRENTFORCE ON A CURRENTFORCE ON A CURRENTFORCE ON A CURRENTFORCE ON A CURRENT ---\n--C CCCCARRYING CONDU..."
+    },
+    {
+      "chunk_index": 8,
+      "score": 0.0924,
+      "book_name": "",
+      "chapter_name": "MAGNETIC EFFECTS OF ELECTRIC CURRENT",
+      "page_number": 201,
+      "content_snippet": "Magnetic Effects of Electric Current 201\nWe know that the magnetic field produced by a curr ent-carrying\nwire at a given point depends directly on the..."
+    },
+    {
+      "chunk_index": 9,
+      "score": 0.0257,
+      "book_name": "",
+      "chapter_name": "MAGNETIC EFFECTS OF ELECTRIC CURRENT",
+      "page_number": 196,
+      "content_snippet": "Science196\n12.1 MAGNETIC FIELD AND FIELD LINES12.1 MAGNETIC FIELD AND FIELD LINES12.1 MAGNETIC FIELD AND FIELD LINES12.1 MAGNETIC FIELD AND FIELD LINE..."
+    }
+  ],
+  "resolved_book_uuid": "71d30452-178b-5820-8900-e87d333f3911"
+}

@@ -1,0 +1,241 @@
+{
+  "type": "storyboard_ready",
+  "lesson_title": "Understanding Simple Electric Circuits",
+  "scenes": [
+    {
+      "scene_no": 1,
+      "purpose": "Introduce the concept of electric circuits and their components.",
+      "beat_shape": "opener",
+      "template_id": "title_slide",
+      "template_selection_reasoning": "The title slide is essential for setting the stage for the lesson, providing a clear introduction to the topic of electric circuits.",
+      "camera": {
+        "zoom": 1.1,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "main_concept"
+      },
+      "teacher_script": "In this lesson, we will explore the fundamentals of simple electric circuits, including their components and how current flows through them.",
+      "template_data": {
+        "title": "Understanding Simple Electric Circuits",
+        "subtitle": "Components and Current Flow"
+      }
+    },
+    {
+      "scene_no": 2,
+      "purpose": "Explain the components of a simple electric circuit.",
+      "beat_shape": "hierarchy",
+      "template_id": "concept_diagram",
+      "template_selection_reasoning": "A concept diagram effectively illustrates the relationships between the components of an electric circuit, allowing students to visualize how they connect.",
+      "camera": {
+        "zoom": 1.0,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "battery"
+      },
+      "teacher_script": "A simple electric circuit consists of four main components: a battery, a switch, a resistor, and a bulb. Each plays a crucial role in the circuit's operation.",
+      "template_data": {
+        "title": "Components of a Simple Electric Circuit",
+        "central_node": {
+          "text": "Electric Circuit",
+          "icon": "circuit"
+        },
+        "leaf_nodes": [
+          {
+            "text": "Battery",
+            "icon": "battery"
+          },
+          {
+            "text": "Switch",
+            "icon": "power_switch"
+          },
+          {
+            "text": "Resistor",
+            "icon": "resistor"
+          },
+          {
+            "text": "Bulb",
+            "icon": "lightbulb"
+          }
+        ]
+      }
+    },
+    {
+      "scene_no": 3,
+      "purpose": "Demonstrate how current flows through the circuit.",
+      "beat_shape": "process_spatial",
+      "template_id": "illustrated_scene",
+      "template_selection_reasoning": "An illustrated scene visually represents the flow of current through the circuit, making it easier for students to understand the dynamic process.",
+      "camera": {
+        "zoom": 1.0,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "current_flow"
+      },
+      "teacher_script": "When the switch is closed, the circuit forms a complete loop. Current flows from the positive terminal of the battery, through the resistor and bulb, and back to the battery's negative terminal.",
+      "template_data": {
+        "title": "Current Flow in the Circuit",
+        "primitive_shape": "node_network",
+        "primitive_params": {
+          "nodes": [
+            {
+              "label": "Battery"
+            },
+            {
+              "label": "Switch"
+            },
+            {
+              "label": "Resistor"
+            },
+            {
+              "label": "Bulb"
+            }
+          ],
+          "connections": [
+            [
+              0,
+              1
+            ],
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              3
+            ],
+            [
+              3,
+              0
+            ]
+          ]
+        },
+        "elements": [
+          {
+            "type": "line",
+            "x1": 640.0,
+            "y1": 140.0,
+            "x2": 860.0,
+            "y2": 360.0,
+            "stroke_color": "#94a3b8",
+            "stroke_width": 2
+          },
+          {
+            "type": "line",
+            "x1": 860.0,
+            "y1": 360.0,
+            "x2": 640.0,
+            "y2": 580.0,
+            "stroke_color": "#94a3b8",
+            "stroke_width": 2
+          },
+          {
+            "type": "line",
+            "x1": 640.0,
+            "y1": 580.0,
+            "x2": 420.0,
+            "y2": 360.0,
+            "stroke_color": "#94a3b8",
+            "stroke_width": 2
+          },
+          {
+            "type": "line",
+            "x1": 420.0,
+            "y1": 360.0,
+            "x2": 640.0,
+            "y2": 140.0,
+            "stroke_color": "#94a3b8",
+            "stroke_width": 2
+          },
+          {
+            "type": "circle",
+            "cx": 640.0,
+            "cy": 140.0,
+            "r": 44,
+            "stroke_color": "#38bdf8",
+            "fill": "rgba(56,189,248,0.4)",
+            "label": "Battery",
+            "position": {
+              "x": 640.0,
+              "y": 206.0
+            }
+          },
+          {
+            "type": "circle",
+            "cx": 860.0,
+            "cy": 360.0,
+            "r": 44,
+            "stroke_color": "#22c55e",
+            "fill": "rgba(34,197,94,0.4)",
+            "label": "Switch",
+            "position": {
+              "x": 860.0,
+              "y": 426.0
+            }
+          },
+          {
+            "type": "circle",
+            "cx": 640.0,
+            "cy": 580.0,
+            "r": 44,
+            "stroke_color": "#f59e0b",
+            "fill": "rgba(245,158,11,0.4)",
+            "label": "Resistor",
+            "position": {
+              "x": 640.0,
+              "y": 646.0
+            }
+          },
+          {
+            "type": "circle",
+            "cx": 420.0,
+            "cy": 360.0,
+            "r": 44,
+            "stroke_color": "#ff6347",
+            "fill": "rgba(255,99,71,0.4)",
+            "label": "Bulb",
+            "position": {
+              "x": 420.0,
+              "y": 426.0
+            }
+          }
+        ]
+      },
+      "_primitive_shape": "node_network"
+    },
+    {
+      "scene_no": 4,
+      "purpose": "Summarize the lesson and reinforce key concepts.",
+      "beat_shape": "cyclical",
+      "template_id": "cycle_template",
+      "template_selection_reasoning": "The cycle template is suitable for summarizing the flow of current in a circuit, reinforcing the continuous nature of electric current.",
+      "camera": {
+        "zoom": 1.0,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "current_cycle"
+      },
+      "teacher_script": "In summary, a simple electric circuit allows current to flow continuously when the switch is closed. Understanding these components and their connections is fundamental to grasping electricity.",
+      "template_data": {
+        "title": "Summary of Current Flow",
+        "stages": [
+          {
+            "label": "Battery",
+            "icon": "battery"
+          },
+          {
+            "label": "Closed Switch",
+            "icon": "power_switch"
+          },
+          {
+            "label": "Resistor",
+            "icon": "resistor"
+          },
+          {
+            "label": "Bulb",
+            "icon": "lightbulb"
+          }
+        ]
+      }
+    }
+  ]
+}

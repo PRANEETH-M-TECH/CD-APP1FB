@@ -18,6 +18,18 @@ module.exports = {
       sceneTl.fromTo('#cartesian-eq-${sId}', { opacity: 0, scale: 0.8 }, { opacity: 1, scale: 1, duration: 0.4 }, 0.2);
       sceneTl.fromTo('#cartesian-curve-${sId}', { strokeDasharray: 800, strokeDashoffset: 800 }, { strokeDashoffset: 0, duration: 1.0, ease: 'power2.out' }, 0.4);
       sceneTl.fromTo('#cartesian-points-${sId} .grid-point', { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, stagger: 0.2, duration: 0.4, ease: 'back.out(1.8)' }, 0.8);
+
+      // Points keep a gentle continuous pulse once plotted, so the plot
+      // doesn't go inert the instant the curve finishes drawing.
+      sceneTl.to('#cartesian-points-${sId} .grid-point', {
+        boxShadow: '0 0 16px #38bdf8',
+        scale: 1.15,
+        duration: 0.9,
+        yoyo: true,
+        repeat: 240,
+        stagger: 0.15,
+        ease: 'sine.inOut'
+      }, 1.6);
     `;
   }
 };

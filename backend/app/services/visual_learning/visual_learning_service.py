@@ -142,6 +142,13 @@ async def generate_visual_lesson_stream(query: str, book_uuid: str, class_name: 
         from backend.app.services.visual_learning.template_registry import (
             get_active_template_ids,
             repair_scene_templates,
+            apply_curated_diagrams,
+            force_curated_diagram_scene,
+            apply_primitive_diagrams,
+            force_paired_organ_primitive,
+            force_enclosure_primitive,
+            force_node_network_primitive,
+            force_branching_primitive,
         )
         valid_templates = get_active_template_ids()
 
@@ -161,9 +168,32 @@ async def generate_visual_lesson_stream(query: str, book_uuid: str, class_name: 
             print(f"           Reasoning: {reasoning[:90]}...")
 
         repair_scene_templates(clips, log=print)
+        apply_curated_diagrams(clips, log=print)
+        force_curated_diagram_scene(clips, log=print)
+        apply_primitive_diagrams(clips, log=print)
+        force_paired_organ_primitive(clips, log=print)
+        force_enclosure_primitive(clips, log=print)
+        force_node_network_primitive(clips, log=print)
+        force_branching_primitive(clips, log=print)
 
         empty_count = sum(1 for c in clips if _scene_template_data_is_empty(c.get("template_data")))
         print(f"   [CONTENT AUDIT] {empty_count}/{len(clips)} scenes have empty template_data")
+
+        for idx, clip in enumerate(clips, 1):
+            if clip.get("template_id") == "illustrated_scene":
+                # Curated/primitive-generated content is code-verified correct
+                # regardless of element count (e.g. a container_flow with one
+                # inflow and one outflow is genuinely complete at 3 elements)
+                # - the sparse-scene floor only means something for the LLM's
+                # own freehand elements, where a low count really did mean a
+                # lazy/incomplete scene.
+                if clip.get("_curated_diagram_id") or clip.get("_primitive_shape"):
+                    continue
+                n_elements = len((clip.get("template_data") or {}).get("elements", []))
+                if n_elements < 4:
+                    logger.warning(f"[HYPERFRAMES_ILLUSTRATED_SCENE_SPARSE] lesson='{lesson_title}' scene={idx} elements={n_elements} (spec floor=4)")
+                    print(f"   [CONTENT AUDIT] Scene {idx}: illustrated_scene has only {n_elements} elements (spec floor is 4) - sparse scene")
+
         print("----------------------------------------------------------------------\n")
 
         return clips
@@ -314,9 +344,22 @@ async def generate_visual_lesson_stream(query: str, book_uuid: str, class_name: 
         await asyncio.sleep(0.1)
         
         progress_queue = asyncio.Queue()
+        scenes_by_no = {s.get("scene_no"): s for s in processed_scenes}
+        # Scenes are synthesized concurrently and their TTS calls can finish
+        # in any order (confirmed live: a real 5-scene lesson completed
+        # 1, 3, 4, 2, 5 - not 1-2-3-4-5). Streaming scene_audio_ready in raw
+        # completion order would narrate the story out of sequence (scene 3's
+        # narration before scene 2's). sorted_scene_nos/next_flush_idx/
+        # pending_ready buffer completed scenes and only flush them once
+        # every earlier scene in the story has also been flushed, so
+        # scene_audio_ready always streams in strict narrative order
+        # regardless of which one's TTS happened to finish first.
+        sorted_scene_nos = sorted(scenes_by_no.keys())
+        next_flush_idx = 0
+        pending_ready = {}
 
-        async def _on_audio_progress(slide_no: int, total_slides: int):
-            await progress_queue.put((slide_no, total_slides))
+        async def _on_audio_progress(slide_no: int, total_slides: int, audio_url: str):
+            await progress_queue.put((slide_no, total_slides, audio_url))
 
         try:
             audio_task = asyncio.create_task(
@@ -326,16 +369,35 @@ async def generate_visual_lesson_stream(query: str, book_uuid: str, class_name: 
             completed_count = 0
             while completed_count < total_clips and not audio_task.done():
                 try:
-                    s_no, total_s = await asyncio.wait_for(progress_queue.get(), timeout=1.5)
+                    s_no, total_s, s_audio_url = await asyncio.wait_for(progress_queue.get(), timeout=1.5)
                     completed_count += 1
-                    yield f"data: {json.dumps({'type': 'progress', 'step': 'creating_narration', 'status': 'in_progress', 'message': f'Synthesizing AI voiceovers ({completed_count}/{total_clips} ready)...'})}\n\n"
+                    scene = scenes_by_no.get(s_no)
+                    if scene is not None and s_audio_url:
+                        scene["audio_url"] = s_audio_url
+                        pending_ready[s_no] = scene
+                        # Flush every scene that's now ready, in strict
+                        # narrative order, starting from the earliest one
+                        # still owed - not the raw completion order above.
+                        while next_flush_idx < len(sorted_scene_nos) and sorted_scene_nos[next_flush_idx] in pending_ready:
+                            ready_no = sorted_scene_nos[next_flush_idx]
+                            ready_scene = pending_ready.pop(ready_no)
+                            yield f"data: {json.dumps({'type': 'scene_audio_ready', 'scene': ready_scene})}\n\n"
+                            next_flush_idx += 1
                 except asyncio.TimeoutError:
-                    yield f"data: {json.dumps({'type': 'progress', 'step': 'creating_narration', 'status': 'in_progress', 'message': f'Synthesizing AI voiceovers ({completed_count}/{total_clips} ready)...'})}\n\n"
+                    pass
 
             audio_urls = await audio_task
             for idx, scene in enumerate(processed_scenes):
-                if idx < len(audio_urls):
+                if idx < len(audio_urls) and not scene.get("audio_url"):
                     scene["audio_url"] = audio_urls[idx]
+
+            # Flush anything still buffered (e.g. an earlier scene never got
+            # a real audio_url so later, already-ready scenes were stuck
+            # waiting behind it) - stream what we have in order rather than
+            # silently dropping it into only the final batched audio_ready.
+            for ready_no in sorted_scene_nos[next_flush_idx:]:
+                if ready_no in pending_ready:
+                    yield f"data: {json.dumps({'type': 'scene_audio_ready', 'scene': pending_ready[ready_no]})}\n\n"
         except Exception as audio_err:
             logger.warning(f"[VisualLearning] Batch audio generation notice: {audio_err}")
             for scene in processed_scenes:

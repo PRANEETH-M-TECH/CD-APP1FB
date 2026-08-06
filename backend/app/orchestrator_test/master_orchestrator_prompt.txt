@@ -114,6 +114,13 @@ If authorized (`is_authorized: true`):
   "aerobic" vs "anaerobic" respiration means the chapter covers that exact comparison - match it).
   Before deciding GENERAL_KNOWLEDGE, scan every chapter summary across every subject in
   CURRICULUM_DATA for the query's core nouns/concepts, not just the question's grammatical shape.
+• RULE 1C (MATCH SYNONYMS AND SCIENTIFIC/COMMON-NAME PAIRS, NOT JUST EXACT WORDS):
+  A chapter summary using different but equivalent terminology than the query still counts as a
+  match - do not require the query's exact words to appear verbatim. Common examples: "digestive
+  system" = "alimentary canal" / "digestion"; "respiratory system" = "breathing" / "gas exchange";
+  "food chain" = "trophic levels"; "power supply" = "electricity generation". Before falling back
+  to GENERAL_KNOWLEDGE, explicitly consider whether the query's topic is being described in the
+  chapter summary under a different name.
 • RULE 2 (GENERAL KNOWLEDGE FALLBACK):
   If the core concepts do NOT match any Chapter Title, Topic Keyword, or Concept Description in the grade's CURRICULUM_DATA, or if `matched_chapter` is null (for example, if the topic is taught in a different grade or not covered in the current syllabus):
   - Set `classification: "GENERAL_KNOWLEDGE"`

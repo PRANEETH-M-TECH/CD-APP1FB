@@ -4,6 +4,7 @@ from backend.app.services.visual_learning.template_registry import (
     build_template_data_hints_block,
     build_selection_rules_text,
     build_icon_guidance_text,
+    build_shape_guidance_text,
 )
 
 def get_visual_lesson_prompt(class_name: str, subject: str, query: str, context: str) -> str:
@@ -12,7 +13,8 @@ def get_visual_lesson_prompt(class_name: str, subject: str, query: str, context:
     template_choice_line = build_template_choice_line()
     template_data_hints_block = build_template_data_hints_block()
     selection_rules_text = build_selection_rules_text()
-    icon_guidance_text = build_icon_guidance_text()
+    icon_guidance_text = build_icon_guidance_text(subject)
+    shape_guidance_text = build_shape_guidance_text()
 
     prompt = f"""You are CHADUVU-GURU, an intelligent, patient AI teacher. Your goal is to design a structured, highly engaging, and animated Visual Lesson Storyboard for a Class {class_name} student studying {subject}.
 Base your explanation on the textbook context below.
@@ -40,7 +42,8 @@ You must output a single, valid JSON object with the following structure:
     {{
       "scene_no": 1,
       "purpose": "Pedagogical objective of the scene",
-      "template_id": "title_slide", // Choose from: {template_choice_line}
+      "beat_shape": "opener", // Classify the scene's information-shape FIRST (see SCENE SHAPE section below) - one of: opener, sequence, hierarchy, comparison, cause_effect, process_spatial, quantitative, cyclical, spatial, overlap
+      "template_id": "title_slide", // Choose from: {template_choice_line} - MUST match a template registered for this scene's beat_shape
       "template_selection_reasoning": "Detailed pedagogical explanation of WHY this specific template was selected for this scene instead of others.",
       "camera": {{
         "zoom": 1.1, // Camera zoom level (1.0 = standard, 1.15 = close-up focus, 0.9 = wide overview)
@@ -56,6 +59,8 @@ You must output a single, valid JSON object with the following structure:
     }}
   ]
 }}
+
+{shape_guidance_text}
 
 ### STORYBOARD TEMPLATE SELECTION RULES:
 {selection_rules_text}

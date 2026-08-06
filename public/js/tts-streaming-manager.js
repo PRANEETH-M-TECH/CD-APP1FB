@@ -313,6 +313,36 @@ class StreamingAudioPipeline {
     }
 
     /**
+     * Call once the backend has confirmed no more pre-generated chunks are
+     * coming (e.g. the 'all_scene_audio_ready' SSE event). Unlike flush(),
+     * this doesn't create a chunk from textBuffer - it only unlocks
+     * onComplete for the pushPreGeneratedChunk() usage pattern, where the
+     * queue draining is otherwise indistinguishable from "not done yet, the
+     * next scene's audio just hasn't arrived over SSE".
+     */
+    markStreamComplete() {
+        this.streamCompleted = true;
+        if (!this.isProcessingPlayback) {
+            if (this.deliveryQueue.length === 0) {
+                // Nothing left queued and nothing playing - the queue-drain
+                // path in _processPlaybackQueue() already ran and skipped
+                // onComplete because streamCompleted wasn't true yet, so fire
+                // it now; nothing else will trigger it.
+                if (typeof this.onComplete === 'function') {
+                    try {
+                        this.onComplete();
+                    } catch (err) {
+                        console.error('[STREAM ERROR] Error in onComplete callback:', err);
+                    }
+                }
+            } else {
+                this._processPlaybackQueue();
+            }
+        }
+        this._processRenderQueue();
+    }
+
+    /**
      * Push a pre-generated chunk of text along with its already compiled Supabase audio URL.
      * Bypasses the TTS generation pipeline completely.
      * @param {string} text
@@ -896,8 +926,16 @@ class StreamingAudioPipeline {
             this.isProcessingPlayback = false;
         }
 
-        // Notify caller that all chunks are done
-        if (typeof this.onComplete === 'function') {
+        // Notify caller that all chunks are done - but only once the source
+        // has confirmed no more chunks are coming (streamCompleted, set by
+        // flush() for the token-streaming path or markStreamComplete() for
+        // the pushPreGeneratedChunk() path). Without this gate, the queue
+        // draining here just means "caught up for now" - e.g. scene 1's
+        // audio finished playing before scene 2's SSE chunk had arrived yet -
+        // not "genuinely done". Firing onComplete on that transient drain was
+        // a real confirmed bug: it mounted the video lesson player right
+        // after the first scene's narration, cutting off the rest.
+        if (this.streamCompleted && typeof this.onComplete === 'function') {
             try {
                 this.onComplete();
             } catch (err) {
@@ -970,6 +1008,19 @@ class StreamingAudioPipeline {
             } else if (this.dryRun) {
                 // Silence simulation
                 await new Promise(r => setTimeout(r, 300));
+            } else {
+                // No audio for this chunk at all (e.g. the backend's TTS call
+                // for this scene failed and audio_url came back empty) - fall
+                // back to a reading-paced delay instead of resolving
+                // instantly. Without this, a chunk with no audio "plays" in
+                // ~0ms, so the whole answer can flash up almost immediately
+                // with zero pacing whenever TTS silently fails for one or
+                // more scenes - confirmed as a real symptom the user
+                // reported ("whole answer displayed, then video immediately").
+                const charCount = (chunk.sanitized_text || chunk.text_chunk || '').length;
+                const readingPaceMs = Math.min(8000, Math.max(1500, charCount * 70));
+                console.warn(`[STREAM WARNING] Chunk #${chunk_id} has no audio (TTS likely failed for this scene) - using reading-paced fallback delay (${readingPaceMs}ms) instead of instant display.`);
+                await new Promise(r => setTimeout(r, readingPaceMs));
             }
 
             const elapsed = Math.round(performance.now() - playStart);
@@ -1050,6 +1101,31 @@ class StreamingAudioPipeline {
             window.speechSynthesis.cancel();
         }
     }
+
+    /**
+     * Called when the browser tab/window regains focus (see the
+     * visibilitychange listener below). A backgrounded tab can leave an
+     * in-flight audio.play() promise pending indefinitely instead of ever
+     * resolving/rejecting, and heavily throttles the setTimeout-based
+     * polling used elsewhere in this pipeline - confirmed as a real user-
+     * reported symptom: narration appears to "freeze" partway through after
+     * switching away from the browser to a different application, with the
+     * video sometimes mounting anyway once background compile work
+     * finishes around the same time. Nudge everything to catch up now that
+     * timers run normally again, rather than waiting for a stuck promise or
+     * throttled timer to eventually resolve on its own.
+     */
+    _handleVisibilityChange() {
+        if (document.visibilityState !== 'visible' || !this.isActive) return;
+        console.log('[STREAM] Tab regained focus - catching up any stalled playback/render state.');
+        if (this.currentAudio && this.currentAudio.paused && !this.currentAudio.ended) {
+            this.currentAudio.play().catch(() => {});
+        }
+        this._processRenderQueue();
+        if (!this.isProcessingPlayback) {
+            this._processPlaybackQueue();
+        }
+    }
 }
 
 // ── Auto-initialize on DOMContentLoaded ──────────────────────────────────────
@@ -1062,4 +1138,10 @@ document.addEventListener('DOMContentLoaded', () => {
         dryRun: false
     });
     console.log('[STREAM] window.ttsPipeline and window.playbackController ready.');
+
+    document.addEventListener('visibilitychange', () => {
+        if (window.ttsPipeline) {
+            window.ttsPipeline._handleVisibilityChange();
+        }
+    });
 });

@@ -630,6 +630,20 @@ function setupChatSubmitGlobal() {
         chatHistory.appendChild(userRow);
         chatHistory.scrollTop = chatHistory.scrollHeight;
 
+        // Stop any audio/video still playing from a PREVIOUS turn before this
+        // new one starts anything of its own. stopAll() below only resets the
+        // streaming TTS preview pipeline - it never touches a previously
+        // mounted Hyperframes video iframe, which keeps autoplaying its own
+        // baked-in scene audio regardless. Confirmed live: asking a second
+        // question while the first question's video was still playing caused
+        // both audio sources to play simultaneously ("overlapping voices").
+        if (window.playbackController) {
+            window.playbackController.stopAll();
+        }
+        document.querySelectorAll('iframe[id^="hf-iframe-"]').forEach(iframe => {
+            hfCmd(iframe.id, 'PAUSE');
+        });
+
         if (submitButton) submitButton.setAttribute('disabled', 'true');
         if (listChaptersBtn) listChaptersBtn.classList.add('hidden');
         const currentTurn = _turnCount++;
@@ -767,7 +781,14 @@ function setupChatSubmitGlobal() {
                     }
                     const badge = document.getElementById(`intent-badge-${currentTurn}`);
                     if (badge) {
-                        badge.textContent = (data.intent || '').replace(/_/g, ' ');
+                        // GENERAL_KNOWLEDGE means this answer wasn't grounded in the
+                        // student's ingested textbook content - make that explicit
+                        // rather than showing the raw classification label, so
+                        // students can tell a syllabus-grounded answer apart from
+                        // one answered from general knowledge/web search.
+                        badge.textContent = data.intent === 'GENERAL_KNOWLEDGE'
+                            ? 'OUTSIDE YOUR TEXTBOOK'
+                            : (data.intent || '').replace(/_/g, ' ');
                         badge.className = `intent-badge-pill intent-pill-${(data.intent || '').toLowerCase()}`;
                     }
                     // Apply subject theming
@@ -816,8 +837,33 @@ function setupChatSubmitGlobal() {
                     }
                 } else if (data.type === 'session') {
                     _sessionId = data.session_id || _sessionId;
+                } else if (data.type === 'all_scene_audio_ready') {
+                    // Backend confirms no more scene_audio_ready chunks are
+                    // coming for this lesson - only now can the streaming
+                    // pipeline's completion be trusted (see
+                    // markStreamComplete's own comment for why the queue
+                    // draining alone isn't a safe signal).
+                    if (useStreamingAudio && window.ttsPipeline) {
+                        window.ttsPipeline.markStreamComplete();
+                    }
                 } else if (data.type === 'lesson_ready') {
-                    if (window.ttsPipeline && window.ttsPipeline.isActive && !window.ttsPipeline.streamCompleted) {
+                    // !streamCompleted alone isn't enough - it only means "no
+                    // MORE chunks are coming," not "everything already queued
+                    // has finished PLAYING." Confirmed live: when the video
+                    // compiles quickly right after all_scene_audio_ready
+                    // fires, streamCompleted can already be true while the
+                    // pipeline is still mid-playback of an earlier scene -
+                    // the old check let the video mount immediately anyway,
+                    // cutting off the rest of the narration. Must also check
+                    // there's no outstanding playback/queue work left.
+                    const pipeline = window.ttsPipeline;
+                    const stillNarrating = pipeline && pipeline.isActive && (
+                        !pipeline.streamCompleted ||
+                        pipeline.isProcessingPlayback ||
+                        pipeline.deliveryQueue.length > 0 ||
+                        pipeline.renderQueue.length > 0
+                    );
+                    if (stillNarrating) {
                         console.log('[submitSmartQuery Global] Video ready during Teacher Reading! Buffering video mount.');
                         bufferedLessonReadyGlobal = data;
                     } else {

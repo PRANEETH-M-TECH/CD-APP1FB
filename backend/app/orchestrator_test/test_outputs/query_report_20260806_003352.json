@@ -1,0 +1,108 @@
+{
+  "timestamp": "2026-08-06T00:33:52.270795",
+  "execution_time_seconds": 13.16,
+  "authenticated_student": {
+    "uid": "64AUNqlQKHTeR5BMfntEdZTglTn2",
+    "email": "student10@cg.com",
+    "name": "Student Ten",
+    "class": 10,
+    "board": "CBSE",
+    "role": "student"
+  },
+  "raw_user_query": "Explain about the respiration in human beings?",
+  "orchestrator_output": {
+    "is_authorized": true,
+    "refusal_reason": null,
+    "classification": "CURRICULUM",
+    "reformulated_query": "Explain respiration in human beings.",
+    "matched_subject": "science",
+    "matched_chapter": "LIFE PROCESSES",
+    "complexity_level": 2,
+    "format_decision": "VIDEO_REQUIRED",
+    "text_narration": null
+  },
+  "rag_retrieval_executed": true,
+  "retrieved_top10_chunks": [
+    {
+      "chunk_index": 1,
+      "score": 0.46,
+      "book_name": "",
+      "chapter_name": "LIFE PROCESSES",
+      "page_number": 99,
+      "content_snippet": "(b) mitochondria. (d) nucleus.\n5. How are fats digested in our bodies? Where does this process take place?\n6. What is the role of saliva in the digest..."
+    },
+    {
+      "chunk_index": 2,
+      "score": 0.2943,
+      "book_name": "",
+      "chapter_name": "LIFE PROCESSES",
+      "page_number": 91,
+      "content_snippet": "Life Processes 91\n5.4 TR 5.4 TR5.4 TR 5.4 TR5.4 TR ANSPORTANSPORTANSPORT\nANSPORTANSPORT A AA AATION TIONTIONTIONTION\n5.4.1 Transportation in Human Bei..."
+    },
+    {
+      "chunk_index": 3,
+      "score": 0.2943,
+      "book_name": "",
+      "chapter_name": "LIFE PROCESSES",
+      "page_number": 99,
+      "content_snippet": "Life Processes 99\n/square6During the process of respiration, organic compounds such as glucose are broken\ndown to provide energy in the form of ATP. A..."
+    },
+    {
+      "chunk_index": 4,
+      "score": 0.2654,
+      "book_name": "",
+      "chapter_name": "LIFE PROCESSES",
+      "page_number": 90,
+      "content_snippet": "Science90\nWithin the lungs, the passage divides into smaller and smaller\ntubes which finally terminate in balloon-like structures which\nare called alv..."
+    },
+    {
+      "chunk_index": 5,
+      "score": 0.2629,
+      "book_name": "",
+      "chapter_name": "LIFE PROCESSES",
+      "page_number": 80,
+      "content_snippet": "Science80\nclass, even if we are just asleep, this maintenance job has to go on.\nThe processes which together perform this maintenance job are\nlife pro..."
+    },
+    {
+      "chunk_index": 6,
+      "score": 0.2533,
+      "book_name": "",
+      "chapter_name": "LIFE PROCESSES",
+      "page_number": 89,
+      "content_snippet": "Life Processes 89\ncells, or away from them and out into the air. The direction of diffusion\ndepends upon the environmental conditions and the requirem..."
+    },
+    {
+      "chunk_index": 7,
+      "score": 0.2505,
+      "book_name": "",
+      "chapter_name": "HOW DO ORGANISMS REPRODUCE",
+      "page_number": 113,
+      "content_snippet": "How do Organisms\nReproduce?\n7CHAPTER\nB\nefore we discuss the mechanisms by which organisms reproduce,\nlet us ask a more basic question – why do organis..."
+    },
+    {
+      "chunk_index": 8,
+      "score": 0.2495,
+      "book_name": "",
+      "chapter_name": "LIFE PROCESSES",
+      "page_number": 89,
+      "content_snippet": "respiration. This oxygen is absorbed by different organs in\ndifferent animals. All these organs have a structure that increases\nthe surface area which..."
+    },
+    {
+      "chunk_index": 9,
+      "score": 0.2437,
+      "book_name": "",
+      "chapter_name": "LIFE PROCESSES",
+      "page_number": 88,
+      "content_snippet": "Science88\nprocess breaks up the three-carbon pyruvate molecule to give three\nmolecules of carbon dioxide. The other pr oduct is water . Since this\npro..."
+    },
+    {
+      "chunk_index": 10,
+      "score": 0.1204,
+      "book_name": "",
+      "chapter_name": "CARBON AND ITS COMPOUNDS",
+      "page_number": 78,
+      "content_snippet": "Science78\n4. Explain the nature of the covalent bond using the bond formation in CH3Cl.\n5. Draw the electron dot structures for\n(a) ethanoic acid.\n(b)..."
+    }
+  ],
+  "resolved_book_uuid": "71d30452-178b-5820-8900-e87d333f3911"
+}

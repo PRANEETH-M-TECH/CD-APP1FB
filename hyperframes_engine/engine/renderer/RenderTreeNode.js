@@ -109,17 +109,28 @@ class RenderTreeNode {
         const shapeStyleAttr = RenderTreeNode._styleWithoutPaint(style);
         const common = `id="${this.component.id}" fill="${fill}" stroke="${stroke}" stroke-width="${strokeWidth}" ${shapeStyleAttr}`;
 
+        // Shape elements (circle/rect/line/path) are SVG leaf tags that cannot
+        // visually contain children of their own - a nested <text> label would
+        // be silently dropped if returned as-is. When the shape has children
+        // (e.g. the LABEL node illustrated_scene attaches for el.label), wrap
+        // the shape and its children in an (unlabelled) <g> so the label
+        // actually renders as a sibling <text>, while the shape itself keeps
+        // its own id unchanged so existing GSAP selectors (document.getElementById
+        // targeting el_comp_<scene>_<idx> directly) keep working untouched.
+        let shapeHtml;
         if (shape === 'circle' || shape === 'ellipse') {
-          return `<circle cx="${properties.cx || 0}" cy="${properties.cy || 0}" r="${properties.r || 0}" ${common} />`;
+          shapeHtml = `<circle cx="${properties.cx || 0}" cy="${properties.cy || 0}" r="${properties.r || 0}" ${common} />`;
         } else if (shape === 'rect') {
-          return `<rect x="${properties.x || 0}" y="${properties.y || 0}" width="${properties.width || 0}" height="${properties.height || 0}" rx="${properties.rx || 0}" ${common} />`;
+          shapeHtml = `<rect x="${properties.x || 0}" y="${properties.y || 0}" width="${properties.width || 0}" height="${properties.height || 0}" rx="${properties.rx || 0}" ${common} />`;
         } else if (shape === 'line') {
-          return `<line x1="${properties.x1 || 0}" y1="${properties.y1 || 0}" x2="${properties.x2 || 0}" y2="${properties.y2 || 0}" ${common} />`;
+          shapeHtml = `<line x1="${properties.x1 || 0}" y1="${properties.y1 || 0}" x2="${properties.x2 || 0}" y2="${properties.y2 || 0}" ${common} />`;
         } else if (shape === 'path') {
           const dash = properties.dash_array || properties.strokeDasharray || '';
-          return `<path d="${properties.d || properties.path_data || ''}" stroke-dasharray="${dash}" ${common} />`;
+          shapeHtml = `<path d="${properties.d || properties.path_data || ''}" stroke-dasharray="${dash}" ${common} />`;
+        } else {
+          return childrenHTML;
         }
-        return childrenHTML;
+        return childrenHTML ? `<g>${shapeHtml}${childrenHTML}</g>` : shapeHtml;
       }
 
       case 'LABEL': {

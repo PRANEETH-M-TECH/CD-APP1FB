@@ -1,0 +1,227 @@
+{
+  "type": "storyboard_ready",
+  "lesson_title": "Exploring the Structure of a Plant Cell",
+  "scenes": [
+    {
+      "scene_no": 1,
+      "purpose": "Introduce the topic of plant cell structure and its organelles.",
+      "beat_shape": "opener",
+      "template_id": "title_slide",
+      "template_selection_reasoning": "The title slide is essential for setting the stage for the lesson, providing a clear introduction to the topic of plant cell structure.",
+      "camera": {
+        "zoom": 1.1,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "main_concept"
+      },
+      "teacher_script": "Today, we will explore the fascinating structure of a plant cell and the various organelles that play crucial roles in its function.",
+      "template_data": {
+        "title": "Exploring the Structure of a Plant Cell",
+        "subtitle": "Understanding Organelles and Their Functions"
+      }
+    },
+    {
+      "scene_no": 2,
+      "purpose": "Visualize the main components of a plant cell and their functions.",
+      "beat_shape": "spatial",
+      "template_id": "illustrated_scene",
+      "template_selection_reasoning": "The concept diagram effectively illustrates the central idea of the plant cell and its various organelles, allowing for a clear understanding of their relationships.",
+      "camera": {
+        "zoom": 1.0,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "plant_cell"
+      },
+      "teacher_script": "A plant cell is a complex structure with several organelles, each serving specific functions. Let's take a closer look at these components.",
+      "template_data": {
+        "title": "Components of a Plant Cell",
+        "animation_action": "rise",
+        "elements": [
+          {
+            "type": "rect",
+            "x": 260,
+            "y": 140,
+            "width": 760,
+            "height": 440,
+            "rx": 28,
+            "stroke_color": "#a78bfa",
+            "stroke_width": 3,
+            "fill": "rgba(167,139,250,0.08)",
+            "label": "Plant Cell",
+            "position": {
+              "x": 640.0,
+              "y": 120
+            }
+          },
+          {
+            "type": "circle",
+            "cx": 413.3333333333333,
+            "cy": 270.0,
+            "r": 50.400000000000006,
+            "stroke_color": "#38bdf8",
+            "fill": "rgba(56,189,248,0.4)",
+            "label": "Cell Wall",
+            "position": {
+              "x": 413.3333333333333,
+              "y": 342.4
+            }
+          },
+          {
+            "type": "circle",
+            "cx": 640.0,
+            "cy": 270.0,
+            "r": 50.400000000000006,
+            "stroke_color": "#22c55e",
+            "fill": "rgba(34,197,94,0.4)",
+            "label": "Chloroplasts",
+            "position": {
+              "x": 640.0,
+              "y": 342.4
+            }
+          },
+          {
+            "type": "circle",
+            "cx": 866.6666666666666,
+            "cy": 270.0,
+            "r": 50.400000000000006,
+            "stroke_color": "#f59e0b",
+            "fill": "rgba(245,158,11,0.4)",
+            "label": "Vacuole",
+            "position": {
+              "x": 866.6666666666666,
+              "y": 342.4
+            }
+          },
+          {
+            "type": "circle",
+            "cx": 413.3333333333333,
+            "cy": 450.0,
+            "r": 50.400000000000006,
+            "stroke_color": "#ff6347",
+            "fill": "rgba(255,99,71,0.4)",
+            "label": "Cytoplasm",
+            "position": {
+              "x": 413.3333333333333,
+              "y": 522.4
+            }
+          },
+          {
+            "type": "circle",
+            "cx": 640.0,
+            "cy": 450.0,
+            "r": 50.400000000000006,
+            "stroke_color": "#facc15",
+            "fill": "rgba(250,204,21,0.4)",
+            "label": "Nucleus",
+            "position": {
+              "x": 640.0,
+              "y": 522.4
+            }
+          }
+        ],
+        "primitive_shape": "enclosure"
+      },
+      "_primitive_shape": "enclosure"
+    },
+    {
+      "scene_no": 3,
+      "purpose": "Explain the function of chloroplasts in photosynthesis.",
+      "beat_shape": "process_spatial",
+      "template_id": "illustrated_scene",
+      "template_selection_reasoning": "The illustrated scene allows for a dynamic representation of chloroplasts and their role in photosynthesis, making the concept visually engaging and easier to understand.",
+      "camera": {
+        "zoom": 1.1,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "chloroplasts"
+      },
+      "teacher_script": "Chloroplasts are vital organelles in plant cells responsible for photosynthesis. They capture sunlight and convert it into energy, enabling plants to produce food.",
+      "template_data": {
+        "title": "Chloroplasts and Photosynthesis",
+        "animation_action": "rise",
+        "elements": [
+          {
+            "type": "path",
+            "path_data": "M 100 600 Q 300 100 600 600",
+            "stroke_color": "#4caf50",
+            "stroke_width": 4,
+            "fill": "none"
+          },
+          {
+            "type": "circle",
+            "cx": 300,
+            "cy": 300,
+            "r": 60,
+            "stroke_color": "#8bc34a",
+            "stroke_width": 2,
+            "fill": "rgba(139, 195, 74, 0.5)"
+          },
+          {
+            "type": "circle",
+            "cx": 600,
+            "cy": 300,
+            "r": 60,
+            "stroke_color": "#8bc34a",
+            "stroke_width": 2,
+            "fill": "rgba(139, 195, 74, 0.5)"
+          },
+          {
+            "type": "circle",
+            "cx": 900,
+            "cy": 300,
+            "r": 60,
+            "stroke_color": "#8bc34a",
+            "stroke_width": 2,
+            "fill": "rgba(139, 195, 74, 0.5)"
+          },
+          {
+            "type": "path",
+            "path_data": "M 300 300 L 300 600",
+            "stroke_color": "#ffeb3b",
+            "stroke_width": 2,
+            "dash_array": "8 6"
+          }
+        ]
+      }
+    },
+    {
+      "scene_no": 4,
+      "purpose": "Summarize the key organelles and their functions in a plant cell.",
+      "beat_shape": "cyclical",
+      "template_id": "cycle_template",
+      "template_selection_reasoning": "The cycle template is ideal for summarizing the functions of various organelles in a plant cell, illustrating how they work together in a continuous process.",
+      "camera": {
+        "zoom": 1.0,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "summary_cycle"
+      },
+      "teacher_script": "In summary, the organelles of a plant cell work together in a cycle to ensure the plant's survival and growth. Each organelle has a unique role that contributes to the overall function of the cell.",
+      "template_data": {
+        "title": "Summary of Plant Cell Organelles",
+        "stages": [
+          {
+            "label": "Cell Wall",
+            "icon": "building_blocks"
+          },
+          {
+            "label": "Chloroplasts",
+            "icon": "chloroplast"
+          },
+          {
+            "label": "Vacuole",
+            "icon": "water_drop"
+          },
+          {
+            "label": "Cytoplasm",
+            "icon": "molecule"
+          },
+          {
+            "label": "Nucleus",
+            "icon": "cell_nucleus"
+          }
+        ]
+      }
+    }
+  ]
+}

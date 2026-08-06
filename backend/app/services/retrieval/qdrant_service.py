@@ -535,6 +535,7 @@ def hybrid_search(book_uuid: str, query: str, keywords: List[Dict], conceptual_s
     # BM25 keyword search
     bm25 = get_or_build_bm25_index(book_uuid)
     normalized_bm25_results = []
+    top_10_sparse = []
     if bm25:
         corpus_docs = book_corpus.get(book_uuid, [])
         tokenized_query = [w for w in keyword_query_str.split() if w]
@@ -576,9 +577,42 @@ def hybrid_search(book_uuid: str, query: str, keywords: List[Dict], conceptual_s
             hybrid_candidates[doc_text] = {"semantic": 0, "bm25": 0, "doc": doc}
         hybrid_candidates[doc_text]["bm25"] = score
 
+    # Combine via Reciprocal Rank Fusion (RRF) instead of raw-score min-max
+    # normalization. The old approach rescaled BM25 scores by
+    # (score-min)/(max-min) within the top-10 BM25 candidates for this
+    # query, which ALWAYS forces the single highest-BM25 candidate to a
+    # perfect 1.0 - even when every BM25 candidate is a weak, largely
+    # coincidental keyword match. Confirmed live: for "explain Ohm's law
+    # clearly with a diagram", an unrelated Myopia passage had the highest
+    # raw BM25 score (11.4, barely above a tight cluster of other weak
+    # matches 9.5-11.2) purely from generic word overlap ("explain",
+    # "clearly", "diagram") - normalizing it to 1.0 let it outrank the
+    # genuinely relevant, semantically strong Ohm's law passage in the final
+    # hybrid score (0.5 vs 0.288), causing the video-lesson LLM to generate
+    # an entire lesson about the wrong topic. RRF combines RANK POSITION
+    # instead of raw magnitude, so being #1 among a cluster of weak BM25
+    # matches only contributes a small, bounded amount (1/(RRF_K+1)) rather
+    # than a full 1.0 weighted equally with semantic relevance - it can no
+    # longer single-handedly dominate a chunk with strong semantic
+    # relevance but a merely-average BM25 rank.
+    RRF_K = 60
+    semantic_ranks: Dict[str, int] = {}
+    for rank, res in enumerate(semantic_results, start=1):
+        doc_text = res.payload.get("text", "").strip()
+        if doc_text and doc_text not in semantic_ranks:
+            semantic_ranks[doc_text] = rank
+
+    bm25_ranks: Dict[str, int] = {}
+    for rank, (_score, doc) in enumerate(top_10_sparse, start=1):
+        doc_text = doc.get("text", "").strip()
+        if doc_text and doc_text not in bm25_ranks:
+            bm25_ranks[doc_text] = rank
+
     ranked_list = []
     for doc_text, scores in hybrid_candidates.items():
-        hybrid_score = alpha * (scores.get("semantic") or 0) + (1 - alpha) * (scores.get("bm25") or 0)
+        semantic_rrf = 1.0 / (RRF_K + semantic_ranks[doc_text]) if doc_text in semantic_ranks else 0.0
+        bm25_rrf = 1.0 / (RRF_K + bm25_ranks[doc_text]) if doc_text in bm25_ranks else 0.0
+        hybrid_score = alpha * semantic_rrf + (1 - alpha) * bm25_rrf
         ranked_list.append((hybrid_score, scores["doc"]))
 
     ranked_list.sort(key=lambda x: x[0], reverse=True)

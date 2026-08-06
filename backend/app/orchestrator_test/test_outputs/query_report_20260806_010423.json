@@ -1,0 +1,100 @@
+{
+  "timestamp": "2026-08-06T01:04:23.547633",
+  "execution_time_seconds": 13.85,
+  "authenticated_student": {
+    "uid": "64AUNqlQKHTeR5BMfntEdZTglTn2",
+    "email": "student10@cg.com",
+    "name": "Student Ten",
+    "class": 10,
+    "board": "CBSE",
+    "role": "student"
+  },
+  "raw_user_query": "Explain about the respiratory system\"",
+  "orchestrator_output": {
+    "is_authorized": true,
+    "refusal_reason": null,
+    "classification": "CURRICULUM",
+    "reformulated_query": "Explain the respiratory system.",
+    "matched_subject": "science",
+    "matched_chapter": "LIFE PROCESSES",
+    "complexity_level": 2,
+    "format_decision": "VIDEO_REQUIRED",
+    "text_narration": null
+  },
+  "rag_retrieval_executed": true,
+  "retrieved_top10_chunks": [
+    {
+      "chunk_index": 1,
+      "score": 0.681,
+      "book_name": "",
+      "chapter_name": "LIFE PROCESSES",
+      "page_number": 90,
+      "content_snippet": "Science90\nWithin the lungs, the passage divides into smaller and smaller\ntubes which finally terminate in balloon-like structures which\nare called alv..."
+    },
+    {
+      "chunk_index": 2,
+      "score": 0.2814,
+      "book_name": "",
+      "chapter_name": "LIFE PROCESSES",
+      "page_number": 99,
+      "content_snippet": "Life Processes 99\n/square6During the process of respiration, organic compounds such as glucose are broken\ndown to provide energy in the form of ATP. A..."
+    },
+    {
+      "chunk_index": 3,
+      "score": 0.2547,
+      "book_name": "",
+      "chapter_name": "LIFE PROCESSES",
+      "page_number": 89,
+      "content_snippet": "respiration. This oxygen is absorbed by different organs in\ndifferent animals. All these organs have a structure that increases\nthe surface area which..."
+    },
+    {
+      "chunk_index": 4,
+      "score": 0.246,
+      "book_name": "",
+      "chapter_name": "LIFE PROCESSES",
+      "page_number": 94,
+      "content_snippet": "Science94\npumping system. To avoid this, the blood has platelet cells which circulate\naround the body and plug these leaks by helping to clot the bloo..."
+    },
+    {
+      "chunk_index": 5,
+      "score": 0.2317,
+      "book_name": "",
+      "chapter_name": "LIFE PROCESSES",
+      "page_number": 92,
+      "content_snippet": "Science92\nThe heart is a muscular organ which is\nas big as our fist (Fig. 5.10). Because\nboth oxygen and carbon dioxide have to\nbe transported by the ..."
+    },
+    {
+      "chunk_index": 6,
+      "score": 0.2203,
+      "book_name": "",
+      "chapter_name": "LIFE PROCESSES",
+      "page_number": 89,
+      "content_snippet": "Life Processes 89\ncells, or away from them and out into the air. The direction of diffusion\ndepends upon the environmental conditions and the requirem..."
+    },
+    {
+      "chunk_index": 7,
+      "score": 0.0031,
+      "book_name": "",
+      "chapter_name": "LIFE PROCESSES",
+      "page_number": 82,
+      "content_snippet": "Science82\nLet us now see what actually happens during the process of\nphotosynthesis. The following events occur during this process –\nFigure 5.2Figure..."
+    },
+    {
+      "chunk_index": 8,
+      "score": 0.0031,
+      "book_name": "",
+      "chapter_name": "LIFE PROCESSES",
+      "page_number": 83,
+      "content_snippet": "Life Processes 83\nNow, let us study how the plant\nobtains carbon dioxide. In Class IX,\nwe had talked about stomata (Fig. 5.3)\nwhich are tiny pores pre..."
+    },
+    {
+      "chunk_index": 9,
+      "score": 0.0023,
+      "book_name": "",
+      "chapter_name": "LIFE PROCESSES",
+      "page_number": 92,
+      "content_snippet": "allows a highly efficient supply of oxygen to the\nbody. This is useful in animals that have high\nenergy needs, such as birds and mammals, which\nconsta..."
+    }
+  ],
+  "resolved_book_uuid": "71d30452-178b-5820-8900-e87d333f3911"
+}

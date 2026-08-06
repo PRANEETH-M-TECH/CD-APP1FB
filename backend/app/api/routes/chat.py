@@ -692,6 +692,9 @@ async def smart_query_engine(
                     subject=video_subject
                 )
 
+                streamed_scene_nos = set()
+                narration_parts = []
+
                 async for sse_chunk in visual_stream:
                     # Strip 'data: ' prefix if present and parse
                     raw_data = sse_chunk.strip()
@@ -703,23 +706,24 @@ async def smart_query_engine(
 
                         # The storyboard (scenes + teacher_script) is ready before
                         # audio/compile finish. Ignore it for display purposes -
-                        # we wait for 'audio_ready' below so real, single-generation
-                        # audio can be attached to each scene's text as it streams
-                        # (a real-time teacher reading it aloud), instead of either
-                        # streaming silently or triggering a second, separate TTS call.
+                        # we stream each scene's text the moment ITS OWN audio is
+                        # ready (scene_audio_ready below), not before, so text and
+                        # narration always arrive together.
                         if chunk_json.get("type") == "storyboard_ready":
                             continue
 
-                        # Audio is ready (the ONLY TTS pass for this lesson - reused
-                        # for both this narrated text stream and the video itself).
-                        # Stream each scene's teacher_script with its real audio_url,
-                        # same pattern as the cache-hit path.
-                        if chunk_json.get("type") == "audio_ready":
-                            scenes = chunk_json.get("scenes", [])
-                            video_scenes_for_cache = scenes
-                            narration_parts = []
-                            for s in scenes:
-                                title = s.get("template_data", {}).get("title") or s.get("template_data", {}).get("heading") or s.get("purpose") or f"Scene {s.get('scene_no')}"
+                        # A single scene's audio just finished - stream its text
+                        # immediately, in a real-time teacher-reading way, instead
+                        # of waiting for every other scene's TTS to also finish.
+                        # This is what actually gates when the student sees
+                        # anything at all, so per-scene delivery here is the fix
+                        # for "why does the text answer wait so long".
+                        if chunk_json.get("type") == "scene_audio_ready":
+                            s = chunk_json.get("scene") or {}
+                            scene_no = s.get("scene_no")
+                            if scene_no not in streamed_scene_nos:
+                                streamed_scene_nos.add(scene_no)
+                                title = s.get("template_data", {}).get("title") or s.get("template_data", {}).get("heading") or s.get("purpose") or f"Scene {scene_no}"
                                 script = s.get("teacher_script") or ""
                                 audio_url = s.get("audio_url") or ""
                                 narration_parts.append(script)
@@ -727,13 +731,49 @@ async def smart_query_engine(
                                 bullet_text = format_text_explanation(bullet_text)
                                 text_chunk = bullet_text + "\n\n"
                                 yield f"data: {json.dumps({'display_text': text_chunk, 'audio_url': audio_url})}\n\n"
-                                await asyncio.sleep(0.05)
-                            text_script = " ".join(narration_parts)
                             continue
 
-                        # Forward progress steps to frontend
+                        # Batched completion signal - by now every scene should
+                        # already have streamed individually above. Only used to
+                        # capture the final scene list (with audio_url attached)
+                        # for caching; stream any scene that was somehow missed
+                        # above (e.g. a late/slow straggler) rather than silently
+                        # dropping its text.
+                        if chunk_json.get("type") == "audio_ready":
+                            scenes = chunk_json.get("scenes", [])
+                            video_scenes_for_cache = scenes
+                            for s in scenes:
+                                scene_no = s.get("scene_no")
+                                if scene_no in streamed_scene_nos:
+                                    continue
+                                streamed_scene_nos.add(scene_no)
+                                title = s.get("template_data", {}).get("title") or s.get("template_data", {}).get("heading") or s.get("purpose") or f"Scene {scene_no}"
+                                script = s.get("teacher_script") or ""
+                                audio_url = s.get("audio_url") or ""
+                                narration_parts.append(script)
+                                bullet_text = f"- **{title}**: {script}"
+                                bullet_text = format_text_explanation(bullet_text)
+                                text_chunk = bullet_text + "\n\n"
+                                yield f"data: {json.dumps({'display_text': text_chunk, 'audio_url': audio_url})}\n\n"
+                            text_script = " ".join(narration_parts)
+                            # Explicit "no more scene audio is coming" signal for
+                            # the frontend's streaming TTS queue. Without this the
+                            # queue has no way to distinguish "genuinely done" from
+                            # "just caught up, next scene's audio hasn't arrived
+                            # yet" - confirmed live: the queue draining transiently
+                            # between scenes was firing the pipeline's onComplete
+                            # after only the first scene played, mounting the video
+                            # player prematurely and cutting off the rest of the
+                            # narration.
+                            yield f"data: {json.dumps({'type': 'all_scene_audio_ready'})}\n\n"
+                            continue
+
+                        # Internal pipeline step names ("generating storyboard",
+                        # "synthesizing voiceovers", etc.) are deliberately not
+                        # forwarded to the UI - the student sees narrated text
+                        # arrive scene-by-scene above instead of a process log.
                         if chunk_json.get("type") == "progress":
-                            yield f"data: {json.dumps(chunk_json)}\n\n"
+                            continue
 
                         # Handle ready payload
                         if chunk_json.get("type") == "lesson_ready":

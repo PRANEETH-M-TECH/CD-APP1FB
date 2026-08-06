@@ -1,0 +1,108 @@
+{
+  "timestamp": "2026-08-06T21:41:54.020156",
+  "execution_time_seconds": 19.28,
+  "authenticated_student": {
+    "uid": "64AUNqlQKHTeR5BMfntEdZTglTn2",
+    "email": "student10@cg.com",
+    "name": "Student Ten",
+    "class": 10,
+    "board": "CBSE",
+    "role": "student"
+  },
+  "raw_user_query": "explain about Ohm's law clearly with a diagram",
+  "orchestrator_output": {
+    "is_authorized": true,
+    "refusal_reason": null,
+    "classification": "CURRICULUM",
+    "reformulated_query": "Explain Ohm's law with a diagram.",
+    "matched_subject": "science",
+    "matched_chapter": "ELECTRICITY",
+    "complexity_level": 2,
+    "format_decision": "VIDEO_REQUIRED",
+    "text_narration": null
+  },
+  "rag_retrieval_executed": true,
+  "retrieved_top10_chunks": [
+    {
+      "chunk_index": 1,
+      "score": 0.7592,
+      "book_name": "",
+      "chapter_name": "ELECTRICITY",
+      "page_number": 189,
+      "content_snippet": "Electricity 189\nApplying Ohm’s law [Eq. (11.5)], we get\nH = I2 Rt (11.21)\nThis is known as Joule’s law of heating. The\nlaw implies that heat produced ..."
+    },
+    {
+      "chunk_index": 2,
+      "score": 0.5186,
+      "book_name": "",
+      "chapter_name": "ELECTRICITY",
+      "page_number": 181,
+      "content_snippet": "Electricity 181\nQUESTIONS\n?\n1. On what factors does the resistance of a\nconductor depend?\n2. Will current flow more easily through a thick\nwire or a t..."
+    },
+    {
+      "chunk_index": 3,
+      "score": 0.4227,
+      "book_name": "",
+      "chapter_name": "ELECTRICITY",
+      "page_number": 185,
+      "content_snippet": "Electricity 185\nApplying Ohm’s law to the electric lamp and conductor separately,\nwe get potential difference across the electric lamp,\nV1 = 20 Ω ×  0..."
+    },
+    {
+      "chunk_index": 4,
+      "score": 0.3275,
+      "book_name": "",
+      "chapter_name": "ELECTRICITY",
+      "page_number": 184,
+      "content_snippet": "Science184\nOn applying Ohm’s law to the three resistors separately, we further\nhave\nV1 = I R1 [11.13(a)]\nV2 = I R2 [11.13(b)]\nand V3 = I R3 [11.13(c)]..."
+    },
+    {
+      "chunk_index": 5,
+      "score": 0.3083,
+      "book_name": "",
+      "chapter_name": "ELECTRICITY",
+      "page_number": 180,
+      "content_snippet": "Science180\nExample 11.4\nThe potential difference between the terminals of an electric heater\nis 60 V when it draws a current of 4 A from the source. W..."
+    },
+    {
+      "chunk_index": 6,
+      "score": 0.3059,
+      "book_name": "",
+      "chapter_name": "ELECTRICITY",
+      "page_number": 175,
+      "content_snippet": "Electricity 175\n11.4 OHM’S LA11.4 OHM’S LA11.4 OHM’S LA11.4 OHM’S LA11.4 OHM’S LA W WW WW\nIs there a relationship between the potential difference acr..."
+    },
+    {
+      "chunk_index": 7,
+      "score": 0.303,
+      "book_name": "",
+      "chapter_name": "ELECTRICITY",
+      "page_number": 176,
+      "content_snippet": "Science176\nFigure 11.3Figure 11.3Figure 11.3Figure 11.3Figure 11.3\nV–I graph for a nichrome wire. A\nstraight line plot shows that as the\ncurrent throu..."
+    },
+    {
+      "chunk_index": 8,
+      "score": 0.1942,
+      "book_name": "",
+      "chapter_name": "ELECTRICITY",
+      "page_number": 178,
+      "content_snippet": "Science178\nIt is observed that the ammeter reading decreases to one-half when\nthe length of the wire is doubled. The ammeter reading is increased when..."
+    },
+    {
+      "chunk_index": 9,
+      "score": 0.1754,
+      "book_name": "",
+      "chapter_name": "ELECTRICITY",
+      "page_number": 186,
+      "content_snippet": "Science186\n/square6Take out the plug from the key. Remove the ammeter and voltmeter from the circuit.\nInsert the ammeter in series with the resistor R..."
+    },
+    {
+      "chunk_index": 10,
+      "score": 0.138,
+      "book_name": "",
+      "chapter_name": "ELECTRICITY",
+      "page_number": 194,
+      "content_snippet": "Science194 194194 194194\n15. Two lamps, one rated 100 W at 220 V, and the other 60 W at 220 V, are connected\nin parallel to electric mains supply. Wha..."
+    }
+  ],
+  "resolved_book_uuid": "71d30452-178b-5820-8900-e87d333f3911"
+}

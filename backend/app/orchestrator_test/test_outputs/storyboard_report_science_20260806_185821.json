@@ -1,0 +1,321 @@
+{
+  "type": "storyboard_ready",
+  "lesson_title": "Understanding the Human Menstrual Cycle",
+  "scenes": [
+    {
+      "scene_no": 1,
+      "purpose": "Introduce the topic of the human menstrual cycle.",
+      "beat_shape": "opener",
+      "template_id": "title_slide",
+      "template_selection_reasoning": "The title slide is essential for setting the stage for the lesson, providing a clear introduction to the topic of the human menstrual cycle.",
+      "camera": {
+        "zoom": 1.1,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "main_concept"
+      },
+      "teacher_script": "Today, we will explore the human menstrual cycle, a vital process in female reproductive health. Understanding its stages is crucial for grasping human biology.",
+      "template_data": {
+        "title": "Understanding the Human Menstrual Cycle",
+        "subtitle": "A Journey Through Its Stages"
+      }
+    },
+    {
+      "scene_no": 2,
+      "purpose": "Explain the stages of the menstrual cycle.",
+      "beat_shape": "sequence",
+      "template_id": "cycle_template",
+      "template_selection_reasoning": "The cycle template effectively illustrates the cyclical nature of the menstrual cycle, allowing students to visualize each stage in a clear, organized manner.",
+      "camera": {
+        "zoom": 1.0,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "menstrual_cycle"
+      },
+      "teacher_script": "The menstrual cycle consists of four main stages: menstruation, the follicular phase, ovulation, and the luteal phase. Let's break these down.",
+      "template_data": {
+        "title": "Stages of the Menstrual Cycle",
+        "stages": [
+          {
+            "label": "Menstruation",
+            "icon": "blood"
+          },
+          {
+            "label": "Follicular Phase",
+            "icon": "egg"
+          },
+          {
+            "label": "Ovulation",
+            "icon": "ovary"
+          },
+          {
+            "label": "Luteal Phase",
+            "icon": "hormone"
+          }
+        ]
+      }
+    },
+    {
+      "scene_no": 3,
+      "purpose": "Detail the menstruation stage.",
+      "beat_shape": "hierarchy",
+      "template_id": "concept_diagram",
+      "template_selection_reasoning": "The concept diagram allows for a hierarchical breakdown of the menstruation stage, emphasizing its significance and related processes.",
+      "camera": {
+        "zoom": 1.1,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "menstruation_details"
+      },
+      "teacher_script": "During menstruation, the uterine lining sheds if no fertilization occurs. This process typically lasts 2 to 8 days and is crucial for preparing the body for a new cycle.",
+      "template_data": {
+        "title": "Menstruation Stage",
+        "central_node": {
+          "text": "Menstruation",
+          "icon": "blood"
+        },
+        "leaf_nodes": [
+          {
+            "text": "Uterine Lining Shedding",
+            "icon": "tissue"
+          },
+          {
+            "text": "Hormonal Changes",
+            "icon": "hormone"
+          },
+          {
+            "text": "Duration: 2-8 Days",
+            "icon": "clock"
+          }
+        ]
+      }
+    },
+    {
+      "scene_no": 4,
+      "purpose": "Explain the follicular phase.",
+      "beat_shape": "process_spatial",
+      "template_id": "illustrated_scene",
+      "template_selection_reasoning": "The illustrated scene effectively depicts the follicular phase, showcasing the growth of follicles and the preparation for ovulation in a visually engaging manner.",
+      "camera": {
+        "zoom": 1.0,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "follicular_phase"
+      },
+      "teacher_script": "In the follicular phase, follicles in the ovaries mature, preparing for ovulation. This phase is marked by rising estrogen levels, which help thicken the uterine lining.",
+      "template_data": {
+        "title": "Follicular Phase",
+        "primitive_shape": "branching",
+        "primitive_params": {
+          "source": {
+            "label": "Follicular Phase"
+          },
+          "branches": [
+            {
+              "label": "Follicle Maturation",
+              "cluster": false
+            },
+            {
+              "label": "Estrogen Increase",
+              "cluster": false
+            },
+            {
+              "label": "Uterine Lining Thickening",
+              "cluster": false
+            }
+          ]
+        },
+        "elements": [
+          {
+            "type": "rect",
+            "x": 618,
+            "y": 110,
+            "width": 44,
+            "height": 190,
+            "stroke_color": "#94a3b8",
+            "fill": "rgba(148,163,184,0.15)",
+            "label": "Follicular Phase",
+            "position": {
+              "x": 470,
+              "y": 205.0
+            }
+          },
+          {
+            "type": "path",
+            "path_data": "M 640 80 L 640 300",
+            "stroke_color": "#3b82f6",
+            "stroke_width": 3,
+            "dash_array": "8 6"
+          },
+          {
+            "type": "path",
+            "path_data": "M 640 300 Q 575.4837567451749 370.5868302664686 471.78864862759076 456.8596228143747",
+            "stroke_color": "#94a3b8",
+            "stroke_width": 9,
+            "fill": "none"
+          },
+          {
+            "type": "circle",
+            "cx": 471.78864862759076,
+            "cy": 456.8596228143747,
+            "r": 46,
+            "stroke_color": "#ff6347",
+            "fill": "rgba(255,99,71,0.35)",
+            "label": "Follicle Maturation",
+            "position": {
+              "x": 471.78864862759076,
+              "y": 524.8596228143747
+            }
+          },
+          {
+            "type": "path",
+            "path_data": "M 640 300 Q 612.0 403.5 640.0 530.0",
+            "stroke_color": "#94a3b8",
+            "stroke_width": 9,
+            "fill": "none"
+          },
+          {
+            "type": "circle",
+            "cx": 640.0,
+            "cy": 530.0,
+            "r": 46,
+            "stroke_color": "#22c55e",
+            "fill": "rgba(34,197,94,0.35)",
+            "label": "Estrogen Increase",
+            "position": {
+              "x": 640.0,
+              "y": 598.0
+            }
+          },
+          {
+            "type": "path",
+            "path_data": "M 640 300 Q 760.5162432548251 370.5868302664686 808.2113513724092 456.8596228143747",
+            "stroke_color": "#94a3b8",
+            "stroke_width": 9,
+            "fill": "none"
+          },
+          {
+            "type": "circle",
+            "cx": 808.2113513724092,
+            "cy": 456.8596228143747,
+            "r": 46,
+            "stroke_color": "#f59e0b",
+            "fill": "rgba(245,158,11,0.35)",
+            "label": "Uterine Lining Thickening",
+            "position": {
+              "x": 808.2113513724092,
+              "y": 524.8596228143747
+            }
+          }
+        ]
+      },
+      "_primitive_shape": "branching"
+    },
+    {
+      "scene_no": 5,
+      "purpose": "Describe ovulation.",
+      "beat_shape": "sequence",
+      "template_id": "cycle_template",
+      "template_selection_reasoning": "The cycle template is suitable for illustrating ovulation as a key event in the menstrual cycle, highlighting its timing and significance.",
+      "camera": {
+        "zoom": 1.0,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "ovulation"
+      },
+      "teacher_script": "Ovulation occurs around the midpoint of the cycle when a mature egg is released from the ovary. This is the optimal time for fertilization.",
+      "template_data": {
+        "title": "Ovulation",
+        "stages": [
+          {
+            "label": "Egg Release",
+            "icon": "egg"
+          },
+          {
+            "label": "Fertilization Window",
+            "icon": "sperm"
+          },
+          {
+            "label": "Hormonal Surge",
+            "icon": "hormone"
+          }
+        ]
+      }
+    },
+    {
+      "scene_no": 6,
+      "purpose": "Explain the luteal phase.",
+      "beat_shape": "hierarchy",
+      "template_id": "math_derivation",
+      "template_selection_reasoning": "The concept diagram allows for a clear hierarchical understanding of the luteal phase, emphasizing its role in preparing for potential pregnancy.",
+      "camera": {
+        "zoom": 1.1,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "luteal_phase"
+      },
+      "teacher_script": "In the luteal phase, the body prepares for a possible pregnancy. If fertilization does not occur, hormone levels drop, leading back to menstruation.",
+      "template_data": {
+        "title": "Luteal Phase",
+        "central_node": {
+          "text": "Luteal Phase",
+          "icon": "hormone"
+        },
+        "leaf_nodes": [
+          {
+            "text": "Corpus Luteum Formation",
+            "icon": "egg"
+          },
+          {
+            "text": "Hormonal Support for Pregnancy",
+            "icon": "hormone"
+          },
+          {
+            "text": "Preparation for Menstruation",
+            "icon": "blood"
+          }
+        ],
+        "steps": [
+          "Corpus Luteum Formation",
+          "Hormonal Support for Pregnancy",
+          "Preparation for Menstruation"
+        ]
+      }
+    },
+    {
+      "scene_no": 7,
+      "purpose": "Summarize the menstrual cycle.",
+      "beat_shape": "cyclical",
+      "template_id": "cycle_template",
+      "template_selection_reasoning": "The cycle template effectively summarizes the entire menstrual cycle, reinforcing the cyclical nature of the process and its stages.",
+      "camera": {
+        "zoom": 1.0,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "summary_cycle"
+      },
+      "teacher_script": "To conclude, the menstrual cycle is a complex yet beautifully orchestrated process that prepares the female body for potential pregnancy each month.",
+      "template_data": {
+        "title": "Summary of the Menstrual Cycle",
+        "stages": [
+          {
+            "label": "Menstruation",
+            "icon": "blood"
+          },
+          {
+            "label": "Follicular Phase",
+            "icon": "egg"
+          },
+          {
+            "label": "Ovulation",
+            "icon": "ovary"
+          },
+          {
+            "label": "Luteal Phase",
+            "icon": "hormone"
+          }
+        ]
+      }
+    }
+  ]
+}

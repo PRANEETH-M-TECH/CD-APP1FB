@@ -645,6 +645,9 @@ class StoryboardAdapter {
 
         case 'general_scene':
         default: {
+          if (templateId !== 'general_scene') {
+            console.warn(`[HYPERFRAMES_TEMPLATE_FALLBACK] scene=${sceneNo} raw_template_id="${rawTemplateId}" normalized="${templateId}" -> falling back to general_scene (unrecognized template_id)`);
+          }
           nodes.push(StoryboardAdapter.createNode(`title_${sceneNo}`, 'TEXT', 'TEXT', `title_comp_${sceneNo}`, { text: data.title || '' }));
           break;
         }

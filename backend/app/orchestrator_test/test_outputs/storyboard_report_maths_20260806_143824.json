@@ -1,0 +1,209 @@
+{
+  "type": "storyboard_ready",
+  "lesson_title": "Deriving the Quadratic Formula",
+  "scenes": [
+    {
+      "scene_no": 1,
+      "purpose": "Introduce the topic of deriving the quadratic formula through completing the square.",
+      "beat_shape": "opener",
+      "template_id": "title_slide",
+      "template_selection_reasoning": "The title slide is essential for setting the stage for the lesson, providing a clear introduction to the topic.",
+      "camera": {
+        "zoom": 1.1,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "main_concept"
+      },
+      "teacher_script": "Today, we will derive the quadratic formula from the standard form of a quadratic equation by completing the square. This foundational concept will enhance your understanding of quadratic equations.",
+      "template_data": {
+        "title": "Deriving the Quadratic Formula",
+        "subtitle": "Completing the Square Method"
+      }
+    },
+    {
+      "scene_no": 2,
+      "purpose": "Explain the standard form of a quadratic equation.",
+      "beat_shape": "process_spatial",
+      "template_id": "illustrated_scene",
+      "template_selection_reasoning": "A concept diagram effectively illustrates the structure of the quadratic equation and its components, helping students visualize the relationships.",
+      "camera": {
+        "zoom": 1.0,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "main_concept"
+      },
+      "teacher_script": "A quadratic equation is expressed in the form ax² + bx + c = 0, where a, b, and c are constants, and a is not zero. Let's break down these components.",
+      "template_data": {
+        "title": "Quadratic Equation Structure",
+        "animation_action": "rise",
+        "elements": [
+          {
+            "type": "rect",
+            "x": 618,
+            "y": 110,
+            "width": 44,
+            "height": 190,
+            "stroke_color": "#94a3b8",
+            "fill": "rgba(148,163,184,0.15)",
+            "label": "Quadratic Equation",
+            "position": {
+              "x": 470,
+              "y": 205.0
+            }
+          },
+          {
+            "type": "path",
+            "path_data": "M 640 80 L 640 300",
+            "stroke_color": "#3b82f6",
+            "stroke_width": 3,
+            "dash_array": "8 6"
+          },
+          {
+            "type": "path",
+            "path_data": "M 640 300 Q 575.4837567451749 370.5868302664686 471.78864862759076 456.8596228143747",
+            "stroke_color": "#94a3b8",
+            "stroke_width": 9,
+            "fill": "none"
+          },
+          {
+            "type": "circle",
+            "cx": 471.78864862759076,
+            "cy": 456.8596228143747,
+            "r": 46,
+            "stroke_color": "#ff6347",
+            "fill": "rgba(255,99,71,0.35)",
+            "label": "a (Coefficient of x²)",
+            "position": {
+              "x": 471.78864862759076,
+              "y": 524.8596228143747
+            }
+          },
+          {
+            "type": "path",
+            "path_data": "M 640 300 Q 612.0 403.5 640.0 530.0",
+            "stroke_color": "#94a3b8",
+            "stroke_width": 9,
+            "fill": "none"
+          },
+          {
+            "type": "circle",
+            "cx": 640.0,
+            "cy": 530.0,
+            "r": 46,
+            "stroke_color": "#22c55e",
+            "fill": "rgba(34,197,94,0.35)",
+            "label": "b (Coefficient of x)",
+            "position": {
+              "x": 640.0,
+              "y": 598.0
+            }
+          },
+          {
+            "type": "path",
+            "path_data": "M 640 300 Q 760.5162432548251 370.5868302664686 808.2113513724092 456.8596228143747",
+            "stroke_color": "#94a3b8",
+            "stroke_width": 9,
+            "fill": "none"
+          },
+          {
+            "type": "circle",
+            "cx": 808.2113513724092,
+            "cy": 456.8596228143747,
+            "r": 46,
+            "stroke_color": "#f59e0b",
+            "fill": "rgba(245,158,11,0.35)",
+            "label": "c (Constant term)",
+            "position": {
+              "x": 808.2113513724092,
+              "y": 524.8596228143747
+            }
+          }
+        ],
+        "primitive_shape": "branching"
+      },
+      "_primitive_shape": "branching"
+    },
+    {
+      "scene_no": 3,
+      "purpose": "Demonstrate the process of completing the square.",
+      "beat_shape": "sequence",
+      "template_id": "math_derivation",
+      "template_selection_reasoning": "The math derivation template is ideal for step-by-step explanations of the completing the square process, allowing students to follow along easily.",
+      "camera": {
+        "zoom": 1.1,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "main_concept"
+      },
+      "teacher_script": "To derive the quadratic formula, we start with ax² + bx + c = 0. First, we divide the entire equation by a to simplify it.",
+      "template_data": {
+        "title": "Completing the Square Steps",
+        "formula": "ax² + bx + c = 0",
+        "steps": [
+          "Step 1: Divide by a: x² + (b/a)x + (c/a) = 0",
+          "Step 2: Move constant to the right: x² + (b/a)x = - (c/a)",
+          "Step 3: Complete the square: (x + b/2a)² = (b² - 4ac) / 4a²"
+        ]
+      }
+    },
+    {
+      "scene_no": 4,
+      "purpose": "Present the final quadratic formula derived from the previous steps.",
+      "beat_shape": "sequence",
+      "template_id": "cycle_template",
+      "template_selection_reasoning": "Continuing with the math derivation template allows for a clear presentation of the final formula, reinforcing the learning process.",
+      "camera": {
+        "zoom": 1.0,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "main_concept"
+      },
+      "teacher_script": "After completing the square, we arrive at the quadratic formula: x = [-b ± √(b² - 4ac)] / (2a). This formula allows us to find the roots of any quadratic equation.",
+      "template_data": {
+        "title": "Quadratic Formula",
+        "formula": "x = [-b ± √(b² - 4ac)] / (2a)",
+        "steps": []
+      }
+    },
+    {
+      "scene_no": 5,
+      "purpose": "Summarize the key points learned in the lesson.",
+      "beat_shape": "hierarchy",
+      "template_id": "math_derivation",
+      "template_selection_reasoning": "A concept diagram is effective for summarizing the key points, reinforcing the lesson's main ideas visually.",
+      "camera": {
+        "zoom": 1.0,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "main_concept"
+      },
+      "teacher_script": "In summary, we derived the quadratic formula by completing the square, understanding the structure of quadratic equations, and the significance of the discriminant.",
+      "template_data": {
+        "title": "Summary of Key Points",
+        "central_node": {
+          "text": "Quadratic Formula Derivation",
+          "icon": "book"
+        },
+        "leaf_nodes": [
+          {
+            "text": "Standard Form: ax² + bx + c = 0",
+            "icon": "pencil"
+          },
+          {
+            "text": "Completing the Square Process",
+            "icon": "gear"
+          },
+          {
+            "text": "Quadratic Formula: x = [-b ± √(b² - 4ac)] / (2a)",
+            "icon": "check"
+          }
+        ],
+        "steps": [
+          "Standard Form: ax² + bx + c = 0",
+          "Completing the Square Process",
+          "Quadratic Formula: x = [-b ± √(b² - 4ac)] / (2a)"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,240 @@
+{
+  "type": "storyboard_ready",
+  "lesson_title": "The Human Excretory System",
+  "scenes": [
+    {
+      "scene_no": 1,
+      "purpose": "Introduce the human excretory system and its components.",
+      "beat_shape": "opener",
+      "template_id": "title_slide",
+      "template_selection_reasoning": "The title slide is essential for setting the stage for the lesson, introducing the main topic clearly.",
+      "camera": {
+        "zoom": 1.1,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "main_concept"
+      },
+      "teacher_script": "Today, we will explore the human excretory system, a vital process for removing waste from our bodies. Let's dive into how this system functions.",
+      "template_data": {
+        "title": "The Human Excretory System",
+        "subtitle": "Understanding Waste Removal in Our Bodies"
+      }
+    },
+    {
+      "scene_no": 2,
+      "purpose": "Explain the components of the human excretory system.",
+      "beat_shape": "hierarchy",
+      "template_id": "concept_diagram",
+      "template_selection_reasoning": "A concept diagram effectively illustrates the hierarchical structure of the excretory system's components, showing their relationships.",
+      "camera": {
+        "zoom": 1.0,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "main_concept"
+      },
+      "teacher_script": "The human excretory system consists of several key components: the kidneys, ureters, urinary bladder, and urethra. Each plays a crucial role in waste removal.",
+      "template_data": {
+        "title": "Components of the Excretory System",
+        "central_node": {
+          "text": "Excretory System",
+          "icon": "kidney"
+        },
+        "leaf_nodes": [
+          {
+            "text": "Kidneys",
+            "icon": "kidney"
+          },
+          {
+            "text": "Ureters",
+            "icon": "tube"
+          },
+          {
+            "text": "Urinary Bladder",
+            "icon": "container_flow"
+          },
+          {
+            "text": "Urethra",
+            "icon": "tube"
+          }
+        ]
+      }
+    },
+    {
+      "scene_no": 3,
+      "purpose": "Describe the urine production process in the kidneys.",
+      "beat_shape": "process_spatial",
+      "template_id": "illustrated_scene",
+      "template_selection_reasoning": "An illustrated scene allows for a visual representation of urine production, making the complex process easier to understand.",
+      "camera": {
+        "zoom": 1.1,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "main_concept"
+      },
+      "teacher_script": "Urine is produced in the kidneys through a filtration process. Blood enters the kidneys, where waste products are filtered out, forming urine.",
+      "template_data": {
+        "title": "Urine Production in the Kidneys",
+        "primitive_shape": "container_flow",
+        "primitive_params": {
+          "container": {
+            "label": "Kidney"
+          },
+          "inflows": [
+            {
+              "label": "Blood with Waste"
+            }
+          ],
+          "outflows": [
+            {
+              "label": "Urine"
+            }
+          ]
+        },
+        "elements": [
+          {
+            "type": "rect",
+            "x": 480.0,
+            "y": 250.0,
+            "width": 320,
+            "height": 220,
+            "rx": 24,
+            "stroke_color": "#38bdf8",
+            "fill": "rgba(56,189,248,0.18)",
+            "label": "Kidney",
+            "position": {
+              "x": 640,
+              "y": 230.0
+            }
+          },
+          {
+            "type": "circle",
+            "cx": 570,
+            "cy": 310,
+            "r": 10,
+            "stroke_color": "#38bdf8",
+            "fill": "rgba(56,189,248,0.4)"
+          },
+          {
+            "type": "circle",
+            "cx": 680,
+            "cy": 330,
+            "r": 8,
+            "stroke_color": "#38bdf8",
+            "fill": "rgba(56,189,248,0.4)"
+          },
+          {
+            "type": "circle",
+            "cx": 620,
+            "cy": 400,
+            "r": 9,
+            "stroke_color": "#38bdf8",
+            "fill": "rgba(56,189,248,0.4)"
+          },
+          {
+            "type": "circle",
+            "cx": 715,
+            "cy": 415,
+            "r": 7,
+            "stroke_color": "#38bdf8",
+            "fill": "rgba(56,189,248,0.4)"
+          },
+          {
+            "type": "path",
+            "path_data": "M 140 360.0 L 460.0 360.0",
+            "stroke_color": "#22c55e",
+            "stroke_width": 3,
+            "dash_array": "8 6",
+            "label": "Blood with Waste",
+            "position": {
+              "x": 300.0,
+              "y": 344.0
+            }
+          },
+          {
+            "type": "path",
+            "path_data": "M 820.0 360.0 L 1140 360.0",
+            "stroke_color": "#a78bfa",
+            "stroke_width": 3,
+            "dash_array": "8 6",
+            "label": "Urine",
+            "position": {
+              "x": 980.0,
+              "y": 344.0
+            }
+          }
+        ]
+      },
+      "_primitive_shape": "container_flow"
+    },
+    {
+      "scene_no": 4,
+      "purpose": "Explain the journey of urine from the kidneys to the outside of the body.",
+      "beat_shape": "sequence",
+      "template_id": "cycle_template",
+      "template_selection_reasoning": "The cycle template effectively illustrates the sequential process of urine traveling from the kidneys to the bladder and out through the urethra.",
+      "camera": {
+        "zoom": 1.0,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "main_concept"
+      },
+      "teacher_script": "Once urine is formed in the kidneys, it travels through the ureters to the urinary bladder, where it is stored until it is expelled through the urethra.",
+      "template_data": {
+        "title": "Urine Flow Process",
+        "stages": [
+          {
+            "label": "Kidneys",
+            "icon": "kidney"
+          },
+          {
+            "label": "Ureters",
+            "icon": "tube"
+          },
+          {
+            "label": "Urinary Bladder",
+            "icon": "container_flow"
+          },
+          {
+            "label": "Urethra",
+            "icon": "tube"
+          }
+        ]
+      }
+    },
+    {
+      "scene_no": 5,
+      "purpose": "Summarize the importance of the excretory system.",
+      "beat_shape": "hierarchy",
+      "template_id": "taxonomy_tree",
+      "template_selection_reasoning": "A taxonomy tree is suitable for summarizing the importance of the excretory system and its role in maintaining homeostasis.",
+      "camera": {
+        "zoom": 1.0,
+        "pan_x": 0,
+        "pan_y": 0,
+        "target_node": "main_concept"
+      },
+      "teacher_script": "The excretory system is crucial for maintaining the body's balance by removing harmful waste products, regulating water levels, and ensuring overall health.",
+      "template_data": {
+        "title": "Importance of the Excretory System",
+        "root": {
+          "label": "Excretory System Functions",
+          "icon": "kidney",
+          "children": [
+            {
+              "label": "Waste Removal",
+              "icon": "cross"
+            },
+            {
+              "label": "Water Regulation",
+              "icon": "water_drop"
+            },
+            {
+              "label": "Homeostasis Maintenance",
+              "icon": "balance"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

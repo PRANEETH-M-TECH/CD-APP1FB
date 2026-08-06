@@ -70,7 +70,7 @@ async def _generate_single_slide_audio(
         logger.info(f"[AudioGen] Slide {slide_no} already has audio URL: {audio_url}")
         print(f"🚀 [AudioGen] Skip TTS. Using pre-generated audio for Scene {slide_no} -> {audio_url}", flush=True)
         if progress_callback:
-            await progress_callback(slide_no, total_slides)
+            await progress_callback(slide_no, total_slides, audio_url)
         return audio_url
 
     if not isinstance(slide_no, int):
@@ -89,9 +89,10 @@ async def _generate_single_slide_audio(
         print(f"[NOTICE] [AudioGen] SARVAM_API_KEY missing. Saving mock silent audio for scene {slide_no}.", flush=True)
         with open(wav_path, "wb") as f:
             f.write(base64.b64decode(dummy_wav_b64))
+        fallback_url = f"/uploads/visual_lessons/{lesson_id}/{wav_filename}"
         if progress_callback:
-            await progress_callback(slide_no, total_slides)
-        return f"/uploads/visual_lessons/{lesson_id}/{wav_filename}"
+            await progress_callback(slide_no, total_slides, fallback_url)
+        return fallback_url
         
     try:
         from backend.app.services.chat.tts_service import synthesize_text_cached
@@ -106,17 +107,22 @@ async def _generate_single_slide_audio(
             f.write(all_audio_bytes)
             
         from backend.app.core.supabase_storage import upload_file_to_supabase
-        cloud_audio_url = upload_file_to_supabase(wav_path, f"{lesson_id}/{wav_filename}")
+        # upload_file_to_supabase uses a blocking httpx.Client, not the async
+        # one - calling it directly here would freeze the whole event loop for
+        # its duration, which silently serializes every "concurrent" scene in
+        # generate_slide_audio's asyncio.gather() and defeats per-scene
+        # streaming upstream. Run it on a thread so scenes actually overlap.
+        cloud_audio_url = await asyncio.to_thread(upload_file_to_supabase, wav_path, f"{lesson_id}/{wav_filename}")
         final_audio_url = cloud_audio_url or f"/uploads/visual_lessons/{lesson_id}/{wav_filename}"
-        
+
         logger.info(f"[RENDER LOG] [AUDIO TTS SUCCESS] Scene {slide_no} audio ready ({len(all_audio_bytes)} bytes) -> {final_audio_url}")
         print(f"[RENDER LOG] [AUDIO TTS SUCCESS] Scene {slide_no} audio ready -> {final_audio_url}", flush=True)
-        
+
         if progress_callback:
-            await progress_callback(slide_no, total_slides)
-            
+            await progress_callback(slide_no, total_slides, final_audio_url)
+
         return final_audio_url
-        
+
     except Exception as e:
         logger.warning(f"[AudioGen] Fallback audio for Scene {slide_no}: {e}")
         print(f"[RENDER LOG] [AUDIO TTS NOTICE] Scene {slide_no} using silent fallback audio: {e}", flush=True)
@@ -124,15 +130,15 @@ async def _generate_single_slide_audio(
             with open(wav_path, "wb") as f:
                 f.write(base64.b64decode(dummy_wav_b64))
             from backend.app.core.supabase_storage import upload_file_to_supabase
-            cloud_audio_url = upload_file_to_supabase(wav_path, f"{lesson_id}/{wav_filename}")
+            cloud_audio_url = await asyncio.to_thread(upload_file_to_supabase, wav_path, f"{lesson_id}/{wav_filename}")
             final_audio_url = cloud_audio_url or f"/uploads/visual_lessons/{lesson_id}/{wav_filename}"
             if progress_callback:
-                await progress_callback(slide_no, total_slides)
+                await progress_callback(slide_no, total_slides, final_audio_url)
             return final_audio_url
         except Exception as write_err:
             logger.error(f"[AudioGen] Failed writing fallback audio for Scene {slide_no}: {write_err}")
             if progress_callback:
-                await progress_callback(slide_no, total_slides)
+                await progress_callback(slide_no, total_slides, None)
             return None
 
 

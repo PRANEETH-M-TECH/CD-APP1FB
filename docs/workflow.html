@@ -339,10 +339,11 @@ flowchart TD
       L2 --> L3{"scenes empty?"}
       L3 -- retry <2 --> L2
       L3 -- no --> L4["storyboard_ready<br/>stream scene text, no audio yet"]
-      L4 --> L5["generate_slide_audio()<br/>Sarvam TTS — ONE call per scene"]
-      L5 --> L6["audio_ready<br/>stream same text + real audio_url"]
-      L6 --> L7["run-storyboard.js<br/>StoryboardAdapter → Renderer → templates/*.js"]
-      L7 --> L8["lesson_ready<br/>mount video"]
+      L4 --> L5["generate_slide_audio()<br/>Sarvam TTS — concurrent per-scene calls,<br/>streamed back in narrative order"]
+      L5 --> L6["scene_audio_ready ×N<br/>stream each scene's text + real audio_url"]
+      L6 --> L6b["all_scene_audio_ready<br/>explicit 'no more scenes coming' signal"]
+      L6b --> L7["run-storyboard.js<br/>StoryboardAdapter → Renderer → templates/*.js"]
+      L7 --> L8["lesson_ready<br/>mount video — only once narration genuinely finished playing"]
     end
 
     K --> M["save_to_global_query_cache()"]
@@ -496,7 +497,7 @@ flowchart TD
             <td><span class="path">backend/app/services/retrieval/qdrant_service.py</span></td>
             <td><span class="fn">hybrid_search()</span></td>
             <td class="none-cell">—</td>
-            <td class="note">Hybrid dense + BM25 search against the <span class="fn">textbooks_v2</span> Qdrant collection, filtered to the resolved book_uuid.</td>
+            <td class="note">Hybrid dense + BM25 search against the <span class="fn">textbooks_v2</span> Qdrant collection, filtered to the resolved book_uuid. Combines the two rankers via <b>Reciprocal Rank Fusion</b> (<span class="fn">1/(60+rank)</span> per ranker) — not raw-score blending.</td>
           </tr>
           <tr>
             <td class="step-cell">Content existence check</td>
@@ -508,6 +509,7 @@ flowchart TD
         </tbody>
       </table>
     </div>
+    <div class="callout"><b>Known footgun —</b> do not revert <span class="fn">hybrid_search()</span>'s score combination back to min-max raw-score normalization. That approach always rescaled whichever chunk had the single highest BM25 score to a perfect 1.0, <i>even when every BM25 candidate was a weak, coincidental keyword match</i> — confirmed live: a Class 10 science query about "Ohm's law" retrieved a Myopia passage as the #1 chunk (generic word overlap on "explain"/"diagram"), and the resulting video was about vision defects instead. RRF fixes this by combining rank position instead of magnitude, so a single weak-but-locally-highest hit can no longer dominate a chunk with genuinely strong semantic relevance. Separately — not yet fixed — the ingested PDF text has an apostrophe-encoding bug (<span class="fn">Ohm's</span> → <span class="fn">Ohm&#65533;s</span>) that breaks exact keyword matching on some terms; RRF makes retrieval robust despite it, but the real fix is re-ingesting affected books with correct encoding.</div>
   </section>
 
   <!-- ============ PHASE 5 ============ -->
@@ -527,7 +529,7 @@ flowchart TD
             <td><span class="path">backend/app/services/visual_learning/visual_learning_service.py</span></td>
             <td><span class="fn">generate_visual_lesson_stream()</span></td>
             <td class="none-cell">—</td>
-            <td class="note">A generator: yields <span class="fn">progress</span> → <span class="fn">storyboard_ready</span> → <span class="fn">audio_ready</span> → <span class="fn">lesson_ready</span> events in order.</td>
+            <td class="note">A generator: yields <span class="fn">progress</span> → <span class="fn">storyboard_ready</span> → <span class="fn">scene_audio_ready</span> (×N, narrative order) → <span class="fn">audio_ready</span> (batched, internal) → <span class="fn">lesson_ready</span> events in order.</td>
           </tr>
           <tr>
             <td class="step-cell">Design storyboard</td>
@@ -544,6 +546,13 @@ flowchart TD
             <td class="note">One retry with a fresh completion if the LLM returns scenes with no real template_data.</td>
           </tr>
           <tr>
+            <td class="step-cell">Audit + repair templates</td>
+            <td><span class="path">backend/app/services/visual_learning/template_registry.py</span></td>
+            <td><span class="fn">repair_scene_templates()</span>, <span class="fn">apply_curated_diagrams()</span>, <span class="fn">force_curated_diagram_scene()</span>, <span class="fn">apply_primitive_diagrams()</span>, <span class="fn">force_paired_organ_primitive()</span>, <span class="fn">force_enclosure_primitive()</span>, <span class="fn">force_node_network_primitive()</span>, <span class="fn">force_branching_primitive()</span></td>
+            <td class="none-cell">—</td>
+            <td class="note">Runs in this exact order on every LLM-generated storyboard, in place, before anything is streamed. <span class="fn">repair_scene_templates()</span> runs first and now also corrects a scene's <span class="fn">template_id</span> when its own <span class="fn">template_data</span> fields don't match what it claims to be — trusting real field names over the LLM's stated label. Curated diagrams (hand-verified, exact keyword match) always outrank the 7 generic diagram primitives, which always outrank LLM freehand SVG. The <span class="fn">force_*_primitive</span> functions are keyword-gated reliability backstops that convert a misclassified <span class="fn">concept_diagram</span> scene into the right <span class="fn">illustrated_scene</span> primitive (organ pairs, container structures, wired networks) when the LLM picked the wrong template for an obviously-shaped topic.</td>
+          </tr>
+          <tr>
             <td class="step-cell">Stream text (no audio yet)</td>
             <td>chat.py</td>
             <td class="fn">on "storyboard_ready"</td>
@@ -555,14 +564,21 @@ flowchart TD
             <td><span class="path">backend/app/services/visual_learning/visual_audio_generator.py</span></td>
             <td><span class="fn">generate_slide_audio()</span></td>
             <td class="none-cell">—</td>
-            <td class="note">Calls <span class="fn">tts_service.synthesize_text_cached()</span> (Sarvam) once per scene, uploads each clip to Supabase.</td>
+            <td class="note">Calls <span class="fn">tts_service.synthesize_text_cached()</span> (Sarvam) once per scene, uploads each clip to Supabase. All scenes synthesize <b>concurrently</b> for speed.</td>
           </tr>
           <tr>
-            <td class="step-cell">Stream text + real audio</td>
+            <td class="step-cell">Stream text + real audio, in order</td>
             <td>chat.py</td>
-            <td class="fn">on "audio_ready"</td>
+            <td class="fn">on "scene_audio_ready" (per scene)</td>
             <td class="none-cell">—</td>
-            <td class="note">The single, real narration reused for the video — this is what the student actually hears while reading.</td>
+            <td class="note">Because synthesis is concurrent, scenes can finish in any order. <span class="path">visual_learning_service.py</span>'s Step 4 buffers completed scenes and only emits <span class="fn">scene_audio_ready</span> in strict narrative order (scene 1 before scene 2, etc.), regardless of which one's TTS call actually finished first.</td>
+          </tr>
+          <tr>
+            <td class="step-cell">Signal narration complete</td>
+            <td>chat.py</td>
+            <td class="fn">on "all_scene_audio_ready"</td>
+            <td class="none-cell">—</td>
+            <td class="note">Explicit "no more scenes coming" signal, forwarded from <span class="path">visual_learning_service.py</span>'s batched <span class="fn">audio_ready</span> event. The frontend's streaming-audio queue (<span class="path">tts-streaming-manager.js</span>) needs this to distinguish "genuinely done" from "just caught up, the next scene's audio hasn't arrived yet" — without it, the video player could mount right after the first scene finished playing.</td>
           </tr>
           <tr>
             <td class="step-cell">Compile the video</td>
@@ -575,6 +591,7 @@ flowchart TD
       </table>
     </div>
     <div class="callout"><b>Known footgun —</b> the prompt and the engine must agree on canvas scale for anything with raw SVG coordinates (<span class="fn">illustrated_scene</span>, <span class="fn">cartesian_grid</span>). If <span class="path">template-registry.json</span>'s hint doesn't state the real pixel canvas size, the LLM invents tiny coordinates and the scene renders as good as blank.</div>
+    <div class="callout"><b>Known footgun —</b> a scene's <span class="fn">template_id</span> and <span class="fn">template_data</span> can disagree (e.g. <span class="fn">template_id: "cycle_template"</span> with no <span class="fn">stages</span> field at all) whenever a repair pass swaps the template without also translating the data, or when the LLM itself just states the wrong <span class="fn">template_id</span> for the data it wrote. <span class="fn">repair_scene_templates()</span>'s <span class="fn">_fix_template_id_data_mismatch()</span> + <span class="fn">_adapt_template_data_for_swap()</span> catch this for the common cases (<span class="fn">math_derivation</span>/<span class="fn">cycle_template</span>/<span class="fn">horizontal_timeline</span>/<span class="fn">illustrated_scene</span>/<span class="fn">concept_diagram</span>) — confirmed live as the cause of a real "blank scene" report (an empty <span class="fn">#cycle-stages</span> container, title + orbit dot only, no stage cards). Any new repair/swap path added to that function should adapt <span class="fn">template_data</span> too, not just <span class="fn">template_id</span>.</div>
   </section>
 
   <!-- ============ PHASE 6 ============ -->
@@ -607,7 +624,21 @@ flowchart TD
             <td><span class="path">public/script.js</span> +<br/><span class="path">public/js/tts-streaming-manager.js</span></td>
             <td><span class="fn">mountVideoLessonGlobal()</span></td>
             <td class="none-cell">—</td>
-            <td class="note">Text renders via the SSE stream; audio plays through <span class="fn">pushPreGeneratedChunk()</span> using the real <span class="fn">audio_url</span> — never a fresh client-side TTS call for video answers.</td>
+            <td class="note">Text renders via the SSE stream; audio plays through <span class="fn">pushPreGeneratedChunk()</span> using the real <span class="fn">audio_url</span> — never a fresh client-side TTS call for video answers. Before starting a new turn, <span class="fn">submitSmartQuery()</span> now explicitly stops any previous turn's still-playing video/audio first (<span class="fn">playbackController.stopAll()</span> + <span class="fn">PAUSE</span> to every mounted Hyperframes iframe) — otherwise a new question's narration can overlap with the previous question's still-playing video.</td>
+          </tr>
+          <tr>
+            <td class="step-cell">Decide when to mount the video</td>
+            <td>public/script.js</td>
+            <td class="fn">"lesson_ready" handler</td>
+            <td class="none-cell">—</td>
+            <td class="note">Only mounts immediately if the streaming-audio pipeline has <b>no outstanding work</b> (<span class="fn">isProcessingPlayback</span>, <span class="fn">deliveryQueue</span>, <span class="fn">renderQueue</span> all clear) — not just "no more chunks are coming" (<span class="fn">streamCompleted</span>). The latter alone isn't enough: it can be true while the pipeline is still mid-playback of an earlier scene if the video happens to compile quickly. Otherwise the event is buffered (<span class="fn">bufferedLessonReadyGlobal</span>) and flushed once <span class="fn">onComplete</span> fires for real.</td>
+          </tr>
+          <tr>
+            <td class="step-cell">Recover from a backgrounded tab</td>
+            <td>public/js/tts-streaming-manager.js</td>
+            <td><span class="fn">_handleVisibilityChange()</span> (via <span class="fn">visibilitychange</span>)</td>
+            <td class="none-cell">—</td>
+            <td class="note">Browsers throttle JS timers and can leave an <span class="fn">audio.play()</span> promise pending indefinitely in a backgrounded tab/window — narration can appear to "freeze" after switching to a different application and back. On regaining focus, forces any stalled audio to resume and both queues to re-process immediately rather than waiting on a stuck timer/promise.</td>
           </tr>
         </tbody>
       </table>
