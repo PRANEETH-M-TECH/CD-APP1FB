@@ -103,16 +103,6 @@ def main():
         except Exception as e:
             print(f"[WARN] Failed to install root npm packages: {e}")
 
-    # Check remotion_test_app npm package
-    remotion_dir = os.path.join(os.getcwd(), "remotion_test_app")
-    if os.path.exists(remotion_dir) and os.path.exists(os.path.join(remotion_dir, "package.json")):
-        print(f"[*] Running 'npm install' in '{remotion_dir}'...")
-        try:
-            subprocess.run("npm install", cwd=remotion_dir, shell=True, check=True)
-            print("[OK] Remotion app npm packages updated.")
-        except Exception as e:
-            print(f"[WARN] Failed to install Remotion app npm packages: {e}")
-
     # 5. Check configuration files (.env)
     print("\n[*] Checking environment configuration...")
     if not os.path.exists(".env"):
@@ -124,6 +114,29 @@ def main():
             print("[WARN] No '.env' or '.env.example' file found.")
     else:
         print("[OK] '.env' configuration file is present.")
+
+    # 5b. Check Firebase service account credentials
+    # Firestore backs almost everything (auth, curriculum data, query
+    # caching) - without this the server still starts (firebase_init.py
+    # degrades gracefully, logging a warning instead of crashing), but
+    # nearly every route will fail at runtime. Not an .env variable by
+    # default - it's a JSON key file at the repo root (or the
+    # FIREBASE_SERVICE_ACCOUNT_JSON / FIREBASE_CREDENTIALS env vars, for
+    # deployments where a file isn't convenient).
+    print("\n[*] Checking Firebase service account credentials...")
+    has_env_creds = bool(os.environ.get("FIREBASE_SERVICE_ACCOUNT_JSON") or os.environ.get("FIREBASE_CREDENTIALS"))
+    if os.path.exists("serviceAccountKey.json"):
+        print("[OK] 'serviceAccountKey.json' is present.")
+    elif has_env_creds:
+        print("[OK] Firebase credentials supplied via environment variable.")
+    else:
+        print("[WARN] No 'serviceAccountKey.json' found and no FIREBASE_SERVICE_ACCOUNT_JSON/")
+        print("       FIREBASE_CREDENTIALS environment variable set. The server will still")
+        print("       start, but every Firestore-backed route (auth, curriculum, caching) will")
+        print("       fail. Download a real service account key from your Firebase project")
+        print("       (Project Settings -> Service Accounts -> Generate New Private Key),")
+        print("       save it as 'serviceAccountKey.json' in the repo root, and re-run this")
+        print("       script. 'serviceAccountKey.example.json' shows the expected shape.")
 
     # 6. Run the Application
     print("\n==================================================")

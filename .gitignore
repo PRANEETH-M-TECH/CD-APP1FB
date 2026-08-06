@@ -58,11 +58,19 @@ chapterdata/chap_extraction.json
 temp/
 tmp/
 
+# ============ REGENERATABLE CACHES ============
+bm25_indices/
+chpchunks/
+summary/
+backend/app/orchestrator_test/test_outputs/
+
 # ============ SYSTEM FILES ============
 .DS_Store
 Thumbs.db
+desktop.ini
 .idea/
 .vscode/
+.idx/
 *.swp
 *.swo
 *~
