@@ -1080,9 +1080,10 @@ async def submit_feedback(request: FeedbackRequest):
     """
     try:
         from google.cloud import firestore as _fs
+        from google.cloud.firestore_v1.field_path import FieldPath
         # Use collection group to find the document by query_id without needing uid
         queries_group = db.collection_group("queries")
-        docs = list(queries_group.where(_fs.FieldPath.document_id(), "==", request.query_id).limit(1).stream())
+        docs = list(queries_group.where(FieldPath.document_id(), "==", request.query_id).limit(1).stream())
         
         if not docs:
             logger.error(f"[FEEDBACK] Query document {request.query_id} not found across nested queries.")

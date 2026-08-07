@@ -1295,6 +1295,25 @@ function injectFeedbackButtons(turnId) {
     // Slide-in animation trigger
     requestAnimationFrame(() => row.classList.add('fb-visible'));
     console.log(`[Feedback] Rating row rendered for turn ${turnId}.`);
+
+    // Text answers don't get a dismiss/close button the way video lessons
+    // do - so this prompt must not linger indefinitely. Auto-dismiss after
+    // 5s if the student never answers; submitFeedback() below cancels this
+    // and dismisses immediately as soon as they do answer.
+    const dismissTimer = setTimeout(() => dismissFeedbackRow(turnId), 5000);
+    row.dataset.dismissTimerId = String(dismissTimer);
+}
+
+/** Fade out and remove the feedback row for a turn, cancelling any pending auto-dismiss timer. */
+function dismissFeedbackRow(turnId) {
+    const card = document.getElementById(`ai-card-global-${turnId}`);
+    const row = card ? card.querySelector('.fb-row') : null;
+    if (!row) return;
+    if (row.dataset.dismissTimerId) {
+        clearTimeout(Number(row.dataset.dismissTimerId));
+    }
+    row.classList.remove('fb-visible');
+    setTimeout(() => row.remove(), 400); // matches .fb-row's existing 0.4s opacity/transform transition
 }
 
 /** Handle a thumbs up or down click */
@@ -1326,11 +1345,17 @@ function submitFeedback(turnId, type) {
         window.speechSynthesis.speak(msg);
         // Save to backend silently
         if (queryId) _saveFeedbackToServer(queryId, 'like', '');
+        // Once answered, this shouldn't linger on screen - a brief moment
+        // for the thank-you message to register, then dismiss.
+        setTimeout(() => dismissFeedbackRow(turnId), 1200);
     } else {
         // Animate the thumbs down
         if (downBtn) { downBtn.classList.add('fb-selected-down'); }
         // Open the interactive robot overlay
         openFeedbackOverlay(queryId, turnId);
+        // The overlay takes over from here - the underlying row has served
+        // its purpose and shouldn't stay visible behind/after it.
+        dismissFeedbackRow(turnId);
     }
 }
 
