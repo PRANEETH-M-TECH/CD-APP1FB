@@ -401,16 +401,50 @@ def run_orchestrator_pipeline(raw_query: str, student_profile: Dict[str, Any]) -
 
 
     raw_json_text = response.text.strip()
-    
+
+    # The model's text_narration field routinely contains LaTeX (e.g. \frac{a}{b},
+    # \times, \left(, \right, \text) - single backslashes that are not valid JSON
+    # string content. Most of those letters (b, f, n, r, t, u) also happen to be
+    # legal JSON escapes, so json.loads doesn't always error - it silently eats the
+    # leading letter as a control character instead (\frac -> "\x0crac"). Only \"
+    # and \\ are ever intentional here; every other backslash is LaTeX and must be
+    # doubled so it survives as literal text.
+    def _repair_invalid_escapes(text: str) -> str:
+        return re.sub(
+            r'\\(.)',
+            lambda m: m.group(0) if m.group(1) in ('"', '\\') else '\\\\' + m.group(1),
+            text,
+        )
+
     # Robust JSON extractor
     def extract_and_parse_json(text: str) -> dict:
         text_clean = text.strip()
         first_brace = text_clean.find("{")
         last_brace = text_clean.rfind("}")
-        if first_brace != -1 and last_brace != -1 and last_brace > first_brace:
-            json_candidate = text_clean[first_brace:last_brace + 1]
+        json_candidate = (
+            text_clean[first_brace:last_brace + 1]
+            if first_brace != -1 and last_brace != -1 and last_brace > first_brace
+            else text_clean
+        )
+        try:
             return json.loads(json_candidate)
-        return json.loads(text_clean)
+        except json.JSONDecodeError:
+            return json.loads(_repair_invalid_escapes(json_candidate))
+
+    def _salvage_text_narration(text: str) -> str | None:
+        """Best-effort extraction of just the text_narration value when the
+        JSON as a whole still won't parse, so we never show the user the raw
+        JSON payload."""
+        match = re.search(r'"text_narration"\s*:\s*"(.*?)(?<!\\)"\s*,\s*"video_storyboard"', text, re.DOTALL)
+        if not match:
+            match = re.search(r'"text_narration"\s*:\s*"(.*?)(?<!\\)"\s*\}', text, re.DOTALL)
+        if not match:
+            return None
+        raw_value = match.group(1)
+        try:
+            return json.loads(f'"{_repair_invalid_escapes(raw_value)}"')
+        except Exception:
+            return raw_value.replace('\\"', '"').replace('\\n', '\n')
 
     try:
         # Try cleaning markdown code fences first
@@ -421,11 +455,14 @@ def run_orchestrator_pipeline(raw_query: str, student_profile: Dict[str, Any]) -
             cleaned_text = cleaned_text[3:]
         if cleaned_text.endswith("```"):
             cleaned_text = cleaned_text[:-3]
-        
+
         orchestrator_output = extract_and_parse_json(cleaned_text.strip())
     except Exception as parse_err:
-        print(f"[WARN] Failed to parse LLM JSON: {parse_err}. Creating fallback query container.")
-        # Create a clean fallback response using the raw model output directly as text_narration
+        print(f"[WARN] Failed to parse LLM JSON: {parse_err}. Attempting to salvage text_narration.")
+        salvaged = _salvage_text_narration(raw_json_text)
+        # Fall back to the raw text only if salvage genuinely fails - never show
+        # the user the raw JSON envelope itself.
+        narration = salvaged if salvaged is not None else raw_json_text
         orchestrator_output = {
             "is_authorized": True,
             "refusal_reason": None,
@@ -435,7 +472,7 @@ def run_orchestrator_pipeline(raw_query: str, student_profile: Dict[str, Any]) -
             "matched_chapter": None,
             "complexity_level": 1,
             "format_decision": "QUICK_ANSWER",
-            "text_narration": raw_json_text,
+            "text_narration": narration,
             "video_storyboard": None
         }
 

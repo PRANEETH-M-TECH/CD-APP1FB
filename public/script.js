@@ -741,6 +741,17 @@ function setupChatSubmitGlobal() {
                     mountVideoLessonGlobal(currentTurn, bufferedLessonReadyGlobal);
                     bufferedLessonReadyGlobal = null;
                 }
+                // The answer text finishes visibly displaying/narrating here,
+                // not when the SSE stream closes (that only means the backend
+                // finished SENDING text - the Teacher Reading pipeline paces
+                // on-screen display to match voice narration, which lags
+                // behind). Feedback belongs after the student has actually
+                // seen/heard the full answer, unless this is a video lesson -
+                // those get their own feedback modal timed to actual video
+                // playback completion instead (see isVideoLesson above).
+                if (!isVideoLesson) {
+                    injectFeedbackButtons(currentTurn);
+                }
             };
             if (window.playbackController) {
                 const cardEl = document.getElementById(`ai-card-global-${currentTurn}`);
@@ -764,10 +775,15 @@ function setupChatSubmitGlobal() {
                 if (submitButton) submitButton.removeAttribute('disabled');
                 if (listChaptersBtn) listChaptersBtn.classList.remove('hidden');
                 chatHistory.scrollTop = chatHistory.scrollHeight;
-                // Inject feedback thumbs now, unless this is a video lesson -
-                // those get their own feedback modal timed to actual video
-                // playback completion instead (see isVideoLesson above).
-                if (!isVideoLesson) {
+                // Inject feedback thumbs now - but only when there's no
+                // Teacher Reading pipeline pacing the on-screen text. When
+                // useStreamingAudio is true, the SSE stream closing just
+                // means the backend finished SENDING data; the answer may
+                // still be visibly displaying/narrating for a while longer,
+                // so feedback is deferred to ttsPipeline.onComplete instead
+                // (see above) so it appears after the student actually sees
+                // the full answer, not while it's still streaming in.
+                if (!isVideoLesson && !useStreamingAudio) {
                     injectFeedbackButtons(currentTurn);
                 }
                 return;

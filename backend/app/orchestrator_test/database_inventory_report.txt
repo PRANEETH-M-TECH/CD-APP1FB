@@ -11,35 +11,53 @@
 
    [CLASS / GRADE IN QDRANT]: Unknown
       - Subject: Unknown
-        * Book/Source: 02388bd2e1e88738b9ce21a5d1c7ce9b | Chapter: CHANGES AROUND US
-        * Book/Source: 02388bd2e1e88738b9ce21a5d1c7ce9b | Chapter: FIBRE TO FABRIC
-        * Book/Source: 02388bd2e1e88738b9ce21a5d1c7ce9b | Chapter: HABITAT
-        * Book/Source: 02388bd2e1e88738b9ce21a5d1c7ce9b | Chapter: LEARNING HOW TO MEASURE
-        * Book/Source: 02388bd2e1e88738b9ce21a5d1c7ce9b | Chapter: LIGHT, SHADOWS AND IMAGES
-        * Book/Source: 02388bd2e1e88738b9ce21a5d1c7ce9b | Chapter: LIVING AND NON LIVING
-        * Book/Source: 02388bd2e1e88738b9ce21a5d1c7ce9b | Chapter: MATERIALS AND THINGS
-        * Book/Source: 02388bd2e1e88738b9ce21a5d1c7ce9b | Chapter: MOVEMENTS IN ANIMALS
-        * Book/Source: 02388bd2e1e88738b9ce21a5d1c7ce9b | Chapter: OUR FOOD
-        * Book/Source: 02388bd2e1e88738b9ce21a5d1c7ce9b | Chapter: PLANTS: PARTS AND FUNCTIONS
-        * Book/Source: 02388bd2e1e88738b9ce21a5d1c7ce9b | Chapter: PLAYING WITH MAGNETS
-        * Book/Source: 02388bd2e1e88738b9ce21a5d1c7ce9b | Chapter: RAIN: WHERE DOES IT COME FROM?
-        * Book/Source: 02388bd2e1e88738b9ce21a5d1c7ce9b | Chapter: SEPARATION OF SUBSTANCES
-        * Book/Source: 02388bd2e1e88738b9ce21a5d1c7ce9b | Chapter: SIMPLE ELECTRIC CIRCUITS
-        * Book/Source: 02388bd2e1e88738b9ce21a5d1c7ce9b | Chapter: WATER IN OUR LIFE
-        * Book/Source: 02388bd2e1e88738b9ce21a5d1c7ce9b | Chapter: WHAT DO ANIMALS EAT?
-        * Book/Source: d2918761-6481-5762-acdc-3d59bbeccd15 | Chapter: ECONOMIC ACTIVITIES AROUND US
-        * Book/Source: d2918761-6481-5762-acdc-3d59bbeccd15 | Chapter: EXPLORING SOCIETY: INDIA AND BEYOND
+        * Book/Source: 6533c9be-f65c-5636-bce3-7d669f3cfcd4 | Chapter: Areas Related to Circles
+        * Book/Source: 6533c9be-f65c-5636-bce3-7d669f3cfcd4 | Chapter: Arithmetic Progressions
+        * Book/Source: 6533c9be-f65c-5636-bce3-7d669f3cfcd4 | Chapter: Circles
+        * Book/Source: 6533c9be-f65c-5636-bce3-7d669f3cfcd4 | Chapter: Coordinate Geometry
+        * Book/Source: 6533c9be-f65c-5636-bce3-7d669f3cfcd4 | Chapter: Introduction to Trigonometry
+        * Book/Source: 6533c9be-f65c-5636-bce3-7d669f3cfcd4 | Chapter: Pair of Linear Equations in Two Variables
+        * Book/Source: 6533c9be-f65c-5636-bce3-7d669f3cfcd4 | Chapter: Polynomials
+        * Book/Source: 6533c9be-f65c-5636-bce3-7d669f3cfcd4 | Chapter: Probability
+        * Book/Source: 6533c9be-f65c-5636-bce3-7d669f3cfcd4 | Chapter: Quadratic Equations
+        * Book/Source: 6533c9be-f65c-5636-bce3-7d669f3cfcd4 | Chapter: Real Numbers
+        * Book/Source: 6533c9be-f65c-5636-bce3-7d669f3cfcd4 | Chapter: Some Applications of Trigonometry
+        * Book/Source: 6533c9be-f65c-5636-bce3-7d669f3cfcd4 | Chapter: Statistics
+        * Book/Source: 6533c9be-f65c-5636-bce3-7d669f3cfcd4 | Chapter: Surface Areas and Volumes
+        * Book/Source: 6533c9be-f65c-5636-bce3-7d669f3cfcd4 | Chapter: Triangles
+        * Book/Source: 71d30452-178b-5820-8900-e87d333f3911 | Chapter: ACIDS, BASES AND SALTS
+        * Book/Source: 71d30452-178b-5820-8900-e87d333f3911 | Chapter: CARBON AND ITS COMPOUNDS
+        * Book/Source: 71d30452-178b-5820-8900-e87d333f3911 | Chapter: CHEMICAL REACTIONS AND EQUATIONS
+        * Book/Source: 71d30452-178b-5820-8900-e87d333f3911 | Chapter: CONTROL AND COORDINATION
+        * Book/Source: 71d30452-178b-5820-8900-e87d333f3911 | Chapter: ELECTRICITY
+        * Book/Source: 71d30452-178b-5820-8900-e87d333f3911 | Chapter: HEREDITY
+        * Book/Source: 71d30452-178b-5820-8900-e87d333f3911 | Chapter: HOW DO ORGANISMS REPRODUCE
+        * Book/Source: 71d30452-178b-5820-8900-e87d333f3911 | Chapter: LIFE PROCESSES
+        * Book/Source: 71d30452-178b-5820-8900-e87d333f3911 | Chapter: LIGHT – REFLECTION AND REFRACTION
+        * Book/Source: 71d30452-178b-5820-8900-e87d333f3911 | Chapter: MAGNETIC EFFECTS OF ELECTRIC CURRENT
+        * Book/Source: 71d30452-178b-5820-8900-e87d333f3911 | Chapter: METALS AND NON-METALS
+        * Book/Source: 71d30452-178b-5820-8900-e87d333f3911 | Chapter: OUR ENVIRONMENT
+        * Book/Source: 71d30452-178b-5820-8900-e87d333f3911 | Chapter: THE HUMAN EYE AND THE COLOURFUL WORLD
+        * Book/Source: b16fe23d-c28a-5be2-8d96-b093e0bed196 | Chapter: Agriculture
+        * Book/Source: b16fe23d-c28a-5be2-8d96-b093e0bed196 | Chapter: Forest and Wildlife Resources
+        * Book/Source: b16fe23d-c28a-5be2-8d96-b093e0bed196 | Chapter: Lifelines of National Economy
+        * Book/Source: b16fe23d-c28a-5be2-8d96-b093e0bed196 | Chapter: Manufacturing Industries
+        * Book/Source: b16fe23d-c28a-5be2-8d96-b093e0bed196 | Chapter: Minerals and Energy Resources
+        * Book/Source: b16fe23d-c28a-5be2-8d96-b093e0bed196 | Chapter: Resources and Development
+        * Book/Source: b16fe23d-c28a-5be2-8d96-b093e0bed196 | Chapter: Water Resources
+        * Book/Source: d2918761-6481-5762-acdc-3d59bbeccd15 | Chapter: Economic Activities Around Us
         * Book/Source: d2918761-6481-5762-acdc-3d59bbeccd15 | Chapter: FAMILY AND COMMUNITY
         * Book/Source: d2918761-6481-5762-acdc-3d59bbeccd15 | Chapter: GRASSROOTS DEMOCRACY – PART 1
         * Book/Source: d2918761-6481-5762-acdc-3d59bbeccd15 | Chapter: GRASSROOTS DEMOCRACY – PART 2
         * Book/Source: d2918761-6481-5762-acdc-3d59bbeccd15 | Chapter: GRASSROOTS DEMOCRACY – PART 3
         * Book/Source: d2918761-6481-5762-acdc-3d59bbeccd15 | Chapter: INDIA’S CULTURAL ROOTS
+        * Book/Source: d2918761-6481-5762-acdc-3d59bbeccd15 | Chapter: INTRODUCTION – WHY SOCIAL SCIENCE?
         * Book/Source: d2918761-6481-5762-acdc-3d59bbeccd15 | Chapter: India, That Is Bharat
         * Book/Source: d2918761-6481-5762-acdc-3d59bbeccd15 | Chapter: LANDFORMS AND LIFE
         * Book/Source: d2918761-6481-5762-acdc-3d59bbeccd15 | Chapter: OCEANS AND CONTINENTS
-        * Book/Source: d2918761-6481-5762-acdc-3d59bbeccd15 | Chapter: THE VALUE OF WORK
+        * Book/Source: d2918761-6481-5762-acdc-3d59bbeccd15 | Chapter: THE BEGINNINGS OF INDIAN CIVILISATION
         * Book/Source: d2918761-6481-5762-acdc-3d59bbeccd15 | Chapter: TIMELINE AND SOURCES OF HISTORY
-        * Book/Source: d2918761-6481-5762-acdc-3d59bbeccd15 | Chapter: The Beginnings of Indian Civilisation
-        * Book/Source: d2918761-6481-5762-acdc-3d59bbeccd15 | Chapter: UNITY IN DIVERSITY, OR ‘MANY IN THE ONE’
+        * Book/Source: d2918761-6481-5762-acdc-3d59bbeccd15 | Chapter: The Value Of Work
+        * Book/Source: d2918761-6481-5762-acdc-3d59bbeccd15 | Chapter: UNITY IN DIVERSITY, OR 'MANY IN THE ONE'
 
 ==================================================

@@ -388,8 +388,19 @@ class Renderer {
           </svg>
           
           <div id="timeline-stages-${sId}">
-            ${stages.map((stage, stIdx) => `
-              <div class="timeline-stage" id="timeline-stage-${sId}-${stIdx}">
+            ${stages.map((stage, stIdx) => {
+              // #timeline-stages-${sId} is a plain block <div>, not a flex
+              // container, so position:absolute children with no explicit
+              // left/top all collapse to the same top-left "static position"
+              // fallback instead of spreading out - every stage rendered on
+              // top of every other one. Mirror the SVG progress line's own
+              // 5% -> 95% span so each stage lands at its correct point
+              // along the track regardless of how many stages there are.
+              const leftPct = stages.length > 1
+                ? 5 + (stIdx * 90) / (stages.length - 1)
+                : 50;
+              return `
+              <div class="timeline-stage" id="timeline-stage-${sId}-${stIdx}" style="left: ${leftPct}%;">
                 <div class="timeline-stage-circle theme-card-border">
                   <div class="timeline-stage-badge theme-accent-bg">${stage.step_no}</div>
                   <svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="theme-stroke">
@@ -398,7 +409,8 @@ class Renderer {
                 </div>
                 <p class="timeline-stage-label">${stage.label}</p>
               </div>
-            `).join('')}
+            `;
+            }).join('')}
           </div>
         </div>
       </div>

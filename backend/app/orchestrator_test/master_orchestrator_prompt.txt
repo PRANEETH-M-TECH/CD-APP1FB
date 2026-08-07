@@ -185,6 +185,14 @@ SECTION 7: STRICT MASTER JSON OUTPUT SCHEMA & SYSTEM CONTRACT
 ================================================================================
 Output ONLY a valid JSON object. Do NOT include markdown code fences (```json) or extra text.
 
+CRITICAL JSON ESCAPING RULE: `text_narration` frequently contains LaTeX (e.g. \frac{a}{b},
+\times, \left(...\right), \text{...}). A single backslash is NOT valid inside a JSON string -
+every backslash you write MUST be escaped as a DOUBLE backslash, or the entire response fails
+to parse. Example: to express \frac{1}{2} you must write \\frac{1}{2} in the JSON string value.
+Likewise \times -> \\times, \left( -> \\left(, \right) -> \\right). Only the standard JSON
+escapes (\\n for a real line break, \\" for a literal quote) may use a single backslash before
+the letter/character; every other backslash needs to be doubled.
+
 JSON SCHEMA:
 {
   "is_authorized": boolean,

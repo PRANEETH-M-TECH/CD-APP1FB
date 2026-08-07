@@ -1057,7 +1057,26 @@ class StreamingAudioPipeline {
                 if (this.currentAudio === audio) {
                     this.currentAudio = null;
                 }
+                if (this._forceResolveCurrentAudio === forceResolve) {
+                    this._forceResolveCurrentAudio = null;
+                }
             };
+
+            // A backgrounded/hidden tab can leave this chunk's play() promise
+            // pending indefinitely without ever resolving, rejecting, or even
+            // updating audio.paused - _handleVisibilityChange()'s normal
+            // "resume if paused" nudge does nothing in that case, since the
+            // browser may still report paused=false for a call that never
+            // actually started. Exposing this lets the visibilitychange
+            // handler force past a genuinely stuck chunk the moment the tab
+            // is foregrounded again, instead of the student having to wait
+            // out the full 30s watchdog above.
+            const forceResolve = () => {
+                console.warn('[STREAM] Forcing past a stuck chunk after tab regained focus.');
+                cleanup();
+                resolve();
+            };
+            this._forceResolveCurrentAudio = forceResolve;
 
             audio.onended = () => {
                 cleanup();
@@ -1116,10 +1135,45 @@ class StreamingAudioPipeline {
      * throttled timer to eventually resolve on its own.
      */
     _handleVisibilityChange() {
+        if (document.visibilityState === 'hidden') {
+            this._hiddenSinceMs = performance.now();
+            return;
+        }
         if (document.visibilityState !== 'visible' || !this.isActive) return;
         console.log('[STREAM] Tab regained focus - catching up any stalled playback/render state.');
-        if (this.currentAudio && this.currentAudio.paused && !this.currentAudio.ended) {
-            this.currentAudio.play().catch(() => {});
+
+        const wasHiddenMs = this._hiddenSinceMs ? (performance.now() - this._hiddenSinceMs) : 0;
+        this._hiddenSinceMs = null;
+
+        if (this.currentAudio && !this.currentAudio.ended) {
+            // Don't gate the resume attempt on audio.paused alone - a play()
+            // call issued while the tab was hidden can leave the element
+            // reporting paused=false (browsers often flip this optimistically
+            // as soon as play() is called) even though nothing ever actually
+            // started decoding/playing. Attempting play() again here is a
+            // harmless no-op if it's already genuinely progressing.
+            const resumeAttempt = this.currentAudio.play();
+            if (resumeAttempt && typeof resumeAttempt.catch === 'function') {
+                resumeAttempt.catch(() => {
+                    if (this._forceResolveCurrentAudio) this._forceResolveCurrentAudio();
+                });
+            }
+            // If the tab was hidden for a meaningful stretch, give the
+            // resumed play() a brief moment to actually start, then check
+            // whether it genuinely moved - if not, it's stuck (the classic
+            // "pending forever" case), so rescue it now instead of leaving
+            // the student waiting on the full 30s watchdog.
+            if (wasHiddenMs > 1000) {
+                const audioAtResume = this.currentAudio;
+                const timeAtResume = audioAtResume.currentTime;
+                setTimeout(() => {
+                    if (this.currentAudio !== audioAtResume) return; // already moved on normally
+                    if (audioAtResume.currentTime === timeAtResume && !audioAtResume.ended) {
+                        console.warn('[STREAM] Chunk still stuck 1.5s after tab regained focus - forcing past it.');
+                        if (this._forceResolveCurrentAudio) this._forceResolveCurrentAudio();
+                    }
+                }, 1500);
+            }
         }
         this._processRenderQueue();
         if (!this.isProcessingPlayback) {
